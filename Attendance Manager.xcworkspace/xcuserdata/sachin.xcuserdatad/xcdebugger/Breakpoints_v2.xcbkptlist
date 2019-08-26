@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "D176783A-2A4D-4B3E-8599-4A63F6D0BF9E"
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8A25214E-F994-4278-A684-EBDE9F64BBA1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Attendance Manager/My Activity/MyActivityViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
+            landmarkName = "btnBackPressed(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5195475B-6129-4136-8097-93BCCEE86AE7"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Attendance Manager/My Activity/ActivityDetailsView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "btnBackPressed(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "5195475B-6129-4136-8097-93BCCEE86AE7 - e33cb498f2c1ceb4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Attendance_Manager.ActivityDetailsView.btnBackPressed(Any) -&gt; ()"
+                  moduleName = "Attendance Manager"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sachin/Desktop/untitled%20folder/Attendance%20Manager/Attendance%20Manager%202.0/Attendance%20Manager/My%20Activity/ActivityDetailsView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "85">
+               </Location>
+               <Location
+                  uuid = "5195475B-6129-4136-8097-93BCCEE86AE7 - e3d1fe7c2266ed65"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in Attendance_Manager.ActivityDetailsView.btnBackPressed(Any) -&gt; ()"
+                  moduleName = "Attendance Manager"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sachin/Desktop/untitled%20folder/Attendance%20Manager/Attendance%20Manager%202.0/Attendance%20Manager/My%20Activity/ActivityDetailsView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D3A26F58-8E24-4452-9154-7BD3D8DE6B38"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Attendance Manager/My Activity/ActivityChartViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "209"
+            endingLineNumber = "209"
+            landmarkName = "btnBackPressed(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D3A26F58-8E24-4452-9154-7BD3D8DE6B38 - 4825c7462615b5e5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Attendance_Manager.ActivityChartViewController.btnBackPressed(Any) -&gt; ()"
+                  moduleName = "Attendance Manager"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sachin/Desktop/untitled%20folder/Attendance%20Manager/Attendance%20Manager%202.0/Attendance%20Manager/My%20Activity/ActivityChartViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "209"
+                  endingLineNumber = "209"
+                  offsetFromSymbolStart = "85">
+               </Location>
+               <Location
+                  uuid = "D3A26F58-8E24-4452-9154-7BD3D8DE6B38 - f4022128b226bfe9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in Attendance_Manager.ActivityChartViewController.btnBackPressed(Any) -&gt; ()"
+                  moduleName = "Attendance Manager"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sachin/Desktop/untitled%20folder/Attendance%20Manager/Attendance%20Manager%202.0/Attendance%20Manager/My%20Activity/ActivityChartViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "209"
+                  endingLineNumber = "209"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C85789D6-4CF9-4E8C-B104-61E8985F94C9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Attendance Manager/Add Task Manager/TaskController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "226"
+            endingLineNumber = "226"
+            landmarkName = "btnBackPressed(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "C85789D6-4CF9-4E8C-B104-61E8985F94C9 - c7ea2de615a9787f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Attendance_Manager.TaskController.btnBackPressed(Any) -&gt; ()"
+                  moduleName = "Attendance Manager"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sachin/Desktop/untitled%20folder/Attendance%20Manager/Attendance%20Manager%202.0/Attendance%20Manager/Add%20Task%20Manager/TaskController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "226"
+                  endingLineNumber = "226"
+                  offsetFromSymbolStart = "85">
+               </Location>
+               <Location
+                  uuid = "C85789D6-4CF9-4E8C-B104-61E8985F94C9 - d3ff5bbbb7916e4b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in Attendance_Manager.TaskController.btnBackPressed(Any) -&gt; ()"
+                  moduleName = "Attendance Manager"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sachin/Desktop/untitled%20folder/Attendance%20Manager/Attendance%20Manager%202.0/Attendance%20Manager/Add%20Task%20Manager/TaskController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "226"
+                  endingLineNumber = "226"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A69EF8EB-9665-4A1F-9678-B0E35DAF49A8"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Attendance Manager/Add Task Manager/TaskController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "250"
+            endingLineNumber = "250"
+            landmarkName = "btnSavePressed(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "A69EF8EB-9665-4A1F-9678-B0E35DAF49A8 - e533b76b79b9da5d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Attendance_Manager.TaskController.btnSavePressed(Any) -&gt; ()"
+                  moduleName = "Attendance Manager"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sachin/Desktop/untitled%20folder/Attendance%20Manager/Attendance%20Manager%202.0/Attendance%20Manager/Add%20Task%20Manager/TaskController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "250"
+                  endingLineNumber = "250"
+                  offsetFromSymbolStart = "7154">
+               </Location>
+               <Location
+                  uuid = "A69EF8EB-9665-4A1F-9678-B0E35DAF49A8 - ceee4a727329c0a9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in Attendance_Manager.TaskController.btnSavePressed(Any) -&gt; ()"
+                  moduleName = "Attendance Manager"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sachin/Desktop/untitled%20folder/Attendance%20Manager/Attendance%20Manager%202.0/Attendance%20Manager/Add%20Task%20Manager/TaskController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "250"
+                  endingLineNumber = "250"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "38026C42-1120-47CC-81B5-4A3E5D64DE5E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Attendance Manager/User Activites/ActivityController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
+            landmarkName = "viewDidAppear(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "191B0D64-03C9-4989-9A2E-512B10DE9777"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Attendance Manager/User Activites/ActivityController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "602"
+            endingLineNumber = "602"
+            landmarkName = "showLogoutAlert()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5D76AB1F-6FE2-415C-B79B-F4D3BAF8ADD2"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pods/Charts/Source/Charts/Charts/BarLineChartViewBase.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "711"
+            endingLineNumber = "711"
+            landmarkName = "panGestureRecognized(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
