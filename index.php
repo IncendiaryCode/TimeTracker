@@ -1,5 +1,4 @@
 <?php include("header.php");?>
-
 <body >
         <div class="bg" id="mySlider">
         </div>
