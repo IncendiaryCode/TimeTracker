@@ -1,0 +1,91 @@
+header {
+    background-image: linear-gradient(-40deg, #e485fb 40%, #6d77ff 100%);
+}
+
+.login-color {
+    background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #fadffd);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.text-display {
+    display: block;
+}
+
+.pr-4 {
+    display: inline;
+    font-size: 28px;
+}
+
+.nav-link {
+    display: block;
+}
+
+.dropdown-menu-right {
+    width: 250px;
+}
+
+.number-font {
+    font-size: 45px;
+}
+
+.col-lg-5 {
+    font-size: 70px;
+}
+
+.canvasjs-chart-credit {
+    display: none
+}
+
+.card1 {
+    padding: 5px;
+    border-radius: 15px;
+    border-width: 1px;
+    background-image: linear-gradient(-50deg, #ef4774, #9253bb, #475cf4);
+}
+
+.card2 {
+    padding: 5px;
+    border-radius: 15px;
+    border-width: 1px;
+    background-image: linear-gradient(-50deg, #35ea7d, #119a8d);
+}
+
+.card3 {
+    padding: 5px;
+    border-radius: 15px;
+    border-width: 1px;
+    background-image: linear-gradient(-50deg, #fe6407, #ee0c74);
+}
+
+.card4 {
+    padding: 5px;
+    border-radius: 15px;
+    border-width: 1px;
+    background-image: linear-gradient(-50deg, #4bb749, #8bcb51, #d5e15a);
+}
+
+.text-underline {
+    color: white;
+    text-decoration: underline;
+}
+
+@media(max-width: 1200px) {
+    .number-font {
+        font-size: 30px;
+    }
+
+    .col-lg-5 {
+        font-size: 40px;
+    }
+
+}
+
+.m-0 {
+    text-decoration: underline;
+}
