@@ -7,6 +7,7 @@ $(document).ready(function () {
 
 });
 
+
 var Validation = function (e) {
     this.isValid = false;
     this.errorCount = 0;
@@ -77,7 +78,6 @@ loginForm.onsubmit = function (e) {
         
 
         var id = document.getElementById('Username').value;
-        console.log(id);
         localStorage.setItem('id',id);
 
         document.getElementById('Username-error').value = " ";

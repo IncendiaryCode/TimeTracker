@@ -18,7 +18,7 @@
     <header class="container-fluid main-header">
         <div class="row ">
             <div class="col-6 time-tracker">
-                <img src="../images/logo-white.png" onclick="window.location.href='employeeInfo.html'" height="50px">
+                <img src='<?=BASE_URL?>assets/images/logo-white.png' onclick="window.location.href='<?=BASE_URL?>user/home.php'" height="50px">
             </div>
         </div>
     </header>

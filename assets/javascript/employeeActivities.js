@@ -1,5 +1,5 @@
 var id = localStorage.getItem('count');
-console.log('id',id);
+
 for (var i = id; i > 0; i--) {
     variable = localStorage.getItem('entry' + parseInt(i));
     var data = JSON.parse(variable);

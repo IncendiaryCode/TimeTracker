@@ -30,7 +30,7 @@ if (addTask) {
             document.getElementById('taskError').innerHTML = "Please Enter Task Name ";
             return false;
         }
-        if (project == "" || project == " ") {
+        if (project == "Select Project") {
             document.getElementById('taskError').innerHTML = "Please Choose Project Name ";
             return false;
         } else {
@@ -83,7 +83,6 @@ function showTask() {
             } else {
                 $(document).ready(function() {
                     $('.timer').hide();
-                    console.log(ended);
                 }); 
             }
             $(".attach-card").append("<div class='col-lg-5 ml-lg-5 mt-3 shadow card-style' onclick = 'clearTime()' data-toggle='modal' data-target='#newModal' data-toggle='tooltip' data-placement='top' '><div class='card-header bg-white text-left text-black-50'><div class='row pt-2'><span class='vertical-line'></span><div class='col-6 text-left'>" + id + ")" + loginTime + "</div><div class='col-5 text-right'><span class='text-right timer'><i class=' far fa-clock'></i> <label id='hr'>00</label>:<label id='min'>00</label>:<label id='sec'>00</label></span><span>" + ended + "</span></div></div></div><div class='card-body text-body ml-4'><p>" + taskName + "</p></div><div class='card-footer text-black-50 bg-white pl-4 pb-3'><i class='fas fa-user-circle'></i>" + projectName + "</div></div>");
@@ -94,7 +93,7 @@ function showTask() {
     }
 }
 
-showTask();
+/*showTask();*/
 
 
 var secLabel = document.getElementById("sec");

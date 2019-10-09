@@ -24,22 +24,43 @@ include("../php/activity.php");
                 <span aria-hidden="true">×</span>
             </button>
         </div>
-        <div class="container">
+        <div class="container pt-5">
             <div class=" row mb-3">
-                <div class="col-6">
-                    <h4 class="font-weight-light text-left pt-5">Recent Activites</h4>
+                <div class="col-6 space-left">
+                    <h4 class="font-weight-light text-left ">Recent Activites</h4>
                 </div>
-                <div class="col-6 dropdown text-right">
+                <div class="col-6  space-right dropdown text-right">
                     <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Sort by
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="employeeInfo.php" onclick="sortByTaskName();">Task name</a>
-                        <a class="dropdown-item" href="employeeInfo.php" onclick="sortByDate();">Date</a>
+                        <a class="dropdown-item"  onclick="sortByTaskName();">Task name</a>
+                        <a class="dropdown-item"  onclick="sortByDate();">Date</a>
                     </div>
                 </div>
             </div>
             <div class='row mb-5 attach-card'>
+                <div class="d-flex align-items-center">
+                  <strong>Loading...</strong></div>
+                  <div class="spinner-border text-right ml-auto" role="status" aria-hidden="true">
+                  </div>
+                  <!-- ajax call -->
+                  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js">
+                    function loadDoc() {
+                          var xhttp = new XMLHttpRequest();
+                          xhttp.onreadystatechange = function() {
+                            if (this.readyState == 4 && this.status == 200) {
+                              console.log('error');
+                              this.responseText;
+                            }
+                          };
+                            console.log('success');
+                          xhttp.open("GET", "<?=BASE_URL?>/php/activity.php", true);
+                          xhttp.send();
+                        }
+                        loadDoc();
+                  </script>
+
                 <?php echo '<pre>'; print_r(get_activities('task')); ?>
             </div>
             <hr>

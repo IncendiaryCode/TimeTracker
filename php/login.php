@@ -25,7 +25,7 @@
             //unset($_SESSION['logout_flag']);
         //move to homepage
             // header('location:employeeInfo.php');
-            header("location:user/home.php");
+            header("location:".BASE_URL."user/home.php");
 
         }else if(mysqli_num_rows($res_q)==0){
             //new login 

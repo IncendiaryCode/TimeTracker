@@ -1,3 +1,5 @@
+
+
 html {
     background-color: #fff;
     font-family: 'Roboto', sans-serif;
@@ -285,4 +287,12 @@ padding: 0px;
 #newModal
 {
     opacity: .89;
+}
+.space-left
+{
+    padding-left: 0px;
+}
+.space-right
+{
+    padding-right: 0px;
 }

@@ -10,13 +10,13 @@
                         <h5 class="text-center mt-4 font-weight-light"><?php echo $_SESSION['user_name'];?></h5>
                         <div class="container">
                             <div class="row">
-                                <h3 class="hr pt-4 font-weight-normal"><a href="employeeProfile.php" class="text-dark">Profile</a></h3>
+                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>user/employee_profile.php" class="text-dark">Profile</a></h3>
                             </div>
                             <div class="row">
-                                <h3 class="hr pt-4 font-weight-normal"><a href="employeeActivities.php" class="text-dark">Login Activities</a></h3>
+                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>user/employee_activities.php" class="text-dark">Login Activities</a></h3>
                             </div>
                             <div class="row">
-                                <h3 class="hr pt-4 font-weight-normal"><a href="index.php" class="text-dark" onclick="logout()">Logout</a></h3>
+                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>index.php" class="text-dark" onclick="logout()">Logout</a></h3>
                             </div>
                             <div class="row hr"></div>
                         </div>
