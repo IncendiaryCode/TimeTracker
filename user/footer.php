@@ -43,6 +43,32 @@
 	    </div>
 	</div>
 
+    <!-- Modal Timer Stop Confirm -->
+    <div class="modal fade" id="timestopmodal" tabindex="-1" role="dialog" aria-labelledby="timestopmodalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="timestopmodalLabel">Confirm Timer Action</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h3>Would you like to Stop or Complete the task?</h3>                    
+                    <p class="mt-4 mb-1">Note:</p>
+                    <ul class="text-muted">
+                        <li>Stopping task will pause the timer but not complete the task.</li>
+                        <li>Completing task ends the task and not editable again.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="timestopmodal-complete-task" class="btn btn-danger">Complete Task</button>
+                    <button type="button" id="timestopmodal-stop-task" class="btn btn-primary">Stop Timer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

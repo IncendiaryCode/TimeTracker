@@ -224,20 +224,27 @@ function loadTaskActivities(formData) {
         success: function(values) {
             var data = JSON.parse(values);
             $("#attach-card").empty();
-            for (x in data) {
-                if (data[x].end_time == '00:00:00') {
-                    // $('#end_time').hide();
-                    $('.timer').show();
-                } else {
-                    $('#end_time').show();
-                    // $('.timer').css('display', 'none');
 
-                }
-
-                /*$("#attach-card").dblclick(function() {
-                    window.location.href = "../user/task_description.php";
+            var timerStopModal = $('#timestopmodal').modal({
+                'show': false,
+                'backdrop': 'static',
+                // 'keyboard': false
+            });
+            timerStopModal.on('shown.bs.modal', function(e) {
+                console.log('hidden modal', );
+                var taskCompleteBtn = $(timestopmodal).find('#timestopmodal-complete-task');
+                var taskCloseBtn = $(timestopmodal).find('#timestopmodal-stop-task');
+                /*$.ajax({
+                    type: 'POST',
+                    url: timeTrackerBaseURL + 'php/stoptimer.php',
+                    data: { 'id': $(this).data('taskid') },
+                    success: function(res) {
+                        console.log('stopped', res);
+                    }
                 });*/
+            });
 
+            for (x in data) {
                 var cardHeader = $('<div class="card-header" />');
                 var cardHeaderRow = $('<div class="row pt-2" />');
                 cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].start_time + '</div>');
@@ -245,16 +252,9 @@ function loadTaskActivities(formData) {
                 if (data[x].end_time !== '00:00:00') {
                     stopCol.append('<i class="far fa-clock"></i> ' + data[x].end_time);
                 } else {
-                    var stopButton = $('<button class="text-danger btn btn-link" id="stop">Stop</button>').data('taskid', data[x].id);
+                    var stopButton = $('<button class="text-danger btn btn-link btn-sm" id="stop"><i class="fas fa-stop"></i> Stop</button>').data('taskid', data[x].id);
                     stopButton.on('click', function() {
-                        $.ajax({
-                            type: 'POST',
-                            url: timeTrackerBaseURL + 'php/stoptimer.php',
-                            data: { 'id': $(this).data('taskid') },
-                            success: function(res) {
-                                console.log('stopped', res);
-                            }
-                        });
+                        timerStopModal.modal('show');
                     });
                     stopCol.append(stopButton);
                 }
