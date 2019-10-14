@@ -222,6 +222,10 @@ header.main-header h1 {
     border-style: solid;
 }
 
+#attach-card {
+    min-height: 200px;
+}
+
 .card-style-1 {
     box-shadow: 0 0.2rem 0.7rem rgba(0, 0, 0, .1) !important;
     border-radius: 15px;

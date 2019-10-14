@@ -1,5 +1,5 @@
 <?php
 //Constant values
-define("BASE_URL", "http://localhost/TimeTracker/");
+define("BASE_URL", "http://www.timetracker.com/");
 define("VERSION", "1.0");
 ?>

@@ -215,72 +215,86 @@ changeImage.onsubmit = function(e) {
         return true;
 }
 
+function loadTaskActivities(formData) {
+    $("#attach-card").empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
+    $.ajax({
+        type: 'GET',
+        url: timeTrackerBaseURL + 'php/activity.php',
+        data: formData,
+        success: function(values) {
+            var data = JSON.parse(values);
+            $("#attach-card").empty();
+            for (x in data) {
+                if (data[x].end_time == '00:00:00') {
+                    // $('#end_time').hide();
+                    $('.timer').show();
+                } else {
+                    $('#end_time').show();
+                    // $('.timer').css('display', 'none');
+
+                }
+
+                /*$("#attach-card").dblclick(function() {
+                    window.location.href = "../user/task_description.php";
+                });*/
+
+                var cardHeader = $('<div class="card-header" />');
+                var cardHeaderRow = $('<div class="row pt-2" />');
+                cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].start_time + '</div>');
+                var stopCol = $('<div class="col-6 text-right" />');
+                if (data[x].end_time !== '00:00:00') {
+                    stopCol.append('<i class="far fa-clock"></i> ' + data[x].end_time);
+                } else {
+                    var stopButton = $('<button class="text-danger btn btn-link" id="stop">Stop</button>').data('taskid', data[x].id);
+                    stopButton.on('click', function() {
+                        $.ajax({
+                            type: 'POST',
+                            url: timeTrackerBaseURL + 'php/stoptimer.php',
+                            data: { 'id': $(this).data('taskid') },
+                            success: function(res) {
+                                console.log('stopped', res);
+                            }
+                        });
+                    });
+                    stopCol.append(stopButton);
+                }
+                cardHeaderRow.append(stopCol);
+                cardHeader.append(cardHeaderRow);
+
+
+                var cardInner = $("<div class='card card-style-1' />");
+                cardInner.append(cardHeader);
+
+                var cardBody = $("<div class='card-body' />");
+                cardBody.append(data[x].task_name);
+                cardInner.append(cardBody);
+
+                var cardFooter = $("<div class='card-footer' />");
+                cardFooter.append("<i class='fas fa-user-circle'></i> " + data[x].project_id);
+                cardInner.append(cardFooter);
+
+                var cardCol = $("<div class='col-lg-6 mb-4' />");
+                cardCol.append(cardInner);
+
+                $("#attach-card").append(cardCol);
+            }
+        }
+    });
+}
+
 $(document).ready(function() {
 
     if ($("#attach-card").length > 0) {
-        $.ajax({
-            type: 'GET',
-            url: timeTrackerBaseURL + 'php/activity.php?type=task',
-            success: function(values) {
-                var data = JSON.parse(values);
-                $("#attach-card").empty();
-                for (x in data) {
-                    if (data[x].end_time == '00:00:00') {
-                        // $('#end_time').hide();
-                        $('.timer').show();
-                    } else {
-                        $('#end_time').show();
-                        // $('.timer').css('display', 'none');
-
-                    }
-
-                    /*$("#attach-card").dblclick(function() {
-                        window.location.href = "../user/task_description.php";
-                    });*/
-
-                    var cardHeader = $('<div class="card-header" />');
-                    var cardHeaderRow = $('<div class="row pt-2" />');
-                    cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].start_time + '</div>');
-                    var stopCol = $('<div class="col-6 text-right" />');
-                    if (data[x].end_time !== '00:00:00') {
-                        stopCol.append('<i class="far fa-clock"></i> '+data[x].end_time);
-                    } else {
-                        var stopButton = $('<button class="text-danger btn btn-link" id="stop">Stop</button>').data('taskid', data[x].id);
-                        stopButton.on('click', function() {
-                            $.ajax({
-                                type: 'POST',
-                                url: timeTrackerBaseURL + 'php/stoptimer.php',
-                                data: { 'id': $(this).data('taskid') },
-                                success: function(res) {
-                                    console.log('stopped', res);
-                                }
-                            });
-                        });
-                        stopCol.append(stopButton);
-                    }
-                    cardHeaderRow.append(stopCol);
-                    cardHeader.append(cardHeaderRow);
-
-
-                    var cardInner = $("<div class='card card-style-1' />");
-                    cardInner.append(cardHeader);
-
-                    var cardBody = $("<div class='card-body' />");
-                    cardBody.append(data[x].task_name);
-                    cardInner.append(cardBody);
-
-                    var cardFooter = $("<div class='card-footer' />");
-                    cardFooter.append("<i class='fas fa-user-circle'></i> " + data[x].project_id);
-                    cardInner.append(cardFooter);
-
-                    var cardCol = $("<div class='col-lg-6 mb-4' />");
-                    cardCol.append(cardInner);
-
-                    $("#attach-card").append(cardCol);
-                }
-            }
-        });
+        loadTaskActivities({ 'type': 'task' });
     }
+
+    $('#dropdown-recent-acts').on('show.bs.dropdown', function(e) {
+        var anchors = $(e.currentTarget).find('a.dropdown-item');
+        anchors.unbind('click').on('click', function(e) {
+            e.preventDefault();
+            loadTaskActivities({ 'type': $(this).data('type') });
+        });
+    });
 
     $('.fa-play').click(function() {
         $('.fa-stop').show();

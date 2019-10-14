@@ -1,9 +1,9 @@
 <?php
 	//DB connection
 	$servername="localhost";
-	$username="root";
-	$password="gp.@1234";
-	$database="time_tracker";
+	$username="DB USERNAME";
+	$password="DB PASSWORD";
+	$database="DB NAME";
 
 	$GLOBALS['db_connection'] = mysqli_connect($servername, $username, $password,$database);	
 	if (!$GLOBALS['db_connection']) {
