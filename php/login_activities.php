@@ -1,11 +1,9 @@
 <?php
-	include('con.php');
-	session_start();
+	include('_con.php');
 	$user_id=$_SESSION['user_id'];
 
-
-	$s="SELECT id,project_id,t_date,start_time,end_time FROM time_details WHERE ref_id=".$user_id."";
-	$r=mysqli_query($con,$s);
+	$s="SELECT * FROM time_details WHERE ref_id=2 AND type='login'";
+	$r=mysqli_query($GLOBALS['db_connection'],$s);
 	$num=mysqli_num_rows($r);
 	if($num>0){		
 		$row = mysqli_fetch_all($r,MYSQLI_ASSOC);

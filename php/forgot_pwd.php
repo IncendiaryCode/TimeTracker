@@ -1,15 +1,15 @@
 <?php
 
 //print_r("forgot"); exit();
-	include("con.php");
-	//session_start();
+	include("_con.php");
+	session_start();
 	$q = $_POST['email'];
 	//print_r($q);exit();
 	//$q=$_REQUEST['email']
 	if(isset($q)){
-		$email=mysqli_real_escape_string($con,$q);
+		$email=mysqli_real_escape_string($GLOBALS['db_connection'],$q);
 		$sql_q="SELECT * FROM login WHERE email='$email' AND type='user'";
-        $res_q=mysqli_query($con,$sql_q);
+        $res_q=mysqli_query($GLOBALS['db_connection'],$sql_q);
         $count=mysqli_num_rows($res_q);
 
         if($count==1){
@@ -30,7 +30,7 @@
 			$sql="UPDATE login SET reset_token = '".$token."' WHERE email= '".$email."'";
 
 			//print_r($sql); exit();
-			if(mysqli_query($con,$sql)){
+			if(mysqli_query($GLOBALS['db_connection'],$sql)){
 				/*$email_result = mail('swasthika@printgreener.com', $subject, $message);
 				var_dump($email_result); exit();*/
 				//Send mail after storing token
@@ -46,7 +46,7 @@
 					//echo "Failed to Recover your password, try again";
 				}
 			}else{//if unable to insert into DB
-				echo "Error: " . $sql . "<br>" . mysqli_error($con);
+				echo "Error: " . $sql . "<br>" . mysqli_error($GLOBALS['db_connection']);
 			}
         }else{//if SELECT query fails
         	//echo "Email does not exist in database.";

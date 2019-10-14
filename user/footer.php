@@ -10,13 +10,17 @@
                         <h5 class="text-center mt-4 font-weight-light"><?php echo $_SESSION['user_name'];?></h5>
                         <div class="container">
                             <div class="row">
-                                <h3 class="hr pt-4 font-weight-normal"><a href="employeeProfile.php" class="text-dark">Profile</a></h3>
+                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>user/employee_profile.php" class="text-dark">Profile</a></h3>
                             </div>
                             <div class="row">
-                                <h3 class="hr pt-4 font-weight-normal"><a href="employeeActivities.php" class="text-dark">Login Activities</a></h3>
+                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>user/employee_activities.php" class="text-dark">Login Activities</a></h3>
                             </div>
                             <div class="row">
-                                <h3 class="hr pt-4 font-weight-normal"><a href="index.php" class="text-dark" onclick="logout()">Logout</a></h3>
+<<<<<<< HEAD
+                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>/php/logout.php" class="text-dark" onclick="logout()">Logout</a></h3>
+=======
+                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>index.php" class="text-dark" onclick="logout()">Logout</a></h3>
+>>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
                             </div>
                             <div class="row hr"></div>
                         </div>
@@ -26,15 +30,15 @@
         </div>
     </div>
 
-    <div class="modal" id="changeimage1" data-backdrop="false">
+    <div class="modal" id="changeimage" data-backdrop="false">
 	    <div class="modal-dialog animated fadeInDown">
 	        <div class="modal-content text-center">
 	            <div class="modal-header ">Upload image
 	                <button type="button" class="close text-danger" data-dismiss="modal">×</button>
 	            </div>
 	            <div class="modal-body">
-	                <form id="uploadImage">
-	                    <p><input type="file" name="change image" placeholder="Upload image" id="image"></p>
+	                <form id="uploadImage" method="post" action="<?=BASE_URL?>php/upload_profile.php" enctype="multipart/form-data">
+	                    <p><input type="file" name="change_img" placeholder="Upload image" id="image"></p>
 	                    <p class="text-danger" id="imageerror"></p>
 	                    <button type="submit" class="btn save-task submitProfile">Upload</button>
 	                </form>
@@ -49,5 +53,7 @@
     <script src="<?=BASE_URL?>assets/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
     <script src="<?=BASE_URL?>assets/javascript/addTask.js?v=<?=VERSION?>"></script>
     <script src="<?=BASE_URL?>assets/javascript/employeeActivities.js?v=<?=VERSION?>"></script>
+    <script src="<?=BASE_URL?>assets/javascript/employeeProfile.js?v=<?=VERSION?>"></script>
+    
 </body>
 </html>

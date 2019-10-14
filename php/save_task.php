@@ -1,39 +1,26 @@
 <?php
-	include('con.php');
+	include('_con.php');
 	session_start();
-	$tabl_id=$_SESSION['table_id'];
+	//$tabl_id=$_SESSION['table_id'];
 	//$user=$_SESSION['user'];
-	$user_id=$_SESSION['user_id'];
-	//$user_id=$_POST['user_id'];
-	$task_name=mysqli_real_escape_string($con,$_POST['task-name']);
+	$user_id = $_SESSION['user_id'];
+	//if(isset($_POST)){
+	$task_name = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['task-name']);
 	//$task_desc=mysqli_real_escape_string($con,$_POST['td']);
-	$choose_p=mysqli_real_escape_string($con,$_POST['chooseProject']);
-	$task_start=mysqli_real_escape_string($con,$_POST['startedDate']);
+	$task_start = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['startedDate']);
+	$choose_p = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['chooseProject']);
+	
 	$td=strtotime($task_start);
-	//$task_start_time=date('H:i:s',$td);
-	$task_date=date('Y-m-d',$td);
-	//print_r($task_date);exit();
-	$task_end=mysqli_real_escape_string($con,$_POST['endedDate']);
-	//print_r($_POST);exit();
-	$sql="INSERT INTO time_details(type,ref_id,project_id,task_name,t_date,start_time,end_time,created_on) VALUES('task','".$user_id."','".$choose_p."','".$task_name."','".$task_date."','".$task_start."','".$task_end."','".date('Y-m-d H:i:s')."')";
-	//print_r($sql);exit();
-	$res=mysqli_query($con,$sql);
-	if(($res)==TRUE){
+	$task_start_time = date('H:i:s',$td);
+	$task_date = date('Y-m-d',$td);
+	$task_end = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['endedDate']);
+	$tdd = strtotime($task_end);
+	$task_end_time=date('H:i:s',$tdd);
 
-		$s="SELECT * FROM time_details WHERE ref_id='".$user_id."' AND type='task' ";
-		$r=mysqli_query($con,$s);
-		$num=mysqli_num_rows($r);
-		$row = mysqli_fetch_all($r,MYSQLI_ASSOC);
+	//Insertion of task info into db
+	$sql="INSERT INTO time_details(type,ref_id,project_id,task_name,t_date,start_time,end_time,created_on) VALUES('task','".$user_id."','".$choose_p."','".$task_name."','".$task_date."','".$task_start_time."','".$task_end_time."','".date('Y-m-d H:i:s')."')";
+	$res=mysqli_query($GLOBALS['db_connection'],$sql);
+	if($res==TRUE){
+		header("location:../user/home.php");
 	}
-		/*echo $num;
-		if($num>0){
-		
-			$row = mysqli_fetch_all($r,MYSQLI_ASSOC);
-			
-}
-
-	}else{
-		echo "<br>";
-		echo "Error: ".$sql."<br>".mysqli_error($con);
-	}*/
 ?>

@@ -55,7 +55,7 @@
             <div class="container">
                 <div class=" row mb-3">
                     <div class="col-6">
-                        <h4 class="font-weight-light text-left pt-5">Recent Activites</h4>
+                        <h4 class="font-weight-light text-left">Recent Activites</h4>
                     </div>
                     <div class="col-6 dropdown text-right">
                         <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

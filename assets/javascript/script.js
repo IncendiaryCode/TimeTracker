@@ -7,6 +7,7 @@ $(document).ready(function () {
 
 });
 
+
 var Validation = function (e) {
     this.isValid = false;
     this.errorCount = 0;
@@ -44,7 +45,7 @@ Validation.prototype.event = function (ele) {
 
         return this.isValidateEmail(ele);
     }
-    if (ele.type == 'passwprd') {
+    if (ele.type == 'password') {
         this.isValid = true;
         return this.isValid;
     }
@@ -77,7 +78,6 @@ loginForm.onsubmit = function (e) {
         
 
         var id = document.getElementById('Username').value;
-        console.log(id);
         localStorage.setItem('id',id);
 
         document.getElementById('Username-error').value = " ";
@@ -88,29 +88,44 @@ loginForm.onsubmit = function (e) {
 
 var forgotPsw = document.getElementById('forgotPassword');
 forgotPsw.onsubmit = function (e) {
+
     var validateForm = new Validation(e.currentTarget);
     var finalValue = validateForm.correctCheck();
     if (finalValue.isValid == true) {
+
         var valid = validateOtp();
-        if (valid == true)
-        {
-            $(document).ready(function () {
+       
+            
+            
+         //   return false;
         
-            $('#formPsw').show();
-            $('#form2').hide();
-            return false;
-        
-    });
+
+           
             var formPsw = document.getElementById('reEnterPsw');
             formPsw.onsubmit = function (e)
             {
+                var email = document.getElementById('Username').value;
                var psw1 = document.getElementById('psw1').value;
     var psw2 = document.getElementById('psw2').value;
     if (psw1 == "" || psw1 == " ") {
         document.getElementById('cnfrmPsw').innerHTML = "Empty Password";
         return false;
     }
+    else if(email == "" || email == " "){
+        document.getElementById('Username-errorr').innerHTML = "Empty Email";
+        return false;
+    }
     if (psw1 === psw2) {
+    
+        $.ajax({
+                type: "POST",
+                url: '../php/change_pwd.php',
+                data: {Username:email, psw11:psw1, psw22:psw2},
+                success: function(data){
+                    //alert(data);
+                }
+            });
+       // document.location.href="../php/change_pwd.php";
          alert('password changed successfully!!!');
          
         return true;
@@ -123,8 +138,7 @@ forgotPsw.onsubmit = function (e) {
 
         }
             return false;
-    } else
-        return false;
+   
 }return false;
 }
 
@@ -136,8 +150,8 @@ function validateOtp() {
     });
 
    
-    var otp = document.getElementById('otp1').value;
-            if (otp === "" || otp === " ") {
+    var otpp = document.getElementById('otp1').value;
+            if (otpp === "" || otpp === " ") {
                 document.getElementById('rotate-text').innerHTML = " OTP has sent to your mail. ";
                 document.getElementById('here').innerHTML = " Enter OTP ";
                 return false;
@@ -146,6 +160,44 @@ function validateOtp() {
             {  
                 document.getElementById('rotate-text').innerHTML = " ";
                 /*validate OTP*/
-                return true;
+                $.ajax({
+                    type: "POST",
+                    url: 'php/check_otp.php',
+                    data: {otp:otpp},
+                    success: function(data){
+                        //alert(data);
+                        //console.log(data);
+                        if(data == null || data == ""){
+                            $(document).ready(function () {
+                                console.log("its in on submit3");
+                                $('#formPsw').show();
+                                $('#form2').hide();
+                            });
+                            return true;
+                        }else{
+                            document.getElementById("here").innerHTML = "Wrong OTP.";
+                            return false;
+                        }
+                    }
+                });
+               // document.location.href="php/check_otp.php";
             }
 }
+function sendOTP(){
+    var email = document.getElementById('Uname').value;
+    if(email=="" || email==" "){
+        document.getElementById('Uname-error').innerHTML="Enter email.";
+    }else{
+        console.log("sdhsaj");
+            $.ajax({
+                type: "POST",
+                url: 'php/forgot_pwd.php',
+                data: {email:email},
+                success: function(data){
+                    alert(data);
+                }
+            });
+        }   
+}
+
+//console.log("here");

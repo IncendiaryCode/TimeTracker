@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <?php
-include("../configs/constants.php");
+include("../configurations/constants.php");
 session_start();
 if(!isset($_SESSION['user'])){
-    header("location:".BASE_URL);
+    header("location:".BASE_URL."index.php");
 }
 // echo $GLOBALS['page_title']; exit;
 ?>
@@ -23,25 +23,33 @@ if(!isset($_SESSION['user'])){
     <header class="container-fluid main-header">
         <div class="row padding-around">
             <div class="col-6 time-tracker">
-                <a href="<?=BASE_URL?>">
+                <a href="<?=BASE_URL?>user/home.php">
                     <img src="<?=BASE_URL?>assets/images/logo-white.png" height="40px">
                 </a>
             </div>
 
             <?php if(empty($GLOBALS['page_title'])) { ?>
             <div class="col-5 text-right ">
-                <a href="<?=BASE_URL?>user/add_task.php" class="btn btn-primary"><i class="fas fa-plus icon-White "></i> Task</a>
+<<<<<<< HEAD
+                <a href="<?=BASE_URL?>user/add_task.php" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
+=======
+                <a href="<?=BASE_URL?>user/add_task.php" id="new-task" class="btn btn-primary"><i class="fas fa-plus icon-White "></i> Task</a>
+>>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
             </div>
             <div class="col-1 text-left" id="append">
                 <!-- to chage image -->
-                <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#changeProfile" data-toggle="tooltip" data-placement="top" title="User Profile" onclick="timeUpdate()"></i></h2>
+                <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#changeProfile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></h2>
            </div>
        		<?php } else { ?>
            <div class="col-6 text-right">
                 <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#changeProfile" data-placement="top" title="User Profile"></i></h2>
             </div>
             <div class="col-12">
-                <p class="display-4 pb-  text-center">Add Task</p>
+<<<<<<< HEAD
+                <p class="display-4  text-center"><?= $GLOBALS['page_title'] ?></p>
+=======
+                <p class="display-4  text-center"><?php echo $GLOBALS['page_title'] ?></p>
+>>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
             </div>
        		<?php } ?>
 

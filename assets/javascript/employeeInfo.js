@@ -60,8 +60,20 @@ function timeUpdate() {
 function pause() {
 
     if ((++pauseCount) % 2 !== 0) {
+        //play
         localStorage.setItem('totalSeconds', totalSeconds);
         clearInterval(a);
+        var logoutTime = getTime();
+        var oldTime = localStorage.getItem('loginTime');
+        storing.ended=logoutTime;
+        var id= document.getElementById('user_id').value;
+        $.ajax({
+                type:"POST",
+                url:'../php/stop.php',
+                data:{info:JSON.stringify(storing),user_id:id},
+                success:function(data){
+                }
+            });
     } else {
         flag = true;
         a = setInterval(setTime, 1000);
@@ -75,12 +87,20 @@ function pause() {
         storing = storing + count;
         storing = {
             'date': date + todayTime,
-            'started': oldTime,
+            'started': todayTime,
             'ended': '00:00:00',
             'timeUsed': '00:00:00'
         }
         localStorage.setItem('entry' + count, JSON.stringify(storing));
-
+        var id= document.getElementById('user_id').value;
+        $.ajax({
+            type:"POST",
+            url:'../php/play.php',
+            data:{info:JSON.stringify(storing),user_id:id},
+            success:function(data){
+                /**/
+            }
+        });
     }
 }
 
@@ -128,16 +148,16 @@ function storeTime() {
     var timeUsed = secondsToTime(totalSeconds);
     storing.ended = logoutTime;
     storing.timeUsed = timeUsed;
-    localStorage.setItem('entry' + count, JSON.stringify(storing));
-
-
+    localStorage.setItem('entry' + count, JSON.stringify(storing));    
+   
+    
 }
 
 function loginTime() {
 
     var id = localStorage.getItem('id');
     if (count == null) {
-        localStorage.setItem('count', 0);
+        localStorage.setItem('count',0);
     }
     count = parseInt(localStorage.getItem('count'));
     var todayTime = getTime();
@@ -209,6 +229,20 @@ changeImage.onsubmit = function(e) {
 
 $(document).ready(function() {
     $('.submitProfile').click(function() {
-        $('#changeProfile').modal('show')
+        $('#changeProfile').modal('show');
+        var image=document.getElementById('image').value;
+        console.log(image);
+        $.ajax({
+            type: 'POST',
+            url: '<?=BASE_URL?>php/upload_profile.php',
+            data: {change_img:image},
+            success:function(data){
+                //document.getElementById('new_img').src=response;
+                 $('#new_img').empty().append(data);
+                console.log(data);
+            }
+        });
+        
     });
+        
 });

@@ -1,11 +1,12 @@
+
 <!DOCTYPE html>
 <?php
 include("configurations/constants.php");
 session_start();
-$user_id=$_SESSION['user_id'];
-/*if(isset($_SESSION['user_id'])){
-    header("location:user/home.php");
-}*/
+// $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
+if(isset($_SESSION['user_id'])){
+    //header("location:user/home.php");
+}
 ?>
 <html>
 <head>

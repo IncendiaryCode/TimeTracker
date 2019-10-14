@@ -11,10 +11,10 @@
     <header class="container-fluid main-header">
         <div class="row padding-around">
             <div class="col-6 time-tracker">
-                <img src="images/logo-white.png" height="50px">
+                <img src="<?=BASE_URL?>images/logo-white.png" height="50px">
             </div>
             <div class="col-5 text-right ">
-                <form method="post" action="addTask.php">
+                <form method="post" action="add_task.php">
                     <button id="new-task" type="submit" onclick="timeUpdate()"><i class="fas fa-plus icon-White "></i>
                         <span class="time-tracker "> Task</span></button>
                 </form>
@@ -58,8 +58,8 @@
                             Sort by
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="employeeInfo.php" onclick="sortByTaskName();">Task name</a>
-                            <a class="dropdown-item" href="employeeInfo.php" onclick="sortByDate();">Date</a>
+                            <a class="dropdown-item" href="home.php" onclick="sortByTaskName();">Task name</a>
+                            <a class="dropdown-item" href="home.php" onclick="sortByDate();">Date</a>
                         </div>
                     </div>
                 </div>
@@ -79,17 +79,17 @@
                 <div class="modal-content modal-width">
                     <div class="container-fluid-main">
                         <div class="  md main-container-employee text-center">
-                            <img id="new_img" src="images/<?=$_SESSION['user_image'];?>" width="10%;" class="rounded-circle figure mt-4" data-toggle="modal" data-target="#changeimage" data-toggle="tooltip" data-placement="top" title="Upload profile picture">
+                            <img id="new_img" src="<?=BASE_URL?>images/user_profiles/<?=$_SESSION['user_image'];?>" width="10%;" class="rounded-circle figure mt-4" data-toggle="modal" data-target="#changeimage" data-toggle="tooltip" data-placement="top" title="Upload profile picture">
                             <h5 class="text-center mt-4 font-weight-light"><?php echo $_SESSION['user_name'];?></h5>
                             <div class="container">
                                 <div class="row">
-                                    <h3 class="hr pt-4 font-weight-normal"><a href="employeeProfile.php" class="text-dark">Profile</a></h3>
+                                    <h3 class="hr pt-4 font-weight-normal"><a href="<?BASE_URL?>user/employee_profile.php" class="text-dark">Profile</a></h3>
                                 </div>
                                 <div class="row">
-                                    <h3 class="hr pt-4 font-weight-normal"><a href="employeeActivities.php" class="text-dark">Login Activities</a></h3>
+                                    <h3 class="hr pt-4 font-weight-normal"><a href="<?BASE_URL?>user/employee_activities.php" class="text-dark">Login Activities</a></h3>
                                 </div>
                                 <div class="row">
-                                    <h3 class="hr pt-4 font-weight-normal"><a href="index.php" class="text-dark" onclick="logout()">Logout</a></h3>
+                                    <h3 class="hr pt-4 font-weight-normal"><a href="<?BASE_URL?>index.php" class="text-dark" onclick="logout()">Logout</a></h3>
                                 </div>
                                 <div class="row hr"></div>
                             </div>
@@ -105,7 +105,7 @@
                         <button type="button" class="close text-danger" data-dismiss="modal">×</button>
                     </div>
                     <div class="modal-body">
-                        <form id="uploadImage" method="post" action="upload_profile.php" enctype="multipart/form-data">
+                        <form id="uploadImage" method="post" action="<?BASE_URL?>php/upload_profile.php" enctype="multipart/form-data">
                             <p><input type="file" name="change_img" placeholder="Upload image" id="image"></p>
                             <p class="text-danger" id="imageerror"></p>
                             <button type="submit" class="btn save-task submitProfile">Upload</button>

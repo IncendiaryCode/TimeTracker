@@ -1,5 +1,5 @@
 <?php
-	include('con.php');
+	include('_con.php');
 	session_start();
 	$tabl_id=$_SESSION['table_id'];
 	$user_id=$_POST['user_id'];
@@ -15,10 +15,10 @@
 	$start_t=$_SESSION['login_time'];
 	$sql="UPDATE time_details SET end_time='".$info['ended']."', start_time='".$info['started']."' WHERE id='".$tabl_id."' AND ref_id='".$user_id."'";
 	//print_r($sql);
-	$res=mysqli_query($con,$sql);
+	$res=mysqli_query($GLOBALS['db_connection'],$sql);
 	if($res==FALSE){
 		//echo "Updated.";
 		//header('Refresh:1;URL=employeeActivities.php?logout='.$row['end_time']);
-		echo"Error:".mysqli_error($con);
+		echo"Error:".mysqli_error($GLOBALS['db_connection']);
 	}
 ?>
