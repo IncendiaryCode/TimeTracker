@@ -30,11 +30,7 @@ if(!isset($_SESSION['user'])){
 
             <?php if(empty($GLOBALS['page_title'])) { ?>
             <div class="col-5 text-right ">
-<<<<<<< HEAD
                 <a href="<?=BASE_URL?>user/add_task.php" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
-=======
-                <a href="<?=BASE_URL?>user/add_task.php" id="new-task" class="btn btn-primary"><i class="fas fa-plus icon-White "></i> Task</a>
->>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
             </div>
             <div class="col-1 text-left" id="append">
                 <!-- to chage image -->
@@ -45,11 +41,7 @@ if(!isset($_SESSION['user'])){
                 <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#changeProfile" data-placement="top" title="User Profile"></i></h2>
             </div>
             <div class="col-12">
-<<<<<<< HEAD
                 <p class="display-4  text-center"><?= $GLOBALS['page_title'] ?></p>
-=======
-                <p class="display-4  text-center"><?php echo $GLOBALS['page_title'] ?></p>
->>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
             </div>
        		<?php } ?>
 

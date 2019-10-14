@@ -7,11 +7,7 @@ include("header.php");
         <div class="main-container-inner">
             <div class="row ">
                 <div class="col-6 offset-3">
-<<<<<<< HEAD
-                    <form action="../php/save_task.php" method="post" id="addTask" class="mt-5 ">
-=======
                     <form action="<?=BASE_URL?>/user/home.php" method="post" id="addTask" class="mt-5 ">
->>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
                         <div class="form-group  ">
                             <label for="task-name ">Write the task name</label>
                             <input type="text" class="form-control" name="task-name" id="Taskname">
@@ -23,27 +19,21 @@ include("header.php");
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
                             <select type="number" class="form-control" id="chooseProject" name="chooseProject">
-<<<<<<< HEAD
-                            <option>Select Project</option>
-                                
-                            <!-- <?php
-                            $s="SELECT name FROM project";
-                            $r=mysqli_query($GLOBALS['db_connection'],$s);
-                            $num=mysqli_num_rows($r);   
-                            if($num > 0){     
-                                $row = mysqli_fetch_all($r,MYSQLI_ASSOC);
-                            }
-                            echo $row;
-                            ?> -->
-                            <option>1</option>
-                            <option>2</option>
-=======
+                                <option>Select Project</option>                                
+                                <!-- <?php
+                                $s="SELECT name FROM project";
+                                $r=mysqli_query($GLOBALS['db_connection'],$s);
+                                $num=mysqli_num_rows($r);   
+                                if($num > 0){     
+                                    $row = mysqli_fetch_all($r,MYSQLI_ASSOC);
+                                }
+                                echo $row;
+                                ?> -->
                                 <option>Select Project</option>
                                 <option>Sphere</option>
                                 <option>Buck</option>
                                 <option>TimeTracker</option>
                                 <option>Latli</option>
->>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
                             </select>
                         </div>
                         <div class="form-group">

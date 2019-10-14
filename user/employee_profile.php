@@ -8,15 +8,9 @@ include("header.php");
                 <div class="row mt-5">
                     <div class="col-6 offset-3">
                         <div class="text-center mt-4">
-<<<<<<< HEAD
                             <img src="<?=BASE_URL?>assets/images/user_profiles/<?=$_SESSION['user_image'];?>" width="30%;" class="rounded-circle figure mt-4 text-center">
                         </div>
                         <form action="<?=BASE_URL?>php/change_pwd.php" class="mt-4" id="myProfile" method="post">
-=======
-                            <img src="<?=BASE_URL?>assets/images/user_profiles/icons8-virtualbox-48.png" width="30%;" class="rounded-circle figure mt-4 text-center">
-                        </div>
-                        <form action="<?=BASE_URL?>/user/home.php" class="mt-4" id="myProfile">
->>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
                             <div class="form-group">
                                 <div class="input-group mb-3 ">
                                     <input type="password" class="mb-4 form-control-file font-weight-light border-top-0 border-left-0 border-right-0" id="oldPsw" name="psw1" placeholder="Enter Old Password">

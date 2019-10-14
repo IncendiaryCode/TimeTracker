@@ -28,15 +28,10 @@ include("../php/activity.php");
                 <span aria-hidden="true">×</span>
             </button>
         </div>
-<<<<<<< HEAD
         <div class="container">
             <div class="row mb-3 pt-4">
                 <div class="col-6 space-left  space-right">
-=======
-        <div class="container pt-5">
-            <div class=" row mb-3">
-                <div class="col-6 space-left">
->>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
+
                     <h4 class="font-weight-light text-left ">Recent Activites</h4>
                 </div>
                 <div class="col-6  space-right dropdown text-right">
@@ -44,21 +39,13 @@ include("../php/activity.php");
                         Sort by
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-<<<<<<< HEAD
                         <a class="dropdown-item" href="home.php" onclick="sortByTaskName();">Task name</a>
                         <a class="dropdown-item" href="home.php" onclick="sortByDate();">Date</a>
-=======
-                        <a class="dropdown-item"  onclick="sortByTaskName();">Task name</a>
-                        <a class="dropdown-item"  onclick="sortByDate();">Date</a>
->>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
                     </div>
                 </div>
             </div>
 
             <div class='row mb-5 attach-card'>
-<<<<<<< HEAD
-             
-=======
                 <div class="d-flex align-items-center">
                   <strong>Loading...</strong></div>
                   <div class="spinner-border text-right ml-auto" role="status" aria-hidden="true">
@@ -79,9 +66,7 @@ include("../php/activity.php");
                         }
                         loadDoc();
                   </script>
-
                 <?php echo '<pre>'; print_r(get_activities('task')); ?>
->>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
             </div>
             <hr>
             <footer>

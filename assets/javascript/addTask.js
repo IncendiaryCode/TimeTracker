@@ -10,13 +10,14 @@ var store = {
     'started': '10:00AM',
     'ended': '0',
     'taskName': 'taskName',
-    'taskDescription':'taskDescription',
+    'taskDescription': 'taskDescription',
     'projectName': 'projectName',
     'totalTime': 'totalTime'
 }
+
 if (addTask) {
-    var m=new Date();
-    var start_date=m.getUTCFullYear() + "-" + m.getUTCMonth() + "-" + m.getUTCDate() + " "+ m.getHours()+":"+m.getMinutes()+":"+m.getSeconds();
+    var m = new Date();
+    var start_date = m.getUTCFullYear() + "-" + m.getUTCMonth() + "-" + m.getUTCDate() + " " + m.getHours() + ":" + m.getMinutes() + ":" + m.getSeconds();
     document.getElementById('setCurrentDate').value = start_date;
     var loginTime = document.getElementById('setCurrentDate').value;
     var ended = document.getElementById('ended').value;
@@ -27,16 +28,12 @@ if (addTask) {
         var taskName = document.getElementById('Taskname').value;
         var project = document.getElementById('chooseProject').value;
         var taskDescription = document.getElementById('description').value;
-        
+
         if (taskName == "" || taskName == " ") {
             document.getElementById('taskError').innerHTML = "Please Enter Task Name ";
             return false;
         }
-<<<<<<< HEAD
         if (project == "" || project == "Select Project") {
-=======
-        if (project == "Select Project") {
->>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
             document.getElementById('taskError').innerHTML = "Please Choose Project Name ";
             console.log("here");
             return false;
@@ -45,48 +42,27 @@ if (addTask) {
             return true;
         }
     }
-
 }
 
+/*
 function showTask() {
     num = localStorage.getItem('num');
     // console.log(num);
-    /*retrieve from db and pass it..*/
-    /*display in loop*/
+    // retrieve from db and pass it..
+    // /*display in loop
     if (num > 0) {
         for (var i = num; i > 0; i--) {
             variable = localStorage.getItem('row' + parseInt(i));
             var data = JSON.parse(variable);
             var id = data.id;
-
             var loginTime = data.started;
             var ended = data.ended;
             var taskName = data.taskName;
             var projectName = data.projectName;
-<<<<<<< HEAD
-            
-         
-=======
-            if ((ended == "" || ended == " " || ended == null)) {
-                $(document).ready(function() {
-                    $('.timer').show();
-                    $('.Btn').show();
-
-                });
-
-            } else {
-                $(document).ready(function() {
-                    $('.timer').hide();
-                }); 
-            }
-            $(".attach-card").append("<div class='col-lg-5 ml-lg-5 mt-3 shadow card-style' onclick = 'clearTime()' data-toggle='modal' data-target='#newModal' data-toggle='tooltip' data-placement='top' '><div class='card-header bg-white text-left text-black-50'><div class='row pt-2'><span class='vertical-line'></span><div class='col-6 text-left'>" + id + ")" + loginTime + "</div><div class='col-5 text-right'><span class='text-right timer'><i class=' far fa-clock'></i> <label id='hr'>00</label>:<label id='min'>00</label>:<label id='sec'>00</label></span><span>" + ended + "</span></div></div></div><div class='card-body text-body ml-4'><p>" + taskName + "</p></div><div class='card-footer text-black-50 bg-white pl-4 pb-3'><i class='fas fa-user-circle'></i>" + projectName + "</div></div>");
->>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
         }
     }
 }
-
-/*showTask();*/
-
+showTask();*/
 
 var secLabel = document.getElementById("sec");
 var minLabel = document.getElementById("min");
@@ -94,7 +70,6 @@ var hrLabel = document.getElementById("hr");
 var totalSec = 0;
 var totalMin = 0;
 var totalHr = 0;
-
 
 function displaytime() {
 
@@ -125,7 +100,7 @@ function timeFormate(value, lable) {
 function taskSchedule(card) {
 
     console.log(card);
-    var id= card.id;
+    var id = card.id;
     var loginTime = card.started;
     var ended = card.ended;
     if (ended == null) {
@@ -136,23 +111,23 @@ function taskSchedule(card) {
     var taskDescription = card.taskDescription;
 
 
-        if ((++pauseCount) % 2 == 0) {
-            clearInterval(taskTimer);
-            console.log('totalSec', totalSec);
-            store.ended = parseInt(ended) + taskSecondsToTime(totalSec);
-            console.log(store.ended);
-            store.id=id;
-            store.started=loginTime;
-            store.taskName=taskName;
-            store.projectName=projectName;
-            localStorage.setItem('row' + store.id, JSON.stringify(store));
+    if ((++pauseCount) % 2 == 0) {
+        clearInterval(taskTimer);
+        console.log('totalSec', totalSec);
+        store.ended = parseInt(ended) + taskSecondsToTime(totalSec);
+        console.log(store.ended);
+        store.id = id;
+        store.started = loginTime;
+        store.taskName = taskName;
+        store.projectName = projectName;
+        localStorage.setItem('row' + store.id, JSON.stringify(store));
 
-            document.getElementById('stop').innerHTML = "Resume";
+        document.getElementById('stop').innerHTML = "Resume";
 
-        } else {
-            taskTimer = setInterval(displaytime, 1000);
-            document.getElementById('stop').innerHTML = "Stop";
-        }
+    } else {
+        taskTimer = setInterval(displaytime, 1000);
+        document.getElementById('stop').innerHTML = "Stop";
+    }
 }
 
 function clearTime() {
@@ -200,5 +175,5 @@ function taskTimeToSeconds(time) {
 
 function sortByTaskName() {
     /*retreive name from database*/
-    
+
 }

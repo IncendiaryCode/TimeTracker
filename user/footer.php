@@ -16,11 +16,7 @@
                                 <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>user/employee_activities.php" class="text-dark">Login Activities</a></h3>
                             </div>
                             <div class="row">
-<<<<<<< HEAD
                                 <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>/php/logout.php" class="text-dark" onclick="logout()">Logout</a></h3>
-=======
-                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>index.php" class="text-dark" onclick="logout()">Logout</a></h3>
->>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
                             </div>
                             <div class="row hr"></div>
                         </div>

@@ -1,10 +1,7 @@
-<<<<<<< HEAD
 /*var id = localStorage.getItem('count');
 console.log('id',id);
-=======
-var id = localStorage.getItem('count');
 
->>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
+var id = localStorage.getItem('count');
 for (var i = id; i > 0; i--) {
     variable = localStorage.getItem('entry' + parseInt(i));
     var data = JSON.parse(variable);
