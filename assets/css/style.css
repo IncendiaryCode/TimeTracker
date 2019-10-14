@@ -7,10 +7,11 @@ html {
 
 body {
     font-family: 'Roboto', sans-serif;
-    /*font-size: 18px;*/
+    font-size: 16px;
     background-color: #fff;
     background-image: linear-gradient(-40deg, #e485fb 40%, #6d77ff 100%);
     height: 100%;
+    color: #666;
 }
 
 header.main-header {
@@ -185,7 +186,7 @@ header.main-header h1 {
 
 }
 
-.card-style {
+/*.card-style {
     border-radius: 20px;
     border-width: 1px;
     border-style: solid;
@@ -194,16 +195,10 @@ header.main-header h1 {
 
 .card-header {
     font-size: 12px;
-}
+}*/
 
 .timePerTask {
     color: #bbbbbb;
-}
-
-.vertical-line {
-    color: #867bfe;
-    border-width: 2px;
-    border-style: solid;
 }
 
 .save-task {
@@ -221,29 +216,45 @@ header.main-header h1 {
     }
 }
 
-.card-style {
-    border-radius: 20px;
+.vertical-line {
+    color: #867bfe;
+    border-width: 2px;
+    border-style: solid;
+}
+
+.card-style-1 {
+    box-shadow: 0 0.2rem 0.7rem rgba(0, 0, 0, .1) !important;
+    border-radius: 15px;
     border-width: 1px;
     border-style: solid;
-    border-color: #ededed;
+    border-color: #ededed;    
 }
 
-.card-header {
-    font-size: 15px;
+.card-style-1 .card-header .vertical-line {
+    margin-right: 10px;
+}
+
+.card-style-1 .card-header {
     border: none;
+    background: #fff;
+    border-radius: 15px 15px 0 0;
+    color: #999;
+    font-size: 14px;
 }
 
-.card {
-    box-shadow: 0 0.2rem 0.7rem rgba(0, 0, 0, .1) !important;
+.card-style-1 .card-body {
+    padding-top: 0; 
+    padding-bottom: 0; 
+    margin-left: 15px;    
 }
 
-.card-body {
-    padding: 0px;
-}
-
-.card-footer {
+.card-style-1 .card-footer {
     border: none;
-    padding: 0px;
+    background: #fff;
+    border-radius: 0 0 15px 15px;
+    margin-left: 15px;
+    color: #999;
+    font-size: 14px;
 }
 
 #changeProfile {

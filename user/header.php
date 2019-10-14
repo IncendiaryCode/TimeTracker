@@ -17,6 +17,9 @@ if(!isset($_SESSION['user'])){
     <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.7.0/css/all.css">
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<?=BASE_URL?>assets/css/style.css?v=<?=VERSION?>">
+    <script type="text/javascript">
+        var timeTrackerBaseURL = "<?=BASE_URL?>";
+    </script>
 </head>
 
 <body>

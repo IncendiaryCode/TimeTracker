@@ -1,14 +1,3 @@
-$(document).ready(function() {
-    $('.fa-play').click(function() {
-        $('.fa-stop').show();
-        $('.fa-play').hide();
-    })
-    $('.fa-stop ').click(function() {
-        $('.fa-stop').hide();
-        $('.fa-play').show();
-    })
-})
-
 var minutesLabel = document.getElementById("minutes");
 var secondsLabel = document.getElementById("seconds");
 var hoursLabel = document.getElementById("hours");
@@ -65,15 +54,14 @@ function pause() {
         clearInterval(a);
         var logoutTime = getTime();
         var oldTime = localStorage.getItem('loginTime');
-        storing.ended=logoutTime;
-        var id= document.getElementById('user_id').value;
+        storing.ended = logoutTime;
+        var id = document.getElementById('user_id').value;
         $.ajax({
-                type:"POST",
-                url:'../php/stop.php',
-                data:{info:JSON.stringify(storing),user_id:id},
-                success:function(data){
-                }
-            });
+            type: "POST",
+            url: '../php/stop.php',
+            data: { info: JSON.stringify(storing), user_id: id },
+            success: function(data) {}
+        });
     } else {
         flag = true;
         a = setInterval(setTime, 1000);
@@ -92,12 +80,12 @@ function pause() {
             'timeUsed': '00:00:00'
         }
         localStorage.setItem('entry' + count, JSON.stringify(storing));
-        var id= document.getElementById('user_id').value;
+        var id = document.getElementById('user_id').value;
         $.ajax({
-            type:"POST",
-            url:'../php/play.php',
-            data:{info:JSON.stringify(storing),user_id:id},
-            success:function(data){
+            type: "POST",
+            url: '../php/play.php',
+            data: { info: JSON.stringify(storing), user_id: id },
+            success: function(data) {
                 /**/
             }
         });
@@ -148,16 +136,16 @@ function storeTime() {
     var timeUsed = secondsToTime(totalSeconds);
     storing.ended = logoutTime;
     storing.timeUsed = timeUsed;
-    localStorage.setItem('entry' + count, JSON.stringify(storing));    
-   
-    
+    localStorage.setItem('entry' + count, JSON.stringify(storing));
+
+
 }
 
 function loginTime() {
 
     var id = localStorage.getItem('id');
     if (count == null) {
-        localStorage.setItem('count',0);
+        localStorage.setItem('count', 0);
     }
     count = parseInt(localStorage.getItem('count'));
     var todayTime = getTime();
@@ -228,21 +216,96 @@ changeImage.onsubmit = function(e) {
 }
 
 $(document).ready(function() {
+
+    if ($("#attach-card").length > 0) {
+        $.ajax({
+            type: 'GET',
+            url: timeTrackerBaseURL + 'php/activity.php?type=task',
+            success: function(values) {
+                var data = JSON.parse(values);
+                $("#attach-card").empty();
+                for (x in data) {
+                    if (data[x].end_time == '00:00:00') {
+                        // $('#end_time').hide();
+                        $('.timer').show();
+                    } else {
+                        $('#end_time').show();
+                        // $('.timer').css('display', 'none');
+
+                    }
+
+                    /*$("#attach-card").dblclick(function() {
+                        window.location.href = "../user/task_description.php";
+                    });*/
+
+                    var cardHeader = $('<div class="card-header" />');
+                    var cardHeaderRow = $('<div class="row pt-2" />');
+                    cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].start_time + '</div>');
+                    var stopCol = $('<div class="col-6 text-right" />');
+                    if (data[x].end_time !== '00:00:00') {
+                        stopCol.append('<i class="far fa-clock"></i> '+data[x].end_time);
+                    } else {
+                        var stopButton = $('<button class="text-danger btn btn-link" id="stop">Stop</button>').data('taskid', data[x].id);
+                        stopButton.on('click', function() {
+                            $.ajax({
+                                type: 'POST',
+                                url: timeTrackerBaseURL + 'php/stoptimer.php',
+                                data: { 'id': $(this).data('taskid') },
+                                success: function(res) {
+                                    console.log('stopped', res);
+                                }
+                            });
+                        });
+                        stopCol.append(stopButton);
+                    }
+                    cardHeaderRow.append(stopCol);
+                    cardHeader.append(cardHeaderRow);
+
+
+                    var cardInner = $("<div class='card card-style-1' />");
+                    cardInner.append(cardHeader);
+
+                    var cardBody = $("<div class='card-body' />");
+                    cardBody.append(data[x].task_name);
+                    cardInner.append(cardBody);
+
+                    var cardFooter = $("<div class='card-footer' />");
+                    cardFooter.append("<i class='fas fa-user-circle'></i> " + data[x].project_id);
+                    cardInner.append(cardFooter);
+
+                    var cardCol = $("<div class='col-lg-6 mb-4' />");
+                    cardCol.append(cardInner);
+
+                    $("#attach-card").append(cardCol);
+                }
+            }
+        });
+    }
+
+    $('.fa-play').click(function() {
+        $('.fa-stop').show();
+        $('.fa-play').hide();
+    })
+
+    $('.fa-stop ').click(function() {
+        $('.fa-stop').hide();
+        $('.fa-play').show();
+    })
+
     $('.submitProfile').click(function() {
         $('#changeProfile').modal('show');
-        var image=document.getElementById('image').value;
+        var image = document.getElementById('image').value;
         console.log(image);
         $.ajax({
             type: 'POST',
             url: '<?=BASE_URL?>php/upload_profile.php',
-            data: {change_img:image},
-            success:function(data){
+            data: { change_img: image },
+            success: function(data) {
                 //document.getElementById('new_img').src=response;
-                 $('#new_img').empty().append(data);
+                $('#new_img').empty().append(data);
                 console.log(data);
             }
         });
-        
     });
-        
+
 });
