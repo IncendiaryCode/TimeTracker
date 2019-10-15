@@ -27,34 +27,33 @@
 
         <div id="form2" class="animated fadeInRightBig">
             <form id="forgotPassword" method="post" class="login-form" action="<?=BASE_URL?>php/check_otp.php" onsubmit="validateOtp()" novalidate>
-                <div class="text-center">
+                
                     <div class="logo-space">
                         <h5 class="text-center">Forgot Password</h5>
+                        <p class="error" id="here"></p>
+                          <p class="error" id="Uname-error"></p>
+                          <p style="color: green" class="animated rotateIn" id="rotate-text"></p>
                     </div>
 
                     <div class="form-group">
                           <div class="input-group mb-3 top-space">
                             <input id="user_id" name="user_id" type="hidden" value="<?php echo $_SESSION['user_id'];?>">
                             <input type="email" class="form-control-file  has-email-validation has-empty-validation font-weight-light border-top-0 border-left-0 border-right-0" id="Uname" name="email" placeholder="Enter email">
-                            <div class="input-group-append">
-                              <button  class="btn btn-link forgot-color" id="getOTP" onclick="sendOTP()">Send OTP</button>  
-                             </div>
+                            
+                            
                           </div>
-                          <p class="error" id="Uname-error"></p>
-                          <p style="color: green" class="animated rotateIn" id="rotate-text"></p>
+                              <a href="#"  class="text-left btn btn-link forgot-color p-0" id="getOTP" onclick="sendOTP()">Send OTP</a>  
                     </div>
                     <div class="form-group otp">
                           <div class="input-group mb-3  top-space">
                             <input type="text" class="form-control-file top-space font-weight-light border-top-0 border-left-0 border-right-0" id="otp1" name="otp" placeholder="Enter OTP">
-                           
                           </div>
-                          <p class="error" id="here"></p>
+                          
                     </div>
                       <div class="row top-space" style="width: 100%;">
                         <a href="<?=BASE_URL?>index.php" class="col-6 text-left forgot-color"><i class="fas fa-arrow-left"> back to login</i></a>
                         <button class="btn btn-primary col-3 offset-3 login-color" id="count" type="submit">  Submit  </button>    
-                    </div>
-                </div>                
+                    </div>              
             </form> 
         </div>
 

@@ -289,7 +289,7 @@ header.main-header h1 {
 padding: 0px;
 }
 
-.fa-play
+.fa-stop
 {
     display: none;
 }
@@ -303,11 +303,7 @@ padding: 0px;
 {
     opacity: .89;
 }
-.space-left
+#Checked
 {
-    padding-left: 0px;
-}
-.space-right
-{
-    padding-right: 0px;
+    display: none;
 }

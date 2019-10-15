@@ -3,7 +3,7 @@
     include('../configurations/constants.php');
     session_start();
     $error="";
-    //mysqli_select_db($database,$GLOBALS['db_connection']);
+    mysqli_select_db($database,$GLOBALS['db_connection']);
     if(isset($_POST['Username']) && isset($_POST['password'])){
         $email = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['Username']);
         $password = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['password']);

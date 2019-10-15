@@ -44,25 +44,6 @@ if (addTask) {
     }
 }
 
-/*
-function showTask() {
-    num = localStorage.getItem('num');
-    // console.log(num);
-    // retrieve from db and pass it..
-    // /*display in loop
-    if (num > 0) {
-        for (var i = num; i > 0; i--) {
-            variable = localStorage.getItem('row' + parseInt(i));
-            var data = JSON.parse(variable);
-            var id = data.id;
-            var loginTime = data.started;
-            var ended = data.ended;
-            var taskName = data.taskName;
-            var projectName = data.projectName;
-        }
-    }
-}
-showTask();*/
 
 var secLabel = document.getElementById("sec");
 var minLabel = document.getElementById("min");
@@ -148,7 +129,7 @@ function pauseTime() {
     document.getElementById('stop').innerHTML = "Resume";
     clearInterval(taskTimer);
 }
-
+/**/
 
 
 function taskSecondsToTime(d) {
@@ -177,3 +158,18 @@ function sortByTaskName() {
     /*retreive name from database*/
 
 }
+
+$(document).ready(function(){
+    var btn;
+    $('#editTask').click(function()
+    {
+    btn = document.getElementById('editTask').checked;
+    if (btn == true) {
+        $('#Checked').show();
+    }
+    })
+    $('#newTask').click(function()
+    {
+    $('#Checked').hide();
+});
+});

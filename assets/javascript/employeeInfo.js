@@ -249,7 +249,7 @@ function loadTaskActivities(formData) {
                 var cardHeaderRow = $('<div class="row pt-2" />');
                 cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].start_time + '</div>');
                 var stopCol = $('<div class="col-6 text-right" />');
-                if (data[x].end_time !== '00:00:00') {
+                if (data[x].end_time !== '01:00:00') {
                     stopCol.append('<i class="far fa-clock"></i> ' + data[x].end_time);
                 } else {
                     var stopButton = $('<button class="text-danger btn btn-link btn-sm" id="stop"><i class="fas fa-stop"></i> Stop</button>').data('taskid', data[x].id);
@@ -269,12 +269,24 @@ function loadTaskActivities(formData) {
                 cardBody.append(data[x].task_name);
                 cardInner.append(cardBody);
 
-                var cardFooter = $("<div class='card-footer' />");
-                cardFooter.append("<i class='fas fa-user-circle'></i> " + data[x].project_id);
+                var cardFooter = $("<div class='card-footer row'>");
+                cardFooter.append("<div class='col-6 p-0'> <i class='fab fa-bitcoin'>" + data[x].project_id + "</i></div>");
+
+                cardFooter.append("<div class='col-5 text-right edit-task'>");
+                var footerRight = $("<i class='text-success far fa-edit' id='editOption' style='display: none';></i></div></div");
+                cardFooter.append(footerRight);
+                /*cardFooter.append("<i class='text-success far fa-edit' id='editOption' style='display: none';></i></div></div");*/
+
+                 footerRight.on('click', function() {
+
+                    window.location.href="../user/add_task.php"
+                    });
+
                 cardInner.append(cardFooter);
 
                 var cardCol = $("<div class='col-lg-6 mb-4' />");
                 cardCol.append(cardInner);
+
 
                 $("#attach-card").append(cardCol);
             }
@@ -321,5 +333,12 @@ $(document).ready(function() {
             }
         });
     });
+    $('#attach-card').mouseenter(function() {
+        $('#editOption').show();
+        //
+    })
+    $('#attach-card').mouseleave(function() {
+        $('#editOption').hide();
+    })
 
 });

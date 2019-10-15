@@ -8,7 +8,12 @@
 		//Choose task info from db
 		$q = "SELECT * FROM time_details WHERE ref_id=".$_SESSION['user_id'];
 		if ($task_type == 'task') {
+			
 			$q .= " AND type='task'";
+		}
+		else
+		{	
+			$q .= " AND type='login'";
 		}
 		$r = mysqli_query($GLOBALS['db_connection'], $q);
 		$num = mysqli_num_rows($r);

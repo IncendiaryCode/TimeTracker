@@ -8,7 +8,7 @@ include("header.php");
             <div class="row ">
                 <div class="col-6 offset-3">
                     <form action="<?=BASE_URL?>/user/home.php" method="post" id="addTask" class="mt-5 ">
-                        <div class="form-group  ">
+                        <div class="form-group">
                             <label for="task-name ">Write the task name</label>
                             <input type="text" class="form-control" name="task-name" id="Taskname">
                         </div>
@@ -20,7 +20,7 @@ include("header.php");
                             <label for="choose-project">Choose a project</label>
                             <select type="number" class="form-control" id="chooseProject" name="chooseProject">
                                 <option>Select Project</option>                                
-                                <!-- <?php
+                               <!--  <?php
                                 $s="SELECT name FROM project";
                                 $r=mysqli_query($GLOBALS['db_connection'],$s);
                                 $num=mysqli_num_rows($r);   
@@ -29,18 +29,29 @@ include("header.php");
                                 }
                                 echo $row;
                                 ?> -->
-                                <option>Select Project</option>
                                 <option>Sphere</option>
                                 <option>Buck</option>
                                 <option>TimeTracker</option>
                                 <option>Latli</option>
                             </select>
                         </div>
+                        <div class="form-group pl-4">
+                            <div class="radio">
+                                <label for="radio1" class="form-check-label" >
+                                <input type="radio" id="newTask" name="radios" value="option1" class="form-check-input" checked>New task
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label for="radio1" class="form-check-label ">
+                                <input type="radio" id="editTask" name="radios" value="option1" class="form-check-input">Edit task
+                                </label>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="started-date">Started on</label>
                             <input type="text" class="form-control" id="setCurrentDate" name="startedDate">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="Checked">
                             <label for="ended-date">Ended on</label>
                             <input type="datetime-local" class="form-control" id="ended" name="endedDate">
                         </div>                        

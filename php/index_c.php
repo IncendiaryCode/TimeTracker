@@ -1,5 +1,5 @@
 <?php
-	include('con.php');
+	include('_con.php');
 	//session_start();
 
 ?>
@@ -8,9 +8,7 @@
 	<head>
 		<meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>
-			Change Password
-		</title>
+		<title>Change Password</title>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	    <link rel="stylesheet" type="text/css" href="css/new.css">
 	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -39,12 +37,7 @@
 	                <button type="submit" class="col-3 offset-3 btn btn-primary" id="count">Submit</button>
 	            </div>
 	        </form> 
-	    </div>
-	    <div id="success" class="animated bounce">
-	            
-	        <p class="text-center">success</p>
-	                
-	    </div>   
+	    </div>  
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	    <script src="javascript/script.js"></script>
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

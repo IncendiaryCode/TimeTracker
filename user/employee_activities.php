@@ -1,20 +1,9 @@
 <?php 
-$GLOBALS['page_title'] = 'My Activities';
+$GLOBALS['page_title'] = 'My Login Activities';
 include("header.php");
 include("../php/login_activities.php");
 ?>
-<body>
-<<<<<<< HEAD
-   
-=======
-    <header class="container-fluid main-header">
-        <div class="row ">
-            <div class="col-6 time-tracker">
-                <img src='<?=BASE_URL?>assets/images/logo-white.png' onclick="window.location.href='<?=BASE_URL?>user/home.php'" height="50px">
-            </div>
-        </div>
-    </header>
->>>>>>> 8f08aeaa5781360dc38d4f4cb6e97c2997478051
+<body> 
     <main class="container-fluid-main">
         <div class="  md main-container-employee">
             <div class="container mt-4 ">
@@ -28,26 +17,8 @@ include("../php/login_activities.php");
                     <div class="au-task js-list-load">
                         <div class="au-task-list js-scrollbar3">
                             <div class="au-task__item au-task__item--danger">
-                                <div class="row au-task__item-inner">
-                                    <?php 
-                                    if($row)
-                                    {
-                                        foreach($row as $value) { ?>
-                                        <div class='col-lg-5 ml-lg-5 m-3 shadow card-style'>
-                                            <div class='card-header bg-white text-left text-black-50'>
-                                                <h5 class='task'><p>Date : <?=$value['t_date'];?></p></h5>
-                                                <div class='row pt-2'><span class='vertical-line'>
-                                                </span><div class='col-6 text-left'>Start-time : <?=$value['start_time'];?></div>
-                                                <div class='col-5 text-right'><span>End-time : <?=$value['end_time'];?></span></div>
-                                            </div></div><div class='card-body text-body ml-4'><p>Total Time Used: <?php echo timeUsed($value['start_time'],$value['end_time']);?></p>
-                                            </div>
-                                        </div>
-                                    <?php  }
-                                    }
-                                    else
-                                    {
-                                        echo "No data present";
-                                    } ?>
+                                <div class="row au-task__item-inner attach" id="attachPanels">
+                                    
                                 </div>
                             </div>
                             
