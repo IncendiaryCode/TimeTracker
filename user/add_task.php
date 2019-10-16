@@ -41,7 +41,7 @@ include("header.php");
                                 <input type="radio" id="newTask" name="radios" value="option1" class="form-check-input" checked>New task
                                 </label>
                                 <label for="radio1" class="form-check-label ml-5">
-                                <input type="radio" id="editTask" name="radios" value="option1" class="form-check-input">Edit task
+                                <input type="radio" id="editTask" name="radios" value="option1" class="form-check-input">Old task
                                 </label>
                             </div>
                         </div>

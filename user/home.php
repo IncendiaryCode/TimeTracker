@@ -19,7 +19,7 @@ include("../php/activity.php");
 </div>
 <main class="container-fluid-main">
     <div class="md main-container-employee container timer">
-        <div class="text-center main-container-inner topWidth" id="stopTime">
+        <div class="text-center main-container-inner shadow-lg topWidth" id="stopTime">
             <h3><i class="row fas fa-stop stop"></i><i class=" row fas fa-play play"></i></h3>
         </div>        
         <div class="container">
@@ -38,9 +38,7 @@ include("../php/activity.php");
                 </div>
                 <div class="col-6">
                     <div class="dropdown text-right" id="dropdown-recent-acts">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Sort by
-                        </button>
+                        <i class="fas fa-random"  id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
                             <a class="dropdown-item" href="#" data-type="task_asc">Task name</a>
                             <a class="dropdown-item" href="#" data-type="date_asc">Created date</a>
@@ -53,7 +51,7 @@ include("../php/activity.php");
             </div>
             <hr>
             <footer>
-                <p class="text-center p-3 ">© 2019 Printgreener.com</p>
+                <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</p>
             </footer>
         </div>
     </div>

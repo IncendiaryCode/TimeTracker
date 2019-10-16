@@ -28,7 +28,7 @@ include("header.php");
                         </div>
                         <div class="form-group">
                             <label for="started-date">Started on</label>
-                            <input type="text" class="form-control" name="startedDate">
+                            <input type="datetime-local" class="form-control" name="startedDate">
                         </div>
                         <div class="form-group">
                             <label for="ended-date">Ended on</label>

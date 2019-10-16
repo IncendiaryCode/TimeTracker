@@ -54,10 +54,21 @@ header.main-header h1 {
     width: 70%;
     margin-left: 15%;
 }
+@media (max-width: 700px)
+{
+    .main-container
+    {
+    background: #fff;
+    border-radius: 50px 50px 0 0;
+    z-index: 1;
+    position: relative;
+}
+}
 
 .alert {
     border-radius: 15px;
     font-size: 22px;
+    background-color: #edeef3;
 }
 
 .time-font {
@@ -117,7 +128,7 @@ header.main-header h1 {
         text-align: center;
         height: 100px;
         width: 100px;
-        margin-left: 47%;
+        margin-left: 45%;
         border-radius: 50%;
         top: -47px;
         z-index: 1;
@@ -163,7 +174,6 @@ header.main-header h1 {
     background-image: linear-gradient(150deg, #8b5ff4, #dd9dfe);
     border-style: none;
     border-radius: 5px;
-    width: 20%;
     opacity: 1;
     z-index: 0;
     height: 40px;
@@ -173,11 +183,11 @@ header.main-header h1 {
 #login-time {
     padding-top: 50px;
     color: #c8b8fd;
+    font-weight:lighter;
 }
 
 .topWidth {
     padding-top: 32px;
-
 }
 
 .timePerTask {
@@ -197,6 +207,7 @@ header.main-header h1 {
     #new-task {
         width: 50%;
     }
+     
 }
 
 .vertical-line {

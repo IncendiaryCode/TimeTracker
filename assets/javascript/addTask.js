@@ -18,7 +18,8 @@ var store = {
 if (addTask) {
     var m = new Date();
     var start_date = m.getUTCFullYear() + "-" + m.getUTCMonth() + "-" + m.getUTCDate() + " " + m.getHours() + ":" + m.getMinutes() + ":" + m.getSeconds();
-    document.getElementById('setCurrentDate').value = start_date;
+    console.log(start_date);
+/*    document.getElementById('setCurrentDate').innerHTML = start_date;*/
     var loginTime = document.getElementById('setCurrentDate').value;
     var ended = document.getElementById('ended').value;
     if (ended == null || ended == "" || ended == " ") {
