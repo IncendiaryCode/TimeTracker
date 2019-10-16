@@ -40,21 +40,21 @@ include("header.php");
                                 <label for="radio1" class="form-check-label" >
                                 <input type="radio" id="newTask" name="radios" value="option1" class="form-check-input" checked>New task
                                 </label>
-                            </div>
-                            <div class="radio">
-                                <label for="radio1" class="form-check-label ">
+                                <label for="radio1" class="form-check-label ml-5">
                                 <input type="radio" id="editTask" name="radios" value="option1" class="form-check-input">Edit task
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="started-date">Started on</label>
-                            <input type="text" class="form-control" id="setCurrentDate" name="startedDate">
-                        </div>
-                        <div class="form-group" id="Checked">
-                            <label for="ended-date">Ended on</label>
-                            <input type="datetime-local" class="form-control" id="ended" name="endedDate">
-                        </div>                        
+                        <div id="Checked">
+                            <div class="form-group">
+                                <label for="started-date">Started on</label>
+                                <input type="text" class="form-control" id="setCurrentDate" name="startedDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="ended-date">Ended on</label>
+                                <input type="datetime-local" class="form-control" id="ended" name="endedDate">
+                            </div>   
+                        </div>                     
                         <p id="taskError" class=" text-danger"></p>
                         <input id="user_id" name="user_id" type="hidden" value="<?php echo $_SESSION['user_id'];?>">
                         <p id="taskError" class=" text-danger"></p>

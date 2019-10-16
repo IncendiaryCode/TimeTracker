@@ -23,8 +23,8 @@ if(!isset($_SESSION['user'])){
 </head>
 
 <body>
-    <header class="container-fluid main-header">
-        <div class="row padding-around">
+    <header class="container main-header">
+        <div class="row">
             <div class="col-6 time-tracker">
                 <a href="<?=BASE_URL?>user/home.php">
                     <img src="<?=BASE_URL?>assets/images/logo-white.png" height="40px">
@@ -44,7 +44,7 @@ if(!isset($_SESSION['user'])){
                 <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#changeProfile" data-placement="top" title="User Profile"></i></h2>
             </div>
             <div class="col-12">
-                <p class="display-4  text-center"><?= $GLOBALS['page_title'] ?></p>
+                <p class="display-4 pt-3  text-center"><?= $GLOBALS['page_title'] ?></p>
             </div>
        		<?php } ?>
 

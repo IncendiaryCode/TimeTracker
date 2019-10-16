@@ -1,12 +1,11 @@
 <?php 
-$GLOBALS['page_title'] = 'My Login Activities';
+$GLOBALS['page_title'] = 'Login Activities';
 include("header.php");
 include("../php/login_activities.php");
 ?>
-<body> 
-    <main class="container-fluid-main">
-        <div class="  md main-container-employee">
-            <div class="container mt-4 ">
+<main class="container-fluid container-fluid-main">
+    <div class="main-container">
+        <div class="main-container-inner mt-3">
                 <div class="au-card au-card--no-shadow au-card--no-pad mb-2">
                     <div class="au-card-title pt-5">
                         <div class="bg-overlay bg-overlay--blue"></div>
@@ -17,7 +16,7 @@ include("../php/login_activities.php");
                     <div class="au-task js-list-load">
                         <div class="au-task-list js-scrollbar3">
                             <div class="au-task__item au-task__item--danger">
-                                <div class="row au-task__item-inner attach" id="attachPanels">
+                                <div class="row au-task__item-inner attach  m-1" id="attachPanels" >
                                     
                                 </div>
                             </div>

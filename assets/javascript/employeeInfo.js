@@ -11,18 +11,14 @@ var count = localStorage.getItem('count');
 loginTime();
 var a;
 var flag = false;
-displayTaskTime();
 /*localStorage.clear();*/
-function setTime() {
-    if (flag == true) {
+function setTime(startTime) {
         totalSeconds = localStorage.getItem('totalSeconds');
-        flag = false;
-        /*pauseCount++;*/
-    }
-    ++totalSeconds;
-    checkTime(totalSeconds % 60, secondsLabel);
-    totalMinuts = parseInt(totalSeconds / 60);
-    totalHours = parseInt(totalSeconds / 3600);
+    //set this to localstorage
+    localStorage.setItem('totalSeconds', startTime);
+    checkTime(startTime % 60, secondsLabel);
+    totalMinuts = parseInt(startTime / 60);
+    totalHours = parseInt(startTime / 3600);
     checkTime(totalMinuts % 60, minutesLabel);
     checkTime(totalHours % 3600, hoursLabel);
 }
@@ -37,7 +33,7 @@ function checkTime(value, lable) {
     } else if (n == 1) {
         lable.innerHTML = '0' + value;
     } else {
-        lable.innerHTML = (totalSeconds % 60);
+        lable.innerHTML = value;
     }
 }
 
@@ -46,9 +42,9 @@ function timeUpdate() {
     localStorage.setItem('totalSeconds', totalSeconds);
 }
 
-function pause() {
+function pause(startTime) {
 
-    if ((++pauseCount) % 2 !== 0) {
+    if ((pauseCount++) % 2 !== 0) {
         //play
         localStorage.setItem('totalSeconds', totalSeconds);
         clearInterval(a);
@@ -63,8 +59,10 @@ function pause() {
             success: function(data) {}
         });
     } else {
-        flag = true;
-        a = setInterval(setTime, 1000);
+        a = setInterval(function() {
+            startTime++;
+            setTime(startTime);
+        }, 1000);
         count = parseInt(localStorage.getItem('count'));
         var today = new Date();
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -92,28 +90,11 @@ function pause() {
     }
 }
 
-function displayTaskTime() {
-
-    var totalSeconds = localStorage.getItem('totalSeconds');
-
-    var lastTime = localStorage.getItem('lastTime');
-    if (lastTime == 0 || lastTime == null) {
-        localStorage.setItem('lastTime', getTime());
-        localStorage.setItem('totalSeconds', 0);
-    } else {
-
-        var currentTime = getTime();
-        currentTime = convertTimeToSeconds(currentTime);
-        lastTime = convertTimeToSeconds(lastTime);
-        var diff = currentTime - lastTime;
-        totalSeconds = parseInt(totalSeconds) + diff;
-        localStorage.setItem('totalSeconds', totalSeconds);
-        flag = true;
-        pauseCount++;
-        pause();
-    }
-
-}
+var timer = document.getElementById('stopTime');
+$('#stopTime').click(function()
+{
+pause(timeTrackerStartTime);
+});
 
 function logout() {
     localStorage.setItem('lastTime', 0);
@@ -269,24 +250,34 @@ function loadTaskActivities(formData) {
                 cardBody.append(data[x].task_name);
                 cardInner.append(cardBody);
 
-                var cardFooter = $("<div class='card-footer row'>");
-                cardFooter.append("<div class='col-6 p-0'> <i class='fab fa-bitcoin'>" + data[x].project_id + "</i></div>");
+                var cardFooter = $("<div class='card-footer'>");
+                var footerRow = $('<div class="row" />');
+                footerRow.append("<div class='col-6'> <i class='fab fa-bitcoin'> " + data[x].project_id + "</i></div>");
 
-                cardFooter.append("<div class='col-5 text-right edit-task'>");
-                var footerRight = $("<i class='text-success far fa-edit' id='editOption' style='display: none';></i></div></div");
-                cardFooter.append(footerRight);
-                /*cardFooter.append("<i class='text-success far fa-edit' id='editOption' style='display: none';></i></div></div");*/
+                var footerRight = $("<div class='col-6 text-right card-actions'>");
+                //action Edit
+                var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit"></i></a>');
+                actionEdit.attr('href', timeTrackerBaseURL + 'user/edit_task.php?id=' + data[x].project_id);
+                actionEdit.on('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = "../user/edit_task.php";
+                });
+                footerRight.append(actionEdit);
 
-                 footerRight.on('click', function() {
+                /*//action delete
+                var actionDelete = $('<a href="#" class="card-action action-delete text-danger" id="action-delete"><i class="far fa-trash-alt"></i></a>');
+                actionDelete.on('click', function(e) {
+                    e.preventDefault();
+                    console.log(this.id);
+                });
+                footerRight.append(actionDelete);*/
 
-                    window.location.href="../user/add_task.php"
-                    });
-
+                footerRow.append(footerRight);
+                cardFooter.append(footerRow);
                 cardInner.append(cardFooter);
 
                 var cardCol = $("<div class='col-lg-6 mb-4' />");
                 cardCol.append(cardInner);
-
 
                 $("#attach-card").append(cardCol);
             }
@@ -307,16 +298,19 @@ $(document).ready(function() {
             loadTaskActivities({ 'type': $(this).data('type') });
         });
     });
+    $(document).ready(function() {
+        $('.play').click(function() {
+            $('.stop').show();
+            $('.play').hide();
+        })
 
-    $('.fa-play').click(function() {
-        $('.fa-stop').show();
-        $('.fa-play').hide();
-    })
+        $('.stop').click(function() {
+            $('.stop').hide();
+            $('.play').show();
+        });
 
-    $('.fa-stop ').click(function() {
-        $('.fa-stop').hide();
-        $('.fa-play').show();
-    })
+    });
+
 
     $('.submitProfile').click(function() {
         $('#changeProfile').modal('show');
@@ -333,12 +327,5 @@ $(document).ready(function() {
             }
         });
     });
-    $('#attach-card').mouseenter(function() {
-        $('#editOption').show();
-        //
-    })
-    $('#attach-card').mouseleave(function() {
-        $('#editOption').hide();
-    })
 
 });

@@ -6,6 +6,9 @@ if(!isset($_SESSION['user'])){
   }
 include("../php/activity.php");
 ?>
+<script type="text/javascript">
+    var timeTrackerStartTime = 300;
+</script>
 <div>
     <input id="user_id" name="user_id" type="hidden" value="<?php echo $_SESSION['user_id'];?>">
     <p class="font-weight-light time-font text-center" id="login-time">Started at 9:00AM</p>
@@ -15,9 +18,9 @@ include("../php/activity.php");
     <p class="font-weight-light text-center" id="taskName">Punch in/out</p>
 </div>
 <main class="container-fluid-main">
-    <div class="md main-container-employee">
-        <div class="text-center main-container-inner topWidth" id="stopTime" onclick="pause()">
-            <h3><i class="row fas fa-stop "></i><i class=" row fas fa-play "></i></h3>
+    <div class="md main-container-employee container timer">
+        <div class="text-center main-container-inner topWidth" id="stopTime">
+            <h3><i class="row fas fa-stop stop"></i><i class=" row fas fa-play play"></i></h3>
         </div>        
         <div class="container">
             <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4">
