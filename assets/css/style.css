@@ -75,7 +75,7 @@ header.main-header h1 {
     font-size: 15px;
 }
 
-#timeUsed {
+#primary-timer {
     font-size: 60px;
     color: white;
 }
@@ -86,7 +86,7 @@ header.main-header h1 {
     margin-bottom: 5%;
 }
 
-#stopTime {
+.stop-time {
     position: relative;
     text-align: center;
     height: 90px;
@@ -112,7 +112,7 @@ header.main-header h1 {
         font-size: 30px;
     }
 
-    #timeUsed {
+    #primary-timer {
         font-size: 100px;
         color: white;
     }
@@ -123,7 +123,7 @@ header.main-header h1 {
         margin-bottom: 5%;
     }
 
-    #stopTime {
+    .stop-time {
         position: relative;
         text-align: center;
         height: 100px;

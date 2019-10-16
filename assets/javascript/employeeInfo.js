@@ -8,57 +8,89 @@ var totalWorkTime = 0;
 var pauseCount = 0;
 var storing;
 var count = localStorage.getItem('count');
-loginTime();
-var a;
-var flag = false;
-/*localStorage.clear();*/
+
+// loginTime();
+
+//main timer interval
+var mainTimerInterval;
+
+//localStorage.clear();
+
 function setTime(startTime) {
-    totalSeconds = localStorage.getItem('totalSeconds');
-    //set this to localstorage
-    localStorage.setItem('totalSeconds', startTime);
-    checkTime(startTime % 60, secondsLabel);
+
+    //update local storage
+    localStorage.setItem('timeStamp', startTime);
+
+    var date = new Date(startTime * 1000);
+    // Hours part from the timestamp
+    var hours = "0" + date.getHours();
+    // Minutes part from the timestamp
+    var minutes = "0" + date.getMinutes();
+    // Seconds part from the timestamp
+    var seconds = "0" + date.getSeconds();
+    var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+    $('#primary-timer').html(formattedTime);
+
+    /*checkTime(startTime % 60, secondsLabel);
     totalMinuts = parseInt(startTime / 60);
     totalHours = parseInt(startTime / 3600);
     checkTime(totalMinuts % 60, minutesLabel);
-    checkTime(totalHours % 3600, hoursLabel);
+    checkTime(totalHours % 3600, hoursLabel);*/
 }
 
-function checkTime(value, lable) {
+/*function checkTime(value) {
+    var time = '00:00';
+    console.log(value)
     var n = value.toString().length;
     if (value == 59) {
-        lable.innerHTML = '00';
+        time = '00';
     }
-    if (value == "00") {
-
-    } else if (n == 1) {
-        lable.innerHTML = '0' + value;
+    if (n == 1) {
+        time += ':0' + value;
     } else {
-        lable.innerHTML = value;
+        time += ':' + value;
     }
-}
+    return time;
+}*/
 
 function timeUpdate() {
     localStorage.setItem('lastTime', getTime());
 }
 
-function pause(startTime) {
+function startTimer(startTime) {
+    //set in local storage
+    localStorage.setItem('timeStamp', startTime);
+
+    if (startTime === 'stop') {
+        //clear the existing interval
+        clearInterval(mainTimerInterval);
+    } else {
+        mainTimerInterval = setInterval(function() {
+            startTime++;
+            setTime(startTime);
+        }, 1000);
+    }
+}
+
+/*function startTimer(startTime) {
 
     if ((pauseCount++) % 2 !== 0) {
-        //play
+        //stop
         localStorage.setItem('totalSeconds', startTime);
-        clearInterval(a);
-        var logoutTime = getTime();
-        var oldTime = localStorage.getItem('loginTime');
-        storing.ended = logoutTime;
-        var id = document.getElementById('user_id').value;
+        clearInterval(mainTimerInterval);
+
+        // var logoutTime = getTime();
+        // storing.ended = logoutTime;
+
+        var dataParams = { end_time: startTime };
         $.ajax({
             type: "POST",
             url: '../php/stop.php',
-            data: { info: JSON.stringify(storing), user_id: id },
+            data: dataParams,
             success: function(data) {}
         });
     } else {
-        a = setInterval(function() {
+        mainTimerInterval = setInterval(function() {
             startTime++;
             setTime(startTime);
         }, 1000);
@@ -67,8 +99,6 @@ function pause(startTime) {
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var todayTime = getTime();
         var time = convertTimeToSeconds(todayTime);
-        var oldTime = localStorage.getItem('loginTime');
-        var oldtime = convertTimeToSeconds(oldTime);
         storing = storing + count;
         storing = {
             'date': date + todayTime,
@@ -83,37 +113,15 @@ function pause(startTime) {
             url: '../php/play.php',
             data: { info: JSON.stringify(storing), user_id: id },
             success: function(data) {
-                /**/
+                
             }
         });
     }
-}
-
-var timer = document.getElementById('stopTime');
-var timeTrackerStartTime = localStorage.getItem('totalSeconds');
-if (timeTrackerStartTime == 0) {
-    $('#stopTime').click(function() {
-        timeTrackerStartTime = localStorage.getItem('totalSeconds');
-        pause(0);
-    });
-} else {
-    timeTrackerStartTime = localStorage.getItem('totalSeconds');
-    $(document).ready(function() {
-        $('.stop').show();
-        $('.play').hide();
-        pause(timeTrackerStartTime);
-    });
-}
-if (timeTrackerStartTime != 0) {
-    $('#stopTime').click(function() {
-        timeTrackerStartTime = localStorage.getItem('totalSeconds');
-        pause(timeTrackerStartTime);
-    });
-}
+}*/
 
 function logout() {
     localStorage.setItem('lastTime', 0);
-    localStorage.setItem('totalSeconds', 0);
+    localStorage.setItem('timeStamp', 0);
     var counter = localStorage.getItem('count');
     storeTime();
     localStorage.setItem('count', parseInt(counter) + 1);
@@ -137,7 +145,7 @@ function storeTime() {
 
 }
 
-function loginTime() {
+/*function loginTime() {
 
     var id = localStorage.getItem('id');
     if (count == null) {
@@ -145,7 +153,8 @@ function loginTime() {
     }
     count = parseInt(localStorage.getItem('count'));
     var todayTime = getTime();
-    document.getElementById('login-time').innerHTML = "Started at " + todayTime;
+    // document.getElementById('login-time').innerHTML = "Started at " + todayTime;
+
     localStorage.setItem('loginTime', todayTime);
     storing = storing + count;
     storing = {
@@ -157,7 +166,7 @@ function loginTime() {
     }
     localStorage.setItem('entry' + count, JSON.stringify(storing));
 
-}
+}*/
 
 
 function secondsToTime(d) {
@@ -245,7 +254,7 @@ function loadTaskActivities(formData) {
                 var cardHeaderRow = $('<div class="row pt-2" />');
                 cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].start_time + '</div>');
                 var stopCol = $('<div class="col-6 text-right" />');
-                if (data[x].end_time !== '01:00:00') {
+                if (data[x].end_time !== '00:00:00') {
                     stopCol.append('<i class="far fa-clock"></i> ' + data[x].end_time);
                 } else {
                     var stopButton = $('<button class="text-danger btn btn-link btn-sm" id="stop"><i class="fas fa-stop"></i> Stop</button>').data('taskid', data[x].id);
@@ -267,7 +276,7 @@ function loadTaskActivities(formData) {
 
                 var cardFooter = $("<div class='card-footer'>");
                 var footerRow = $('<div class="row" />');
-                footerRow.append("<div class='col-6'> <i class='fab fa-bitcoin'> " + data[x].name + "</i></div>");
+                footerRow.append("<div class='col-6'> <i class='fab fa-bitcoin'> " + data[x].project_id + "</i></div>");
 
                 var footerRight = $("<div class='col-6 text-right card-actions'>");
                 //action Edit
@@ -300,7 +309,46 @@ function loadTaskActivities(formData) {
     });
 }
 
+function updateTimer(timerUrl, action) {
+    $.ajax({
+        type: "POST",
+        url: timerUrl,
+        data: { end_time: localStorage.getItem('timeStamp') },
+        dataType: 'json',
+        success: function(res) {
+            //handle timer
+            if (res.status) {
+                if (res.action == 'stop') {
+                    $('#stop-time .action-icon').removeClass('fa-play').addClass('fa-stop');
+                    $('#stop-time').data('isrunning', '0');
+                    startTimer('stop');
+                } else {
+                    $('#stop-time .action-icon').removeClass('fa-stop').addClass('fa-play');
+                    $('#stop-time').data('isrunning', '1');
+                    startTimer(res.start_time);
+                }
+            }
+        }
+    });
+}
+
 $(document).ready(function() {
+
+    $('#stop-time').click(function() {
+        var isRunning = $(this).data('isrunning');
+        var action = 'play';
+        var url = '../php/play.php';
+        if (isRunning) {
+            action = 'stop';
+            url = '../php/stop.php';
+        }
+        updateTimer(url, action);
+    });
+
+    if ((__timeTrackerStartTime !== 0) && (typeof __timeTrackerStartTime != 'undefined')) {
+        //TODO: check for integer only        
+        startTimer(__timeTrackerStartTime);
+    }
 
     if ($("#attach-card").length > 0) {
         loadTaskActivities({ 'type': 'task' });

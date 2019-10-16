@@ -4,22 +4,29 @@ if(!isset($_SESSION['user'])){
       header("location:../index.php");
       die();
   }
+
+$timer = 1571290190;
+$timerClass = 'fa-play';
+if (!empty($timer)) {
+    $timerClass = 'fa-stop';
+}
 ?>
 <script type="text/javascript">
-    var timeTrackerStartTime = 300;
+    //this will be send to JS for timer to start
+    var __timeTrackerStartTime = "<?=$timer?>";
 </script>
 <div>
     <input id="user_id" name="user_id" type="hidden" value="<?php echo $_SESSION['user_id'];?>">
     <p class="font-weight-light time-font text-center" id="login-time">Started at 9:00AM</p>
-    <p class=" font-weight-light text-center" id="timeUsed">
-        <label id="hours">00</label>:<label id="minutes">00</label>:<label id="seconds">00</label>
+    <p class="font-weight-light text-center" id="primary-timer">
+        00:00:00
     </p>
     <p class="font-weight-light text-center" id="taskName">Punch in/out</p>
 </div>
 <main class="container-fluid-main">
     <div class="md main-container-employee container timer">
-        <div class="text-center main-container-inner shadow-lg topWidth" id="stopTime">
-            <h3><i class="row fas fa-stop stop"></i><i class=" row fas fa-play play"></i></h3>
+        <div class="text-center shadow-lg topWidth stop-time" id="stop-time" data-isrunning="1">
+            <h3><i class="fas action-icon <?=$timerClass?>"></i></h3>
         </div>        
         <div class="container">
             <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4">
