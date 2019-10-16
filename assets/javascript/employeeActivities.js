@@ -25,7 +25,7 @@ function loginActivities(formData) {
                 cardInner.append(cardBody);
 
                 var cardFooter = $("<div class='card-footer' />");
-                cardFooter.append("<i class='fab fa-bitcoin'></i> " + data[x].project_id);
+                cardFooter.append("<i class='fab fa-bitcoin'></i> " + data[x].name);
                 cardInner.append(cardFooter);
 
                 var cardCol = $("<div class='col-lg-6 mb-4' />");

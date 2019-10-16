@@ -4,7 +4,6 @@ if(!isset($_SESSION['user'])){
       header("location:../index.php");
       die();
   }
-include("../php/activity.php");
 ?>
 <script type="text/javascript">
     var timeTrackerStartTime = 300;

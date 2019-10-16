@@ -48,5 +48,19 @@ changeImage.onsubmit = function (e) {
 	else
 		return true;
 }
-
+$('.submitImage').click(function() {
+        $('#changeImage').modal('show');
+        var image = document.getElementById('image').value;
+        console.log(image);
+        $.ajax({
+            type: 'POST',
+            url: timeTrackerBaseURL + 'admin/php/upload_profile.php',
+            data: { change_image: image },
+            success: function(data) {
+                //document.getElementById('new_img').src=response;
+                $('#new_img').empty().append(data);
+                console.log(data);
+            }
+        });
+    });
 

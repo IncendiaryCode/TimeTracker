@@ -16,7 +16,7 @@ if (validate) {
             document.getElementById('alertMsg').innerHTML = "Enter new Password";
             return false;
         } else if (psw1 !== psw2) {
-            document.getElementById('alertMsg').innerHTML = "Passowrd is not matching..";
+            document.getElementById('alertMsg').innerHTML = "Password is not matching..";
 
             return false;
         } else {

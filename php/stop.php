@@ -1,24 +1,16 @@
 <?php
 	include('_con.php');
 	session_start();
-	$tabl_id=$_SESSION['table_id'];
-	$user_id=$_POST['user_id'];
-	$j=$_POST['info'];
-	//$user=$_SESSION['user'];
-	
-	//$task_id=$_POST['task_id'];
-	//print_r($_POST);exit();
+	$tabl_id = $_SESSION['login_row_id'];
+	$user_id = $_POST['user_id'];
+	$json_data = $_POST['info'];
 
-	$info=json_decode($j,true);
-	//print_r($info['started']);
-	//print_r($_COOKIE['login_date']);
-	$start_t=$_SESSION['login_time'];
-	$sql="UPDATE time_details SET end_time='".$info['ended']."', start_time='".$info['started']."' WHERE id='".$tabl_id."' AND ref_id='".$user_id."'";
-	//print_r($sql);
-	$res=mysqli_query($GLOBALS['db_connection'],$sql);
-	if($res==FALSE){
-		//echo "Updated.";
-		//header('Refresh:1;URL=employeeActivities.php?logout='.$row['end_time']);
+	$timer_stop_info = json_decode($json_data,true);
+	//update end time in time details
+	$sql_query = "UPDATE time_details SET end_time='".$timer_stop_info['ended']."' WHERE id=".$tabl_id;
+	$result = mysqli_query($GLOBALS['db_connection'],$sql_query);
+	if($result == FALSE){
+		//@TODO dump error to file not UI
 		echo"Error:".mysqli_error($GLOBALS['db_connection']);
 	}
 ?>

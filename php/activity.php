@@ -2,40 +2,44 @@
 	include('_con.php');
 	function get_activities($task_type){
 		//login check
-		if (!$_SESSION['user']) {
+		if (!isset($_SESSION['user'])) {
 			return FALSE;
 		}
 		//Choose task info from db
-		$q = "SELECT * FROM time_details WHERE ref_id=".$_SESSION['user_id'];
+		$query = "SELECT t.task_name,t.t_date,t.start_time,t.end_time,t.id,p.id,p.name FROM time_details AS t JOIN project AS p ON t.project_id=p.id WHERE t.ref_id=".$_SESSION['user_id'];
 		if ($task_type == 'task') {
-			
-			$q .= " AND type='task'";
+			$query.=" AND t.type='task' ORDER BY t.id DESC";
+		}else if($task_type == 'task_asc'){
+			$query .= " AND t.type='task' ORDER BY t.task_name";
+		}else if($task_type == 'date_asc'){
+			$query .= " AND t.type='task' ORDER BY t.t_date";
+		}else if($task_type == 'login'){
+			$query .= " AND t.type='login'";
 		}
-		else
-		{	
-			$q .= " AND type='login'";
+		$query_result = mysqli_query($GLOBALS['db_connection'], $query);
+		if($query_result==TRUE){
+			$num = mysqli_num_rows($query_result);
+			$activity_details = array();
+			if($num > 0){
+				$activity_details = mysqli_fetch_all($query_result,MYSQLI_ASSOC);
+			}
 		}
-		$r = mysqli_query($GLOBALS['db_connection'], $q);
-		$num = mysqli_num_rows($r);
-		$activity_details = array();
-		if($num > 0){	
-		$activity_details = mysqli_fetch_all($r,MYSQLI_ASSOC);
+		echo json_encode($activity_details);
 	}
-	echo json_encode($activity_details);
-}
-		//To get total time used
-	function timeUsed($t11,$t22){
-		$t1 = strtotime($t11);
-		$t2 = strtotime($t22);
-		$hours =$t2 - $t1;
-		$res=gmdate('H:i:s',$hours);
-		return $res;
-	}
+	
 	if ($_GET) {	
-		if (isset($_GET['type'])) {
-		session_start();
-		get_activities('task');
+		if (isset($_GET['type'])) { 
+			session_start();
+			if($_GET['type'] == 'task'){ //to fetch task activities
+				get_activities('task');
+			}else if($_GET['type'] == 'task_asc' ){ //to fetch task details sorted by task name
+				get_activities('task_asc');
+			}else if($_GET['type'] == 'date_asc'){ //to fetch task details sorted by task date
+				get_activities('date_asc');
+			}
+			else if($_GET['type'] == 'login'){
+				get_activities('login');
+			}
 		}
 	}
 ?>
-
