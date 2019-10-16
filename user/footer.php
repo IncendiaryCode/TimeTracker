@@ -54,7 +54,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h3>Would you like to Stop or Complete the task?</h3>                    
+                    <h3>Would you like to stop or complete the task?</h3>
                     <p class="mt-4 mb-1">Note:</p>
                     <ul class="text-muted">
                         <li>Stopping task will pause the timer but not complete the task.</li>

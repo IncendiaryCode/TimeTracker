@@ -276,16 +276,16 @@ function loadTaskActivities(formData) {
 
                 var cardFooter = $("<div class='card-footer'>");
                 var footerRow = $('<div class="row" />');
-                footerRow.append("<div class='col-6'> <i class='fab fa-bitcoin'> " + data[x].project_id + "</i></div>");
+                footerRow.append("<div class='col-6'> <i class='fab fa-twitter'></i> " + data[x].name + "</div>");
 
                 var footerRight = $("<div class='col-6 text-right card-actions'>");
                 //action Edit
                 var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit"></i></a>');
-                actionEdit.attr('href', timeTrackerBaseURL + 'user/edit_task.php?id=' + data[x].project_id);
-                actionEdit.on('click', function(e) {
+                actionEdit.attr('href', timeTrackerBaseURL + 'user/edit_task.php?id=' + data[x].id);
+                /*actionEdit.on('click', function(e) {
                     e.preventDefault();
                     window.location.href = "../user/edit_task.php";
-                });
+                });*/
                 footerRight.append(actionEdit);
 
                 /*//action delete
