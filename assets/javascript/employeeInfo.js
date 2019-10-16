@@ -13,7 +13,7 @@ var a;
 var flag = false;
 /*localStorage.clear();*/
 function setTime(startTime) {
-        totalSeconds = localStorage.getItem('totalSeconds');
+    totalSeconds = localStorage.getItem('totalSeconds');
     //set this to localstorage
     localStorage.setItem('totalSeconds', startTime);
     checkTime(startTime % 60, secondsLabel);
@@ -90,16 +90,26 @@ function pause(startTime) {
 }
 
 var timer = document.getElementById('stopTime');
-
-$('#stopTime').click(function()
-{
 var timeTrackerStartTime = localStorage.getItem('totalSeconds');
-if (timeTrackerStartTime != null) {
-pause(timeTrackerStartTime);
+if (timeTrackerStartTime == 0) {
+    $('#stopTime').click(function() {
+        timeTrackerStartTime = localStorage.getItem('totalSeconds');
+        pause(0);
+    });
+} else {
+    timeTrackerStartTime = localStorage.getItem('totalSeconds');
+    $(document).ready(function() {
+        $('.stop').show();
+        $('.play').hide();
+        pause(timeTrackerStartTime);
+    });
 }
-else
-pause(0);
-});
+if (timeTrackerStartTime != 0) {
+    $('#stopTime').click(function() {
+        timeTrackerStartTime = localStorage.getItem('totalSeconds');
+        pause(timeTrackerStartTime);
+    });
+}
 
 function logout() {
     localStorage.setItem('lastTime', 0);
@@ -313,6 +323,16 @@ $(document).ready(function() {
             $('.stop').hide();
             $('.play').show();
         });
+        $('#timestopmodal-stop-task').click(function() {
+            pauseCount++;
+            clearInterval(a);
+        })
+        /* $('#timestopmodal-complete-task').click(function()
+         {
+         pauseCount++;
+         clearInterval(a);
+         $('.')
+         })*/
 
     });
 

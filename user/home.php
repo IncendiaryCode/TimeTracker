@@ -25,7 +25,7 @@ include("../php/activity.php");
         <div class="container">
             <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4">
                 <i class="text-danger  fas fa-exclamation-triangle"></i>
-                A task "Create login API for mobile" has not been ended.
+                As task "Create login API for mobile" has not been ended.
                 <a href="#" class="forgot-color"> Stop now!
                 </a>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -38,7 +38,7 @@ include("../php/activity.php");
                 </div>
                 <div class="col-6">
                     <div class="dropdown text-right" id="dropdown-recent-acts">
-                        <i class="fas fa-random"  id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                        <i class="fas fa-sliders-h"  id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
                             <a class="dropdown-item" href="#" data-type="task_asc">Task name</a>
                             <a class="dropdown-item" href="#" data-type="date_asc">Created date</a>
