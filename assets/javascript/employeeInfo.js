@@ -326,6 +326,8 @@ $(document).ready(function() {
         $('#timestopmodal-stop-task').click(function() {
             pauseCount++;
             clearInterval(a);
+            $('.stop').hide();
+            $('.play').show();
         })
         /* $('#timestopmodal-complete-task').click(function()
          {
