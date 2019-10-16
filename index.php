@@ -6,18 +6,18 @@
             <form id="loginForm" class="login-form"  method="post" action="<?=BASE_URL?>php/login.php" novalidate>
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="email" class="form-control-file logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light" id="Username" name="Username" placeholder="Username">
+                        <input type="email" class="form-control-file logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light" id="username" name="username" placeholder="User name">
                     </div>
-                    <p class="error" id="Username-error"></p>
+                    <p class="error" id="username-error"></p>
                 </div>
                 <div class="form-group">
                     <div class="input-group ">
-                        <input type="password" class="form-control-file top-space has-empty-validation border-top-0 border-left-0 border-right-0 font-weight-light" id="Password" name="password" placeholder="password" >
+                        <input type="password" class="form-control-file top-space has-empty-validation border-top-0 border-left-0 border-right-0 font-weight-light" id="password" name="password" placeholder="Password" >
                     </div>
                     <p class="error" id="Password-error" ></p>
                 </div>
                 <div class="row top-space" style="width: 100%;">
-                    <a href="#" class="col-6 forgot-color" id="forgot">forgot password?</a>
+                    <a href="#" class="col-6 forgot-color" id="forgot">Forgot password?</a>
 
                     <button type="submit" class=" col-3 offset-3 login-color btn btn-primary" id="submit">Login</button>
                     <div class="error"><?php echo isset($error) ? $error : ''?></div>
@@ -66,9 +66,9 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="email" class="form-control-file logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light" id="Username" name="Username" placeholder="Username">
+                        <input type="email" class="form-control-file logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light" id="username" name="username" placeholder="username">
                     </div>
-                    <p class="error" id="Username-error"></p>
+                    <p class="error" id="username-error"></p>
                 </div>
                 <div class="form-group">
                       <div class="input-group mb-3 top-space">
