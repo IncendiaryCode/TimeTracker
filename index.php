@@ -37,7 +37,8 @@
 
                     <div class="form-group">
                           <div class="input-group mb-3 top-space">
-                            <input id="user_id" name="user_id" type="hidden" value="<?php echo $_SESSION['user_id'];?>">
+                            <?php $user_id_value = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '';?>
+                            <input id="user_id" name="user_id" type="hidden" value="<?=$user_id_value?>">
                             <input type="email" class="form-control-file  has-email-validation has-empty-validation font-weight-light border-top-0 border-left-0 border-right-0" id="Uname" name="email" placeholder="Enter email">
                             
                             
