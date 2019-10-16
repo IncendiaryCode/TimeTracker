@@ -5,7 +5,7 @@ if(!isset($_SESSION['user'])){
       die();
   }
 
-$timer = 1571290190;
+$timer = 1571234240;
 $timerClass = 'fa-play';
 if (!empty($timer)) {
     $timerClass = 'fa-stop';
@@ -25,7 +25,7 @@ if (!empty($timer)) {
 </div>
 <main class="container-fluid-main">
     <div class="md main-container-employee container timer">
-        <div class="text-center shadow-lg topWidth stop-time" id="stop-time" data-isrunning="1">
+        <div class="text-center shadow-lg topWidth stop-time" id="stop-time" data-tasktype="login">
             <h3><i class="fas action-icon <?=$timerClass?>"></i></h3>
         </div>        
         <div class="container">

@@ -16,6 +16,24 @@ var mainTimerInterval;
 
 //localStorage.clear();
 
+function timeUpdate() {
+    localStorage.setItem('lastTime', getTime());
+}
+
+function startTimer(startTime) {
+    if (startTime === 'stop') {
+        //clear the existing interval
+        clearInterval(mainTimerInterval);
+    } else {
+        //set in local storage
+        localStorage.setItem('timeStamp', startTime);
+        mainTimerInterval = setInterval(function() {
+            startTime++;
+            setTime(startTime);
+        }, 1000);
+    }
+}
+
 function setTime(startTime) {
 
     //update local storage
@@ -30,46 +48,6 @@ function setTime(startTime) {
     var seconds = "0" + date.getSeconds();
     var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
     $('#primary-timer').html(formattedTime);
-
-    /*checkTime(startTime % 60, secondsLabel);
-    totalMinuts = parseInt(startTime / 60);
-    totalHours = parseInt(startTime / 3600);
-    checkTime(totalMinuts % 60, minutesLabel);
-    checkTime(totalHours % 3600, hoursLabel);*/
-}
-
-/*function checkTime(value) {
-    var time = '00:00';
-    console.log(value)
-    var n = value.toString().length;
-    if (value == 59) {
-        time = '00';
-    }
-    if (n == 1) {
-        time += ':0' + value;
-    } else {
-        time += ':' + value;
-    }
-    return time;
-}*/
-
-function timeUpdate() {
-    localStorage.setItem('lastTime', getTime());
-}
-
-function startTimer(startTime) {
-    //set in local storage
-    localStorage.setItem('timeStamp', startTime);
-
-    if (startTime === 'stop') {
-        //clear the existing interval
-        clearInterval(mainTimerInterval);
-    } else {
-        mainTimerInterval = setInterval(function() {
-            startTime++;
-            setTime(startTime);
-        }, 1000);
-    }
 }
 
 /*function startTimer(startTime) {
@@ -220,6 +198,45 @@ changeImage.onsubmit = function(e) {
         return true;
 }
 
+var timerStopModal = function() {
+    var timerModal = $('#timestopmodal').modal({
+        'show': false,
+        'backdrop': 'static',
+        // 'keyboard': false
+    });
+
+    timerModal.on('shown.bs.modal', function(e) {
+        console.log('shown modal', localStorage.getItem('timeStamp'));
+        var taskCompleteBtn = $(timestopmodal).find('#timestopmodal-complete-task');
+        var taskCloseBtn = $(timestopmodal).find('#timestopmodal-stop-task');
+        /*$.ajax({
+            type: 'POST',
+            url: timeTrackerBaseURL + 'php/stoptimer.php',
+            data: { 'id': $(this).data('taskid') },
+            success: function(res) {
+                console.log('stopped', res);
+            }
+        });*/
+    });
+
+    timerModal.on('hidden.bs.modal', function(e) {
+        console.log('hidden modal', localStorage.getItem('timeStamp'));
+        startTimer(localStorage.getItem('timeStamp'));
+    });
+
+    var completeBtn = timerModal.find('button#timestopmodal-complete-task');
+    completeBtn.unbind().on('click', function() {
+        updateTimer('../php/complete.php');
+    });
+
+    var stopBtn = timerModal.find('button#timestopmodal-stop-task');
+    stopBtn.unbind().on('click', function() {
+        updateTimer('../php/stop.php');
+    });
+
+    return timerModal;
+};
+
 function loadTaskActivities(formData) {
     $("#attach-card").empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
     $.ajax({
@@ -230,24 +247,7 @@ function loadTaskActivities(formData) {
             var data = JSON.parse(values);
             $("#attach-card").empty();
 
-            var timerStopModal = $('#timestopmodal').modal({
-                'show': false,
-                'backdrop': 'static',
-                // 'keyboard': false
-            });
-            timerStopModal.on('shown.bs.modal', function(e) {
-                console.log('hidden modal', );
-                var taskCompleteBtn = $(timestopmodal).find('#timestopmodal-complete-task');
-                var taskCloseBtn = $(timestopmodal).find('#timestopmodal-stop-task');
-                /*$.ajax({
-                    type: 'POST',
-                    url: timeTrackerBaseURL + 'php/stoptimer.php',
-                    data: { 'id': $(this).data('taskid') },
-                    success: function(res) {
-                        console.log('stopped', res);
-                    }
-                });*/
-            });
+            var timerModal = timerStopModal();
 
             for (x in data) {
                 var cardHeader = $('<div class="card-header" />');
@@ -259,7 +259,7 @@ function loadTaskActivities(formData) {
                 } else {
                     var stopButton = $('<button class="text-danger btn btn-link btn-sm" id="stop"><i class="fas fa-stop"></i> Stop</button>').data('taskid', data[x].id);
                     stopButton.on('click', function() {
-                        timerStopModal.modal('show');
+                        timerModal.modal('show');
                     });
                     stopCol.append(stopButton);
                 }
@@ -309,25 +309,32 @@ function loadTaskActivities(formData) {
     });
 }
 
-function updateTimer(timerUrl, action) {
+function updateTimer(timerUrl) {
+    /*var isRunning = $('#stop-time').data('isrunning');
+    console.log(isRunning);
+    var action = 'play';
+    var url = '../php/play.php';
+    if (parseInt(isRunning)) {
+        action = 'stop';
+        url = '../php/stop.php';
+    }*/
     $.ajax({
         type: "POST",
         url: timerUrl,
         data: { end_time: localStorage.getItem('timeStamp') },
-        dataType: 'json',
+        // dataType: 'json',
         success: function(res) {
             //handle timer
-            if (res.status) {
+            // console.log(res);
+            /*if (res.status) {
                 if (res.action == 'stop') {
-                    $('#stop-time .action-icon').removeClass('fa-play').addClass('fa-stop');
-                    $('#stop-time').data('isrunning', '0');
+                    $('#stop-time .action-icon').removeClass('fa-stop').addClass('fa-play');                    
                     startTimer('stop');
                 } else {
-                    $('#stop-time .action-icon').removeClass('fa-stop').addClass('fa-play');
-                    $('#stop-time').data('isrunning', '1');
+                    $('#stop-time .action-icon').removeClass('fa-play').addClass('fa-stop');
                     startTimer(res.start_time);
                 }
-            }
+            }*/
         }
     });
 }
@@ -335,14 +342,8 @@ function updateTimer(timerUrl, action) {
 $(document).ready(function() {
 
     $('#stop-time').click(function() {
-        var isRunning = $(this).data('isrunning');
-        var action = 'play';
-        var url = '../php/play.php';
-        if (isRunning) {
-            action = 'stop';
-            url = '../php/stop.php';
-        }
-        updateTimer(url, action);
+        var timerModal = timerStopModal();
+        timerModal.modal('show');
     });
 
     if ((__timeTrackerStartTime !== 0) && (typeof __timeTrackerStartTime != 'undefined')) {
@@ -361,31 +362,6 @@ $(document).ready(function() {
             loadTaskActivities({ 'type': $(this).data('type') });
         });
     });
-    $(document).ready(function() {
-        $('.play').click(function() {
-            $('.stop').show();
-            $('.play').hide();
-        })
-
-        $('.stop').click(function() {
-            $('.stop').hide();
-            $('.play').show();
-        });
-        $('#timestopmodal-stop-task').click(function() {
-            pauseCount++;
-            clearInterval(a);
-            $('.stop').hide();
-            $('.play').show();
-        })
-        /* $('#timestopmodal-complete-task').click(function()
-         {
-         pauseCount++;
-         clearInterval(a);
-         $('.')
-         })*/
-
-    });
-
 
     $('.submitProfile').click(function() {
         $('#changeProfile').modal('show');
