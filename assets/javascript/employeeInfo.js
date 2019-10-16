@@ -39,14 +39,13 @@ function checkTime(value, lable) {
 
 function timeUpdate() {
     localStorage.setItem('lastTime', getTime());
-    localStorage.setItem('totalSeconds', totalSeconds);
 }
 
 function pause(startTime) {
 
     if ((pauseCount++) % 2 !== 0) {
         //play
-        localStorage.setItem('totalSeconds', totalSeconds);
+        localStorage.setItem('totalSeconds', startTime);
         clearInterval(a);
         var logoutTime = getTime();
         var oldTime = localStorage.getItem('loginTime');
@@ -91,9 +90,15 @@ function pause(startTime) {
 }
 
 var timer = document.getElementById('stopTime');
+
 $('#stopTime').click(function()
 {
+var timeTrackerStartTime = localStorage.getItem('totalSeconds');
+if (timeTrackerStartTime != null) {
 pause(timeTrackerStartTime);
+}
+else
+pause(0);
 });
 
 function logout() {
