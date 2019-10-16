@@ -3,15 +3,17 @@
     include('../configurations/constants.php');
     session_start();
     $error="";
-    mysqli_select_db($database,$GLOBALS['db_connection']);
-    if(isset($_POST['Username']) && isset($_POST['password'])){
-        $email = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['Username']);
+
+    if(isset($_POST['username']) && isset($_POST['password'])){
+
+        $email = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['username']);
         $password = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['password']);
-        $pass=md5($password);
+        $pass = md5($password);
 
         //checking for the email an password in DB
-        $sql_q="SELECT u.id,u.profile,u.name FROM login AS l JOIN users AS u ON l.ref_id= u.id WHERE l.email='$email' AND l.password='$password' AND l.type='user'";
-        $res_q=mysqli_query($GLOBALS['db_connection'], $sql_q);
+        $sql_q = "SELECT u.id, u.profile, u.name FROM login AS l JOIN users AS u ON l.ref_id=u.id WHERE l.email='$email' AND l.password='$pass' AND l.type='user'";
+        $res_q =mysqli_query($GLOBALS['db_connection'], $sql_q);
+
         if(mysqli_num_rows($res_q)==1){
             $row = mysqli_fetch_assoc($res_q);
 
@@ -40,7 +42,7 @@
 
             //$error="Your email/password is wrong.";
             //$_SESSION['error']=$error;
-            $username = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['Username']);
+            $username = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['username']);
             $password = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['password']);
             $pass=md5($password);
             $sql_qu="SELECT * FROM login WHERE email='$username' AND password='$pass' AND type='admin'";
