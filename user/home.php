@@ -3,12 +3,18 @@ include("header.php");
 if(!isset($_SESSION['user'])){
       header("location:../index.php");
       die();
-  }
+}
+
+include("../php/task_status.php");
+
+
+//print_r($task_status); exit();
 
 $timer = 1571234240;
 $timerClass = 'fa-play';
-if (!empty($timer)) {
+if (!empty($task_status)) {
     $timerClass = 'fa-stop';
+    $timer = strtotime($task_status[0]['t_date'].$task_status[0]['start_time']);
 }
 ?>
 <script type="text/javascript">

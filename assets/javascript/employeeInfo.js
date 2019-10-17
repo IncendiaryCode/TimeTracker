@@ -281,7 +281,7 @@ function loadTaskActivities(formData) {
                 var footerRight = $("<div class='col-6 text-right card-actions'>");
                 //action Edit
                 var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit"></i></a>');
-                actionEdit.attr('href', timeTrackerBaseURL + 'user/edit_task.php?id='+data[x].id+"&t_name="+data[x].task_name);
+                actionEdit.attr('href', timeTrackerBaseURL + 'user/edit_task.php?t_id='+data[x].t_id);
                /* actionEdit.on('click', function() {
                     e.preventDefault();
                     window.location.href = "../user/edit_task.php";

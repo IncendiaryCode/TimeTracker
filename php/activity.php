@@ -6,7 +6,7 @@
 			return FALSE;
 		}
 		//Choose task info from db
-		$query = "SELECT t.task_name,t.t_date,t.start_time,t.end_time,t.id,p.id,p.name FROM time_details AS t JOIN project AS p ON t.project_id=p.id WHERE t.ref_id=".$_SESSION['user_id'];
+		$query = "SELECT t.task_name,t.t_date,t.start_time,t.end_time,t.id AS t_id,p.id,p.name FROM time_details AS t JOIN project AS p ON t.project_id=p.id WHERE t.ref_id=".$_SESSION['user_id'];
 		if ($task_type == 'task') {
 			$query.=" AND t.type='task' ORDER BY t.id DESC";
 		}else if($task_type == 'task_asc'){
@@ -39,12 +39,12 @@
 			}else if($_GET['type'] == 'login'){
 				get_activities('login');
 			}
-		}else if(isset($_GET['id'],$_GET['t_name'])){ //to fetch task details into edit_taak page
+		}else if(isset($_GET['t_id'])){ //to fetch task details into edit_taak page
 
-			$proj_id = $_GET['id'];
-			$task = $_GET['t_name'];
-			$sql_query = "SELECT t.task_name,t.t_date,t.start_time,t.end_time,t.id,p.id,p.name FROM time_details AS t JOIN project AS p ON t.project_id=p.id WHERE t.ref_id=".$_SESSION['user_id'];
-			$sql_query .= " AND t.project_id = '$proj_id' AND t.task_name='$task' AND type='task'";
+			//$proj_id = $_GET['id'];
+			//$task = $_GET['t_name'];
+			$sql_query = "SELECT t.task_name,t.t_date,t.start_time,t.end_time,t.id AS t_id,p.id,p.name FROM time_details AS t JOIN project AS p ON t.project_id=p.id WHERE t.id=".$_GET['t_id'];
+			//$sql_query .= " AND t.project_id = '$proj_id' AND t.task_name='$task' AND type='task'";
 
 			$q_result = mysqli_query($GLOBALS['db_connection'],$sql_query);
 			if($q_result == TRUE){
