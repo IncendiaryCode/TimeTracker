@@ -27,7 +27,6 @@
 
         <div id="form2" class="animated fadeInRightBig">
             <form id="forgotPassword" method="post" class="login-form" action="<?=BASE_URL?>php/check_otp.php" onsubmit="validateOtp()" novalidate>
-                
                     <div class="logo-space">
                         <h5 class="text-center">Forgot Password</h5>
                         <p class="error" id="here"></p>
@@ -37,23 +36,20 @@
 
                     <div class="form-group">
                           <div class="input-group mb-3 top-space">
-                            <?php $user_id_value = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '';?>
-                            <input id="user_id" name="user_id" type="hidden" value="<?=$user_id_value?>">
                             <input type="email" class="form-control-file  has-email-validation has-empty-validation font-weight-light border-top-0 border-left-0 border-right-0" id="Uname" name="email" placeholder="Enter email">
-                            
                             
                           </div>
                               <a href="#"  class="text-left btn btn-link forgot-color p-0" id="getOTP" onclick="sendOTP()">Send OTP</a>  
                     </div>
                     <div class="form-group otp">
-                          <div class="input-group mb-3  top-space">
-                            <input type="text" class="form-control-file top-space font-weight-light border-top-0 border-left-0 border-right-0" id="otp1" name="otp" placeholder="Enter OTP">
+                          <div class="input-group mb-3 ">
+                            <input type="text" class="form-control-file font-weight-light border-top-0 border-left-0 border-right-0" id="otp1" name="otp" placeholder="Enter OTP">
                           </div>
                           
                     </div>
                       <div class="row top-space" style="width: 100%;">
                         <a href="<?=BASE_URL?>index.php" class="col-6 text-left forgot-color"><i class="fas fa-arrow-left"> back to login</i></a>
-                        <button class="btn btn-primary col-3 offset-3 login-color" id="count" type="submit">  Submit  </button>    
+                        <button class="btn btn-primary col-3 offset-3 login-color" id="count" type="submit" name="submit">  Submit  </button>
                     </div>              
             </form> 
         </div>
@@ -67,9 +63,8 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="email" class="form-control-file logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light" id="username" name="username" placeholder="username">
+                        <input type="hidden" class="form-control-file logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light"  id="user-email" name="mail" placeholder="username">
                     </div>
-                    <p class="error" id="username-error"></p>
                 </div>
                 <div class="form-group">
                       <div class="input-group mb-3 top-space">

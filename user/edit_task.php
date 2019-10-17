@@ -3,7 +3,7 @@ $GLOBALS['page_title'] = 'Edit Task';
 include("header.php");
 ?>
 <main class="container-fluid container-fluid-main">
-    <div class="main-container">
+    <div class="main-container container">
         <div class="main-container-inner">
             <div class="row ">
                 <div class="col-6 offset-3">

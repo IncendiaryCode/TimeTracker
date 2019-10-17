@@ -3,7 +3,7 @@ $GLOBALS['page_title'] = 'Add Task';
 include("header.php");
 ?>
 <main class="container-fluid container-fluid-main">
-    <div class="main-container">
+    <div class="main-container container">
         <div class="main-container-inner">
             <div class="row ">
                 <div class="col-6 offset-3">
@@ -19,8 +19,7 @@ include("header.php");
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
                             <select type="number" class="form-control" id="chooseProject" name="chooseProject">
-                                <option>Select Project</option>                                
-                              
+                                <option>Select Project</option>
                                 <option>Sphere</option>
                                 <option>Buck</option>
                                 <option>TimeTracker</option>

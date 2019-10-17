@@ -9,16 +9,19 @@
                         <img id="new_img" src="<?=BASE_URL?>assets/images/user_profiles/<?=$_SESSION['user_image'];?>" width="10%;" class="rounded-circle figure mt-4" data-toggle="modal" data-target="#changeimage" data-toggle="tooltip" data-placement="top" title="Upload profile picture">
                         <h5 class="text-center mt-4 font-weight-light"><?php echo $_SESSION['user_name'];?></h5>
                         <div class="container">
-                            <div class="row">
-                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>user/employee_profile.php" class="text-dark">Change Password</a></h3>
+                            <div>
+                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>user/employee_profile.php" class="text-dark">My profile</a></h3>
                             </div>
-                            <div class="row">
-                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>user/employee_activities.php" class="text-dark">Login Activities</a></h3>
+                            <div>
+                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>user/change_password.php" class="text-dark">Change password</a></h3>
                             </div>
-                            <div class="row">
+                            <div>
+                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>user/employee_activities.php" class="text-dark">Login activities</a></h3>
+                            </div>
+                            <div>
                                 <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>php/logout.php" class="text-dark" onclick="logout()">Logout</a></h3>
                             </div>
-                            <div class="row hr"></div>
+                            <hr>
                         </div>
                     </div>
                 </div>
@@ -75,7 +78,8 @@
     <script src="<?=BASE_URL?>assets/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
     <script src="<?=BASE_URL?>assets/javascript/addTask.js?v=<?=VERSION?>"></script>
     <script src="<?=BASE_URL?>assets/javascript/employeeActivities.js?v=<?=VERSION?>"></script>
-    <script src="<?=BASE_URL?>assets/javascript/employeeProfile.js?v=<?=VERSION?>"></script>
+    <script src="<?=BASE_URL?>assets/javascript/change_password.js?v=<?=VERSION?>"></script>
+    <script src="<?=BASE_URL?>assets/javascript/employee_profile.js?v=<?=VERSION?>"></script>
     
 </body>
 </html>

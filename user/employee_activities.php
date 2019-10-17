@@ -1,10 +1,10 @@
 <?php 
 $GLOBALS['page_title'] = 'Login Activities';
 include("header.php");
-include("../php/login_activities.php");
+#include("../php/login_activities.php");
 ?>
 <main class="container-fluid container-fluid-main">
-    <div class="main-container">
+    <div class="main-container container">
         <div class="main-container-inner mt-3">
                 <div class="au-card au-card--no-shadow au-card--no-pad mb-2">
                     <div class="au-card-title pt-5">

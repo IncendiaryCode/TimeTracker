@@ -5,7 +5,7 @@ var num = localStorage.getItem('num');
 var idItiration = 0;
 /*localStorage.clear();*/
 var variable;
-var store = {
+/*var store = {
     'id': 'id',
     'started': '10:00AM',
     'ended': '0',
@@ -13,7 +13,7 @@ var store = {
     'taskDescription': 'taskDescription',
     'projectName': 'projectName',
     'totalTime': 'totalTime'
-}
+}*/
 
 if (addTask) {
     var m = new Date();
@@ -46,7 +46,7 @@ if (addTask) {
 }
 
 
-var secLabel = document.getElementById("sec");
+/*var secLabel = document.getElementById("sec");
 var minLabel = document.getElementById("min");
 var hrLabel = document.getElementById("hr");
 var totalSec = 0;
@@ -131,7 +131,7 @@ function pauseTime() {
     clearInterval(taskTimer);
 }
 /**/
-
+/*
 
 function taskSecondsToTime(d) {
     d = Number(d);
@@ -154,11 +154,7 @@ function taskTimeToSeconds(time) {
 
 }
 
-
-function sortByTaskName() {
-    /*retreive name from database*/
-
-}
+*/
 
 $(document).ready(function(){
     var btn;

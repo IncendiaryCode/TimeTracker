@@ -252,7 +252,7 @@ function loadTaskActivities(formData) {
             for (x in data) {
                 var cardHeader = $('<div class="card-header" />');
                 var cardHeaderRow = $('<div class="row pt-2" />');
-                cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].start_time + '</div>');
+                cardHeaderRow.append('<div class="col-4 col-lg-3 text-left"><span class="vertical-line"></span>' + data[x].t_date + '</div> <div class="col-2 col-lg-3 text-left">' + data[x].start_time + '</div>');
                 var stopCol = $('<div class="col-6 text-right" />');
                 if (data[x].end_time !== '00:00:00') {
                     stopCol.append('<i class="far fa-clock"></i> ' + data[x].end_time);
@@ -347,8 +347,10 @@ $(document).ready(function() {
     });
 
     if ((__timeTrackerStartTime !== 0) && (typeof __timeTrackerStartTime != 'undefined')) {
-        //TODO: check for integer only        
-        startTimer(__timeTrackerStartTime);
+        //TODO: check for integer only 
+        if (__timeTrackerStartTime == parseInt(__timeTrackerStartTime)) {
+            startTimer(__timeTrackerStartTime);
+        }
     }
 
     if ($("#attach-card").length > 0) {
