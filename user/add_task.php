@@ -1,6 +1,8 @@
 <?php
 $GLOBALS['page_title'] = 'Add Task';
 include("header.php");
+include("../php/activity.php");
+
 ?>
 <main class="container-fluid container-fluid-main">
     <div class="main-container container">
@@ -20,10 +22,9 @@ include("header.php");
                             <label for="choose-project">Choose a project</label>
                             <select type="number" class="form-control" id="chooseProject" name="chooseProject">
                                 <option>Select Project</option>
-                                <option>Sphere</option>
-                                <option>Buck</option>
-                                <option>TimeTracker</option>
-                                <option>Latli</option>
+                                <?php foreach($project_names as $p){ ?>
+                                <option><?=$p['name']; ?></option>
+                            <?php } ?> 
                             </select>
                         </div>
                         <div class="form-group pl-4">

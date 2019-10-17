@@ -33,7 +33,7 @@ if(!isset($_SESSION['user'])){
 
             <?php if(empty($GLOBALS['page_title'])) { ?>
             <div class="col-5 text-right ">
-                <a href="<?=BASE_URL?>user/add_task.php" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
+                <a href="<?=BASE_URL?>user/add_task.php?add=add_t" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
             </div>
             <div class="col-1 text-left" id="append">
                 <!-- to chage image -->
