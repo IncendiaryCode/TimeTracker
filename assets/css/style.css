@@ -52,15 +52,14 @@ header.main-header h1 {
     z-index: 1;
     position: relative;
 }
-@media (max-width: 700px)
-{
-    .main-container
-    {
-    background: #fff;
-    border-radius: 50px 50px 0 0;
-    z-index: 1;
-    position: relative;
-}
+
+@media (max-width: 700px) {
+    .main-container {
+        background: #fff;
+        border-radius: 50px 50px 0 0;
+        z-index: 1;
+        position: relative;
+    }
 }
 
 .alert {
@@ -141,7 +140,7 @@ header.main-header h1 {
     border-radius: 50px 50px 0 0;
     z-index: 1;
     position: relative;
-    }
+}
 
 .forgot-color {
     color: #a280fc;
@@ -167,7 +166,7 @@ header.main-header h1 {
 
 }
 
-#new-task {
+.btn-primary {
     color: white;
     background-image: linear-gradient(150deg, #8b5ff4, #dd9dfe);
     border-style: none;
@@ -175,13 +174,17 @@ header.main-header h1 {
     opacity: 1;
     z-index: 0;
     height: 40px;
-    box-shadow: 1px 1px #8b5ff4;
+    box-shadow: 2px 2px 7px #8b5ff4;
+}
+
+.btn-primary:hover {    
+    background-image: linear-gradient(150deg, #7277fe, #ca82fb, #f2c2fd);
 }
 
 #login-time {
     padding-top: 50px;
     color: #c8b8fd;
-    font-weight:lighter;
+    font-weight: lighter;
 }
 
 .topWidth {
@@ -205,7 +208,7 @@ header.main-header h1 {
     #new-task {
         width: 50%;
     }
-     
+
 }
 
 .vertical-line {
@@ -314,4 +317,3 @@ header.main-header h1 {
 .modal {
     background-image: linear-gradient(to bottom right, rgb(111, 121, 253, 0.75), rgb(215, 136, 251, 0.75), rgb(250, 223, 253, 0.75));
 }
-

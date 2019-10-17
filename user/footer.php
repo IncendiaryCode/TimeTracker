@@ -10,16 +10,16 @@
                         <h5 class="text-center mt-4 font-weight-light"><?php echo $_SESSION['user_name'];?></h5>
                         <div class="container">
                             <div>
-                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>user/employee_profile.php" class="text-dark">My profile</a></h3>
+                                <h3 class="hr p-4 font-weight-normal"><a class="forgot-color"href="<?=BASE_URL?>user/employee_profile.php" >My profile</a></h3>
                             </div>
                             <div>
-                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>user/change_password.php" class="text-dark">Change password</a></h3>
+                                <h3 class="hr p-4 font-weight-normal"><a class="forgot-color"href="<?=BASE_URL?>user/change_password.php">Change password</a></h3>
                             </div>
                             <div>
-                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>user/employee_activities.php" class="text-dark">Login activities</a></h3>
+                                <h3 class="hr p-4 font-weight-normal"><a class="forgot-color"href="<?=BASE_URL?>user/employee_activities.php">Login activities</a></h3>
                             </div>
                             <div>
-                                <h3 class="hr pt-4 font-weight-normal"><a href="<?=BASE_URL?>php/logout.php" class="text-dark" onclick="logout()">Logout</a></h3>
+                                <h3 class="hr p-4 font-weight-normal"><a class="forgot-color"href="<?=BASE_URL?>php/logout.php" onclick="logout()">Logout</a></h3>
                             </div>
                             <hr>
                         </div>
