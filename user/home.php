@@ -7,12 +7,13 @@ if(!isset($_SESSION['user'])){
 
 include("../php/task_status.php");
 
+// print_r($task_status); exit();
 
-//print_r($task_status); exit();
-
-$timer = 1571234240;
+$timer = '';
 $timerClass = 'fa-play';
+$tasktype = 'login';
 if (!empty($task_status)) {
+    $tasktype = 'project';
     $timerClass = 'fa-stop';
     $timer = strtotime($task_status[0]['t_date'].$task_status[0]['start_time']);
 }
@@ -23,19 +24,19 @@ if (!empty($task_status)) {
 </script>
 <div>
     <input id="user_id" name="user_id" type="hidden" value="<?php echo $_SESSION['user_id'];?>">
-    <p class="font-weight-light time-font text-center" id="login-time">Started at 9:00AM</p>
+    <p class="font-weight-light time-font text-center" id="login-time">Started at <?=$task_status[0]['start_time']?></p>
     <p class="font-weight-light text-center" id="primary-timer">
         00:00:00
     </p>
-    <p class="font-weight-light text-center" id="taskName">Punch in/out</p>
+    <p class="font-weight-light text-center" id="taskName"><?=$task_status[0]['task_name']?></p>
 </div>
 <main class="container-fluid-main">
     <div class="md main-container-employee container timer">
-        <div class="text-center shadow-lg topWidth stop-time" id="stop-time" data-tasktype="login">
+        <div class="text-center shadow-lg topWidth stop-time" id="stop-time" data-tasktype="<?=$tasktype?>" data-id="<?=$task_status[0]['t_id']?>">
             <h3><i class="fas action-icon <?=$timerClass?>"></i></h3>
         </div>        
         <div class="container">
-            <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4">
+            <!-- <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4">
                 <i class="text-danger  fas fa-exclamation-triangle"></i>
                 As task "Create login API for mobile" has not been ended.
                 <a href="#" class="forgot-color"> Stop now!
@@ -43,7 +44,7 @@ if (!empty($task_status)) {
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-            </div>
+            </div> -->
             <div class="row mb-3 pt-4">
                 <div class="col-6">
                     <h4 class="font-weight-light text-left ">Recent Activites</h4>

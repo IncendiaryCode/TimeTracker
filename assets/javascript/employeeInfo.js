@@ -207,16 +207,6 @@ var timerStopModal = function() {
 
     timerModal.on('shown.bs.modal', function(e) {
         console.log('shown modal', localStorage.getItem('timeStamp'));
-        var taskCompleteBtn = $(timestopmodal).find('#timestopmodal-complete-task');
-        var taskCloseBtn = $(timestopmodal).find('#timestopmodal-stop-task');
-        /*$.ajax({
-            type: 'POST',
-            url: timeTrackerBaseURL + 'php/stoptimer.php',
-            data: { 'id': $(this).data('taskid') },
-            success: function(res) {
-                console.log('stopped', res);
-            }
-        });*/
     });
 
     timerModal.on('hidden.bs.modal', function(e) {
@@ -321,11 +311,13 @@ function updateTimer(timerUrl) {
     $.ajax({
         type: "POST",
         url: timerUrl,
-        data: { end_time: localStorage.getItem('timeStamp') },
-        // dataType: 'json',
+        data: { id: localStorage.getItem('tid') },
+        dataType: 'json',
         success: function(res) {
             //handle timer
-            // console.log(res);
+            if (res.status) {
+                window.location.reload();
+            }
             /*if (res.status) {
                 if (res.action == 'stop') {
                     $('#stop-time .action-icon').removeClass('fa-stop').addClass('fa-play');                    
@@ -341,9 +333,21 @@ function updateTimer(timerUrl) {
 
 $(document).ready(function() {
 
-    $('#stop-time').click(function() {
-        var timerModal = timerStopModal();
-        timerModal.modal('show');
+    $('#stop-time').click(function() {        
+        if ($(this).data('tasktype') == 'login') {
+            $.ajax({
+                type: 'POST',
+                url: timeTrackerBaseURL + 'php/play.php',
+                data: { 'action': 'login' },
+                success: function(res) {
+                    console.log('task statred', res);
+                }
+            });
+        } else {
+            localStorage.setItem('tid', $(this).data('id'));
+            var timerModal = timerStopModal();
+            timerModal.modal('show');    
+        }
     });
 
     if ((__timeTrackerStartTime !== 0) && (typeof __timeTrackerStartTime != 'undefined')) {
