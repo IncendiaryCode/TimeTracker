@@ -276,7 +276,7 @@ function loadTaskActivities(formData) {
 
                 var cardFooter = $("<div class='card-footer'>");
                 var footerRow = $('<div class="row" />');
-                footerRow.append("<div class='col-6'> <i class='fab fa-bitcoin'> " + data[x].name + "</i></div>");
+                footerRow.append("<div class='col-6'> <i class='fab fa-twitter'> " + data[x].name + "</i></div>");
 
                 var footerRight = $("<div class='col-6 text-right card-actions'>");
                 //action Edit
