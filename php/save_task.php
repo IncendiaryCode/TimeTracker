@@ -19,9 +19,16 @@
     $sql_query = "SELECT id FROM project WHERE name = '$choose_p'";
     $result = mysqli_query($GLOBALS['db_connection'],$sql_query);
     if($result == TRUE){
-	    $num_of_rows = mysqli_num_rows($result);
+	    //$num_of_rows = mysqli_num_rows($result);
 	    $row = mysqli_fetch_assoc($result);
-		$sql = "INSERT INTO time_details(type,ref_id,project_id,task_name,t_date,start_time,end_time,created_on) VALUES('task','".$user_id."','".$row['id']."','".$task_name."','".$task_start_date."','".$task_start_time."','".$task_end_time."','".date('Y-m-d H:i:s')."')";
+	    if (isset($_POST['task_id'])) {
+	    	$sql = "UPDATE time_details SET project_id = ".$row['id'].",task_name = '".$task_name."',t_date = '".$task_start_date."',start_time = '".$task_start_time."',end_time = '".$task_end_time."',modified_on = '".date('Y-m-d H:i:s')."'";
+	    }
+	    else
+	    {
+	    	$sql = "INSERT INTO time_details(type,ref_id,project_id,task_name,t_date,start_time,end_time,created_on) VALUES('task','".$user_id."','".$row['id']."','".$task_name."','".$task_start_date."','".$task_start_time."','".$task_end_time."','".date('Y-m-d H:i:s')."')";
+	    }
+	    		
 		$sql_res = mysqli_query($GLOBALS['db_connection'],$sql);
 		if($sql_res == TRUE){
 			header("location:../user/home.php");

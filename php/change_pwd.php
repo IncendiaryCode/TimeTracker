@@ -16,7 +16,7 @@
 			$sql_query = "UPDATE login SET password = '".$pass."' WHERE email='$user_mail'";
 			$result = mysqli_query($GLOBALS['db_connection'],$sql_query);
 			if($result){
-				header("Refresh:1;URL=../index.php");
+				header("Location:../index.php");
 			}else//if UPDATE fails
 			{
 				echo "Error: ".$sql_query."<br>".mysqli_error($GLOBALS['db_connection']);

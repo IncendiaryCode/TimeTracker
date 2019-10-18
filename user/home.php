@@ -7,15 +7,18 @@ if(!isset($_SESSION['user'])){
 
 include("../php/task_status.php");
 
-// print_r($task_status); exit();
-
 $timer = '';
 $timerClass = 'fa-play';
 $tasktype = 'login';
+$task_id = 0;
+$start_time = '';
+
 if (!empty($task_status)) {
-    $tasktype = 'project';
+    $tasktype = ($task_status[0]['type'] == 'login') ? 'login' : 'project';
     $timerClass = 'fa-stop';
     $timer = strtotime($task_status[0]['t_date'].$task_status[0]['start_time']);
+    $task_id = $task_status[0]['t_id'];
+    $start_time = $task_status[0]['start_time'];
 }
 ?>
 <script type="text/javascript">
@@ -24,15 +27,15 @@ if (!empty($task_status)) {
 </script>
 <div>
     <input id="user_id" name="user_id" type="hidden" value="<?php echo $_SESSION['user_id'];?>">
-    <p class="font-weight-light time-font text-center" id="login-time">Started at <?=$task_status[0]['start_time']?></p>
+    <p class="font-weight-light time-font text-center" id="login-time">Started at <?=$start_time;?></p>
     <p class="font-weight-light text-center" id="primary-timer">
         00:00:00
     </p>
-    <p class="font-weight-light text-center" id="taskName"><?=$task_status[0]['task_name']?></p>
+    <p class="font-weight-light text-center" id="taskName"><?=$tasktype;?></p>
 </div>
 <main class="container-fluid-main">
     <div class="md main-container-employee container timer">
-        <div class="text-center shadow-lg topWidth stop-time" id="stop-time" data-tasktype="<?=$tasktype?>" data-id="<?=$task_status[0]['t_id']?>">
+        <div class="text-center shadow-lg topWidth stop-time" id="stop-time" data-tasktype="<?=$tasktype;?>" data-id="<?=$task_id;?>">
             <h3><i class="fas action-icon <?=$timerClass?>"></i></h3>
         </div>        
         <div class="container">

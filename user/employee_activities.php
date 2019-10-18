@@ -17,25 +17,7 @@ include("header.php");
                         <div class="au-task-list js-scrollbar3">
                             <div class="au-task__item au-task__item--danger">
                                 <div class="row au-task__item-inner attach  m-1" id="attachPanels" >
-                                    <?php 
-                                    if($row)
-                                    {
-                                        foreach($row as $value) { ?>
-                                        <div class='col-lg-5 ml-lg-5 m-3 shadow card-style'>
-                                            <div class='card-header bg-white text-left text-black-50'>
-                                                <h5 class='task'><p>Date : <?=$value['t_date'];?></p></h5>
-                                                <div class='row pt-2'><span class='vertical-line'>
-                                                </span><div class='col-6 text-left'>Start-time : <?=$value['start_time'];?></div>
-                                                <div class='col-5 text-right'><span>End-time : <?=$value['end_time'];?></span></div>
-                                            </div></div><div class='card-body text-body ml-4'><p>Total Time Used: <?php echo timeUsed($value['start_time'],$value['end_time']);?></p>
-                                            </div>
-                                        </div>
-                                    <?php  }
-                                    }
-                                    else
-                                    {
-                                        echo "No data present";
-                                    } ?>
+                                <!-- Loading in js-->
                                 </div>
                             </div>
                             

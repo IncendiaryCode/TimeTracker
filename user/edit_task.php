@@ -37,6 +37,7 @@ foreach($project_data as $data){
                         </div>
                         <p id="taskError" class=" text-danger"></p>
                         <input id="user_id" name="user_id" type="hidden" value="<?php echo $_SESSION['user_id'];?>">
+                        <input id="task_id" name="task_id" type="hidden" value="<?php echo $data['t_id'];?>">
                         <p id="taskError" class=" text-danger"></p>
                         <button type="submit" class="save-task">Save Task</button>
                     </form>

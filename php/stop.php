@@ -8,15 +8,7 @@
 	if ($_POST) {
 		session_start();	
 		$tabl_id = $_POST['id'];
-		$user_id = $_POST['user_id'];
-		$json_data = $_POST['info'];
-
-		$stop_timer_time = $_POST['end_time']; 
-		$stop_time = date('H:i:s',$stop_timer_time);
-		
-		// print_r($stop_time);
-		$timer_stop_info = json_decode($json_data,true);
-
+		$stop_time = date('H:i:s');
 		//update end time in time details
 		$sql_query = "UPDATE time_details SET end_time='".$stop_time."' WHERE id='$tabl_id'";
 		$result = mysqli_query($GLOBALS['db_connection'],$sql_query);
