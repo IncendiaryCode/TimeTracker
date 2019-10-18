@@ -271,11 +271,11 @@ function loadTaskActivities(formData) {
                 var footerRight = $("<div class='col-6 text-right card-actions'>");
                 //action Edit
                 var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit"></i></a>');
-                actionEdit.attr('href', timeTrackerBaseURL + 'user/edit_task.php?t_id='+data[x].t_id);
-               /* actionEdit.on('click', function() {
-                    e.preventDefault();
-                    window.location.href = "../user/edit_task.php";
-                });*/
+                actionEdit.attr('href', timeTrackerBaseURL + 'user/edit_task.php?t_id=' + data[x].t_id);
+                /* actionEdit.on('click', function() {
+                     e.preventDefault();
+                     window.location.href = "../user/edit_task.php";
+                 });*/
                 footerRight.append(actionEdit);
 
                 /*//action delete
@@ -333,24 +333,29 @@ function updateTimer(timerUrl) {
 
 $(document).ready(function() {
 
-    $('#stop-time').click(function() {        
+    $('#stop-time').click(function() {
+        var t_id = $(this).data('id');
         if ($(this).data('tasktype') == 'login') {
+            var taskUrl = timeTrackerBaseURL + 'php/play.php';
+            if (t_id) {
+                taskUrl = timeTrackerBaseURL + 'php/stop.php';
+            }
             $.ajax({
                 type: 'POST',
-                url: timeTrackerBaseURL + 'php/play.php',
+                url: taskUrl,
                 data: { 'action': 'login' },
                 success: function(res) {
                     console.log('task statred', res);
                 }
             });
         } else {
-            localStorage.setItem('tid', $(this).data('id'));
+            localStorage.setItem('tid', t_id);
             var timerModal = timerStopModal();
-            timerModal.modal('show');    
+            timerModal.modal('show');
         }
     });
 
-    if ((__timeTrackerStartTime !== 0) && (typeof __timeTrackerStartTime != 'undefined')) {
+    if ((typeof __timeTrackerStartTime != 'undefined') && (__timeTrackerStartTime !== 0)) {
         //TODO: check for integer only 
         if (__timeTrackerStartTime == parseInt(__timeTrackerStartTime)) {
             startTimer(__timeTrackerStartTime);

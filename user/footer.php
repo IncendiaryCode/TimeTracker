@@ -78,8 +78,6 @@
     <script src="<?=BASE_URL?>assets/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
     <script src="<?=BASE_URL?>assets/javascript/addTask.js?v=<?=VERSION?>"></script>
     <script src="<?=BASE_URL?>assets/javascript/employeeActivities.js?v=<?=VERSION?>"></script>
-    <script src="<?=BASE_URL?>assets/javascript/change_password.js?v=<?=VERSION?>"></script>
-    <script src="<?=BASE_URL?>assets/javascript/employee_profile.js?v=<?=VERSION?>"></script>
-    
+    <script src="<?=BASE_URL?>assets/javascript/change_password.js?v=<?=VERSION?>"></script>    
 </body>
 </html>
