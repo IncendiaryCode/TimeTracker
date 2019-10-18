@@ -21,18 +21,19 @@
 			//Inserting token into reset_token column
 			$sql_query = "UPDATE login SET reset_token = '".$token."' WHERE email= '".$email."'";
 			if(mysqli_query($GLOBALS['db_connection'],$sql_query)){
+				//@todo stoped email for now get otp from DB
 				//$email_result = mail('swasthika@printgreener.com', $subject, $message);
 				//Send mail after storing token
-				if(!mail($to, $subject, $message, $headers)){
+				//if(!mail($to, $subject, $message, $headers)){
 					//echo "Your Password has been sent to your email id";
 					//header("location:check_otp.php");
 					//print_r(error_get_last());exit();
 					//var_dump(error_get_last()['rotate-text']);exit();
 
-				}else{//if mail not sent
+				//}else{//if mail not sent
 				
 					echo "Mail sent.";
-				}
+				//}
 			}else{//if unable to insert into DB
 				echo "Error: " . $sql_query . "<br>" . mysqli_error($GLOBALS['db_connection']);
 			}

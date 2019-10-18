@@ -19,7 +19,7 @@ foreach($project_data as $data){
                         </div>
                         <div class="form-group">
                             <label for="description">Write a small description</label>
-                            <textarea class="form-control" id="description" rows="4"></textarea>
+                            <textarea class="form-control" id="description" rows="4" name="task_desc"><?=$data['description'];?></textarea>
                         </div>
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
@@ -29,11 +29,13 @@ foreach($project_data as $data){
                         </div>
                         <div class="form-group">
                             <label for="started-date">Started on</label>
-                            <input type="datetime-local" class="form-control" name="startedDate" value="<?=$data['t_date'];?>">
+                            <?php $start = $data['t_date']." ".$data['start_time']; ?>
+                            <input type="datetime-local" class="form-control" name="startedDate" value="<?=$start;?>">
                         </div>
                         <div class="form-group">
                             <label for="ended-date">Ended on</label>
-                            <input type="datetime-local" class="form-control" id="ended" name="endedDate" value="<?=$data['end_time'];?>">
+                            <?php $end = ($data['end_time'] == '00:00:00') ? '' : $data['t_date']." ".$data['end_time']; ?>
+                            <input type="datetime-local" class="form-control" id="ended" name="endedDate" value="<?=$end;?>">
                         </div>
                         <p id="taskError" class=" text-danger"></p>
                         <input id="user_id" name="user_id" type="hidden" value="<?php echo $_SESSION['user_id'];?>">
