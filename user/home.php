@@ -22,8 +22,18 @@ if (!empty($task_status)) {
     $task_type = ($task_status[0]['type'] == 'login') ? 'login' : 'project';
     $task_name = $task_status[0]['task_name'];
     $timerClass = 'fa-stop';
-    $timer = strtotime($task_status[0]['t_date'].$task_status[0]['start_time']);
     $task_id = $task_status[0]['t_id'];
+
+    // $timer = strtotime($task_status[0]['t_date'].$task_status[0]['start_time']);
+    $timer =(($task_status[0]['t_date'].$task_status[0]['start_time']));
+    $datetime1 = new DateTime();
+    $datetime2 = new DateTime($timer);
+
+    $interval = date_diff($datetime1, $datetime2);
+    $timer =  strtotime($task_status[0]['t_date'] . $interval->format(' %h:%i:%s'));
+    //echo "<br>";
+    //print_r($interval);
+    //exit();
 }
 ?>
 <script type="text/javascript">
@@ -58,7 +68,7 @@ if (!empty($task_status)) {
                 </div>
                 <div class="col-6">
                     <div class="dropdown text-right" id="dropdown-recent-acts">
-                        <i class="fas fa-sliders-h"  id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                        <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
                             <a class="dropdown-item" href="#" data-type="task_asc">Task name</a>
                             <a class="dropdown-item" href="#" data-type="date_asc">Created date</a>

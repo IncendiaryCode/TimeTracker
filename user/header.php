@@ -37,11 +37,11 @@ if(!isset($_SESSION['user'])){
             </div>
             <div class="col-1 text-left" id="append">
                 <!-- to chage image -->
-                <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#changeProfile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></h2>
+                <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></h2>
            </div>
        		<?php } else { ?>
            <div class="col-6 text-right">
-                <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#changeProfile" data-placement="top" title="User Profile"></i></h2>
+                <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-placement="top" title="User Profile"></i></h2>
             </div>
             <div class="col-12">
                 <p class="display-4 pt-3  text-center"><?= $GLOBALS['page_title'] ?></p>

@@ -2,9 +2,7 @@
 $GLOBALS['page_title'] = 'Edit Task';
 include("header.php");
 include("../php/activity.php");
-foreach($project_data as $data){
-
-}
+// echo '<pre>'; print_r($project_data); exit;
 ?>
 <main class="container-fluid container-fluid-main">
     <div class="main-container container">
@@ -12,42 +10,51 @@ foreach($project_data as $data){
             <div class="row ">
                 <div class="col-6 offset-3">
                     <form action="<?=BASE_URL?>php/save_task.php" method="post" id="addTask" class="mt-5 ">
-                        <div class="form-group">
+                        <div class="form-group  ">
                             <label for="task-name ">Write the task name</label>
-
-                            <input type="text" class="form-control" name="task-name" id="Taskname" value="<?=$data['task_name'];?>">
+                            <input type="text" class="form-control" name="task_name" id="Taskname" value="<?=$project_data[0]['task_name'];?>">
                         </div>
                         <div class="form-group">
                             <label for="description">Write a small description</label>
-                            <textarea class="form-control" id="description" rows="4" name="task_desc"><?=$data['description'];?></textarea>
+                            <textarea class="form-control" id="description" name="task_desc" rows="4"><?=$project_data[0]['description'];?></textarea>
                         </div>
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
-                            <select type="number" class="form-control" id="chooseProject" name="chooseProject">
-                                <option selected><?=$data['name'];?></option>
+                            <select readonly="" type="number" class="form-control" id="choose-project" name="project_name">
+                                <option selected><?=$project_data[0]['name'];?></option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="started-date">Started on</label>
-                            <?php $start = $data['t_date']." ".$data['start_time']; ?>
-                            <input type="datetime-local" class="form-control" name="startedDate" value="<?=$start;?>">
+                            <label for="start_date">Started on</label>
+                            <div class="input-group">
+                                <?php $start = $project_data[0]['t_date']." ".$project_data[0]['start_time']; ?>
+                                <input readonly="" type="text" class="form-control datetimepicker" id="started-date" name="start_date" aria-describedby="date-start" value="<?=$start;?>">
+                                <div class="input-group-append">
+                                <span class="input-group-text" id="date-start"><i class="fas fa-calendar"></i></span>
+                              </div>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="ended-date">Ended on</label>
-                            <?php $end = ($data['end_time'] == '00:00:00') ? '' : $data['t_date']." ".$data['end_time']; ?>
-                            <input type="datetime-local" class="form-control" id="ended" name="endedDate" value="<?=$end;?>">
-                        </div>
+                            <label for="end-date">Ended on</label>
+                            <div class="input-group">
+                                <?php $end = ($project_data[0]['end_time'] == '00:00:00') ? '' : $project_data[0]['t_date']." ".$project_data[0]['end_time']; ?>
+                                <input type="text" class="form-control datetimepicker" id="end-date" name="end_date" aria-describedby="date-end" value="<?=$end;?>">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="date-end"><i class="fas fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>                        
                         <p id="taskError" class=" text-danger"></p>
-                        <input id="user_id" name="user_id" type="hidden" value="<?php echo $_SESSION['user_id'];?>">
-                        <input id="task_id" name="task_id" type="hidden" value="<?php echo $data['t_id'];?>">
-                        <p id="taskError" class=" text-danger"></p>
-                        <button type="submit" class="save-task">Save Task</button>
+                        <p>&nbsp;</p> 
+                        <hr/>
+                        <button type="submit" class="btn btn-primary">Save Task</button>
                     </form>
                 </div>
             </div>
         </div>
-        <hr>
-        <footer>
+        
+        <footer class="footer">
+            <hr>
             <p class="text-center ">Copyright © 2019 Printgreener.com</p>
         </footer>
     </div>

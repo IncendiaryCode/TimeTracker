@@ -242,13 +242,14 @@ function loadTaskActivities(formData) {
             for (x in data) {
                 var cardHeader = $('<div class="card-header" />');
                 var cardHeaderRow = $('<div class="row pt-2" />');
-                cardHeaderRow.append('<div class="col-4 col-lg-3 text-left"><span class="vertical-line"></span>' + data[x].t_date + '</div> <div class="col-2 col-lg-3 text-left">' + data[x].start_time + '</div>');
+                cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].t_date + ' ' + data[x].start_time + '</div>');
                 var stopCol = $('<div class="col-6 text-right" />');
                 if (data[x].end_time !== '00:00:00') {
                     stopCol.append('<i class="far fa-clock"></i> ' + data[x].end_time);
                 } else {
-                    var stopButton = $('<button class="text-danger btn btn-link btn-sm" id="stop"><i class="fas fa-stop"></i> Stop</button>').data('taskid', data[x].id);
+                    var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x].t_id);
                     stopButton.on('click', function() {
+                        localStorage.setItem('tid', $(this).data('taskid'));
                         timerModal.modal('show');
                     });
                     stopCol.append(stopButton);
@@ -266,7 +267,7 @@ function loadTaskActivities(formData) {
 
                 var cardFooter = $("<div class='card-footer'>");
                 var footerRow = $('<div class="row" />');
-                footerRow.append("<div class='col-6'> <i class='fab fa-twitter'> " + data[x].name + "</i></div>");
+                footerRow.append("<div class='col-6'> <i class='fab fa-twitter'></i> " + data[x].name + "</div>");
 
                 var footerRight = $("<div class='col-6 text-right card-actions'>");
                 //action Edit
@@ -344,7 +345,7 @@ $(document).ready(function() {
                 type: 'POST',
                 url: taskUrl,
                 data: { 'action': 'login', 'id': t_id },
-                success: function(res) {                    
+                success: function(res) {
                     window.location.reload();
                 }
             });
@@ -374,10 +375,9 @@ $(document).ready(function() {
         });
     });
 
-    $('.submitProfile').click(function() {
-        $('#changeProfile').modal('show');
+    $('#submit-profile').click(function() {
+        // $('#change-profile').modal('show');
         var image = document.getElementById('image').value;
-        console.log(image);
         $.ajax({
             type: 'POST',
             url: '<?=BASE_URL?>php/upload_profile.php',

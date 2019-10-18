@@ -1,30 +1,19 @@
-	<div class="modal fade" id="changeProfile" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
+	<div class="modal modal-transparent fade" id="change-profile" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
         <div class="modal-dialog modal-xl">
-            <div class="modal-header bg-white">
+            <div class="modal-header">
                 <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times"></i></button>
             </div>
-            <div class="modal-content modal-width">
-                <div class="container-fluid-main">
-                    <div class="  md main-container-employee text-center">
-                        <img id="new_img" src="<?=BASE_URL?>assets/images/user_profiles/<?=$_SESSION['user_image'];?>" width="10%;" class="rounded-circle figure mt-4" data-toggle="modal" data-target="#changeimage" data-toggle="tooltip" data-placement="top" title="Upload profile picture">
-                        <h5 class="text-center mt-4 font-weight-light"><?php echo $_SESSION['user_name'];?></h5>
-                        <div class="container">
-                            <div>
-                                <h3 class="hr p-4 font-weight-normal"><a class="forgot-color"href="<?=BASE_URL?>user/employee_profile.php" >My profile</a></h3>
-                            </div>
-                            <div>
-                                <h3 class="hr p-4 font-weight-normal"><a class="forgot-color"href="<?=BASE_URL?>user/change_password.php">Change password</a></h3>
-                            </div>
-                            <div>
-                                <h3 class="hr p-4 font-weight-normal"><a class="forgot-color"href="<?=BASE_URL?>user/employee_activities.php">Login activities</a></h3>
-                            </div>
-                            <div>
-                                <h3 class="hr p-4 font-weight-normal"><a class="forgot-color"href="<?=BASE_URL?>php/logout.php" onclick="logout()">Logout</a></h3>
-                            </div>
-                            <hr>
-                        </div>
-                    </div>
-                </div>
+            <div class="modal-content text-center">
+                <img id="new_img" src="<?=BASE_URL?>assets/images/user_profiles/<?=$_SESSION['user_image'];?>" class="rounded-circle img-fluid" data-toggle="modal" data-target="#changeimage" data-toggle="tooltip" data-placement="top" title="Upload profile picture">
+                <h5 class="text-center mt-4 font-weight-light">
+                    <?php echo $_SESSION['user_name'];?>
+                </h5>                
+                <ul class="text-center">
+                    <li><a href="<?=BASE_URL?>user/employee_profile.php">My profile</a></li>
+                    <li><a href="<?=BASE_URL?>user/change_password.php">Change password</a></li>
+                    <li><a href="<?=BASE_URL?>user/employee_activities.php">My activities</a></li>
+                    <li><a href="<?=BASE_URL?>php/logout.php" onclick="logout()">Logout</a></li>
+                </ul>
             </div>
         </div>
     </div>
@@ -39,7 +28,7 @@
 	                <form id="uploadImage" method="post" action="<?=BASE_URL?>php/upload_profile.php" enctype="multipart/form-data">
 	                    <p><input type="file" name="change_img" placeholder="Upload image" id="image"></p>
 	                    <p class="text-danger" id="imageerror"></p>
-	                    <button type="submit" class="btn save-task submitProfile">Upload</button>
+	                    <button type="submit" class="btn save-task" id="submit-profile">Upload</button>
 	                </form>
 	            </div>
 	        </div>
