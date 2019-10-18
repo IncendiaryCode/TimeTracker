@@ -343,9 +343,9 @@ $(document).ready(function() {
             $.ajax({
                 type: 'POST',
                 url: taskUrl,
-                data: { 'action': 'login' },
-                success: function(res) {
-                    console.log('task statred', res);
+                data: { 'action': 'login', 'id': t_id },
+                success: function(res) {                    
+                    window.location.reload();
                 }
             });
         } else {

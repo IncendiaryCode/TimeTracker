@@ -324,3 +324,7 @@ a {
 .modal {
     background-image: linear-gradient(to bottom right, rgb(111, 121, 253, 0.75), rgb(215, 136, 251, 0.75), rgb(250, 223, 253, 0.75));
 }
+
+.footer {
+    margin-top: 80px;
+}

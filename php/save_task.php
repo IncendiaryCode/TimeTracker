@@ -2,14 +2,14 @@
 	include('_con.php');
 	session_start();
 	$user_id = $_SESSION['user_id'];
-	$task_name = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['task-name']);
+	$task_name = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['task_name']);
 	//$task_desc=mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['task_desc']);
-	$task_start = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['startedDate']);
-	$choose_p = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['chooseProject']);
+	$task_start = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['start_date']);
+	$choose_p = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['project_name']);
 	$time_start = strtotime($task_start);
 	$task_start_time = date('H:i:s',$time_start);
 	$task_start_date = date('Y-m-d',$time_start);
-	$task_end = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['endedDate']);
+	$task_end = mysqli_real_escape_string($GLOBALS['db_connection'],$_POST['end_date']);
 	$time_end = strtotime($task_end);
 	$task_end_time = date('H:i:s',$time_end);
     if(empty($task_end)){ //if end time is not specified
