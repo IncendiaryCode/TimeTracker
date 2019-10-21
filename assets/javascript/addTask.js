@@ -51,8 +51,9 @@ $(document).ready(function() {
         if (__editTask == true) {
             $('#Checked').show();
         }
-    })
+    });
     $('#newTask').click(function() {
+        __editTask=false;
         $('#Checked').hide();
     });
 $(function () {

@@ -289,11 +289,12 @@ function loadTaskActivities(formData) {
                 var actionPlay = $('<a href="#" class="card-action action-delete" id="action-delete"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon fa-play"></i></div></a>');
                 actionPlay.on('click', function(e) {
                     $.ajax({
-                        type: 'POST',
-                        url: timeTrackerBaseURL + 'php/play.php',
+                        type: 'GET',
+                        url: timeTrackerBaseURL + 'php/activity.php',
                         data: { 'id': data[x].t_id },
                         success: function(res) {
                             window.location.reload();
+                            //console.log(res);
                         }
                     });
                     startTimer(__timeTrackerStartTime);
