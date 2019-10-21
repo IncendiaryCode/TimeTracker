@@ -24,7 +24,6 @@
     $sql_query = "SELECT id FROM project WHERE name = '$choose_p'";
     $result = mysqli_query($GLOBALS['db_connection'],$sql_query);
     if($result == TRUE){
-	    //$num_of_rows = mysqli_num_rows($result);
 	    $row = mysqli_fetch_assoc($result);
 	    if (isset($_POST['task_id'])) {
 	    	$task_id = $_POST['task_id'];

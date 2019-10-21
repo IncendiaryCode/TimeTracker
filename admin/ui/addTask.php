@@ -1,4 +1,7 @@
-<?php include("header.php"); ?>
+<?php
+    include("header.php");
+    include("../php/get_number.php");
+?>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light">
@@ -78,18 +81,28 @@
             <div class="main-container-inner">
                 <div class="row mt-5">
                     <div class="col-6 offset-3">
-                        <form action="../index.html" id="addTask">
+                        <form action="../php/add_task.php" id="addTask" method="post">
                             <div class="form-group mt-3">
-                                <label for="task-name ">Enter the name of User to assign task</label>
-                                <input type="text" class="form-control" name="task-name" id="Taskname">
+                                <label for="user-name ">Enter the name of User to assign task</label>
+                                <input type="text" class="form-control" name="user-name" id="Username">
+                            </div>
+                            <div class="form-group">
+                                <label for="task-name">Enter the Task name</label>
+                                <input type="text" class="form-control" id="task_name" name="task_name">
                             </div>
                             <div class="form-group">
                                 <label for="description">Write a small description</label>
-                                <textarea class="form-control" id="description" rows="5"></textarea>
+                                <textarea class="form-control" id="description" name="description"rows="5"></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="choose-project">Choose a project</label>
-                                <select class="form-control" id="chooseProject"></select>
+                                <select class="form-control" id="chooseProject" name="chooseProject">
+                                <option>Select Project</option>
+                                <?php 
+                                    foreach($fetch_proj_name as $p){ ?>
+                                    <option><?=$p['name']; ?></option>
+                                <?php } ?> 
+                            </select>
                             </div>
                             <p id="taskError" class=" text-danger"></p>
                             <button type="submit" class="save-task">Assign Task</button>

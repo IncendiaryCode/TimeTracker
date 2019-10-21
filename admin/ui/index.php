@@ -4,7 +4,7 @@ include("header.php");
         header('location:http://localhost/time_tracker/index.php');
         die();
     }
-    include("../php/add_user.php");
+    include("../php/get_number.php");
 ?>
 <body>
     <header>
@@ -68,7 +68,7 @@ include("header.php");
                             <i class="fas fa-user-circle"></i>
                         </div>
                         <div class="col-lg-7 col-8 text-center">
-                            <span class="font-weight-bold text-display number-font shadow-lg"><?php echo $row['id']; ?></span>
+                            <span class="font-weight-bold text-display number-font shadow-lg"><?php echo $row; ?></span>
                             <span class="text-display pt-3">Total Users</span>
                         </div>
                     </div>
@@ -85,7 +85,7 @@ include("header.php");
                             <i class="fas fa-chalkboard"></i>
                         </div>
                         <div class="col-lg-7 col-8 text-center">
-                            <span class="font-weight-bold text-display number-font shadow-lg">3</span>
+                            <span class="font-weight-bold text-display number-font shadow-lg"><?php echo $row_proj; ?></span>
                             <span class="text-display pt-3">Total Projects</span>
                         </div>
                     </div>
@@ -102,7 +102,7 @@ include("header.php");
                             <i class=" fa fa-tasks"></i>
                         </div>
                         <div class="col-lg-7 col-8 text-center">
-                            <span class="font-weight-bold text-display number-font shadow-lg">5</span>
+                            <span class="font-weight-bold text-display number-font shadow-lg"><?php echo $row_task; ?></span>
                             <span class="text-display pt-3">Total Tasks</span>
                         </div>
                     </div>

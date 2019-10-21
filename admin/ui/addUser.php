@@ -93,7 +93,7 @@
                             </div>
                             <div class="form-group mt-3">
                                 <label for="task-name ">Enter Password</label>
-                                <input type="text" class="form-control" name="task_pass">
+                                <input type="password" class="form-control" name="task_pass">
                             </div>
                             <p id="userError" class=" text-danger"></p>
                             <button type="submit" class="save-task">Add User</button>

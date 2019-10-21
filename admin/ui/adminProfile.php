@@ -11,7 +11,7 @@
         <div class="  md main-container-employee text-center">
             <img id="new_img" src="../images/<?=$_SESSION['user_image'];?>" width="10%;" class="rounded-circle figure mt-4" data-toggle="modal" data-target="#changeImage" data-toggle="tooltip" data-placement="top" title="Upload profile picture">
             <div class="container ">
-                <form method="post" action="../php/change_pwd.php" id="changePsw">
+                <form method="post" action="//localhost/time_tracker/php/change_pwd.php" id="changePsw">
                     <h5 class="text-center mt-4">Change Password</h5>
                     <div class="form-group">
                         <div class="input-group mb-3 ">
