@@ -28,7 +28,7 @@ include("../php/activity.php");
                             <label for="start_date">Started on</label>
                             <div class="input-group">
                                 <?php $start = $project_data[0]['t_date']." ".$project_data[0]['start_time']; ?>
-                                <input readonly="" type="text" class="form-control datetimepicker" id="started-date" name="start_date" aria-describedby="date-start" value="<?=$start;?>">
+                                <input readonly="" type="text" class="form-control" id="started-date" name="start_date" aria-describedby="date-start" value="<?=$start;?>">
                                 <div class="input-group-append">
                                 <span class="input-group-text" id="date-start"><i class="fas fa-calendar"></i></span>
                               </div>

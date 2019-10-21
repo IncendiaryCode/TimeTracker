@@ -1,7 +1,7 @@
     <div class="modal modal-transparent fade" id="change-profile" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-header">
-                <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times"></i></button>
+                <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times  main-modal-close"></i></button>
             </div>
             <div class="modal-content text-center">
                 <img id="new_img" src="<?=BASE_URL?>assets/images/user_profiles/<?=$_SESSION['user_image'];?>" class="rounded-circle img-fluid" data-toggle="modal" data-target="#changeimage" data-toggle="tooltip" data-placement="top" title="Upload profile picture">
@@ -64,10 +64,12 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="//momentjs.com/downloads/moment.js"></script>
     <script src="<?=BASE_URL?>assets/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
     <script src="<?=BASE_URL?>assets/javascript/addTask.js?v=<?=VERSION?>"></script>
     <script src="<?=BASE_URL?>assets/javascript/employeeActivities.js?v=<?=VERSION?>"></script>
     <script src="<?=BASE_URL?>assets/javascript/change_password.js?v=<?=VERSION?>"></script>
     <script src="<?=BASE_URL?>assets/javascript/employee_profile.js?v=<?=VERSION?>"></script>    
+    <script src="<?=BASE_URL?>assets/javascript/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script>
 </body>
 </html>

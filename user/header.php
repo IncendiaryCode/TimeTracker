@@ -16,7 +16,9 @@ if(!isset($_SESSION['user'])){
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.0/css/all.css">
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="<?=BASE_URL?>assets/css/style.css?v=<?=VERSION?>">
+    <link rel="stylesheet" type="text/css" href="<?=BASE_URL?>assets/css/bootstrap-datetimepicker.min.css?v=<?=VERSION?>">
     <script type="text/javascript">
         var timeTrackerBaseURL = "<?=BASE_URL?>";
     </script>

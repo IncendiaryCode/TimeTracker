@@ -286,6 +286,22 @@ function loadTaskActivities(formData) {
                     console.log(this.id);
                 });
                 footerRight.append(actionDelete);*/
+                var actionPlay = $('<a href="#" class="card-action action-delete" id="action-delete"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon fa-play"></i></div></a>');
+                actionPlay.on('click', function(e) {
+                    $.ajax({
+                        type: 'POST',
+                        url: timeTrackerBaseURL + 'php/play.php',
+                        data: { 'id': data[x].t_id },
+                        success: function(res) {
+                            window.location.reload();
+                        }
+                    });
+                    startTimer(__timeTrackerStartTime);
+                });
+                if (data[x].end_time !== '00:00:00') {
+                    footerRight.append(actionPlay);
+                }
+
 
                 footerRow.append(footerRight);
                 cardFooter.append(footerRow);

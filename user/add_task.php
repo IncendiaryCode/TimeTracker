@@ -41,18 +41,12 @@ include("../php/activity.php");
                                 <label for="start_date">Started on</label>
                                 <div class="input-group">
                                   <input type="text" class="form-control datetimepicker" id="started-date" name="start_date" aria-describedby="date-start">
-                                  <div class="input-group-append">
-                                    <span class="input-group-text" id="date-start"><i class="fas fa-calendar"></i></span>
-                                  </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="end-date">Ended on</label>
                                 <div class="input-group">
                                   <input type="text" class="form-control datetimepicker" id="end-date" name="end_date" aria-describedby="date-end">
-                                  <div class="input-group-append">
-                                    <span class="input-group-text" id="date-end"><i class="fas fa-calendar"></i></span>
-                                  </div>
                                 </div>
                             </div>
                         </div>
@@ -64,7 +58,6 @@ include("../php/activity.php");
                 </div>
             </div>
         </div>
-        
         <footer class="footer">
             <hr>
             <p class="text-center ">Copyright © 2019 Printgreener.com</p>
