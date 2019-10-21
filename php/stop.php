@@ -6,7 +6,7 @@
 	$data['message'] = 'Something went wrong!';
 
 	if ($_POST) {
-		session_start();	
+		//session_start();	
 		$tabl_id = $_POST['id'];
 		$stop_time = date('H:i:s');
 		//update end time in time details

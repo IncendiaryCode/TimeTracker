@@ -1,4 +1,4 @@
-	<div class="modal modal-transparent fade" id="change-profile" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
+    <div class="modal modal-transparent fade" id="change-profile" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-header">
                 <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times"></i></button>
@@ -19,21 +19,21 @@
     </div>
 
     <div class="modal" id="changeimage" data-backdrop="false">
-	    <div class="modal-dialog animated fadeInDown">
-	        <div class="modal-content text-center">
-	            <div class="modal-header ">Upload image
-	                <button type="button" class="close text-danger" data-dismiss="modal">×</button>
-	            </div>
-	            <div class="modal-body">
-	                <form id="uploadImage" method="post" action="<?=BASE_URL?>php/upload_profile.php" enctype="multipart/form-data">
-	                    <p><input type="file" name="change_img" placeholder="Upload image" id="image"></p>
-	                    <p class="text-danger" id="imageerror"></p>
-	                    <button type="submit" class="btn save-task" id="submit-profile">Upload</button>
-	                </form>
-	            </div>
-	        </div>
-	    </div>
-	</div>
+        <div class="modal-dialog animated fadeInDown">
+            <div class="modal-content text-center">
+                <div class="modal-header ">Upload image
+                    <button type="button" class="close text-danger" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadImage" method="post" action="<?=BASE_URL?>php/upload_profile.php" enctype="multipart/form-data">
+                        <p><input type="file" name="change_img" placeholder="Upload image" id="image"></p>
+                        <p class="text-danger" id="imageerror"></p>
+                        <button type="submit" class="btn save-task" id="submit-profile">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal Timer Stop Confirm -->
     <div class="modal fade" id="timestopmodal" tabindex="0" role="dialog" aria-labelledby="timestopmodalLabel" aria-hidden="true">
@@ -61,12 +61,13 @@
         </div>
     </div>
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="<?=BASE_URL?>assets/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
     <script src="<?=BASE_URL?>assets/javascript/addTask.js?v=<?=VERSION?>"></script>
     <script src="<?=BASE_URL?>assets/javascript/employeeActivities.js?v=<?=VERSION?>"></script>
-    <script src="<?=BASE_URL?>assets/javascript/change_password.js?v=<?=VERSION?>"></script>    
+    <script src="<?=BASE_URL?>assets/javascript/change_password.js?v=<?=VERSION?>"></script>
+    <script src="<?=BASE_URL?>assets/javascript/employee_profile.js?v=<?=VERSION?>"></script>    
 </body>
 </html>

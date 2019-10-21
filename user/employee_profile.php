@@ -9,22 +9,22 @@ include("header.php");
                     <div class="col-6 offset-3">
                         <div class="text-center mt-4">
                             <img src="<?=BASE_URL?>assets/images/user_profiles/<?=$_SESSION['user_image'];?>" width="30%;" class="rounded-circle figure mt-4 text-center">
-                            <h4 class="text-center employee-name mt-3">John</h4>
+                            <h4 class="text-center employee-name mt-3"><?php echo $_SESSION['user_name'];?></h4>
                         </div>
                         <div class="m-5">
                             <table class="table">
                                   <tbody>
                                     <tr>
                                       <th scope="row">Email</th>
-                                      <td>test@printgreener.com</td>
+                                      <td><?php echo $_SESSION['user'];?></td>
                                     </tr>
                                     <tr>
-                                      <th scope="row">Phone number</th>
-                                      <td>8559875942</td>
+                                      <th scope="row"><div id="phone_no">Phone number</div></th>
+                                      <td></td>
                                     </tr>
                                     <tr>
-                                      <th scope="row">Employee type</th>
-                                      <td>user</td>
+                                      <th scope="row"><div id="emp_type">Employee type</div></th>
+                                      <td><?php?></td>
                                     </tr>
                                   </tbody>
                             </table>
