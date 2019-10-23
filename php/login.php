@@ -1,5 +1,4 @@
 <?php
-
     include("_con.php");
     include('../configurations/constants.php');
     session_start();
