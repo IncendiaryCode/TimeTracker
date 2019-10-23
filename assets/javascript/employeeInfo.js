@@ -238,7 +238,7 @@ function loadTaskActivities(formData) {
             $("#attach-card").empty();
 
             var timerModal = timerStopModal();
-
+                 var t_id;
             for (x in data) {
                 var cardHeader = $('<div class="card-header" />');
                 var cardHeaderRow = $('<div class="row pt-2" />');
@@ -286,17 +286,19 @@ function loadTaskActivities(formData) {
                     console.log(this.id);
                 });
                 footerRight.append(actionDelete);*/
-                var actionPlay = $('<a href="#" class="card-action action-delete" id="action-delete"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon fa-play"></i></div></a>');
+                var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon fa-play"></i></div></a>');
                 actionPlay.on('click', function(e) {
-                    $.ajax({
+                        console.log('id',data[x].t_id);
+                        $.ajax({
                         type: 'GET',
                         url: timeTrackerBaseURL + 'php/activity.php',
-                        data: { 'id': data[x].t_id },
+                        data: { 'id': data[x].t_id},
                         success: function(res) {
-                            window.location.reload();
-                            //console.log(res);
+                           window.location.reload();
+                           console.log(res);
                         }
                     });
+
                     startTimer(__timeTrackerStartTime);
                 });
                 if (data[x].end_time !== '00:00:00') {
@@ -308,7 +310,7 @@ function loadTaskActivities(formData) {
                 cardFooter.append(footerRow);
                 cardInner.append(cardFooter);
 
-                var cardCol = $("<div class='col-lg-6 mb-4' />");
+                var cardCol = $("<div class='col-lg-6 mb-4 cardCol' />");
                 cardCol.append(cardInner);
 
                 $("#attach-card").append(cardCol);
@@ -405,6 +407,5 @@ $(document).ready(function() {
                 console.log(data);
             }
         });
-    });
-
+    }); 
 });
