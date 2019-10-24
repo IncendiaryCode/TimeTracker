@@ -238,7 +238,6 @@ function loadTaskActivities(formData) {
             $("#attach-card").empty();
 
             var timerModal = timerStopModal();
-                 var t_id;
             for (x in data) {
                 var cardHeader = $('<div class="card-header" />');
                 var cardHeaderRow = $('<div class="row pt-2" />');
@@ -286,16 +285,18 @@ function loadTaskActivities(formData) {
                     console.log(this.id);
                 });
                 footerRight.append(actionDelete);*/
-                var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon fa-play"></i></div></a>');
+                var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon fa-play"><input type="hidden" value =' + data[x].t_id + '></i></div></a>');
+
                 actionPlay.on('click', function(e) {
-                        console.log('id',data[x].t_id);
-                        $.ajax({
+
+                    var element = this.getElementsByTagName('input').item(0).value;
+                    $.ajax({
                         type: 'GET',
                         url: timeTrackerBaseURL + 'php/activity.php',
-                        data: { 'id': data[x].t_id},
+                        data: { 'id': element },
                         success: function(res) {
-                           window.location.reload();
-                           console.log(res);
+                            window.location.reload();
+                            console.log(res);
                         }
                     });
 
@@ -407,5 +408,5 @@ $(document).ready(function() {
                 console.log(data);
             }
         });
-    }); 
+    });
 });
