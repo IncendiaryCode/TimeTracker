@@ -65,6 +65,20 @@
 				$project_names = mysqli_fetch_all($result_q,MYSQLI_ASSOC);
 				//print_r($project_names);
 			}
+		}else if(isset($_GET['id'])){
+			$s_query = "SELECT t.task_name,t.t_date,t.start_time,t.end_time,t.id AS t_id,p.id,p.name,t.description FROM time_details AS t JOIN project AS p ON t.project_id=p.id WHERE t.id=".$_GET['id'];
+			$result = mysqli_query($GLOBALS['db_connection'],$s_query);
+			if($result == TRUE){
+				$num_of_rows = mysqli_num_rows($result);
+				$task_data = array();
+				if($num_of_rows > 0){
+					$task_data = mysqli_fetch_all($result,MYSQLI_ASSOC);
+					//print_r($task_data);
+					echo json_encode($task_data);
+				}
+			}else{
+				echo "Error: ".mysqli_error($GLOBALS['db_connection']);
+			}
 		}
 		else if(isset($_GET['id'])){
 			$s_query = "SELECT t.task_name,t.t_date,t.start_time,t.end_time,t.id AS t_id,p.id,p.name,t.description FROM time_details AS t JOIN project AS p ON t.project_id=p.id WHERE t.id=".$_GET['id'];
