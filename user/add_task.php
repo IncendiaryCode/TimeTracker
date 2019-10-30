@@ -29,10 +29,10 @@ include("../php/activity.php");
                         <div class="form-group pl-4">
                             <div class="radio">
                                 <label for="radio1" class="form-check-label">
-                                    <input type="radio" id="newTask" name="task_type" value="option1" class="form-check-input" checked>New task
+                                    <input type="radio" id="newTask" name="task_type" class="form-check-input" checked>New task
                                 </label>
                                 <label for="radio1" class="form-check-label ml-5">
-                                    <input type="radio" id="editTask" name="task_type" value="option1" class="form-check-input">Completed task
+                                    <input type="radio" id="editTask" name="task_type" class="form-check-input">Completed task
                                 </label>
                             </div>
                         </div>

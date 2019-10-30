@@ -1,50 +1,5 @@
 <?php include("header.php"); ?>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <img src="../images/logo-white.png" height="40px;" onclick="window.location.href='../ui/index.php'">
-            <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon "></span>
-            </button>
-            <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
-                <div class="navbar-nav ml-auto flex-column-reverse flex-lg-row">
-                    <div class="nav-item nav-link pr-4">
-                        <div class="dropdown" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <i class="far fa fa-qrcode"></i>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class=" text-center">
-                                    <table class="table table-hover">
-                                        <thead>Options</thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row"><a href="#">Assign Task</a></th>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th scope="row"><a href="#" onclick=window.location.href="adminOptions.html">See all </a></th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="nav-item nav-link">
-                        <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="../images/images.png" height="40px" class="rounded-circle">
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class=" text-center">
-                                    <p><a href="#" onclick='window.location.href="adminProfile.php"' class="text-display">Profile</a></p>
-                                    <p><a href="#" onclick='window.location.href="../php/logout.php"' class="text-display"><i class="fas fa-power-off"></i> Logout</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
     <div class="container mt-5">
         <div class="au-card au-card--no-shadow au-card--no-pad m-b-40">
             <div class="au-card-title">

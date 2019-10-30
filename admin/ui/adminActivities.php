@@ -1,14 +1,6 @@
 <?php include("header.php"); ?>
 <body>
-    <header class="container-fluid ">
-        <div class="row">
-            <div class="col-6 mt-5">
-                <h5><i class="fas fa-arrow-left" onclick="window.location.href='../ui/index.php'"></i> <i class="fas fa-clock"></i>
-                    <span class="font-weight-light ">Time</span><b>Tracker</b>
-                </h5>
-            </div>
-        </div>
-    </header>
+   
     <div class="container-fluid">
         <div class='row attach-card'>
             <div class='col-md-6 '>

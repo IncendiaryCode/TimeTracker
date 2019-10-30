@@ -50,52 +50,6 @@ function setTime(startTime) {
     $('#primary-timer').html(formattedTime);
 }
 
-/*function startTimer(startTime) {
-
-    if ((pauseCount++) % 2 !== 0) {
-        //stop
-        localStorage.setItem('totalSeconds', startTime);
-        clearInterval(mainTimerInterval);
-
-        // var logoutTime = getTime();
-        // storing.ended = logoutTime;
-
-        var dataParams = { end_time: startTime };
-        $.ajax({
-            type: "POST",
-            url: '../php/stop.php',
-            data: dataParams,
-            success: function(data) {}
-        });
-    } else {
-        mainTimerInterval = setInterval(function() {
-            startTime++;
-            setTime(startTime);
-        }, 1000);
-        count = parseInt(localStorage.getItem('count'));
-        var today = new Date();
-        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-        var todayTime = getTime();
-        var time = convertTimeToSeconds(todayTime);
-        storing = storing + count;
-        storing = {
-            'date': date + todayTime,
-            'started': todayTime,
-            'ended': '00:00:00',
-            'timeUsed': '00:00:00'
-        }
-        localStorage.setItem('entry' + count, JSON.stringify(storing));
-        var id = document.getElementById('user_id').value;
-        $.ajax({
-            type: "POST",
-            url: '../php/play.php',
-            data: { info: JSON.stringify(storing), user_id: id },
-            success: function(data) {
-                
-            }
-        });
-    }
-}*/
 
 function logout() {
     localStorage.setItem('lastTime', 0);
@@ -122,30 +76,6 @@ function storeTime() {
 
 
 }
-
-/*function loginTime() {
-
-    var id = localStorage.getItem('id');
-    if (count == null) {
-        localStorage.setItem('count', 0);
-    }
-    count = parseInt(localStorage.getItem('count'));
-    var todayTime = getTime();
-    // document.getElementById('login-time').innerHTML = "Started at " + todayTime;
-
-    localStorage.setItem('loginTime', todayTime);
-    storing = storing + count;
-    storing = {
-        'id': id,
-        'date': 'date',
-        'started': todayTime,
-        'ended': '00:00:00',
-        'timeUsed': '00:00:00'
-    }
-    localStorage.setItem('entry' + count, JSON.stringify(storing));
-
-}*/
-
 
 function secondsToTime(d) {
     d = Number(d);
@@ -239,13 +169,17 @@ function loadTaskActivities(formData) {
 
             var timerModal = timerStopModal();
             for (x in data) {
+
+                var start_time = timeTo12HrFormat(data[x].start_time);
                 var cardHeader = $('<div class="card-header" />');
                 var cardHeaderRow = $('<div class="row pt-2" />');
-                cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].t_date + ' ' + data[x].start_time + '</div>');
+                cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].t_date + ' ' +start_time + '</div>');
                 var stopCol = $('<div class="col-6 text-right" />');
-                if (data[x].end_time !== '00:00:00') {
+                if (data[x].end_time !== '00:00:00') /*check whether task is ended or not*/
+                 {
                     stopCol.append('<i class="far fa-clock"></i> ' + data[x].end_time);
                 } else {
+
                     var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x].t_id);
                     stopButton.on('click', function() {
                         localStorage.setItem('tid', $(this).data('taskid'));
@@ -288,24 +222,27 @@ function loadTaskActivities(formData) {
                 var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon fa-play"><input type="hidden" value =' + data[x].t_id + '></i></div></a>');
 
                 actionPlay.on('click', function(e) {
-
-                    var element = this.getElementsByTagName('input').item(0).value;
+                    var t_id = this.getElementsByTagName('input').item(0).value;
                     $.ajax({
                         type: 'GET',
                         url: timeTrackerBaseURL + 'php/activity.php',
-                        data: { 'id': element },
+                        data: { 'id': t_id },
                         success: function(res) {
-                            window.location.reload();
-                            console.log(res);
+                            /*pause current running task and start selected task.*/
+                            $.ajax({
+                                type: 'POST',
+                                url: timeTrackerBaseURL + 'php/play.php',
+                                data: { 'action': 'task', 'id': t_id },
+                                success: function(res) {
+                                    window.location.reload();
+                                }
+                            });
                         }
                     });
-
-                    startTimer(__timeTrackerStartTime);
                 });
                 if (data[x].end_time !== '00:00:00') {
                     footerRight.append(actionPlay);
                 }
-
 
                 footerRow.append(footerRight);
                 cardFooter.append(footerRow);
@@ -410,3 +347,21 @@ $(document).ready(function() {
         });
     });
 });
+
+function timeTo12HrFormat(time)
+{   // Take a time in 24 hour format and format it in 12 hour format
+    var time_part_array = time.split(":");
+    var ampm = 'AM';
+
+    if (time_part_array[0] >= 12) {
+        ampm = 'PM';
+    }
+
+    if (time_part_array[0] > 12) {
+        time_part_array[0] = time_part_array[0] - 12;
+    }
+
+    formatted_time = time_part_array[0] + ':' + time_part_array[1] +' '+ ampm;
+
+    return formatted_time;
+}

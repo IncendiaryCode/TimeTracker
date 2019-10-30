@@ -33,7 +33,6 @@ if (addTask) {
         }
         if (project == "" || project == "Select Project") {
             document.getElementById('taskError').innerHTML = "Please Choose Project Name ";
-            console.log("here");
             return false;
         } else {
             /*store data in database*/

@@ -7,58 +7,6 @@ include("header.php");
     include("../php/get_number.php");
 ?>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <img src="../images/logo-white.png" height="40px;">
-            <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon "></span>
-            </button>
-            <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
-                <div class="navbar-nav ml-auto flex-column-reverse flex-lg-row">
-                    
-                    <div class="nav-item nav-link pr-4">
-                        <div class="dropdown" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <i class="far fa-bell"></i>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class=" text-center">
-                                    <table class="table table-hover">
-                                        <thead>You have 3 notificatoins</thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">2</th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">3</th>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th scope="row"><a href="#" onclick=window.location.href="adminNotifications.php">See all notifications</a></th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="nav-item nav-link">
-                        <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="../images/<?=$_SESSION['user_image'];?>" height="40px" class="rounded-circle">
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class=" text-center">
-                                    <p><a href="#" onclick='window.location.href="adminProfile.php"' class="text-display">Profile</a></p>
-                                    <p><a href="#" onclick='window.location.href="../php/logout.php"' class="text-display"><i class="fas fa-power-off"></i> Logout</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
     <div class="container-fluid text-white">
         <div class="row mt-5 mb-5">
             <div class="col-xl-2 col-sm-4 col-12 offset-xl-2 mt-1">
