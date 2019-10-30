@@ -71,12 +71,12 @@
             scales: {
                 xAxes: [{
                     gridLines: {
-                        display: true
+                        display: false
                     }
                 }],
                 yAxes: [{
                     gridLines: {
-                        display: true,
+                        display: false,
                         drawBorder: false
                     },
                     ticks: {

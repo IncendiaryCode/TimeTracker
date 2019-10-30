@@ -59,7 +59,9 @@
     </div>
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="//momentjs.com/downloads/moment.js"></script>
@@ -71,6 +73,7 @@
 <script src="<?=BASE_URL?>assets/javascript/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script>
 <script src="<?=BASE_URL?>assets/plugins/daily-chart.js"></script>
 <script src="<?=BASE_URL?>assets/plugins/week-chart.js"></script>
+<script src="<?=BASE_URL?>assets/plugins/monthly-chart.js"></script>
 <script src="<?=BASE_URL?>assets/plugins/utils.js?v=<?=VERSION?>"></script>
 </body>
 </html>
