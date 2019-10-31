@@ -1,10 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+$this->load->helper('url_helper');
 ?>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light">
-            <img src="../assets/images/logo-white.png" height="40px;" onclick="window.location.href='admin'">
+            <img src="<?=base_url();?>assets/images/logo-white.png" height="40px;" onclick="window.location.href='<?=base_url();?>index.php/admin'">
             <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon "></span>
             </button>
@@ -62,7 +63,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="../assets/images/images.png" height="40px" class="rounded-circle">
+                            <img src="<?=base_url();?>assets/images/images.png" height="40px" class="rounded-circle">
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class=" text-center">
                                     <p><a href="#" onclick='window.location.href="adminProfile.php"' class="text-display">Profile</a></p>
@@ -80,22 +81,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="main-container-inner">
                 <div class="row mt-2 pt-4">
                     <div class="col-6 offset-3">
-                        <form action="<?php echo site_url('add_user/add_users'); ?>" id="addUser" method="post">
+                    <?php 
+                        $this->load->library('form_validation');
+                        if(validation_errors()) { ?>
+                            <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
+                        <?php } ?>      
+                        <form action="<?php echo base_url();?>index.php/add_user/add_users" id="addUser" method="post">
                             <div class="form-group mt-3">
                                 <label for="task-name ">Enter the Name of new User</label>
-                                <input type="text" class="form-control" name="task_name" id="newUser" value="<?php echo set_value('task_name');?>">
+                                <input type="text" class="form-control" name="task_name" id="newUser" value="">
                             </div>
                             <div class="form-group mt-3">
                                 <label for="task-name ">Enter the Email of new User</label>
-                                <input type="email" class="form-control" name="user_email" id="user_email" value="<?php echo set_value('user_email');?>">
+                                <input type="email" class="form-control" name="user_email" id="user_email" value="">
                             </div>
                             <div class="form-group mt-3">
                                 <label for="task-name ">Enter the Contact number of new User</label>
-                                <input type="tel" minlength="10" maxlength="10" class="form-control" name="contact" id="contact" value="<?php echo set_value('contact');?>">
+                                <input type="tel" minlength="10" maxlength="10" class="form-control" name="contact" id="contact" value="">
                             </div>
                             <div class="form-group mt-3">
                                 <label for="task-name ">Enter Password</label>
-                                <input type="password" class="form-control" name="task_pass" id="task_pass" value="<?php echo set_value('task_pass');?>">
+                                <input type="password" class="form-control" name="task_pass" id="task_pass" value="">
                             </div>
                             <p id="userError" class=" text-danger"></p>
                             <button type="submit" class="save-task" value="submit">Add User</button>

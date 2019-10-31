@@ -14,7 +14,6 @@ class Admin extends CI_Controller {
 	{
 		$this->lang->load('form_validation_lang');
 		$this->load->view('header');
-	
 		$data['total_users'] = $this->dashboard_model->get_users();
 		$data['total_tasks'] = $this->dashboard_model->get_tasks();
 		$data['total_projects'] = $this->dashboard_model->get_projects();

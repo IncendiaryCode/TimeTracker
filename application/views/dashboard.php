@@ -86,7 +86,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <hr>
                     <div class="text-center">
-                        <button class="btn btn-link text-white" onclick="window.location.href='addProject.php'"><i class="fas fa-plus"></i> Projects</button>
+                        <button class="btn btn-link text-white" onclick="window.location.href='add_project'"><i class="fas fa-plus"></i> Projects</button>
                     </div>
                 </div>
             </div>
@@ -103,7 +103,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <hr>
                     <div class="text-center">
-                        <button class="btn btn-link text-white" onclick="window.location.href='addTask.php'"><i class="fas fa-plus"></i> Tasks</button>
+                        <button class="btn btn-link text-white" onclick="window.location.href='add_task'"><i class="fas fa-plus"></i> Tasks</button>
                     </div>
                 </div>
             </div>
