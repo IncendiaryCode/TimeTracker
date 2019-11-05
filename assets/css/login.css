@@ -1,0 +1,124 @@
+body,
+html {
+    height: 100%;
+    width: 100%;
+}
+
+.bg {
+    background-image: url("../images/Web_Login_BG.jpg");
+    height: 100%;
+    width: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.forgot-color {
+    color: #a280fc;
+}
+
+.form-control-file {
+    border-style: solid;
+}
+
+.login-color {
+    background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #edbffd);
+    border-radius: 5px;
+    border-style: none;
+    height: 40px;
+    color: white;
+}
+
+.login-form {
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.positioning-logo {
+    position: absolute;
+    top: 0%;
+    margin-top: 10%;
+    width: 100%;
+    right: 0%;
+}
+
+#form1 {
+    position: absolute;
+    top: 0%;
+    margin-top: 350px;
+    width: 50%;
+    float: right;
+    right: 0%;
+}
+
+#form2 {
+    display: none;
+    position: absolute;
+    top: 0%;
+    margin-top: 350px;
+    width: 50%;
+    float: right;
+    right: 0%;
+}
+
+#formPsw {
+    display: none;
+    position: absolute;
+    top: 0%;
+    margin-top: 350px;
+    width: 50%;
+    float: right;
+    right: 0%;
+}
+
+@media (max-width: 768px) {
+    #mySlider {
+        display: none;
+    }
+
+    #form1 {
+        width: 100%;
+        margin-top: 40%;
+    }
+
+    #form2 {
+        width: 100%;
+        margin-top: 40%;
+    }
+
+    #formPsw {
+        width: 100%;
+        margin-top: 40%;
+    }
+}
+
+
+.error {
+    color: red;
+}
+
+.logo-space {
+    margin-top: 10%;
+}
+
+.top-space {
+    margin-top: 5%;
+}
+
+.form-close {
+    color: red;
+}
+
+.cancel-button {
+    margin-left: 40%;
+    color: black;
+}
+
+
+.here {
+    display: none;
+}
+
+.newPsw {
+    display: none;
+    margin-top: 50px;
+}
