@@ -1,10 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+$this->load->library('session');
+$profile = $this->session->userdata('user__profile');
 ?>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light">
-            <img src="../assets/images/logo-white.png" height="40px;">
+            <img src="<?=base_url();?>assets/images/logo-white.png" height="40px;">
             <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon "></span>
             </button>
@@ -41,11 +43,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="../assets/images/images.png" height="40px" class="rounded-circle">
+                            <img src="<?=base_url();?>assets/images/<?=$profile?>" height="40px" class="rounded-circle">
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class=" text-center">
-                                    <p><a href="#" onclick='window.location.href="adminProfile.php"' class="text-display">Profile</a></p>
-                                    <p><a href="#" onclick='window.location.href="../php/logout.php"' class="text-display"><i class="fas fa-power-off"></i> Logout</a></p>
+                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/profile"' class="text-display">Profile</a></p>
+                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display"><i class="fas fa-power-off"></i> Logout</a></p>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +71,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <hr>
                     <div class="text-center">
-                        <button class="btn btn-link text-white" onclick="window.location.href='add_user'"><i class="fas fa-plus"></i> Users</button>
+                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/add_user'"><i class="fas fa-plus"></i> Users</button>
                     </div>
                 </div>
             </div>
@@ -86,7 +88,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <hr>
                     <div class="text-center">
-                        <button class="btn btn-link text-white" onclick="window.location.href='add_project'"><i class="fas fa-plus"></i> Projects</button>
+                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/add_project'"><i class="fas fa-plus"></i> Projects</button>
                     </div>
                 </div>
             </div>
@@ -103,7 +105,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <hr>
                     <div class="text-center">
-                        <button class="btn btn-link text-white" onclick="window.location.href='add_task'"><i class="fas fa-plus"></i> Tasks</button>
+                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/add_task'"><i class="fas fa-plus"></i> Tasks</button>
                     </div>
                 </div>
             </div>

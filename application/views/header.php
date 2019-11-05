@@ -13,6 +13,8 @@ $this->load->helper('url_helper');
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/login.css">
+    <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/new.css">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/admin.css">
    

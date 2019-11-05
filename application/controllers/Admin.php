@@ -8,10 +8,12 @@ class Admin extends CI_Controller {
 	    parent::__construct();
 	    $this->load->model('dashboard_model');
         $this->load->helper('url_helper');
+        $this->load->library('session');
     }
 
 	public function index()
 	{
+
 		$this->lang->load('form_validation_lang');
 		$this->load->view('header');
 		$data['total_users'] = $this->dashboard_model->get_users();
@@ -19,6 +21,7 @@ class Admin extends CI_Controller {
 		$data['total_projects'] = $this->dashboard_model->get_projects();
 		$this->load->view('dashboard',$data);
 		$this->load->view('footer');
+
 	}
 }
 ?>

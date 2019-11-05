@@ -7,7 +7,7 @@ class Add_task extends CI_Controller {
 	{
 	    parent::__construct();
 	    $this->load->model('dashboard_model');
-
+$this->load->library('session');
     }
 
 	public function index()

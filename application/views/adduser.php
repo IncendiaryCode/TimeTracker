@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->helper('url_helper');
+$this->load->library('session');
+$profile = $this->session->userdata('user__profile');
 ?>
 <body>
     <header>
@@ -63,11 +65,11 @@ $this->load->helper('url_helper');
                     </div>
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="<?=base_url();?>assets/images/images.png" height="40px" class="rounded-circle">
+                            <img src="<?=base_url();?>assets/images/<?=$profile?>" height="40px" class="rounded-circle">
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class=" text-center">
-                                    <p><a href="#" onclick='window.location.href="adminProfile.php"' class="text-display">Profile</a></p>
-                                    <p><a href="#" onclick='window.location.href="../php/logout/php"' class="text-display"><i class="fas fa-power-off"></i> Logout</a></p>
+                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/profile"' class="text-display">Profile</a></p>
+                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display"><i class="fas fa-power-off"></i> Logout</a></p>
                                 </div>
                             </div>
                         </div>

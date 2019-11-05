@@ -5,6 +5,7 @@ class Dashboard_model extends CI_Model {
     {
         $this->load->database();
     }
+    //Dashboard model
     public function get_users(){
 		$get_users_q = $this->db->get('users');
         $row = $get_users_q->num_rows();
@@ -20,6 +21,7 @@ class Dashboard_model extends CI_Model {
 		$row_proj = $get_proj_q->num_rows();
 		return $row_proj;	   
 	}
+	//add user model
 	public function add_users(){
 	    $array1 = array('name'=>$this->input->post('task_name'),'email'=>$this->input->post('user_email'),'phone'=>$this->input->post('contact'),'type'=>'user','created_on'=>time());
 	    $this->db->set($array1);
@@ -61,6 +63,7 @@ class Dashboard_model extends CI_Model {
             return false;
         }
     }
+    //add task model
     public function add_tasks(){
     	$query1 = $this->db->get_where('project', array('name' => $this->input->post('chooseProject')));
     	if($query1->num_rows() > 0){
@@ -83,6 +86,7 @@ class Dashboard_model extends CI_Model {
 			echo "project id not present.";
     	}
 	}
+	//add project model
 	public function project_exists(){
         $this->db->where('name', $this->input->post('task-name'));
         
@@ -104,5 +108,67 @@ class Dashboard_model extends CI_Model {
     		return true;
    		}
     }
+    //update profile model
+    public function submit_profile($picture){
+    	$useremail = $this->session->userdata('email');
+    	$this->db->where('email',$useremail);
+        $query = $this->db->update('users', $picture);
+        if(!$query){
+    		return false;
+    	}else{
+    		$this->db->where('email',$useremail);
+    		$query2 = $this->db->get('users');
+    		if($query2->num_rows() > 0){
+    			$user_profile = $query2->row_array();
+    			$this->session->set_userdata('user__profile',$user_profile['profile']);
+    			return true;
+   			}else{
+   				return false;
+   			}
+        }
+	}
+	public function password_exists(){
+		$email = $this->session->userdata('email');
+        $query = $this->db->get_where('login', array('email' => $email,'password'=>md5($this->input->post('psw1'))));
+       // print_r($query->result_array());exit;
+        if($query->num_rows() == 1){
+        	return true;
+		}else{
+			$this->form_validation->set_message('password_exists','Please enter your old password properly.');
+        	return false;
+		}
+	}
+	public function change_password(){
+		$new_pwd = $this->input->post('psw11');
+		$confirm_pwd = $this->input->post('psw22');
+		if($new_pwd == $confirm_pwd){
+			$email = $this->session->userdata('email');
+			$this->db->set('password',$this->input->post('psw11'));
+			$this->db->where('email', $email);
+			$query = $this->db->update('login');
+			if($query){
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			$this->form_validation->set_message('password_exists','Passwords do not match.');
+			return false;
+		}
+	}
+	public function login_process(){
+		$username = $this->security->xss_clean($this->input->post('username'));
+        $password = $this->security->xss_clean($this->input->post('password'));
+		$query = $this->db->get_where('login', array('email' => $username,'password'=>md5($password),'type'=>'admin'));
+		if($query->num_rows() == 1){
+			$row = $query->row();
+            $data = array('userid' => $row->id,'email' => $row->email,'logged_in' => TRUE);
+            $this->session->set_userdata($data);
+			return true;
+		}else{
+			$this->form_validation->set_message('Wrong inputs.');
+			return false;
+		}
+	}
 }
 ?>
