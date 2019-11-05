@@ -6,7 +6,7 @@ include("header.php");
     <div class="main-container container">
         <div class="main-container-inner">
             <div class="p-5">
-                <div id="calendar_basic" style="width:  1000px; height: 200px;"></div>
+                <div id="calendar_basic" style="width:  1000px; height: 500px;"></div>
             </div>
         </div>
     <hr class="mt-5">

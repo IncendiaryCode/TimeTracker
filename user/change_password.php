@@ -2,6 +2,7 @@
 $GLOBALS['page_title'] = 'Change password';
 include("header.php");
 ?>
+<!-- form to change user password -->
     <main class="container-fluid container-fluid-main">
         <div class=" main-container container">
             <div class="main-container-inner">

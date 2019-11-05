@@ -15,9 +15,7 @@ $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = '';
 
-// echo '<pre>'; print_r($task_status); exit;
-
-if (!empty($task_status)) {
+if (!empty($task_status)) {     /*fetching task details*/   
     $start_text = 'Started at '.$task_status[0]['start_time'];
     $task_type = ($task_status[0]['type'] == 'login') ? 'login' : 'project';
     $task_name = $task_status[0]['task_name'];
@@ -31,14 +29,11 @@ if (!empty($task_status)) {
 
     $interval = date_diff($datetime1, $datetime2);
     $timer =  strtotime($task_status[0]['t_date'] . $interval->format(' %h:%i:%s'));
-    //echo "<br>";
-    //print_r($interval);
-    //exit();
 }
 ?>
 <script type="text/javascript">
     //this will be send to JS for timer to start
-    var __timeTrackerStartTime = "<?=$timer?>";
+    var __timeTrackerStartTime = "<?=$timer?>";    /*start date and time of the task.*/ 
 </script>
 <div>
     <p class="font-weight-light time-font text-center" id="login-time"><?=$start_text?></p>
@@ -53,7 +48,7 @@ if (!empty($task_status)) {
             <h3><i class="fas action-icon <?=$timerClass?>"></i></h3>
         </div>        
         <div class="container">
-            <!-- <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4">
+            <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4">   <!-- TODO... -->
                 <i class="text-danger  fas fa-exclamation-triangle"></i>
                 As task "Create login API for mobile" has not been ended.
                 <a href="#" class="forgot-color"> Stop now!
@@ -61,22 +56,22 @@ if (!empty($task_status)) {
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-            </div> -->
+            </div>
             <div class="row mb-3 pt-4">
                 <div class="col-6">
-                    <h4 class="font-weight-light text-left ">Recent Activites</h4>
+                    <h4 class="font-weight-light text-left ">Recent Activites</h4>  
                 </div>
                 <div class="col-6">
                     <div class="dropdown text-right" id="dropdown-recent-acts">
                         <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">   <!-- sorting options -->
                             <a class="dropdown-item" href="#" data-type="task_asc">Task name</a>
                             <a class="dropdown-item" href="#" data-type="date_asc">Created date</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class='row mb-5' id="attach-card">
+            <div class='row mb-5' id="attach-card">     <!-- recent task details -->
                 <div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>
             </div>
             <hr>

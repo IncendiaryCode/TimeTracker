@@ -33,7 +33,6 @@ Validation.prototype.event = function(ele) {
         }
     }
     if (ele.type == 'email' && ele.classList.contains('has-email-validation')) {
-
         return this.isValidateEmail(ele);
     }
     if (ele.type == 'password') {

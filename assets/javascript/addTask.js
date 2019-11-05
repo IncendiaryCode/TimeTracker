@@ -8,13 +8,6 @@ var __editTask;
 if (addTask) {
     var m = new Date();
     var start_date = m.getUTCFullYear() + "-" + m.getUTCMonth() + "-" + m.getUTCDate() + " " + m.getHours() + ":" + m.getMinutes() + ":" + m.getSeconds();
-    // console.log(start_date);
-    /*    document.getElementById('setCurrentDate').innerHTML = start_date;*/
-    // var loginTime = document.getElementById('setCurrentDate').value;
-    // var ended = document.getElementById('ended').value;
-    /*if (ended == null || ended == "" || ended == " ") {
-        ended = 0;
-    }*/
     addTask.onsubmit = function(e) {
         var taskName = document.getElementById('Taskname').value;
         var project = document.getElementById('choose-project').value;

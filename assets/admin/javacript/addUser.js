@@ -7,7 +7,6 @@ addUser.onsubmit = function(e) {
     } else {
         document.getElementById('userError').innerHTML = " ";
         return true;
-
         return false;
     }
 }

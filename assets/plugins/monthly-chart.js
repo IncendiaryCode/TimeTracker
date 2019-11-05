@@ -13,15 +13,16 @@
               [new Date(2019, 3, 16), 6],
               [new Date(2019, 3, 17), 8],
               [new Date(2019, 9, 17), 5],
-              [new Date(2019, 4, 17), 8],
-              [new Date(2019, 7, 17), 9]
+              [new Date(2018, 4, 17), 8],
+              [new Date(2018, 7, 17), 9]
           ]);
 
           var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
 
           var options = {
               title: " ",
-              height: 300,
+              height: 500,
+                
           };
 
           chart.draw(dataTable, options);

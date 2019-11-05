@@ -5,7 +5,6 @@ session_start();
 if(!isset($_SESSION['user'])){
     header("location:".BASE_URL."index.php");
 }
-// echo $GLOBALS['page_title']; exit;
 ?>
 <html>
 <head>
@@ -33,7 +32,7 @@ if(!isset($_SESSION['user'])){
                 </a>
             </div>
 
-            <?php if(empty($GLOBALS['page_title'])) { ?>
+            <?php if(empty($GLOBALS['page_title'])) { ?>        <!-- refers to home page -->
             <div class="col-5 text-right ">
                 <a href="<?=BASE_URL?>user/add_task.php?add=add_t" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
             </div>
@@ -41,7 +40,7 @@ if(!isset($_SESSION['user'])){
                 <!-- to chage image -->
                 <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></h2>
            </div>
-       		<?php } else { ?>
+       		<?php } else { ?>  <!-- refers to all other pages  -->
            <div class="col-6 text-right">
                 <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-placement="top" title="User Profile"></i></h2>
             </div>

@@ -2,6 +2,7 @@
 
         var date = document.getElementById('daily-chart').value;
 
+
         if (date == "" || date == " " || date == null) {
             var today = new Date();
             document.getElementById("daily-chart").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
@@ -33,13 +34,12 @@
             url: timeTrackerBaseURL + 'php/activity.php',
             data: { 'user': "<?= $_SESSION['user'] ?>", 'date': date },
             dataType: 'json',
-            success: function(res) {
-
-            }
+            success: function(res) {}
         });
     }
 
     var chart = document.getElementById('daily').getContext('2d');
+    /* chart.height(1000);*/
     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     gradient = chart.createLinearGradient(0, 0, 0, 600);
@@ -58,7 +58,7 @@
                 borderColor: "#7078ff",
                 backgroundColor: gradient,
                 hoverbackground: gradient,
-                data: [0.1, 0.1]
+                data: [0.05, 0.05, 0, 0.05, 0, 0, 0.05]
             }]
         },
         options: {

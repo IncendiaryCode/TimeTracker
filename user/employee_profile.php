@@ -12,21 +12,21 @@ include("header.php");
                         <h4 class="text-center employee-name mt-3">
                             <?php echo $_SESSION['user_name'];?>
                         </h4>
+                        <div class="dropdown">
+                            <!-- calander view of all activites. -->
+                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    My activities
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a href="../user/daily_details.php" class="nav-link"  role="tab" aria-controls="pills-home" aria-selected="true">Daily activities</a>
+                    <a href="../user/weekly_details.php" class="nav-link" role="tab" aria-controls="pills-profile" aria-selected="false">Weekly activities</a>
+                    <a href="../user/monthly_details.php" class="nav-link" role="tab" aria-controls="pills-contact" aria-selected="false">Monthly activities</a>
+                  </div>
+                </div>
                     </div>
                 </div>
             </div>
             <div class="offset-4 col-4 pl-5">
-                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                    <li class="nav-item">
-                        <a href="../user/daily_details.php" class="nav-link active"  role="tab" aria-controls="pills-home" aria-selected="true">Daily</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../user/weekly_details.php" class="nav-link" role="tab" aria-controls="pills-profile" aria-selected="false">Weekly</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../user/monthly_details.php" class="nav-link" role="tab" aria-controls="pills-contact" aria-selected="false">Monthly</a>
-                    </li>
-                </ul>
                 <table class="table mt-5">
                     <tbody id="table-body">
                     </tbody>

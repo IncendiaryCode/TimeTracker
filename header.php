@@ -3,9 +3,7 @@
 <?php
 include("configurations/constants.php");
 session_start();
-// $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
 if(isset($_SESSION['user_id'])){
-    //header("location:user/home.php");
 }
 ?>
 <html>

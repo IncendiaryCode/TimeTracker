@@ -91,7 +91,6 @@ var forgotPsw = document.getElementById('forgotPassword');
 forgotPsw.onsubmit = function(e) {
 
     user_email = document.getElementById('Uname').value;
-    console.log(user_email);
     var validateForm = new Validation(e.currentTarget);
     var finalValue = validateForm.correctCheck();
     if (finalValue.isValid == true) {
@@ -136,14 +135,13 @@ forgotPsw.onsubmit = function(e) {
 function validateOtp() {
     $(document).ready(function() {
         $('#getOTP').click(function() {
-            $('.here').show();
+            $('.alert-user').show();
         });
     });
 
-
     var otpp = document.getElementById('otp1').value;
     if (otpp === "" || otpp === " ") {
-        document.getElementById('here').innerHTML = " Enter OTP ";
+        document.getElementById('alert-user').innerHTML = " Enter OTP ";
         return false;
     } else {
         document.getElementById('rotate-text').innerHTML = " ";
@@ -160,7 +158,7 @@ function validateOtp() {
                     });
                     return true;
                 } else {
-                    document.getElementById("here").innerHTML = "Wrong OTP.";
+                    document.getElementById("alert-user").innerHTML = "Wrong OTP.";
                     return false;
                 }
             }
@@ -172,7 +170,7 @@ function sendOTP() {
     var email = document.getElementById('Uname').value;
     if (email == "" || email == " ") {
         document.getElementById('Uname-error').innerHTML = "Enter email.";
-    } else {    
+    } else {
         $.ajax({
             type: "POST",
             url: 'php/forgot_pwd.php',

@@ -146,7 +146,9 @@ var timerStopModal = function() {
 
     var completeBtn = timerModal.find('button#timestopmodal-complete-task');
     completeBtn.unbind().on('click', function() {
-        updateTimer('../php/complete.php');
+        //updateTimer('../php/complete.php');
+        updateTimer('../php/stop.php');
+        window.location.reload();
     });
 
     var stopBtn = timerModal.find('button#timestopmodal-stop-task');
@@ -173,10 +175,9 @@ function loadTaskActivities(formData) {
                 var start_time = timeTo12HrFormat(data[x].start_time);
                 var cardHeader = $('<div class="card-header" />');
                 var cardHeaderRow = $('<div class="row pt-2" />');
-                cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].t_date + ' ' +start_time + '</div>');
+                cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].t_date + ' ' + start_time + '</div>');
                 var stopCol = $('<div class="col-6 text-right" />');
-                if (data[x].end_time !== '00:00:00') /*check whether task is ended or not*/
-                 {
+                if (data[x].end_time !== '00:00:00') /*check whether task is ended or not*/ {
                     stopCol.append('<i class="far fa-clock"></i> ' + data[x].end_time);
                 } else {
 
@@ -348,8 +349,7 @@ $(document).ready(function() {
     });
 });
 
-function timeTo12HrFormat(time)
-{   // Take a time in 24 hour format and format it in 12 hour format
+function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it in 12 hour format
     var time_part_array = time.split(":");
     var ampm = 'AM';
 
@@ -361,7 +361,7 @@ function timeTo12HrFormat(time)
         time_part_array[0] = time_part_array[0] - 12;
     }
 
-    formatted_time = time_part_array[0] + ':' + time_part_array[1] +' '+ ampm;
+    formatted_time = time_part_array[0] + ':' + time_part_array[1] + ' ' + ampm;
 
     return formatted_time;
 }

@@ -12,7 +12,7 @@
 		$project_data = array();
 		if($num_rows > 0){
 			$task_status = mysqli_fetch_all($q_result,MYSQLI_ASSOC);
-					//echo $project_data;
+			/*echo $task_status;*/
 		}
 		else
 		{

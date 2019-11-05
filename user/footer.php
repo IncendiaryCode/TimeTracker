@@ -8,7 +8,7 @@
             <h5 class="text-center mt-4 font-weight-light">
                 <?php echo $_SESSION['user_name'];?>
             </h5>
-            <ul class="text-center">
+            <ul class="text-center">    <!-- profile options -->
                 <li><a href="<?=BASE_URL?>user/employee_profile.php">My profile</a></li>
                 <li><a href="<?=BASE_URL?>user/change_password.php">Change password</a></li>
                 <li><a href="<?=BASE_URL?>user/employee_activities.php">My activities</a></li>
@@ -17,7 +17,7 @@
         </div>
     </div>
 </div>
-<div class="modal" id="changeimage" data-backdrop="false">
+<div class="modal" id="changeimage" data-backdrop="false">  <!-- to change the profile picture of user-->
     <div class="modal-dialog animated fadeInDown">
         <div class="modal-content text-center">
             <div class="modal-header ">Upload image
@@ -33,8 +33,8 @@
         </div>
     </div>
 </div>
-<!-- Modal Timer Stop Confirm -->
-<div class="modal fade" id="timestopmodal" tabindex="0" role="dialog" aria-labelledby="timestopmodalLabel" aria-hidden="true">
+
+<div class="modal fade" id="timestopmodal" tabindex="0" role="dialog" aria-labelledby="timestopmodalLabel" aria-hidden="true">  <!-- Modal Timer to Stop or Confirm -->
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">

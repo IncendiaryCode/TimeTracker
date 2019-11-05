@@ -27,6 +27,8 @@ include("../php/activity.php");
                             </select>
                         </div>
                         <div class="form-group pl-4">
+
+                            <!-- new or completed tasks..-->
                             <div class="radio">
                                 <label for="radio1" class="form-check-label">
                                     <input type="radio" id="newTask" name="task_type" class="form-check-input" checked>New task
@@ -36,6 +38,8 @@ include("../php/activity.php");
                                 </label>
                             </div>
                         </div>
+
+                        <!-- if task is completed -->
                         <div id="Checked">
                             <div class="form-group">
                                 <label for="start_date">Started on</label>
@@ -53,7 +57,7 @@ include("../php/activity.php");
                         <p id="taskError" class=" text-danger"></p>
                         <p>&nbsp;</p> 
                         <hr/>
-                        <button type="submit" class="btn btn-primary">Save Task</button>
+                        <button type="submit" class="btn btn-primary">Save Task</button><!-- to store the task entry. -->
                     </form>
                 </div>
             </div>

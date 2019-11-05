@@ -3,6 +3,7 @@
         <div class="bg  col-md-6" id="mySlider"></div>
         <div class="col-md-6 positioning-logo text-center"><img src="<?=BASE_URL?>assets/images/logo.png"></div>
         <div id="form1">
+            <!-- login form -->
             <form id="loginForm" class="login-form"  method="post" action="<?=BASE_URL?>php/login.php" novalidate>
                 <div class="form-group">
                     <div class="input-group">
@@ -25,12 +26,13 @@
             </form>
         </div>
 
+        <!-- forgot password form -->
         <div id="form2" class="animated fadeInRightBig">
             <form id="forgotPassword" method="post" class="login-form" action="<?=BASE_URL?>php/check_otp.php" onsubmit="validateOtp()" novalidate>
                     <div class="logo-space">
                         <h5 class="text-center">Forgot Password</h5>
-                        <p class="error" id="here"></p>
-                          <p class="error" id="Uname-error"></p>
+                        <p class="text-danger" id="alert-user"></p>
+                          <p class="text-danger" id="Uname-error"></p>
                           <p style="color: green" class="animated rotateIn" id="rotate-text"></p>
                     </div>
 
@@ -56,6 +58,7 @@
             </form> 
         </div>
 
+        <!--  change password form -->
         <div id="formPsw" class="animated fadeInRightBig">
             <form id="reEnterPsw" method="post" class="login-form" action="<?=BASE_URL?>php/change_pwd.php" novalidate>
                 <div class="text-center">

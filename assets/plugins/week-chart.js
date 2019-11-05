@@ -38,7 +38,7 @@
     };
 
     var chart = document.getElementById('weekly').getContext('2d');
-    
+
     gradient = chart.createLinearGradient(0, 0, 0, 600);
 
     gradient.addColorStop(0, '#7078ff');
@@ -64,6 +64,17 @@
             },
             tooltips: {
                 enabled: true,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var item = tooltipItem.xLabel;
+                        var week_count = document.getElementById('weekly-chart').value;
+                        weekly.onclick = function() {
+                            //console.log('week_count',(week_count.slice(0,4)+week_count.slice(-2)+item));
+                            var value = week_count.slice(0, 4) + week_count.slice(-2) + item;
+                            window.location.href = '../../TimeTracker/user/daily_details.php?value=' + value;
+                        }
+                    }
+                }
             },
             hover: {
                 mode: 'index'
@@ -91,10 +102,11 @@
                         labelString: 'Time in hours',
                     }
                 }]
-            }
+            },
+
         }
     };
     window.onload = function() {
         window.myLine = new Chart(chart, config);
-        
+
     };
