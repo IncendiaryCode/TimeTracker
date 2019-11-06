@@ -142,7 +142,11 @@ class Dashboard_model extends CI_Model {
 		$new_pwd = $this->input->post('psw11');
 		$confirm_pwd = $this->input->post('psw22');
 		if($new_pwd == $confirm_pwd){
-			$email = $this->session->userdata('email');
+            if($this->session->userdata('email')){
+                $email = $this->session->userdata('email');
+            }else{
+                $email = $this->input->post('mail');
+            }
 			$this->db->set('password',$this->input->post('psw11'));
 			$this->db->where('email', $email);
 			$query = $this->db->update('login');
@@ -152,6 +156,7 @@ class Dashboard_model extends CI_Model {
 				return false;
 			}
 		}else{
+            $this->session->set_flashdata('err_msg', 'Passwords do not match..');
 			$this->form_validation->set_message('password_exists','Passwords do not match.');
 			return false;
 		}
@@ -170,5 +175,39 @@ class Dashboard_model extends CI_Model {
 			return false;
 		}
 	}
+    public function send_otp(){
+        $email = $this->security->xss_clean($this->input->post('email'));
+        if(empty($email)){
+            $this->session->set_flashdata('err_msg', 'Please enter Email.');
+        }else{
+            $query = $this->db->get_where('login', array('email'=>$email));
+            if($query->num_rows() == 1){
+                $token = substr(mt_rand(), 0, 6);
+                $this->db->set('reset_token',$token);
+                $this->db->where('email', $email);
+                $query = $this->db->update('login');
+                if($query){
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }
+    }
+    public function check_otp(){
+        $email = $this->security->xss_clean($this->input->post('email'));
+        $otp = $this->security->xss_clean($this->input->post('otp'));
+        $query = $this->db->get_where('login', array('reset_token'=>$otp,'email'=>$email));
+        if($query->num_rows() == 1){
+            $row = $query->row_array();
+            $result = $row['email'];
+            return $result;
+        }else{
+            $this->session->set_flashdata('error_msg', 'Enter correct OTP.');
+            return false;
+        }
+    }
 }
 ?>

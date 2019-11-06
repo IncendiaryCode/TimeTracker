@@ -61,9 +61,9 @@ class Profile extends CI_Controller {
 		$this->lang->load('form_validation_lang');
 		$this->load->library('form_validation');
   		$this->load->helper('security');
-  		$this->form_validation->set_rules('psw1','Old Password','trim|required|min_length[6]|max_length[100]|md5|trim|callback_password_exists|xss_clean');
-  		$this->form_validation->set_rules('psw11','New Password','trim|required|min_length[6]|max_length[100]|md5|trim|xss_clean');
-  		$this->form_validation->set_rules('psw22','Confirm Password','trim|required|min_length[6]|max_length[100]|md5|trim|xss_clean');
+  		$this->form_validation->set_rules('psw1','Old Password','trim|required|min_length[3]|max_length[100]|md5|trim|callback_password_exists|xss_clean');
+  		$this->form_validation->set_rules('psw11','New Password','trim|required|min_length[3]|max_length[100]|md5|trim|xss_clean');
+  		$this->form_validation->set_rules('psw22','Confirm Password','trim|required|min_length[3]|max_length[100]|md5|trim|xss_clean');
   		if ($this->form_validation->run() == FALSE)
 		{
 			$this->load->helper('url');
