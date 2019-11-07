@@ -14,7 +14,7 @@ include("header.php");
                         </h4>
                         <div class="dropdown">
                             <!-- calander view of all activites. -->
-                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     My activities
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">

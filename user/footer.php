@@ -73,7 +73,18 @@
 <script src="<?=BASE_URL?>assets/javascript/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script>
 <script src="<?=BASE_URL?>assets/plugins/daily-chart.js"></script>
 <script src="<?=BASE_URL?>assets/plugins/week-chart.js"></script>
-<script src="<?=BASE_URL?>assets/plugins/monthly-chart.js"></script>
+<!-- <script src="<?=BASE_URL?>assets/plugins/monthly-chart.js"></script> -->
 <script src="<?=BASE_URL?>assets/plugins/utils.js?v=<?=VERSION?>"></script>
+
+
+<script src="<?=BASE_URL?>assets/plugins/preview.js?v=<?=VERSION?>"></script>
+<script src="<?=BASE_URL?>assets/plugins/iCalendar.js?v=<?=VERSION?>"></script>
+
+<script type="text/javascript">
+    function logout()
+    {
+        localStorage.setItem("firstTime", null);
+    }
+</script>
 </body>
 </html>

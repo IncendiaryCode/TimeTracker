@@ -8,13 +8,14 @@ if(!isset($_SESSION['user'])){
 include("../php/task_status.php");
 
 $timer = '';
-$timerClass = 'fa-play';
+$timerClass = 'fa-stop';
+
+
 $task_type = 'login';
 $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
-$task_name = '';
-
+$task_name = 'Login';
 if (!empty($task_status)) {     /*fetching task details*/   
     $start_text = 'Started at '.$task_status[0]['start_time'];
     $task_type = ($task_status[0]['type'] == 'login') ? 'login' : 'project';
@@ -30,17 +31,40 @@ if (!empty($task_status)) {     /*fetching task details*/
     $interval = date_diff($datetime1, $datetime2);
     $timer =  strtotime($task_status[0]['t_date'] . $interval->format(' %h:%i:%s'));
 }
+
 ?>
+
+</script>
 <script type="text/javascript">
     //this will be send to JS for timer to start
+
     var __timeTrackerStartTime = "<?=$timer?>";    /*start date and time of the task.*/ 
 </script>
-<div>
+<div id="task-timer">
     <p class="font-weight-light time-font text-center" id="login-time"><?=$start_text?></p>
-    <p class="font-weight-light text-center" id="primary-timer">
+    <div class="text-center">
+    <span class="font-weight-light text-center" id="primary-timer">
         00:00:00
-    </p>
-    <p class="font-weight-light text-center" id="taskName"><?=$task_name?></p>
+    </span>
+
+    <?php 
+    if (!empty($task_status)) { 
+        echo $task_status[0]['type'];
+     ?>
+
+    <span class="task pl-4 text-white"><i class='fas fa-chevron-right text-white '></i></span>  
+   <?php } ?>
+   
+</div>
+    <p class="font-weight-light text-center" id="taskName"><?php 
+
+    if (!empty($task_name)) {
+        echo $task_name;
+    }
+    else echo "Login";
+     ?>
+         
+     </p>
 </div>
 <main class="container-fluid-main">
     <div class="md main-container-employee container timer">
@@ -74,11 +98,11 @@ if (!empty($task_status)) {     /*fetching task details*/
             <div class='row mb-5' id="attach-card">     <!-- recent task details -->
                 <div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>
             </div>
+        </div>
             <hr>
             <footer>
                 <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</p>
             </footer>
-        </div>
     </div>
 </main>
 <?php include("footer.php"); ?>

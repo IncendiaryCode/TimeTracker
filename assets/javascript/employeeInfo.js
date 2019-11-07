@@ -8,7 +8,6 @@ var totalWorkTime = 0;
 var pauseCount = 0;
 var storing;
 var count = localStorage.getItem('count');
-
 // loginTime();
 
 //main timer interval
@@ -16,10 +15,10 @@ var mainTimerInterval;
 
 //localStorage.clear();
 
-function timeUpdate() {
+/*function timeUpdate() {
     localStorage.setItem('lastTime', getTime());
 }
-
+*/
 function startTimer(startTime) {
     if (startTime === 'stop') {
         //clear the existing interval
@@ -50,16 +49,20 @@ function setTime(startTime) {
     $('#primary-timer').html(formattedTime);
 }
 
-
+/*
 function logout() {
     localStorage.setItem('lastTime', 0);
     localStorage.setItem('timeStamp', 0);
     var counter = localStorage.getItem('count');
     storeTime();
     localStorage.setItem('count', parseInt(counter) + 1);
+
+    localStorage.setItem('firstTime', 'null');
+    console.log("loggin out......");
+
 }
 
-
+*/
 
 function storeTime() {
 
@@ -180,7 +183,6 @@ function loadTaskActivities(formData) {
                 if (data[x].end_time !== '00:00:00') /*check whether task is ended or not*/ {
                     stopCol.append('<i class="far fa-clock"></i> ' + data[x].end_time);
                 } else {
-
                     var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x].t_id);
                     stopButton.on('click', function() {
                         localStorage.setItem('tid', $(this).data('taskid'));
@@ -225,19 +227,11 @@ function loadTaskActivities(formData) {
                 actionPlay.on('click', function(e) {
                     var t_id = this.getElementsByTagName('input').item(0).value;
                     $.ajax({
-                        type: 'GET',
-                        url: timeTrackerBaseURL + 'php/activity.php',
-                        data: { 'id': t_id },
+                        type: 'POST',
+                        url: timeTrackerBaseURL + 'php/play.php',
+                        data: { 'action': 'task', 'id': t_id },
                         success: function(res) {
-                            /*pause current running task and start selected task.*/
-                            $.ajax({
-                                type: 'POST',
-                                url: timeTrackerBaseURL + 'php/play.php',
-                                data: { 'action': 'task', 'id': t_id },
-                                success: function(res) {
-                                    window.location.reload();
-                                }
-                            });
+                            window.location.reload();
                         }
                     });
                 });
@@ -290,8 +284,22 @@ function updateTimer(timerUrl) {
     });
 }
 
-$(document).ready(function() {
 
+$(document).ready(function() {
+    var firstTime = localStorage.getItem("firstTime");
+    console.log('firstTime', firstTime);
+    if (firstTime == 'null') {
+        console.log('timer running');
+        localStorage.setItem("firstTime", "stop");
+        $.ajax({
+            type: 'POST',
+            url: timeTrackerBaseURL + 'php/play.php',
+            data: { 'action': 'login' },
+            success: function(res) {
+                window.location.reload();
+            }
+        });
+    };
     $('#stop-time').click(function() {
         var t_id = $(this).data('id');
         if ($(this).data('tasktype') == 'login') {
@@ -299,6 +307,7 @@ $(document).ready(function() {
             if (t_id) {
                 taskUrl = timeTrackerBaseURL + 'php/stop.php';
             }
+            console.log('task_id', t_id);
             $.ajax({
                 type: 'POST',
                 url: taskUrl,
@@ -365,3 +374,4 @@ function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it
 
     return formatted_time;
 }
+
