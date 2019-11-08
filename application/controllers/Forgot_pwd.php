@@ -14,6 +14,7 @@
 			$this->load->view('footer');
 		}
 		public function send_otp(){
+			$this->load->library('email');
 			$this->load->helper('form');
 			$this->load->helper(array('form','url'));
 			$this->load->library('form_validation');

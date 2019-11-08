@@ -3,6 +3,7 @@ class Dashboard_model extends CI_Model {
 
     public function __construct()
     {
+        $this->load->library('email');
         $this->load->database();
     }
     //Dashboard model
@@ -12,7 +13,7 @@ class Dashboard_model extends CI_Model {
         return $row;
     }
     public function get_tasks(){
-		$get_task_q = $this->db->query("SELECT * FROM time_details WHERE type = 'task'");
+		$get_task_q = $this->db->query("SELECT * FROM task");
 		$row_task = $get_task_q->num_rows();
 		return $row_task;
 	}
@@ -23,14 +24,14 @@ class Dashboard_model extends CI_Model {
 	}
 	//add user model
 	public function add_users(){
-	    $array1 = array('name'=>$this->input->post('task_name'),'email'=>$this->input->post('user_email'),'phone'=>$this->input->post('contact'),'type'=>'user','created_on'=>time());
+	    $array1 = array('name'=>$this->input->post('task_name'),'email'=>$this->input->post('user_email'),'phone'=>$this->input->post('contact'),'type'=>'user','created_on'=>date('Y:m:d H:i:s'));
 	    $this->db->set($array1);
 
 	    $query = $this->db->insert('users',$array1);
 	    
 	    $last_insert_id = $this->db->insert_id();
 	    //print_r('came to here-'. $last_insert_id); exit;
-	    $array2 = array('email'=>$this->input->post('user_email'),'password'=>$this->input->post('task_pass'),'type'=>'user','ref_id'=> $last_insert_id,'created_on'=>time());
+	    $array2 = array('email'=>$this->input->post('user_email'),'password'=>$this->input->post('task_pass'),'type'=>'user','ref_id'=> $last_insert_id,'created_on'=>date('Y:m:d H:i:s'));
 	    $this->db->set($array2);
 	    $query2 = $this->db->insert('login',$array2);
 	    return true;
@@ -71,13 +72,21 @@ class Dashboard_model extends CI_Model {
     		$query2 = $this->db->get_where('users',array('name' => $this->input->post('user-name')));
     		if($query2->num_rows() >0){
     			$user_id = $query2->row_array();
-    			$array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('description'),'project_id'=>$proj_id['id'],'type'=>'task','created_on'=>time(),'ref_id' => $user_id['id']);
+    			$array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('description'),'project_id'=>$proj_id['id'],'module_id'=>'1','created_on'=>date('Y:m:d H:i:s'));
     			$this->db->set($array);
-	    		$query3 = $this->db->insert('time_details',$array);
+	    		$query3 = $this->db->insert('task',$array);
 	    		if(!$query3){
 	    			return false;
 	    		}else{
-	    			return true;
+                    $last_insert_id = $this->db->insert_id();
+                    $array2 = array('user_id'=>$user_id['id'],'task_id'=>$last_insert_id,'created_on'=>date('Y:m:d H:i:s'));
+                    $this->db->set($array2);
+                    $query4 = $this->db->insert('task_assignee',$array2);
+                    if(!$query4){
+                        return false;
+                    }else{
+                        return true;
+                    }
 	    		}
     		}else{
     			echo "Not a valid user id.";
@@ -100,7 +109,7 @@ class Dashboard_model extends CI_Model {
         }
     }
     public function add_projects(){
-    	$array = array('name'=>$this->input->post('task-name'), 'created_on'=>time());
+    	$array = array('name'=>$this->input->post('task-name'), 'created_on'=>date('Y:m:d H:i:s'));
     	$query = $this->db->insert('project', $array);
     	if(!$query){
     		return false;
@@ -183,10 +192,22 @@ class Dashboard_model extends CI_Model {
             $query = $this->db->get_where('login', array('email'=>$email));
             if($query->num_rows() == 1){
                 $token = substr(mt_rand(), 0, 6);
+
                 $this->db->set('reset_token',$token);
                 $this->db->where('email', $email);
                 $query = $this->db->update('login');
                 if($query){
+                   /* $to = $email;
+                    $this->email->from('admin1@printgreener.com', 'Admin');
+                    $this->email->to('swasthika@printgreener.com');
+                    $this->email->subject('OTP for login');
+                    $this->email->message('Use this OTP:'.$token);
+                    $this->email->send();
+                    if(!$this->email->send()){
+                        echo "mail not sent.";exit;
+                    }else{
+                        echo "sent.";
+                    }*/
                     return true;
                 }else{
                     return false;

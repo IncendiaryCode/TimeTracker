@@ -30,16 +30,12 @@ $profile = $this->session->userdata('user__profile');
                         <div class="input-group mb-3 ">
                             <input type="password" class="mb-4 form-control-file font-weight-light border-top-0 border-left-0 border-right-0" id="psw1" name="psw11" placeholder="Enter New Password">
                         </div>
-                    </div>
-                    <div class="form-group">
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control-file top-space font-weight-light border-top-0 border-left-0 border-right-0" id="psw2" name="psw22" placeholder="Confirm Password">
+                            <input type="password" class="mb-4 form-control-file font-weight-light border-top-0 border-left-0 border-right-0" id="psw2" name="psw22" placeholder="Confirm Password">
                         </div>
-                        <p class="text-danger"></p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-danger" id="alertMsg"></p>
-                        <button type="submit" class="btn save-task  text-white">Submit</button>
+                        <div class="text-right">
+                            <button type="submit" class="btn save-task  text-white">Submit</button>
+                        </div>
                     </div>
                 </form>
             </div>
