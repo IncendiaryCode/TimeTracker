@@ -17,10 +17,10 @@
 		}else if($task_type == 'login'){
 			$query .= " AND t.type='login'";
 		}
+		$activity_details = array();
 		$query_result = mysqli_query($GLOBALS['db_connection'], $query);
 		if($query_result == TRUE){
-			$num = mysqli_num_rows($query_result);
-			$activity_details = array();
+			$num = mysqli_num_rows($query_result);			
 			if($num > 0){
 				$activity_details = mysqli_fetch_all($query_result,MYSQLI_ASSOC);
 			}

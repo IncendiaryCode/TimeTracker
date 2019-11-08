@@ -1,45 +1,55 @@
-    $(document).ready(function() {
+$(document).ready(function () {
 
-        var date = document.getElementById('daily-chart').value;
+    if(document.getElementById('daily-chart'))
+    {
+    var date = document.getElementById('daily-chart').value;
+
+    if (date == "" || date == " " || date == null) {
+        var today = new Date();
+        document.getElementById("daily-chart").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
 
 
-        if (date == "" || date == " " || date == null) {
-            var today = new Date();
-            document.getElementById("daily-chart").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
-
-
-            date = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
-            document.getElementById("daily-chart").setAttribute("max", date);
-
-            date = document.getElementById('daily-chart').value;
-            retrieveData(date);
-        }
-    });
-
-    function dailyChart() {
-        var date = document.getElementById('daily-chart').value;
-        if (date == "" || date == " " || date == null) {
-            var today = new Date();
-            document.getElementById("daily-chart").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
-        }
+        date = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+        document.getElementById("daily-chart").setAttribute("max", date);
 
         date = document.getElementById('daily-chart').value;
-        document.getElementById("daily-chart").setAttribute("max", date);
-        retrieveData(date)
+        retrieveData(date);
+    }
+}
+});
+
+function dailyChart() {
+    var date = document.getElementById('daily-chart').value;
+    if (date == "" || date == " " || date == null) {
+        var today = new Date();
+        document.getElementById("daily-chart").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
     }
 
-    function retrieveData(date) {
-        $.ajax({
-            type: "GET",
-            url: timeTrackerBaseURL + 'php/activity.php',
-            data: { 'user': "<?= $_SESSION['user'] ?>", 'date': date },
-            dataType: 'json',
-            success: function(res) {}
-        });
-    }
+    date = document.getElementById('daily-chart').value;
+    document.getElementById("daily-chart").setAttribute("max", date);
+    retrieveData(date)
+}
 
+function retrieveData(date) {
+    $.ajax({
+        type: "GET",
+        url: timeTrackerBaseURL + 'php/activity.php',
+        data: { 'user': "<?= $_SESSION['user'] ?>", 'date': date },
+        dataType: 'json',
+        success: function (res) { }
+    });
+}
+
+
+
+    if(document.getElementById('daily'))
+    {
+   
     var chart = document.getElementById('daily').getContext('2d');
-    /* chart.height(1000);*/
+    window.onload = function () {
+        window.myLine = new Chart(chart, config);
+    }
+
     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     gradient = chart.createLinearGradient(0, 0, 0, 600);
@@ -67,7 +77,7 @@
                 display: false
             },
             tooltips: {
-                enabled: false,
+                enabled: true,
             },
             hover: {
                 mode: 'index'
@@ -98,6 +108,5 @@
             }
         }
     };
-    window.onload = function() {
-        window.myLine = new Chart(chart, config);
-    };
+}
+    

@@ -16,18 +16,9 @@ include("header.php");
                     </div>
                 </div>
 
-                <div class="dropdown text-right">
-                  <button class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                   <i class="fas fa-list-ul"></i>
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="../user/weekly_details.php">Weekly chart</a>
-                    <a class="dropdown-item" href="../user/monthly_details.php">Monthly chart</a>
-                  </div>
                 </div>
                 <canvas id="daily"></canvas>
             </div>
-        </div>
         <hr class="mt-5">
         <footer>
             <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
@@ -82,6 +73,7 @@ var myDate = getDateOfWeek((parseInt(d.slice(4,6))), (parseInt(d.slice(0,4))), (
 console.log(myDate);
 document.getElementById('daily-chart').value = myDate;
 <?php } ?>
+
 </script>
 
 <?php include("footer.php"); ?>

@@ -287,7 +287,6 @@ function updateTimer(timerUrl) {
 
 $(document).ready(function() {
     var firstTime = localStorage.getItem("firstTime");
-    console.log('firstTime', firstTime);
     if (firstTime == 'null') {
         console.log('timer running');
         localStorage.setItem("firstTime", "stop");

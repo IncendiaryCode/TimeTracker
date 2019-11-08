@@ -10,7 +10,7 @@ include("header.php");
                 <div class="au-card-title pt-5">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Daily activitie</a>
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Daily activities</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Weekly activities</a>
@@ -20,20 +20,11 @@ include("header.php");
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <div class="daily-chart">
-                                <div class="form-group">
-                                    <label for="end-date">Select date</label>
-                                    <div class="input-group">
-                                        <!-- chart that shows daily activities -->
-                                        <input type="date" class="form-control" id="daily-chart">
-                                        <button class="btn btn-primary" onclick="dailyChart()">view chart</button>
-                                    </div>
-                                </div>
-                                <canvas id="daily"></canvas>
-                            </div>
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">daily chart
+                           
+                            <canvas id="daily"></canvas>
                         </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">weekly chart
                             <div class="daily-chart">
                                 <div class="form-group">
                                     <label for="end-date">Select week</label>
@@ -45,11 +36,10 @@ include("header.php");
                                 <canvas id="weekly"></canvas>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                            <div class="p-5" id="calendar_basic">
-                            </div>
-                            <div class="clear">
-                            </div>
+                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">monthly chart
+                            
+                           <!--  <div class="p-5" id="calendar_basic" ></div> -->
+
                         </div>
                     </div>
                 </div>
@@ -64,7 +54,6 @@ include("header.php");
                 </div>
             </div>
         </div>
-    </div>
     <hr>
     <footer>
         <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</p>

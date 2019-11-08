@@ -1,4 +1,6 @@
     $(document).ready(function() {
+        if(document.getElementById('weekly-chart'))
+        {
         var weekControl = document.querySelector('input[type="week"]');
 
         var curr = new Date(); // get current date
@@ -12,6 +14,7 @@
             document.getElementById("weekly-chart").setAttribute("max", week);
             retrieveData(week);
         }
+    }
     });
 
     function weeklyChart() {
@@ -37,8 +40,14 @@
         return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
     };
 
-    var chart = document.getElementById('weekly').getContext('2d');
+    if(document.getElementById('weekly'))
+    {
 
+    var chart = document.getElementById('weekly').getContext('2d');
+        window.onload = function() {
+        window.myLine = new Chart(chart, config);
+
+    };
     gradient = chart.createLinearGradient(0, 0, 0, 600);
 
     gradient.addColorStop(0, '#7078ff');
@@ -71,7 +80,7 @@
                         weekly.onclick = function() {
                             //console.log('week_count',(week_count.slice(0,4)+week_count.slice(-2)+item));
                             var value = week_count.slice(0, 4) + week_count.slice(-2) + item;
-                            window.location.href = '../../TimeTracker/user/daily_details.php?value=' + value;
+                            window.location.href = 'daily_details.php?value=' + value;
                         }
                     }
                 }
@@ -105,8 +114,6 @@
             },
 
         }
-    };
-    window.onload = function() {
-        window.myLine = new Chart(chart, config);
-
-    };
+    }
+}
+   

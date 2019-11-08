@@ -19,11 +19,13 @@
               [new Date(2018, 7, 17), 9]
           ]);
 
-          var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+if (document.getElementById('calendar_basic')) {
+var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+
 
           var options = {
               title: " ",
               height: 600,
           };
           chart.draw(dataTable, options);
-      } 
+      } }
