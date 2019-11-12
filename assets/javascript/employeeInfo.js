@@ -168,7 +168,7 @@ function loadTaskActivities(formData) {
         type: 'GET',
         url: timeTrackerBaseURL + 'php/activity.php',
         data: formData,
-        success: function(values) {;
+        success: function(values) {
             var data = JSON.parse(values);
             $("#attach-card").empty();
 
@@ -181,8 +181,11 @@ function loadTaskActivities(formData) {
                 cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].t_date + ' ' + start_time + '</div>');
                 var stopCol = $('<div class="col-6 text-right" />');
                 if (data[x].end_time !== '0000-00-00 00:00:00') /*check whether task is ended or not*/ {
-                    stopCol.append('<i class="far fa-clock"></i> ' + data[x].end_time);
-                    document.body.style.backgroundColor = "#f6d4fe";
+                    stopCol.append('<i class="far fa-clock"></i>' + data[x].end_time);
+                    /*change background of current running task entries*/
+                    $('.card-style-1').css("background", "#e7d3fe");
+                    $('.card-header').css("background", "#e7d3fe");
+                    $('.card-footer').css("background", "#e7d3fe");
                 } else {
                     var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x].t_id);
                     stopButton.on('click', function() {
@@ -195,7 +198,7 @@ function loadTaskActivities(formData) {
                 cardHeader.append(cardHeaderRow);
 
 
-                var cardInner = $("<div class='card card-style-1'  id='card-inner'/>");
+                var cardInner = $("<div class='card card-style-1'  />");
                 cardInner.append(cardHeader);
 
                 var cardBody = $("<div class='card-body' />");

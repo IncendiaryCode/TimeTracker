@@ -148,6 +148,8 @@ function drawDailyChart(res) {
                 tooltips: {
                     enabled: true,
                     cornerRadius: 10,
+                    xPadding: 20,
+                    titleFontSize: 10,
                 },
                 scales: {
                     xAxes: [{

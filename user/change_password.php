@@ -28,7 +28,7 @@ include("header.php");
                             </div>
                             <div class="text-right">
                                 <p class="text-danger" id="alertMsg"></p>
-                                <button type="submit" class="btn save-task  text-white">Submit</button>
+                                <button type="submit" class="btn btn btn-primary text-white">Submit</button>
                             </div>
                         </form>
                     </div>

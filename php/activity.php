@@ -10,7 +10,6 @@
 /*		$query = "SELECT t.task_name,t.t_date,t.start_time,t.end_time,t.id AS t_id,p.id,p.name,t.description FROM time_details AS t JOIN project AS p ON t.project_id=p.id WHERE t.ref_id=".$_SESSION['user_id'];*/
 
 		$query = "SELECT t.id,t.task_name,t.project_id,t.module_id,d.task_id,d.task_date,d.start_time,d.end_time,p.id,p.name,p.color_code,p.image_name FROM task AS t JOIN time_details AS d ON t.id = d.task_id JOIN project AS p ON t.project_id = p.id";
-		print_r($query); exit; 
 		if ($task_type == 'task') {
 			$query.=" ORDER BY t.id DESC";
 		}
@@ -72,7 +71,6 @@
 			$project_names=array();
 			if(mysqli_num_rows($result_q) > 0){
 				$project_names = mysqli_fetch_all($result_q,MYSQLI_ASSOC);
-				//print_r($project_names);
 			}
 		}
 		else if(isset($_GET['id'])){
