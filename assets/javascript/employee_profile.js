@@ -10,9 +10,6 @@
          tableRow.append("<tr><th scope='row'>Type</th><td>"+ data['type']+"</td></tr></table>");
 
          $('#table-body').append(tableRow);
-
-
-
      }
  });
 

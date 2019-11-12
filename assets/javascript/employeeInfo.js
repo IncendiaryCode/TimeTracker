@@ -169,6 +169,7 @@ function loadTaskActivities(formData) {
         url: timeTrackerBaseURL + 'php/activity.php',
         data: formData,
         success: function(values) {
+            ;
             var data = JSON.parse(values);
             $("#attach-card").empty();
 

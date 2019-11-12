@@ -10,7 +10,7 @@ include("header.php");
         </div>
         <hr class="mt-5">
         <footer>
-            <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
+            <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com </p>
         </footer>
     </div>
 </main>

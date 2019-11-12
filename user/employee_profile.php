@@ -12,17 +12,6 @@ include("header.php");
                         <h4 class="text-center employee-name mt-3">
                             <?php echo $_SESSION['user_name'];?>
                         </h4>
-                        <div class="dropdown">
-                            <!-- calander view of all activites. -->
-                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    My activities
-                  </button>
-                <!-- <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a href="../user/daily_details.php" class="nav-link"  role="tab" aria-controls="pills-home" aria-selected="true">Daily activities</a>
-                    <a href="../user/weekly_details.php" class="nav-link" role="tab" aria-controls="pills-profile" aria-selected="false">Weekly activities</a>
-                    <a href="../user/monthly_details.php" class="nav-link" role="tab" aria-controls="pills-contact" aria-selected="false">Monthly activities</a>
-                  </div>  -->
-                </div>
                     </div>
                 </div>
             </div>
@@ -32,12 +21,11 @@ include("header.php");
                     </tbody>
                 </table>
             </div>
-          </div>
-
-            <hr class="mt-5">
-            <footer>
-                <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
-            </footer>
         </div>
+        <hr class="mt-5">
+        <footer>
+            <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
+        </footer>
+    </div>
 </main>
 <?php include("footer.php"); ?>

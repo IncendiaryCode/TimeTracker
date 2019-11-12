@@ -3,43 +3,67 @@ $GLOBALS['page_title'] = 'Login Activities';
 include("header.php");
 #include("../php/login_activities.php");
 ?>
+
+
 <main class="container-fluid container-fluid-main">
     <div class="main-container container">
         <div class="main-container-inner mt-3">
             <div class="au-card au-card--no-shadow au-card--no-pad mb-2">
                 <div class="au-card-title pt-5">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <ul class="nav nav-tabs" id="chart-navigation" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Daily activities</a>
+                            <a class="nav-link active" id="daily-view-tab" data-toggle="tab" href="#daily-view" role="tab" aria-controls="daily-view" aria-selected="true">Daily activities</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Weekly activities</a>
+                            <a class="nav-link" id="weekly-view-tab" data-toggle="tab" href="#weekly-view" role="tab" aria-controls="weekly-view" aria-selected="false">Weekly activities</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Monthly activities</a>
+                            <a class="nav-link" id="monthly-view-tab" data-toggle="tab" href="#monthly-view" role="tab" aria-controls="monthly-view" aria-selected="false">Monthly activities</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">daily chart
-                           
-                            <canvas id="daily"></canvas>
-                        </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">weekly chart
+                        <div class="tab-pane fade show active" id="daily-view" role="tabpanel" aria-labelledby="daily-view-tab">
                             <div class="daily-chart">
-                                <div class="form-group">
+                                <div class="form-group m-5">
+                                    <label for="end-date">Select date</label>
+                                        <div class="input-group">
+
+                                        <!-- chart that shows daily activities -->
+                                            <input type="date" class="form-control" id="daily-chart">
+                                            <button class="btn btn-primary" onclick="loadDailyChart()">view chart</button>
+                                    </div>
+                                </div>
+
+                                </div>
+                                    <canvas id="daily" style="width:1000px; height:80px; margin-left:50px;"></canvas>
+                        </div>
+                        <div class="tab-pane fade" id="weekly-view" role="tabpanel" aria-labelledby="weekly-view-tab">
+                            <div class="daily-chart">
+                               <div class="form-group m-5">
                                     <label for="end-date">Select week</label>
                                     <div class="input-group">
                                         <input type="week" class="form-control " id="weekly-chart">
-                                        <button class="btn btn-primary" onclick="weeklyChart()">view chart</button>
+                                        <button class="btn btn-primary" onclick="loadWeeklyChart()">view chart</button>
                                     </div>
                                 </div>
                                 <canvas id="weekly"></canvas>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">monthly chart
+                        <div class="tab-pane fade" id="monthly-view" role="tabpanel" aria-labelledby="monthly-view-tab">
                             
-                           <!--  <div class="p-5" id="calendar_basic" ></div> -->
+                        <div class="daily-chart">
+                                <div class="form-group m-5">
+                                    <label for="end-date">Select date</label>
+                                        <div class="input-group">
 
+                                        <!-- chart that shows monthly activities -->
+                                            <input type="number" class="form-control" id="monthly-chart">
+                                            <button class="btn btn-primary" onclick="loadMonthlyChart()">view chart</button>
+                                    </div>
+                                </div>
+
+                                </div>
+                        <div class="p-5" id="calendar_basic" ></div>
                         </div>
                     </div>
                 </div>
@@ -60,4 +84,5 @@ include("header.php");
     </footer>
     </div>
 </main>
+
 <?php include("footer.php"); ?>
