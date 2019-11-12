@@ -168,8 +168,7 @@ function loadTaskActivities(formData) {
         type: 'GET',
         url: timeTrackerBaseURL + 'php/activity.php',
         data: formData,
-        success: function(values) {
-            ;
+        success: function(values) {;
             var data = JSON.parse(values);
             $("#attach-card").empty();
 
@@ -181,8 +180,9 @@ function loadTaskActivities(formData) {
                 var cardHeaderRow = $('<div class="row pt-2" />');
                 cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + data[x].t_date + ' ' + start_time + '</div>');
                 var stopCol = $('<div class="col-6 text-right" />');
-                if (data[x].end_time !== '00:00:00') /*check whether task is ended or not*/ {
+                if (data[x].end_time !== '0000-00-00 00:00:00') /*check whether task is ended or not*/ {
                     stopCol.append('<i class="far fa-clock"></i> ' + data[x].end_time);
+                    document.body.style.backgroundColor = "#f6d4fe";
                 } else {
                     var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x].t_id);
                     stopButton.on('click', function() {
@@ -195,7 +195,7 @@ function loadTaskActivities(formData) {
                 cardHeader.append(cardHeaderRow);
 
 
-                var cardInner = $("<div class='card card-style-1' />");
+                var cardInner = $("<div class='card card-style-1'  id='card-inner'/>");
                 cardInner.append(cardHeader);
 
                 var cardBody = $("<div class='card-body' />");
@@ -208,7 +208,7 @@ function loadTaskActivities(formData) {
 
                 var footerRight = $("<div class='col-6 text-right card-actions'>");
                 //action Edit
-                var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit"></i></a>');
+                var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit animated fadeInRight" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
                 actionEdit.attr('href', timeTrackerBaseURL + 'user/edit_task.php?t_id=' + data[x].t_id);
                 /* actionEdit.on('click', function() {
                      e.preventDefault();
@@ -223,7 +223,7 @@ function loadTaskActivities(formData) {
                     console.log(this.id);
                 });
                 footerRight.append(actionDelete);*/
-                var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon fa-play"><input type="hidden" value =' + data[x].t_id + '></i></div></a>');
+                var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon animated fadeInRight fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x].t_id + '></i></div></a>');
 
                 actionPlay.on('click', function(e) {
                     var t_id = this.getElementsByTagName('input').item(0).value;
@@ -236,7 +236,7 @@ function loadTaskActivities(formData) {
                         }
                     });
                 });
-                if (data[x].end_time !== '00:00:00') {
+                if (data[x].end_time !== '0000-00-00 00:00:00') {
                     footerRight.append(actionPlay);
                 }
 
@@ -374,4 +374,3 @@ function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it
 
     return formatted_time;
 }
-

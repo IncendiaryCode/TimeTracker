@@ -72,9 +72,6 @@
 <script src="<?=BASE_URL?>assets/javascript/change_password.js?v=<?=VERSION?>"></script>
 <script src="<?=BASE_URL?>assets/javascript/employee_profile.js?v=<?=VERSION?>"></script>
 <script src="<?=BASE_URL?>assets/javascript/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script>
-<!-- <script src="<?=BASE_URL?>assets/plugins/daily-chart.js"></script>
-<script src="<?=BASE_URL?>assets/plugins/week-chart.js"></script>
-<script src="<?=BASE_URL?>assets/plugins/monthly-chart.js"></script> -->
 
 <script src="<?=BASE_URL?>assets/plugins/chart.js"></script>
 

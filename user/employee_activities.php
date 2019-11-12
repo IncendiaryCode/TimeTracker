@@ -1,5 +1,5 @@
 <?php 
-$GLOBALS['page_title'] = 'Login Activities';
+$GLOBALS['page_title'] = 'My Activities';
 include("header.php");
 #include("../php/login_activities.php");
 ?>

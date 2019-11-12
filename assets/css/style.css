@@ -363,10 +363,12 @@ a:hover {
     font-size: 36px;
 }
 
-/*.daily-chart
+.card-action
 {
-width: 70%;
-margin: 2% 15% 5% 15%;
-padding-top: 5%;
+    font-size: 40px;
 }
-*/
+
+/*.card-footer
+{
+    min-height: 85px;
+}*/

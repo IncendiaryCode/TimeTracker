@@ -4,14 +4,14 @@ function retrieveChartData(type, date) {
         url: timeTrackerBaseURL + 'php/activity.php',
         data: { 'chart_type': type, 'date': date },
         dataType: 'json',
-        success: function(res) {
+        success: function (res) {
             console.log('retrieveChartData RESONSE', res);
             drawDailyChart(res);
         }
     });
 }
 
-Date.prototype.getWeek = function() {
+Date.prototype.getWeek = function () {
     var onejan = new Date(this.getFullYear(), 0, 1);
     return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 }
@@ -91,10 +91,10 @@ function drawDailyChart(res) {
                 tooltips: {
                     enabled: true,
                     callbacks: {
-                        label: function(tooltipItem, data) {
+                        label: function (tooltipItem, data) {
                             var item = tooltipItem.xLabel;
                             var week_count = document.getElementById('weekly-chart').value;
-                            weekly.onclick = function() {
+                            weekly.onclick = function () {
                                 var value = week_count.slice(0, 4) + week_count.slice(-2) + item;
                                 /*window.location.href = 'daily_details.php?value=' + value;*/
                             }
@@ -147,7 +147,7 @@ function drawDailyChart(res) {
                 },
                 tooltips: {
                     enabled: true,
-                    
+                    cornerRadius: 10,
                 },
                 scales: {
                     xAxes: [{
@@ -189,7 +189,7 @@ function loadMonthlyChart() {
         url: timeTrackerBaseURL + 'php/activity.php',
         data: { 'chart_type': "monthly_chart", 'date': year },
         dataType: 'json',
-        success: function(res) {
+        success: function (res) {
             google.charts.load("current", { packages: ["calendar"] });
             google.setOnLoadCallback(drawChart(res));
         }
@@ -200,7 +200,7 @@ function drawChart(data) {
 
     console.log('data', data['data'][2]);
 
-    console.log(typeof(data['data'][2]));
+    console.log(typeof (data['data'][2]));
     var dataTable = new google.visualization.DataTable();
     console.log('data', data['data']);
 
@@ -231,10 +231,10 @@ function drawChart(data) {
 }
 
 
-$(document).ready(function() {
+$(document).ready(function () {
 
     //Tab Change
-    $('#chart-navigation a').on('shown.bs.tab', function(event) {
+    $('#chart-navigation a').on('shown.bs.tab', function (event) {
         var x = $(event.target).attr("href"); // active tab
         var y = $(event.relatedTarget); // previous tab
         console.log('new tab', x);
@@ -252,7 +252,7 @@ $(document).ready(function() {
 });
 
 
-window.onload = function() {
+window.onload = function () {
     if (document.getElementById('daily-chart')) {
         loadDailyChart();
     }
