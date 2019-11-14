@@ -59,7 +59,7 @@
     </div>
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
@@ -67,23 +67,32 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="//momentjs.com/downloads/moment.js"></script>
 <script src="<?=BASE_URL?>assets/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
-<script src="<?=BASE_URL?>assets/javascript/addTask.js?v=<?=VERSION?>"></script>
+
 <script src="<?=BASE_URL?>assets/javascript/employeeActivities.js?v=<?=VERSION?>"></script>
 <script src="<?=BASE_URL?>assets/javascript/change_password.js?v=<?=VERSION?>"></script>
 <script src="<?=BASE_URL?>assets/javascript/employee_profile.js?v=<?=VERSION?>"></script>
-<script src="<?=BASE_URL?>assets/javascript/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script>
+
+
+
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+
+
+<!-- <script src="<?=BASE_URL?>assets/javascript/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script> -->
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+
+<script src="<?=BASE_URL?>assets/javascript/addTask.js?v=<?=VERSION?>"></script>
+
 
 <script src="<?=BASE_URL?>assets/plugins/chart.js"></script>
 
-<script src="<?=BASE_URL?>assets/plugins/utils.js?v=<?=VERSION?>"></script>
-
-
-<script src="<?=BASE_URL?>assets/plugins/preview.js?v=<?=VERSION?>"></script>
-<script src="<?=BASE_URL?>assets/plugins/iCalendar.js?v=<?=VERSION?>"></script>
+<!-- <script src="<?=BASE_URL?>assets/plugins/utils.js?v=<?=VERSION?>"></script> -->
 
 <script type="text/javascript">
     function logout()
     {
+        localStorage.clear();
         localStorage.setItem("firstTime", null);
     }
 </script>

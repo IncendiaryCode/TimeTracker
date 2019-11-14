@@ -171,7 +171,6 @@ function loadTaskActivities(formData) {
         success: function(values) {
             var data = JSON.parse(values);
             $("#attach-card").empty();
-
             var timerModal = timerStopModal();
             for (x in data) {
 
@@ -211,7 +210,7 @@ function loadTaskActivities(formData) {
 
                 var footerRight = $("<div class='col-6 text-right card-actions'>");
                 //action Edit
-                var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit animated fadeInRight" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
+                var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit position_edit_icon animated fadeIn" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
                 actionEdit.attr('href', timeTrackerBaseURL + 'user/edit_task.php?t_id=' + data[x].t_id);
                 /* actionEdit.on('click', function() {
                      e.preventDefault();
@@ -226,7 +225,7 @@ function loadTaskActivities(formData) {
                     console.log(this.id);
                 });
                 footerRight.append(actionDelete);*/
-                var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon animated fadeInRight fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x].t_id + '></i></div></a>');
+                var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon animated fadeIn fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x].t_id + '></i></div></a>');
 
                 actionPlay.on('click', function(e) {
                     var t_id = this.getElementsByTagName('input').item(0).value;
