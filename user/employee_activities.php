@@ -35,7 +35,7 @@ include("header.php");
                                 </div>
 
                                 </div>
-                                    <canvas id="daily" style="width:1000px; height:80px; margin-left:50px;"></canvas>
+                                    <canvas id="daily" style="width:1000px; height:80px;"></canvas>
                         </div>
                         <div class="tab-pane fade" id="weekly-view" role="tabpanel" aria-labelledby="weekly-view-tab">
                             <div class="daily-chart">
@@ -43,10 +43,10 @@ include("header.php");
                                     <label for="end-date">Select week</label>
                                     <div class="input-group">
                                         <input type="week" class="form-control " id="weekly-chart">
-                                        <button class="btn btn-primary" onclick="loadWeeklyChart()">view chart</button>
+                                        <button class="btn btn-primary" onclick="loadWeeklyChart()" >view chart</button>
                                     </div>
                                 </div>
-                                <canvas id="weekly"></canvas>
+                                <canvas id="weekly" class="offset-2 col-8" style="width:1200px; height:350px;"></canvas>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="monthly-view" role="tabpanel" aria-labelledby="monthly-view-tab">
