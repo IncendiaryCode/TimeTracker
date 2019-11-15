@@ -53,7 +53,7 @@ include("../php/activity.php");
                                   <input type="text" class="form-control datetimepicker" id="end-date" name="end_date" aria-describedby="date-end">
                                 </div>
                             </div> -->
-                            <div class="page-wrapper">
+                            <!-- <div class="page-wrapper">
                                 <div class="user-data m-b-30">
                                     <div class="table-data">
                                         <table class="table">
@@ -104,6 +104,45 @@ include("../php/activity.php");
                                         </div>
                                     </div>
                                 </div>
+                            </div> -->
+                            <div id="show_list">
+                                <div class="row" >
+                                    <div class="col-3">
+                                        <p><b>Date</b></p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p><b>Start time</b></p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p><b>End time</b></p>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="row mt-5 pl-4">
+                                    <div class="col-3">
+                                        <div class='input-group date'>
+                                            <input class="form-control-file p-1 border-top-0 border-left-0 border-right-0 border-dark" name="date0" data-date-format="dd/mm/yyyy" id="date-picker">
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="input-group date">
+                                            <input id="timepicker1" class="form-control-file border-top-0 border-left-0 border-right-0 rounded-0 border-dark" name="start-Time0" />
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="input-group date">
+                                            <input id="timepicker2" class="form-control-file border-top-0 border-left-0 border-right-0 rounded-0 border-dark" name="end-Time0" />
+                                        </div>
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        <i class="fas fa-plus text-success" onclick="__store_timings()" data-toggle="tooltip" data-placement="top" title="add"></i>
+                                    </div>
+                                </div>
+                            <div class="text-left text-danger">
+                                <p id="datetime-error" class="pt-4"></p>
                             </div>
                         </div>
                         <p id="taskError" class=" text-danger"></p>

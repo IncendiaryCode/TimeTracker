@@ -1,8 +1,4 @@
 var addTask = document.getElementById('addTask');
-/*var taskTimer;
- */
-var pauseCount = 0;
-var idItiration = 0;
 
 var __editTask;
 
@@ -70,7 +66,7 @@ $('#timepicker2').timepicker({
     uiLibrary: 'bootstrap4'
 });
 
-
+var id = 0;
 
 function __store_timings()
 
@@ -80,21 +76,12 @@ function __store_timings()
     var end_time = document.getElementById('timepicker2').value;
 
 
-    var __start_seconds = parseInt(start_time.slice(0, 2)) * 60 + parseInt(start_time.slice(4, 6));
+    var __start_seconds = (parseInt(start_time.slice(0, 2)) * 60) + parseInt(start_time.slice(3, 5));
 
-    var __end_seconds = parseInt(end_time.slice(0, 2)) * 60 + parseInt(end_time.slice(4, 6));
+    var __end_seconds = (parseInt(end_time.slice(0, 2)) * 60) + (parseInt(end_time.slice(3, 5)));
 
     /*fetch timings form database*/
-    arr = localStorage.getItem('timings');
-    if (arr == null) {
-        var arr = [{}];
-        localStorage.setItem('timings', JSON.stringify(arr));
-    }
-
-    arr = localStorage.getItem('timings');
-    arr = JSON.parse(arr);
-
-    var validate_interval = __check_for_timeintervals(arr, __start_seconds, date);
+    var validate_interval = __check_for_timeintervals(__start_seconds, date);
 
     var validate_greater_time = __check_for_greatertime(date, start_time, end_time);
 
@@ -106,65 +93,57 @@ function __store_timings()
     } else if (!validate_greater_time) {
         document.getElementById('datetime-error').innerHTML = "date/time of start/end connot be greater than currnet date/time";
     } else if (__start_seconds >= __end_seconds) {
+
         document.getElementById('datetime-error').innerHTML = "Start time cannot be greater or equal to end time.";
     } else if (!validate_interval) {
         document.getElementById('datetime-error').innerHTML = "Already same task is done in this interval.";
     } else {
         document.getElementById('datetime-error').innerHTML = " ";
-        arr = localStorage.getItem('timings');
-        arr = JSON.parse(arr);
-
-        arr.push({ 'date': date, start_time: start_time, 'end_time': end_time });
-        localStorage.setItem('timings', JSON.stringify(arr));
-        window.location.reload();
+        id = id + 1;
+        display_list(date, start_time, end_time, id);
+        //window.location.reload();
     }
 }
 
-$(document).ready(function() {
-    $('#editTask').click(function() {
-        $("#show_list").empty();
-        arr = localStorage.getItem('timings');
-        if (arr == null) {
-            $("#show_list").html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
-        }
-        arr = JSON.parse(arr);
-        for (var i = 1; i < arr.length; i++) {
-            if (arr[i] != null) {
-                var list_element = $('<tr><td><div class="table-data__info">' + arr[i]['date'] + '</div>');
-                list_element.append('</td><td><span>' + arr[i]['start_time'] + '</span>');
-                list_element.append('</td><td>' + arr[i]['end_time'] + '</td><td><span class="more p-1" onclick="__delete_from_array(this, arr)"><input type="hidden" value=' + i + '><i class="fas fa-minus"  style="color:red;" data-toggle="tooltip" data-placement="top" title="delete"></i></span></td></tr>');
-                $("#show_list").append(list_element);
-            }
-        }
-    });
-});
 
-function __delete_from_array(index_value, array) {
+function display_list(date, start_time, end_time, itirator) {
+    var list_element = $('<div class="row p-4"><div class="col-3"><div class="input-group date"><input class="form-control-file border-top-0 border-left-0 border-right-0 border-dark" name="date' + itirator + '" data-date-format="dd/mm/yyyy" value=' + date + '><span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span></div></div>');
+    list_element.append('<div class="col-3"><div class="input-group date"><input class="form-control-file border-top-0 border-left-0 border-right-0 rounded-0 border-dark" name="start-Time' + itirator + '"  value=' + start_time + '></div></div>');
+    list_element.append('<div class="col-3"><div class="input-group date"><input class="form-control-file border-top-0 border-left-0 border-right-0 rounded-0 border-dark" name="end-Time' + itirator + '" value=' + end_time + '></div></div>');
+    list_element.append('<div class="col-3 text-danger text-center"><i class="fas fa-minus" onclick="__delete_from_array(this)" data-toggle="tooltip" data-placement="top" title="delete"></i></div></div>');
+    $("#show_list").append(list_element);
 
-    var index = index_value.childNodes[0].value;
-    var value = array;
-    delete value[index];
-    localStorage.setItem('timings', JSON.stringify(value));
-    window.location.reload();
+    document.getElementById('date-picker').value = "";
+    document.getElementById('timepicker1').value = "";
+    document.getElementById('timepicker2').value = "";
+
+
 }
 
-function __check_for_timeintervals(arr, __start_seconds, date) {
 
-    for (var i = 1; i < arr.length; i++) {
-        if (arr[i] != null && arr[i]['date'] == date) {
+function __delete_from_array(content) {
 
-            var old_start_time = arr[i]['start_time'];
-            var old_end_time = arr[i]['end_time'];
+    var remove_element = content.parentNode.parentNode;
+    remove_element.remove();
+}
 
-            var start_old_time_sec = (parseInt(old_start_time.slice(0, 2)) * 60 + parseInt(old_start_time.slice(4, 6)));
-            var end_old_time_sec = (parseInt(old_end_time.slice(0, 2)) * 60 + parseInt(old_end_time.slice(4, 6)))
+function __check_for_timeintervals(__start_seconds, date) {
 
+    var element = document.getElementById("show_list");
+    var value = element.getElementsByTagName("input");
+    var input_values = __store_inputvalues();
 
-            if (start_old_time_sec <= __start_seconds <= end_old_time_sec) {
+    if (input_values.length > 1) {
+        for (var i = 1; i < input_values.length; i++) {
+
+            var old_date = input_values[i]["old_date"];
+            var start_old_time_sec = (parseInt(input_values[i]["old_start_time"].slice(0, 2)) * 60 + parseInt(input_values[i]["old_start_time"].slice(3, 5)));
+            var end_old_time_sec = (parseInt(input_values[i]["old_end_time"].slice(0, 2)) * 60 + parseInt(input_values[i]["old_end_time"].slice(3, 5)));
+
+            if (((start_old_time_sec < __start_seconds) && (__start_seconds < end_old_time_sec)) && date == old_date) {
                 return false;
             }
         }
-
     }
     return true;
 }
@@ -191,19 +170,39 @@ function __check_for_greatertime(date, start_time, end_time) {
 
 function check_date(date) {
     var cur_date = new Date();
-
-
+    if ((parseInt(cur_date.getFullYear()) > parseInt(date.slice(6, 10)))) {
+        return true;
+    }
     if ((parseInt(cur_date.getFullYear()) < parseInt(date.slice(6, 10)))) {
         return false;
     }
-
-    if (((parseInt(cur_date.getMonth() + 1)) < parseInt(date.slice(3, 5)))) {
-        return false;
-    }
-
-    if (parseInt(cur_date.getDate()) < (parseInt(date.slice(0, 2)))) {
-        return false;
+    if ((parseInt(cur_date.getFullYear()) == parseInt(date.slice(6, 10)))) {
+        if ((parseInt(cur_date.getMonth() + 1)) > parseInt(date.slice(3, 5))) {
+            return true;
+        }
+        if ((parseInt(cur_date.getMonth() + 1)) < parseInt(date.slice(3, 5))) {
+            return false;
+        }
+        if ((parseInt(cur_date.getMonth() + 1)) == parseInt(date.slice(3, 5))) {
+            if ((parseInt(cur_date.getDate()) >= (parseInt(date.slice(0, 2))))) {
+                return true;
+            } else { return false; }
+        }
     }
     return true;
 
+}
+
+function __store_inputvalues() {
+    var input_array = [{}];
+    var k = 0;
+    var element = document.getElementById("show_list");
+    var value = element.getElementsByTagName("input");
+    for (var i = 0; i < value.length / 3; i++) {
+        var old_date = value[k++].value;
+        var old_start_time = value[k++].value;
+        var old_end_time = value[k++].value;
+        input_array.push({ old_date, old_start_time, old_end_time });
+    }
+    return input_array;
 }
