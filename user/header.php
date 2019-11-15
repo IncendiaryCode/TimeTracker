@@ -10,27 +10,15 @@ if(!isset($_SESSION['user'])){
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Time Tracker</title>   
-
-
+    <title>Time Tracker</title>
     <!-- //User Dashboard assets -->
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
-
-    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
-
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-
-    
+    <link href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.0/css/all.css">
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="<?=BASE_URL?>assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css?v=<?=VERSION?>">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+    <link href="//unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="<?=BASE_URL?>assets/css/animate.css?v=<?=VERSION?>">
     <link rel="stylesheet" type="text/css" href="<?=BASE_URL?>assets/css/style.css?v=<?=VERSION?>">
-    <link rel="stylesheet" type="text/css" href="<?=BASE_URL?>assets/css/new.css?v=<?=VERSION?>">
-    <link rel="stylesheet" type="text/css" href="<?=BASE_URL?>assets/css/add_task_style.css?v=<?=VERSION?>">
-
-
     <script type="text/javascript">
         var timeTrackerBaseURL = "<?=BASE_URL?>";
     </script>

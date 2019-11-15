@@ -39,72 +39,10 @@ include("../php/activity.php");
                                 </label>
                             </div>
                         </div>
+
                         <!-- if task is completed -->
-                        <div id="Checked">
-                            <!-- <div class="form-group">
-                                <label for="start_date">Started on</label>
-                                <div class="input-group">
-                                  <input type="text" class="form-control datetimepicker" id="started-date" name="start_date" aria-describedby="date-start">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="end-date">Ended on</label>
-                                <div class="input-group">
-                                  <input type="text" class="form-control datetimepicker" id="end-date" name="end_date" aria-describedby="date-end">
-                                </div>
-                            </div> -->
-                            <!-- <div class="page-wrapper">
-                                <div class="user-data m-b-30">
-                                    <div class="table-data">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <td>Date</td>
-                                                    <td>Start time</td>
-                                                    <td>End time</td>
-                                                    <td></td>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="show_list">
-                                            </tbody>
-                                        </table>
-                                        <table>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div class="table-data__info">Date<span class="text-danger">*</span>
-                                                            <div class='input-group date'>
-                                                                <input class="form-control-file p-1 border-top-0 border-left-0 border-right-0 border-dark" data-date-format="dd/mm/yyyy" id="date-picker">
-                                                                <span class="input-group-addon">
-                                                                    <span class="glyphicon glyphicon-time"></span>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="pl-5">Start time<span class="text-danger">*</span>
-                                                        <div class="input-group date">
-                                                            <input id="timepicker1" class="form-control-file border-top-0 border-left-0 border-right-0 rounded-0 border-dark" />
-                                                        </div>
-                                                    </td>
-                                                    <td class="pl-5">End time<span class="text-danger">*</span>
-                                                        <div class="input-group date">
-                                                            <input id="timepicker2" class="form-control-file border-top-0 border-left-0 border-right-0 rounded-0 border-dark" />
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <span class="more p-4 m-4">
-                                                            <i class="fas fa-plus" onclick="__store_timings()" data-toggle="tooltip" data-placement="top" title="add"></i>
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="text-center text-danger">
-                                            <p id="datetime-error"></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
+                        <div id="task-times" class="display-none">
+                            
                             <div id="show_list">
                                 <div class="row" >
                                     <div class="col-3">
@@ -118,33 +56,46 @@ include("../php/activity.php");
                                     </div>
                                 </div>
                             </div>
-                                <div class="row mt-5 pl-4">
-                                    <div class="col-3">
-                                        <div class='input-group date'>
-                                            <input class="form-control-file p-1 border-top-0 border-left-0 border-right-0 border-dark" name="date0" data-date-format="dd/mm/yyyy" id="date-picker">
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-time"></span>
-                                            </span>
+                                
+                            <!-- Add time  -->
+                            <div id="task-add-time">
+                                <div class="primary-wrap">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control" name="date-0" data-date-format="dd/mm/yyyy" id="date-picker">
+                                              <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+                                              </div>                                          
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="input-group date">
-                                            <input id="timepicker1" class="form-control-file border-top-0 border-left-0 border-right-0 rounded-0 border-dark" name="start-Time0" />
+                                        <div class="col-3">
+                                            <div class="input-group date">
+                                                <input id="start-time-0" class="form-control timepicker" name="start-time-0" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="input-group date">
-                                            <input id="timepicker2" class="form-control-file border-top-0 border-left-0 border-right-0 rounded-0 border-dark" name="end-Time0" />
+                                        <div class="col-3">
+                                            <div class="input-group date">
+                                                <input id="end-time-0" class="form-control timepicker" name="end-time-0" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-3 text-center">
-                                        <i class="fas fa-plus text-success" onclick="__store_timings()" data-toggle="tooltip" data-placement="top" title="add"></i>
+                                        <div class="col-3 text-center">
+                                            <a href="javascript:void(0);" id="add-new-time" title="Add">
+                                                <i class="fas fa-plus text-success"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+                            <!-- END: Add time  -->
+                                
                             <div class="text-left text-danger">
                                 <p id="datetime-error" class="pt-4"></p>
                             </div>
                         </div>
+
                         <p id="taskError" class=" text-danger"></p>
                         <p>&nbsp;</p>
                         <hr />

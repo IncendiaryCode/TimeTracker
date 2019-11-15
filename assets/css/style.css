@@ -179,6 +179,7 @@ header.main-header h1 {
     z-index: 0;
     box-shadow: 2px 2px 7px #8b5ff4;
 }
+
 .btn-default {
     color: white;
     background-image: linear-gradient(150deg, #8b5ff4, #dd9dfe);
@@ -188,6 +189,7 @@ header.main-header h1 {
     z-index: 0;
     box-shadow: 2px 2px 7px #8b5ff4;
 }
+
 .btn-default:hover {
     background-image: linear-gradient(150deg, #7277fe, #ca82fb, #f2c2fd, #fffacc);
 }
@@ -370,33 +372,30 @@ a:hover {
 .footer {
     margin-top: 80px;
 }
-.main-modal-close
-{
+
+.main-modal-close {
     font-size: 36px;
 }
 
-.card-action
-{
+.card-action {
     font-size: 32px;
 }
-.position_edit_icon
-{
+
+.position_edit_icon {
     position: absolute;
     margin: -22%;
 }
-.position_play_icon
-{
+
+.position_play_icon {
     position: absolute;
     margin: -22% -5%;
 }
 
-.gj-picker-bootstrap
-{
+.gj-picker-bootstrap {
     color: #e99efb;
 }
 
-.fa-minus
-{
+.fa-minus {
     color: red;
 }
 
@@ -406,6 +405,11 @@ a:hover {
     background-image: none;
     border-color: #fff;
 }
+
 .border {
     border: 1px solid #000;
+}
+
+.display-none {
+    display: none;
 }
