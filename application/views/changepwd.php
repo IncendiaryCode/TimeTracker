@@ -7,7 +7,7 @@
 	<div class="bg  col-md-6" id="mySlider"></div>
     <div class="col-md-6 positioning-logo text-center"><img src="<?=base_url();?>assets/images/logo.png"></div>
     <div id="formPsw" class="animated fadeInRightBig">
-            <form id="reEnterPsw" method="post" class="login-form" action="../change_pwd/change_pass" novalidate>
+            <form id="reEnterPsw" method="post" class="login-form" action="<?=base_url();?>index.php/login/change_pass" novalidate>
                 <div class="text-center">
                     <div class=" logo-space">
                         <h5 class="text-center">Change Password</h5>
@@ -23,7 +23,7 @@
                     <?php }?>
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="hidden" class="form-control-file logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light"  id="user-email" name="mail" placeholder="username" value="<?=$result;?>">
+                        <input type="hidden" class="form-control-file logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light"  id="user-email" name="mail" placeholder="username" value="<?php echo (isset($result))?$result:"";?>">
                     </div>
                 </div>
                 <div class="form-group">

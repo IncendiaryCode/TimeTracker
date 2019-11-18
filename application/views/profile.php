@@ -1,8 +1,8 @@
 <?php 
-defined('BASEPATH') OR exit('No direct script access allowed');
-$this->load->helper('url_helper');
-$this->load->library('session');
-$profile = $this->session->userdata('user__profile');
+    defined('BASEPATH') OR exit('No direct script access allowed');
+    $this->load->helper('url_helper');
+    $this->load->library('session');
+    $profile = $this->session->userdata('user_profile');
 ?>
     <header class="container-fluid">
         <div class="row">
@@ -20,8 +20,12 @@ $profile = $this->session->userdata('user__profile');
                     $this->load->library('form_validation');
                     if(validation_errors()) { ?>
                         <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
-                <?php } ?>
-                <form method="post" action="<?=base_url();?>index.php/profile/change_password" id="changePsw">
+                   <?php } 
+                    if( $this->session->flashdata('err_msg') )
+                 { ?>
+               <div class="alert alert-danger"><?php echo $this->session->flashdata('err_msg');?></div>
+               <?php } ?>
+                <form method="post" action="<?=base_url();?>index.php/admin/change_password" id="changePsw">
                     <h5 class="text-center mt-4">Change Password</h5>
                     <div class="form-group">
                         <div class="input-group mb-3 ">
@@ -48,7 +52,7 @@ $profile = $this->session->userdata('user__profile');
                     <button type="button" class="close text-danger" data-dismiss="modal">×</button>
                 </div>
                 <div class="modal-body">
-                    <form id="uploadImage" method="post" enctype="multipart/form-data" action="<?=base_url();?>index.php/profile/upload_profile">
+                    <form id="uploadImage" method="post" enctype="multipart/form-data" action="<?=base_url();?>index.php/admin/upload_profile">
                         <p><input type="file" name="change_image" placeholder="Upload image" id="image"></p>
                         <p class="text-danger" id="imageErr"></p>
                         <button type="submit" class="btn save-task submitImage" >Upload</button>

@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->helper('url_helper');
 $this->load->library('session');
-$profile = $this->session->userdata('user__profile');
+$profile = $this->session->userdata('user_profile');
 ?>
 <body>
     <header>
@@ -88,12 +88,13 @@ $profile = $this->session->userdata('user__profile');
                         if(validation_errors()) { ?>
                             <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
                         <?php } ?> 
-                        <form action="<?php echo base_url();?>index.php/add_project/add_projects" id="addProject" method="post">
+                        <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
+                        <form action="<?php echo base_url();?>index.php/admin/add_projects" id="addProject" method="post">
                             <div class="form-group mt-3">
                                 <label for="task-name ">Enter the Project name</label>
                                 <input type="text" class="form-control" name="task-name" id="Projectname">
                             </div>
-                            <p id="projectError" class=" text-danger"></p>
+                        
                             <button type="submit" class="save-task">Add Project</button>
                         </form>
                     </div>

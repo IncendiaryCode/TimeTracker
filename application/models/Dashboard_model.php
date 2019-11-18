@@ -120,6 +120,7 @@ class Dashboard_model extends CI_Model {
     //update profile model
     public function submit_profile($picture){
     	$useremail = $this->session->userdata('email');
+        print_r($picture);exit;
     	$this->db->where('email',$useremail);
         $query = $this->db->update('users', $picture);
         if(!$query){
@@ -128,9 +129,10 @@ class Dashboard_model extends CI_Model {
     		$this->db->where('email',$useremail);
     		$query2 = $this->db->get('users');
     		if($query2->num_rows() > 0){
-    			$user_profile = $query2->row_array();
-    			$this->session->set_userdata('user__profile',$user_profile['profile']);
-    			return true;
+    			$user_profile = $query2->row();
+    			$this->session->set_userdata('user_profile',$user_profile->profile);
+    			//return $user_profile->type;
+                return true;
    			}else{
    				return false;
    			}
@@ -147,16 +149,19 @@ class Dashboard_model extends CI_Model {
         	return false;
 		}
 	}
+    //function to change password
 	public function change_password(){
 		$new_pwd = $this->input->post('psw11');
 		$confirm_pwd = $this->input->post('psw22');
+
 		if($new_pwd == $confirm_pwd){
-            if($this->session->userdata('email')){
+            if($this->session->userdata('email')){       
                 $email = $this->session->userdata('email');
             }else{
+                
                 $email = $this->input->post('mail');
             }
-			$this->db->set('password',$this->input->post('psw11'));
+			$this->db->set('password',md5($new_pwd));
 			$this->db->where('email', $email);
 			$query = $this->db->update('login');
 			if($query){
@@ -166,19 +171,23 @@ class Dashboard_model extends CI_Model {
 			}
 		}else{
             $this->session->set_flashdata('err_msg', 'Passwords do not match..');
-			$this->form_validation->set_message('password_exists','Passwords do not match.');
 			return false;
 		}
 	}
+    //To login
 	public function login_process(){
-		$username = $this->security->xss_clean($this->input->post('username'));
-        $password = $this->security->xss_clean($this->input->post('password'));
-		$query = $this->db->get_where('login', array('email' => $username,'password'=>md5($password),'type'=>'admin'));
+		$username = $this->input->post('username');
+        $password = $this->input->post('password');
+		$query = $this->db->get_where('login', array('email' => $username,'password'=>md5($password)));
 		if($query->num_rows() == 1){
 			$row = $query->row();
-            $data = array('userid' => $row->id,'email' => $row->email,'logged_in' => TRUE);
-            $this->session->set_userdata($data);
-			return true;
+            $query2 = $this->db->get_where('users', array('email' => $username));
+            if($query2->num_rows() == 1){
+                $row2 = $query2->row();
+                $data = array('userid' => $row2->id,'email' => $row->email,'logged_in' => TRUE,'user_profile' => $row2->profile,'username' => $row2->name);
+                $this->session->set_userdata($data);
+    			return $row->type;
+            }
 		}else{
 			$this->form_validation->set_message('Wrong inputs.');
 			return false;

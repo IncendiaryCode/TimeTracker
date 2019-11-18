@@ -17,6 +17,7 @@
             { ?>
                <div class="alert alert-danger"><?php echo $this->session->flashdata('err_message');?></div>
             <?php } ?>
+             <div class="alert-success"><?php echo $this->session->flashdata('success');?></div>
                 <form id="loginForm" class="login-form"  method="post" action="<?=base_url();?>index.php/login/login_process" novalidate>
                 <div class="form-group">
                     <div class="input-group">
@@ -31,7 +32,7 @@
                     <p class="error" id="Password-error" ></p>
                 </div>
                 <div class="row top-space" style="width: 100%;">
-                    <a href="#" onclick='window.location.href="<?=base_url();?>index.php/forgot_pwd"' class="col-6 forgot-color" id="forgot">Forgot password?</a>
+                    <a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/load_forgot_pwd"' class="col-6 forgot-color" id="forgot">Forgot password?</a>
 
                     <button type="submit" class=" col-3 offset-3 login-color btn btn-primary" id="submit">Login</button>
                     <div class="error"><?php echo isset($error) ? $error : ''?></div>

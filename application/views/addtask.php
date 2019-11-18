@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->helper('url_helper');
 $this->load->library('session');
-$profile = $this->session->userdata('user__profile');
+$profile = $this->session->userdata('user_profile');
 ?>
 <body>
     <header>
@@ -87,8 +87,9 @@ $profile = $this->session->userdata('user__profile');
                         $this->load->library('form_validation');
                         if(validation_errors()) { ?>
                             <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
-                        <?php } ?>  
-                        <form action="<?php echo base_url();?>index.php/add_task/add_tasks" id="addTask" method="post">
+                        <?php } ?>
+                        <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>  
+                        <form action="<?php echo base_url();?>index.php/admin/add_tasks" id="addTask" method="post">
                             <div class="form-group mt-3">
                                 <label for="user-name ">Enter the name of User to assign task</label>
                                 <input type="text" class="form-control" name="user-name" id="Username">
@@ -111,7 +112,7 @@ $profile = $this->session->userdata('user__profile');
                                 <?php } ?> 
                             </select>
                             </div>
-                            <p id="taskError" class=" text-danger"></p>
+                        
                             <button type="submit" class="save-task">Assign Task</button>
                         </form>
                     </div>

@@ -16,7 +16,7 @@
 		                            { ?>
 		                            <div class="alert alert-danger"><?php echo $this->session->flashdata('error_msg');?></div>
 		                        <?php }?>
-    <form id="forgotPassword" method="post" action="<?=base_url();?>index.php/forgot_pwd/check_otp" onsubmit="validateOtp()" novalidate>
+    <form id="forgotPassword" method="post" action="<?=base_url();?>index.php/login/check_otp" onsubmit="validateOtp()" novalidate>
                     <div class="logo-space">
                         <h5 class="text-center">Forgot Password</h5>
                         <p class="error" id="here"></p>
@@ -46,7 +46,7 @@
                     </div>
                       <div class="row top-space" style="width: 100%;">
                         <a href="<?=base_url();?>index.php/login" class="col-6 text-left forgot-color"><i class="fas fa-arrow-left"> back to login</i></a>
-                        <button onclick="window.location.href='<?=base_url();?>index.php/forgot_pwd/check_otp'" class="btn btn-primary col-3 offset-3 login-color" id="count" type="submit" name="submit">  Submit  </button>
+                        <button onclick="window.location.href='<?=base_url();?>index.php/login/check_otp'" class="btn btn-primary col-3 offset-3 login-color" id="count" type="submit" name="submit">  Submit  </button>
                     </div>              
             </form> 
         </div>

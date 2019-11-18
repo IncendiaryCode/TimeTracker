@@ -182,24 +182,18 @@ class User_model extends CI_Model {
                 $total['total_hours'] = floor($total_time/3600);
                 $total['day'] = $day;
                 if(!empty($total)){
-                $chart_data = array('weekly_chart',
-                    "status"=>TRUE,
-                    "labels"=> $total['day'],
-                    "data"=> $total['total_hours']
-                ); 
-            }else{
-            $chart_data = array('weekly_chart',
-                    "status"=>TRUE,
-                    "labels"=> array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'),
-                    "data"=> array(7, 4, 8, 7, 9, 5)
-                );
-            }
-            }else{
-            $chart_data = array('weekly_chart',
-                    "status"=>TRUE,
-                    "labels"=> array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'),
-                    "data"=> array(7, 4, 8, 7, 9, 5)
-                );
+                    $chart_data = array('weekly_chart',
+                        "status"=>TRUE,
+                        "labels"=> $total['day'],
+                        "data"=> $total['total_hours']
+                    ); 
+                }else{
+                    $chart_data = array('weekly_chart',
+                            "status"=>TRUE,
+                            "labels"=> array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'),
+                            "data"=> array(7, 4, 8, 7, 9, 5)
+                        );
+                }
             }
         }
         }if($chart_type == "monthly_chart"){
