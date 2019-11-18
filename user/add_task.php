@@ -60,10 +60,10 @@ include("../php/activity.php");
                             <!-- Add time  -->
                             <div id="task-add-time">
                                 <div class="primary-wrap">
-                                    <div class="row">
+                                    <div class="row mt-3">
                                         <div class="col-3">
                                             <div class="input-group mb-3">
-                                                <input type="text" class="form-control" name="date-0" data-date-format="dd/mm/yyyy" id="date-picker">
+                                                <input type="text" class="form-control datepicker" name="date-0" data-date-format="dd/mm/yyyy" id="date-picker-start">
                                               <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     <span class="fa fa-calendar"></span>
@@ -78,7 +78,7 @@ include("../php/activity.php");
                                         </div>
                                         <div class="col-3">
                                             <div class="input-group date">
-                                                <input id="end-time-0" class="form-control timepicker" name="end-time-0" />
+                                                <input id="end-time-0" class="form-control timepicker1" name="end-time-0" />
                                             </div>
                                         </div>
                                         <div class="col-3 text-center">
