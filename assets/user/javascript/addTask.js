@@ -176,16 +176,16 @@ var addTime = {
 /*                                var input_values = _this.get_inputvalues();*/
                                 var input_values = this.array_of_timings;
 
-
-                                console.log(input_values);
-                                if (input_values.length == 2) {
+                                /*if (input_values.length == 2) {
                                                 return true;
-                                } else if (input_values.length > 1) {
-                                                for (var i = 1; i < input_values.length - 1; i++) {
-
-                                                        var old_date = input_values[i]["old_date"];
-                                                        var start_old_time_sec = (parseInt(input_values[i]["old_start_time"].slice(0, 2)) * 60 + parseInt(input_values[i]["old_start_time"].slice(3, 5)));
-                                                        var end_old_time_sec = (parseInt(input_values[i]["old_end_time"].slice(0, 2)) * 60 + parseInt(input_values[i]["old_end_time"].slice(3, 5)));
+                                } else*/ if (input_values.length > 1) {
+                                                for (var i = 1; i < input_values.length; i++) {
+                                                        
+                                                        var old_date = input_values[i]["date"];
+                                                        console.log(input_values)
+                                                        console.log(old_date)
+                                                        var start_old_time_sec = (parseInt(input_values[i]["start_time"].slice(0, 2)) * 60 + parseInt(input_values[i]["start_time"].slice(3, 5)));
+                                                        var end_old_time_sec = (parseInt(input_values[i]["end_time"].slice(0, 2)) * 60 + parseInt(input_values[i]["end_time"].slice(3, 5)));
 
                                                         if (((start_old_time_sec <= __start_seconds) && (__start_seconds < end_old_time_sec)) && date == old_date) {
                                                                         return false;
@@ -194,6 +194,11 @@ var addTime = {
                                                                         return false;
                                                         }
                                                 }
+                                }
+                                else
+                                {
+                                        console.log("gsdss");
+                                        return true;
                                 }
                                 return true;
                 },
