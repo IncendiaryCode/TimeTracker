@@ -27,10 +27,13 @@ $profile = $this->session->userdata('user_profile');
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
                             <select type="number" class="form-control" id="choose-project" name="project_name">
+
                                 <option>Select Project</option>
-                                <?php foreach($result as $p){ ?>
-                                <option><?=$p['name']; ?></option>
-                            <?php } ?> 
+                                <?php 
+                                 foreach($result as $p){ 
+                                    ?>
+                                <option><?=$p['name'];  ?></option>
+                            <?php }?>
                             </select>
                         </div>
                         <div class="form-group pl-4">

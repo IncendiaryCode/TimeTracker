@@ -89,8 +89,9 @@ var addTime = {
 
 
 
-                                var input = $("<input>").attr("type", "hidden").attr("name", "members").val(JSON.stringify(array_of_timings));
-                                removeBtn.append($(input));
+                                var input = $("<input id='timings-array'>").attr("type", "hidden").attr("name", "members").val(JSON.stringify(array_of_timings));
+                                /*colEndTime.append(input);*/
+                                input.appendTo(row);
 
                                 section.append(row);
                                 this.ele.prepend(section);
@@ -172,7 +173,11 @@ var addTime = {
                 check_for_timeintervals: function(__start_seconds, __end_seconds, date) { // check current task is already entered.
                                 var _this = this;
                                 var element = document.getElementById("task-add-time");
-                                var input_values = _this.get_inputvalues();
+/*                                var input_values = _this.get_inputvalues();*/
+                                var input_values = this.array_of_timings;
+
+
+                                console.log(input_values);
                                 if (input_values.length == 2) {
                                                 return true;
                                 } else if (input_values.length > 1) {
@@ -279,5 +284,18 @@ $(document).ready(function() {
                 $('.timepicker1').timepicker({
                                 uiLibrary: 'bootstrap4'
                 });
+
+                $('#choose-project').click(function()
+                {
+                        /*$.ajax({
+                        type: 'POST',
+                        url: timeTrackerBaseURL + 'index.php/user/start_timer',
+                        data: { 'action': 'task', 'id': t_id },
+                        success: function(res) {
+                        //alert(res);
+                            window.location.reload();
+                        }
+                    });*/
+                })
 
 });
