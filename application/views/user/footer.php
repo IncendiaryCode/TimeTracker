@@ -22,8 +22,8 @@
         </div>
     </div>
 </div>
-<div class="modal" id="changeimage" data-backdrop="false">  <!-- to change the profile picture of user-->
-    <div class="modal-dialog animated fadeInDown">
+<div class="modal" id="changeimage" data-backdrop="false" >  <!-- to change the profile picture of user-->
+    <div class="modal-dialog animated zoomIn" >
         <div class="modal-content text-center">
             <div class="modal-header ">Upload image
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
@@ -38,7 +38,7 @@
         </div>
     </div>
 
-<div class="modal show fade" id="timestopmodal" tabindex="0" role="dialog" aria-labelledby="timestopmodalLabel" aria-hidden="true">  <!-- Modal Timer to Stop or Confirm -->
+<div class="modal fade" id="timestopmodal" tabindex="0" role="dialog" aria-labelledby="timestopmodalLabel" aria-hidden="true">  <!-- Modal Timer to Stop or Confirm -->
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -48,46 +48,36 @@
             </button>
             </div>
             <div class="modal-body">
-            <h3>Would you like to stop or complete the task?</h3>
-            <p class="mt-4 mb-1">Note:</p>
-            <ul class="text-muted">
-            <li>Stopping task will pause the timer but not complete the task.</li>
-            <li>Completing task ends the task and not editable again.</li>
-            </ul>
+                <h3>Would you like to stop or complete the task?</h3>
+                <p class="mt-4 mb-1">Note:</p>
+                <ul class="text-muted">
+                    <li>Stopping task will pause the timer but not complete the task.</li>
+                    <li>Completing task ends the task and not editable again.</li>
+                </ul>
             </div>
             <div class="modal-footer">
-            <button type="button" id="timestopmodal-complete-task" class="btn btn-danger">Complete Task</button>
-            <button type="button" id="timestopmodal-stop-task" class="btn btn-primary">Stop Timer</button>
+                <button type="button" id="timestopmodal-complete-task" class="btn btn-danger">Complete Task</button>
+                <button type="button" id="timestopmodal-stop-task" class="btn btn-primary">Stop Timer</button>
             </div>
-            </div>
+        </div>
     </div>
 </div>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://unpkg.com/pageable@latest/dist/pageable.min.js"></script>
 
-
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://momentjs.com/downloads/moment.js"></script>
-<script src="<?=base_url();?>assets/user/javascript/employeeInfo.js?>"></script>
-<script src="<?=base_url();?>assets/user/javascript/change_password.js?>"></script>
-
-
-
-<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
-
-
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
-
-<script src="<?=base_url();?>assets/user/javascript/addTask.js?>"></script>
-
-
+<script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="//momentjs.com/downloads/moment.js"></script>
+<script src="//unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 <script src="<?=base_url();?>assets/user/plugins/chart.js"></script>
-
-
+<script src="<?=base_url();?>assets/user/javascript/addTask.js?>"></script>
+<script src="<?=base_url();?>assets/user/javascript/employeeInfo.js?v=<?=VERSION?>?>"></script>
+<script src="<?=base_url();?>assets/user/javascript/change_password.js?>"></script>
+<!-- <script src="<?=base_url();?>assets/user/javascript/employeeActivities.js?>"></script> -->
+<script src="<?=base_url();?>assets/user/javascript/employee_profile.js?>"></script>
 <script type="text/javascript">
     function logout()
     {

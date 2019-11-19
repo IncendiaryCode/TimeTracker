@@ -21,7 +21,7 @@ $this->load->helper('url_helper');
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css?>">
-    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/style.css?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/style.css">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/new.css?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/add_task_style.css?>">
 

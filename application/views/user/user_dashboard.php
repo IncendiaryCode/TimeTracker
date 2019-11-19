@@ -32,29 +32,82 @@ if (isset($task_status)) {     /*fetching task details*/
 
     var __timeTrackerStartTime = "<?=$timer?>";    /*start date and time of the task.*/ 
 </script>
+
+<!-- new scoll -->
+
+<!-- <div>
+<span id="new_scoll">
+    <section data-anchor="gallery 1">
+        <div></div>
+    </section>
+    <section data-anchor="gallery 2">
+        <div></div>
+    </section>
+    <section data-anchor="gallery 3">
+        <div></div>
+    </section>
+    <section data-anchor="gallery 4">
+        <div></div>
+    </section>
+    <section data-anchor="gallery 5">
+        <div></div>
+    </section>
+    <section data-anchor="gallery 6">
+        <div></div>
+    </section>
+</span>
+</div>
+
+<div class="page-progress">
+<svg class="radial-svg" width="50" height="100" transform="rotate(-90 0 0)" style="display: none">
+    <circle class="radial-fill" stroke-width="5" r="14" cx="20" cy="20"></circle>
+</svg>
+</div>
+
+ -->
+
+
+<!-- END new scoll -->
+
+
+
+
 <div id="task-timer">
-    <p class="font-weight-light time-font text-center" id="login-time"><?=$start_text?></p>
-    <div class="text-center">
-        <span class="font-weight-light text-center" id="primary-timer">
-            00:00:00
-        </span>
-       <?php if (!empty($task_status)) { ?>
-            <span class="task pl-4 text-white"><strong><?=$type;?></strong></span>  
-       <?php } ?>
+    <div id="login-timer-details">
+        <p class="font-weight-light time-font text-center" id="login-time">
+            <?=$start_text?>
+        </p>
+        <div class="text-center">
+            <span class="font-weight-light text-center primary-timer" id="primary-timer">
+                00:00:00
+            </span>
+        </div>
+        <p class="font-weight-light text-center taskName" id="taskName">
+            <?php
+         echo "Login"; ?>
+        </p>
     </div>
-    <p class="font-weight-light text-center" id="taskName">
-    <?php if (!empty($task_name)) {
-        echo $task_name;
+    <p class="text-center text-white pb-5">
+        <?php     // if there is not task
+    for ($taskNo=0; $taskNo < 2; $taskNo++) {
+        ?>
+        <span>.</span>
+        <?php
     }
-    else echo "Login";
     ?>         
     </p>
 </div>
+
+
+
+
+
+
 <main class="container-fluid-main">
     <div class="md main-container-employee container timer">
         <div class="text-center shadow-lg topWidth stop-time" id="stop-time" data-tasktype="<?=$task_type?>" data-id="<?=$task_id?>">
             <h3><i class="fas action-icon <?=$timerClass?>"></i></h3>
-        </div>        
+        </div>
         <div class="container">
             <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4">   <!-- TODO... -->
                 <i class="text-danger  fas fa-exclamation-triangle"></i>
