@@ -4,6 +4,9 @@ if (addTask) {
                 var m = new Date();
                 var start_date = m.getUTCFullYear() + "-" + m.getUTCMonth() + "-" + m.getUTCDate() + " " + m.getHours() + ":" + m.getMinutes() + ":" + m.getSeconds();
                 addTask.onsubmit = function(e) {
+/*                                var array_of_timings = [];
+                                array_of_timings = input_array;
+                                console.log(array_of_timings);*/
                                 var taskName = document.getElementById('Taskname').value;
                                 var project = document.getElementById('choose-project').value;
                                 if (taskName == "" || taskName == " ") {
@@ -37,12 +40,13 @@ var addTime = {
                 id: 0,
                 ele: null,
                 addBtn: null,
-                input_array: [{}],
+                array_of_timings: [{}],
                 layout: function(date, start_time, end_time) {
 
                                 var section = $('<div class="time-section" />');
                                 var row = $('<div class="row" />');
                                 var id = this.id;
+                                var array_of_timings = this.array_of_timings;
 
                                 var colDate = $('<div class="col-3">' +
                                                 '<div class="input-group mb-3">' +
@@ -75,11 +79,18 @@ var addTime = {
                                                 '<i class="fas fa-minus text-danger"></i>' +
                                                 '</a>' +
                                                 '</div>');
+
                                 removeBtn.on('click', function() {
                                                 //remove the row
                                                 $(this).closest(".time-section").remove();
                                 });
+                                array_of_timings.push({date,start_time,end_time});
                                 removeBtn.appendTo(row);
+
+
+
+                                var input = $("<input>").attr("type", "hidden").attr("name", "members").val(JSON.stringify(array_of_timings));
+                                removeBtn.append($(input));
 
                                 section.append(row);
                                 this.ele.prepend(section);
@@ -167,22 +178,23 @@ var addTime = {
                                 } else if (input_values.length > 1) {
                                                 for (var i = 1; i < input_values.length - 1; i++) {
 
-                                                                var old_date = input_values[i]["old_date"];
-                                                                var start_old_time_sec = (parseInt(input_values[i]["old_start_time"].slice(0, 2)) * 60 + parseInt(input_values[i]["old_start_time"].slice(3, 5)));
-                                                                var end_old_time_sec = (parseInt(input_values[i]["old_end_time"].slice(0, 2)) * 60 + parseInt(input_values[i]["old_end_time"].slice(3, 5)));
+                                                        var old_date = input_values[i]["old_date"];
+                                                        var start_old_time_sec = (parseInt(input_values[i]["old_start_time"].slice(0, 2)) * 60 + parseInt(input_values[i]["old_start_time"].slice(3, 5)));
+                                                        var end_old_time_sec = (parseInt(input_values[i]["old_end_time"].slice(0, 2)) * 60 + parseInt(input_values[i]["old_end_time"].slice(3, 5)));
 
-                                                                if (((start_old_time_sec <= __start_seconds) && (__start_seconds < end_old_time_sec)) && date == old_date) {
-                                                                                return false;
-                                                                }
-                                                                if (((start_old_time_sec >= __start_seconds) && (__end_seconds > start_old_time_sec)) && (date == old_date)) {
-                                                                                return false;
-                                                                }
+                                                        if (((start_old_time_sec <= __start_seconds) && (__start_seconds < end_old_time_sec)) && date == old_date) {
+                                                                        return false;
+                                                        }
+                                                        if (((start_old_time_sec >= __start_seconds) && (__end_seconds > start_old_time_sec)) && (date == old_date)) {
+                                                                        return false;
+                                                        }
                                                 }
                                 }
                                 return true;
                 },
                 get_inputvalues: function() { // to get entered input values.
-                                input_array = this.input_array;
+                                /*input_array = this.input_array;*/
+                                var input_array = [{}];
                                 var k = 0;
                                 var element = document.getElementById("task-add-time");
                                 var value = element.getElementsByTagName("input");

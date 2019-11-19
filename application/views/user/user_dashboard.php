@@ -35,7 +35,7 @@ if (isset($task_status)) {     /*fetching task details*/
 
 <!-- new scoll -->
 
-<!-- <div>
+<!-- <div style="height: 250px">
 <span id="new_scoll">
     <section data-anchor="gallery 1">
         <div></div>
@@ -56,15 +56,22 @@ if (isset($task_status)) {     /*fetching task details*/
         <div></div>
     </section>
 </span>
-</div>
+</div> -->
 
-<div class="page-progress">
-<svg class="radial-svg" width="50" height="100" transform="rotate(-90 0 0)" style="display: none">
+
+<!-- <nav id="nav">
+    <ul>
+        <li class="nav nav-prev"><button type="button"></button></li>
+        <li class="nav nav-next"><button type="button"></button></li>
+    </ul>
+</nav> -->
+
+
+<div class="page-progress"style="display: none">
+<svg class="radial-svg" width="50" height="100" transform="rotate(-90 0 0)" >
     <circle class="radial-fill" stroke-width="5" r="14" cx="20" cy="20"></circle>
 </svg>
 </div>
-
- -->
 
 
 <!-- END new scoll -->

@@ -102,6 +102,7 @@ $profile = $this->session->userdata('user_profile');
                         <p>&nbsp;</p>
                         <hr />
                         <button type="submit" class="btn btn-primary">Save Task</button><!-- to store the task entry. -->
+                        <button type="button" class="btn btn-primary ml-5" id="save-and-start">Save and Start</button><!-- to store the task entry. -->
                     </form>
                 </div>
             </div>
