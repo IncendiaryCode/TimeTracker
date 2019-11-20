@@ -14,11 +14,11 @@ $this->load->helper('url_helper');
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500&display=swap" rel="stylesheet">
     <link href="//unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>    
-    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css?v=<?=VERSION?>">    
-    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/add_task_style.css?v=<?=VERSION?>">
-    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/plugins/bxslider/css/jquery.bxslider.min.css?v=<?=VERSION?>">
-    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/new.css?v=<?=VERSION?>">
-    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/style.css?v=<?=VERSION?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css?>">    
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/add_task_style.css?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/plugins/bxslider/css/jquery.bxslider.min.css?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/new.css?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/style.css?>">
     <script type="text/javascript">
         var timeTrackerBaseURL = "<?=base_url();?>";
     </script>

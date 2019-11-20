@@ -85,6 +85,12 @@
 				echo json_encode($chart_data);
 			}
 		}
+		//fetch project module
+		public function get_project_module(){
+			$projectid = $this->input->post('id');
+			$data['result'] = $this->user_model->get_module_name($projectid);
+			echo json_encode($data);
+		}
 		//Add tasks
 		public function add_tasks(){
 		        $this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|xss_clean');
