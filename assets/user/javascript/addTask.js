@@ -1,5 +1,4 @@
 var addTask = document.getElementById('addTask');
-var __editTask;
 if (addTask) {
                 var m = new Date();
                 var start_date = m.getUTCFullYear() + "-" + m.getUTCMonth() + "-" + m.getUTCDate() + " " + m.getHours() + ":" + m.getMinutes() + ":" + m.getSeconds();
@@ -13,14 +12,7 @@ if (addTask) {
                                                 document.getElementById('taskError').innerHTML = "Please Enter Task Name ";
                                                 return false;
                                 }
-                                if (__editTask == true) {
-                                                var start_date = document.getElementById('started-date').value;
-                                                var end_date = document.getElementById('end-date').value;
-                                                if (start_date == "" || start_date == " " || end_date == "" || end_date == " ") {
-                                                                document.getElementById('taskError').innerHTML = "Please Enter start and end date.";
-                                                                return false;
-                                                }
-                                }
+                                
                                 if (project == "" || project == "Select Project") {
                                                 document.getElementById('taskError').innerHTML = "Please Choose Project Name ";
                                                 return false;
@@ -31,7 +23,7 @@ if (addTask) {
                                                 return false;
                                 } else {
                                                 // store data in database
-                                                console.log(this)
+
                                                 return true;
                                 }
                 }
@@ -183,8 +175,6 @@ var addTime = {
                                                 for (var i = 1; i < input_values.length; i++) {
                                                         
                                                         var old_date = input_values[i]["date"];
-                                                        console.log(input_values)
-                                                        console.log(old_date)
                                                         var start_old_time_sec = (parseInt(input_values[i]["start_time"].slice(0, 2)) * 60 + parseInt(input_values[i]["start_time"].slice(3, 5)));
                                                         var end_old_time_sec = (parseInt(input_values[i]["end_time"].slice(0, 2)) * 60 + parseInt(input_values[i]["end_time"].slice(3, 5)));
 
@@ -198,7 +188,6 @@ var addTime = {
                                 }
                                 else
                                 {
-                                        console.log("gsdss");
                                         return true;
                                 }
                                 return true;
@@ -290,19 +279,18 @@ $(document).ready(function() {
                                 uiLibrary: 'bootstrap4'
                 });
 
-                $('.project-name').click(function()
-                {
-                        console.log("fgdsjfdjhf");
-                        console.log(document.getElementById('project-id').value);
-                        
-                        /*$.ajax({
+                $("select.project_name").change(function(){
+                        var project_id = $(this).children("option:selected").val();
+                        console.log(project_id);
+                        //alert("You have selected the country - " + selectedCountry);
+                        $.ajax({
                         type: 'POST',
-                        url: timeTrackerBaseURL + 'index.php/user/start_timer',
-                        data: { 'action': 'task', 'id': t_id },
+                        url: timeTrackerBaseURL + 'index.php/user/get_project_module',
+                        data: { 'id': project_id },
                         success: function(res) {
-                        //alert(res);
-                            window.location.reload();
+                            console.log(res);
+                                
                         }
-                    });*/
-                });
+                    });
+            });
 });;

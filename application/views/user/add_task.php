@@ -25,14 +25,14 @@ $profile = $this->session->userdata('user_profile');
                             <textarea class="form-control" id="description" name="task_desc" rows="4"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="choose-project">Choose a project</label>
-                            <select type="number" class="form-control" id="choose-project" name="project_name">
+                            <label for="choose-project" >Choose a project</label>
+                            <select type="number" class="form-control project_name" id="choose-project" name="project_name">
 
                                 <option>Select Project</option>
                                 <?php 
                                  foreach($result as $p){ 
                                     ?>
-                                <option class="project-name"><?php echo $p['name']; ?></option>
+                                <option value=<?php echo $p['id']?> ><?php echo $p['name']; ?></option>
 
                             <?php }?>
                             </select>
