@@ -31,6 +31,7 @@ if (addTask) {
                                                 return false;
                                 } else {
                                                 // store data in database
+                                                console.log(this)
                                                 return true;
                                 }
                 }
@@ -249,7 +250,6 @@ var addTime = {
                                                 }
                                                 if ((parseInt(cur_date.getMonth() + 1)) < parseInt(date.slice(3, 5))) {
                                                                 return false;
-                                                                zz
                                                 }
                                                 if ((parseInt(cur_date.getMonth() + 1)) == parseInt(date.slice(3, 5))) {
                                                                 if ((parseInt(cur_date.getDate()) >= (parseInt(date.slice(0, 2))))) {
@@ -290,8 +290,11 @@ $(document).ready(function() {
                                 uiLibrary: 'bootstrap4'
                 });
 
-                $('#choose-project').click(function()
+                $('.project-name').click(function()
                 {
+                        console.log("fgdsjfdjhf");
+                        console.log(document.getElementById('project-id').value);
+                        
                         /*$.ajax({
                         type: 'POST',
                         url: timeTrackerBaseURL + 'index.php/user/start_timer',
@@ -301,6 +304,5 @@ $(document).ready(function() {
                             window.location.reload();
                         }
                     });*/
-                })
-
-});
+                });
+});;

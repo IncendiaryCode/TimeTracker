@@ -190,7 +190,7 @@ function loadTaskActivities(formData) {
                     $('.card-header').css("background", "#e7d3fe");
                     $('.card-footer').css("background", "#e7d3fe");
                 } else {
-                    var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"><input type="hidden" value=' + data[x][y].start_time + '></i> Stop</a>').data('taskid',data[x][y].task_id);
+                    var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"><input type="hidden" value=' + data[x][y].start_time + '></i> Stop</a>').data('taskid',data[x][y].id);
                    
                     stopButton.on('click', function() {
                          alert(data[x][y].start_time);
@@ -221,10 +221,10 @@ function loadTaskActivities(formData) {
                 var footerRight = $("<div class='col-6 text-right card-actions'>");
                 //action Edit
                 var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit position_edit_icon animated fadeIn" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
-                actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_edit_task?t_id=' + data[x][y].task_id);
+                actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_edit_task?t_id=' + data[x][y].id);
                 
                 /*actionEdit.on('click',function(e){
-                    //var id = data[x][y].task_id;
+                    //var id = data[x][y].id;
                     var id = this.getElementsByTagName('input').item(0).value;
                     //console.log(t_id);
                     $.ajax({
@@ -247,7 +247,7 @@ function loadTaskActivities(formData) {
                     console.log(this.id);
                 });
                 footerRight.append(actionDelete);*/
-                var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon animated fadeIn fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].task_id + '></i></div></a>');
+                var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon animated fadeIn fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
 
                 actionPlay.on('click', function(e) {
                     var t_id = this.getElementsByTagName('input').item(0).value;
@@ -379,7 +379,6 @@ $(document).ready(function() {
           // pager: true,
          // slideWidth: 600
     });
-
 });
 
 function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it in 12 hour format

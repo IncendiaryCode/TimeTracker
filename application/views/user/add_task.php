@@ -32,9 +32,11 @@ $profile = $this->session->userdata('user_profile');
                                 <?php 
                                  foreach($result as $p){ 
                                     ?>
-                                <option><?=$p['name'];  ?></option>
+                                <option class="project-name"><?php echo $p['name']; ?></option>
+
                             <?php }?>
                             </select>
+                                <!-- <input type="hidden" name="" id="result_array" value="<?php print_r($result);?>"> -->
                         </div>
                         <div class="form-group pl-4">
                             <!-- new or completed tasks..-->

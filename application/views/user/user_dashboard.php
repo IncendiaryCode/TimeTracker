@@ -60,27 +60,6 @@ if (isset($task_status)) {     /*fetching task details*/
 </div>
 
 
-
-<!-- <nav id="nav">
-    <ul>
-        <li class="nav nav-prev"><button type="button"></button></li>
-        <li class="nav nav-next"><button type="button"></button></li>
-    </ul>
-</nav> -->
-
-
-<div class="page-progress"style="display: none">
-<svg class="radial-svg" width="50" height="100" transform="rotate(-90 0 0)" >
-    <circle class="radial-fill" stroke-width="5" r="14" cx="20" cy="20"></circle>
-</svg>
-</div>
-
-
-<!-- END new scoll -->
-
-
-
-
 <!-- <div id="task-timer">
     <div id="login-timer-details">
         <p class="font-weight-light time-font text-center" id="login-time">
