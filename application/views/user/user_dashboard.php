@@ -29,34 +29,36 @@ if (isset($task_status)) {     /*fetching task details*/
 ?>
 <script type="text/javascript">
     //this will be send to JS for timer to start
-
     var __timeTrackerStartTime = "<?=$timer?>";    /*start date and time of the task.*/ 
 </script>
 
 <!-- new scoll -->
 
-<!-- <div style="height: 250px">
-<span id="new_scoll">
-    <section data-anchor="gallery 1">
-        <div></div>
-    </section>
-    <section data-anchor="gallery 2">
-        <div></div>
-    </section>
-    <section data-anchor="gallery 3">
-        <div></div>
-    </section>
-    <section data-anchor="gallery 4">
-        <div></div>
-    </section>
-    <section data-anchor="gallery 5">
-        <div></div>
-    </section>
-    <section data-anchor="gallery 6">
-        <div></div>
-    </section>
-</span>
-</div> -->
+<div class="container timer-slider">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="timer-slider">
+              <div>                
+                <div class="section-slider" id="login-timer-details">
+                    <p class="font-weight-light time-font text-center" id="login-time">
+                        <?=$start_text?>
+                    </p>
+                    <div class="font-weight-light text-center primary-timer" id="primary-timer" data-type="" data-time="">
+                        00:00:00
+                    </div>
+                    <p class="font-weight-light text-center taskName" id="taskName">
+                        <?php echo "Login"; ?>
+                    </p>
+                </div>
+              </div>
+
+              <div>Content 2</div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <!-- <nav id="nav">
@@ -79,7 +81,7 @@ if (isset($task_status)) {     /*fetching task details*/
 
 
 
-<div id="task-timer">
+<!-- <div id="task-timer">
     <div id="login-timer-details">
         <p class="font-weight-light time-font text-center" id="login-time">
             <?=$start_text?>
@@ -103,7 +105,7 @@ if (isset($task_status)) {     /*fetching task details*/
     }
     ?>         
     </p>
-</div>
+</div> -->
 
 
 

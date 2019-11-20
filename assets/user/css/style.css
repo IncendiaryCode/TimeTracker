@@ -689,3 +689,10 @@ circle {
   stroke-dashoffset: 87.9645943005;
 }
 
+.timer-slider .bx-wrapper {
+     background: transparent;
+     border: none;
+     box-shadow: none;
+     min-height: 150px;
+     margin-bottom: 100px;
+}

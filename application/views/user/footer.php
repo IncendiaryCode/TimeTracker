@@ -62,22 +62,23 @@
         </div>
     </div>
 </div>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://unpkg.com/pageable@latest/dist/pageable.min.js"></script>
 
-<script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="//unpkg.com/pageable@latest/dist/pageable.min.js"></script>
+<script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
 <script src="//momentjs.com/downloads/moment.js"></script>
 <script src="//unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
-<script src="<?=base_url();?>assets/user/plugins/chart.js"></script>
-<script src="<?=base_url();?>assets/user/javascript/addTask.js?>"></script>
-<script src="<?=base_url();?>assets/user/javascript/employeeInfo.js?v=<?=VERSION?>?>"></script>
-<script src="<?=base_url();?>assets/user/javascript/change_password.js?>"></script>
+<script src="<?=base_url();?>assets/user/plugins/chart.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/user/javascript/addTask.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/user/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/user/javascript/change_password.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/plugins/bxslider/js/jquery.bxslider.min.js?v=<?=VERSION?>"></script>
 <!-- <script src="<?=base_url();?>assets/user/javascript/employeeActivities.js?>"></script> -->
-<script src="<?=base_url();?>assets/user/javascript/employee_profile.js?>"></script>
+<script src="<?=base_url();?>assets/user/javascript/employee_profile.js?v=<?=VERSION?>"></script>
 <script type="text/javascript">
     function logout()
     {
