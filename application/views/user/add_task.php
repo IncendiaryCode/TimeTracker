@@ -76,7 +76,7 @@ $profile = $this->session->userdata('user_profile');
                                     <div class="row">
                                         <div class="col-3">
                                             <div class="input-group mb-3">
-                                                <input type="text" class="form-control datepicker" name="date-0" data-date-format="dd/mm/yyyy" id="date-picker-start">
+                                                <input type="text" class="form-control datepicker" name="daterange[0][date]" data-date-format="dd/mm/yyyy" id="date-picker-start">
                                               <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     <span class="fa fa-calendar"></span>
@@ -86,12 +86,12 @@ $profile = $this->session->userdata('user_profile');
                                         </div>
                                         <div class="col-3">
                                             <div class="input-group date">
-                                                <input id="start-time-0" class="form-control timepicker" name="start-time-0" />
+                                                <input id="start-time-0" class="form-control timepicker" name="daterange[0][start]" />
                                             </div>
                                         </div>
                                         <div class="col-3">
                                             <div class="input-group date">
-                                                <input id="end-time-0" class="form-control timepicker1" name="end-time-0" />
+                                                <input id="end-time-0" class="form-control timepicker1" name="daterange[0][end]" />
                                             </div>
                                         </div>
                                         <div class="col-3 text-center">

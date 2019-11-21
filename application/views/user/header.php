@@ -9,16 +9,16 @@ $this->load->helper('url_helper');
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Time Tracker</title>   
     <!-- //User Dashboard assets -->    
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">    
-    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.0/css/all.css">
-    <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500&display=swap" rel="stylesheet">
-    <link href="//unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
-    <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>    
-    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css?>">    
-    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/add_task_style.css??v=<?=VERSION?>">
-    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/plugins/bxslider/css/jquery.bxslider.min.css??v=<?=VERSION?>">
-    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/new.css??v=<?=VERSION?>">
-    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/style.css??v=<?=VERSION?>">
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">    
+    <link rel="stylesheet" type="text/css" href="//use.fontawesome.com/releases/v5.11.0/css/all.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500&display=swap">
+    <link rel="stylesheet" type="text/css" href="//unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css"/>    
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css?v=<?=VERSION?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/add_task_style.css?v=<?=VERSION?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/plugins/bxslider/css/jquery.bxslider.min.css?v=<?=VERSION?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/new.css?v=<?=VERSION?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/style.css?v=<?=VERSION?>">
     <script type="text/javascript">
         var timeTrackerBaseURL = "<?=base_url();?>";
     </script>
