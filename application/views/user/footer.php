@@ -72,7 +72,7 @@
 <script src="//momentjs.com/downloads/moment.js"></script>
 <script src="//unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
-<script src="<?=base_url();?>assets/user/plugins/calendar-view.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/user/plugins/calendar_view.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/add_task.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/change_password.js?v=<?=VERSION?>"></script>
