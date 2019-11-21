@@ -11,10 +11,11 @@ $task_id = '';
 $task_name = 'Login';
 
 if (isset($task_status)) {     /*fetching task details*/ 
-    for ($i=0; $i < sizeof($task_status); $i++) { 
-
-    $start_text = 'Started at '.$task_status[$i]['start_time'];
     //print_r($task_status); exit();
+    for ($i=0; $i < sizeof($task_status); $i++) { 
+ 
+    $start_text = 'Started at '.$task_status[$i]['start_time'];
+   
     $task_type = ($type == 'login') ? 'login' : 'task';
     $task_name = $task_status[$i]['task_name'];
     $timerClass = 'fa-stop';

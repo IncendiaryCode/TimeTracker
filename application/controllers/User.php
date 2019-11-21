@@ -53,9 +53,7 @@
 		//Stop Timer
 		public function stop_timer(){
 				$id = $this->input->post('id',TRUE);
-				$start = $this->input->post('start_time',TRUE);
-				/*print_r($start);exit;*/
-				$result = $this->user_model->stop_timer($id,$start);
+				$result = $this->user_model->stop_timer($id);
 				if($result == FALSE){
 					echo "Something went wrong.";
 				}else{
@@ -191,10 +189,14 @@
 					redirect('user/load_my_profile','refresh');
 				}
 		}
+		//Display My Profile Page
 		public function load_my_profile(){
-			$this->load->view('user/header');
-			$this->load->view('user/profile');
-			$this->load->view('user/footer');
+			
+				
+		
+			$data['user_details'] = $this->user_model->my_profile();
+			echo json_encode($data);
+		
 		}
 		public function password_exists(){
 	        if ($this->user_model->password_exists() == TRUE)

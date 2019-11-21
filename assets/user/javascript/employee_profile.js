@@ -1,7 +1,9 @@
+ $(document).ready(function()
+{
  $.ajax({
      type: 'GET',
-     url: timeTrackerBaseURL + 'php/my_profile.php',
-     data: { 'type': 'profile' },
+     url: timeTrackerBaseURL + 'index.php/user/load_my_profile',
+     
      success: function(values) {
          var data = JSON.parse(values);
 
@@ -12,4 +14,4 @@
          $('#table-body').append(tableRow);
      }
  });
-
+ });
