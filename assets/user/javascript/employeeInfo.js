@@ -12,14 +12,6 @@ var count = localStorage.getItem('count');
 
 //main timer interval
 var mainTimerInterval;
-
-//localStorage.clear();
-
-/*function timeUpdate() {
-    localStorage.setItem('lastTime', getTime());
-}
-*/
-
 function startTimer(startTime) {
     if (startTime === 'stop') {
         //clear the existing interval
@@ -49,21 +41,6 @@ function setTime(startTime) {
     var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
     $('#primary-timer').html(formattedTime);
 }
-
-/*
-function logout() {
-    localStorage.setItem('lastTime', 0);
-    localStorage.setItem('timeStamp', 0);
-    var counter = localStorage.getItem('count');
-    storeTime();
-    localStorage.setItem('count', parseInt(counter) + 1);
-
-    localStorage.setItem('firstTime', 'null');
-    console.log("loggin out......");
-
-}
-
-*/
 
 function storeTime() {
 
@@ -171,6 +148,7 @@ function loadTaskActivities(formData) {
             var data = JSON.parse(values);
             $("#attach-card").empty();
             var timerModal = timerStopModal();
+
             for (x in data){
                 for(var y=0;y<data[x].length;y++){
                // var start_time = timeTo12HrFormat(data[x][y].start_time);
@@ -308,9 +286,25 @@ function updateTimer(timerUrl) {
     });
 }
 
+function load_task_details(taskData)
+{
+var id=1;
+    var data = JSON.parse(taskData);
+    var task_data = data['data'];
+    console.log(task_data);
+    for(var i=0; i<task_data.length; i++)
+    {
+    var content_value = $('<div><div class="section-slider" id="login-timer-details-' + id + '">' +
+        '<p class="font-weight-light time-font text-center" id="login-time-' + id + '"> Started at' + task_data[i]["start_time"] + '</p>' +
+        '<div class="font-weight-light text-center primary-timer" id="primary-timer-' + id + '" data-type="" data-time="">'+"00:00:00"+'</div>' + 
+        '<p class="font-weight-light text-center taskName" id="taskName-' + id + '">'+ task_data[i]["task_name"] + '</p></div></div>');
+        //$('#timer-slider').prepend(content_value);
+        id++;
+    }
+}
 
 
-
+    
 function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it in 12 hour format
     var time_part_array = time.split(":");
     var ampm = 'AM';
@@ -386,6 +380,27 @@ $(document).ready(function() {
             loadTaskActivities({ 'type': $(this).data('type') });
         });
     });
+/*
+        $.ajax({
+        type: 'GET',
+        url: timeTrackerBaseURL + 'index.php/user/load_task_data',
+        data: {'type': 'task'},
+        success: function(values) {
+            var data = JSON.parse(values);
+            var id=1;
+            var task_data = data['data'];
+            console.log(task_data);
+            for( var i=0;i<3; i++)
+               {
+
+                var content_value = $('<div style="float: left; list-style: none; position: relative; width: 1110px;" class="bx-clone" aria-hidden="true"> content A </div>');
+                $('#timer-slider').append(content_value);
+                }
+            }
+
+    });
+                var content_value = $("<div> content 12 </div>");
+                $('#timer-slider').append(content_value);*/
 
     $("#timer-slider").bxSlider({
           auto: false,
@@ -396,5 +411,5 @@ $(document).ready(function() {
          // slideWidth: 600
     });
 
-    $('#timer-slider').append("<div> content2 </div>");
 });
+

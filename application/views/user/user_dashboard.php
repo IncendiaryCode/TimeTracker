@@ -9,23 +9,26 @@ $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Login';
+
 if (isset($task_status)) {     /*fetching task details*/ 
-    $start_text = 'Started at '.$task_status['start_time'];
+    for ($i=0; $i < sizeof($task_status); $i++) { 
+
+    $start_text = 'Started at '.$task_status[$i]['start_time'];
     //print_r($task_status); exit();
     $task_type = ($type == 'login') ? 'login' : 'task';
-    $task_name = $task_status['task_name'];
+    $task_name = $task_status[$i]['task_name'];
     $timerClass = 'fa-stop';
-    $task_id = $task_status['task_id'];
+    $task_id = $task_status[$i]['task_id'];
 
-    $timer = $task_status['start_time'];
+    $timer = $task_status[$i]['start_time'];
    // $timer =($task_status[0]['task_date'].$task_status[0]['start_time']);
     $datetime1 = new DateTime();
     $datetime2 = new DateTime($timer);
 
     $interval = date_diff($datetime1, $datetime2);
-    $timer =  strtotime($task_status['task_date'] . $interval->format(' %h:%i:%s'));
+    $timer =  strtotime($task_status[$i]['task_date'] . $interval->format(' %h:%i:%s'));
 }
-
+ }
 ?>
 <script type="text/javascript">
     //this will be send to JS for timer to start
@@ -36,7 +39,7 @@ if (isset($task_status)) {     /*fetching task details*/
 
 <div class="container timer-slider">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" id="here">
             <div id="timer-slider">
               <div>            
                 <div class="section-slider" id="login-timer-details">
@@ -52,8 +55,7 @@ if (isset($task_status)) {     /*fetching task details*/
                 </div>
               </div>
 
-              <div>Content 2</div>
-
+                
             </div>
         </div>
     </div>

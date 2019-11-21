@@ -29,16 +29,17 @@ $profile = $this->session->userdata('user_profile');
                             <select type="number" class="form-control project_name" id="choose-project" name="project_name">
                                 <option>Select Project</option>
                                 <?php
+                                
                                  foreach($result as $p){ 
                                     ?>
-                                <option value=<?php echo $p['id']?> label= <?php echo $p['name']; ?> >
+                                <option value=<?php echo $p['id']?> label= <?php echo $p['name']; ?> ><?php echo $p['name']; ?>
                                 </option>
                             <?php }?>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="choose-module" >Choose project module</label>
-                            <select type="number" class="form-control project_name" id="choose-module" name="project_name">
+                            <select type="number" class="form-control project_name" id="choose-module" name="project_module">
                                 <option>Select module</option>                                
                             </select>
                         </div>
