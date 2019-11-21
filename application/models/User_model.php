@@ -18,7 +18,7 @@ class User_model extends CI_Model {
         $this->db->where(array('d.user_id'=>$userid));
         $this->db->where('d.end_time IS NULL');
         $query = $this->db->get();
-        $task_status = $query->row_array();
+        $task_status = $query->result_array();
         if($query->num_rows()>0){
             $type = 'task';
             return array('task_status'=>$task_status,'type'=>$type);
@@ -76,8 +76,7 @@ class User_model extends CI_Model {
         $userid = $this->session->userdata('userid');
         $task_type = $type;
         if($task_type == 'login'){
-            print_r($task_type);exit;
-            $array1 = array('user_id'=>$userid,'task_date'=>date('Y:m:d'),'start_time'=>date('Y:m:d H:i:s'),'created_on'=>date('Y:m:d H:i:s'));
+            $array1 = array('user_id'=>$userid,'task_date'=>date('Y:m:d'),'start_time'=>date('Y:m:d H:i:s'),'total_hours'=>'0','total_minutes'=>'0','created_on'=>date('Y:m:d H:i:s'));
             $this->db->set($array1);
             $query1 = $this->db->insert('login_details',$array1);
             if($query1){
@@ -105,16 +104,24 @@ class User_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('time_details');
         $this->db->where(array('task_id'=>$task_id,'user_id'=>$userid,'start_time'=>$start_time));
+        //$this->db->where('end_time IS NULL');
         $query = $this->db->get();
         if($query->num_rows() > 0){
-            $data = $query->result_array();
-           /* print_r($data);exit;*/
+            $data = $query->result_array(); 
             $this->db->where(array('start_time'=>$data->start_time,'task_id'=>$data->task_id));
             $query2 = $this->db->update('time_details',array('end_time'=>date('Y:m:d H:i:s')));
-            if($query2){
-                return true;
-            }else{
-                return false;
+            if($this->db->affected_rows() > 0){
+               // $last_insert_id = $this->db->insert_id();
+                $query = $this->db->query("SELECT DATEPART(HOURS,end_time,start_time) AS total_hours,DATEPART(MINUTES,end_time,start_time) AS total_minutes,id,task_id FROM time_details WHERE id=".$id);
+                if($query->num_rows() > 0){
+                    $data = $query->result_array();
+                    $query = $this->db->update('time_details',array('total_hours'=>$data->total_hours,'total_minutes'=>$data->total_minutes));
+                    if($query){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
             }
         }
     }
@@ -134,13 +141,16 @@ class User_model extends CI_Model {
                 $data = $query->row_array();
                 $starttime = $data['start_time'];
                 $endtime = $data['end_time'];
-                $label_data = $this->SplitTime($starttime, $endtime, "60");
+                $label_data = $this->split_time($starttime, $endtime, "60");
                 if(!empty($label_data)){
-                    $chart_data = array('daily_chart',
+                    /*$chart_data = array('daily_chart',
                     "status"=>TRUE,
                     "labels"=> $label_data[0],
                     "data"=> $label_data[1]
-                    );
+                    );*/
+                    $chart_data = array($label_data);
+                    //print_r($chart_data);
+                    return $chart_data;
                 }
             }else{
                 $chart_data = array('daily_chart',
@@ -170,10 +180,15 @@ class User_model extends CI_Model {
                 foreach($data as $d){
                     $day = date('D', strtotime($d['task_date']));
                     //print_r($day);
-                    $start = strtotime($d['start_time']);
+                   /* $start = strtotime($d['start_time']);
                     $end = strtotime($d['end_time']);
                     $total_time = $end-$start;
-                    $total['total_hours'] = floor($total_time/3600);
+                    $total['total_hours'] = floor($total_time/3600);*/
+                    $minutes = $d['total_minutes'];
+                    $tohours = $minutes/60;
+                    $total_hours = $d['total_hours'];
+                    $mins_to_hour = $total_hours + $tohours;
+                    $total['total_hours'] = $mins_to_hour;
                     $total['day'] = $day;
                     if(!empty($total)){
                         $chart_data = array('weekly_chart',
@@ -206,36 +221,36 @@ class User_model extends CI_Model {
         return $chart_data;
     }
     //to make time intervals in daily chart
-    public function SplitTime($StartTime, $EndTime, $Duration="60"){
-        $ReturnArray = array ();// Define output
-        $startTime    = strtotime ($StartTime); //Get Timestamp
-        $EndTime      = strtotime ($EndTime); //Get Timestamp
-        $AddMins  = $Duration * 60;
-        $dat = date('Y-m-d', $startTime);
-        $starttime = date('Y-m-d H:i:s',strtotime('+1 hour',$startTime));
+    public function split_time($start__time, $end_time, $duration="60"){
+        $result_array = array ();// Define output
+        $start_time    = strtotime ($start__time); //Get Timestamp
+        $end_time      = strtotime ($end_time); //Get Timestamp
+        $add_mins  = $duration * 60;
+        $dat = date('Y-m-d', $start_time);
+        $starttime = date('Y-m-d H:i:s',strtotime('+1 hour',$start_time));
         $start = strtotime($starttime);
         $i = strtotime($dat.'09:00:00');
-        while($i <= $startTime){
-            $ReturnArray[] = date ("G:00", $i);
+        while($i <= $start_time){
+            $result_array[] = date ("G:00", $i);
             $returndata[] = '0';
-            $i += $AddMins;
+            $i += $add_mins;
         }
-        while ($start <= $EndTime) //Run loop
+        while ($start <= $end_time) //Run loop
         {
 
-            $ReturnArray[] = date ("G:00", $start);
+            $result_array[] = date ("G:00", $start);
             $returndata[] = '1';
-            $start += $AddMins; //Endtime check
+            $start += $add_mins; //Endtime check
         }
-        $endtime = date('Y-m-d H:i:s',strtotime('+1 hour',$EndTime));
-        $endTime = strtotime($endtime);
+        $endtime = date('Y-m-d H:i:s',strtotime('+1 hour',$end_time));
+        $end__time = strtotime($endtime);
         $end = strtotime($dat.'23:59:59');
-        while($endTime <= $end){
-            $ReturnArray[] = date ("G:00", $endTime);
+        while($end__time <= $end){
+            $result_array[] = date ("G:00", $end__time);
             $returndata[] = '0';
-            $endTime += $AddMins;
+            $end__time += $add_mins;
         }
-        return array($ReturnArray,$returndata);
+        return array($result_array,$returndata);
     }
     //get start date and end date from the week input
     public function get_start_and_end_date($week, $year) {
@@ -284,33 +299,39 @@ class User_model extends CI_Model {
     }
 	//add task model
     public function add_tasks(){
-        $taskdate = $this->input->post('date-0');
-        $taskdate = $this->input->post('start-time-0');
-        $taskdate = $this->input->post('end-time-0');
-       // print_r($this->input->post());exit;
-    	$query1 = $this->db->get_where('project', array('name' => $this->input->post('project_name')));
-    	if($query1->num_rows() > 0){
-    		$proj_id = $query1->row_array();
-    		$array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('task_desc'),'project_id'=>$proj_id['id'],'module_id'=>'1','created_on'=>date('Y:m:d H:i:s'));
-    		$this->db->set($array);
-	    	$query3 = $this->db->insert('task',$array);
-	    	if(!$query3){
-	    		return false;
-	    	}else{
-                $last_insert_id = $this->db->insert_id();
-                $array2 = array('user_id'=>$userid,'task_id'=>$last_insert_id,'created_on'=>date('Y:m:d H:i:s'));
-                $this->db->set($array2);
-                $query4 = $this->db->insert('task_assignee',$array2);
-                if(!$query4){
-                    return false;
-                }else{
-
-                    return true;
+        if(!empty($this->input->post('project_module'))){
+            $module_id = $this->input->post('project_module');
+        }else{
+            $module_id = 1;
+        }
+        //print_r(($this->input->post('members[]')));
+        $members = $this->input->post('members');
+        print_r($members);exit;
+    	$array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('task_desc'),'project_id'=>$this->input->post('project_name'),'module_id'=>$module_id,'created_on'=>date('Y:m:d H:i:s'));
+    	$this->db->set($array);
+	    $query = $this->db->insert('task',$array);
+	    if(!$query){
+	    	return false;
+	    }else{
+            $last_insert_id = $this->db->insert_id();
+            $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'created_on'=>date('Y:m:d H:i:s'));
+            $this->db->set($array);
+            $query = $this->db->insert('task_assignee',$array);
+            if(!$query){
+                return false;
+            }else{
+                //Add timings into time_details table
+                for($i=0;$i<count($members);$i++){
+                    $start_time[$i] = '';
+                    $end_itme[$i] = '';
+                    $diff[$i] = $end_time[$i] - $start_time[$i];
+                    $hours[$i] = $diff[$i] / ( 60 * 60 );
+                    $array = array('user_id'=>'','task_id'=>$last_insert_id,'task_date'=>'','start_time'=>'','end_time'=>'','total_hours'=>$hours[$i],'total_minutes'=>'');
                 }
-	    	}
-		}else{
-			echo "project id not present.";
-    	}
+                return true;
+            }
+	    }
+
 	}
     //Check for the Old Password
     public function password_exists(){

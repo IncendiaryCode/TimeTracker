@@ -96,6 +96,7 @@
 		        $this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|xss_clean');
 		        $this->form_validation->set_rules('task_desc','Task Description','trim|required');
 		        $this->form_validation->set_rules('project_name','Project name','required');
+		        $this->form_validation->set_rules('project_module','Module name','required');
 		        $this->form_validation->set_rules('task_type','Radio button','required');
 		       // $this->form_validation->set_rules('start_date','Task Start Date','required');
 		       // $this->form_validation->set_rules('end_date','Task End Date','required');
