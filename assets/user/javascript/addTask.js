@@ -278,19 +278,29 @@ $(document).ready(function() {
                 $('.timepicker1').timepicker({
                                 uiLibrary: 'bootstrap4'
                 });
-
+                $('#choose-project').click(function()
+                {
+                        $('#choose-module').empty().html('<option>Select module</option>');
+                })
                 $("select.project_name").change(function(){
                         var project_id = $(this).children("option:selected").val();
-                        console.log(project_id);
-                        //alert("You have selected the country - " + selectedCountry);
                         $.ajax({
                         type: 'POST',
                         url: timeTrackerBaseURL + 'index.php/user/get_project_module',
                         data: { 'id': project_id },
                         success: function(res) {
-                            console.log(res);
+                            var result = JSON.parse(res);
+                            var array = result['result'];
+                                for(var i=0; i < array.length; i++) {                            
+                                var module_name = $('<option value=' + array[i]["id"]+'>'+ array[i]["name"]+'</option>');
+                                $("#choose-module").append(module_name);
+                                }
                                 
                         }
                     });
             });
 });;
+
+                            
+                            
+                                

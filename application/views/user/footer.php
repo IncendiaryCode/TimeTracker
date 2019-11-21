@@ -37,8 +37,9 @@
             </div>
         </div>
     </div>
+</div>
 
-<div class="modal fade" id="timestopmodal" tabindex="0" role="dialog" aria-labelledby="timestopmodalLabel" aria-hidden="true">  <!-- Modal Timer to Stop or Confirm -->
+<div class="modal fade" id="timestopmodal" tabindex="-1" role="dialog" aria-labelledby="timestopmodalLabel" aria-hidden="true">  <!-- Modal Timer to Stop or Confirm -->
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">

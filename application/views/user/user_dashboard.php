@@ -32,13 +32,13 @@ if (isset($task_status)) {     /*fetching task details*/
     var __timeTrackerStartTime = "<?=$timer?>";    /*start date and time of the task.*/ 
 </script>
 
-<!-- new scoll -->
+<!-- new scoll for task -->
 
 <div class="container timer-slider">
     <div class="row">
         <div class="col-md-12">
             <div id="timer-slider">
-              <div>                
+              <div>            
                 <div class="section-slider" id="login-timer-details">
                     <p class="font-weight-light time-font text-center" id="login-time">
                         <?=$start_text?>
@@ -58,38 +58,6 @@ if (isset($task_status)) {     /*fetching task details*/
         </div>
     </div>
 </div>
-
-
-<!-- <div id="task-timer">
-    <div id="login-timer-details">
-        <p class="font-weight-light time-font text-center" id="login-time">
-            <?=$start_text?>
-        </p>
-        <div class="text-center">
-            <span class="font-weight-light text-center primary-timer" id="primary-timer">
-                00:00:00
-            </span>
-        </div>
-        <p class="font-weight-light text-center taskName" id="taskName">
-            <?php
-         echo "Login"; ?>
-        </p>
-    </div>
-    <p class="text-center text-white pb-5">
-        <?php     // if there is not task
-    for ($taskNo=0; $taskNo < 2; $taskNo++) {
-        ?>
-        <span>.</span>
-        <?php
-    }
-    ?>         
-    </p>
-</div> -->
-
-
-
-
-
 
 <main class="container-fluid-main">
     <div class="md main-container-employee container timer">

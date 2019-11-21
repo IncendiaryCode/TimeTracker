@@ -27,16 +27,20 @@ $profile = $this->session->userdata('user_profile');
                         <div class="form-group">
                             <label for="choose-project" >Choose a project</label>
                             <select type="number" class="form-control project_name" id="choose-project" name="project_name">
-
                                 <option>Select Project</option>
-                                <?php 
+                                <?php
                                  foreach($result as $p){ 
                                     ?>
-                                <option value=<?php echo $p['id']?> ><?php echo $p['name']; ?></option>
-
+                                <option value=<?php echo $p['id']?> label= <?php echo $p['name']; ?> >
+                                </option>
                             <?php }?>
                             </select>
-                                <!-- <input type="hidden" name="" id="result_array" value="<?php print_r($result);?>"> -->
+                        </div>
+                        <div class="form-group">
+                            <label for="choose-module" >Choose project module</label>
+                            <select type="number" class="form-control project_name" id="choose-module" name="project_name">
+                                <option>Select module</option>                                
+                            </select>
                         </div>
                         <div class="form-group pl-4">
                             <!-- new or completed tasks..-->

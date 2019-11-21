@@ -108,7 +108,7 @@ class User_model extends CI_Model {
         $query = $this->db->get();
         if($query->num_rows() > 0){
             $data = $query->result_array();
-            print_r($data);exit;
+           /* print_r($data);exit;*/
             $this->db->where(array('start_time'=>$data->start_time,'task_id'=>$data->task_id));
             $query2 = $this->db->update('time_details',array('end_time'=>date('Y:m:d H:i:s')));
             if($query2){
@@ -279,7 +279,7 @@ class User_model extends CI_Model {
         $p_id = $project_id;
         $query = $this->db->query("SELECT * FROM project_module WHERE project_id = {$p_id} OR project_id = 0"); 
         //  
-        $result = $query->result_array();
+        $result = $query->result();
         return $result;
     }
 	//add task model
@@ -287,7 +287,7 @@ class User_model extends CI_Model {
         $taskdate = $this->input->post('date-0');
         $taskdate = $this->input->post('start-time-0');
         $taskdate = $this->input->post('end-time-0');
-        print_r($this->input->post());exit;
+       // print_r($this->input->post());exit;
     	$query1 = $this->db->get_where('project', array('name' => $this->input->post('project_name')));
     	if($query1->num_rows() > 0){
     		$proj_id = $query1->row_array();

@@ -54,7 +54,7 @@
 		public function stop_timer(){
 				$id = $this->input->post('id',TRUE);
 				$start = $this->input->post('start_time',TRUE);
-				print_r($start);exit;
+				/*print_r($start);exit;*/
 				$result = $this->user_model->stop_timer($id,$start);
 				if($result == FALSE){
 					echo "Something went wrong.";

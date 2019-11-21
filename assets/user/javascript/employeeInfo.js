@@ -136,7 +136,6 @@ var timerStopModal = function() {
     var timerModal = $('#timestopmodal').modal({
         'show': false,
         'backdrop': 'static',
-        // 'keyboard': false
     });
 
     timerModal.on('shown.bs.modal', function(e) {
@@ -150,14 +149,13 @@ var timerStopModal = function() {
 
     var completeBtn = timerModal.find('button#timestopmodal-complete-task');
     completeBtn.unbind().on('click', function() {
-        //updateTimer('../php/complete.php');
-        updateTimer('..index.php/user/stop_timer');
+        updateTimer('user/stop_timer');
         window.location.reload();
     });
 
     var stopBtn = timerModal.find('button#timestopmodal-stop-task');
     stopBtn.unbind().on('click', function() {
-        updateTimer('..index.php/user/stop_timer');
+        updateTimer('user/stop_timer');
     });
 
     return timerModal;
@@ -172,7 +170,6 @@ function loadTaskActivities(formData) {
         success: function(values) {
             var data = JSON.parse(values);
             $("#attach-card").empty();
-
             var timerModal = timerStopModal();
             for (x in data){
                 for(var y=0;y<data[x].length;y++){
@@ -182,24 +179,24 @@ function loadTaskActivities(formData) {
                 var cardHeaderRow = $('<div class="row pt-2" />');
                 cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>'  + ' ' + data[x][y].start_time + '</div>');
                 var stopCol = $('<div class="col-6 text-right" />');
-                //alert(data[x][y].end_time);
-                if (data[x][y].end_time !== '0000-00-00 00:00:00' || data[x][y].end_time !== null) /*check whether task is ended or not*/ {
-                    stopCol.append('<i class="far fa-clock"></i>' + data[x][y].end_time);
+                //alert(data[x][y].t_minutes);
+                if (data[x][y].t_minutes !== '0') /*check whether task is ended or not*/ {
+                    stopCol.append('<i class="far fa-clock"></i>' + data[x][y].t_minutes);
                     /*change background of current running task entries*/
+                } else {
                     $('.card-style-1').css("background", "#e7d3fe");
                     $('.card-header').css("background", "#e7d3fe");
                     $('.card-footer').css("background", "#e7d3fe");
-                } else {
-                    var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"><input type="hidden" value=' + data[x][y].start_time + '></i> Stop</a>').data('taskid',data[x][y].id);
+                    var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid',data[x][y].id);
                    
                     stopButton.on('click', function() {
-                         alert(data[x][y].start_time);
+                        
                        // var start_time = this.getElementsByTagName('input').item(0).value;
-                        var start_time=document.getElementsByTagName("input")[0].getAttribute("value");
-                        alert(start_time);
+                        /*var start_time=document.getElementsByTagName("input")[0].getAttribute("value");*/
+                       
                         localStorage.setItem('tid', $(this).data('taskid'));
-                        localStorage.setItem('starttime',start_time);
-                        alert(localStorage.getItem('starttime'));
+                       /* localStorage.setItem('starttime',start_time);
+                        alert(localStorage.getItem('starttime'));*/
                         timerModal.modal('show');
                     });
                     stopCol.append(stopButton);
@@ -262,7 +259,7 @@ function loadTaskActivities(formData) {
                         }
                     });
                 });
-                if (data[x][y].end_time !== '0000-00-00 00:00:00' || data[x][y].end_time !== null) {
+                if (data[x][y].t_minutes !== '0') {
                     footerRight.append(actionPlay);
                 }
 
@@ -291,7 +288,7 @@ function updateTimer(timerUrl) {
     $.ajax({
         type: "POST",
         url: timerUrl,
-        data: { id: localStorage.getItem('tid'),start_time:localStorage.getItem('starttime') },
+        data: { id: localStorage.getItem('tid') },
         dataType: 'json',
         success: function(res) {
             //handle timer
@@ -309,6 +306,26 @@ function updateTimer(timerUrl) {
             }*/
         }
     });
+}
+
+
+
+
+function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it in 12 hour format
+    var time_part_array = time.split(":");
+    var ampm = 'AM';
+
+    if (time_part_array[0] >= 12) {
+        ampm = 'PM';
+    }
+
+    if (time_part_array[0] > 12) {
+        time_part_array[0] = time_part_array[0] - 12;
+    }
+
+    formatted_time = time_part_array[0] + ':' + time_part_array[1] + ' ' + ampm;
+
+    return formatted_time;
 }
 
 
@@ -340,7 +357,6 @@ $(document).ready(function() {
                 url: taskUrl,
                 data: { 'action': 'login', 'id': t_id },
                 success: function(res) {
-                    //alert(res);
                     window.location.reload();
                 }
             });
@@ -379,21 +395,6 @@ $(document).ready(function() {
           // pager: true,
          // slideWidth: 600
     });
+
+    $('#timer-slider').append("<div> content2 </div>");
 });
-
-function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it in 12 hour format
-    var time_part_array = time.split(":");
-    var ampm = 'AM';
-
-    if (time_part_array[0] >= 12) {
-        ampm = 'PM';
-    }
-
-    if (time_part_array[0] > 12) {
-        time_part_array[0] = time_part_array[0] - 12;
-    }
-
-    formatted_time = time_part_array[0] + ':' + time_part_array[1] + ' ' + ampm;
-
-    return formatted_time;
-}
