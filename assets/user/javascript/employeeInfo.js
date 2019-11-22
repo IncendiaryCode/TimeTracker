@@ -158,7 +158,9 @@ function loadTaskActivities(formData) {
                     cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
                     var stopCol = $('<div class="col-6 text-right" />');
                     if (data[x][y].t_minutes != 0) /*check whether task is ended or not*/ {
-                        stopCol.append('<i class="far fa-clock"></i>Total timeused-' + data[x][y].t_minutes);
+                        var total_timeused = convertTimestamptoTime(data[x][y].t_minutes);
+
+                        stopCol.append('<i class="far fa-clock"></i>Total timeused=' + total_timeused);
                         /*change background of current running task entries*/
                     } else {
                         if (data[x][y].t_minutes == '0') {
@@ -166,7 +168,7 @@ function loadTaskActivities(formData) {
                         stopButton.on('click', function() {
                             localStorage.setItem('tid', $(this).data('taskid'))
                             timerModal.modal('show');
-/*                            timerStopModal();*/
+
                         });
                         stopCol.append(stopButton);
                     }
@@ -235,7 +237,7 @@ function updateTimer() {
         success: function(res) {
             //handle timer
             if (res.status) {
-                /*window.location.reload();*/
+                window.location.reload();
             }
 
         }
@@ -276,9 +278,24 @@ function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it
     return formatted_time;
 }
 
+function convertTimestamptoTime() { 
+            unixTimestamp = 10637282; 
+  
+            // convert to milliseconds and  
+            // then create a new Date object 
+            dateObj = new Date(unixTimestamp * 1000); 
+            utcString = dateObj.toUTCString(); 
+  
+            time = utcString.slice(-11, -4); 
+  
+            return time;
+        }
+
+
 
 $(document).ready(function() {
     var firstTime = localStorage.getItem("firstTime");
+    console.log(firstTime);
     if (firstTime == 'null') {
         console.log('timer running');
         localStorage.setItem("firstTime", "stop");
@@ -287,11 +304,13 @@ $(document).ready(function() {
             url: timeTrackerBaseURL + 'index.php/user/start_timer',
             data: { 'action': 'login' },
             success: function(res) {
+                console.log(res);
                 window.location.reload();
             }
         });
     };
     $('#stop-time').click(function() {
+
         var t_id = $(this).data('id');
 
         console.log($(this).data('tasktype'));

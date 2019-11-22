@@ -170,18 +170,6 @@ var addTime = {
         });
 
 
-        /*  var date = document.getElementById('date-picker-start').value;
-          var start_time = document.getElementById('start-time-0').value;
-          var end_time = document.getElementById('end-time-0').value;
-          var array_of_timings = this.array_of_timings;
-          if (_this.validate()) {
-                  array_of_timings.push({date,start_time,end_time});
-                  var input = $("<input id='timings-array'>").attr("type", "hidden").attr("name", "members").val(JSON.stringify(array_of_timings));
-                  $('#addTask').append(input);
-          }*/
-
-
-
     },
     init: function(eleID) {
         //initial settings
@@ -318,4 +306,19 @@ $(document).ready(function() {
             }
         });
     });
-});;
+    $('#start-task-time').click(function()
+        {
+        $.ajax({
+            type: "POST",
+            url: timeTrackerBaseURL + 'index.php/user/add_tasks',
+            data: {'action': 'save_and_start'},    /*call to start the task timer.*/
+            dataType: 'json',
+            success: function(res) {
+                if (res.status) {
+                    window.location.reload();
+                }
+
+            }
+        });
+        });
+});

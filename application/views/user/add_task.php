@@ -15,7 +15,12 @@ $profile = $this->session->userdata('user_profile');
                             <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
                     <?php } ?>
                     <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
+
+                        <div class="text-center shadow-lg topWidth start-time" id="start-task-time" data-tasktype="Task" data-id="80">
+                            <h3><i class="fas action-icon fa-play"></i></h3>
+                        </div>
                     <form action="<?=base_url();?>index.php/user/add_tasks" method="post" id="addTask" class="mt-5 ">
+
                         <div class="form-group  ">
                             <label for="task-name ">Write the task name</label>
                             <input type="text" class="form-control" name="task_name" id="Taskname">
@@ -112,7 +117,6 @@ $profile = $this->session->userdata('user_profile');
                         <p>&nbsp;</p>
                         <hr />
                         <button type="submit" class="btn btn-primary">Save Task</button><!-- to store the task entry. -->
-                        <button type="button" class="btn btn-primary ml-5" id="save-and-start">Save and Start</button><!-- to store the task entry. -->
                     </form>
                 </div>
             </div>

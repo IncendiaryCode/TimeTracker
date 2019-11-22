@@ -102,6 +102,20 @@ header.main-header h1 {
     background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #fadffd);
     margin-top: 15%;
 }
+.start-time {
+    position: relative;
+    text-align: center;
+    height: 90px;
+    width: 90px;
+    margin-left: 80%;
+    border-radius: 50%;
+    top: -15%;
+    z-index: 1;
+    color: white;
+    background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #fadffd);
+    margin-top: 15%;
+}
+
 
 @media (min-width: 1024px) {
     .main-container-employee {
@@ -139,9 +153,25 @@ header.main-header h1 {
         background-image: linear-gradient(to bottom right, #6f79fd, #df88fb, #ffdffd);
         margin-top: 0%;
     }
+    .start-time {
+        position: relative;
+        text-align: center;
+        height: 100px;
+        width: 100px;
+        margin-left: 90%;
+        border-radius: 50%;
+        top: -47px;
+        z-index: 1;
+        color: white;
+        background-image: linear-gradient(to bottom right, #6f79fd, #df88fb, #ffdffd);
+        margin-top: 0%;
+    }
 }
 
 .stop-time:hover {
+    background-image: linear-gradient(150deg, #7277fe, #ca82fb, #f2c2fd);
+}
+.start-time:hover {
     background-image: linear-gradient(150deg, #7277fe, #ca82fb, #f2c2fd);
 }
 
@@ -204,7 +234,7 @@ header.main-header h1 {
 
 .login-time {
     padding-top: 50px;
-    color: #fff;
+    color: #c8b8fd;
     font-weight: lighter;
 }
 
