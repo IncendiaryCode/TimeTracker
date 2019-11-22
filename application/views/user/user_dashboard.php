@@ -15,7 +15,7 @@ if (!empty($task_info)) {     /*fetching task details*/
     if($task_info['type']=='task'){
     //for ($i=0; $i < sizeof($task_info); $i++) { 
         foreach($task_info['task_status'] as $taskinfo){
-        //print_r($taskinfo['start_time']);exit;
+        //print_r($taskinfo['task_name']);
     $start_text = 'Started at '.$taskinfo['start_time'];
    
     
@@ -43,7 +43,6 @@ var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
     <div class="row">
         <div class="col-md-12" id="here">
             <div id="timer-slider">
-                <?php if($task_info['type']=='login'){ ?>
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
@@ -53,12 +52,12 @@ var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
                             00:00:00
                         </div>
                         <p class="font-weight-light text-center taskName" id="taskName">
-                            <?php echo $task_type; ?>
+                            <?php echo "Login"; ?>
                         </p>
                     </div>
                 </div>
-            <?php }
-            else if($task_info['type']=='task'){
+            <?php 
+            if($task_info['type']=='task'){
                 $id=1;
                 foreach($task_info['task_status'] as $taskinfo){ ?>
                     <div>
@@ -70,7 +69,7 @@ var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
                                 00:00:00
                             </div>
                             <p class="font-weight-light text-center taskName" id="taskName<?=$id?>">
-                                <?php echo $task_type; ?>
+                                <?php echo $taskinfo['task_name']; ?>
                             </p>
                         </div>
                     </div>

@@ -40,7 +40,7 @@
 		//Start timer controller
 		public function start_timer(){
 			$type = $this->input->post('action',TRUE);
-			if(isset($_POST['id'])){
+			if(($this->input->post('id'))){
 				$id = $this->input->post('id',TRUE);
 				$result = $this->user_model->start_timer($type);
 				if(!$result){
@@ -99,6 +99,16 @@
 		}
 		//Add tasks
 		public function add_tasks(){
+			if($this->input->post('action') == 'save_and_start'){
+				$result=$this->user_model->add_tasks();
+		            if(!$result){
+		                echo "Something went wrong.";
+		            }else{
+		            	$data = $this->user_model->start_timer($this->input->post('action'));
+		            	print_r($data);exit;
+		            	redirect('user/index','refresh');
+		            }
+			}
 		        $this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|callback_task_exists|xss_clean');
 		        $this->form_validation->set_rules('task_desc','Task Description','trim|required');
 		        $this->form_validation->set_rules('project_name','Project name','required');
@@ -199,8 +209,13 @@
 		}
 		//Display My Profile Page
 		public function load_my_profile(){
+			
 			$data = $this->user_model->my_profile();
 			echo json_encode($data);
+			$this->load->view('user/header');
+			$this->load->view('user/profile',$data);
+			$this->load->view('user/footer');
+			
 		}
 		public function password_exists(){
 	        if ($this->user_model->password_exists() == TRUE)
