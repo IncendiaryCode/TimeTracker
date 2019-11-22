@@ -5,9 +5,7 @@ function retrieveChartData(type, date) {
         data: { 'chart_type': type, 'date': date },
         dataType: 'json',
         success: function(res) {
-            console.log('retrieveChartData RESPONSE', res);
-            //console.log(res);
-            drawDailyChart(res);
+            drawChart(res);
         }
     });
 }
@@ -55,7 +53,8 @@ function loadWeeklyChart() {
     }
 }
 
-function drawDailyChart(res) {
+function drawChart(res) {
+    console.log(res);
     var type = res[0];
     var id;
     if (type == 'daily_chart') {
@@ -194,12 +193,12 @@ function loadMonthlyChart() {
         dataType: 'json',
         success: function(res) {
             google.charts.load("current", { packages: ["calendar"] });
-            google.setOnLoadCallback(drawChart(res));
+            google.setOnLoadCallback(drawMonthlyChart(res));
         }
     });
 }
 
-function drawChart(data) {
+function drawMonthlyChart(data) {
 
     console.log('data', data['data'][2]);
 

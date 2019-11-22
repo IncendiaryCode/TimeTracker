@@ -126,13 +126,14 @@ var timerStopModal = function() {
 
     var completeBtn = timerModal.find('button#timestopmodal-complete-task');
     completeBtn.unbind().on('click', function() {
-        updateTimer('user/stop_timer');
+        updateTimer('stop_timer');
         window.location.reload();
     });
 
     var stopBtn = timerModal.find('button#timestopmodal-stop-task');
     stopBtn.unbind().on('click', function() {
-        updateTimer('user/stop_timer');
+        updateTimer('stop_timer');
+        window.location.reload();
     });
 
     return timerModal;
@@ -149,27 +150,25 @@ function loadTaskActivities(formData) {
             $("#attach-card").empty();
             var timerModal = timerStopModal();
 
+            console.log(data)
             for (x in data) {
                 for (var y = 0; y < data[x].length; y++) {
                     var cardHeader = $('<div class="card-header" />');
                     var cardHeaderRow = $('<div class="row pt-2" />');
                     cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
                     var stopCol = $('<div class="col-6 text-right" />');
-                    //alert(data[x][y].t_minutes);
-                    if (data[x][y].t_minutes !== '0') /*check whether task is ended or not*/ {
+                    if (data[x][y].t_minutes == null) /*check whether task is ended or not*/ {
                         stopCol.append('<i class="far fa-clock"></i>' + data[x][y].t_minutes);
                         /*change background of current running task entries*/
                     } else {
-                        $('.card-style-1').css("background", "#e7d3fe");
-                        $('.card-header').css("background", "#e7d3fe");
-                        $('.card-footer').css("background", "#e7d3fe");
+                        if (data[x][y].t_minutes == '0') {
                         var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x][y].id);
-
                         stopButton.on('click', function() {
                             localStorage.setItem('tid', $(this).data('taskid'))
                             timerModal.modal('show');
                         });
                         stopCol.append(stopButton);
+                    }
                     }
                     cardHeaderRow.append(stopCol);
                     cardHeader.append(cardHeaderRow);
@@ -195,13 +194,11 @@ function loadTaskActivities(formData) {
 
                     actionPlay.on('click', function(e) {
                         var t_id = this.getElementsByTagName('input').item(0).value;
-                        //alert(t_id);
                         $.ajax({
                             type: 'POST',
                             url: timeTrackerBaseURL + 'index.php/user/start_timer',
                             data: { 'action': 'task', 'id': t_id },
                             success: function(res) {
-                                //alert(res);
                                 window.location.reload();
                             }
                         });
@@ -213,11 +210,14 @@ function loadTaskActivities(formData) {
                     footerRow.append(footerRight);
                     cardFooter.append(footerRow);
                     cardInner.append(cardFooter);
-
                     var cardCol = $("<div class='col-lg-6 mb-4 cardCol' />");
                     cardCol.append(cardInner);
-
                     $("#attach-card").append(cardCol);
+                    if ((data[x][y].t_minutes === "0")) {
+                        cardInner.css("background", "#e7d3fe");
+                        cardHeader.css("background", "#e7d3fe");
+                        cardFooter.css("background", "#e7d3fe");
+                    }
                 }
             }
         }
@@ -334,8 +334,14 @@ $(document).ready(function() {
 
     $("#timer-slider").bxSlider({
         auto: false,
-
+        infiniteLoop: false,
         controls: false,
     });
 
+     
+
+
 });
+
+
+

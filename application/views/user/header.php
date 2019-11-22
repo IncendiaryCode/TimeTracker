@@ -15,7 +15,6 @@ $this->load->helper('url_helper');
     <link rel="stylesheet" type="text/css" href="//unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css"/>    
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css?v=<?=VERSION?>">
-    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/add_task_style.css?v=<?=VERSION?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/plugins/bxslider/css/jquery.bxslider.min.css?v=<?=VERSION?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/animation.css?v=<?=VERSION?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/style.css?v=<?=VERSION?>">
@@ -31,8 +30,9 @@ $this->load->helper('url_helper');
                     <img src="<?=base_url();?>assets/images/logo-white.png" height="40px">
                 </a>
             </div>
-
-            <?php if(empty($GLOBALS['page_title'])) { ?>        <!-- refers to home page -->
+            <?php
+             if(empty($GLOBALS['page_title'])) { 
+                ?>        <!-- refers to home page -->
             <div class="col-5 text-right ">
                 <a href="<?=site_url();?>/user/add_tasks" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
             </div>
