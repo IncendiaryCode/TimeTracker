@@ -202,9 +202,9 @@ header.main-header h1 {
     background-image: linear-gradient(150deg, #7277fe, #ca82fb, #f2c2fd, #fffacc);
 }
 
-#login-time {
+.login-time {
     padding-top: 50px;
-    color: #c8b8fd;
+    color: #fff;
     font-weight: lighter;
 }
 

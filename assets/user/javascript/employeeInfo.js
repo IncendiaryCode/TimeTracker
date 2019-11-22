@@ -126,13 +126,14 @@ var timerStopModal = function() {
 
     var completeBtn = timerModal.find('button#timestopmodal-complete-task');
     completeBtn.unbind().on('click', function() {
-        updateTimer('stop_timer');
+        updateTimer();
         window.location.reload();
     });
 
     var stopBtn = timerModal.find('button#timestopmodal-stop-task');
     stopBtn.unbind().on('click', function() {
-        updateTimer('stop_timer');
+        console.log("btn stop is clicked");
+        updateTimer();
         window.location.reload();
     });
 
@@ -150,7 +151,6 @@ function loadTaskActivities(formData) {
             $("#attach-card").empty();
             var timerModal = timerStopModal();
 
-            console.log(data)
             for (x in data) {
                 for (var y = 0; y < data[x].length; y++) {
                     var cardHeader = $('<div class="card-header" />');
@@ -166,6 +166,7 @@ function loadTaskActivities(formData) {
                         stopButton.on('click', function() {
                             localStorage.setItem('tid', $(this).data('taskid'))
                             timerModal.modal('show');
+/*                            timerStopModal();*/
                         });
                         stopCol.append(stopButton);
                     }
@@ -224,16 +225,17 @@ function loadTaskActivities(formData) {
     });
 }
 
-function updateTimer(timerUrl) {
+function updateTimer() {
+    console.log( localStorage.getItem('tid'));
     $.ajax({
         type: "POST",
-        url: timerUrl,
-        data: { id: localStorage.getItem('tid') },
+        url: timeTrackerBaseURL + 'index.php/user/stop_timer',
+        data: {'action': 'task', 'id': localStorage.getItem('tid') },          /*call to stop the task timer.*/
         dataType: 'json',
         success: function(res) {
             //handle timer
             if (res.status) {
-                window.location.reload();
+                /*window.location.reload();*/
             }
 
         }
@@ -291,6 +293,8 @@ $(document).ready(function() {
     };
     $('#stop-time').click(function() {
         var t_id = $(this).data('id');
+
+        console.log($(this).data('tasktype'));
         if ($(this).data('tasktype') == 'login') {
             var taskUrl = timeTrackerBaseURL + 'index.php/user/start_timer';
             if (t_id) {
@@ -306,6 +310,7 @@ $(document).ready(function() {
                 }
             });
         } else {
+
             localStorage.setItem('tid', t_id);
             var timerModal = timerStopModal();
             timerModal.modal('show');

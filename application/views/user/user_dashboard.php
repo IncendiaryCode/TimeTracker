@@ -46,7 +46,7 @@ var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
                 <?php if($task_info['type']=='login'){ ?>
                 <div>
                     <div class="section-slider" id="login-timer-details">
-                        <p class="font-weight-light time-font text-center" id="login-time">
+                        <p class="font-weight-light time-font text-center login-time" id="login-time">
                             <?=$start_text?>
                         </p>
                         <div class="font-weight-light text-center primary-timer" id="primary-timer" data-type="" data-time="">
@@ -59,21 +59,22 @@ var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
                 </div>
             <?php }
             else if($task_info['type']=='task'){
+                $id=1;
                 foreach($task_info['task_status'] as $taskinfo){ ?>
                     <div>
-                        <div class="section-slider" id="login-timer-details">
-                            <p class="font-weight-light time-font text-center" id="login-time">
+                        <div class="section-slider" id="login-timer-details<?=$id?>">
+                            <p class="font-weight-light time-font text-center login-time" id="login-time<?=$id?>">
                                 <?=$start_text?>
                             </p>
-                            <div class="font-weight-light text-center primary-timer" id="primary-timer" data-type="" data-time="">
+                            <div class="font-weight-light text-center primary-timer" id="primary-timer<?=$id?>" data-type="" data-time="">
                                 00:00:00
                             </div>
-                            <p class="font-weight-light text-center taskName" id="taskName">
+                            <p class="font-weight-light text-center taskName" id="taskName<?=$id?>">
                                 <?php echo $task_type; ?>
                             </p>
                         </div>
                     </div>
-                <?php }
+                <?php $id++; }
             } ?>
             </div>
         </div>
