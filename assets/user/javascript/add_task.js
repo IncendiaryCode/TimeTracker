@@ -33,6 +33,7 @@ if (addTask) {
                 } else {
                     array_of_timings.push({ date, start_time, end_time });
                     // $('#addTask').append(input);
+                   /* return true;*/
                 }
             }
 
@@ -306,19 +307,53 @@ $(document).ready(function() {
             }
         });
     });
-    $('#start-task-time').click(function()
+    $('#save-and-start').click(function()
         {
-        $.ajax({
-            type: "POST",
-            url: timeTrackerBaseURL + 'index.php/user/add_tasks',
-            data: {'action': 'save_and_start'},    /*call to start the task timer.*/
-            dataType: 'json',
-            success: function(res) {
-                if (res.status) {
-                    window.location.reload();
-                }
+            var addTask = document.getElementById('addTask');
+                if (addTask) {
+                    var m = new Date();
+                    var start_date = m.getUTCFullYear() + "-" + m.getUTCMonth() + "-" + m.getUTCDate() + " " + m.getHours() + ":" + m.getMinutes() + ":" + m.getSeconds();
+                    addTask.onsubmit = function(e) {
 
-            }
-        });
-        });
+                        var taskName = document.getElementById('Taskname').value;
+                        var project = document.getElementById('choose-project').value;
+                        if (taskName == "" || taskName == " ") {
+                            document.getElementById('taskError').innerHTML = "Please Enter Task Name ";
+                            return false;
+                        }
+
+                        if (project == "" || project == "Select Project") {
+                            document.getElementById('taskError').innerHTML = "Please Choose Project Name ";
+                            return false;
+                        }
+
+                        if (document.getElementById('editTask').checked) { //check radio button for multiple timings
+                            var date = document.getElementById('date-picker-start').value;
+                            var start_time = document.getElementById('start-time-0').value;
+                            var end_time = document.getElementById('end-time-0').value;
+                            var flag = true;
+
+                            if (date !== "" && date !== " " && start_time !== "" && start_time !== " " && end_time !== "" && end_time !== " ") {
+                            document.getElementById('taskError').innerHTML = "You can not start completed task";
+                            return false;
+                        }
+                        } else {
+                                $.ajax({
+                                    type: "POST",
+                                    url: timeTrackerBaseURL + 'index.php/user/add_tasks',
+                                    data: {'action': 'save_and_start'},    /*call to start the task timer.*/
+                                    dataType: 'json',
+                                    success: function(res) {
+                                        if (res.status) {
+                                            window.location.reload();
+                                        }
+
+                                    }
+                                });
+                                return true;
+                        }
+                    }
+                }
+        
+            });
 });

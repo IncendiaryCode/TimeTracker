@@ -297,20 +297,19 @@ $(document).ready(function() {
     var firstTime = localStorage.getItem("firstTime");
     console.log(firstTime);
     if (firstTime == 'null') {
-        console.log('timer running');
         localStorage.setItem("firstTime", "stop");
         $.ajax({
             type: 'POST',
             url: timeTrackerBaseURL + 'index.php/user/start_timer',
             data: { 'action': 'login' },
             success: function(res) {
-                console.log(res);
+            console.log('timer running');
                 window.location.reload();
             }
         });
     };
     $('#stop-time').click(function() {
-
+        
         var t_id = $(this).data('id');
 
         console.log($(this).data('tasktype'));
