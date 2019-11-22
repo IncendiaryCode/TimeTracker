@@ -26,8 +26,8 @@ $profile = $this->session->userdata('user_profile');
                         </div>
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
-                            <select readonly="" type="number" class="form-control" id="choose-project" name="project_name">
-                                <option selected><?=$task_data['name'];?></option>
+                            <select readonly="" type="number" class="form-control" id="choose-project" name="project_name" >
+                                <option selected value=<?php echo $task_data['project_id']?>><?=$task_data['name'];?></option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -58,10 +58,15 @@ $profile = $this->session->userdata('user_profile');
                 </div>
             </div>
         </div>
-        
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+            $(function() {
+               $('#end_date').datetimepicker();
+             });
+        </script>
         <footer class="footer">
             <hr>
             <p class="text-center ">Copyright © 2019 Printgreener.com</p>
         </footer>
+
     </div>
 </main>

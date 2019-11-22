@@ -77,6 +77,7 @@
 <script src="<?=base_url();?>assets/user/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/change_password.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/plugins/bxslider/js/jquery.bxslider.min.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/employee_profile.js?v=<?=VERSION?>"></script>
 <script type="text/javascript">
     function logout()

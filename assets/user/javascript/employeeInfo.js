@@ -148,6 +148,7 @@ function loadTaskActivities(formData) {
         data: formData,
         success: function(values) {
             var data = JSON.parse(values);
+            console.log(data);
             $("#attach-card").empty();
             var timerModal = timerStopModal();
 
@@ -244,21 +245,6 @@ function updateTimer() {
     });
 }
 
-function load_task_details(taskData) {
-    var id = 1;
-    var data = JSON.parse(taskData);
-    var task_data = data['data'];
-    console.log(task_data);
-    for (var i = 0; i < task_data.length; i++) {
-        var content_value = $('<div><div class="section-slider" id="login-timer-details-' + id + '">' +
-            '<p class="font-weight-light time-font text-center" id="login-time-' + id + '"> Started at' + task_data[i]["start_time"] + '</p>' +
-            '<div class="font-weight-light text-center primary-timer" id="primary-timer-' + id + '" data-type="" data-time="">' + "00:00:00" + '</div>' +
-            '<p class="font-weight-light text-center taskName" id="taskName-' + id + '">' + task_data[i]["task_name"] + '</p></div></div>');
-        //$('#timer-slider').prepend(content_value);
-        id++;
-    }
-}
-
 
 
 function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it in 12 hour format
@@ -277,7 +263,7 @@ function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it
 
     return formatted_time;
 }
-
+ 
 function convertTimestamptoTime() { 
             unixTimestamp = 10637282; 
   
@@ -304,12 +290,12 @@ $(document).ready(function() {
             data: { 'action': 'login' },
             success: function(res) {
             console.log('timer running');
-                window.location.reload();
+                //window.location.reload();
             }
         });
     };
     $('#stop-time').click(function() {
-        
+
         var t_id = $(this).data('id');
 
         console.log($(this).data('tasktype'));

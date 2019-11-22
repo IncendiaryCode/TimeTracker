@@ -54,16 +54,18 @@ var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
             <?php 
             if(!empty($task_info['task_status'])){
                 $id=1;
-                foreach($task_info['task_status'] as $taskinfo){ ?>
+                foreach($task_info['task_status'] as $taskinfo){ 
+                    /*print_r($task_info['task_status']); exit();*/
+                    ?>
                     <div>
                         <div class="section-slider" id="login-timer-details<?=$id?>">
-                            <p class="font-weight-light time-font text-center login-time" id="login-time<?=$id?>">
+                            <p class="font-weight-light time-font text-center login-time" id="start-time<?=$id?>">
                                 <?php echo $taskinfo['start_time'];?>
                             </p>
-                            <div class="font-weight-light text-center primary-timer" id="primary-timer<?=$id?>" data-type="" data-time="">
+                            <div class="font-weight-light text-center primary-timer" id="task-timer<?=$id?>" data-type="" data-time="">
                                 00:00:00
                             </div>
-                            <p class="font-weight-light text-center taskName" id="taskName<?=$id?>">
+                            <p class="font-weight-light text-center taskName" id="task-name<?=$id?>">
                                 <?php echo $taskinfo['task_name']; ?>
                             </p>
                         </div>
