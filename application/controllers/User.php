@@ -24,7 +24,7 @@
 		{
 			//loading user dashboard
 			$this->load->view('user/header');
-			$task_details = $this->user_model->task_status();
+			$task_details['task_info'] = $this->user_model->task_status();
 			$this->load->view('user/user_dashboard',$task_details);
 			$this->load->view('user/footer');
 		}
@@ -89,9 +89,17 @@
 			$data['result'] = $this->user_model->get_module_name($projectid);
 			echo json_encode($data);
 		}
+
+		public function task_exists(){
+			if($this->user_model->task_exists() == TRUE){
+				return true;
+			}else{
+				return false;
+			}
+		}
 		//Add tasks
 		public function add_tasks(){
-		        $this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|xss_clean');
+		        $this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|callback_task_exists|xss_clean');
 		        $this->form_validation->set_rules('task_desc','Task Description','trim|required');
 		        $this->form_validation->set_rules('project_name','Project name','required');
 		        $this->form_validation->set_rules('project_module','Module name','required');
@@ -191,12 +199,8 @@
 		}
 		//Display My Profile Page
 		public function load_my_profile(){
-			
-				
-		
-			$data['user_details'] = $this->user_model->my_profile();
+			$data = $this->user_model->my_profile();
 			echo json_encode($data);
-		
 		}
 		public function password_exists(){
 	        if ($this->user_model->password_exists() == TRUE)
