@@ -18,19 +18,13 @@ class User_model extends CI_Model {
         $this->db->where(array('d.user_id'=>$userid,'d.total_minutes'=>'0'));
         //$this->db->where('d.end_time IS NULL');
         $query = $this->db->get();
-        $task_status = $query->result_array();
-        if($query->num_rows()>0){
-            $type = 'task';
-            return array('task_status'=>$task_status,'type'=>$type);
-        }else{
-            $this->db->select('*');
-            $this->db->from('login_details');
-            $this->db->where(array('user_id'=>$userid));
-            $this->db->where('end_time IS NULL');
-            $query = $this->db->get();
+        if($query->num_rows() > 0){
             $task_status = $query->result_array();
-            $type = 'login';
-            return array('task_status'=>$task_status,'type'=>$type);
+            $login_date = date('Y:m:d H:i:s');
+            return array('task_status'=>$task_status,'login_time'=>$login_date);
+        }else{
+            $login_date = date('Y:m:d H:i:s');
+            return array('task_status'=>'','login_time'=>$login_date);
         }
     }
     //load tasks
@@ -75,7 +69,7 @@ class User_model extends CI_Model {
         $userid = $this->session->userdata('userid');
         $task_type = $type;
         if($task_type == 'login'){
-            $array1 = array('user_id'=>$userid,'task_date'=>date('Y:m:d'),'start_time'=>date('Y:m:d H:i:s'),'created_on'=>date('Y:m:d H:i:s'),);
+            $array1 = array('user_id'=>$userid,'task_date'=>date('Y:m:d'),'start_time'=>date('Y:m:d H:i:s'),'created_on'=>date('Y:m:d H:i:s'));
             $this->db->set($array1);
             $query1 = $this->db->insert('login_details',$array1);
             if($query1){

@@ -9,15 +9,11 @@ $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Login';
-
-if (!empty($task_info)) {     /*fetching task details*/ 
-    $task_type = ($task_info['type'] == 'login') ? 'Login' : 'Task';
-    if($task_info['type']=='task'){
+if (!empty($task_info['task_status'])) {     /*fetching task details*/ 
     //for ($i=0; $i < sizeof($task_info); $i++) { 
         foreach($task_info['task_status'] as $taskinfo){
         //print_r($taskinfo['task_name']);
     $start_text = 'Started at '.$taskinfo['start_time'];
-   
     
     $task_name = $taskinfo['task_name'];
     $timerClass = 'fa-stop';
@@ -31,7 +27,6 @@ if (!empty($task_info)) {     /*fetching task details*/
     $interval = date_diff($datetime1, $datetime2);
     $timer =  strtotime($taskinfo['task_date'] . $interval->format(' %h:%i:%s'));
 }
- }
 }
 ?>
 <script type="text/javascript">
@@ -46,7 +41,7 @@ var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
-                            <?=$start_text?>
+                            <?=$task_info['login_time'];?>
                         </p>
                         <div class="font-weight-light text-center primary-timer" id="primary-timer" data-type="" data-time="">
                             00:00:00
@@ -57,13 +52,13 @@ var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
                     </div>
                 </div>
             <?php 
-            if($task_info['type']=='task'){
+            if(!empty($task_info['task_status'])){
                 $id=1;
                 foreach($task_info['task_status'] as $taskinfo){ ?>
                     <div>
                         <div class="section-slider" id="login-timer-details<?=$id?>">
                             <p class="font-weight-light time-font text-center login-time" id="login-time<?=$id?>">
-                                <?=$start_text?>
+                                <?php echo $taskinfo['start_time'];?>
                             </p>
                             <div class="font-weight-light text-center primary-timer" id="primary-timer<?=$id?>" data-type="" data-time="">
                                 00:00:00
