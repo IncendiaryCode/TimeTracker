@@ -18,10 +18,12 @@ $profile = $this->session->userdata('user_profile');
 
                     <form action="<?=base_url();?>index.php/user/add_tasks" method="post" id="addTask" class="mt-5 ">
 
-                        <div class="text-center shadow-lg topWidth start-time" id="start-task-time" data-tasktype="Task" data-id="80">
-                            <h3><button type="submit" id="save-and-start"> <i class="fas action-icon fa-play"></i></button></h3>
-                        </div>
-                        <div class="form-group  ">
+                        <button type="submit" id="save-and-start" class="text-center shadow-lg icon-width start-time">
+                            <div  data-tasktype="Task" data-id="80">
+                            <h3> <i class=" fas action-icon fa-play"></i></h3>
+                                </div>
+                            </button>
+                        <div class="form-group">
                             <label for="task-name ">Write the task name</label>
                             <input type="text" class="form-control" name="task_name" id="Taskname">
                         </div>
