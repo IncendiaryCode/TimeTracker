@@ -157,8 +157,8 @@ function loadTaskActivities(formData) {
                     var cardHeaderRow = $('<div class="row pt-2" />');
                     cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
                     var stopCol = $('<div class="col-6 text-right" />');
-                    if (data[x][y].t_minutes == null) /*check whether task is ended or not*/ {
-                        stopCol.append('<i class="far fa-clock"></i>' + data[x][y].t_minutes);
+                    if (data[x][y].t_minutes != 0) /*check whether task is ended or not*/ {
+                        stopCol.append('<i class="far fa-clock"></i>Total timeused-' + data[x][y].t_minutes);
                         /*change background of current running task entries*/
                     } else {
                         if (data[x][y].t_minutes == '0') {
@@ -338,7 +338,7 @@ $(document).ready(function() {
         controls: false,
     });
 
-     
+
 
 
 });
