@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-//$this->load->library('session');
+$login_time = $this->session->userdata('login_time');
 $timer = '';
 $timerClass = 'fa-stop';
 
@@ -9,7 +9,7 @@ $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Login';
-if (!empty($task_info['task_status'])) {     /*fetching task details*/ 
+if (!empty($task_info)) {     /*fetching task details*/ 
     //for ($i=0; $i < sizeof($task_info); $i++) { 
         foreach($task_info['task_status'] as $taskinfo){
         //print_r($taskinfo['task_name']);
@@ -41,7 +41,7 @@ var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
-                            <?=$task_info['login_time'];?>
+                            <?=$login_time;?>
                         </p>
                         <div class="font-weight-light text-center primary-timer" id="primary-timer" data-type="" data-time="">
                             00:00:00
@@ -52,11 +52,9 @@ var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
                     </div>
                 </div>
             <?php 
-            if(!empty($task_info['task_status'])){
+            if(!empty($task_info)){
                 $id=1;
-                foreach($task_info['task_status'] as $taskinfo){ 
-                    /*print_r($task_info['task_status']); exit();*/
-                    ?>
+                foreach($task_info['task_status'] as $taskinfo){ ?>
                     <div>
                         <div class="section-slider" id="login-timer-details<?=$id?>">
                             <p class="font-weight-light time-font text-center login-time" id="start-time<?=$id?>">

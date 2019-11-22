@@ -20,11 +20,9 @@ class User_model extends CI_Model {
         $query = $this->db->get();
         if($query->num_rows() > 0){
             $task_status = $query->result_array();
-            $login_date = date('Y:m:d H:i:s');
-            return array('task_status'=>$task_status,'login_time'=>$login_date);
+            return array('task_status'=>$task_status,'type'=>'task');
         }else{
-            $login_date = date('Y:m:d H:i:s');
-            return array('task_status'=>'','login_time'=>$login_date);
+            return array('task_status'=>'','type'=>'login');
         }
     }
     //load tasks
@@ -87,7 +85,7 @@ class User_model extends CI_Model {
             }else{
                 return false;
             }
-       // }else if($task_type == 'save_and_start'){
+        }else if($task_type == 'save_and_start'){
 
        }
     }
@@ -320,48 +318,76 @@ class User_model extends CI_Model {
     }
 	//add task model
     public function add_tasks(){
+
         $userid = $this->session->userdata('userid');
         if(!empty($this->input->post('project_module'))){
             $module_id = $this->input->post('project_module');
         }else{
             $module_id = 1;
         }
-    	$array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('task_desc'),'project_id'=>$this->input->post('project_name'),'module_id'=>$module_id,'created_on'=>date('Y:m:d H:i:s'));
-    	$this->db->set($array);
-	    $query = $this->db->insert('task',$array);
-	    if(!$query){
-	    	return false;
-	    }else{
-            $last_insert_id = $this->db->insert_id();
-            $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'created_on'=>date('Y:m:d H:i:s'));
-            $this->db->set($array);
-            $query = $this->db->insert('task_assignee',$array);
-            if(!$query){
-                return false;
-            }else{
-                //Add timings into time_details table
-                $members = ($this->input->post('daterange'));
-                if(!empty($members)){
-                    for($i=1;$i<count($members);$i++){
-                        $start_time[$i] = strtotime($members[$i]['start']);
-                        $end_itme[$i] = strtotime($members[$i]['end']);
-                        $diff = $end_itme[$i] - $start_time[$i];
-                        $hours = $diff / ( 60 * 60 );
-                        $minutes = $diff/60; 
-                        $total_mins = ($minutes < 0 ? 0 : abs($minutes));
-                        $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'task_date'=>$members[$i]['date'],'start_time'=>$members[$i]['start'],'end_time'=>$members[$i]['end'],'total_hours'=>$hours,'total_minutes'=>$total_mins);
-                        $this->db->set($array);
-                        $query = $this->db->insert('time_details',$array);
-                        if($query){  
-                            return $last_insert_id;
-                        }else{
-                            return false;
+
+        if($this->input->get('type') == 'edit'){
+            
+            $array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('task_desc'),'modified_on'=>date('Y:m:d H:i:s'));
+            $this->db->where(array('project_id'=>$this->input->post('project_name')));
+            $query = $this->db->update('task',$array);
+            if($this->db->affected_rows() > 0){
+                $start_time = strtotime($this->input->post('start_date'));
+                $end_time = strtotime($this->input->post('end_date'));
+                $diff = $end_time - $start_time;
+                $hours = $diff / ( 60 * 60 );
+                $minutes = $diff/60; 
+                $total_mins = ($minutes < 0 ? 0 : abs($minutes));
+                $array = array('end_time'=>$this->input->post('end_date'),'total_hours'=>$hours,'total_minutes'=>$total_mins);
+                $this->db->where(array('user_id'=>$userid,'start_time'=>$this->input->post('start_date')));
+                $query = $this->db->update('time_details',$array);
+                if($this->db->affected_rows() > 0){
+                    return true;
+                }else{
+                    print_r($this->input->post('start_date'));exit;
+                    return false;
+                }
+            }
+        }
+        else{
+        //print_r($this->input->post('project_name'));
+        	$array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('task_desc'),'project_id'=>$this->input->post('project_name'),'module_id'=>$module_id,'created_on'=>date('Y:m:d H:i:s'));
+        	$this->db->set($array);
+    	    $query = $this->db->insert('task',$array);
+    	    if(!$query){
+    	    	return false;
+    	    }else{
+                $last_insert_id = $this->db->insert_id();
+                $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'created_on'=>date('Y:m:d H:i:s'));
+                $this->db->set($array);
+                $query = $this->db->insert('task_assignee',$array);
+                if(!$query){
+                    return false;
+                }else{
+                    //Add timings into time_details table
+                    $members = ($this->input->post('daterange'));
+                    if(!empty($members)){
+                        for($i=1;$i<count($members);$i++){
+                            $start_time[$i] = strtotime($members[$i]['start']);
+                            $end_itme[$i] = strtotime($members[$i]['end']);
+                            $diff = $end_itme[$i] - $start_time[$i];
+                            $hours = $diff / ( 60 * 60 );
+                            $minutes = $diff/60; 
+                            $total_mins = ($minutes < 0 ? 0 : abs($minutes));
+                            $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'task_date'=>$members[$i]['date'],'start_time'=>$members[$i]['start'],'end_time'=>$members[$i]['end'],'total_hours'=>$hours,'total_minutes'=>$total_mins);
+                            $this->db->set($array);
+                            $query = $this->db->insert('time_details',$array);
+                            if($query){  
+                                return $last_insert_id;
+                            }else{
+                                return false;
+                            }
                         }
                     }
+                    return $last_insert_id;
                 }
-                return $last_insert_id;
-            }
-	    }
+    	    }
+        }
 	}
     //Check for the Old Password
     public function password_exists(){

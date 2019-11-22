@@ -35,6 +35,7 @@
 					$data['total_tasks'] = $this->dashboard_model->get_tasks();
 					$data['total_projects'] = $this->dashboard_model->get_projects();
 					$this->session->set_userdata('logged_in',TRUE);
+					$this->session->set_userdata('login_time',date('Y:m:d H:i:s'));
 					$this->load->view('dashboard',$data);
 					$this->load->view('footer');
 				}else if($result == 'user'){

@@ -184,7 +184,7 @@ class Dashboard_model extends CI_Model {
             $query2 = $this->db->get_where('users', array('email' => $username));
             if($query2->num_rows() == 1){
                 $row2 = $query2->row();
-                $data = array('userid' => $row2->id,'email' => $row->email,'logged_in' => TRUE,'user_profile' => $row2->profile,'username' => $row2->name);
+                $data = array('userid' => $row2->id,'email' => $row->email,'logged_in' => TRUE,'user_profile' => $row2->profile,'username' => $row2->name,'login_time' => date('Y:m:d H:i:s'));
                 $this->session->set_userdata($data);
     			return $row->type;
             }

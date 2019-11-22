@@ -14,7 +14,7 @@ $profile = $this->session->userdata('user_profile');
                             <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
                     <?php } ?>
                     <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
-                    <form action="<?=base_url();?>index.php/user/edit_task" method="post" id="addTask" class="mt-5 ">
+                    <form action="<?=base_url();?>index.php/user/edit_task?type=edit" method="post" id="addTask" class="mt-5 ">
                         <input type="hidden" name="task_id" value="<?=$task_data['task_id'];?>">
                         <div class="form-group  ">
                             <label for="task-name ">Write the task name</label>
@@ -33,7 +33,7 @@ $profile = $this->session->userdata('user_profile');
                         <div class="form-group">
                             <label for="start_date">Started on</label>
                             <div class="input-group">
-                                <?php $start = $task_data['task_date']." ".$task_data['start_time']; ?>
+                                <?php $start = $task_data['start_time']; ?>
                                 <input readonly="" type="text" class="form-control" id="started-date" name="start_date" aria-describedby="date-start" value="<?=$start;?>">
                                 <div class="input-group-append">
                                 <span class="input-group-text" id="date-start"><i class="fas fa-calendar"></i></span>
@@ -43,7 +43,7 @@ $profile = $this->session->userdata('user_profile');
                         <div class="form-group">
                             <label for="end-date">Ended on</label>
                             <div class="input-group">
-                                <?php $end = (($task_data['end_time'] == '0000-00-00 00:00:00') || ($task_data['end_time'] == null)) ? '' : $task_data['task_date']." ".$task_data['end_time']; ?>
+                                <?php $end = (($task_data['end_time'] == '0000-00-00 00:00:00') || ($task_data['end_time'] == null)) ? '' : $task_data['end_time']; ?>
                                 <input type="text" class="form-control datetimepicker" id="end-date" name="end_date" aria-describedby="date-end" value="<?=$end;?>">
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="date-end"><i class="fas fa-calendar"></i></span>
