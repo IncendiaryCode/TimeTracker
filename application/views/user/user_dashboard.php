@@ -28,12 +28,13 @@ if (!empty($task_info)) {     /*fetching task details*/
 
     $interval = date_diff($datetime1, $datetime2);
     $timer =  strtotime($taskinfo['task_date'] . $interval->format(' %h:%i:%s'));
+
 }
 }
 ?>
 <script type="text/javascript">
 //this will be send to JS for timer to start
-var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
+var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the task.*/
 </script>
 <!-- new scoll for task -->
 <div class="container timer-slider">
@@ -58,9 +59,11 @@ var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
                 $id=1;
                 foreach($task_info['task_status'] as $taskinfo){ ?>
                     <div>
-                        <div class="section-slider" id="login-timer-details<?=$id?>">
+                        <div class="section-slider task-slider" id="login-timer-details<?=$id?>">
+                            <input type="hidden" id="$taskinfo['task_id']" value="<?php echo $taskinfo['start_time']?>">
                             <p class="font-weight-light time-font text-center login-time" id="start-time<?=$id?>">
                                 <?php echo $taskinfo['start_time'];?>
+                                
                             </p>
                             <div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer<?=$taskinfo['task_id']?>" data-type="" data-time="">
                                 00:00:00

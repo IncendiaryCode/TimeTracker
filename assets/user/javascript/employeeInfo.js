@@ -45,7 +45,6 @@ function setTime(startTime) {
     var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
     $('#primary-timer').html(formattedTime);
-    //$('.start-task-timer').html(new_formattedTime);
 }
 
 function secondsToTime(d) {
@@ -60,7 +59,6 @@ function secondsToTime(d) {
     var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
     return hDisplay + mDisplay + sDisplay;
 }
-
 function convertTimeToSeconds(time) {
     var totalHrs = parseInt(time.slice(0, 2));
     var totalMins = parseInt(time.slice(3, 5));
@@ -69,8 +67,6 @@ function convertTimeToSeconds(time) {
     return totalSeconds;
 
 }
-
-
 function getTime() {
     var timeLogout = new Date();
     var logoutTime = timeLogout.getFullYear() + '-' + (timeLogout.getMonth() + 1) + '-' + timeLogout.getDate();
@@ -85,11 +81,9 @@ function getTime() {
     var time = currentHr + ":" + currentMin + ":" + currentSec;
     return time;
 }
-
 function addZeroBefore(n) {
     return (n < 10 ? '0' : '') + n;
 }
-
 var changeImage = document.getElementById('uploadImage');
 changeImage.onsubmit = function(e) {
     var image = document.getElementById('image').value;
@@ -139,7 +133,6 @@ function loadTaskActivities(formData) {
         data: formData,
         success: function(values) {
             var data = JSON.parse(values);
-            console.log(data);
             $("#attach-card").empty();
             var timerModal = timerStopModal();
 
@@ -159,8 +152,8 @@ function loadTaskActivities(formData) {
                         stopButton.on('click', function() {
                             localStorage.setItem('tid', $(this).data('taskid'))
                             timerModal.modal('show');
-                            localStorage.setItem('t_id', data[x][y].id);
-                                start_task_timer("stop");
+                            /*localStorage.setItem('t_id', data[x][y].id);
+                                start_task_timer("stop");*/
 
 
                         });
@@ -185,6 +178,7 @@ function loadTaskActivities(formData) {
                     var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit position_edit_icon animated fadeIn" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
                     actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_edit_task?t_id=' + data[x][y].id);
 
+
                     footerRight.append(actionEdit);
                     var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon animated fadeIn fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
 
@@ -204,8 +198,8 @@ function loadTaskActivities(formData) {
                             url: timeTrackerBaseURL + 'index.php/user/start_timer',
                             data: { 'action': 'task', 'id': t_id },
                             success: function(res) {
-                                localStorage.setItem('t_id', t_id);
-                                start_task_timer(0);
+                                /*localStorage.setItem('t_id', t_id);
+                                start_task_timer(0);*/
                             }
                         });
                     });
@@ -226,46 +220,6 @@ function loadTaskActivities(formData) {
         }
     });
 }
-var tast_timer;
-
-function start_task_timer(startTime) {
-    console.log("here");
-    var task_id = localStorage.getItem('t_id');
-    if (startTime === 'stop') {
-        //clear the existing interval
-        clearInterval(tast_timer);
-    } else {
-        //set in local storage
-        localStorage.setItem('task_timer'+task_id, startTime);
-        tast_timer = setInterval(function() {
-            startTime++;
-            set_task_time(startTime);
-        }, 1000);
-    }
-}
-
-function set_task_time(startTime) {
-
-    //update local storage
-    var task_id = localStorage.getItem('t_id')
-    localStorage.setItem('task_timer'.task_id, startTime);
-
-
-    var date = new Date(startTime * 1000);
-    // Hours part from the timestamp
-    var hours = "0" + date.getHours();
-    // Minutes part from the timestamp
-    var minutes = "0" + date.getMinutes();
-    // Seconds part from the timestamp
-    var seconds = "0" + date.getSeconds();
-
-    var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-
-    
-    $('#task-timer'+task_id).html(formattedTime);
-}
-
-
 function updateTimer() {
     console.log( localStorage.getItem('tid'));
     $.ajax({
@@ -304,26 +258,25 @@ function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it
  
 
 
-$(document).ready(function() {
-    var firstTime = localStorage.getItem("firstTime");
-    console.log(firstTime);
-    if (firstTime == 'null') {
-        localStorage.setItem("firstTime", "stop");
+/*window.onload = function() {
         $.ajax({
             type: 'POST',
             url: timeTrackerBaseURL + 'index.php/user/start_timer',
             data: { 'action': 'login' },
             success: function(res) {
-            console.log('timer running');
+                console.log(res);
                 //window.location.reload();
             }
         });
-    };
+};*/
+
+$(document).ready(function() {
+    
+    
+
     $('#stop-time').click(function() {
 
         var t_id = $(this).data('id');
-
-        console.log($(this).data('tasktype'));
         if ($(this).data('tasktype') == 'login') {
             var taskUrl = timeTrackerBaseURL + 'index.php/user/start_timer';
             if (t_id) {
@@ -345,11 +298,24 @@ $(document).ready(function() {
             timerModal.modal('show');
         }
     });
-
-    if ((typeof __timeTrackerStartTime != 'undefined') && (__timeTrackerStartTime !== 0)) {
+    var curr_timeStamp = Math.floor(Date.now() / 1000);
+    login_timer =  parseInt(curr_timeStamp)-parseInt(__timeTrackerLoginTime);
+    if ((typeof login_timer != 'undefined') && (login_timer !== 0)) {
         //TODO: check for integer only 
-        if (__timeTrackerStartTime == parseInt(__timeTrackerStartTime)) {
-            startTimer(__timeTrackerStartTime);
+        if (login_timer == parseInt(login_timer)) {
+            startTimer(login_timer);
+        }
+    }
+    var x = document.getElementsByClassName("task-slider");
+    for(var i=0;i<x.length; i++)
+    {
+        var element = x[i].childNodes[1].value;
+        console.log(element)
+    }
+    if ((typeof __timeTrackerTaskTime != 'undefined') && (__timeTrackerTaskTime !== 0)) {
+        //TODO: check for integer only 
+        if (__timeTrackerTaskTime == parseInt(__timeTrackerTaskTime)) {
+            startTimer(__timeTrackerTaskTime);
         }
     }
 
@@ -372,9 +338,4 @@ $(document).ready(function() {
         controls: false,
     });
 
-
-
 });
-
-
-

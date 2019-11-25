@@ -30,7 +30,7 @@ $profile = $this->session->userdata('user_profile');
                                 <option selected value=<?php echo $task_data['project_id']?>><?=$task_data['name'];?></option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="start_date">Started on</label>
                             <div class="input-group">
                                 <?php $start = $task_data['start_time']; ?>
@@ -49,7 +49,26 @@ $profile = $this->session->userdata('user_profile');
                                     <span class="input-group-text" id="date-end"><i class="fas fa-calendar"></i></span>
                                 </div>
                             </div>
-                        </div>                        
+                        </div>    -->     
+                        <h4 class="mt-4 text-center">Task activities</h4>
+                        <table class="table table-sm">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Date</th>
+                              <th scope="col">Start time</th>
+                              <th scope="col">End time</th>
+                            </tr>
+                          </thead>
+                          <tbody id="task_history">
+                            <tr>
+                              <th scope="row">1</th>
+                              <td>Mark</td>
+                              <td>Otto</td>
+                              <td>@mdo</td>
+                            </tr>
+                          </tbody>
+                        </table>                
                         <p id="taskError" class=" text-danger"></p>
                         <p>&nbsp;</p> 
                         <hr/>
@@ -58,10 +77,6 @@ $profile = $this->session->userdata('user_profile');
                 </div>
             </div>
         </div>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
-            $(function() {
-               $('#end_date').datetimepicker();
-             });
         </script>
         <footer class="footer">
             <hr>
