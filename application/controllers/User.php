@@ -40,14 +40,11 @@
 		//Start timer controller
 		public function start_timer(){
 			$type = $this->input->post('action',TRUE);
-			if(($this->input->post('id'))){
-				$id = $this->input->post('id',TRUE);
-				$result = $this->user_model->start_timer($type);
-				if(!$result){
-					echo "Something went wrong.";
-				}else{
-					redirect('user/index','refresh');
-				}
+			$result = $this->user_model->start_timer($type);
+			if(!$result){
+				echo "Something went wrong.";
+			}else{
+				redirect('user/index','refresh');
 			}
 		}
 		//Stop Timer
@@ -104,7 +101,8 @@
 		            if(!$result){
 		                echo "Something went wrong.";
 		            }else{
-		            	$data = $this->user_model->start_timer($this->input->post('action'));
+		            	//print_r($result);exit;
+		            	$data = $this->user_model->start_timer($result);
 		            	print_r($data);exit;
 		            	redirect('user/index','refresh');
 		            }

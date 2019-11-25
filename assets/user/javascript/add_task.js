@@ -316,7 +316,9 @@ $(document).ready(function() {
                     addTask.onsubmit = function(e) {
 
                         var taskName = document.getElementById('Taskname').value;
+                        var description = document.getElementById('description').value
                         var project = document.getElementById('choose-project').value;
+                        var project_module = document.getElementById('choose-module').value;
                         if (taskName == "" || taskName == " ") {
                             document.getElementById('taskError').innerHTML = "Please Enter Task Name ";
                             return false;
@@ -338,19 +340,26 @@ $(document).ready(function() {
                             return false;
                         }
                         } else {
+
                                 $.ajax({
                                     type: "POST",
                                     url: timeTrackerBaseURL + 'index.php/user/add_tasks',
-                                    data: {'action': 'save_and_start'},    /*call to start the task timer.*/
+                                    data: {'action': 'save_and_start',
+                                            'task_name':taskName,
+                                            'description':description,
+                                            'project':project,
+                                            'project_module':project_module,
+                                          },    /*call to start the task timer.*/
                                     dataType: 'json',
                                     success: function(res) {
-                                        if (res.status) {
-                                            window.location.reload();
-                                        }
+                                      //  if (res.status) {
+                                            console.log(res);
+                                            //window.location.reload();
+                                       // }
 
                                     }
                                 });
-                                return true;
+                                return false;
                         }
                     }
                 }
