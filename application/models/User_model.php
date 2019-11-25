@@ -14,7 +14,6 @@ class User_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('time_details AS d');
         $this->db->join('task AS t', 't.id = d.task_id');
-        $this->db->join('task_assignee AS a','a.task_id = t.id');
         $this->db->join('project AS p', 'p.id = t.project_id');
         $this->db->where(array('d.user_id'=>$userid,'d.total_minutes'=>'0'));
         //$this->db->where('d.end_time IS NULL');
@@ -32,7 +31,7 @@ class User_model extends CI_Model {
         $this->db->select('p.name,d.start_time,p.image_name,t.task_name,t.id');
         //$this->db->select_sum('d.total_hours','t_hours');
         $this->db->select_sum('d.total_minutes','t_minutes');
-        $this->db->select("IF(d.end_time,1,0) AS running_task",FALSE);
+        $this->db->select("IF(d.total_minutes,1,0) AS running_task",FALSE);
         $this->db->from('task AS t');
         $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
         $this->db->join('task_assignee AS a','a.task_id = t.id');

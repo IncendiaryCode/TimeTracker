@@ -11,7 +11,7 @@ $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Login';
-if (!empty($task_info)) {     /*fetching task details*/ 
+if (!empty($task_info['task_status'])) {     /*fetching task details*/ 
     //for ($i=0; $i < sizeof($task_info); $i++) { 
         foreach($task_info['task_status'] as $taskinfo){
         //print_r($taskinfo['task_name']);
@@ -25,11 +25,12 @@ if (!empty($task_info)) {     /*fetching task details*/
    // $timer =($task_info[0]['task_date'].$task_info[0]['start_time']);
     $datetime1 = new DateTime();
     $datetime2 = new DateTime($timer);
-
+    $timer_start = $datetime2->getTimestamp();
     $interval = date_diff($datetime1, $datetime2);
     $timer =  strtotime($taskinfo['task_date'] . $interval->format(' %h:%i:%s'));
 
 }
+
 }
 ?>
 <script type="text/javascript">
@@ -44,7 +45,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
-                            <?=$logintime;?>
+                            <?=$login_time;?>
                         </p>
                         <div class="font-weight-light text-center primary-timer" id="primary-timer" data-type="" data-time="">
                             00:00:00
@@ -55,12 +56,12 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                     </div>
                 </div>
             <?php 
-            if(!empty($task_info)){
+            if(!empty($task_info['task_status'])){
                 $id=1;
                 foreach($task_info['task_status'] as $taskinfo){ ?>
                     <div>
                         <div class="section-slider task-slider" id="login-timer-details<?=$id?>">
-                            <input type="hidden" id="$taskinfo['task_id']" value="<?php echo $taskinfo['start_time']?>">
+                            <input type="hidden" id="$taskinfo['task_id']" value="<?php echo $timer_start?>">
                             <p class="font-weight-light time-font text-center login-time" id="start-time<?=$id?>">
                                 <?php echo $taskinfo['start_time'];?>
                                 
