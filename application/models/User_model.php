@@ -14,6 +14,7 @@ class User_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('time_details AS d');
         $this->db->join('task AS t', 't.id = d.task_id');
+        $this->db->join('task_assignee AS a','a.task_id = t.id');
         $this->db->join('project AS p', 'p.id = t.project_id');
         $this->db->where(array('d.user_id'=>$userid,'d.total_minutes'=>'0'));
         //$this->db->where('d.end_time IS NULL');
@@ -57,10 +58,12 @@ class User_model extends CI_Model {
         $this->db->from('time_details');
         $this->db->join('task', 'task.id = time_details.task_id');
         $this->db->join('project', 'project.id = task.project_id');
+        $this->db->join('time_details','time_details.task_id = task.id');
         $this->db->where(array('task.id'=>$taskid));
         $this->db->order_by("task.id", "asc");
         $query = $this->db->get();
         $data = $query->row_array();
+        print_r($data);exit;
         return $data;
     }
     //Start Timer...

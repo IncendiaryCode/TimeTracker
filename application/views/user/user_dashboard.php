@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 $login_time = $this->session->userdata('login_time');
+$login = new DateTime($login_time);
+$logintime = $login->getTimestamp();
 $timer = '';
 $timerClass = 'fa-stop';
 
@@ -41,7 +43,7 @@ var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
-                            <?=$login_time;?>
+                            <?=$logintime;?>
                         </p>
                         <div class="font-weight-light text-center primary-timer" id="primary-timer" data-type="" data-time="">
                             00:00:00

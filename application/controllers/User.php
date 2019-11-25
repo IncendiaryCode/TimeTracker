@@ -103,7 +103,6 @@
 		            }else{
 		            	//print_r($result);exit;
 		            	$data = $this->user_model->start_timer($result);
-		            	print_r($data);exit;
 		            	redirect('user/index','refresh');
 		            }
 			}
