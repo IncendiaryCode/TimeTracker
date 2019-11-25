@@ -270,6 +270,41 @@ function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it
         });
 };*/
 
+var mainTimerInterval;
+
+function start_task_timer(startTime, id) {
+    if (startTime === 'stop') {
+        //clear the existing interval
+        clearInterval(mainTimerInterval);
+    } else {
+        //set in local storage
+        localStorage.setItem('timeStamp', startTime);
+        mainTimerInterval = setInterval(function() {
+            startTime++;
+            setTaskTime(startTime, id);
+        }, 1000);
+    }
+}
+
+function setTaskTime(startTime, id) {
+
+    //update local storage
+    localStorage.setItem('timeStamp', startTime);
+
+    var date = new Date(startTime * 1000);
+    // Hours part from the timestamp
+    var hours = "0" + date.getHours();
+    // Minutes part from the timestamp
+    var minutes = "0" + date.getMinutes();
+    // Seconds part from the timestamp
+    var seconds = "0" + date.getSeconds();
+
+    var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+    $('#task-timer'+id).html(formattedTime);
+}
+
+
 $(document).ready(function() {
     
     
@@ -301,7 +336,6 @@ $(document).ready(function() {
     var curr_timeStamp = Math.floor(Date.now() / 1000);
     login_timer =  parseInt(curr_timeStamp)-parseInt(__timeTrackerLoginTime);
     if ((typeof login_timer != 'undefined') && (login_timer !== 0)) {
-        //TODO: check for integer only 
         if (login_timer == parseInt(login_timer)) {
             startTimer(login_timer);
         }
@@ -309,14 +343,12 @@ $(document).ready(function() {
     var x = document.getElementsByClassName("task-slider");
     for(var i=0;i<x.length; i++)
     {
-        var element = x[i].childNodes[1].value;
-        console.log(element)
-    }
+        var __timeTrackerTaskTime = x[i].childNodes[1].value;
     if ((typeof __timeTrackerTaskTime != 'undefined') && (__timeTrackerTaskTime !== 0)) {
-        //TODO: check for integer only 
         if (__timeTrackerTaskTime == parseInt(__timeTrackerTaskTime)) {
-            startTimer(__timeTrackerTaskTime);
+            start_task_timer(__timeTrackerTaskTime, x[i].childNodes[1].id);
         }
+    }
     }
 
     if ($("#attach-card").length > 0) {
@@ -330,7 +362,6 @@ $(document).ready(function() {
             loadTaskActivities({ 'type': $(this).data('type') });
         });
     });
-
 
     $("#timer-slider").bxSlider({
         auto: false,
