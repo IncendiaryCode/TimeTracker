@@ -31,7 +31,7 @@ class User_model extends CI_Model {
         $this->db->select('p.name,d.start_time,p.image_name,t.task_name,t.id');
         //$this->db->select_sum('d.total_hours','t_hours');
         $this->db->select_sum('d.total_minutes','t_minutes');
-        $this->db->select("IF(d.total_minutes,1,0) AS running_task",FALSE);
+        $this->db->select("IF(d.end_time,1,0) AS running_task",FALSE);
         $this->db->from('task AS t');
         $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
         $this->db->join('task_assignee AS a','a.task_id = t.id');
@@ -52,17 +52,16 @@ class User_model extends CI_Model {
     }
     //get task details to edit task
     public function get_task_info($id){
+        $userid = $this->session->userdata('userid');
         $taskid = $id;
         $this->db->select('*');
         $this->db->from('time_details');
         $this->db->join('task', 'task.id = time_details.task_id');
         $this->db->join('project', 'project.id = task.project_id');
-        $this->db->join('time_details','time_details.task_id = task.id');
-        $this->db->where(array('task.id'=>$taskid));
+        $this->db->where(array('task.id'=>$taskid,'user_id'=>$userid));
         $this->db->order_by("task.id", "asc");
         $query = $this->db->get();
-        $data = $query->row_array();
-        print_r($data);exit;
+        $data = $query->result_array();
         return $data;
     }
     //Start Timer...
@@ -114,19 +113,21 @@ class User_model extends CI_Model {
             $this->db->where(array('start_time'=>$data['start_time'],'task_id'=>$data['task_id'],'user_id'=>$userid));
             $query2 = $this->db->update('time_details',array('end_time'=>date('Y:m:d H:i:s')));
             if($this->db->affected_rows() > 0){
-                //print_r();exit;
-                $query = $this->db->query("SELECT start_time,end_time,id,task_id FROM time_details WHERE task_id=".$id);
+                $this->db->where(array('start_time'=>$data['start_time'],'task_id'=>$data['task_id'],'user_id'=>$userid));
+                $result = $this->db->get('time_details')->row()->id;
+                //print_r($result);exit;
+                $query = $this->db->query("SELECT start_time,end_time,id,task_id FROM time_details WHERE id=".$result);
                 if($query->num_rows() > 0){
-                    $data = $query->row_array();
-                    $start_time = strtotime($data['start_time']);
-                    $end_itme = strtotime($data['end_time']);
+                    $data2 = $query->row_array();
+                    $start_time = strtotime($data2['start_time']);
+                    $end_itme = strtotime($data2['end_time']);
                     $diff = $end_itme - $start_time;
                     //$diff=date_diff(date_create($data['end_time']),date_create($data['start_time']));
                     //print_r($diff);exit;
                     $hours = round(abs($diff / ( 60 * 60 )));
                     //$minutes = intval(floor($diff/60));
                     $minutes = round(abs($diff) / 60,2);
-                    $this->db->where(array('user_id'=>$userid,'task_id'=>$task_id));
+                    $this->db->where(array('user_id'=>$userid,'task_id'=>$task_id,'total_minutes'=>'0'));
                     $query = $this->db->update('time_details',array('total_hours'=>$hours,'total_minutes'=>$minutes));
                     if($query){
                         return true;

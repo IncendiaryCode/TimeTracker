@@ -119,7 +119,7 @@ var timerStopModal = function() {
     var stopBtn = timerModal.find('button#timestopmodal-stop-task');
     stopBtn.unbind().on('click', function() {
         updateTimer();
-        window.location.reload();
+       // window.location.reload();
     });
 
     return timerModal;
@@ -230,7 +230,7 @@ function updateTimer() {
         success: function(res) {
             //handle timer
             if (res.status) {
-                window.location.reload();
+               // window.location.reload();
             }
 
         }
@@ -312,7 +312,7 @@ $(document).ready(function() {
     $('#stop-time').click(function() {
 
         var t_id = $(this).data('id');
-        if ($(this).data('tasktype') == 'login') {
+        if ($(this).data('tasktype') == 'task') {
             var taskUrl = timeTrackerBaseURL + 'index.php/user/start_timer';
             if (t_id) {
                 taskUrl = timeTrackerBaseURL + 'index.php/user/stop_timer';
@@ -321,9 +321,9 @@ $(document).ready(function() {
             $.ajax({
                 type: 'POST',
                 url: taskUrl,
-                data: { 'action': 'login', 'id': t_id },
+                data: { 'action': 'task', 'id': t_id },
                 success: function(res) {
-                    window.location.reload();
+                   // window.location.reload();
                 }
             });
         } else {

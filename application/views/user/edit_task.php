@@ -2,6 +2,7 @@
 $GLOBALS['page_title'] = 'Edit Task';
 $this->load->library('session');
 $profile = $this->session->userdata('user_profile');
+print_r($task_data[0]['id']);
 ?>
 <main class="container-fluid container-fluid-main">
     <div class="main-container container">
@@ -15,19 +16,19 @@ $profile = $this->session->userdata('user_profile');
                     <?php } ?>
                     <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
                     <form action="<?=base_url();?>index.php/user/edit_task?type=edit" method="post" id="addTask" class="mt-5 ">
-                        <input type="hidden" name="task_id" value="<?=$task_data['task_id'];?>">
+                        <input type="hidden" name="task_id" value="<?=$task_data[0]['task_id'];?>">
                         <div class="form-group  ">
                             <label for="task-name ">Write the task name</label>
-                            <input type="text" class="form-control" name="task_name" id="Taskname" value="<?=$task_data['task_name'];?>">
+                            <input type="text" class="form-control" name="task_name" id="Taskname" value="<?=$task_data[0]['task_name'];?>">
                         </div>
                         <div class="form-group">
                             <label for="description">Write a small description</label>
-                            <textarea class="form-control" id="description" name="task_desc" rows="4"><?=$task_data['description'];?></textarea>
+                            <textarea class="form-control" id="description" name="task_desc" rows="4"><?=$task_data[0]['description'];?></textarea>
                         </div>
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
                             <select readonly="" type="number" class="form-control" id="choose-project" name="project_name" >
-                                <option selected value=<?php echo $task_data['project_id']?>><?=$task_data['name'];?></option>
+                                <option selected value=<?php echo $task_data[0]['project_id']?>><?=$task_data[0]['name'];?></option>
                             </select>
                         </div>
                         <!-- <div class="form-group">
@@ -60,14 +61,20 @@ $profile = $this->session->userdata('user_profile');
                               <th scope="col">End time</th>
                             </tr>
                           </thead>
+                          <?php $num = 1;
+                          foreach($task_data as $task){ 
+                            
+                            ?>
                           <tbody id="task_history">
                             <tr>
-                              <th scope="row">1</th>
-                              <td>Mark</td>
-                              <td>Otto</td>
-                              <td>@mdo</td>
+                              <th scope="row"><?=$num;?></th>
+                              <td><?=$task['task_date'];?></td>
+                              <td><?=$task['start_time'];?></td>
+                              <td><?=$task['end_time'];?></td>
                             </tr>
                           </tbody>
+                            <?php $num=$num+1;
+                        } ?>
                         </table>                
                         <p id="taskError" class=" text-danger"></p>
                         <p>&nbsp;</p> 
