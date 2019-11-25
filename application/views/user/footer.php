@@ -82,6 +82,7 @@
 <script type="text/javascript">
     function logout()
     {
+        clearInterval(mainTimerInterval);
         localStorage.clear();
         localStorage.setItem("firstTime", null);
     }

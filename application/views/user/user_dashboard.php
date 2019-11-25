@@ -60,7 +60,7 @@ var __timeTrackerStartTime = "<?=$timer?>"; /*start date and time of the task.*/
                             <p class="font-weight-light time-font text-center login-time" id="start-time<?=$id?>">
                                 <?php echo $taskinfo['start_time'];?>
                             </p>
-                            <div class="font-weight-light text-center primary-timer" id="task-timer<?=$id?>" data-type="" data-time="">
+                            <div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer<?=$taskinfo['task_id']?>" data-type="" data-time="">
                                 00:00:00
                             </div>
                             <p class="font-weight-light text-center taskName" id="task-name<?=$id?>">

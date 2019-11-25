@@ -7,12 +7,15 @@ var totalHours = 0;
 var totalWorkTime = 0;
 var pauseCount = 0;
 var storing;
+
+
 var count = localStorage.getItem('count');
 
 //main timer interval
 var mainTimerInterval;
 
 function startTimer(startTime) {
+    console.log(startTime);
     if (startTime === 'stop') {
         //clear the existing interval
         clearInterval(mainTimerInterval);
@@ -38,24 +41,11 @@ function setTime(startTime) {
     var minutes = "0" + date.getMinutes();
     // Seconds part from the timestamp
     var seconds = "0" + date.getSeconds();
+
     var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
     $('#primary-timer').html(formattedTime);
-}
-
-function storeTime() {
-
-    count = parseInt(localStorage.getItem('count'));
-    var today = new Date();
-    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-
-    var logoutTime = getTime();
-
-    var timeUsed = secondsToTime(totalSeconds);
-    storing.ended = logoutTime;
-    storing.timeUsed = timeUsed;
-    localStorage.setItem('entry' + count, JSON.stringify(storing));
-
-
+    //$('.start-task-timer').html(new_formattedTime);
 }
 
 function secondsToTime(d) {
@@ -63,6 +53,7 @@ function secondsToTime(d) {
     var h = Math.floor(d / 3600);
     var m = Math.floor(d % 3600 / 60);
     var s = Math.floor(d % 3600 % 60);
+
 
     var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
     var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
@@ -124,6 +115,7 @@ var timerStopModal = function() {
         startTimer(localStorage.getItem('timeStamp'));
     });
 
+
     var completeBtn = timerModal.find('button#timestopmodal-complete-task');
     completeBtn.unbind().on('click', function() {
         updateTimer();
@@ -132,7 +124,6 @@ var timerStopModal = function() {
 
     var stopBtn = timerModal.find('button#timestopmodal-stop-task');
     stopBtn.unbind().on('click', function() {
-        console.log("btn stop is clicked");
         updateTimer();
         window.location.reload();
     });
@@ -158,21 +149,22 @@ function loadTaskActivities(formData) {
                     var cardHeaderRow = $('<div class="row pt-2" />');
                     cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
                     var stopCol = $('<div class="col-6 text-right" />');
-                    if (data[x][y].t_minutes != 0) /*check whether task is ended or not*/ {
-                        var total_timeused = convertTimestamptoTime(data[x][y].t_minutes);
+                    if (data[x][y].running_task == 0) /*check whether task is ended or not*/ {
+                        
 
-                        stopCol.append('<i class="far fa-clock"></i>Total timeused=' + total_timeused);
+                        stopCol.append('<i class="far fa-clock"></i>Total timeused=' + data[x][y].t_minutes);
                         /*change background of current running task entries*/
                     } else {
-                        if (data[x][y].t_minutes == '0') {
                         var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x][y].id);
                         stopButton.on('click', function() {
                             localStorage.setItem('tid', $(this).data('taskid'))
                             timerModal.modal('show');
+                            localStorage.setItem('t_id', data[x][y].id);
+                                start_task_timer("stop");
+
 
                         });
                         stopCol.append(stopButton);
-                    }
                     }
                     cardHeaderRow.append(stopCol);
                     cardHeader.append(cardHeaderRow);
@@ -196,6 +188,15 @@ function loadTaskActivities(formData) {
                     footerRight.append(actionEdit);
                     var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon animated fadeIn fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
 
+
+                     if (data[x][y].running_task == 0) {
+                        footerRight.append(actionPlay);
+                    }
+
+                    var timer = localStorage.getItem('task_timer'+data[x][y].id);
+                    if (timer != null) {
+                    start_task_timer(timer);
+                    }
                     actionPlay.on('click', function(e) {
                         var t_id = this.getElementsByTagName('input').item(0).value;
                         $.ajax({
@@ -203,21 +204,19 @@ function loadTaskActivities(formData) {
                             url: timeTrackerBaseURL + 'index.php/user/start_timer',
                             data: { 'action': 'task', 'id': t_id },
                             success: function(res) {
-                                window.location.reload();
+                                localStorage.setItem('t_id', t_id);
+                                start_task_timer(0);
                             }
                         });
                     });
-                    if (data[x][y].t_minutes !== '0') {
-                        footerRight.append(actionPlay);
-                    }
-
+                   
                     footerRow.append(footerRight);
                     cardFooter.append(footerRow);
                     cardInner.append(cardFooter);
                     var cardCol = $("<div class='col-lg-6 mb-4 cardCol' />");
                     cardCol.append(cardInner);
                     $("#attach-card").append(cardCol);
-                    if ((data[x][y].t_minutes === "0")) {
+                    if ((data[x][y].running_task == 1)) {
                         cardInner.css("background", "#e7d3fe");
                         cardHeader.css("background", "#e7d3fe");
                         cardFooter.css("background", "#e7d3fe");
@@ -227,6 +226,45 @@ function loadTaskActivities(formData) {
         }
     });
 }
+var tast_timer;
+
+function start_task_timer(startTime) {
+    console.log("here");
+    var task_id = localStorage.getItem('t_id');
+    if (startTime === 'stop') {
+        //clear the existing interval
+        clearInterval(tast_timer);
+    } else {
+        //set in local storage
+        localStorage.setItem('task_timer'+task_id, startTime);
+        tast_timer = setInterval(function() {
+            startTime++;
+            set_task_time(startTime);
+        }, 1000);
+    }
+}
+
+function set_task_time(startTime) {
+
+    //update local storage
+    var task_id = localStorage.getItem('t_id')
+    localStorage.setItem('task_timer'.task_id, startTime);
+
+
+    var date = new Date(startTime * 1000);
+    // Hours part from the timestamp
+    var hours = "0" + date.getHours();
+    // Minutes part from the timestamp
+    var minutes = "0" + date.getMinutes();
+    // Seconds part from the timestamp
+    var seconds = "0" + date.getSeconds();
+
+    var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+    
+    $('#task-timer'+task_id).html(formattedTime);
+}
+
 
 function updateTimer() {
     console.log( localStorage.getItem('tid'));
@@ -264,19 +302,6 @@ function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it
     return formatted_time;
 }
  
-function convertTimestamptoTime() { 
-            unixTimestamp = 10637282; 
-  
-            // convert to milliseconds and  
-            // then create a new Date object 
-            dateObj = new Date(unixTimestamp * 1000); 
-            utcString = dateObj.toUTCString(); 
-  
-            time = utcString.slice(-11, -4); 
-  
-            return time;
-        }
-
 
 
 $(document).ready(function() {
@@ -346,7 +371,6 @@ $(document).ready(function() {
         infiniteLoop: false,
         controls: false,
     });
-
 
 
 
