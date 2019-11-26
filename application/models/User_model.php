@@ -30,14 +30,13 @@ class User_model extends CI_Model {
         $userid = $this->session->userdata('userid');
         $this->db->select('p.name,d.start_time,p.image_name,t.task_name,t.id');
         //$this->db->select_sum('d.total_hours','t_hours');
+        $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task",FALSE);
         $this->db->select_sum('d.total_minutes','t_minutes');
-        $this->db->select("IF(d.end_time,1,0) AS running_task",FALSE);
         $this->db->from('task AS t');
         $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
-        $this->db->join('task_assignee AS a','a.task_id = t.id');
         $this->db->join('project AS p', 'p.id = t.project_id');
         $this->db->join('project_module AS m','m.id = t.module_id');        
-        $this->db->where(array('a.user_id'=>$userid));
+        $this->db->where(array('d.user_id'=>$userid));
         $this->db->group_by('d.task_id');
         if($sort_type == 'name'){
             $this->db->order_by("t.task_name", "asc");
@@ -139,6 +138,12 @@ class User_model extends CI_Model {
         }else{
             echo "There is no running task with this userid";
         }
+    }
+    //edit end time of the running task
+    public function edit_end_time(){
+        print_r($this->input->post('end'));
+        $array = array('task_id')
+        $this->db->
     }
     //Activity Chart Data
     public function get_activity($chart_type,$date){
@@ -338,12 +343,12 @@ class User_model extends CI_Model {
         }
 
         if($this->input->get('type') == 'edit'){
-            
+            //print_r($this->input->get('type'));exit;
             $array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('task_desc'),'modified_on'=>date('Y:m:d H:i:s'));
-            $this->db->where(array('project_id'=>$this->input->post('project_name')));
+            $this->db->where(array('project_id'=>$this->input->post('project_name'),'id'=>$this->input->post('task_id')));
             $query = $this->db->update('task',$array);
             if($this->db->affected_rows() > 0){
-                $start_time = strtotime($this->input->post('start_date'));
+                /*$start_time = strtotime($this->input->post('start_date'));
                 $end_time = strtotime($this->input->post('end_date'));
                 $diff = $end_time - $start_time;
                 $hours = $diff / ( 60 * 60 );
@@ -355,9 +360,11 @@ class User_model extends CI_Model {
                 if($this->db->affected_rows() > 0){
                     return true;
                 }else{
-                    print_r($this->input->post('start_date'));exit;
                     return false;
-                }
+                }*/
+                return true;
+            }else{
+                return false;
             }
         }
         else{
@@ -396,21 +403,22 @@ class User_model extends CI_Model {
                         //Add timings into time_details table
                         $members = ($this->input->post('daterange'));
                         if(!empty($members)){
-                            for($i=1;$i<count($members);$i++){
-                                $start_time[$i] = strtotime($members[$i]['start']);
-                                $end_itme[$i] = strtotime($members[$i]['end']);
-                                $diff = $end_itme[$i] - $start_time[$i];
+                            foreach($members as $values)
+                            {
+                                $start_time = strtotime($values['start']);
+                                $end_itme = strtotime($values['end']);
+                                $diff = $end_itme - $start_time;
                                 $hours = $diff / ( 60 * 60 );
                                 $minutes = $diff/60; 
                                 $total_mins = ($minutes < 0 ? 0 : abs($minutes));
-                                $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'task_date'=>$members[$i]['date'],'start_time'=>$members[$i]['start'],'end_time'=>$members[$i]['end'],'total_hours'=>$hours,'total_minutes'=>$total_mins);
+                                $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'task_date'=>$values['date'],'start_time'=>$values['start'],'end_time'=>$values['end'],'total_hours'=>$hours,'total_minutes'=>$total_mins,'created_on'=>date('Y:m:d H:i:s'));
                                 $this->db->set($array);
                                 $query = $this->db->insert('time_details',$array);
-                                if($query){  
+                                /*if($query){  
                                     return $last_insert_id;
                                 }else{
                                     return false;
-                                }
+                                }*/
                             }
                         }
                         return $last_insert_id;

@@ -150,9 +150,9 @@
 		}
 		public function edit_task(){
 				
-				$this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|xss_clean');
+				$this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|callback_task_exists|xss_clean');
 				$this->form_validation->set_rules('task_desc','Task Description','trim|required');
-				$this->form_validation->set_rules('end_date','Task End Date','required');
+				//$this->form_validation->set_rules('end_date','Task End Date','required');
 				if ($this->form_validation->run() == FALSE)
 				{
 					$this->load->view('user/header');
@@ -168,11 +168,20 @@
 				       	$this->load->view('user/header');
 				       	$t_id = $this->input->post('task_id',TRUE);
 				        $data['task_data'] = $this->user_model->get_task_info($t_id);
-				        $data['success'] = "Successfully added.";
+				        $data['success'] = "Edit successful.";
 						$this->load->view('user/edit_task',$data);
 						$this->load->view('user/footer');
 				    }
 				}
+		}
+		//edit end time of the running task
+		public function task_end_time(){
+			$result = $this->user_model->edit_end_time();
+			if($result){
+
+			}else{
+				return false;
+			}
 		}
 		//Upload profile
 		public function upload_profile(){
@@ -207,8 +216,7 @@
 		//Display My Profile Page
 		public function load_my_profile(){
 			
-			$data = $this->user_model->my_profile();
-			echo json_encode($data);
+			$data['res'] = $this->user_model->my_profile();
 			$this->load->view('user/header');
 			$this->load->view('user/profile',$data);
 			$this->load->view('user/footer');

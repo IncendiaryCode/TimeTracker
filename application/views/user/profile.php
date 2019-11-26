@@ -4,7 +4,6 @@ $GLOBALS['page_title'] = 'My profile';
 $this->load->helper('url_helper');
 $this->load->library('session');
 $profile = $this->session->userdata('user_profile');
-$name = $this->session->userdata('username');
 ?>
 <main class="container-fluid container-fluid-main">
     <div class="main-container container">
@@ -14,17 +13,30 @@ $name = $this->session->userdata('username');
                     <div class="text-center mt-4">
                         <img src="<?=base_url();?>assets/user/images/user_profiles/<?=$profile;?>" width="30%;" class="rounded-circle figure mt-4 text-center">
                         <h4 class="text-center employee-name mt-3">
-                            <?php echo $name;?>
+                            <?php echo $res['name'];?>
                         </h4>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="offset-4 col-4 pl-5">
-                    <table class="table mt-5" >
-                        <thead>fjhdsgdfds</thead>
+                    <table class="table mt-5">
                         <tbody id="table-body">
-                            <tr><td>date</td></tr>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td><?php echo $res['email'];?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Phone number</th>
+                                        <td><?=$res['phone'];?></td>
+                                    </tr>
+                                    <tr><th scope="row">Type</th>
+                                        <td><?=$res['type'];?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </tbody>
                     </table>
                 </div>
