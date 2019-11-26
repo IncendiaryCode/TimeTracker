@@ -39,6 +39,43 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="end-time-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <form action="index.php/user/task_end_time" id="update-endtime">
+      <div class="modal-header">
+        <h5 class="modal-title" id="">Stop now!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <div class="input-group date" data-provide="datepicker">
+                <p>Task name: <strong><?php echo $task_info['task_status'][0]['task_name'] ?></strong></p>
+            </div>
+            <div class="input-group date" data-provide="datepicker">
+                <p>Started at: <strong><?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
+            </div>
+            <div>
+                <label for="old-datepicker">Enter end time: </label>
+                <input type="text" class="form-control" id="old-datepicker">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+                <input type="hidden" value="<?php echo $task_info['task_status'][0]['task_id'] ?>">
+            </div>
+            <p class="text-center text-danger" id="old-date-error"></p>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" id="save-changes">Save changes</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="timestopmodal" tabindex="-1" role="dialog" aria-labelledby="timestopmodalLabel" aria-hidden="true">  <!-- Modal Timer to Stop or Confirm -->
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -79,13 +116,6 @@
 <script src="<?=base_url();?>assets/plugins/bxslider/js/jquery.bxslider.min.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/employee_profile.js?v=<?=VERSION?>"></script>
-<script type="text/javascript">
-    function logout()
-    {
-        clearInterval(mainTimerInterval);
-        localStorage.clear();
-        localStorage.setItem("firstTime", null);
-    }
-</script>
+<script src="<?=base_url();?>assets/user/javascript/bootstrap-datetimepicker.js?v=<?=VERSION?>"></script>
 </body>
 </html>

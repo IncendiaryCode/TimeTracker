@@ -15,7 +15,6 @@ var count = localStorage.getItem('count');
 var mainTimerInterval;
 
 function startTimer(startTime) {
-    console.log(startTime);
     if (startTime === 'stop') {
         //clear the existing interval
         clearInterval(mainTimerInterval);
@@ -85,6 +84,7 @@ function addZeroBefore(n) {
     return (n < 10 ? '0' : '') + n;
 }
 var changeImage = document.getElementById('uploadImage');
+if (changeImage) {
 changeImage.onsubmit = function(e) {
     var image = document.getElementById('image').value;
     if (image == "" || image == " ") {
@@ -92,6 +92,7 @@ changeImage.onsubmit = function(e) {
         return false;
     } else
         return true;
+}
 }
 
 var timerStopModal = function() {
@@ -119,11 +120,12 @@ var timerStopModal = function() {
     var stopBtn = timerModal.find('button#timestopmodal-stop-task');
     stopBtn.unbind().on('click', function() {
         updateTimer();
-       // window.location.reload();
+        window.location.reload();
     });
 
     return timerModal;
 };
+
 
 function loadTaskActivities(formData) {
     $("#attach-card").empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
@@ -142,21 +144,20 @@ function loadTaskActivities(formData) {
                     var cardHeaderRow = $('<div class="row pt-2" />');
                     cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
                     var stopCol = $('<div class="col-6 text-right" />');
-                    if (data[x][y].running_task == 0) /*check whether task is ended or not*/ {
+                    if (data[x][y].running_task == 1) /*check whether task is ended or not*/ {
                         
 
                         stopCol.append('<i class="far fa-clock"></i>Total timeused=' + data[x][y].t_minutes);
                         /*change background of current running task entries*/
                     } else {
+                        if (data[x][y].start_time != null) {
                         var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x][y].id);
                         stopButton.on('click', function() {
                             localStorage.setItem('tid', $(this).data('taskid'))
                             timerModal.modal('show');
-                            /*localStorage.setItem('t_id', data[x][y].id);
-                                start_task_timer("stop");*/
-
 
                         });
+                    }
                         stopCol.append(stopButton);
                     }
                     cardHeaderRow.append(stopCol);
@@ -182,15 +183,10 @@ function loadTaskActivities(formData) {
                     footerRight.append(actionEdit);
                     var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon animated fadeIn fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
 
-
-                     if (data[x][y].running_task == 0) {
+                     if (data[x][y].running_task == 1 || data[x][y].start_time == null) {
                         footerRight.append(actionPlay);
                     }
 
-                    var timer = localStorage.getItem('task_timer'+data[x][y].id);
-                    if (timer != null) {
-                    start_task_timer(timer);
-                    }
                     actionPlay.on('click', function(e) {
                         var t_id = this.getElementsByTagName('input').item(0).value;
                         $.ajax({
@@ -198,8 +194,7 @@ function loadTaskActivities(formData) {
                             url: timeTrackerBaseURL + 'index.php/user/start_timer',
                             data: { 'action': 'task', 'id': t_id },
                             success: function(res) {
-                                /*localStorage.setItem('t_id', t_id);
-                                start_task_timer(0);*/
+                                window.location.reload();
                             }
                         });
                     });
@@ -210,7 +205,7 @@ function loadTaskActivities(formData) {
                     var cardCol = $("<div class='col-lg-6 mb-4 cardCol' />");
                     cardCol.append(cardInner);
                     $("#attach-card").append(cardCol);
-                    if ((data[x][y].running_task == 1)) {
+                    if ((data[x][y].running_task == 0 && data[x][y].start_timet != null)) {
                         cardInner.css("background", "#e7d3fe");
                         cardHeader.css("background", "#e7d3fe");
                         cardFooter.css("background", "#e7d3fe");
@@ -255,31 +250,17 @@ function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it
 
     return formatted_time;
 }
- 
 
-
-/*window.onload = function() {
-        $.ajax({
-            type: 'POST',
-            url: timeTrackerBaseURL + 'index.php/user/start_timer',
-            data: { 'action': 'login' },
-            success: function(res) {
-                console.log(res);
-                //window.location.reload();
-            }
-        });
-};*/
-
-var mainTimerInterval;
+var mainTaskInterval;
 
 function start_task_timer(startTime, id) {
     if (startTime === 'stop') {
         //clear the existing interval
-        clearInterval(mainTimerInterval);
+        clearInterval(mainTaskInterval);
     } else {
         //set in local storage
         localStorage.setItem('timeStamp', startTime);
-        mainTimerInterval = setInterval(function() {
+        mainTaskInterval = setInterval(function() {
             startTime++;
             setTaskTime(startTime, id);
         }, 1000);
@@ -304,10 +285,30 @@ function setTaskTime(startTime, id) {
     $('#task-timer'+id).html(formattedTime);
 }
 
+var oldEndTime = document.getElementById('update-endtime');
+if (oldEndTime) {
+    $('#save-changes').click(function()
+    {
+    var oldTime = document.getElementById('old-datepicker').value;
+    console.log(oldTime)
+    if (oldTime == "" || oldTime == " ") {
+        document.getElementById('old-date-error').innerHTML = "Please enter correct end time.";
+        oldEndTime.onsubmit= function()
+        {
+            return false;
+        }
+    }
+    else
+        oldEndTime.onsubmit= function()
+        {
+            return true;
+        }
+
+    })
+}
+
 
 $(document).ready(function() {
-    
-    
 
     $('#stop-time').click(function() {
 
@@ -317,13 +318,12 @@ $(document).ready(function() {
             if (t_id) {
                 taskUrl = timeTrackerBaseURL + 'index.php/user/stop_timer';
             }
-            console.log('task_id', t_id);
             $.ajax({
                 type: 'POST',
                 url: taskUrl,
                 data: { 'action': 'task', 'id': t_id },
                 success: function(res) {
-                   // window.location.reload();
+                   window.location.reload();
                 }
             });
         } else {
@@ -333,23 +333,31 @@ $(document).ready(function() {
             timerModal.modal('show');
         }
     });
+    
+    
+    
     var curr_timeStamp = Math.floor(Date.now() / 1000);
-    login_timer =  parseInt(curr_timeStamp)-parseInt(__timeTrackerLoginTime);
+    login_timer = parseInt(curr_timeStamp) - parseInt(__timeTrackerLoginTime);
     if ((typeof login_timer != 'undefined') && (login_timer !== 0)) {
         if (login_timer == parseInt(login_timer)) {
             startTimer(login_timer);
         }
     }
     var x = document.getElementsByClassName("task-slider");
-    for(var i=0;i<x.length; i++)
+    if(x.length > 0) // check only for login. 
     {
+        $('.alert-box').show();
+    }
+    for (var i = 0; i < x.length; i++) {
         var __timeTrackerTaskTime = x[i].childNodes[1].value;
-    if ((typeof __timeTrackerTaskTime != 'undefined') && (__timeTrackerTaskTime !== 0)) {
-        if (__timeTrackerTaskTime == parseInt(__timeTrackerTaskTime)) {
-            start_task_timer(__timeTrackerTaskTime, x[i].childNodes[1].id);
+        __timeTrackerTaskTimeNew = parseInt(curr_timeStamp) - parseInt(__timeTrackerTaskTime);
+        if ((typeof __timeTrackerTaskTimeNew != 'undefined') && (__timeTrackerTaskTimeNew !== 0)) {
+            if (__timeTrackerTaskTimeNew == parseInt(__timeTrackerTaskTimeNew)) {
+                start_task_timer(__timeTrackerTaskTimeNew, x[i].childNodes[1].id);
+            }
         }
     }
-    }
+
 
     if ($("#attach-card").length > 0) {
         loadTaskActivities({ 'type': 'task' });

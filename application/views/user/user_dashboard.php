@@ -89,12 +89,11 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
             <h3><i class="fas action-icon <?=$timerClass?>"></i></h3>
         </div>
         <div class="container">
-            <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4">
-                <!-- TODO... -->
+            <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4 alert-box">
+                <!-- TODO... -->                
                 <i class="text-danger  fas fa-exclamation-triangle"></i>
                 As task "Create login API for mobile" has not been ended.
-                <a href="#" class="forgot-color"> Stop now!
-                </a>
+                <a href="#" class="forgot-color" id="stop-now" data-toggle="modal" data-target="#end-time-update"> Stop now!</a>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -127,3 +126,5 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
         </footer>
     </div>
 </main>
+
+
