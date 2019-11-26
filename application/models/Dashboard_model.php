@@ -184,24 +184,53 @@ class Dashboard_model extends CI_Model {
             $query2 = $this->db->get_where('users', array('email' => $username));
             if($query2->num_rows() == 1){
                 $row2 = $query2->row();
+                //check for entry with the same login date
                 $this->db->where(array('task_date'=>date('Y:m:d')));
                 $query_check = $this->db->get('login_details');
-                if($query_check->num_rows() == 0){
+                if($query_check->num_rows()>0){ //multiple logins on the same date
+                    $end_time = $query_check->result_array();
+                    foreach($end_time as $end){
+                        $login_time = $end['end_time'];
+                    }
+                    $array = array('user_id'=>$row2->id,'task_date'=>date('Y:m:d'),'start_time'=>date("Y:m:d H:i:s"),'created_on'=>date('Y:m:d H:i:s'));
+                    $this->db->set($array);
+                    $query = $this->db->insert('login_details',$array);
+                    $data = array('userid' => $row2->id,'email' => $row->email,'logged_in' => TRUE,'user_profile' => $row2->profile,'username' => $row2->name,'login_time' => $login_time);
+                    $this->session->set_userdata($data);
+                }else{ //first login for the day
                     $array = array('user_id'=>$row2->id,'task_date'=>date('Y:m:d'),'start_time'=>date("Y:m:d H:i:s"),'created_on'=>date('Y:m:d H:i:s'));
                     $this->db->set($array);
                     $query = $this->db->insert('login_details',$array);
                     $data = array('userid' => $row2->id,'email' => $row->email,'logged_in' => TRUE,'user_profile' => $row2->profile,'username' => $row2->name,'login_time' => date('Y:m:d H:i:s'));
-                    $this->session->set_userdata($data);
-        			return $row->type;
-                }else{
-                    return false;
+                    $this->session->set_userdata($data);    
                 }
+                return $row->type;
+            }else{
+                return false;
             }
 		}else{
 			$this->form_validation->set_message('Wrong inputs.');
 			return false;
 		}
 	}
+    public function logout(){
+        $userid = $this->session->userdata('userid');
+        //check for entry with the same login date
+        $this->db->where(array('task_date'=>date('Y:m:d'),'end_time'=>null));
+        $query_check = $this->db->get('login_details');
+        if($query_check->num_rows()>0){ //multiple logins on the same date
+            $data = $query_check->row_array();
+            $array = array('end_time'=>date('Y:m:d H:i:s'));
+            $this->db->where(array('user_id'=>$userid,'task_date'=>$data['task_date']));
+            $query = $this->db->update('login_details',$array);
+            if($query){
+
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
     public function send_otp(){
         $email = $this->security->xss_clean($this->input->post('email'));
         if(empty($email)){
