@@ -49,8 +49,13 @@
 		}
 		//Stop Timer
 		public function stop_timer(){
-				$id = $this->input->post('id',TRUE);
-				$result = $this->user_model->stop_timer($id);
+				$post_data = $this->input->post();
+				$task_id = $this->input->get('id',TRUE);
+				$end_time = isset($post_data['end_time']) ? $post_data['end_time'] : '';
+		        if ($task_id == '') {
+		            echo "Bad request parameter missing.";
+		        }
+				$result = $this->user_model->stop_timer($task_id,$end_time);
 				if($result == FALSE){
 					echo "Something went wrong.";
 				}else{

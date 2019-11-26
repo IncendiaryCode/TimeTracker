@@ -55,7 +55,7 @@
 		}
 		public function logout(){
 			//$this->session->sess_destroy();
-			$result = $this->dashboard_model->logout();
+			//$result = $this->dashboard_model->logout();
 			if($result){
 				$this->session->unset_userdata('email');
 				$this->session->unset_userdata('userid');

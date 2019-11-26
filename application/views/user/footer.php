@@ -43,7 +43,7 @@
 <div class="modal fade" id="end-time-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="<?=base_url();?>index.php/user/task_end_time?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-endtime" method="post">
+            <form action="<?=base_url();?>index.php/user/stop_timer?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-endtime" method="post">
                 <div class="modal-header">
                     <h5 class="modal-title" id="">Stop now!</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -61,7 +61,7 @@
                     </div>
                     <div>
                         <label for="old-datepicker">Enter end time: </label>
-                        <input type="datetime-local" class="form-control" id="old-datepicker" name="end">
+                        <input type="datetime-local" class="form-control" id="old-datepicker" name="end_time">
                         <div class="input-group-addon">
                             <span class="glyphicon glyphicon-th"></span>
                         </div>

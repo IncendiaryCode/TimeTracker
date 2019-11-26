@@ -185,17 +185,12 @@ class Dashboard_model extends CI_Model {
             if($query2->num_rows() == 1){
                 $row2 = $query2->row();
                 //check for entry with the same login date
-                $this->db->where(array('task_date'=>date('Y:m:d')));
+                $this->db->where(array('task_date'=>date('Y:m:d'), 'user_id' => $row2->id));
                 $query_check = $this->db->get('login_details');
+
                 if($query_check->num_rows()>0){ //multiple logins on the same date
-                    $end_time = $query_check->result_array();
-                    foreach($end_time as $end){
-                        $login_time = $end['end_time'];
-                    }
-                    $array = array('user_id'=>$row2->id,'task_date'=>date('Y:m:d'),'start_time'=>date("Y:m:d H:i:s"),'created_on'=>date('Y:m:d H:i:s'));
-                    $this->db->set($array);
-                    $query = $this->db->insert('login_details',$array);
-                    $data = array('userid' => $row2->id,'email' => $row->email,'logged_in' => TRUE,'user_profile' => $row2->profile,'username' => $row2->name,'login_time' => $login_time);
+                    $login_data = $query_check->row();                   
+                    $data = array('userid' => $row2->id,'email' => $row->email,'logged_in' => TRUE,'user_profile' => $row2->profile,'username' => $row2->name,'login_time' => $login_data->end_time);
                     $this->session->set_userdata($data);
                 }else{ //first login for the day
                     $array = array('user_id'=>$row2->id,'task_date'=>date('Y:m:d'),'start_time'=>date("Y:m:d H:i:s"),'created_on'=>date('Y:m:d H:i:s'));

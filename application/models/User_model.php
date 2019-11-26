@@ -98,8 +98,8 @@ class User_model extends CI_Model {
         }
     }
     //Stop Timer
-    public function stop_timer($id){
-        $task_id = $id;
+    public function stop_timer($task_id, $end_time){
+
         //print_r($task_id);exit;
         $userid = $this->session->userdata('userid');
         $this->db->select('*');
@@ -109,15 +109,24 @@ class User_model extends CI_Model {
         $query = $this->db->get();
         if($query->num_rows() > 0){
             $data = $query->row_array(); 
-            if($this->input->get('id')){
-                $this->db->where(array('task_id'=>$task_id,'user_id'=>$userid,'total_minutes'=>'0'));
-                $query2 = $this->db->update('time_details',array('end_time'=>$this->input->post('end'))); 
+            if($end_time !=''){
+                $update_time = $end_time; 
             }else{
-                $this->db->where(array('start_time'=>$data['start_time'],'task_id'=>$data['task_id'],'user_id'=>$userid));
-                $query2 = $this->db->update('time_details',array('end_time'=>date('Y:m:d H:i:s')));
+                $update_time = date('Y:m:d H:i:s'); 
             }
-            if($this->db->affected_rows() > 0){
-                $this->db->where(array('start_time'=>$data['start_time'],'task_id'=>$data['task_id'],'user_id'=>$userid));
+            
+            $diff = (strtotime($update_time) - strtotime($data['start_time']));            
+            $t_minutes = round((abs($diff) /60),2);           
+
+            $this->db->where(array('id'=>$data['id']));
+            $query2 = $this->db->update('time_details',array('end_time'=> $update_time, 'total_minutes' => $t_minutes,'modified_on' => date('Y:m:d H:i:s') ));
+
+            if($query2){
+                return true;
+            }else{
+                return false;
+            }
+                /*$this->db->where(array('start_time'=>$data['start_time'],'task_id'=>$data['task_id'],'user_id'=>$userid));
                 $result = $this->db->get('time_details')->row()->id;
                 //print_r($result);exit;
                 $query = $this->db->query("SELECT start_time,end_time,id,task_id FROM time_details WHERE id=".$result);
@@ -133,13 +142,7 @@ class User_model extends CI_Model {
                     $minutes = round(abs($diff) / 60,2);
                     $this->db->where(array('user_id'=>$userid,'task_id'=>$task_id,'total_minutes'=>'0'));
                     $query = $this->db->update('time_details',array('total_hours'=>$hours,'total_minutes'=>$minutes));
-                    if($query){
-                        return true;
-                    }else{
-                        return false;
-                    }
-                }
-            }
+                    if($query){*/
         }else{
             echo "There is no running task with this userid";
         }
@@ -379,7 +382,6 @@ class User_model extends CI_Model {
             }
         }
         else{
-           // print_r($this->input->post('action'));
             if($this->input->post('action') == 'save_and_start'){
                 $array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('description'),'project_id'=>$this->input->post('project'),'module_id'=>$this->input->post('project_module'),'created_on'=>date('Y:m:d H:i:s'));
                 $this->db->set($array);
@@ -478,7 +480,6 @@ class User_model extends CI_Model {
         $userid = $this->session->userdata('userid');
         $this->db->where('id',$userid);
         $query = $this->db->get('users');
-        //print_r($query->result_array);exit;
         if($query->num_rows() == 1){
             return $query->row_array();
         }
