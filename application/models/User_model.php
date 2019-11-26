@@ -14,7 +14,7 @@ class User_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('time_details AS d');
         $this->db->join('task AS t', 't.id = d.task_id');
-        $this->db->join('project AS p', 'p.id = t.project_id');
+        //$this->db->join('project AS p', 'p.id = t.project_id');
         $this->db->where(array('d.user_id'=>$userid,'d.total_minutes'=>'0'));
         //$this->db->where('d.end_time IS NULL');
         $query = $this->db->get();
@@ -109,8 +109,13 @@ class User_model extends CI_Model {
         $query = $this->db->get();
         if($query->num_rows() > 0){
             $data = $query->row_array(); 
-            $this->db->where(array('start_time'=>$data['start_time'],'task_id'=>$data['task_id'],'user_id'=>$userid));
-            $query2 = $this->db->update('time_details',array('end_time'=>date('Y:m:d H:i:s')));
+            if($this->input->get('id')){
+                $this->db->where(array('task_id'=>$task_id,'user_id'=>$userid,'total_minutes'=>'0'));
+                $query2 = $this->db->update('time_details',array('end_time'=>$this->input->post('end'))); 
+            }else{
+                $this->db->where(array('start_time'=>$data['start_time'],'task_id'=>$data['task_id'],'user_id'=>$userid));
+                $query2 = $this->db->update('time_details',array('end_time'=>date('Y:m:d H:i:s')));
+            }
             if($this->db->affected_rows() > 0){
                 $this->db->where(array('start_time'=>$data['start_time'],'task_id'=>$data['task_id'],'user_id'=>$userid));
                 $result = $this->db->get('time_details')->row()->id;
@@ -140,11 +145,17 @@ class User_model extends CI_Model {
         }
     }
     //edit end time of the running task
-   /* public function edit_end_time(){
-        print_r($this->input->post('end'));
-        $array = array('task_id')
-        //$this->db->
-    }*/
+    public function edit_end_time(){
+        $userid = $this->session->userdata('userid');
+        $array = array('end_time'=>$this->input->post('end'));
+        $this->db->where(array('task_id'=>$this->input->get('id'),'user_id'=>$userid,'total_minutes'=>'0'));
+        
+        if($query){
+            return true;
+        }else{
+            return false;
+        }
+    }
     //Activity Chart Data
     public function get_activity($chart_type,$date){
         //get task activities

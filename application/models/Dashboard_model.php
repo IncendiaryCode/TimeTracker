@@ -184,9 +184,18 @@ class Dashboard_model extends CI_Model {
             $query2 = $this->db->get_where('users', array('email' => $username));
             if($query2->num_rows() == 1){
                 $row2 = $query2->row();
-                $data = array('userid' => $row2->id,'email' => $row->email,'logged_in' => TRUE,'user_profile' => $row2->profile,'username' => $row2->name,'login_time' => date('Y:m:d H:i:s'));
-                $this->session->set_userdata($data);
-    			return $row->type;
+                $this->db->where(array('task_date'=>date('Y:m:d')));
+                $query_check = $this->db->get('login_details');
+                if($query_check->num_rows() == 0){
+                    $array = array('user_id'=>$row2->id,'task_date'=>date('Y:m:d'),'start_time'=>date("Y:m:d H:i:s"),'created_on'=>date('Y:m:d H:i:s'));
+                    $this->db->set($array);
+                    $query = $this->db->insert('login_details',$array);
+                    $data = array('userid' => $row2->id,'email' => $row->email,'logged_in' => TRUE,'user_profile' => $row2->profile,'username' => $row2->name,'login_time' => date('Y:m:d H:i:s'));
+                    $this->session->set_userdata($data);
+        			return $row->type;
+                }else{
+                    return false;
+                }
             }
 		}else{
 			$this->form_validation->set_message('Wrong inputs.');

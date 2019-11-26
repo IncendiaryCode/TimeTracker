@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+//Login timer
 $login_time = $this->session->userdata('login_time');
-$login = new DateTime($login_time);
+$login = new DateTime($login_time,new DateTimeZone('UTC'));
 $logintime = $login->getTimestamp();
 $timer = '';
 $timerClass = 'fa-stop';
@@ -11,7 +12,7 @@ $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Login';
-if (!empty($task_info['task_status'])) {     /*fetching task details*/ 
+/*if (!empty($task_info['task_status'])) {     //fetching task details 
     //for ($i=0; $i < sizeof($task_info); $i++) { 
         foreach($task_info['task_status'] as $taskinfo){
         //print_r($taskinfo['task_name']);
@@ -31,7 +32,7 @@ if (!empty($task_info['task_status'])) {     /*fetching task details*/
 
 }
 
-}
+}*/
 ?>
 <script type="text/javascript">
 //this will be send to JS for timer to start
@@ -58,10 +59,11 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
             <?php 
             if(!empty($task_info['task_status'])){
                 $id=1;
+                //task timer
                 foreach($task_info['task_status'] as $taskinfo){
                     $timer = $taskinfo['start_time'];
-                    $datetime2 = new DateTime($timer);
-                    $timer_start = $datetime2->getTimestamp();  ?>
+                    $datetime2 = new DateTime($timer,new DateTimeZone('UTC'));
+                    $timer_start = $datetime2->getTimestamp(); ?>
                     <div>
                         <div class="section-slider task-slider" id="login-timer-details<?=$id?>">
                             <input type="hidden" id="<?php echo $taskinfo['task_id'] ?>" value="<?php echo $timer_start?>">

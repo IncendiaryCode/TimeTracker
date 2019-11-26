@@ -176,11 +176,11 @@
 		}
 		//edit end time of the running task
 		public function task_end_time(){
-			$result = $this->user_model->edit_end_time();
+			$result = $this->user_model->stop_timer($this->input->get('id'));
 			if($result){
-
+				redirect('user/index','refresh');
 			}else{
-				return false;
+				echo "Unable to update end time";
 			}
 		}
 		//Upload profile
