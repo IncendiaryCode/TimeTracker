@@ -25,19 +25,18 @@
                             <div class="daily-chart">
                                 <div class="form-group m-5">
                                     <label for="end-date">Select date</label>
-                                        <div class="input-group">
+                                    <div class="input-group">
                                         <!-- chart that shows daily activities -->
-                                            <input type="date" class="form-control" id="daily-chart">
-                                            <button class="btn btn-primary" onclick="loadDailyChart()">view chart</button>
+                                        <input type="date" class="form-control" id="daily-chart">
+                                        <button class="btn btn-primary" onclick="loadDailyChart()">view chart</button>
                                     </div>
                                 </div>
-
-                                </div>
-                                    <canvas id="daily" style="width:1000px; height:80px;"></canvas>
+                            </div>
+                            <canvas id="daily" style="width:1000px; height:80px;"></canvas>
                         </div>
                         <div class="tab-pane fade" id="weekly-view" role="tabpanel" aria-labelledby="weekly-view-tab">
                             <div class="daily-chart">
-                               <div class="form-group m-5">
+                                <div class="form-group m-5">
                                     <label for="end-date">Select week</label>
                                     <div class="input-group">
                                         <input type="week" class="form-control " id="weekly-chart">
@@ -48,20 +47,17 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="monthly-view" role="tabpanel" aria-labelledby="monthly-view-tab">
-                            
-                        <div class="daily-chart">
+                            <div class="daily-chart">
                                 <div class="form-group m-5">
                                     <label for="end-date">Select date</label>
-                                        <div class="input-group">
-
+                                    <div class="input-group">
                                         <!-- chart that shows monthly activities -->
-                                            <input type="number" class="form-control" id="monthly-chart">
-                                            <button class="btn btn-primary" onclick="loadMonthlyChart()">view chart</button>
+                                        <input type="number" class="form-control" id="monthly-chart">
+                                        <button class="btn btn-primary" onclick="loadMonthlyChart()">view chart</button>
                                     </div>
                                 </div>
-
-                                </div>
-                        <div class="p-5" id="calendar_basic" ></div>
+                            </div>
+                            <div class="p-5" id="calendar_basic"></div>
                         </div>
                     </div>
                 </div>
@@ -76,9 +72,9 @@
                 </div>
             </div>
         </div>
-    <hr>
-    <footer>
-        <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</p>
-    </footer>
+        <hr>
+        <footer>
+            <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</p>
+        </footer>
     </div>
 </main>

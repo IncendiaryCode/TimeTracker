@@ -56,7 +56,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                         </p>
                     </div>
                 </div>
-            <?php 
+                <?php 
             if(!empty($task_info['task_status'])){
                 $id=1;
                 //task timer
@@ -64,21 +64,20 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                     $timer = $taskinfo['start_time'];
                     $datetime2 = new DateTime($timer,new DateTimeZone('UTC'));
                     $timer_start = $datetime2->getTimestamp(); ?>
-                    <div>
-                        <div class="section-slider task-slider" id="login-timer-details<?=$id?>">
-                            <input type="hidden" id="<?php echo $taskinfo['task_id'] ?>" value="<?php echo $timer_start?>">
-                            <p class="font-weight-light time-font text-center login-time" id="start-time<?=$id?>">
-                                <?php echo $taskinfo['start_time'];?>
-                                
-                            </p>
-                            <div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer<?=$taskinfo['task_id']?>" data-type="" data-time="">
-                                00:00:00
-                            </div>
-                            <p class="font-weight-light text-center taskName" id="task-name<?=$id?>">
-                                <?php echo $taskinfo['task_name']; ?>
-                            </p>
+                <div>
+                    <div class="section-slider task-slider" id="login-timer-details<?=$id?>">
+                        <input type="hidden" id="<?php echo $taskinfo['task_id'] ?>" value="<?php echo $timer_start?>">
+                        <p class="font-weight-light time-font text-center login-time" id="start-time<?=$id?>">
+                            <?php echo $taskinfo['start_time'];?>
+                        </p>
+                        <div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer<?=$taskinfo['task_id']?>" data-type="" data-time="">
+                            00:00:00
                         </div>
+                        <p class="font-weight-light text-center taskName" id="task-name<?=$id?>">
+                            <?php echo $taskinfo['task_name']; ?>
+                        </p>
                     </div>
+                </div>
                 <?php $id++; }
             } ?>
             </div>
@@ -92,9 +91,10 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
         </div>
         <div class="container">
             <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4 alert-box">
-                <!-- TODO... -->                
+                <!-- TODO... -->
                 <i class="text-danger  fas fa-exclamation-triangle"></i>
-                As task "Create login API for mobile" has not been ended.
+                As task "
+                <?php echo $task_info['task_status'][0]['task_name'] ?>" has not been ended.
                 <a href="#" class="forgot-color" id="stop-now" data-toggle="modal" data-target="#end-time-update"> Stop now!</a>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
@@ -128,5 +128,3 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
         </footer>
     </div>
 </main>
-
-

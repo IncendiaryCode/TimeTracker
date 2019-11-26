@@ -13,7 +13,8 @@
             <h5 class="text-center mt-4 font-weight-light">
                 <?php echo $name;?>
             </h5>
-            <ul class="text-center">    <!-- profile options -->
+            <ul class="text-center">
+                <!-- profile options -->
                 <li id="empplyee-profile"><a href="<?=base_url();?>index.php/user/load_my_profile">My profile</a></li>
                 <li><a href="<?=base_url();?>index.php/user/change_password">Change password</a></li>
                 <li><a href="<?=base_url();?>index.php/user/load_employee_activities">My activities</a></li>
@@ -22,8 +23,9 @@
         </div>
     </div>
 </div>
-<div class="modal" id="changeimage" data-backdrop="false" >  <!-- to change the profile picture of user-->
-    <div class="modal-dialog animated zoomIn" >
+<div class="modal" id="changeimage" data-backdrop="false">
+    <!-- to change the profile picture of user-->
+    <div class="modal-dialog animated zoomIn">
         <div class="modal-content text-center">
             <div class="modal-header ">Upload image
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
@@ -38,52 +40,51 @@
         </div>
     </div>
 </div>
-
-
 <div class="modal fade" id="end-time-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-    <form action="<?=base_url();?>index.php/user/task_end_time?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-endtime" method="post">
-      <div class="modal-header">
-        <h5 class="modal-title" id="">Stop now!</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-            <div class="input-group">
-                <p>Task name: <strong><?php echo $task_info['task_status'][0]['task_name'] ?></strong></p>
-            </div>
-            <div class="input-group">
-                <p>Started at: <strong><?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
-            </div>
-            <div>
-                <label for="old-datepicker">Enter end time: </label>
-                <input type="text" class="form-control" id="old-datepicker" name="end">
-                <div class="input-group-addon">
-                    <span class="glyphicon glyphicon-th"></span>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="<?=base_url();?>index.php/user/task_end_time?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-endtime" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="">Stop now!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-<!--                 <input type="hidden" value="<?php echo $task_info['task_status'][0]['task_id'] ?>">
- -->            </div>
-            <p class="text-center text-danger" id="old-date-error"></p>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <p>Task name: <strong>
+                                <?php echo $task_info['task_status'][0]['task_name'] ?></strong></p>
+                    </div>
+                    <div class="input-group">
+                        <p>Started at: <strong>
+                                <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
+                    </div>
+                    <div>
+                        <label for="old-datepicker">Enter end time: </label>
+                        <input type="datetime-local" class="form-control" id="old-datepicker" name="end">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-th"></span>
+                        </div>
+                    </div>
+                    <p class="text-center text-danger" id="old-date-error"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="save-changes">Save changes</button>
+                </div>
+            </form>
         </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" id="save-changes">Save changes</button>
-      </div>
-    </form>
     </div>
-  </div>
 </div>
-
-<div class="modal fade" id="timestopmodal" tabindex="-1" role="dialog" aria-labelledby="timestopmodalLabel" aria-hidden="true">  <!-- Modal Timer to Stop or Confirm -->
+<div class="modal fade" id="timestopmodal" tabindex="-1" role="dialog" aria-labelledby="timestopmodalLabel" aria-hidden="true">
+    <!-- Modal Timer to Stop or Confirm -->
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="timestopmodalLabel">Confirm Timer Action</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-            </button>
+                <h5 class="modal-title" id="timestopmodalLabel">Confirm Timer Action</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
             </div>
             <div class="modal-body">
                 <h3>Would you like to stop or complete the task?</h3>
@@ -100,7 +101,6 @@
         </div>
     </div>
 </div>
-
 <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -118,4 +118,5 @@
 <script src="<?=base_url();?>assets/user/javascript/employee_profile.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/bootstrap-datetimepicker.js?v=<?=VERSION?>"></script>
 </body>
+
 </html>

@@ -12,17 +12,19 @@ $profile = $this->session->userdata('user_profile');
                     <?php 
                         $this->load->library('form_validation');
                         if(validation_errors()) { ?>
-                            <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
+                    <div class="alert alert-danger">
+                        <?php echo validation_errors(); ?>
+                    </div>
                     <?php } ?>
-                    <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
-
+                    <div class="alert-success">
+                        <?php echo isset($success)?$success:""; ?>
+                    </div>
                     <form action="<?=base_url();?>index.php/user/add_tasks" method="post" id="addTask" class="mt-5 ">
-
                         <button type="submit" id="save-and-start" class="text-center shadow-lg icon-width start-time">
-                            <div  data-tasktype="Task" data-id="80">
-                            <h3> <i class=" fas action-icon fa-play"></i></h3>
-                                </div>
-                            </button>
+                            <div data-tasktype="Task" data-id="80">
+                                <h3> <i class=" fas action-icon fa-play"></i></h3>
+                            </div>
+                        </button>
                         <div class="form-group">
                             <label for="task-name ">Write the task name</label>
                             <input type="text" class="form-control" name="task_name" id="Taskname">
@@ -32,22 +34,22 @@ $profile = $this->session->userdata('user_profile');
                             <textarea class="form-control" id="description" name="task_desc" rows="4"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="choose-project" >Choose a project</label>
+                            <label for="choose-project">Choose a project</label>
                             <select type="number" class="form-control project_name" id="choose-project" name="project_name">
                                 <option>Select Project</option>
                                 <?php
-                                
-                                 foreach($result as $p){ 
-                                    ?>
-                                <option value=<?php echo $p['id']?> label= <?php echo $p['name']; ?> ><?php echo $p['name']; ?>
+                                 foreach($result as $p){ ?>
+                                <option value=<?php echo $p['id']?> label=
+                                    <?php echo $p['name']; ?> >
+                                    <?php echo $p['name']; ?>
                                 </option>
-                            <?php }?>
+                                <?php }?>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="choose-module" >Choose project module</label>
+                            <label for="choose-module">Choose project module</label>
                             <select type="number" class="form-control project_name" id="choose-module" name="project_module">
-                                <option>Select module</option>                                
+                                <option>Select module</option>
                             </select>
                         </div>
                         <div class="form-group pl-4">
@@ -61,11 +63,10 @@ $profile = $this->session->userdata('user_profile');
                                 </label>
                             </div>
                         </div>
-
                         <!-- if task is completed -->
                         <div id="task-times" class="display-none">
                             <div id="show_list">
-                                <div class="row" >
+                                <div class="row">
                                     <div class="col-3">
                                         <p><b>Date</b></p>
                                     </div>
@@ -83,12 +84,12 @@ $profile = $this->session->userdata('user_profile');
                                     <div class="row">
                                         <div class="col-3">
                                             <div class="input-group mb-3">
-                                                <input type="text" class="form-control datepicker" name="daterange[0][date]" data-date-format="dd/mm/yyyy" id="date-picker-start">
-                                              <div class="input-group-append">
-                                                <span class="input-group-text">
-                                                    <span class="fa fa-calendar"></span>
-                                                </span>
-                                              </div>                                          
+                                                <input type="text" class="form-control datepicker" name="daterange[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <span class="fa fa-calendar"></span>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-3">
@@ -110,7 +111,6 @@ $profile = $this->session->userdata('user_profile');
                                 </div>
                             </div>
                             <!-- END: Add time  -->
-                                
                             <div class="text-left text-danger">
                                 <p id="datetime-error" class="pt-4"></p>
                             </div>

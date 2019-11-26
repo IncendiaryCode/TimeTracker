@@ -12,9 +12,13 @@ print_r($task_data[0]['id']);
                     <?php 
                         $this->load->library('form_validation');
                         if(validation_errors()) { ?>
-                            <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
+                    <div class="alert alert-danger">
+                        <?php echo validation_errors(); ?>
+                    </div>
                     <?php } ?>
-                    <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
+                    <div class="alert-success">
+                        <?php echo isset($success)?$success:""; ?>
+                    </div>
                     <form action="<?=base_url();?>index.php/user/edit_task?type=edit" method="post" id="addTask" class="mt-5 ">
                         <input type="hidden" name="task_id" value="<?=$task_data[0]['task_id'];?>">
                         <div class="form-group  ">
@@ -27,38 +31,48 @@ print_r($task_data[0]['id']);
                         </div>
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
-                            <select readonly="" type="number" class="form-control" id="choose-project" name="project_name" >
-                                <option selected value=<?php echo $task_data[0]['project_id']?>><?=$task_data[0]['name'];?></option>
+                            <select readonly="" type="number" class="form-control" id="choose-project" name="project_name">
+                                <option selected value=<?php echo $task_data[0]['project_id']?>>
+                                    <?=$task_data[0]['name'];?>
+                                </option>
                             </select>
-                        </div>     
+                        </div>
                         <h4 class="mt-4 text-center">Task activities</h4>
                         <table class="table table-sm">
-                          <thead>
-                            <tr>
-                              <th scope="col">#</th>
-                              <th scope="col">Date</th>
-                              <th scope="col">Start time</th>
-                              <th scope="col">End time</th>
-                            </tr>
-                          </thead>
-                          <?php $num = 1;
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Start time</th>
+                                    <th scope="col">End time</th>
+                                </tr>
+                            </thead>
+                            <?php $num = 1;
                           foreach($task_data as $task){ 
                             
                             ?>
-                          <tbody id="task_history">
-                            <tr>
-                              <th scope="row"><?=$num;?></th>
-                              <td><?=$task['task_date'];?></td>
-                              <td><?=$task['start_time'];?></td>
-                              <td><?=$task['end_time'];?></td>
-                            </tr>
-                          </tbody>
+                            <tbody id="task_history">
+                                <tr>
+                                    <th scope="row">
+                                        <?=$num;?>
+                                    </th>
+                                    <td>
+                                        <?=$task['task_date'];?>
+                                    </td>
+                                    <td>
+                                        <?=$task['start_time'];?>
+                                    </td>
+                                    <td>
+                                        <?=$task['end_time'];?>
+                                    </td>
+                                </tr>
+                            </tbody>
                             <?php $num=$num+1;
                         } ?>
-                        </table>                
+                        </table>
                         <p id="taskError" class=" text-danger"></p>
-                        <p>&nbsp;</p> 
-                        <hr/>
+                        <p>&nbsp;</p>
+                        <hr />
                         <button type="submit" class="btn btn-primary">Save Task</button>
                     </form>
                 </div>
@@ -69,6 +83,5 @@ print_r($task_data[0]['id']);
             <hr>
             <p class="text-center ">Copyright © 2019 Printgreener.com</p>
         </footer>
-
     </div>
 </main>

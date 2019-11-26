@@ -25,15 +25,22 @@ $profile = $this->session->userdata('user_profile');
                             <table>
                                 <tbody>
                                     <tr>
-                                        <th>Email</th>
-                                        <td><?php echo $res['email'];?></td>
+                                        <th width="50%">Email :</th>
+                                        <td width="50%">
+                                            <?php echo $res['email'];?>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <th>Phone number</th>
-                                        <td><?=$res['phone'];?></td>
+                                        <th width="50%">Phone number :</th>
+                                        <td width="50%">
+                                            <?=$res['phone'];?>
+                                        </td>
                                     </tr>
-                                    <tr><th scope="row">Type</th>
-                                        <td><?=$res['type'];?></td>
+                                    <tr>
+                                        <th scope="row">Type :</th>
+                                        <td>
+                                            <?=$res['type'];?>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -41,11 +48,10 @@ $profile = $this->session->userdata('user_profile');
                     </table>
                 </div>
             </div>
-          </div>
-
-            <hr class="mt-5">
-            <footer>
-                <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
-            </footer>
         </div>
+        <hr class="mt-5">
+        <footer>
+            <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
+        </footer>
+    </div>
 </main>
