@@ -140,11 +140,11 @@ class User_model extends CI_Model {
         }
     }
     //edit end time of the running task
-    public function edit_end_time(){
+   /* public function edit_end_time(){
         print_r($this->input->post('end'));
         $array = array('task_id')
-        $this->db->
-    }
+        //$this->db->
+    }*/
     //Activity Chart Data
     public function get_activity($chart_type,$date){
         //get task activities

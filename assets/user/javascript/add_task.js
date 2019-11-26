@@ -36,10 +36,8 @@ if (addTask) {
                    /* return true;*/
                 }
             }
-
         } else {
             // store data in database
-
             return true;
         }
     }
@@ -59,7 +57,7 @@ var addTime = {
 
         var colDate = $('<div class="col-3">' +
             '<div class="input-group mb-3">' +
-            '<input type="text" class="form-control" name="daterange[' + id + '][date]" data-date-format="dd/mm/yyyy" id="date-picker-' + id + '" value=' + date + ' >' +
+            '<input type="text" class="form-control" name="daterange[' + id + '][date]" data-date-format="yyyy-mm-dd" id="date-picker-' + id + '" value=' + date + ' >' +
             '<div class="input-group-append">' +
             '<span class="input-group-text" id="basic-addon-' + id + '">' +
             '<span class="fa fa-calendar datepicker"></span>' +
@@ -71,14 +69,14 @@ var addTime = {
 
         var colStartTime = $('<div class="col-3">' +
             '<div class="input-group">' +
-            '<input id="start-time-' + id + '" class="form-control timepicker" name="daterange[' + id + '][start]" value=' + start_time + ' />' +
+            '<input id="start-time-' + id + '" class="form-control timepicker" data-date-format="hh:mm:ss" name="daterange[' + id + '][start]" value=' + start_time + ' />' +
             '</div>' +
             '</div>');
         colStartTime.appendTo(row);
 
         var colEndTime = $('<div class="col-3">' +
             '<div class="input-group">' +
-            '<input id="end-time-' + id + '"  class="form-control timepicker1" name="daterange[' + id + '][end]" value=' + end_time + ' />' +
+            '<input id="end-time-' + id + '"  class="form-control timepicker1" data-date-format="hh:mm:ss" name="daterange[' + id + '][end]" value=' + end_time + ' />' +
             '</div>' +
             '</div>');
         colEndTime.appendTo(row);

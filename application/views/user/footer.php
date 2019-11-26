@@ -43,7 +43,7 @@
 <div class="modal fade" id="end-time-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-    <form action="<?=base_url();?>index.php/user/task_end_time" id="update-endtime" method="post">
+    <form action="<?=base_url();?>index.php/user/task_end_time?<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-endtime" method="post">
       <div class="modal-header">
         <h5 class="modal-title" id="">Stop now!</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -51,10 +51,10 @@
         </button>
       </div>
       <div class="modal-body">
-            <div class="input-group date" data-provide="datepicker">
+            <div class="input-group">
                 <p>Task name: <strong><?php echo $task_info['task_status'][0]['task_name'] ?></strong></p>
             </div>
-            <div class="input-group date" data-provide="datepicker">
+            <div class="input-group">
                 <p>Started at: <strong><?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
             </div>
             <div>
@@ -63,8 +63,8 @@
                 <div class="input-group-addon">
                     <span class="glyphicon glyphicon-th"></span>
                 </div>
-                <input type="hidden" value="<?php echo $task_info['task_status'][0]['task_id'] ?>">
-            </div>
+<!--                 <input type="hidden" value="<?php echo $task_info['task_status'][0]['task_id'] ?>">
+ -->            </div>
             <p class="text-center text-danger" id="old-date-error"></p>
         </div>
       <div class="modal-footer">

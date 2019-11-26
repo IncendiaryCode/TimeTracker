@@ -30,27 +30,7 @@ print_r($task_data[0]['id']);
                             <select readonly="" type="number" class="form-control" id="choose-project" name="project_name" >
                                 <option selected value=<?php echo $task_data[0]['project_id']?>><?=$task_data[0]['name'];?></option>
                             </select>
-                        </div>
-                        <!-- <div class="form-group">
-                            <label for="start_date">Started on</label>
-                            <div class="input-group">
-                                <?php $start = $task_data['start_time']; ?>
-                                <input readonly="" type="text" class="form-control" id="started-date" name="start_date" aria-describedby="date-start" value="<?=$start;?>">
-                                <div class="input-group-append">
-                                <span class="input-group-text" id="date-start"><i class="fas fa-calendar"></i></span>
-                              </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="end-date">Ended on</label>
-                            <div class="input-group">
-                                <?php $end = (($task_data['end_time'] == '0000-00-00 00:00:00') || ($task_data['end_time'] == null)) ? '' : $task_data['end_time']; ?>
-                                <input type="text" class="form-control datetimepicker" id="end-date" name="end_date" aria-describedby="date-end" value="<?=$end;?>">
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="date-end"><i class="fas fa-calendar"></i></span>
-                                </div>
-                            </div>
-                        </div>    -->     
+                        </div>     
                         <h4 class="mt-4 text-center">Task activities</h4>
                         <table class="table table-sm">
                           <thead>

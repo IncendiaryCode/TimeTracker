@@ -144,7 +144,7 @@ function loadTaskActivities(formData) {
                     var cardHeaderRow = $('<div class="row pt-2" />');
                     cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
                     var stopCol = $('<div class="col-6 text-right" />');
-                    if (data[x][y].running_task == 1) /*check whether task is ended or not*/ {
+                    if (data[x][y].running_task == 0) /*check whether task is ended or not*/ {
                         
 
                         stopCol.append('<i class="far fa-clock"></i>Total timeused=' + data[x][y].t_minutes);
@@ -183,7 +183,7 @@ function loadTaskActivities(formData) {
                     footerRight.append(actionEdit);
                     var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon animated fadeIn fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
 
-                     if (data[x][y].running_task == 1 || data[x][y].start_time == null) {
+                     if (data[x][y].running_task == 0 || data[x][y].start_time == null) {
                         footerRight.append(actionPlay);
                     }
 
@@ -205,7 +205,7 @@ function loadTaskActivities(formData) {
                     var cardCol = $("<div class='col-lg-6 mb-4 cardCol' />");
                     cardCol.append(cardInner);
                     $("#attach-card").append(cardCol);
-                    if ((data[x][y].running_task == 0 && data[x][y].start_timet != null)) {
+                    if ((data[x][y].running_task == 1 && data[x][y].start_time != null)) {
                         cardInner.css("background", "#e7d3fe");
                         cardHeader.css("background", "#e7d3fe");
                         cardFooter.css("background", "#e7d3fe");
