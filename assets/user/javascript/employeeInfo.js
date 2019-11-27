@@ -57,12 +57,13 @@ if (changeImage) {
     }
 }
 
-function updateTimer() {
-    console.log(localStorage.getItem('task_id'));
+function updateTimer(flag) {
+
+    console.log(flag);
     $.ajax({
         type: "POST",
         url: timeTrackerBaseURL + 'index.php/user/stop_timer',
-        data: { 'action': 'task', 'id': localStorage.getItem('task_id') },
+        data: { 'action': 'task', 'id': localStorage.getItem('task_id'), 'flag': flag  },
         /*call to stop the task timer.*/
         dataType: 'json',
         success: function(res) {
@@ -87,20 +88,24 @@ var timerStopModal = function() {
         startTimer(localStorage.getItem('timeStamp'));
     });
 
+    var flag =0;
     var completeBtn = timerModal.find('button#timestopmodal-complete-task');
+    
     completeBtn.unbind().on('click', function() {
-        updateTimer();
+        flag = 1;
+        updateTimer(flag);
     });
 
     var stopBtn = timerModal.find('button#timestopmodal-stop-task');
+    flag =0;
     stopBtn.unbind().on('click', function() {
-        updateTimer();
+        updateTimer(flag);
     });
     return timerModal;
 };
 
 function minutesToTime(mins) {
-    var total_mins = Number(mins);
+    var total_mins = Number(mins*60);
     var h = Math.floor(total_mins / 3600);
     var m = Math.floor(total_mins % 3600 / 60);
 
@@ -116,13 +121,6 @@ function getTime() {
     var logoutTime = timeLogout.getFullYear() + '-' + (timeLogout.getMonth() + 1) + '-' + timeLogout.getDate();
 
     var date = timeLogout.getFullYear() + '-' + (timeLogout.getMonth() + 1) + '-' + timeLogout.getDate();
-    var currentHr = timeLogout.getHours();
-    currentHr = addZeroBefore(currentHr);
-    var currentMin = timeLogout.getMinutes();
-    currentMin = addZeroBefore(currentMin);
-    var currentSec = timeLogout.getSeconds();
-    currentSec = addZeroBefore(currentSec);
-    var time = currentHr + ":" + currentMin + ":" + currentSec;
     return date;
 }
 
@@ -143,14 +141,15 @@ function loadTaskActivities(formData) {
                     var cardHeaderRow = $('<div class="row pt-2" />');
                     var today = getTime();
                     if (data[x][y].start_time != null) {
-                        if (today != data[x][y].start_time.slice(0,10)) {
+                        var task_date = data[x][y].start_time.slice(0,10);
+                        if (today != task_date) {
                             $('.alert-box').show();
                         }
                     }
                     cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time+'</div>');
                     var stopCol = $('<div class="col-6 text-right" />');
                     if (data[x][y].running_task == 0)  /*check whether task is ended or not*/ {
-                        var timeUsed = minutesToTime(data[x][y].t_minutes)
+                        var timeUsed = minutesToTime(data[x][y].t_minutes);                        
                         stopCol.append('<i class="far fa-clock"></i>Total timeused=' + timeUsed);
                     } else {
                         if (data[x][y].start_time != null) {

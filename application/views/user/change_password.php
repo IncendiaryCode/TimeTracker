@@ -4,7 +4,7 @@
     $this->load->library('session');
     $profile = $this->session->userdata('user_profile');
 ?>
-<main class="container-fluid container-fluid-main">
+<main class="container-fluid container-fluid-main"><p class="display-4 text-white  text-center">Change password</p>
     <div class=" main-container container">
         <div class="main-container-inner">
             <div class="row mt-5">

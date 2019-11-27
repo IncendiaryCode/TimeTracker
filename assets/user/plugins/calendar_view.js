@@ -4,13 +4,13 @@ function retrieveChartData(type, date) {
         url: timeTrackerBaseURL + 'index.php/user/activity_chart',
         data: { 'chart_type': type, 'date': date },
         dataType: 'json',
-        success: function(res) {
-            drawChart(res);
+        success: function (res) {
+            drawChart(type,res);
         }
     });
 }
 
-Date.prototype.getWeek = function() {
+Date.prototype.getWeek = function () {
     var onejan = new Date(this.getFullYear(), 0, 1);
     return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 }
@@ -18,7 +18,7 @@ Date.prototype.getWeek = function() {
 function loadDailyChart() {
 
     var date = document.getElementById('daily-chart').value;
-
+    console.log("date", date);
     if (date == "" || date == " " || date == null) {
         var today = new Date();
         document.getElementById("daily-chart").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
@@ -49,20 +49,16 @@ function loadWeeklyChart() {
             retrieveChartData('weekly_chart', week);
         } else { retrieveChartData('weekly_chart', week); }
 
-
     }
 }
 
-function drawChart(res) {
-    console.log(res);
-    var type = res[0];
-    var id;
+function drawChart(type,res) {
+    console.log("res", res);
     if (type == 'daily_chart') {
         id = "daily";
     } else if (type == 'weekly_chart') {
         id = 'weekly';
     }
-
 
     var chart = document.getElementById(id).getContext('2d');
     gradient = chart.createLinearGradient(0, 0, 0, 600);
@@ -91,10 +87,10 @@ function drawChart(res) {
                 tooltips: {
                     enabled: true,
                     callbacks: {
-                        label: function(tooltipItem, data) {
+                        label: function (tooltipItem, data) {
                             var item = tooltipItem.xLabel;
                             var week_count = document.getElementById('weekly-chart').value;
-                            weekly.onclick = function() {
+                            weekly.onclick = function () {
                                 var value = week_count.slice(0, 4) + week_count.slice(-2) + item;
                                 /*window.location.href = 'daily_details.php?value=' + value;*/
                             }
@@ -191,7 +187,7 @@ function loadMonthlyChart() {
         url: timeTrackerBaseURL + 'index.php/user/activity_chart',
         data: { 'chart_type': "monthly_chart", 'date': year },
         dataType: 'json',
-        success: function(res) {
+        success: function (res) {
             google.charts.load("current", { packages: ["calendar"] });
             google.setOnLoadCallback(drawMonthlyChart(res));
         }
@@ -202,7 +198,7 @@ function drawMonthlyChart(data) {
 
     console.log('data', data['data'][2]);
 
-    console.log(typeof(data['data'][2]));
+    console.log(typeof (data['data'][2]));
     var dataTable = new google.visualization.DataTable();
     console.log('data', data['data']);
 
@@ -233,10 +229,10 @@ function drawMonthlyChart(data) {
 }
 
 
-$(document).ready(function() {
+$(document).ready(function () {
 
     //Tab Change
-    $('#chart-navigation a').on('shown.bs.tab', function(event) {
+    $('#chart-navigation a').on('shown.bs.tab', function (event) {
         var x = $(event.target).attr("href"); // active tab
         var y = $(event.relatedTarget); // previous tab
         console.log('new tab', x);
@@ -254,7 +250,7 @@ $(document).ready(function() {
 });
 
 
-window.onload = function() {
+window.onload = function () {
     if (document.getElementById('daily-chart')) {
         loadDailyChart();
     }
