@@ -6,7 +6,7 @@ $login = new DateTime($login_time,new DateTimeZone('UTC'));
 $logintime = $login->getTimestamp();
 $timer = '';
 $timerClass = 'fa-stop';
-
+//print_r($task_info['login_status']['start_time']);exit;
 $task_type = 'login';
 $task_id = 0;
 $start_text = 'Start punch in/out';
@@ -46,7 +46,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
-                            <?=$login_time;?>
+                            <?php print_r($task_info['login_status']['start_time']); ?>
                         </p>
                         <div class="font-weight-light text-center primary-timer" id="primary-timer" data-type="" data-time="">
                             00:00:00

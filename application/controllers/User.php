@@ -34,7 +34,8 @@
 				$task_details['data'] = $this->user_model->get_task_details($type);
 				echo json_encode($task_details);
 			}else{
-				echo "Not a valid request.";
+				$status = "No Tasks assigned to this user..";
+				echo json_encode($status);
 			}
 		}
 		//Start timer controller
@@ -42,10 +43,13 @@
 			$type = $this->input->post('action',TRUE);
 			$result = $this->user_model->start_timer($type);
 			if(!$result){
-				echo "Something went wrong.";
+				$output_result['status'] = FALSE;
+				$output_result['msg'] = "Timer didnot start.";
 			}else{
-				redirect('user/index','refresh');
+				$output_result['status'] = TRUE;
+				$output_result['msg'] = 'Timer started.';
 			}
+			echo json_encode($output_result);
 		}
 		//Stop Timer
 		public function stop_timer(){
@@ -61,10 +65,14 @@
 		        }
 				$result = $this->user_model->stop_timer($task_id,$end_time);
 				if($result == FALSE){
-					echo "Something went wrong.";
+					$output_result['status'] = FALSE;
+					$output_result['msg'] = "Timer didnot stop.";
 				}else{
-					redirect('user/index','refresh');
+					//redirect('user/index','refresh');
+					$output_result['status'] = TRUE;
+					$output_result['msg'] = 'Timer stop.';
 				}
+				echo json_encode($output_result);
 		}
 		//Load employee activities page
 		public function load_employee_activities(){
@@ -108,11 +116,19 @@
 			if($this->input->post('action') == 'save_and_start'){
 				$result=$this->user_model->add_tasks();
 		            if(!$result){
-		                echo "Something went wrong.";
+		                $output_result['status'] = FALSE;
+		                $output_result['msg'] = "Something went wrong.";
 		            }else{
 		            	//print_r($result);exit;
 		            	$data = $this->user_model->start_timer($result);
-		            	redirect('user/index','refresh');
+		            	if($data){
+		            		$output_result['status'] = TRUE;
+		                	$output_result['msg'] = "Task Saved and Timer started.";
+		            	}else{
+		            		$output_result['status'] = FALSE;
+		                	$output_result['msg'] = "Something went wrong.";
+		            	}
+		            	echo json_encode($output_result);
 		            }
 			}
 		        $this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|callback_task_exists|xss_clean');
@@ -133,7 +149,11 @@
 		        {
 		            $result=$this->user_model->add_tasks();
 		            if(!$result){
-		                echo "Something went wrong.";
+		                $this->load->view('user/header');
+		               	$data['result'] = $this->user_model->get_project_name();
+		                $data['failure'] = "Something went wrong.";
+						$this->load->view('user/add_task',$data);
+						$this->load->view('user/footer');
 		            }else{
 		               	$this->load->view('user/header');
 		               	$data['result'] = $this->user_model->get_project_name();
@@ -172,7 +192,12 @@
 				}else{
 				    $result=$this->user_model->add_tasks();
 				    if(!$result){
-				       	echo "Something went wrong.";
+				       	$this->load->view('user/header');
+				       	$t_id = $this->input->post('task_id',TRUE);
+				        $data['task_data'] = $this->user_model->get_task_info($t_id);
+				        $data['failure'] = "Something went wrong.";
+						$this->load->view('user/edit_task',$data);
+						$this->load->view('user/footer');
 				    }else{
 				       	$this->load->view('user/header');
 				       	$t_id = $this->input->post('task_id',TRUE);
@@ -185,18 +210,17 @@
 		}
 		//Upload profile
 		public function upload_profile(){
-				
-		    	if(!empty($_FILES['change_image']['name'])){
+		    	if(!empty($_FILES['change_img']['name'])){
 			    	$config['upload_path'] = '/var/www/html/time_tracker_ci/assets/user/images/user_profiles/';
 					$config['allowed_types'] = 'gif|jpg|png|jpeg';
 					$config['overwrite'] = FALSE;
 					$config['encrypt_name'] = TRUE;
  					$config['remove_spaces'] = TRUE;
-				    $config['file_name'] = $_FILES['change_image']['name'];
+				    $config['file_name'] = $_FILES['change_img']['name'];
 				    $this->load->library('upload',$config);
 		            $this->upload->initialize($config);
 
-					if($this->upload->do_upload('change_image')){
+					if($this->upload->do_upload('change_img')){
 		                $uploadData = $this->upload->data();
 		               // $picture = $uploadData['file_name'];
 		                $picture = array(
@@ -256,6 +280,22 @@
 						redirect('/login/index', 'refresh'); 
 		            }
 		        }	
+		}
+		public function update_end_time(){
+			$result = $this->user_model->update_logout_time();
+			if($result == TRUE){
+				$this->load->view('user/header');
+				$task_details['task_info'] = $this->user_model->task_status();
+				$task_details['msg'] = "Logout time updated.";
+				$this->load->view('user/user_dashboard',$task_details);
+				$this->load->view('user/footer');
+			}else{
+				$this->load->view('user/header');
+				$task_details['task_info'] = $this->user_model->task_status();
+				$task_details['msg'] = "Logout time not updated.";
+				$this->load->view('user/user_dashboard',$task_details);
+				$this->load->view('user/footer');
+			}
 		}
 	}
 ?>

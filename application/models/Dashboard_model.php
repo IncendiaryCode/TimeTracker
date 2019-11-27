@@ -208,24 +208,7 @@ class Dashboard_model extends CI_Model {
 			return false;
 		}
 	}
-   /* public function logout(){
-        $userid = $this->session->userdata('userid');
-        //check for entry with the same login date
-        $this->db->where(array('task_date'=>date('Y:m:d'),'end_time'=>null));
-        $query_check = $this->db->get('login_details');
-        if($query_check->num_rows()>0){ //multiple logins on the same date
-            $data = $query_check->row_array();
-            $array = array('end_time'=>date('Y:m:d H:i:s'));
-            $this->db->where(array('user_id'=>$userid,'task_date'=>$data['task_date']));
-            $query = $this->db->update('login_details',$array);
-            if($query){
-
-                return true;
-            }else{
-                return false;
-            }
-        }
-    }*/
+    
     public function send_otp(){
         $email = $this->security->xss_clean($this->input->post('email'));
         if(empty($email)){

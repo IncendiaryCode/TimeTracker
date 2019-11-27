@@ -33,6 +33,7 @@ $this->load->helper('url_helper');
                 </a>
             </div>
             <?php
+            
              if(empty($GLOBALS['page_title'])) { 
                 ?>
             <!-- refers to home page -->

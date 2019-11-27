@@ -31,7 +31,7 @@
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
-                <form id="uploadImage" method="post" action="<?=base_url();?>index.php/user/employee_profile" enctype="multipart/form-data">
+                <form id="uploadImage" method="post" action="<?=base_url();?>index.php/user/upload_profile" enctype="multipart/form-data">
                     <p><input type="file" name="change_img" placeholder="Upload image" id="image"></p>
                     <p class="text-danger" id="imageerror"></p>
                     <button type="submit" class="btn save-task" id="submit-profile">Upload</button>
@@ -47,18 +47,19 @@
             <div class="modal-header ">Leave for the day!!!
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
-                <form method="post" action="<?=base_url();?>index.php/login/logout">
                     <div class="modal-body text-left">
                         <p class="mt-4 mb-1"><u>Note:</u></p>
                         <ul class="text-muted"><li>Do you want to leave for the day?</li>
                             <li>You can not login for the day once you logout.</li>
+                           <!-- <li>No: Logout</li>
+                            <li>Yes: update logout time </li>
+                           -->
                         </ul>
                     </div>
                     <div class="modal-footer text-center">
-                        <button type="submit" class="btn btn-secondary" data-dismiss="modal">No</button>
-                        <button type="button" class="btn btn-primary" onclick="<?=base_url();?>index.php/user/update_end_time">Yes</button>
+                        <button type="submit" class="btn btn-secondary" onclick="window.location.href='<?=base_url();?>index.php/login/logout'"data-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='<?=base_url();?>index.php/user/update_end_time'">Yes</button>
                     </div>
-                </form>
             </div>
         </div>
     </div>

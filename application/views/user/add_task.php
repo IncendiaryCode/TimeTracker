@@ -13,7 +13,9 @@ $profile = $this->session->userdata('user_profile');
                         $this->load->library('form_validation');
                         if(validation_errors()) { ?>
                     <div class="alert alert-danger">
-                        <?php echo validation_errors(); ?>
+                        <?php echo validation_errors();
+                        echo isset($failure)?$failure:"";
+                         ?>
                     </div>
                     <?php } ?>
                     <div class="alert-success">

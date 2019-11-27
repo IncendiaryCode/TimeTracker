@@ -20,9 +20,14 @@ class User_model extends CI_Model {
         $query = $this->db->get();
         if($query->num_rows() > 0){
             $task_status = $query->result_array();
-            return array('task_status'=>$task_status,'type'=>'task');
         }else{
-            return array('task_status'=>'','type'=>'login');
+            $task_status = '';
+        }
+            $this->db->where(array('user_id'=>$userid,'task_date'=>date('Y:m:d')));
+            $query = $this->db->get('login_details');
+            if($query->num_rows() > 0){
+                $login_status = $query->row_array();
+                return array('task_status'=>$task_status,'login_status'=>$login_status);
         }
     }
     //load tasks
@@ -331,11 +336,12 @@ class User_model extends CI_Model {
         return $result;
     }
     public function task_exists(){
+        $userid = $this->session->userdata('userid');
         $task_name = $this->input->post('task_name');
-        //print_r($this->input->post('project_name'));exit;
         $this->db->select('task_name');
-        $this->db->from('task');
-        $this->db->where(array('project_id'=>$this->input->post('project_name')));
+        $this->db->from('task AS t');
+        $this->db->join('task_assignee AS a','a.task_id = t.id');
+        $this->db->where(array('t.project_id'=>$this->input->post('project_name'),'a.user_id'=>$userid));
         $query = $this->db->get();
         if($query->num_rows() > 0){
             $row = $query->row_array();
@@ -358,7 +364,6 @@ class User_model extends CI_Model {
         }
 
         if($this->input->get('type') == 'edit'){
-            //print_r($this->input->get('type'));exit;
             $array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('task_desc'),'modified_on'=>date('Y:m:d H:i:s'));
             $this->db->where(array('project_id'=>$this->input->post('project_name'),'id'=>$this->input->post('task_id')));
             $query = $this->db->update('task',$array);
@@ -415,17 +420,18 @@ class User_model extends CI_Model {
                         return false;
                     }else{
                         //Add timings into time_details table
-                        $members = ($this->input->post('daterange'));
-                        if(sizeof($members) > 1){
-                            foreach($members as $values)
+                        $date_value = ($this->input->post('daterange'));
+                        if(sizeof($date_value) > 1){
+                            for($i=1;$i<sizeof($date_value);$i++)
                             {
-                                $start_time = strtotime($values['start']);
-                                $end_itme = strtotime($values['end']);
+                                $start_time = strtotime($date_value[$i]['start']);
+                                $end_itme = strtotime($date_value[$i]['end']);
                                 $diff = $end_itme - $start_time;
                                 $hours = $diff / ( 60 * 60 );
                                 $minutes = $diff/60; 
                                 $total_mins = ($minutes < 0 ? 0 : abs($minutes));
-                                $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'task_date'=>$values['date'],'start_time'=>$values['start'],'end_time'=>$values['end'],'total_hours'=>$hours,'total_minutes'=>$total_mins,'created_on'=>date('Y:m:d H:i:s'));
+                                //print_r($date_value[$i]['date'].' '.date('H:i:s',$end_itme));exit;
+                                $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'task_date'=>$date_value[$i]['date'],'start_time'=>$date_value[$i]['date'].' '.date('H:i:s',$start_time),'end_time'=>$date_value[$i]['date'].' '.date('H:i:s',$end_itme),'total_hours'=>$hours,'total_minutes'=>$total_mins,'created_on'=>date('Y:m:d H:i:s'));
                                 $this->db->set($array);
                                 $query = $this->db->insert('time_details',$array);
                                 /*if($query){  
@@ -483,6 +489,27 @@ class User_model extends CI_Model {
         $query = $this->db->get('users');
         if($query->num_rows() == 1){
             return $query->row_array();
+        }
+    }
+    public function update_logout_time(){
+        $userid = $this->session->userdata('userid');
+        //check for entry with the same login date
+        $this->db->where(array('task_date'=>date('Y:m:d'),'end_time IS NULL'));
+        $query_check = $this->db->get('login_details');
+    //print_r($query_check->row_array());exit;
+        if($query_check->num_rows()>0){
+            $data = $query_check->row_array();
+            //print_r($data['id']);exit;
+            $array = array('end_time'=>date('Y:m:d H:i:s'),'modified_on'=>date('Y:m:d H:i:s'));
+            $this->db->where('id',$data['id']);
+            $query = $this->db->update('login_details',$array);
+            if($this->db->affected_rows() == 1){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
         }
     }
 }
