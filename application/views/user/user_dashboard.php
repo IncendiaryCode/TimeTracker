@@ -92,7 +92,12 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
             <h3><i id="icon-for-task" class="fas action-icon <?=$timerClass?>"></i></h3>
         </div>
         <div class="container">
-            <?php if(!empty($task_info['task_status'])){ ?> 
+            <?php if(!empty($task_info['task_status'])){ 
+               foreach($task_info['task_status'] as $taskinfo){ 
+                $today_date = date("Y-m-d");
+                $task_date = substr($taskinfo['start_time'],0,10);
+                if(strcmp($today_date,$task_date) != 0) {
+                ?> 
             <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4 alert-box">
                 <!-- TODO... -->
                 <i class="text-danger  fas fa-exclamation-triangle"></i>
@@ -102,7 +107,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-            </div> <?php } ?>
+            </div> <?php } } } ?>
             <div class="row mb-3 pt-4">
                 <div class="col-6">
                     <h4 class="font-weight-light text-left ">Recent Activites</h4>
