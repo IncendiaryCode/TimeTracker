@@ -138,7 +138,6 @@ function loadTaskActivities(formData) {
             var timerModal = timerStopModal();
 
             for (x in data) {
-                    console.log(data)
                 for (var y = 0; y < data[x].length; y++) {
                     var cardHeader = $('<div class="card-header" />');
                     var cardHeaderRow = $('<div class="row pt-2" />');
@@ -148,7 +147,7 @@ function loadTaskActivities(formData) {
                             $('.alert-box').show();
                         }
                     }
-                    cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
+                    cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time+'</div>');
                     var stopCol = $('<div class="col-6 text-right" />');
                     if (data[x][y].running_task == 0)  /*check whether task is ended or not*/ {
                         var timeUsed = minutesToTime(data[x][y].t_minutes)
@@ -201,7 +200,6 @@ function loadTaskActivities(formData) {
                             }
                         });
                     });
-
                     footerRow.append(footerRight);
                     cardFooter.append(footerRow);
                     cardInner.append(cardFooter);
@@ -225,7 +223,6 @@ function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it
     if (time_part_array[0] >= 12) {
         ampm = 'PM';
     }
-
     if (time_part_array[0] > 12) {
         time_part_array[0] = time_part_array[0] - 12;
     }

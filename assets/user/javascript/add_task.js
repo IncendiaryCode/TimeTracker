@@ -32,8 +32,6 @@ if (addTask) {
                     return false;
                 } else {
                     array_of_timings.push({ date, start_time, end_time });
-                    // $('#addTask').append(input);
-                   /* return true;*/
                 }
             }
         } else {
@@ -265,10 +263,13 @@ $(document).ready(function() {
 
     $('#editTask').click(function() {
         $('#task-times').show();
+        $('#save-and-start').hide();
+
     });
     addTime.init("#task-add-time");
     $('#newTask').click(function() {
         $('#task-times').hide();
+        $('#save-and-start').show();
     });
 
     $('.datepicker').datepicker({
