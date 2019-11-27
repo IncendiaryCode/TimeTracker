@@ -33,11 +33,12 @@ class User_model extends CI_Model {
         $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task",FALSE);
         $this->db->select_sum('d.total_minutes','t_minutes');
         $this->db->from('task AS t');
+        $this->db->join('task_assignee AS a','a.task_id = t.id');
         $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
         $this->db->join('project AS p', 'p.id = t.project_id');
         $this->db->join('project_module AS m','m.id = t.module_id');        
-        $this->db->where(array('d.user_id'=>$userid));
-        $this->db->group_by('d.task_id');
+        $this->db->where(array('a.user_id'=>$userid));
+        $this->db->group_by('t.id');
         if($sort_type == 'name'){
             $this->db->order_by("t.task_name", "asc");
         }else if($sort_type =='date'){
@@ -415,7 +416,7 @@ class User_model extends CI_Model {
                     }else{
                         //Add timings into time_details table
                         $members = ($this->input->post('daterange'));
-                        if(!empty($members)){
+                        if(sizeof($members) > 1){
                             foreach($members as $values)
                             {
                                 $start_time = strtotime($values['start']);
