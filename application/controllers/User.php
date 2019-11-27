@@ -50,7 +50,11 @@
 		//Stop Timer
 		public function stop_timer(){
 				$post_data = $this->input->post();
-				$task_id = $this->input->get('id',TRUE);
+				if($this->input->post('id')){
+					$task_id = $this->input->post('id',TRUE);
+				}else{
+					$task_id = $this->input->get('id',TRUE);
+				}
 				$end_time = isset($post_data['end_time']) ? $post_data['end_time'] : '';
 		        if ($task_id == '') {
 		            echo "Bad request parameter missing.";
@@ -153,8 +157,8 @@
 				$this->load->view('user/edit_task',$taskid);
 				$this->load->view('user/footer');
 		}
-		public function edit_task(){
-				
+
+		public function edit_task(){	
 				$this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|callback_task_exists|xss_clean');
 				$this->form_validation->set_rules('task_desc','Task Description','trim|required');
 				//$this->form_validation->set_rules('end_date','Task End Date','required');
@@ -178,15 +182,6 @@
 						$this->load->view('user/footer');
 				    }
 				}
-		}
-		//edit end time of the running task
-		public function task_end_time(){
-			$result = $this->user_model->stop_timer($this->input->get('id'));
-			if($result){
-				redirect('user/index','refresh');
-			}else{
-				echo "Unable to update end time";
-			}
 		}
 		//Upload profile
 		public function upload_profile(){
