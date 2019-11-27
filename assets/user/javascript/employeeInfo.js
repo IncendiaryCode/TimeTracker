@@ -126,7 +126,6 @@ function getTime() {
     return date;
 }
 
-
 function loadTaskActivities(formData) {
     $("#attach-card").empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
     $.ajax({
@@ -144,9 +143,10 @@ function loadTaskActivities(formData) {
                     var cardHeader = $('<div class="card-header" />');
                     var cardHeaderRow = $('<div class="row pt-2" />');
                     var today = getTime();
-
-                    if (today !== data[x][y].start_time.slice(0,10)) {
-                        $('.alert-box').show();
+                    if (data[x][y].start_time != null) {
+                        if (today != data[x][y].start_time.slice(0,10)) {
+                            $('.alert-box').show();
+                        }
                     }
                     cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
                     var stopCol = $('<div class="col-6 text-right" />');
@@ -157,10 +157,8 @@ function loadTaskActivities(formData) {
                         if (data[x][y].start_time != null) {
                             var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x][y].id);
                             stopButton.on('click', function() {
-                                console.log($(this).data('taskid'));
-                                localStorage.setItem('task_id', $(this).data('taskid'))
+                                localStorage.setItem('task_id', $(this).data('taskid'));
                                 timerModal.modal('show');
-
                             });
                         }
                         stopCol.append(stopButton);
@@ -171,7 +169,7 @@ function loadTaskActivities(formData) {
                     var cardInner = $("<div class='card card-style-1'  />");
                     cardInner.append(cardHeader);
 
-                    var cardBody = $("<div class='card-body' />");
+                    var cardBody = $("<div class='card-body' />");  
                     cardBody.append(data[x][y].task_name);
                     cardInner.append(cardBody);
 
@@ -294,6 +292,8 @@ $(document).ready(function() {
 
     $('#stop-time').click(function() {
         var t_id = $(this).data('id');
+
+
         if ($(this).data('tasktype') == 'task') {
             var taskUrl = timeTrackerBaseURL + 'index.php/user/start_timer';
             if (t_id) {
@@ -308,9 +308,15 @@ $(document).ready(function() {
                 }
             });
         } else {
+            if (t_id == "" || t_id == " ") {
+                $('#logout-modal').modal('show')
+            }
+            else
+            {
            localStorage.setItem('task_id', t_id);
             var timerModal = timerStopModal();
             timerModal.modal('show');
+            }
         }
     });
     var curr_timeStamp = Math.floor(Date.now() / 1000);
