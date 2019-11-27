@@ -8,8 +8,6 @@ var totalWorkTime = 0;
 var pauseCount = 0;
 var storing;
 
-var count = localStorage.getItem('count');
-
 //main timer interval for login
 var mainTimerInterval;
 
@@ -28,7 +26,6 @@ function startTimer(startTime) {
 }
 
 function setTime(startTime) {
-
     //update local storage
     localStorage.setItem('timeStamp', startTime);
 
@@ -61,16 +58,16 @@ if (changeImage) {
 }
 
 function updateTimer() {
-    console.log(localStorage.getItem('tid'));
+    console.log(localStorage.getItem('task_id'));
     $.ajax({
         type: "POST",
         url: timeTrackerBaseURL + 'index.php/user/stop_timer',
-        data: { 'action': 'task', 'id': localStorage.getItem('tid') },
+        data: { 'action': 'task', 'id': localStorage.getItem('task_id') },
         /*call to stop the task timer.*/
         dataType: 'json',
         success: function(res) {
             //handle timer
-
+            window.location.reload();
         }
     });
 }
@@ -90,21 +87,44 @@ var timerStopModal = function() {
         startTimer(localStorage.getItem('timeStamp'));
     });
 
-
     var completeBtn = timerModal.find('button#timestopmodal-complete-task');
     completeBtn.unbind().on('click', function() {
         updateTimer();
-        window.location.reload();
     });
 
     var stopBtn = timerModal.find('button#timestopmodal-stop-task');
     stopBtn.unbind().on('click', function() {
         updateTimer();
-        window.location.reload();
     });
-
     return timerModal;
 };
+
+function minutesToTime(mins) {
+    var total_mins = Number(mins);
+    var h = Math.floor(total_mins / 3600);
+    var m = Math.floor(total_mins % 3600 / 60);
+
+
+    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes. ") : "";
+    return hDisplay + mDisplay;
+}
+
+
+function getTime() {
+    var timeLogout = new Date();
+    var logoutTime = timeLogout.getFullYear() + '-' + (timeLogout.getMonth() + 1) + '-' + timeLogout.getDate();
+
+    var date = timeLogout.getFullYear() + '-' + (timeLogout.getMonth() + 1) + '-' + timeLogout.getDate();
+    var currentHr = timeLogout.getHours();
+    currentHr = addZeroBefore(currentHr);
+    var currentMin = timeLogout.getMinutes();
+    currentMin = addZeroBefore(currentMin);
+    var currentSec = timeLogout.getSeconds();
+    currentSec = addZeroBefore(currentSec);
+    var time = currentHr + ":" + currentMin + ":" + currentSec;
+    return date;
+}
 
 
 function loadTaskActivities(formData) {
@@ -119,19 +139,26 @@ function loadTaskActivities(formData) {
             var timerModal = timerStopModal();
 
             for (x in data) {
+                    console.log(data)
                 for (var y = 0; y < data[x].length; y++) {
                     var cardHeader = $('<div class="card-header" />');
                     var cardHeaderRow = $('<div class="row pt-2" />');
+                    var today = getTime();
+
+                    if (today !== data[x][y].start_time.slice(0,10)) {
+                        $('.alert-box').show();
+                    }
                     cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
                     var stopCol = $('<div class="col-6 text-right" />');
-                    if (data[x][y].running_task == 0) /*check whether task is ended or not*/ {
-
-                        stopCol.append('<i class="far fa-clock"></i>Total timeused=' + data[x][y].t_minutes);
+                    if (data[x][y].running_task == 0)  /*check whether task is ended or not*/ {
+                        var timeUsed = minutesToTime(data[x][y].t_minutes)
+                        stopCol.append('<i class="far fa-clock"></i>Total timeused=' + timeUsed);
                     } else {
                         if (data[x][y].start_time != null) {
                             var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x][y].id);
                             stopButton.on('click', function() {
-                                localStorage.setItem('tid', $(this).data('taskid'))
+                                console.log($(this).data('taskid'));
+                                localStorage.setItem('task_id', $(this).data('taskid'))
                                 timerModal.modal('show');
 
                             });
@@ -193,7 +220,6 @@ function loadTaskActivities(formData) {
         }
     });
 }
-
 function timeTo12HrFormat(time) { // Take a time in 24 hour format and format it in 12 hour format
     var time_part_array = time.split(":");
     var ampm = 'AM';
@@ -282,26 +308,19 @@ $(document).ready(function() {
                 }
             });
         } else {
-
-            localStorage.setItem('tid', t_id);
+           localStorage.setItem('task_id', t_id);
             var timerModal = timerStopModal();
             timerModal.modal('show');
         }
     });
-
     var curr_timeStamp = Math.floor(Date.now() / 1000);
     login_timer = parseInt(curr_timeStamp) - parseInt(__timeTrackerLoginTime);
-    if ((typeof login_timer != 'undefined') && (login_timer !== 0)) {
+    if ((typeof login_timer != 'undefined')) {
         if (login_timer == parseInt(login_timer)) {
             startTimer(login_timer);
         }
     }
     var x = document.getElementsByClassName("task-slider");
-    if (x.length > 0) // check only for login. 
-    {
-
-        $('.alert-box').show();
-    }
     for (var i = 0; i < x.length; i++) {
         var __timeTrackerTaskTime = x[i].childNodes[1].value;
         __timeTrackerTaskTimeNew = parseInt(curr_timeStamp) - parseInt(__timeTrackerTaskTime);
@@ -311,7 +330,6 @@ $(document).ready(function() {
             }
         }
     }
-
 
     if ($("#attach-card").length > 0) {
         loadTaskActivities({ 'type': 'task' });

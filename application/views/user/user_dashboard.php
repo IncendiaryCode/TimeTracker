@@ -89,19 +89,20 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
 <main class="container-fluid-main">
     <div class="md main-container-employee container timer">
         <div class="text-center shadow-lg topWidth stop-time" id="stop-time" data-tasktype="<?=$task_type?>" data-id="<?=$task_id?>">
-            <h3><i class="fas action-icon <?=$timerClass?>"></i></h3>
+            <h3><i id="icon-for-task" class="fas action-icon <?=$timerClass?>"></i></h3>
         </div>
         <div class="container">
+            <?php if(!empty($task_info['task_status'])){ ?>
             <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4 alert-box">
                 <!-- TODO... -->
                 <i class="text-danger  fas fa-exclamation-triangle"></i>
-                As task "
-                <?php echo $task_info['task_status'][0]['task_name'] ?>" has not been ended.
+
+                As task "<?php echo $task_info['task_status'][0]['task_name'] ?>" has not been ended.
                 <a href="#" class="forgot-color" id="stop-now" data-toggle="modal" data-target="#end-time-update"> Stop now!</a>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-            </div>
+            </div> <?php } ?>
             <div class="row mb-3 pt-4">
                 <div class="col-6">
                     <h4 class="font-weight-light text-left ">Recent Activites</h4>
