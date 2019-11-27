@@ -92,7 +92,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
             <h3><i id="icon-for-task" class="fas action-icon <?=$timerClass?>"></i></h3>
         </div>
         <div class="container">
-            <?php if(!empty($task_info['task_status'])){ ?>
+            <?php if(!empty($task_info['task_status'])){ ?> 
             <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4 alert-box">
                 <!-- TODO... -->
                 <i class="text-danger  fas fa-exclamation-triangle"></i>

@@ -41,7 +41,6 @@
     </div>
 </div>
 
-
 <div class="modal" id="logout-modal" data-backdrop="false">
     <div class="modal-dialog animated zoomIn">
         <div class="modal-content text-center">
@@ -49,6 +48,29 @@
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
                 <form method="post" action="<?=base_url();?>index.php/login/logout">
+                    <div class="modal-body text-left">
+                        <p class="mt-4 mb-1"><u>Note:</u></p>
+                        <ul class="text-muted"><li>Do you want to leave for the day?</li>
+                            <li>You can not login for the day once you logout.</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer text-center">
+                        <button type="submit" class="btn btn-secondary" data-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary" onclick="<?=base_url();?>index.php/user/update_end_time">Yes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="pause-action" data-backdrop="false">
+    <div class="modal-dialog animated zoomIn">
+        <div class="modal-content text-center">
+            <div class="modal-header ">Leave for the day!!!
+                <button type="button" class="close text-danger" data-dismiss="modal">×</button>
+            </div>
+                <form method="post" action="<?=base_url();?>index.php/user/update_end_time">
                     <div class="modal-body text-left">
                         <p class="mt-4 mb-1"><u>Note:</u></p>
                         <ul class="text-muted"><li>Do you want to leave for the day?</li>
@@ -64,7 +86,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="end-time-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
