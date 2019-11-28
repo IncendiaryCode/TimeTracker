@@ -59,7 +59,6 @@ if (changeImage) {
 
 function updateTimer(flag) {
 
-    console.log(flag);
     $.ajax({
         type: "POST",
         url: timeTrackerBaseURL + 'index.php/user/stop_timer',
@@ -68,6 +67,10 @@ function updateTimer(flag) {
         dataType: 'json',
         success: function (res) {
             //handle timer
+            document.getElementById("alarmmsg").innerHTML = res['msg'];
+            setTimeout(function(){
+                document.getElementById("alarmmsg").innerHTML = '';
+            }, 5000);
             window.location.reload();
         }
     });
@@ -146,6 +149,7 @@ function loadTaskActivities(formData) {
                             $('.alert-box').show();
                         }
                     }
+                    /*console.log(data);*/
                     cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
                     var stopCol = $('<div class="col-6 text-right" />');
                     if (data[x][y].running_task == 0)  /*check whether task is ended or not*/ {
@@ -187,6 +191,7 @@ function loadTaskActivities(formData) {
                         footerRight.append(actionPlay);
                     }
 
+
                     actionPlay.on('click', function (e) {
                         var t_id = this.getElementsByTagName('input').item(0).value;
                         $.ajax({
@@ -194,6 +199,11 @@ function loadTaskActivities(formData) {
                             url: timeTrackerBaseURL + 'index.php/user/start_timer',
                             data: { 'action': 'task', 'id': t_id },
                             success: function (res) {
+                                var msg = JSON.parse(res);
+                                document.getElementById("alarmmsg").innerHTML = msg['msg'];
+                                setTimeout(function(){
+                                    document.getElementById("alarmmsg").innerHTML = '';
+                                }, 5000);
                                 window.location.reload();
                             }
                         });
@@ -297,12 +307,17 @@ $(document).ready(function () {
                 url: taskUrl,
                 data: { 'action': 'task', 'id': t_id },
                 success: function (res) {
+
+                    document.getElementById("alarmmsg").innerHTML = res['msg'];
+                    setTimeout(function(){
+                        document.getElementById("alarmmsg").innerHTML = '';
+                    }, 5000);
                     window.location.reload();
                 }
             });
         } else {
             if (t_id == "" || t_id == " ") {
-                $('#pause-action').modal('show')
+                $('#pause-action').modal('show');
             }
             else {
                 localStorage.setItem('task_id', t_id);
@@ -318,7 +333,7 @@ $(document).ready(function () {
         if (login_timer == parseInt(login_timer)) {
             startTimer(login_timer);
         }
-    }
+   }
     var x = document.getElementsByClassName("task-slider");
     for (var i = 0; i < x.length; i++) {
         var __timeTrackerTaskTime = x[i].childNodes[1].value;

@@ -110,6 +110,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 </button>
             </div> <?php } } } ?>
             <div class="row mb-3 pt-4">
+                <p id="alarmmsg" class="text-center"></p>
                 <div class="col-6">
                     <h4 class="font-weight-light text-left ">Recent Activites</h4>
                 </div>

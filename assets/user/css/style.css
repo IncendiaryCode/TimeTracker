@@ -293,7 +293,6 @@ a:hover {
     border-width: 1px;
     border-style: solid;
     border-color: #ededed;
-    min-height: 172px;
 }
 
 .card-style-1 .card-header .vertical-line {
@@ -306,6 +305,7 @@ a:hover {
     border-radius: 15px 15px 0 0;
     color: #999;
     font-size: 14px;
+    min-height: 74px;
 }
 
 .card-style-1 .card-body {

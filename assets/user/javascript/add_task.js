@@ -352,7 +352,10 @@ $(document).ready(function() {
                                     dataType: 'json',
                                     success: function(res) {
                                       //  if (res.status) {
-                                            console.log(res);
+                                            document.getElementById("alartmsg").innerHTML = res['msg'];
+                                                setTimeout(function(){
+                                                    document.getElementById("alarmmsg").innerHTML = '';
+                                                }, 5000);
                                             //window.location.reload();
                                        // }
 

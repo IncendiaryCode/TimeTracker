@@ -32,7 +32,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <canvas id="daily" style="width:1000px; height:80px;"></canvas>
+                            <canvas id="daily" style="width:1000px; height:120px;"></canvas>
                         </div>
                         <div class="tab-pane fade" id="weekly-view" role="tabpanel" aria-labelledby="weekly-view-tab">
                             <div class="daily-chart">
