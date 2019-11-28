@@ -54,11 +54,11 @@
 			}
 		}
 		public function logout(){
-			//$this->session->sess_destroy();
+			$this->session->sess_destroy();
 			//$result = $this->dashboard_model->logout();
-				$this->session->unset_userdata('email');
-				$this->session->unset_userdata('userid');
-			    $this->session->unset_userdata('logged_in');
+				//$this->session->unset_userdata('email');
+			//	$this->session->unset_userdata('userid');
+			   // $this->session->unset_userdata('logged_in');
 			    redirect('/login/index', 'refresh');
 		}
 		public function load_forgot_pwd(){

@@ -94,6 +94,8 @@
 				}
 				$date = $_GET['date'];
 				$chart_data = $this->user_model->get_activity($chart_type,$date);
+				//print_r($chart_data);exit;
+				//$chart_data['status'] = "No activity in this date.";
 				echo json_encode($chart_data);
 			}
 		}

@@ -170,34 +170,23 @@ class User_model extends CI_Model {
         //get task activities
         $userid = $this->session->userdata('userid');
         $taskdate = $date;
+        
         if($chart_type == "daily_chart"){
             $this->db->select('*');
             $this->db->from('time_details');
             $this->db->where(array('user_id'=>$userid,'task_date' => $taskdate));
-            $this->db->where('end_time IS NOT NULL');
-            $this->db->limit(1);
             $query = $this->db->get();
             if($query->num_rows() > 0){
-                $data = $query->row_array();
-                $starttime = $data['start_time'];
-                $endtime = $data['end_time'];
-                //$label_data = $this->split_time($starttime, $endtime, "60");
-                //if(!empty($label_data)){
-                    /*$chart_data = array('daily_chart',
-                    "status"=>TRUE,
-                    "labels"=> $label_data[0],
-                    "data"=> $label_data[1]
-                    );*/
-                   // $chart_data = array($label_data);
-                    //print_r($chart_data);
-                    return array($starttime,$endtime);
-               // }
+                $data = $query->result_array();
+                foreach($data as $dates){
+                    $starttime[] = $dates['start_time'];
+                    $endtime[] = $dates['end_time'];
+                }
+                
+                return array($starttime,$endtime);
             }else{
-                $chart_data = array('daily_chart',
-                    "status"=>TRUE,
-                    "labels"=> array('9AM','10AM','11AM', '12PM','1PM','2PM', '3PM','4PM','12PM', '6PM', '9PM', '12PM'),
-                    "data"=> array(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0)
-                ); 
+                $status = "No activity in this date.";
+                return $status;
             }
         }
 
