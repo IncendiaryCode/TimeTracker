@@ -30,7 +30,6 @@ class Dashboard_model extends CI_Model {
 	    $query = $this->db->insert('users',$array1);
 	    
 	    $last_insert_id = $this->db->insert_id();
-	    //print_r('came to here-'. $last_insert_id); exit;
 	    $array2 = array('email'=>$this->input->post('user_email'),'password'=>$this->input->post('task_pass'),'type'=>'user','ref_id'=> $last_insert_id,'created_on'=>date('Y:m:d H:i:s'));
 	    $this->db->set($array2);
 	    $query2 = $this->db->insert('login',$array2);
@@ -141,7 +140,6 @@ class Dashboard_model extends CI_Model {
 	public function password_exists(){
 		$email = $this->session->userdata('email');
         $query = $this->db->get_where('login', array('email' => $email,'password'=>md5($this->input->post('psw1'))));
-       // print_r($query->result_array());exit;
         if($query->num_rows() == 1){
         	return true;
 		}else{
@@ -189,8 +187,7 @@ class Dashboard_model extends CI_Model {
 
                 if($query_check->num_rows()>0){ //multiple logins on the same date
                     $login_data = $query_check->row_array();                   
-                    $data = array('userid' => $row2->id,'email' => $row->email,'logged_in' => TRUE,'user_profile' => $row2->profile,'username' => $row2->name,'login_time' => $login_data['end_time']);
-                    //$this->session->set_userdata($data);
+                    $data = array('userid' => $row2->id,'email' => $row->email,'logged_in' => TRUE,'user_profile' => $row2->profile,'username' => $row2->name,'login_time' => $login_data['end_time']);;
                 }else{ //first login for the day
                     $array = array('user_id'=>$row2->id,'task_date'=>date('Y:m:d'),'start_time'=>date("Y:m:d H:i:s"),'created_on'=>date('Y:m:d H:i:s'));
                     $this->db->set($array);

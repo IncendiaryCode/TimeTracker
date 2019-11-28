@@ -38,14 +38,7 @@
 					$this->load->view('dashboard',$data);
 					$this->load->view('footer');
 				}else if($result == 'user'){
-					//$this->load->view('user/header');
 					$this->session->set_userdata('logged_in',TRUE);
-					/*$this->load->model('user_model');
-					$result = $this->user_model->task_status();
-					$task_details['task_status'] = $result['task_status'];
-					$task_details['type'] = $result['type'];
-					$this->load->view('user/user_dashboard.php',$task_details);
-					$this->load->view('user/footer');*/
 					redirect('/user/index', 'refresh');
 				}else{
 					$this->session->set_flashdata('err_message', 'Wrong Email/Password');
@@ -53,19 +46,19 @@
 				}
 			}
 		}
+
+		//function to logout
 		public function logout(){
 			$this->session->sess_destroy();
-			//$result = $this->dashboard_model->logout();
-				//$this->session->unset_userdata('email');
-			//	$this->session->unset_userdata('userid');
-			   // $this->session->unset_userdata('logged_in');
 			    redirect('/login/index', 'refresh');
 		}
+		//load forgot password page
 		public function load_forgot_pwd(){
 			$this->load->view('header');
 		    $this->load->view('forgotpwd');
 		    $this->load->view('footer');
 		}
+		//To store OTP into database
 		public function send_otp(){
 			$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
 			if ($this->form_validation->run() == FALSE) {
@@ -82,6 +75,7 @@
 				}
 			}
 		}
+		//function to validate OTP
 		public function check_otp(){
 			$this->form_validation->set_rules('otp', 'OTP', 'trim|required');
 			if ($this->form_validation->run() == FALSE) {
@@ -99,6 +93,7 @@
 				}
 			}
 		}
+		//function to change password
 		public function change_pass(){
 			$this->form_validation->set_rules('mail', 'Email', 'trim|required|valid_email');
 			$this->form_validation->set_rules('psw11','New Password','trim|required|min_length[3]|max_length[100]|md5|trim|xss_clean');

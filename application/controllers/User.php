@@ -23,13 +23,12 @@
 		public function index()
 		{
 			//loading user dashboard
-
 			$this->load->view('user/header');
 			$task_details['task_info'] = $this->user_model->task_status();
 			$this->load->view('user/user_dashboard',$task_details);
 			$this->load->view('user/footer');
 		}
-		public function load_task_data(){
+		public function load_task_data(){   //Load task data to user dashboard
 			if(isset($_GET['type'])){
 				$type = $this->input->get('type', TRUE);
 				$userid = $this->session->userdata('userid');
@@ -53,7 +52,7 @@
 			}
 			echo json_encode($output_result);
 		}
-		//Stop Timer
+		//Stop Timer function
 		public function stop_timer(){
 				$post_data = $this->input->post();
 				if($this->input->post('id')){
@@ -96,8 +95,6 @@
 				}
 				$date = $_GET['date'];
 				$chart_data = $this->user_model->get_activity($chart_type,$date);
-				//print_r($chart_data);exit;
-				//$chart_data['status'] = "No activity in this date.";
 				echo json_encode($chart_data);
 			}
 		}
@@ -107,7 +104,7 @@
 			$data['result'] = $this->user_model->get_module_name($projectid);
 			echo json_encode($data);
 		}
-
+		//check whether task exists inorder to add the task
 		public function task_exists(){
 			if($this->user_model->task_exists() == TRUE){
 				return true;
@@ -141,8 +138,6 @@
 		        $this->form_validation->set_rules('project_name','Project name','required');
 		        $this->form_validation->set_rules('project_module','Module name','required');
 		        $this->form_validation->set_rules('task_type','Radio button','required');
-		       // $this->form_validation->set_rules('start_date','Task Start Date','required');
-		       // $this->form_validation->set_rules('end_date','Task End Date','required');
 		        if ($this->form_validation->run() == FALSE)
 				{
 					$GLOBALS['page_title'] = 'Add Task';
@@ -170,7 +165,7 @@
 		            }
 		        }
 		}
-		//Edit task
+		// Load Edit task Page
 		public function load_edit_task(){
 			$GLOBALS['page_title'] = 'Edit Task';
 				if(isset($_GET['t_id'])){
@@ -185,7 +180,7 @@
 				$this->load->view('user/edit_task',$taskid);
 				$this->load->view('user/footer');
 		}
-
+		//Function to edit task
 		public function edit_task(){
 		$GLOBALS['page_title'] = 'Edit Task';	
 				$this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|callback_task_exists|xss_clean');
@@ -255,6 +250,7 @@
 			$this->load->view('user/footer');
 			
 		}
+
 		public function password_exists(){
 	        if ($this->user_model->password_exists() == TRUE)
 	        { 
@@ -290,6 +286,7 @@
 		            }
 		        }	
 		}
+		//update end time
 		public function update_end_time(){
 			$result = $this->user_model->update_logout_time();
 			if($result == TRUE){
