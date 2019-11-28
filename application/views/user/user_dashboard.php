@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Login timer
-$login_time = $this->session->userdata('login_time');
+//$login_time = $this->session->userdata('login_time');
+$login_time = $task_info['login_status']['start_time'];
 $login = new DateTime($login_time,new DateTimeZone('UTC'));
 $logintime = $login->getTimestamp();
 $timer = '';

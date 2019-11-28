@@ -106,16 +106,16 @@ class User_model extends CI_Model {
     //Stop Timer
     public function stop_timer($task_id, $end_time){
 
-        //print_r($task_id);exit;
         $userid = $this->session->userdata('userid');
         $this->db->select('*');
         $this->db->from('time_details');
         $this->db->where(array('task_id'=>$task_id,'user_id'=>$userid,'total_minutes'=>'0'));
         //$this->db->where('end_time IS NULL');
         $query = $this->db->get();
+       // print_r($query->row_array());exit;
         if($query->num_rows() > 0){
             $data = $query->row_array(); 
-            if($end_time !=''){
+            if($end_time != null){
                 $update_time = $end_time; 
             }else{
                 $update_time = date('Y:m:d H:i:s'); 
@@ -123,12 +123,24 @@ class User_model extends CI_Model {
             
             $diff = (strtotime($update_time) - strtotime($data['start_time']));            
             $t_minutes = round((abs($diff) /60),2);           
+            $hours = round(abs($diff / ( 60 * 60 )));
 
             $this->db->where(array('id'=>$data['id']));
-            $query2 = $this->db->update('time_details',array('end_time'=> $update_time, 'total_minutes' => $t_minutes,'modified_on' => date('Y:m:d H:i:s') ));
-
+            $query2 = $this->db->update('time_details',array('end_time'=> $update_time,'total_hours'=>$hours, 'total_minutes' => $t_minutes,'modified_on' => date('Y:m:d H:i:s') ));
             if($query2){
-                return true;
+                if($this->input->post('flag') == 1)
+                { 
+                    $this->db->where('id',$task_id);
+                    $query = $this->db->update('task',array('complete_task'=>'1'));
+                    if($query){  
+                        $flag_status = "complete";
+                        return $flag_status;
+                    }else{
+                        return false;
+                    }
+                }else if($this->input->post('flag') == 0){
+                    return true;
+                }
             }else{
                 return false;
             }
@@ -150,7 +162,7 @@ class User_model extends CI_Model {
                     $query = $this->db->update('time_details',array('total_hours'=>$hours,'total_minutes'=>$minutes));
                     if($query){*/
         }else{
-            echo "There is no running task with this userid";
+          return false;
         }
     }
     //edit end time of the running task
@@ -170,11 +182,14 @@ class User_model extends CI_Model {
         //get task activities
         $userid = $this->session->userdata('userid');
         $taskdate = $date;
-        
+
         if($chart_type == "daily_chart"){
             $this->db->select('*');
-            $this->db->from('time_details');
-            $this->db->where(array('user_id'=>$userid,'task_date' => $taskdate));
+            $this->db->from('time_details AS d');
+            $this->db->join('task AS t','t.id = d.task_id');
+            $this->db->where('d.end_time IS NOT NULL');
+            $this->db->where(array('d.user_id'=>$userid,'d.task_date' => $taskdate));
+            $this->db->group_by('t.id');
             $query = $this->db->get();
             if($query->num_rows() > 0){
                 $data = $query->result_array();
@@ -182,7 +197,7 @@ class User_model extends CI_Model {
                     $starttime[] = $dates['start_time'];
                     $endtime[] = $dates['end_time'];
                 }
-                
+                print_r(array($starttime));exit;
                 return array($starttime,$endtime);
             }else{
                 $status = "No activity in this date.";
@@ -192,10 +207,12 @@ class User_model extends CI_Model {
 
         if($chart_type == "weekly_chart"){
             $date = $this->input->get('date');
-            $year_value = explode('-',$date);
-            $week_value = $year_value[1];
-            $week = explode('W',$week_value);
-            $getdate = $this->get_start_and_end_date($week[1], $year_value[0]);
+            $year_value = explode('-',$date);  //format: 2019-W23
+            $week_value = $year_value[1];      //W23
+            $week = explode('W',$week_value);  //format: W23
+            $getdate = $this->get_start_and_end_date($week[1], $year_value[0]);  //start and end date for 23rd week and year 2019
+           // print_r($getdate[0]);
+         //   print_r($getdate[1]);
             $this->db->select('*');
             $this->db->from('time_details');
             $this->db->where(array('user_id'=>$userid));
@@ -204,6 +221,7 @@ class User_model extends CI_Model {
             $query = $this->db->get();
             if($query->num_rows() > 0){
                 $data = $query->result_array();
+                //print_r($data);exit;
                 foreach($data as $d){
                     $day = date('D', strtotime($d['task_date']));
                     //print_r($day);
@@ -212,29 +230,44 @@ class User_model extends CI_Model {
                     $total_time = $end-$start;
                     $total['total_hours'] = floor($total_time/3600);*/
                     $minutes = $d['total_minutes'];
-                    $tohours = $minutes/60;
-                    $total_hours = $d['total_hours'];
-                    $mins_to_hour = $total_hours + $tohours;
-                    $total['total_hours'] = $mins_to_hour;
-                    $total['day'] = $day;
-                    if(!empty($total)){
+                    $to_hours = $minutes/60;   //convert total_minutes interms of hour
+                    //print_r($minutes);
+                    //print_r($tohours);exit;
+                    //$total_hours = $d['total_hours'];
+                   // $mins_to_hour = $total_hours + $tohours;  //
+                    $total_hours[] = $to_hours;
+                    $week_days[] = $day;
                         $chart_data = array('weekly_chart',
                             "status"=>TRUE,
-                            "labels"=> $total['day'],
-                            "data"=> $total['total_hours']
+                            "labels"=> $week_days,
+                            "data"=> $total_hours
                         ); 
-                    }else{
-                        $chart_data = array('weekly_chart',
-                                "status"=>TRUE,
-                                "labels"=> array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'),
-                                "data"=> array(7, 4, 8, 7, 9, 5)
-                            );
-                    }
+                       // print_r($total);      
                 }
+            }else{
+                $status = "No activity in this week.";
+                return $status;
             }
         }
 
         if($chart_type == "monthly_chart"){
+            $year_start = date('Y-m-d ',strtotime($taskdate));
+            print_r($year_start);exit;
+           // $yaer_last = ; 
+            $this->db->select('*');
+            $this->db->from('time_details');
+            $this->db->where(array('user_id'=>$userid));
+            $this->db->where('end_time IS NOT NULL');
+            $this->db->where('task_date BETWEEN "'. date('Y-m-d', strtotime($getdate[0])). '" and "'. date('Y-m-d', strtotime($getdate[1])).'"');
+            //$this->db->where_in('task_date',$taskdate);
+            $query = $this->db->get();
+            if($query->num_rows() > 0){
+                $data = $query->result_array();
+
+
+
+
+
             $chart_data = array('monthy_chart',
                     "status"=>TRUE,
                     /*date with working hours in standard format*/
@@ -244,7 +277,7 @@ class User_model extends CI_Model {
                     "{Wed Feb 13 2019 00:00:00 GMT+0530 (India Standard Time) 5}")
                 );
         }
-
+}
         return $chart_data;
     }
     //to make time intervals in daily chart

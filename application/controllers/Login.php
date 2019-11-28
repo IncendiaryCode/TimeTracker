@@ -24,7 +24,7 @@
 		// Check for user login process
 		public function login_process() {
 			$this->form_validation->set_rules('username', 'Username', 'trim|required|valid_email');
-			$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[2]|max_length[100]|xss_clean');
+			$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[3]|max_length[100]|xss_clean');
 			if ($this->form_validation->run() == FALSE) {
 				redirect('/login/index', 'refresh');
 			}else{

@@ -23,6 +23,7 @@
 		public function index()
 		{
 			//loading user dashboard
+
 			$this->load->view('user/header');
 			$task_details['task_info'] = $this->user_model->task_status();
 			$this->load->view('user/user_dashboard',$task_details);
@@ -48,7 +49,7 @@
 				$output_result['msg'] = "Timer didnot start.";
 			}else{
 				$output_result['status'] = TRUE;
-				$output_result['msg'] = 'Timer started.';
+				$output_result['msg'] = "Timer started.";
 			}
 			echo json_encode($output_result);
 		}
@@ -67,13 +68,13 @@
 				$result = $this->user_model->stop_timer($task_id,$end_time);
 				if($result == FALSE){
 					$output_result['status'] = FALSE;
-					$output_result['msg'] = "Timer didnot stop.";
-				}else{
-					//redirect('user/index','refresh');
+					$output_result['msg'] = "Something went wrong.";
+				}else if($result == TRUE){
+					$output_result['flag'] = $result;
 					$output_result['status'] = TRUE;
-					$output_result['msg'] = 'Timer stop.';
+					$output_result['msg'] = "Timer stop.";
 				}
-				echo json_encode($output_result);
+				echo json_encode($output_result);		
 		}
 		//Load employee activities page
 		public function load_employee_activities(){
@@ -116,6 +117,7 @@
 		}
 		//Add tasks
 		public function add_tasks(){
+			$GLOBALS['page_title'] = 'Add Task';
 			if($this->input->post('action') == 'save_and_start'){
 				$result=$this->user_model->add_tasks();
 		            if(!$result){
@@ -143,6 +145,7 @@
 		       // $this->form_validation->set_rules('end_date','Task End Date','required');
 		        if ($this->form_validation->run() == FALSE)
 				{
+					$GLOBALS['page_title'] = 'Add Task';
 					$this->load->view('user/header');
 					$data['result'] = $this->user_model->get_project_name();
 					$this->load->view('user/add_task',$data);
@@ -152,6 +155,7 @@
 		        {
 		            $result=$this->user_model->add_tasks();
 		            if(!$result){
+
 		                $this->load->view('user/header');
 		               	$data['result'] = $this->user_model->get_project_name();
 		                $data['failure'] = "Something went wrong.";
@@ -168,6 +172,7 @@
 		}
 		//Edit task
 		public function load_edit_task(){
+			$GLOBALS['page_title'] = 'Edit Task';
 				if(isset($_GET['t_id'])){
 					$t_id = $this->input->get('t_id', TRUE);
 				}else if(isset($_POST['t_id'])){
@@ -181,7 +186,8 @@
 				$this->load->view('user/footer');
 		}
 
-		public function edit_task(){	
+		public function edit_task(){
+		$GLOBALS['page_title'] = 'Edit Task';	
 				$this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|callback_task_exists|xss_clean');
 				$this->form_validation->set_rules('task_desc','Task Description','trim|required');
 				//$this->form_validation->set_rules('end_date','Task End Date','required');
@@ -242,7 +248,7 @@
 		}
 		//Display My Profile Page
 		public function load_my_profile(){
-			
+			$GLOBALS['page_title'] = 'My profile';
 			$data['res'] = $this->user_model->my_profile();
 			$this->load->view('user/header');
 			$this->load->view('user/profile',$data);

@@ -4,7 +4,7 @@ $this->load->library('session');
 $profile = $this->session->userdata('user_profile');
 print_r($task_data[0]['id']);
 ?>
-<main class="container-fluid container-fluid-main"><p class="display-4 text-white  text-center">Edit task</p>
+<!--<main class="container-fluid container-fluid-main"><p class="display-4 text-white  text-center">Edit task</p>-->
     <div class="main-container container">
         <div class="main-container-inner">
             <div class="row ">
