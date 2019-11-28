@@ -23,7 +23,7 @@ class Verify extends \CI_Controller {
 	{
 	    
 	    // Extract the token
-	    $token = $headers['Authorization'];
+	    $token = $headers['Authorization-Key'];
 	    // Use try-catch
 	    // JWT library throws exception if the token is not valid
 	    try {
