@@ -31,7 +31,8 @@
 		public function load_task_data(){
 			if(isset($_GET['type'])){
 				$type = $this->input->get('type', TRUE);
-				$task_details['data'] = $this->user_model->get_task_details($type);
+				$userid = $this->session->userdata('userid');
+				$task_details['data'] = $this->user_model->get_task_details($type,$userid);
 				echo json_encode($task_details);
 			}else{
 				$status = "No Tasks assigned to this user..";

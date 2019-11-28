@@ -31,8 +31,8 @@ class User_model extends CI_Model {
         }
     }
     //load tasks
-    public function get_task_details($sort_type){
-        $userid = $this->session->userdata('userid');
+    public function get_task_details($sort_type,$userid){
+    
         $this->db->select('p.name,d.start_time,p.image_name,t.task_name,t.id');
         //$this->db->select_sum('d.total_hours','t_hours');
         $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task",FALSE);
