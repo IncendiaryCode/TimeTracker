@@ -21,15 +21,20 @@ class Login extends REST_Controller {
 
     public function index_post()
     {
-        
-        $result = $this->dashboard_model->login_device();
-        if($result == false)
+        $result = array();
+        $data = $this->dashboard_model->login_device();
+        if($data == false)
         {
-            $this->response(['msg' => 'Invalid username or password!'], parent::HTTP_NOT_FOUND);
+            $result['success'] = 0;
+            $result['msg'] = 'Invalid username or password!';
+            $this->response($result, parent::HTTP_NOT_FOUND);
+
         }else{
             // Create a token from the user data and send it as reponse
             $token = AUTHORIZATION::generateToken(['username' => $this->input->post('username')]);
-            $result['token'] = $token;
+            $data['auth_key'] = $token;
+            $result['success'] = 1;
+            $result['user_details'] = $data;
             $this->response($result,REST_Controller::HTTP_OK);
         }
 

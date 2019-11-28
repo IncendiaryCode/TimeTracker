@@ -32,7 +32,7 @@ class Verify extends \CI_Controller {
 	        $data = AUTHORIZATION::validateToken($token);
 	        if ($data === false) {
 	            $status = REST_Controller::HTTP_UNAUTHORIZED;
-	            $response = ['status' => $status, 'msg' => 'Unauthorized Access!'];
+	            $response = ['success'=>0,'status' => $status, 'msg' => 'Unauthorized Access!'];
 	            //$this->response($response, $status);
 	            return $response;
 	            exit();
@@ -43,7 +43,7 @@ class Verify extends \CI_Controller {
 	        // Token is invalid
 	        // Send the unathorized access message
 	        $status = REST_Controller::HTTP_UNAUTHORIZED;
-	        $response = ['status' => $status, 'msg' => 'Unauthorized Access! '];
+	        $response = ['success'=>0,'status' => $status, 'msg' => 'Unauthorized Access! '];
 	        return $response;
 	        //$this->response($response, $status);
 	    }

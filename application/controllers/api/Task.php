@@ -37,10 +37,10 @@ class Task extends REST_Controller {
             $input = $this->input->post();
             if(!empty($input['id'])){
                 $type = 'task';
-                $data =  $this->user_model->get_task_details($type,$input['id']);
+                $data['details'] =  $this->user_model->get_task_details($type,$input['id']);
                 //$data = $this->db->get_where("task", ['id' => $input['id']])->row_array();
             }else{
-                $data = $this->db->get("task")->result();
+                $data['details'] = $this->db->get("task")->result();
             }
             $this->response($data, REST_Controller::HTTP_OK);
         }else{
