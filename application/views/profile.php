@@ -4,16 +4,17 @@
     $this->load->library('session');
     $profile = $this->session->userdata('user_profile');
 ?>
-    <header class="container-fluid">
+<!--     <header class="container-fluid">
         <div class="row">
             <div class="col-6 m-3">
                 <img src="<?=base_url();?>assets/images/logo-white.png" height="40px" onclick="window.location.href='<?=base_url();?>index.php/admin'">
             </div>
         </div>
-    </header>
-    <h1 class="text-center text-white pb-4">My Profile</h1>
+    </header> -->
+    
     <main class="container-fluid-main">
-        <div class="  md main-container-employee text-center">
+        <div class="main-container-inner mt-3">
+        <div class="md main-container-employee text-center">
             <img id="new_img" src="<?=base_url();?>assets/images/<?=$profile?>" width="10%;" class="rounded-circle figure mt-4" data-toggle="modal" data-target="#changeImage" data-toggle="tooltip" data-placement="top" title="Upload profile picture">
             <div class="container ">
                 <?php 
@@ -44,9 +45,14 @@
                 </form>
             </div>
         </div>
+            <hr>
+            <footer>
+                <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</ p>
+            </footer>
+        </div>
     </main>
-    <div class="modal" id="changeImage">
-        <div class="modal-dialog animated fadeInDown">
+<!--     <div class="modal" id="changeImage">
+        <div class="modal-dialog animated">
             <div class="modal-content ">
                 <div class="modal-header ">Upload image
                     <button type="button" class="close text-danger" data-dismiss="modal">×</button>
@@ -61,7 +67,4 @@
             </div>
         </div>
     </div>
-    <hr>
-    <footer>
-        <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</ p>
-    </footer>
+     -->

@@ -4,7 +4,7 @@ $GLOBALS['page_title'] = 'Add Task';
 $this->load->library('session');
 $profile = $this->session->userdata('user_profile');
 ?>
-<!--<main class="container-fluid container-fluid-main"><p class="display-4 text-white  text-center">Add task</p>-->
+<main class="container-fluid container-fluid-main">
     <div class="main-container container">
         <div class="main-container-inner">
             <div class="row ">
@@ -20,7 +20,7 @@ $profile = $this->session->userdata('user_profile');
                     <?php } ?>
                     <div class="alert-success">
                         <?php echo isset($success)?$success:""; ?>
-                                        <p id="alartmsg" class="text-center"></p>
+                            <p id="alartmsg" class="text-center"></p>
                     </div>
                     <form action="<?=base_url();?>index.php/user/add_tasks" method="post" id="addTask" class="mt-5 ">
                         <button type="submit" id="save-and-start" class="text-center shadow-lg icon-width start-time">
@@ -126,8 +126,8 @@ $profile = $this->session->userdata('user_profile');
                 </div>
             </div>
         </div>
+            <hr class="mt-4">
         <footer class="footer">
-            <hr>
             <p class="text-center ">Copyright © 2019 Printgreener.com</p>
         </footer>
     </div>

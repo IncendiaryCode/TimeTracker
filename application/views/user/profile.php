@@ -5,7 +5,7 @@ $this->load->helper('url_helper');
 //$this->load->library('session');
 //$profile = $this->session->userdata('user_profile');
 ?>
-<!--<main class="container-fluid container-fluid-main"><p class="display-4 text-white  text-center">My profile</p>-->
+<main class="container-fluid container-fluid-main">
     <div class="main-container container">
         <div class="main-container-inner">
             <div class="row mt-5">
@@ -49,7 +49,7 @@ $this->load->helper('url_helper');
                 </div>
             </div>
         </div>
-        <hr class="mt-5">
+        <hr class="profile-footer">
         <footer>
             <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
         </footer>

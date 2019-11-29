@@ -9,10 +9,13 @@
             <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times  main-modal-close"></i></button>
         </div>
         <div class="modal-content text-center">
-            <img id="new_img" src="<?=base_url();?>assets/user/images/user_profiles/<?=$profile;?>" class="rounded-circle img-fluid" data-toggle="modal" data-target="#changeimage" data-toggle="tooltip" data-placement="top" title="Upload profile picture">
-            <h5 class="text-center mt-4 font-weight-light">
-                <?php echo $name;?>
-            </h5>
+            <img id="new_img" src="<?=base_url();?>assets/user/images/user_profiles/<?=$profile;?>" class="rounded-circle img-fluid" >
+
+            <div class="edit">
+                <i class="change-image fas fa-camera" data-toggle="modal" data-target="#changeimage"></i>
+            </div> 
+
+            <h5 class="text-center mt-4 font-weight-light"><?php echo $name;?></h5>
             <ul class="text-center">
                 <!-- profile options -->
                 <li id="empplyee-profile"><a href="<?=base_url();?>index.php/user/load_my_profile">My profile</a></li>
@@ -25,7 +28,7 @@
 </div>
 <div class="modal" id="changeimage" data-backdrop="false">
     <!-- to change the profile picture of user-->
-    <div class="modal-dialog animated zoomIn">
+    <div class="modal-dialog animated">
         <div class="modal-content text-center">
             <div class="modal-header ">Upload image
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
@@ -41,8 +44,9 @@
     </div>
 </div>
 
+
 <div class="modal" id="logout-modal" data-backdrop="false">
-    <div class="modal-dialog animated zoomIn">
+    <div class="modal-dialog animated">
         <div class="modal-content text-center">
             <div class="modal-header ">Leave for the day!!!
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
@@ -51,9 +55,6 @@
                         <p class="mt-4 mb-1"><u>Note:</u></p>
                         <ul class="text-muted"><li>Do you want to leave for the day?</li>
                             <li>You can not login for the day once you logout.</li>
-                           <!-- <li>No: Logout</li>
-                            <li>Yes: update logout time </li>
-                           -->
                         </ul>
                     </div>
                     <div class="modal-footer text-center">
@@ -63,10 +64,9 @@
             </div>
         </div>
     </div>
-</div>
 
 <div class="modal" id="pause-action" data-backdrop="false">
-    <div class="modal-dialog animated zoomIn">
+    <div class="modal-dialog animated">
         <div class="modal-content text-center">
             <div class="modal-header ">Leave for the day!!!
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
@@ -86,7 +86,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <div class="modal fade" id="end-time-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

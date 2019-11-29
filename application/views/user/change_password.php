@@ -5,7 +5,7 @@
     $profile = $this->session->userdata('user_profile');
 ?>
 <main class="container-fluid container-fluid-main"><p class="display-4 text-white  text-center">Change password</p>
-    <div class=" main-container container">
+    <div class="main-container container">
         <div class="main-container-inner">
             <div class="row mt-5">
                 <div class="col-6 offset-3">
@@ -48,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <hr class="mt-5">
+        <hr class="change_psw-footer">
         <footer>
             <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
         </footer>

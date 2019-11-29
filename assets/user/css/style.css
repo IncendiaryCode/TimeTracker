@@ -484,3 +484,42 @@ a:hover {
 {
     display: none;
 }
+.figure:hover
+{
+opacity: 0.5;
+}
+
+.link-to-back:hover
+{
+    opacity: 0.5;
+}
+.change-image
+{
+    
+    background-color: white;
+    border-radius: 100%;
+    color: black;
+    padding: 12px;
+}
+.change-image:hover
+{
+    color: blue;
+}
+.fa-camera
+{
+    font-size: 18px;
+}
+.main-modal-close:hover
+{
+    color: red;
+    opacity: 0.5;
+}
+
+.profile-footer
+{
+    margin-top: 200px;
+}
+.change_psw-footer
+{
+    margin-top: 130px;
+}

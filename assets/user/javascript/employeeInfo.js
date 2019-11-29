@@ -40,6 +40,8 @@ function setTime(startTime) {
     var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
     $('#primary-timer').html(formattedTime);
+    $('.title').html(formattedTime);
+    
 }
 
 function addZeroBefore(n) {
@@ -149,7 +151,6 @@ function loadTaskActivities(formData) {
                             $('.alert-box').show();
                         }
                     }
-                    /*console.log(data);*/
                     cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
                     var stopCol = $('<div class="col-6 text-right" />');
                     if (data[x][y].running_task == 0)  /*check whether task is ended or not*/ {
@@ -183,12 +184,19 @@ function loadTaskActivities(formData) {
                     var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit position_edit_icon animated fadeIn" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
                     actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_edit_task?t_id=' + data[x][y].id);
 
-
                     footerRight.append(actionEdit);
+
                     var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon animated fadeIn fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
 
                     if (data[x][y].running_task == 0 || data[x][y].start_time == null) {
-                        footerRight.append(actionPlay);
+                        if (data[x][y].completed == 0) {
+                            footerRight.append("<span class='text-success'>This task is completed.</span>");
+                        
+                        }
+                        else
+                        {
+                            footerRight.append(actionPlay);
+                        }
                     }
 
 
@@ -362,5 +370,4 @@ $(document).ready(function () {
         infiniteLoop: false,
         controls: false,
     });
-
 });

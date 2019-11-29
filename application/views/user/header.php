@@ -8,7 +8,8 @@ $this->load->helper('url_helper');
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Time Tracker</title>
+    <title class="title">TimeTracker</title>
+    <link rel="icon" href="<?=base_url();?>assets/images/logo.png" type="image/icon type">
     <!-- //User Dashboard assets -->
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="//use.fontawesome.com/releases/v5.11.0/css/all.css">
@@ -28,7 +29,7 @@ $this->load->helper('url_helper');
     <header class="container main-header">
         <div class="row">
             <div class="col-6 time-tracker">
-                <a href="<?=site_url();?>/user">
+                <a href="<?=site_url();?>/user" class="link-to-back">
                     <img src="<?=base_url();?>assets/images/logo-white.png" height="40px">
                 </a>
             </div>

@@ -1,14 +1,3 @@
-function retrieveChartData(type, date) {
-    $.ajax({
-        type: "GET",
-        url: timeTrackerBaseURL + 'index.php/user/activity_chart',
-        data: { 'chart_type': type, 'date': date },
-        dataType: 'json',
-        success: function (res) {
-            drawChart(type,res);
-        }
-    });
-}
 
 Date.prototype.getWeek = function () {
     var onejan = new Date(this.getFullYear(), 0, 1);
@@ -35,9 +24,7 @@ function loadDailyChart() {
 function loadWeeklyChart() {
     if (document.getElementById('weekly-chart')) {
         var weekControl = document.querySelector('input[type="week"]');
-
         var week = document.getElementById('weekly-chart').value;
-
         if (week == "" || week == " " || week == null) {
 
             var today = new Date(); // get current date
@@ -52,14 +39,12 @@ function loadWeeklyChart() {
     }
 }
 
-function drawChart(type,res) {
-    console.log("res", res);
+function drawChart(type, res) {
     if (type == 'daily_chart') {
         id = "daily";
     } else if (type == 'weekly_chart') {
         id = 'weekly';
     }
-
     var chart = document.getElementById(id).getContext('2d');
     gradient = chart.createLinearGradient(0, 0, 0, 600);
 
@@ -76,7 +61,8 @@ function drawChart(type,res) {
                     label: 'Time interval',
                     borderColor: "#7078ff",
                     backgroundColor: gradient,
-                    data: res.data //[1, 1, 0, 1, 0, 0, 1]
+                    data: res.data,
+                    
                 }]
             },
             options: {
@@ -125,56 +111,103 @@ function drawChart(type,res) {
             }
         };
     } else if (id == 'daily') {
-        var config = {
-            type: 'bar',
-            data: {
-                labels: res.labels, //['12AM', '3AM', '6AM', '9AM', '12PM', '3PM', '6PM', '9PM', '12AM'],
-                datasets: [{
-                    label: 'Time interval',
-                    borderColor: "#7078ff",
-                    backgroundColor: '#7078ff',
-                    data: res.data //[1, 1, 0, 1, 0, 0, 1]
-                }]
-            },
-            options: {
-                responsive: true,
-                title: {
-                    display: false
-                },
-                tooltips: {
-                    enabled: true,
-                    cornerRadius: 10,
-                    xPadding: 20,
-                    titleFontSize: 10,
-                },
-                scales: {
-                    xAxes: [{
-                        gridLines: {
-                            display: false
-                        }
-                    }],
-                    yAxes: [{
-                        gridLines: {
-                            display: false,
-                            drawBorder: false
-                        },
-                        ticks: {
-                            display: false,
-                            beginAtZero: true
-                        }
+        var arr = [];
+        var totalMin = 0;
+        console.log(res);
+        for(var i=0; i<res.length; i++)
+        {
+            arr=arr+i;
+        for(var j=0; j<res[i].length; j++)
+        {
+        var initialMin = 60;
+        if (res[i][j] != null && res[i][j] != null ) {
+            var x1 = res[0][i].slice(11,16);
+            var x2 = res[1][i].slice(11,16);
+            var startTimeMin = parseInt(x1.slice(0,2)*60)+parseInt(x1.slice(3,5));
+            var endTimeMin = parseInt(x2.slice(0,2)*60)+parseInt(x2.slice(3,5));
 
-                    }]
+            if ((initialMin < startTimeMin)) {
+                totalMin += (endTimeMin - startTimeMin) % 60;
                 }
-            }
+                else
+                {
+            /*if ((initialMin <= startTimeMin) && (initialMin+120>endTimeMin )) {
+               arr+i.push(60);     
+            }else{arr+i.push(0);}
+                arr+i.push(totalMin);*/
+                    initialMin+=120;
+                }
+        }
+            
         }
     }
+    var barChartData = {
+            labels: ['1AM-3AM', '3AM-5AM', '5AM-7AM','7AM-9AM','9AM-11AM','11AM-1PM','1PM-3PM','3PM-5PM','5PM-7PM','7PM-9PM','9PM-11PM','11PM-1AM'],
+            datasets: [{
+                label: 'task1',
+                backgroundColor: "#8c86fe",
+                stack: 'Stack 0',
+                data: [10,5,2,5]
+            },/* {
+                label: 'task2',
+                backgroundColor: "#e485fb",
+                stack: 'Stack 1',
+                data: [1,8,5,15]
+            }*/]
+
+        };
+
+        var config = {
+            type: 'bar',
+                data: barChartData,
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Daily details'
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            
+                            stacked: false,
+                            beginAtZero: true,
+                        }],
+                        yAxes: [{
+                            gridLines: {
+                            display: false
+                        },
+                            stacked: false,
+                            beginAtZero: true,
+                        }]
+                    }
+                }
+            }
+            }
+        
     new Chart(chart, config);
 
 }
 
 
+function retrieveChartData(type, date) {
+    $.ajax({
+        type: "GET",
+        url: timeTrackerBaseURL + 'index.php/user/activity_chart',
+        data: { 'chart_type': type, 'date': date },
+        dataType: 'json',
+        success: function (res) {
+            drawChart(type,res);
+        }
+    });
+}
+
 function loadMonthlyChart() {
     var year = document.getElementById('monthly-chart').value;
+    console.log(year)
     if (year == "" || year == " " || year == null) {
         var cur_year = parseInt(new Date().toString().slice(10, 15));
         document.getElementById('monthly-chart').value = cur_year;
@@ -189,18 +222,17 @@ function loadMonthlyChart() {
         dataType: 'json',
         success: function (res) {
             google.charts.load("current", { packages: ["calendar"] });
-            google.setOnLoadCallback(drawMonthlyChart(res));
+            google.setOnLoadCallback(drawMonthlyChart());
         }
     });
 }
 
-function drawMonthlyChart(data) {
+function drawMonthlyChart() {
 
-    console.log('data', data['data'][2]);
+    //console.log('data', data['data'][2]);
 
-    console.log(typeof (data['data'][2]));
     var dataTable = new google.visualization.DataTable();
-    console.log('data', data['data']);
+    //console.log('data', data['data']);
 
     dataTable.addColumn({ type: 'date', id: 'Date' });
     dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
@@ -223,6 +255,7 @@ function drawMonthlyChart(data) {
 
     var options = {
         title: " ",
+        calendar: { cellSize: 17 },
         height: 600,
     };
     chart.draw(dataTable, options);
