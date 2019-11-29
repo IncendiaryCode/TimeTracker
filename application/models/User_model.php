@@ -353,14 +353,9 @@ class User_model extends CI_Model {
 
             $time_range = $this->input->post('time');
             if(sizeof($time_range) > 0){
-for($i=1;$i<=sizeof($time_range);$i++){
-    $start_value = $time_range[$i]['start'];
-                    $end_value = $time_range[$i]['end'];
-    print_r($start_value);
 
-}exit;
                 for($i=1;$i<=sizeof($time_range);$i++){
-
+                    $table_id[$i] = $time_range[$i]['table_id'];
                     $start_value = $time_range[$i]['start'];
                     $end_value = $time_range[$i]['end'];
                     $date =  date("Y-m-d",strtotime($start_value));
@@ -369,7 +364,7 @@ for($i=1;$i<=sizeof($time_range);$i++){
                     $hours = round(abs($diff / ( 60 * 60 )));
 
                     $array = array('start_time'=>$start_value,'end_time'=>$end_value,'description'=>$this->input->post('task_desc'),'user_id'=>$userid,'task_id'=>$this->input->post('task_id'),'total_hours'=>$hours,'total_minutes'=>$minutes,'task_date'=>$date);
-                    $this->db->where(array('user_id'=>$userid,'task_id'=>$this->input->post('task_id')));
+                    $this->db->where(array('user_id'=>$userid,'task_id'=>$this->input->post('task_id'),'id'=>$table_id[$i]));
                     $query = $this->db->update('time_details',$array);
                     
                 }
@@ -438,7 +433,7 @@ for($i=1;$i<=sizeof($time_range);$i++){
     //Check for the Old Password
     public function password_exists(){
         $email = $this->session->userdata('email');
-        $query = $this->db->get_where('login', array('email' => $email,'password'=>md5($this->input->post('psw1'))));
+        $query = $this->db->get_where('users', array('email' => $email,'password'=>md5($this->input->post('psw1'))));
         if($query->num_rows() == 1){
             return true;
         }else{
@@ -460,7 +455,7 @@ for($i=1;$i<=sizeof($time_range);$i++){
             }
             $this->db->set('password',md5($new_pwd));
             $this->db->where('email', $email);
-            $query = $this->db->update('login');
+            $query = $this->db->update('users');
             if($query){
                 return true;
             }else{

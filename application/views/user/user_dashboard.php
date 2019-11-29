@@ -1,10 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Login timer
-//$login_time = $this->session->userdata('login_time');
+$this->load->helper('date');
 $login_time = $task_info['login_status']['start_time'];
 $login = new DateTime($login_time,new DateTimeZone('UTC'));
 $logintime = $login->getTimestamp();
+$time_login = strtotime($login_time);
 $timer = '';
 $timerClass = 'fa-stop';
 //print_r($task_info['login_status']['start_time']);exit;
@@ -46,7 +47,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
-                            <?php print_r($task_info['login_status']['start_time']); ?>
+                            <?php echo unix_to_human($time_login); ?>
                         </p>
                         <div class="font-weight-light text-center primary-timer" id="primary-timer">
                             00:00:00
@@ -64,6 +65,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                     $timer = $taskinfo['start_time'];
                     $datetime2 = new DateTime($timer,new DateTimeZone('UTC'));
                     $timer_start = $datetime2->getTimestamp();
+                    $task_start = strtotime($timer);
                     $task_id = $taskinfo['task_id'];
                      ?>
                 <div>
@@ -71,7 +73,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                         <input type="hidden" id="<?php echo $taskinfo['task_id'] ?>" value="<?php echo $timer_start?>">
                         <input type="hidden" id="id<?=$id?>" value="<?php echo $taskinfo['task_id']?>">
                         <p class="font-weight-light time-font text-center login-time" id="start-time<?=$id?>">
-                            <?php echo $taskinfo['start_time'];?>
+                            <?php echo unix_to_human($task_start);?>
                         </p>
                         <div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer<?=$taskinfo['task_id']?>" data-type="" data-time="">
                             00:00:00
