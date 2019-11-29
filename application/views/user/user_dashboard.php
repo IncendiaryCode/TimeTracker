@@ -42,14 +42,14 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
 <!-- new scoll for task -->
 <div class="container timer-slider">
     <div class="row">
-        <div class="col-md-12" id="here">
+        <div class="col-md-12">
             <div id="timer-slider">
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
                             <?php print_r($task_info['login_status']['start_time']); ?>
                         </p>
-                        <div class="font-weight-light text-center primary-timer" id="primary-timer" data-type="" data-time="">
+                        <div class="font-weight-light text-center primary-timer" id="primary-timer">
                             00:00:00
                         </div>
                         <p class="font-weight-light text-center taskName" id="taskName">
@@ -69,6 +69,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                      ?>
                 <div>
                     <div class="section-slider task-slider" id="login-timer-details<?=$id?>">
+                        <input type="hidden" id="id<?=$id?>" value="<?php echo $taskinfo['task_id']?>">
                         <input type="hidden" id="<?php echo $taskinfo['task_id'] ?>" value="<?php echo $timer_start?>">
                         <p class="font-weight-light time-font text-center login-time" id="start-time<?=$id?>">
                             <?php echo $taskinfo['start_time'];?>

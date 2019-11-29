@@ -91,11 +91,7 @@ var addTime = {
         });
         array_of_timings.push({ date, start_time, end_time });
         removeBtn.appendTo(row);
-
-        // var input = $("<input id='timings-array'>").attr("type", "hidden").attr("name", "members").val(JSON.stringify(array_of_timings));
-        // /*input.appendTo(row);*/
-        // $('#addTask').append(input);
-
+        
         section.append(row);
         this.ele.prepend(section);
 

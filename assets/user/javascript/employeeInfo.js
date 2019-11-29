@@ -40,8 +40,7 @@ function setTime(startTime) {
     var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
     $('#primary-timer').html(formattedTime);
-    $('.title').html(formattedTime);
-    
+    $('.title').html(formattedTime);   
 }
 
 function addZeroBefore(n) {
@@ -189,9 +188,8 @@ function loadTaskActivities(formData) {
                     var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon animated fadeIn fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
 
                     if (data[x][y].running_task == 0 || data[x][y].start_time == null) {
-                        if (data[x][y].completed == 0) {
+                        if (data[x][y].completed == 1) {
                             footerRight.append("<span class='text-success'>This task is completed.</span>");
-                        
                         }
                         else
                         {
@@ -296,15 +294,37 @@ if (oldEndTime) {
             oldEndTime.onsubmit = function () {
                 return true;
             }
-
     })
 }
 
-
 $(document).ready(function () {
 
+
     $('#stop-time').click(function () {
-        var t_id = $(this).data('id');
+        //var tsk_id = $(this).data('id');
+        var t_id = 0;
+
+        var curr_element = document.getElementsByClassName("bx-pager");
+        var x = curr_element[0].childNodes;
+        for(var i=0;i<x.length;i++)
+        {
+            var className = x[i]["lastChild"];
+            var len = className.classList.length;
+            if (len == 2) {
+                var scroll_num = i+1;
+                var scroll_element = document.getElementById('timer-slider');
+                if (scroll_num == 1) {
+                    $('#pause-action').modal('show');
+                }
+                else
+                {
+                var ele = scroll_element.children[scroll_num];
+                var taskid = document.getElementById('id'+i).value;
+                t_id = taskid;
+                }
+            }
+        }
+
         if ($(this).data('tasktype') == 'task') {
             var taskUrl = timeTrackerBaseURL + 'index.php/user/start_timer';
             if (t_id) {
@@ -369,5 +389,9 @@ $(document).ready(function () {
         auto: false,
         infiniteLoop: false,
         controls: false,
+        
     });
+
+   
 });
+

@@ -2,7 +2,6 @@
 $GLOBALS['page_title'] = 'Edit Task';
 $this->load->library('session');
 $profile = $this->session->userdata('user_profile');
-print_r($task_data[0]['id']);
 ?>
 <main class="container-fluid container-fluid-main">
     <div class="main-container container">
@@ -44,34 +43,28 @@ print_r($task_data[0]['id']);
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Date</th>
                                     <th scope="col">Start time</th>
                                     <th scope="col">End time</th>
                                 </tr>
                             </thead>
+                            <tbody id="task_history">
                             <?php $num = 1;
                           foreach($task_data as $task){ 
-                            
                             ?>
-                            <tbody id="task_history">
                                 <tr>
                                     <th scope="row">
                                         <?=$num;?>
                                     </th>
                                     <td>
-                                    <input type="text" id="start-date<?=$num?>"  name="start-date<?=$num?>" value="<?=$task['task_date'];?>">
+                                        <input class="form-control" type="text" id="start<?=$num?>"  name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>">
                                     </td>
                                     <td>
-                                        <input type="text" id="start<?=$num?>"  name="start<?=$num?>" value="<?=$task['start_time'];?>">
-                                    </td>
-                                    <td>
-                                        
-                                        <input type="text" id="start<?=$num?>"  name="end<?=$num?>" value="<?=$task['end_time'];?>">
+                                        <input class="form-control" type="text" id="start<?=$num?>"  name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>">
                                     </td>
                                 </tr>
-                            </tbody>
                             <?php $num=$num+1;
                         } ?>
+                            </tbody>
                         </table>
                         <p id="taskError" class=" text-danger"></p>
                         <p>&nbsp;</p>
