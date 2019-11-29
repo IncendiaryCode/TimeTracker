@@ -28,7 +28,7 @@ $this->load->helper('url_helper');
 <body>
     <header class="container main-header">
         <div class="row">
-            <div class="col-6 time-tracker">
+            <div class="col-md-6 col-6 time-tracker">
                 <a href="<?=site_url();?>/user" class="link-to-back">
                     <img src="<?=base_url();?>assets/images/logo-white.png" height="40px">
                 </a>
@@ -38,10 +38,10 @@ $this->load->helper('url_helper');
              if(empty($GLOBALS['page_title'])) { 
                 ?>
             <!-- refers to home page -->
-            <div class="col-5 text-right ">
+            <div class="col-md-4 col-6 text-right ">
                 <a href="<?=site_url();?>/user/add_tasks" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
             </div>
-            <div class="col-1 text-left" id="append">
+            <div class="col-md-2 col-12 text-left" id="append">
                 <!-- to chage image -->
                 <h2><a href="#" class="text-white"><i class="fas fa-bars figure " id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></a></h2>
             </div>

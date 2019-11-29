@@ -270,12 +270,6 @@ a:hover {
     height: 40px;
 }
 
-@media (max-width: 770px) {
-    #new-task {
-        width: 50%;
-    }
-
-}
 
 .vertical-line {
     color: #867bfe;
@@ -330,7 +324,7 @@ a:hover {
 }
 
 .card-style-1:hover .card-footer .card-actions .card-action {
-    display: inline-block;
+    display: block;
 }
 
 .modal-transparent {

@@ -1,17 +1,38 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Login timer
-$this->load->helper('date');
+//$login_time = $this->session->userdata('login_time');
 $login_time = $task_info['login_status']['start_time'];
 $login = new DateTime($login_time,new DateTimeZone('UTC'));
-$logintime = strtotime($login_time);
+$logintime = $login->getTimestamp();
 $timer = '';
 $timerClass = 'fa-stop';
+//print_r($task_info['login_status']['start_time']);exit;
 $task_type = 'login';
 $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Login';
+/*if (!empty($task_info['task_status'])) {     //fetching task details 
+    //for ($i=0; $i < sizeof($task_info); $i++) { 
+        foreach($task_info['task_status'] as $taskinfo){
+        //print_r($taskinfo['task_name']);
+    $start_text = 'Started at '.$taskinfo['start_time'];
+    
+    $task_name = $taskinfo['task_name'];
+    $timerClass = 'fa-stop';
+    $task_id = $taskinfo['task_id'];
+
+    $timer = $taskinfo['start_time'];
+   // $timer =($task_info[0]['task_date'].$task_info[0]['start_time']);
+    $datetime1 = new DateTime();
+    $datetime2 = new DateTime($timer);
+    $timer_start = $datetime2->getTimestamp();
+    $interval = date_diff($datetime1, $datetime2);
+    $timer =  strtotime($taskinfo['task_date'] . $interval->format(' %h:%i:%s'));
+
+}
+}*/
 ?>
 <script type="text/javascript">
 //this will be send to JS for timer to start
@@ -20,14 +41,14 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
 <!-- new scoll for task -->
 <div class="container timer-slider">
     <div class="row">
-        <div class="col-md-12" id="here">
+        <div class="col-md-12">
             <div id="timer-slider">
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
-                            <?php echo unix_to_human($logintime); ?>
+                            <?php print_r($task_info['login_status']['start_time']); ?>
                         </p>
-                        <div class="font-weight-light text-center primary-timer" id="primary-timer" data-type="" data-time="">
+                        <div class="font-weight-light text-center primary-timer" id="primary-timer">
                             00:00:00
                         </div>
                         <p class="font-weight-light text-center taskName" id="taskName">
@@ -48,6 +69,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 <div>
                     <div class="section-slider task-slider" id="login-timer-details<?=$id?>">
                         <input type="hidden" id="<?php echo $taskinfo['task_id'] ?>" value="<?php echo $timer_start?>">
+                        <input type="hidden" id="id<?=$id?>" value="<?php echo $taskinfo['task_id']?>">
                         <p class="font-weight-light time-font text-center login-time" id="start-time<?=$id?>">
                             <?php echo $taskinfo['start_time'];?>
                         </p>
@@ -76,9 +98,8 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 $today_date = date("Y-m-d");
                 $task_date = substr($taskinfo['start_time'],0,10);
                 if(strcmp($today_date,$task_date) != 0) {
-                ?> 
+                ?>
             <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4 alert-box">
-                <!-- TODO... -->
                 <i class="text-danger  fas fa-exclamation-triangle"></i>
 
                 As task "<?php echo $task_info['task_status'][0]['task_name'] ?>" has not been ended.

@@ -1,5 +1,5 @@
 <?php
-$GLOBALS['page_title'] = 'Edit Task';
+$GLOBALS['page_title'] = 'Edit task';
 $this->load->library('session');
 $profile = $this->session->userdata('user_profile');
 

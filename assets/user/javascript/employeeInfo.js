@@ -30,7 +30,6 @@ function setTime(startTime) {
     var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
     $('#primary-timer').html(formattedTime);
-    $('.title').html(formattedTime);
 }
 
 function addZeroBefore(n) {
@@ -158,7 +157,7 @@ function loadTaskActivities(formData) {
                     cardHeaderRow.append(stopCol);
                     cardHeader.append(cardHeaderRow);
 
-                    var cardInner = $("<div class='card card-style-1'  />");
+                    var cardInner = $("<div class='card card-style-1 animated fadeInUp'  />");
                     cardInner.append(cardHeader);
 
                     var cardBody = $("<div class='card-body' />");
@@ -267,6 +266,7 @@ function setTaskTime(startTime, id) {
     var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
     $('#task-timer' + id).html(formattedTime);
+    $('.title').html(formattedTime);
 }
 
 var oldEndTime = document.getElementById('update-endtime');

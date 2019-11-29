@@ -46,7 +46,7 @@
 
 
 <div class="modal" id="logout-modal" data-backdrop="false">
-    <div class="modal-dialog animated">
+    <div class="modal-dialog">
         <div class="modal-content text-center">
             <div class="modal-header ">Leave for the day!!!
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
@@ -66,7 +66,7 @@
     </div>
 
 <div class="modal" id="pause-action" data-backdrop="false">
-    <div class="modal-dialog animated">
+    <div class="modal-dialog">
         <div class="modal-content text-center">
             <div class="modal-header ">Leave for the day!!!
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
@@ -123,9 +123,9 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="timestopmodal" tabindex="-1" role="dialog" aria-labelledby="timestopmodalLabel" aria-hidden="true">
+<div class="modal" id="timestopmodal" tabindex="-1">
     <!-- Modal Timer to Stop or Confirm -->
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg" >
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="timestopmodalLabel">Confirm Timer Action</h5>
