@@ -1,13 +1,3 @@
-var minutesLabel = document.getElementById("minutes");
-var secondsLabel = document.getElementById("seconds");
-var hoursLabel = document.getElementById("hours");
-var totalSeconds = 0;
-var totalMinuts = 0;
-var totalHours = 0;
-var totalWorkTime = 0;
-var pauseCount = 0;
-var storing;
-
 //main timer interval for login
 var mainTimerInterval;
 
@@ -40,7 +30,7 @@ function setTime(startTime) {
     var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
     $('#primary-timer').html(formattedTime);
-    $('.title').html(formattedTime);   
+    $('.title').html(formattedTime);
 }
 
 function addZeroBefore(n) {
@@ -183,16 +173,15 @@ function loadTaskActivities(formData) {
                     var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit position_edit_icon animated fadeIn" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
                     actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_edit_task?t_id=' + data[x][y].id);
 
+                    if (data[x][y].completed == 1) {
+                    footerRight.append("<span class='text-success'>This task is completed.</span>");
+                    }
                     footerRight.append(actionEdit);
 
                     var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon animated fadeIn fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
 
                     if (data[x][y].running_task == 0 || data[x][y].start_time == null) {
-                        if (data[x][y].completed == 1) {
-                            footerRight.append("<span class='text-success'>This task is completed.</span>");
-                        }
-                        else
-                        {
+                        if (data[x][y].completed == 0) {
                             footerRight.append(actionPlay);
                         }
                     }
@@ -340,7 +329,7 @@ $(document).ready(function () {
                     setTimeout(function(){
                         document.getElementById("alarmmsg").innerHTML = '';
                     }, 5000);
-                    window.location.reload();
+                    //window.location.reload();
                 }
             });
         } else {
@@ -365,6 +354,7 @@ $(document).ready(function () {
     var x = document.getElementsByClassName("task-slider");
     for (var i = 0; i < x.length; i++) {
         var __timeTrackerTaskTime = x[i].childNodes[1].value;
+
         __timeTrackerTaskTimeNew = parseInt(curr_timeStamp) - parseInt(__timeTrackerTaskTime);
         if ((typeof __timeTrackerTaskTimeNew != 'undefined') && (__timeTrackerTaskTimeNew !== 0)) {
             if (__timeTrackerTaskTimeNew == parseInt(__timeTrackerTaskTimeNew)) {
@@ -389,7 +379,6 @@ $(document).ready(function () {
         auto: false,
         infiniteLoop: false,
         controls: false,
-        
     });
 
    

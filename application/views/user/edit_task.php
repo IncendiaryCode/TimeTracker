@@ -2,7 +2,7 @@
 $GLOBALS['page_title'] = 'Edit Task';
 $this->load->library('session');
 $profile = $this->session->userdata('user_profile');
-print_r($task_data);
+
 ?>
 <main class="container-fluid container-fluid-main">
     <div class="main-container container">
@@ -54,6 +54,7 @@ print_r($task_data);
                             ?>
                                 <tr>
                                     <th scope="row">
+                                        <input type="hidden" name="task-id" value="<?php echo $task['id']?>" >
                                         <?=$num;?>
                                     </th>
                                     <td>
