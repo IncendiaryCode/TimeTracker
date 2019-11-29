@@ -6,7 +6,7 @@ $profile = $this->session->userdata('user_profile');
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light">
-            <img src="<?=base_url();?>assets/images/logo-white.png" height="40px;">
+            <a href="#" class="text-white previous"><img src="<?=base_url();?>assets/images/logo-white.png" height="40px;"></a>
             <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon "></span>
             </button>
@@ -15,7 +15,7 @@ $profile = $this->session->userdata('user_profile');
                     
                     <div class="nav-item nav-link pr-4">
                         <div class="dropdown" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <i class="far fa-bell"></i>
+                            <a href="#"><i class="far fa-bell"></i></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class=" text-center">
                                     <table class="table table-hover">
@@ -43,7 +43,7 @@ $profile = $this->session->userdata('user_profile');
                     </div>
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="<?=base_url();?>assets/images/<?=$profile?>" height="40px" class="rounded-circle">
+                            <a href="#" class="text-white"><img src="<?=base_url();?>assets/images/<?=$profile?>" height="40px" class="rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class=" text-center">
                                     <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/change_password"' class="text-display">Profile</a></p>

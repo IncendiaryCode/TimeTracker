@@ -7,6 +7,7 @@ $(document).ready(function()
 });
 
 var changePsw = document.getElementById('changePsw');
+if (changePsw) {
 changePsw.onsubmit = function (e) {
     
     var oldPsw= document.getElementById('oldPsw').value;
@@ -34,6 +35,7 @@ changePsw.onsubmit = function (e) {
             return true;/**/
         }
         return false;
+    }
     }
 
 var changeImage = document.getElementById('uploadImage');

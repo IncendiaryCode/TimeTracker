@@ -59,13 +59,14 @@ print_r($task_data[0]['id']);
                                         <?=$num;?>
                                     </th>
                                     <td>
-                                        <?=$task['task_date'];?>
+                                    <input type="text" id="start-date<?=$num?>"  name="start-date<?=$num?>" value="<?=$task['task_date'];?>">
                                     </td>
                                     <td>
-                                        <?=$task['start_time'];?>
+                                        <input type="text" id="start<?=$num?>"  name="start<?=$num?>" value="<?=$task['start_time'];?>">
                                     </td>
                                     <td>
-                                        <?=$task['end_time'];?>
+                                        
+                                        <input type="text" id="start<?=$num?>"  name="end<?=$num?>" value="<?=$task['end_time'];?>">
                                     </td>
                                 </tr>
                             </tbody>

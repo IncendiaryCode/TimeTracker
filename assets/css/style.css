@@ -173,3 +173,7 @@ header.main-header h1 {
         width: 50%;
     }
 }
+.previous:hover
+{
+    opacity: 0.5;
+}

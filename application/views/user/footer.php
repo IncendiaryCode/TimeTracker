@@ -12,7 +12,7 @@
             <img id="new_img" src="<?=base_url();?>assets/user/images/user_profiles/<?=$profile;?>" class="rounded-circle img-fluid" >
 
             <div class="edit">
-                <i class="change-image fas fa-camera" data-toggle="modal" data-target="#changeimage"></i>
+                <a href="#" class="text-white"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#changeimage"></i></a>
             </div> 
 
             <h5 class="text-center mt-4 font-weight-light"><?php echo $name;?></h5>

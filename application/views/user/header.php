@@ -43,7 +43,7 @@ $this->load->helper('url_helper');
             </div>
             <div class="col-1 text-left" id="append">
                 <!-- to chage image -->
-                <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></h2>
+                <h2><a href="#" class="text-white"><i class="fas fa-bars figure " id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></a></h2>
             </div>
             <?php } else { ?>
             <!-- refers to all other pages  -->

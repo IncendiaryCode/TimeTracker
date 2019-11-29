@@ -1,4 +1,5 @@
 var addUser = document.getElementById('addUser');
+if (addUser) {
 addUser.onsubmit = function(e) {
     var name = document.getElementById('newUser').value;
     if (name == "" || name == " ") {
@@ -11,4 +12,5 @@ addUser.onsubmit = function(e) {
 
         return false;
     }
+}
 }

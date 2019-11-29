@@ -1,5 +1,5 @@
-
 var addTask = document.getElementById('addTask');
+if (addTask) {
 addTask.onsubmit = function (e) {
 	var taskName = document.getElementById('Taskname').value;
 	var	 project = document.getElementById('chooseProject').value;
@@ -10,4 +10,5 @@ addTask.onsubmit = function (e) {
 	else
 
 		return true;
+}
 }

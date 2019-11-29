@@ -1,4 +1,5 @@
 var addProject = document.getElementById('addProject');
+if (addProject != null) {
 addProject.onsubmit = function (e) {
 	var task = document.getElementById('Projectname').value;
 	if (task =="" || task == " ") {
@@ -7,4 +8,5 @@ addProject.onsubmit = function (e) {
 	}
 	else
 		return true;
+}
 }
