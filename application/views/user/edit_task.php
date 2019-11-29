@@ -2,6 +2,7 @@
 $GLOBALS['page_title'] = 'Edit Task';
 $this->load->library('session');
 $profile = $this->session->userdata('user_profile');
+print_r($task_data);
 ?>
 <main class="container-fluid container-fluid-main">
     <div class="main-container container">
@@ -49,7 +50,7 @@ $profile = $this->session->userdata('user_profile');
                             </thead>
                             <tbody id="task_history">
                             <?php $num = 1;
-                          foreach($task_data as $task){ 
+                          foreach($task_data as $task){
                             ?>
                                 <tr>
                                     <th scope="row">
