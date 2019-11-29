@@ -242,7 +242,7 @@ class Dashboard_model extends CI_Model
                         'login_time' => $login_data['end_time']
                     );
                     ;
-                } //end of if($query_check->num_rows() > 0)
+                }
                 else { //first login for the day
                     $array = array(
                         'user_id' => $row->id,
@@ -267,17 +267,13 @@ class Dashboard_model extends CI_Model
                 $data['type']  = $row->type;
                 $data['email'] = $row->email;
                 return $data;
-            } //$query2->num_rows() == 1
+            }
             else {
                 //return 'Wrong inputs.';
                 return false;
             }
-        } //$query->num_rows() == 1
-        else {
-            //return 'Wrong inputs.';
-            return false;
         }
-    }
+        
     //To login
     public function login_process()
     {
@@ -327,11 +323,7 @@ class Dashboard_model extends CI_Model
                     $this->session->set_userdata($data);
                 }
                 return $row->type;
-            } //$query2->num_rows() == 1
-            else {
-                return false;
             }
-        } //$query->num_rows() == 1
         else {
             $this->form_validation->set_message('Wrong inputs.');
             return false;

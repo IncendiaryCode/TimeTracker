@@ -8,8 +8,7 @@ class User_model extends CI_Model {
         $this->load->library('session');
         $userid = $this->session->userdata('userid');
     }
-    //Task Status into user dashboard page 
-    //to show the timer
+    //fetch running tasks into user dashboard page 
     public function task_status(){
         $userid = $this->session->userdata('userid');
         $this->db->select('*');
@@ -29,12 +28,12 @@ class User_model extends CI_Model {
                 return array('task_status'=>$task_status,'login_status'=>$login_status);
         }
     }
-    //load tasks into user dashboard
+    //load all tasks of the user into user dashboard
     public function get_task_details($sort_type,$userid){   
         $this->db->select('p.name,d.start_time,p.image_name,t.task_name,t.id');
-        $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task",FALSE);
-        $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);
-        $this->db->select_sum('d.total_minutes','t_minutes');
+        $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task",FALSE); //get running tasks of the user
+        $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);         //get completed tasks of the user
+        $this->db->select_sum('d.total_minutes','t_minutes');                      //get total minutes for a particular task
         $this->db->from('task AS t');
         $this->db->join('task_assignee AS a','a.task_id = t.id');
         $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
@@ -43,11 +42,11 @@ class User_model extends CI_Model {
         $this->db->where(array('a.user_id'=>$userid));
         $this->db->group_by('t.id');
         if($sort_type == 'name'){
-            $this->db->order_by("t.task_name", "asc");
+            $this->db->order_by("t.task_name", "asc");  //sort by task name
         }else if($sort_type =='date'){
-            $this->db->order_by("d.task_date", "asc");
+            $this->db->order_by("d.task_date", "asc");  //sort by task date
         }else if($sort_type == 'task'){
-            $this->db->order_by("t.id", "asc");
+            $this->db->order_by("t.id", "asc");         //sort by task id
         }
         $query = $this->db->get();
         $data = $query->result_array();
@@ -70,7 +69,7 @@ class User_model extends CI_Model {
     public function start_timer($type){
         $userid = $this->session->userdata('userid');
         $task_type = $type;
-        if($task_type == 'login'){
+        if($task_type == 'login'){ //check if the timer-start request for login
             $array1 = array('user_id'=>$userid,'task_date'=>date('Y:m:d'),'start_time'=>date('Y:m:d H:i:s'),'created_on'=>date('Y:m:d H:i:s'));
             $this->db->set($array1);
             $query1 = $this->db->insert('login_details',$array1);
@@ -79,7 +78,7 @@ class User_model extends CI_Model {
             }else{
                 return false;
             }
-        }else if($task_type == 'task'){
+        }else if($task_type == 'task'){ //check if the timer-start request for task
             $id = $this->input->post('id');
             $array2 = array('task_id'=>$id,'user_id'=>$userid,'task_date'=>date('Y:m:d'),'start_time'=>date('Y:m:d H:i:s'),'total_hours'=>'0','total_minutes'=>'0','created_on'=>date('Y:m:d H:i:s'));
             $this->db->set($array2);
@@ -89,7 +88,7 @@ class User_model extends CI_Model {
             }else{
                 return false;
             }
-        }else if($this->input->post('action') == 'save_and_start'){
+        }else if($this->input->post('action') == 'save_and_start'){  //if the start-timer request for save and start the task
             $array = array('task_id'=>$task_type,'user_id'=>$userid,'task_date'=>date('Y:m:d'),'start_time'=>date('Y:m:d H:i:s'),'total_hours'=>'0','total_minutes'=>'0','created_on'=>date('Y:m:d H:i:s'));
             $this->db->set($array);
             $query = $this->db->insert('time_details',$array);
