@@ -104,7 +104,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
             <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4 alert-box">
                 <i class="text-danger  fas fa-exclamation-triangle"></i>
 
-                As task "<?php echo $task_info['task_status'][0]['task_name'] ?>" has not been ended.
+                As task "<?php echo $taskinfo['task_name'] ?>" has not been ended.
                 <a href="#" class="forgot-color" id="stop-now" data-toggle="modal" data-target="#end-time-update"> Stop now!</a>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>

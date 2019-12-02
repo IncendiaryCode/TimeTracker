@@ -63,25 +63,51 @@ class User extends CI_Controller
         $post_data = $this->input->post();
         if ($this->input->post('id')) {
             $task_id = $this->input->post('id', TRUE);
+            $end_time = isset($post_data['end_time']) ? $post_data['end_time'] : '';
+            $result = $this->user_model->stop_timer($task_id, $end_time);
+            if ($result == FALSE) {
+                $output_result['status'] = FALSE;
+                $output_result['msg']    = "Something went wrong.";
+            }
+            else if ($result == TRUE) {
+                $output_result['flag']   = $result;
+                $output_result['status'] = TRUE;
+                $output_result['msg']    = "Timer stop.";
+            }
+            echo json_encode($output_result);
         }
         else {
             $task_id = $this->input->get('id', TRUE);
-        }
-        $end_time = isset($post_data['end_time']) ? $post_data['end_time'] : '';
-        if ($task_id == '') {
-            echo "Bad request parameter missing.";
-        }
-        $result = $this->user_model->stop_timer($task_id, $end_time);
-        if ($result == FALSE) {
-            $output_result['status'] = FALSE;
-            $output_result['msg']    = "Something went wrong.";
-        }
-        else if ($result == TRUE) {
-            $output_result['flag']   = $result;
-            $output_result['status'] = TRUE;
-            $output_result['msg']    = "Timer stop.";
-        }
-        echo json_encode($output_result);
+            $end_time = isset($post_data['end_time']) ? $post_data['end_time'] : '';
+            if ($task_id == '') {
+                $output_result['status'] = FALSE;
+                $output_result['msg'] = "Bad request parameter missing.";
+                $this->load->view('user/header');
+                $output_result['task_info'] = $this->user_model->task_status();
+                $this->load->view('user/user_dashboard', $output_result);
+                $this->load->view('user/footer');
+
+            }else{
+                $result = $this->user_model->stop_timer($task_id, $end_time);
+                if ($result == FALSE) {
+                    $output_result['status'] = $result;
+                    $output_result['msg']    = "Something went wrong.";
+                    $this->load->view('user/header');
+                    $output_result['task_info'] = $this->user_model->task_status();
+                    $this->load->view('user/user_dashboard', $output_result);
+                    $this->load->view('user/footer');
+                }
+                else if ($result == TRUE) {
+                    $output_result['flag']   = $result;
+                    $output_result['status'] = TRUE;
+                    $output_result['msg']    = "Task stopped and end time is updated.";
+                    $this->load->view('user/header');
+                    $output_result['task_info'] = $this->user_model->task_status();
+                    $this->load->view('user/user_dashboard', $output_result);
+                    $this->load->view('user/footer');
+                }
+            }
+        } 
     }
     //Load employee activities page
     public function load_employee_activities()
@@ -200,7 +226,7 @@ class User extends CI_Controller
     public function edit_task()
     {
         $GLOBALS['page_title'] = 'Edit Task';
-        $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|callback_task_exists|xss_clean');
+        $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|xss_clean');
         $this->form_validation->set_rules('task_desc', 'Task Description', 'trim|required');
        // $this->form_validation->set_rules('start_time','Task Start Date','required');
        // $this->form_validation->set_rules('end_time','Task End Date','required');
@@ -305,7 +331,7 @@ class User extends CI_Controller
             }
         }
     }
-    //update end time for previous day's running task
+    //update logout time
     public function update_end_time()
     {
         $result = $this->user_model->update_logout_time();

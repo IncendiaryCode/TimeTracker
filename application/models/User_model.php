@@ -122,7 +122,7 @@ class User_model extends CI_Model {
             $this->db->where(array('id'=>$data['id']));
             $query2 = $this->db->update('time_details',array('end_time'=> $update_time,'total_hours'=>$hours, 'total_minutes' => $t_minutes,'modified_on' => date('Y:m:d H:i:s') ));
             if($query2){
-                if($this->input->post('flag') == 1)
+                if($this->input->post('flag') == 1) //if flag is 1, request is to complete the task
                 { 
                     $this->db->where('id',$task_id);
                     $query = $this->db->update('task',array('complete_task'=>'1'));
@@ -132,7 +132,7 @@ class User_model extends CI_Model {
                     }else{
                         return false;
                     }
-                }else if($this->input->post('flag') == 0){
+                }else if($this->input->post('flag') == 0){ //if flag is 0, request is to stop the task
                     return true;
                 }
             }else{
@@ -142,18 +142,7 @@ class User_model extends CI_Model {
           return false;
         }
     }
-    //edit end time of the running task
-    public function edit_end_time(){
-        $userid = $this->session->userdata('userid');
-        $array = array('end_time'=>$this->input->post('end'));
-        $this->db->where(array('task_id'=>$this->input->get('id'),'user_id'=>$userid,'total_minutes'=>'0'));
-        
-        if($query){
-            return true;
-        }else{
-            return false;
-        }
-    }
+    
     //Activity Chart Data
     public function get_activity($chart_type,$date){
         //get task activities
@@ -161,20 +150,63 @@ class User_model extends CI_Model {
         $taskdate = $date;
 
         if($chart_type == "daily_chart"){
-            $this->db->select('*');
+            $this->db->select('*,count(t.task_name) as tasks');
             $this->db->from('time_details AS d');
             $this->db->join('task AS t','t.id = d.task_id');
             $this->db->where('d.end_time IS NOT NULL');
             $this->db->where(array('d.user_id' => $userid,'d.task_date' => $taskdate));
+            $this->db->group_by('d.start_time');
             $query = $this->db->get();
+$data = $query->result_array();
+            print_r($query->result_array());
+            foreach($data as $d){
+                if($d['tasks'] > 1){
+                    $arr =$d['start_time'];
+                }
+            }print_r($arr);exit;
             if($query->num_rows() > 0){
                 $data = $query->result_array();
+                foreach($data as $d){
+                        $task[] = $d['task_name'];
+                }
+                $tasks = array_count_values($task); 
+                foreach($tasks as $key=>$count){
+                    if($count > 1){
+                        $task_names[] = $key;
+
+                    }
+                }
+               
+                //for($i=0 ;$i<sizeof($task_names);$i++){
+                //    foreach($data as $dd){
+                //    if($dd['task_name'] == $task_names[$i]){
+               //         $array[] = array($dd['task_name'],array($dd['start_time'],$dd['end_time']));
+               //     }
+              //  }
+      //  }
+                print_r($array);
+                exit;
+                    
+                for($i=0;$i<sizeof($data);$i++){
+                    
+                    if($data[$i]['task_name'] == $data[$i++]['task_name']){
+                        $start[] = $data[$i]['start_time'];
+                        $end[] = $data[$i]['end_time'];
+                    }   
+                }
                 foreach($data as $dates){
+
                     $starttime[] = $dates['start_time'];
                     $endtime[] = $dates['end_time'];
                     $task[] = $dates['task_name'];
+                    $chart_data = array('daily_chart',
+                            "status"=>TRUE,
+                            //"labels"=> $week_days,
+                            "data"=> array($starttime,$endtime,$task)
+                        ); 
                 }
-                return array($starttime,$endtime,$task);
+                print_r($data);exit;
+                return $chart_data;
             }else{
                 $status = "No activity in this date.";
                 return $status;
@@ -198,13 +230,12 @@ class User_model extends CI_Model {
                 foreach($data as $d){
                     $day = date('D', strtotime($d['task_date']));
                     $minutes = $d['total_minutes'];
-                    $to_hours = $minutes/60;   //convert total_minutes interms of hour
-                    $total_hours[] = $to_hours;
+                    $to_hours[] = $minutes/60;   //get total_minutes interms of hour;
                     $week_days[] = $day;
                         $chart_data = array('weekly_chart',
                             "status"=>TRUE,
                             "labels"=> $week_days,
-                            "data"=> $total_hours
+                            "data"=> $to_hours
                         );      
                 }
             }else{
