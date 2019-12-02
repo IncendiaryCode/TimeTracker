@@ -108,7 +108,7 @@
                     </div>
                     <div>
                         <label for="old-datepicker">Enter end time: </label>
-                        <input type="datetime-local" class="form-control" id="old-datepicker" name="end_time">
+                        <input type="text" class="form-control  edit-date-time" id="old-datepicker" name="end_time">
                         <div class="input-group-addon">
                             <span class="glyphicon glyphicon-th"></span>
                         </div>
@@ -148,12 +148,15 @@
         </div>
     </div>
 </div>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js" type="text/javascript"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
 <script src="//momentjs.com/downloads/moment.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="//unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
@@ -165,7 +168,16 @@
 <script src="<?=base_url();?>assets/plugins/bxslider/js/jquery.bxslider.min.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/employee_profile.js?v=<?=VERSION?>"></script>
-<script src="<?=base_url();?>assets/user/javascript/bootstrap-datetimepicker.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/user/javascript/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script>
+
+<script type="text/javascript">
+ $(function() {
+    $('.edit-date-time').datetimepicker();
+
+});
+</script>
+
+
 </body>
 
 </html>

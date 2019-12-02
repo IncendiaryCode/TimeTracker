@@ -11,8 +11,11 @@ $this->load->helper('url_helper');
     <title class="title">TimeTracker</title>
     <link rel="icon" href="<?=base_url();?>assets/images/logo.png" type="image/icon type">
     <!-- //User Dashboard assets -->
+    <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="//use.fontawesome.com/releases/v5.11.0/css/all.css">
+    <link rel="stylesheet" type="text/css" href="//www.jqueryscript.net/css/jquerysctipttop.css">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500&display=swap">
     <link rel="stylesheet" type="text/css" href="//unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" />
@@ -20,6 +23,7 @@ $this->load->helper('url_helper');
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/plugins/bxslider/css/jquery.bxslider.min.css?v=<?=VERSION?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/animation.css?v=<?=VERSION?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/style.css?v=<?=VERSION?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/bootstrap-datetimepicker.min.css?v=<?=VERSION?>">
     <script type="text/javascript">
     var timeTrackerBaseURL = "<?=base_url();?>";
     </script>
@@ -41,7 +45,7 @@ $this->load->helper('url_helper');
             <div class="col-md-4 col-6 text-right ">
                 <a href="<?=site_url();?>/user/add_tasks" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
             </div>
-            <div class="col-md-2 col-12 text-left" id="append">
+            <div class="col-md-2 col-12 text-center" id="append">
                 <!-- to chage image -->
                 <h2><a href="#" class="text-white"><i class="fas fa-bars figure " id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></a></h2>
             </div>

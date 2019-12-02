@@ -8,6 +8,7 @@ $this->load->helper('url_helper');
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> TimeTracker </title>
+    <link rel="icon" href="<?=base_url();?>assets/images/logo.png" type="image/icon type">
     <link href="<?=base_url();?>assets/css/theme.css" rel="stylesheet" media="all">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">

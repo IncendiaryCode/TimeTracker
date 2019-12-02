@@ -22,6 +22,8 @@ $profile = $this->session->userdata('user_profile');
                         <?php echo isset($success)?$success:""; ?>
                             <p id="alartmsg" class="text-center"></p>
                     </div>
+
+
                     <form action="<?=base_url();?>index.php/user/add_tasks" method="post" id="addTask" class="mt-5 ">
                         <button type="submit" id="save-and-start" class="text-center shadow-lg icon-width start-time">
                             <div data-tasktype="Task" data-id="80">

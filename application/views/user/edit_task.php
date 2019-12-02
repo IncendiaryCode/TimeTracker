@@ -7,7 +7,7 @@ $profile = $this->session->userdata('user_profile');
 <main class="container-fluid container-fluid-main">
     <div class="main-container container">
         <div class="main-container-inner">
-            <div class="row ">
+            <div class="row">
                 <div class="col-6 offset-3">
                     <?php 
                         $this->load->library('form_validation');
@@ -31,6 +31,10 @@ $profile = $this->session->userdata('user_profile');
                             <label for="description">Write a small description</label>
                             <textarea class="form-control" id="description" name="task_desc" rows="4"><?=$task_data[0]['description'];?></textarea>
                         </div>
+
+
+
+
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
                             <select readonly="" type="number" class="form-control" id="choose-project" name="project_name">
@@ -40,34 +44,28 @@ $profile = $this->session->userdata('user_profile');
                             </select>
                         </div>
                         <h4 class="mt-4 text-center">Task activities</h4>
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Start time</th>
-                                    <th scope="col">End time</th>
-                                </tr>
-                            </thead>
-                            <tbody id="task_history">
+                        <div class="row">
+                            <div class="col-2"><b>#</b></div>
+                            <div class="col-5"><b>Start time</b></div>
+                            <div class="col-5"><b>End time</b></div>
+                        </div>
                             <?php $num = 1;
                           foreach($task_data as $task){
                             ?>
-                                <tr>
-                                    <th scope="row">
-                                        <input type="hidden" name="task-id" value="<?php echo $task['id']?>" >
-                                        <?=$num;?>
-                                    </th>
-                                    <td>
-                                        <input class="form-control" type="text" id="start<?=$num?>"  name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>">
-                                    </td>
-                                    <td>
-                                        <input class="form-control" type="text" id="start<?=$num?>"  name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>">
-                                    </td>
-                                </tr>
+                            <div class="row mt-3">
+                                <div class="col-2">
+                                <input type="hidden" name="time[<?=$num?>][table_id]" value="<?php echo $task['id']?>" >
+                                    <?=$num;?>
+                                </div>
+                                <div class="col-5">
+                                    <input class="form-control edit-date-time" type="text" id="start<?=$num?>"  name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>" placeholder="<?=$task['start_time'];?>">
+                                </div>
+                                <div class="col-5">
+                                    <input class="form-control edit-date-time" type="text" id="start<?=$num?>"  name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>" placeholder="<?=$task['end_time'];?>">
+                                </div>
+                            </div>  
                             <?php $num=$num+1;
                         } ?>
-                            </tbody>
-                        </table>
                         <p id="taskError" class=" text-danger"></p>
                         <p>&nbsp;</p>
                         <hr />
@@ -76,7 +74,6 @@ $profile = $this->session->userdata('user_profile');
                 </div>
             </div>
         </div>
-        </script>
         <footer class="footer">
             <hr>
             <p class="text-center ">Copyright © 2019 Printgreener.com</p>
