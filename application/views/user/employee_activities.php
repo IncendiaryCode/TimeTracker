@@ -43,6 +43,7 @@
                                         <button class="btn btn-primary" onclick="loadWeeklyChart()">view chart</button>
                                     </div>
                                 </div>
+                                <p id="week-error"class="text-center"></p>
                                 <canvas id="weekly" class="offset-2 col-8" style="width:1200px; height:350px;"></canvas>
                             </div>
                         </div>
@@ -67,6 +68,7 @@
                     <div class="au-task__item au-task__item--danger">
                         <div class="row au-task__item-inner attach  m-1" id="attachPanels">
                             <!-- Loading in js-->
+                            
                         </div>
                     </div>
                 </div>
