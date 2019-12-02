@@ -287,10 +287,7 @@ if (oldEndTime) {
 }
 
 $(document).ready(function () {
-
-
     $('#stop-time').click(function () {
-        //var tsk_id = $(this).data('id');
         var t_id = 0;
 
         var curr_element = document.getElementsByClassName("bx-pager");
@@ -329,7 +326,6 @@ $(document).ready(function () {
                     setTimeout(function(){
                         document.getElementById("alarmmsg").innerHTML = '';
                     }, 5000);
-                    //window.location.reload();
                 }
             });
         } else {

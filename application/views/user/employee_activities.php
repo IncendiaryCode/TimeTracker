@@ -73,7 +73,8 @@
             </div>
         </div>
         <hr>
-        <footer>
+        <div>
+        <footer class="text-center">
             <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</p>
         </footer>
     </div>

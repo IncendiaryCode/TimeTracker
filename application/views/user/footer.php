@@ -107,11 +107,15 @@
                                 <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
                     </div>
                     <div>
-                        <label for="old-datepicker">Enter end time: </label>
+                        <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
                         <input type="text" class="form-control  edit-date-time" id="old-datepicker" name="end_time">
                         <div class="input-group-addon">
                             <span class="glyphicon glyphicon-th"></span>
                         </div>
+                    </div>
+                    <div class="pt-3">
+                        <label for="task-description">Enter description: </label>
+                        <input type="text" class="form-control " id="task-description" name="task-description">
                     </div>
                     <p class="text-center text-danger" id="old-date-error"></p>
                 </div>
@@ -148,10 +152,10 @@
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js" type="text/javascript"></script> -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -169,12 +173,12 @@
 <script src="<?=base_url();?>assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/employee_profile.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script>
-
 <script type="text/javascript">
  $(function() {
-    $('.edit-date-time').datetimepicker();
-
-});
+ $('.edit-date-time').datetimepicker({
+          useCurrent: false, format: 'YYYY-MM-DD hh:mm',
+     });
+ });
 </script>
 
 

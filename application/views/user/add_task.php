@@ -89,9 +89,9 @@ $profile = $this->session->userdata('user_profile');
                                     <div class="row">
                                         <div class="col-3">
                                             <div class="input-group mb-3">
-                                                <input type="text" class="form-control datepicker" name="daterange[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start">
+                                                <input type="text" class="form-control datepicker-0" name="daterange[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start">
                                                 <div class="input-group-append">
-                                                    <span class="input-group-text">
+                                                    <span class="input-group-text datepicker ">
                                                         <span class="fa fa-calendar"></span>
                                                     </span>
                                                 </div>

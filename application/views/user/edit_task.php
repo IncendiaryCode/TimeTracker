@@ -31,10 +31,6 @@ $profile = $this->session->userdata('user_profile');
                             <label for="description">Write a small description</label>
                             <textarea class="form-control" id="description" name="task_desc" rows="4"><?=$task_data[0]['description'];?></textarea>
                         </div>
-
-
-
-
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
                             <select readonly="" type="number" class="form-control" id="choose-project" name="project_name">
@@ -45,23 +41,27 @@ $profile = $this->session->userdata('user_profile');
                         </div>
                         <h4 class="mt-4 text-center">Task activities</h4>
                         <div class="row">
-                            <div class="col-2"><b>#</b></div>
-                            <div class="col-5"><b>Start time</b></div>
-                            <div class="col-5"><b>End time</b></div>
+                            <div class="col-1"><b>#</b></div>
+                            <div class="col-4"><b>Start time</b></div>
+                            <div class="col-4"><b>End time</b></div>
+                            <div class="col-3"><b>Description</b></div>
                         </div>
                             <?php $num = 1;
                           foreach($task_data as $task){
                             ?>
                             <div class="row mt-3">
-                                <div class="col-2">
+                                <div class="col-1">
                                 <input type="hidden" name="time[<?=$num?>][table_id]" value="<?php echo $task['id']?>" >
                                     <?=$num;?>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-4">
                                     <input class="form-control edit-date-time" type="text" id="start<?=$num?>"  name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>" placeholder="<?=$task['start_time'];?>">
                                 </div>
-                                <div class="col-5">
+                                <div class="col-4">
                                     <input class="form-control edit-date-time" type="text" id="start<?=$num?>"  name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>" placeholder="<?=$task['end_time'];?>">
+                                </div>
+                                <div class="col-3">
+                                    <input type="text" class="form-control" name="time[<?=$num?>][description]" value="<?=$task['task_description'];?>">
                                 </div>
                             </div>  
                             <?php $num=$num+1;
