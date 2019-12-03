@@ -16,7 +16,6 @@ function loadTask(type, date) {
             $("#attachPanels").empty();
             var timerModal = timerStopModal();
             for (x in data) {
-                console.log(data);
                 for (var y = 0; y < data[x].length; y++) {
                     var cardHeader = $('<div class="card-header" />');
                     var cardHeaderRow = $('<div class="row pt-2" />');
@@ -107,10 +106,7 @@ function loadTask(type, date) {
     });
 }
 
-
-
 function loadDailyChart() {
-
     var date = document.getElementById('daily-chart').value;
     console.log("date", date);
     if (date == "" || date == " " || date == null) {
@@ -123,7 +119,6 @@ function loadDailyChart() {
         date = document.getElementById('daily-chart').value;
         retrieveChartData('daily_chart', date);
     } else { retrieveChartData('daily_chart', date); }
-
 }
 
 function loadWeeklyChart() {
@@ -131,11 +126,9 @@ function loadWeeklyChart() {
         var weekControl = document.querySelector('input[type="week"]');
         var week = document.getElementById('weekly-chart').value;
         if (week == "" || week == " " || week == null) {
-
             var today = new Date(); // get current date
             var weekNumber = today.getWeek(); // Returns the week number as an integer
             weekControl.value = today.getFullYear() + '-W' + weekNumber;
-
             week = today.getFullYear() + '-W' + weekNumber;
             document.getElementById("weekly-chart").setAttribute("max", week);
             retrieveChartData('weekly_chart', week);
@@ -143,8 +136,6 @@ function loadWeeklyChart() {
 
     }
 }
-
-
 
 function retrieveChartData(type, date) {
     $.ajax({
@@ -208,7 +199,11 @@ function drawChart(type, res) {
                             var week_count = document.getElementById('weekly-chart').value;
                             weekly.onclick = function () {
                                 var value = week_count.slice(0, 4) + week_count.slice(-2) + item;
-                                //window.location.href = 'http://[::1]/TimeTracker_ci/index.php/user/load_employee_activities?value=' + value;
+                                var date = __get_date(value.slice(4,6), value.slice(0,4)).toString();
+                                var month = getMonth(date.slice(4,7));
+                                var d = date.slice(11,15)+'-'+month+'-'+date.slice(8,10);
+                                document.getElementById('daily-chart').value=d;
+                                $('#chart-navigation a[href="#daily-view"]').tab('show');
                             }
                         }
                     }
@@ -322,6 +317,33 @@ function drawChart(type, res) {
 
 }
 
+function getMonth(month)
+{   
+    var month_no = 0;
+    switch(month)
+    {
+        case "Jan": month_no = 1; break;
+        case "Feb": month_no = 2; break;
+        case "Mar": month_no = 3; break;
+        case "Apr": month_no = 4; break;
+        case "May": month_no = 5; break;
+        case "Jun": month_no = 6; break;
+        case "Jul": month_no = 7; break;
+        case "Aug": month_no = 8; break;
+        case "Sep": month_no = 9; break;
+        case "Oct": month_no = 10; break;
+        case "Nov": month_no = 11; break;
+        case "Dec": month_no = 12; break;
+    }
+    return month_no;
+}
+
+function __get_date(w,y)
+{
+    var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
+
+    return new Date(y, 0, d);
+}
 function loadMonthlyChart() {
     var year = document.getElementById('monthly-chart').value;
     console.log(year);
@@ -385,9 +407,13 @@ $(document).ready(function () {
         var y = $(event.relatedTarget); // previous tab
         if (x == '#daily-view') {
             loadDailyChart();
+            var date = document.getElementById('monthly-chart').value;
+            loadTask('weekly_chart', date);
         }
         if (x == '#weekly-view') {
             loadWeeklyChart();
+            var date = document.getElementById('weekly-chart').value;
+            loadTask('weekly_chart', date);
         }
         if (x == '#monthly-view') {
             loadMonthlyChart();
@@ -400,5 +426,7 @@ $(document).ready(function () {
 window.onload = function () {
     if (document.getElementById('daily-chart')) {
         loadDailyChart();
+        var date = document.getElementById('daily-chart').value;
+        loadTask('daily_chart', date);
     }
 }

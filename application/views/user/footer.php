@@ -179,6 +179,11 @@
           useCurrent: false, format: 'YYYY-MM-DD hh:mm',
      });
  });
+ $(function() {
+ $('.edit-date').datepicker({
+          useCurrent: false, format: 'yyyy-mm-dd',
+     });
+ });
 </script>
 
 

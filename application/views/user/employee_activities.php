@@ -27,7 +27,7 @@
                                     <label for="end-date">Select date</label>
                                     <div class="input-group">
                                         <!-- chart that shows daily activities -->
-                                        <input type="date" class="form-control" id="daily-chart">
+                                        <input type="text" class="form-control edit-date" id="daily-chart" data-date-format="YYYY-mm-DD">
                                         <button class="btn btn-primary" onclick="loadDailyChart()">view chart</button>
                                     </div>
                                 </div>
