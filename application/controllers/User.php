@@ -31,16 +31,21 @@ class User extends CI_Controller
     }
     public function load_task_data() //Load task data to user dashboard
     {
-        if (isset($_GET['type'])) {
+        if ($this->input->get('type',TRUE)) {
             $type                 = $this->input->get('type', TRUE);
-            $userid               = $this->session->userdata('userid');
-            $task_details['data'] = $this->user_model->get_task_details($type, $userid);
-            echo json_encode($task_details);
+            $date                 = '';
+        }else if(!empty($this->input->get('chart_type'))){
+            $date = $this->input->get('date');
+            if($this->input->get('chart_type') == 'daily_chart'){
+                $type = 'daily_chart';    
+            }else if($this->input->get('chart_type') == 'weekly_chart'){
+                $type = 'weekly_chart';
+            }else{
+                $type = 'monthly_chart';
+            }
         }
-        else {
-            $status = "No Tasks assigned to this user..";
-            echo json_encode($status);
-        }
+        $task_details['data'] = $this->user_model->get_task_details($type,$date);
+        echo json_encode($task_details);
     }
     //Start timer function
     public function start_timer()
@@ -88,6 +93,7 @@ class User extends CI_Controller
                 $this->load->view('user/footer');
 
             }else{
+                
                 $result = $this->user_model->stop_timer($task_id, $end_time);
                 if ($result == FALSE) {
                     $output_result['status'] = $result;

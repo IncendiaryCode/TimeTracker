@@ -29,7 +29,8 @@ class User_model extends CI_Model {
         }
     }
     //load all tasks of the user into user dashboard
-    public function get_task_details($sort_type,$userid){   
+    public function get_task_details($sort_type,$date){  
+        $userid =  $this->session->userdata('userid');
         $this->db->select('p.name,d.start_time,p.image_name,t.task_name,t.id');
         $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task",FALSE); //get running tasks of the user
         $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);         //get completed tasks of the user
@@ -38,8 +39,24 @@ class User_model extends CI_Model {
         $this->db->join('task_assignee AS a','a.task_id = t.id');
         $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
         $this->db->join('project AS p', 'p.id = t.project_id');
-        $this->db->join('project_module AS m','m.id = t.module_id');        
-        $this->db->where(array('a.user_id'=>$userid));
+        $this->db->join('project_module AS m','m.id = t.module_id'); 
+        if($date == null){       
+            $this->db->where(array('a.user_id'=>$userid));
+        }else{
+            if($sort_type == 'daily_chart'){
+                $this->db->where(array('d.task_date'=>$date));
+            }
+            else if($sort_type == 'weekly_chart'){
+                $year_value = explode('-',$date);  //format: 2019-W23
+                $week_value = $year_value[1];      //W23
+                $week = explode('W',$week_value);  //format: W23
+                $getdate = $this->get_start_and_end_date($week[1], $year_value[0]);  //start and end date for 23rd week and year 2019
+                $this->db->where('d.task_date BETWEEN "'. date('Y-m-d', strtotime($getdate[0])). '" and "'. date('Y-m-d', strtotime($getdate[1])).'"');
+            }
+            else{
+                //condition for monthly chart
+            }
+        }
         $this->db->group_by('t.id');
         if($sort_type == 'name'){
             $this->db->order_by("t.task_name", "asc");  //sort by task name
@@ -50,7 +67,8 @@ class User_model extends CI_Model {
         }
         $query = $this->db->get();
         $data = $query->result_array();
-        return $data;
+        //print_r($data);exit;
+        return $data; 
     }
     //get task details to edit task
     public function get_task_info($id){
@@ -101,7 +119,7 @@ class User_model extends CI_Model {
     }
     //Function to Stop Timer
     public function stop_timer($task_id, $end_time){
-
+        $end_time = date('Y-m-d H:i:s',strtotime($end_time));
         $userid = $this->session->userdata('userid');
         $this->db->select('*');
         $this->db->from('time_details');
@@ -120,7 +138,7 @@ class User_model extends CI_Model {
             $hours = round(abs($diff / ( 60 * 60 )));
 
             $this->db->where(array('id'=>$data['id']));
-            $query2 = $this->db->update('time_details',array('end_time'=> $update_time,'total_hours'=>$hours, 'total_minutes' => $t_minutes,'modified_on' => date('Y:m:d H:i:s') ));
+            $query2 = $this->db->update('time_details',array('task_description'=>$this->input->post('task-description'),'end_time'=> $update_time,'total_hours'=>$hours, 'total_minutes' => $t_minutes,'modified_on' => date('Y:m:d H:i:s') ));
             if($query2){
                 if($this->input->post('flag') == 1) //if flag is 1, request is to complete the task
                 { 
@@ -148,7 +166,6 @@ class User_model extends CI_Model {
         //get task activities
         $userid = $this->session->userdata('userid');
         $taskdate = $date;
-
         if($chart_type == "daily_chart"){
             $this->db->select('*,count(t.task_name) as tasks');
             $this->db->from('time_details AS d');
@@ -157,55 +174,26 @@ class User_model extends CI_Model {
             $this->db->where(array('d.user_id' => $userid,'d.task_date' => $taskdate));
             $this->db->group_by('d.start_time');
             $query = $this->db->get();
-$data = $query->result_array();
-            print_r($query->result_array());
-            foreach($data as $d){
-                if($d['tasks'] > 1){
-                    $arr =$d['start_time'];
-                }
-            }print_r($arr);exit;
+            $data = $query->result_array();
             if($query->num_rows() > 0){
                 $data = $query->result_array();
                 foreach($data as $d){
                         $task[] = $d['task_name'];
+                        $start[] = $d['start_time'];
+                        $end[] = $d['end_time'];
                 }
                 $tasks = array_count_values($task); 
                 foreach($tasks as $key=>$count){
                     if($count > 1){
                         $task_names[] = $key;
-
                     }
                 }
                
-                //for($i=0 ;$i<sizeof($task_names);$i++){
-                //    foreach($data as $dd){
-                //    if($dd['task_name'] == $task_names[$i]){
-               //         $array[] = array($dd['task_name'],array($dd['start_time'],$dd['end_time']));
-               //     }
-              //  }
-      //  }
-                print_r($array);
-                exit;
-                    
-                for($i=0;$i<sizeof($data);$i++){
-                    
-                    if($data[$i]['task_name'] == $data[$i++]['task_name']){
-                        $start[] = $data[$i]['start_time'];
-                        $end[] = $data[$i]['end_time'];
-                    }   
-                }
-                foreach($data as $dates){
-
-                    $starttime[] = $dates['start_time'];
-                    $endtime[] = $dates['end_time'];
-                    $task[] = $dates['task_name'];
                     $chart_data = array('daily_chart',
                             "status"=>TRUE,
                             //"labels"=> $week_days,
-                            "data"=> array($starttime,$endtime,$task)
+                            "data"=> array($task,array($start,$end,$task))
                         ); 
-                }
-                print_r($data);exit;
                 return $chart_data;
             }else{
                 $status = "No activity in this date.";
@@ -220,24 +208,31 @@ $data = $query->result_array();
             $week = explode('W',$week_value);  //format: W23
             $getdate = $this->get_start_and_end_date($week[1], $year_value[0]);  //start and end date for 23rd week and year 2019
             $this->db->select('*');
+            $this->db->select_sum('total_hours','hours');
             $this->db->from('time_details');
             $this->db->where(array('user_id'=>$userid));
             $this->db->where('end_time IS NOT NULL');
             $this->db->where('task_date BETWEEN "'. date('Y-m-d', strtotime($getdate[0])). '" and "'. date('Y-m-d', strtotime($getdate[1])).'"');
+            $this->db->group_by('task_date');
             $query = $this->db->get();
+            
             if($query->num_rows() > 0){
                 $data = $query->result_array();
                 foreach($data as $d){
                     $day = date('D', strtotime($d['task_date']));
                     $minutes = $d['total_minutes'];
                     $to_hours[] = $minutes/60;   //get total_minutes interms of hour;
-                    $week_days[] = $day;
-                        $chart_data = array('weekly_chart',
+                    $week_days[] = $day;            
+                }
+                $week = array('Mon','Tue','Wed','Thu','Fri','Sat','Sun');
+                
+                $chart_data = array('weekly_chart',
                             "status"=>TRUE,
                             "labels"=> $week_days,
                             "data"=> $to_hours
-                        );      
-                }
+                        );
+                //print_r($chart_data);
+                return $chart_data;
             }else{
                 $status = "No activity in this week.";
                 return $status;
