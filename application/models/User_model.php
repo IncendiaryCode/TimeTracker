@@ -79,7 +79,7 @@ class User_model extends CI_Model {
         return $data; 
     }
     public function get_user_task_info($sort_type,$userid){
-        $this->db->select('p.name,p.image_name,t.task_name,t.id');
+        $this->db->select('p.name as project_name,p.id as project_id,p.image_name,t.task_name,t.id');
         $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);         //get completed tasks of the user
         $this->db->from('task AS t');
         $this->db->join('task_assignee AS a','a.task_id = t.id');
