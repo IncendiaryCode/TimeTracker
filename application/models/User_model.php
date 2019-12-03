@@ -115,7 +115,7 @@ class User_model extends CI_Model {
         $data = $query->result_array();
         $result = $data;
         foreach ($data as $key => $value) {
-           $this->db->select('td.id,td.task_date,td.start_time,td.end_time,td.task_description,td.total_hours,td.total_minutes');
+           $this->db->select('td.id,td.start_time,td.end_time,td.task_description,td.total_hours,td.total_minutes');
            $this->db->from('time_details AS td');
            $this->db->where(array('td.task_id'=>$value['id'],'td.user_id'=>$userid));
            $query = $this->db->get();
