@@ -32,7 +32,7 @@ class User_model extends CI_Model {
     public function get_task_details($sort_type,$date){  
         $userid =  $this->session->userdata('userid');
         $this->db->select('p.name,d.start_time,p.image_name,t.task_name,t.id');
-        $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task",FALSE); //get running tasks of the user
+        $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task",FALSE); //get running tasks of the user 
         $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);         //get completed tasks of the user
         $this->db->select_sum('d.total_minutes','t_minutes');                      //get total minutes for a particular task
         $this->db->from('task AS t');
@@ -40,11 +40,13 @@ class User_model extends CI_Model {
         $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
         $this->db->join('project AS p', 'p.id = t.project_id');
         $this->db->join('project_module AS m','m.id = t.module_id'); 
-        if($date == null){       
+        if($date == null){ 
+                
             $this->db->where(array('a.user_id'=>$userid));
         }else{
             if($sort_type == 'daily_chart'){
                 $this->db->where(array('d.task_date'=>$date));
+                $this->db->where('d.end_time IS NOT NULL');
             }
             else if($sort_type == 'weekly_chart'){
                 $year_value = explode('-',$date);  //format: 2019-W23
@@ -52,9 +54,14 @@ class User_model extends CI_Model {
                 $week = explode('W',$week_value);  //format: W23
                 $getdate = $this->get_start_and_end_date($week[1], $year_value[0]);  //start and end date for 23rd week and year 2019
                 $this->db->where('d.task_date BETWEEN "'. date('Y-m-d', strtotime($getdate[0])). '" and "'. date('Y-m-d', strtotime($getdate[1])).'"');
+                $this->db->where('d.end_time IS NOT NULL');
             }
             else{
                 //condition for monthly chart
+                $year_start = date('Y-m-d',strtotime(date($date.'-01-01')));
+                $year_end = date('Y-m-d', strtotime(date($date.'-12-31')));
+                $this->db->where('d.task_date BETWEEN "'.$year_start. '" and "'.$year_end.'"');
+                $this->db->where('d.end_time IS NOT NULL');
             }
         }
         $this->db->group_by('t.id');
@@ -188,16 +195,20 @@ class User_model extends CI_Model {
                         $task_names[] = $key;
                     }
                 }
+
                
                     $chart_data = array('daily_chart',
                             "status"=>TRUE,
                             //"labels"=> $week_days,
-                            "data"=> array($task,array($start,$end,$task))
+                            "data"=> array($task,array($start,$end))
                         ); 
+                    print_r($chart_data);
                 return $chart_data;
             }else{
-                $status = "No activity in this date.";
-                return $status;
+                $chart_data = array('daily_chart',
+                    'status'=>FALSE,
+                    'data'=>"No activity in this date.");
+                return $chart_data;
             }
         }
 
@@ -240,34 +251,37 @@ class User_model extends CI_Model {
         }
 
         if($chart_type == "monthly_chart"){
-            $year_start = date('Y-m-d ',strtotime($taskdate));
-            print_r($year_start);exit;
-           // $yaer_last = ; 
+            
+            $year_start = date('Y-m-d',strtotime(date($taskdate.'-01-01')));
+            $year_end = date('Y-m-d', strtotime(date($taskdate.'-12-31')));
             $this->db->select('*');
+            $this->db->select_sum('total_hours','hours');
             $this->db->from('time_details');
             $this->db->where(array('user_id'=>$userid));
             $this->db->where('end_time IS NOT NULL');
-            $this->db->where('task_date BETWEEN "'. date('Y-m-d', strtotime($getdate[0])). '" and "'. date('Y-m-d', strtotime($getdate[1])).'"');
-            //$this->db->where_in('task_date',$taskdate);
+            $this->db->where('task_date BETWEEN "'.$year_start. '" and "'.$year_end.'"');
+            $this->db->group_by('task_date');
             $query = $this->db->get();
             if($query->num_rows() > 0){
                 $data = $query->result_array();
+                foreach($data as $d){
+                    $values[] = array(date('Y-m-d',strtotime($d['task_date'])),$d['hours']);
 
-
-
-
-
-            $chart_data = array('monthy_chart',
+                }
+                $chart_data = array('monthy_chart',
                     "status"=>TRUE,
                     /*date with working hours in standard format*/
-                    "data"=> array("Wed Feb 13 2019 00:00:00 GMT+0530 (India Standard Time) 10",
-                    "Wed Feb 13 2019 00:00:00 GMT+0530 (India Standard Time) 8",
-                    "Wed Feb 13 2019 00:00:00 GMT+0530 (India Standard Time) 7", 
-                    "{Wed Feb 13 2019 00:00:00 GMT+0530 (India Standard Time) 5}")
+                    "data"=> $values
                 );
+                return $chart_data;
+            }else{
+                $chart_data = array('monthy_chart',
+                    "status"=>FALSE,
+                    "data"=> '0'
+                );
+                return $chart_data;
+            }
         }
-}
-        return $chart_data;
     }
     //to make time intervals in daily chart
     public function split_time($start__time, $end_time, $duration="60"){
