@@ -74,8 +74,58 @@ class User_model extends CI_Model {
         }
         $query = $this->db->get();
         $data = $query->result_array();
+        //print_r($this->db->last_query());die;    
         //print_r($data);exit;
         return $data; 
+    }
+    public function get_user_task_info($sort_type,$userid){
+        $this->db->select('p.name as project_name,p.id as project_id,p.image_name,t.task_name,t.description,t.id');
+        $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);         //get completed tasks of the user
+        $this->db->from('task AS t');
+        $this->db->join('task_assignee AS a','a.task_id = t.id');
+        $this->db->join('project AS p', 'p.id = t.project_id');
+        $this->db->join('project_module AS m','m.id = t.module_id');
+        $this->db->where(array('a.user_id'=>$userid));
+        /*if($date == null){       
+            $this->db->where(array('a.user_id'=>$userid));
+        }else{
+            if($sort_type == 'daily_chart'){
+                $this->db->where(array('d.task_date'=>$date));
+            }
+            else if($sort_type == 'weekly_chart'){
+                $year_value = explode('-',$date);  //format: 2019-W23
+                $week_value = $year_value[1];      //W23
+                $week = explode('W',$week_value);  //format: W23
+                $getdate = $this->get_start_and_end_date($week[1], $year_value[0]);  //start and end date for 23rd week and year 2019
+                $this->db->where('d.task_date BETWEEN "'. date('Y-m-d', strtotime($getdate[0])). '" and "'. date('Y-m-d', strtotime($getdate[1])).'"');
+            }
+            else{
+                //condition for monthly chart
+            }
+        }*/
+        $this->db->group_by('t.id');
+        if($sort_type == 'name'){
+            $this->db->order_by("t.task_name", "asc");  //sort by task name
+        }else if($sort_type =='date'){
+            $this->db->order_by("d.task_date", "asc");  //sort by task date
+        }else if($sort_type == 'task'){
+            $this->db->order_by("t.id", "asc");         //sort by task id
+        }
+        $query = $this->db->get();
+        $data = $query->result_array();
+        $result = $data;
+        foreach ($data as $key => $value) {
+           $this->db->select('td.id,td.start_time,td.end_time,td.task_description,td.total_hours,td.total_minutes');
+           $this->db->from('time_details AS td');
+           $this->db->where(array('td.task_id'=>$value['id'],'td.user_id'=>$userid));
+           $query = $this->db->get();
+           $sub_data = $query->result_array();
+           $result[$key]['time_details'] = $sub_data;
+           //print_r($this->db->last_query());die;    
+        }
+        //print_r($this->db->last_query());die;    
+        //print_r($data);exit;
+        return $result; 
     }
     //get task details to edit task
     public function get_task_info($id){

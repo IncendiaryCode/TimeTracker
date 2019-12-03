@@ -30,14 +30,11 @@ class Task extends REST_Controller {
         $verify_data = $this->verify->verify_request($headers);
         if(isset($verify_data->username))
         {
-        //$tokenData = 'Hello World!';
-        // Create a token
-        //$token = AUTHORIZATION::generateToken($tokenData);
-        //print_r($token); die;
+        
             $input = $this->input->post();
-            if(!empty($input['id'])){
+            if(!empty($input['userid'])){
                 $type = 'task';
-                $data['details'] =  $this->user_model->get_task_details($type,$input['id']);
+                $data['details'] =  $this->user_model->get_user_task_info($type,$input['userid']);
                 //$data = $this->db->get_where("task", ['id' => $input['id']])->row_array();
             }else{
                 $data['details'] = $this->db->get("task")->result();
