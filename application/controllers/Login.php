@@ -37,13 +37,8 @@ class Login extends CI_Controller
         } else {
             $result = $this->dashboard_model->login_process();
             if ($result == 'admin') {
-                $this->load->view('header');
-                $data['total_users']    = $this->dashboard_model->get_users();
-                $data['total_tasks']    = $this->dashboard_model->get_tasks();
-                $data['total_projects'] = $this->dashboard_model->get_projects();
+                redirect('/admin/index','refresh');
                 $this->session->set_userdata('logged_in', TRUE);
-                $this->load->view('dashboard', $data);
-                $this->load->view('footer');
             } else if ($result == 'user') {
                 $this->session->set_userdata('logged_in', TRUE);
                 redirect('/user/index', 'refresh');
