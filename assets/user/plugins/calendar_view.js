@@ -4,6 +4,111 @@ Date.prototype.getWeek = function () {
     return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 }
 
+
+function loadTask(type, date) {
+    $("#attachPanels").empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
+    $.ajax({
+        type: 'GET',
+        url: timeTrackerBaseURL + 'index.php/user/load_task_data',
+        data: { 'chart_type': type, 'date': date },
+        success: function (values) {
+            var data = JSON.parse(values);
+            $("#attachPanels").empty();
+            var timerModal = timerStopModal();
+            for (x in data) {
+                console.log(data);
+                for (var y = 0; y < data[x].length; y++) {
+                    var cardHeader = $('<div class="card-header" />');
+                    var cardHeaderRow = $('<div class="row pt-2" />');
+                    var today = getTime();
+                    if (data[x][y].start_time != null) {
+                        var task_date = data[x][y].start_time.slice(0, 10);
+                        if (today != task_date) {
+                            $('.alert-box').show();
+                        }
+                    }
+                    cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
+                    var stopCol = $('<div class="col-6 text-right" />');
+                    if (data[x][y].running_task == 0)  /*check whether task is ended or not*/ {
+                        var timeUsed = minutesToTime(data[x][y].t_minutes);
+                        stopCol.append('<i class="far fa-clock"></i>Total timeused=' + timeUsed);
+                    } else {
+                        if (data[x][y].start_time != null) {
+                            var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x][y].id);
+                            stopButton.on('click', function () {
+                                localStorage.setItem('task_id', $(this).data('taskid'));
+                                timerModal.modal('show');
+                            });
+                        }
+                        stopCol.append(stopButton);
+                    }
+                    cardHeaderRow.append(stopCol);
+                    cardHeader.append(cardHeaderRow);
+
+                    var cardInner = $("<div class='card card-style-1 animated fadeInUp'  />");
+                    cardInner.append(cardHeader);
+
+                    var cardBody = $("<div class='card-body' />");
+                    cardBody.append(data[x][y].task_name);
+                    cardInner.append(cardBody);
+                    var cardFooter = $("<div class='card-footer'>");
+                    var footerRow = $('<div class="row" />');
+                    footerRow.append("<div class='col-6'> <i class='fab fa-twitter'></i> " + data[x][y].name + "</div>");
+
+                    var footerRight = $("<div class='col-6 text-right card-actions'>");
+                    //action Edit
+                    var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit position_edit_icon animated fadeIn" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
+                    actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_edit_task?t_id=' + data[x][y].id);
+
+                    if (data[x][y].completed == 1) {
+                    footerRight.append("<span class='text-success'>This task is completed.</span>");
+                    }
+                    footerRight.append(actionEdit);
+
+                    var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon animated fadeIn fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
+
+                    if (data[x][y].running_task == 0 || data[x][y].start_time == null) {
+                        if (data[x][y].completed == 0) {
+                            footerRight.append(actionPlay);
+                        }
+                    }
+
+
+                    actionPlay.on('click', function (e) {
+                        var t_id = this.getElementsByTagName('input').item(0).value;
+                        $.ajax({
+                            type: 'POST',
+                            url: timeTrackerBaseURL + 'index.php/user/start_timer',
+                            data: { 'action': 'task', 'id': t_id },
+                            success: function (res) {
+                                var msg = JSON.parse(res);
+                                document.getElementById("alarmmsg").innerHTML = msg['msg'];
+                                setTimeout(function(){
+                                    document.getElementById("alarmmsg").innerHTML = '';
+                                }, 5000);
+                                window.location.reload();
+                            }
+                        });
+                    });
+                    footerRow.append(footerRight);
+                    cardFooter.append(footerRow);
+                    cardInner.append(cardFooter);
+                    var cardCol = $("<div class='col-lg-6 mb-4 cardCol' />");
+                    cardCol.append(cardInner);
+                    $("#attachPanels").append(cardCol);
+                    if ((data[x][y].running_task == 1 && data[x][y].start_time != null)) { //change background of current running task entries.
+                        cardInner.css("background", "#e7d3fe");
+                        cardHeader.css("background", "#e7d3fe");
+                        cardFooter.css("background", "#e7d3fe");
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+
 function loadDailyChart() {
 
     var date = document.getElementById('daily-chart').value;
@@ -103,7 +208,7 @@ function drawChart(type, res) {
                             var week_count = document.getElementById('weekly-chart').value;
                             weekly.onclick = function () {
                                 var value = week_count.slice(0, 4) + week_count.slice(-2) + item;
-                                /*window.location.href = 'daily_details.php?value=' + value;*/
+                                //window.location.href = 'http://[::1]/TimeTracker_ci/index.php/user/load_employee_activities?value=' + value;
                             }
                         }
                     }
@@ -217,17 +322,14 @@ function drawChart(type, res) {
 
 }
 
-
-
 function loadMonthlyChart() {
     var year = document.getElementById('monthly-chart').value;
-    console.log(year)
+    console.log(year);
     if (year == "" || year == " " || year == null) {
         var cur_year = parseInt(new Date().toString().slice(10, 15));
         document.getElementById('monthly-chart').value = cur_year;
         year = cur_year;
         document.getElementById("monthly-chart").setAttribute("max", cur_year);
-
     }
     $.ajax({
         type: "GET",
@@ -235,7 +337,7 @@ function loadMonthlyChart() {
         data: { 'chart_type': "monthly_chart", 'date': year },
         dataType: 'json',
         success: function (res) {
-            console.log(res)
+            console.log(res);
             google.charts.load("current", { packages: ["calendar"] });
             google.setOnLoadCallback(drawMonthlyChart());
         }
@@ -244,9 +346,7 @@ function loadMonthlyChart() {
 
 function drawMonthlyChart() {
 
-
     var dataTable = new google.visualization.DataTable();
-
 
     dataTable.addColumn({ type: 'date', id: 'Date' });
     dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
@@ -262,8 +362,6 @@ function drawMonthlyChart() {
         [new Date(2019, 7, 17), 9]
     ]);
 
-
-
     var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
 
 
@@ -277,108 +375,6 @@ function drawMonthlyChart() {
 
 
 
-function loadTask(type, date) {
-    $("#attachPanels").empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
-    $.ajax({
-        type: 'GET',
-        url: timeTrackerBaseURL + 'index.php/user/load_task_data',
-        data: { 'chart_type': type, 'date': date },
-        success: function (values) {
-            var data = JSON.parse(values);
-            $("#attachPanels").empty();
-            var timerModal = timerStopModal();
-            for (x in data) {
-                for (var y = 0; y < data[x].length; y++) {
-                    var cardHeader = $('<div class="card-header" />');
-                    var cardHeaderRow = $('<div class="row pt-2" />');
-                    var today = getTime();
-                    if (data[x][y].start_time != null) {
-                        var task_date = data[x][y].start_time.slice(0, 10);
-                        if (today != task_date) {
-                            $('.alert-box').show();
-                        }
-                    }
-                    cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
-                    var stopCol = $('<div class="col-6 text-right" />');
-                    if (data[x][y].running_task == 0)  /*check whether task is ended or not*/ {
-                        var timeUsed = minutesToTime(data[x][y].t_minutes);
-                        stopCol.append('<i class="far fa-clock"></i>Total timeused=' + timeUsed);
-                    } else {
-                        if (data[x][y].start_time != null) {
-                            var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x][y].id);
-                            stopButton.on('click', function () {
-                                localStorage.setItem('task_id', $(this).data('taskid'));
-                                timerModal.modal('show');
-                            });
-                        }
-                        stopCol.append(stopButton);
-                    }
-                    cardHeaderRow.append(stopCol);
-                    cardHeader.append(cardHeaderRow);
-
-                    var cardInner = $("<div class='card card-style-1 animated fadeInUp'  />");
-                    cardInner.append(cardHeader);
-
-                    var cardBody = $("<div class='card-body' />");
-                    cardBody.append(data[x][y].task_name);
-                    cardInner.append(cardBody);
-                    var cardFooter = $("<div class='card-footer'>");
-                    var footerRow = $('<div class="row" />');
-                    footerRow.append("<div class='col-6'> <i class='fab fa-twitter'></i> " + data[x][y].name + "</div>");
-
-                    var footerRight = $("<div class='col-6 text-right card-actions'>");
-                    //action Edit
-                    var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit position_edit_icon animated fadeIn" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
-                    actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_edit_task?t_id=' + data[x][y].id);
-
-                    if (data[x][y].completed == 1) {
-                    footerRight.append("<span class='text-success'>This task is completed.</span>");
-                    }
-                    footerRight.append(actionEdit);
-
-                    var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon animated fadeIn fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
-
-                    if (data[x][y].running_task == 0 || data[x][y].start_time == null) {
-                        if (data[x][y].completed == 0) {
-                            footerRight.append(actionPlay);
-                        }
-                    }
-
-
-                    actionPlay.on('click', function (e) {
-                        var t_id = this.getElementsByTagName('input').item(0).value;
-                        $.ajax({
-                            type: 'POST',
-                            url: timeTrackerBaseURL + 'index.php/user/start_timer',
-                            data: { 'action': 'task', 'id': t_id },
-                            success: function (res) {
-                                var msg = JSON.parse(res);
-                                document.getElementById("alarmmsg").innerHTML = msg['msg'];
-                                setTimeout(function(){
-                                    document.getElementById("alarmmsg").innerHTML = '';
-                                }, 5000);
-                                window.location.reload();
-                            }
-                        });
-                    });
-                    footerRow.append(footerRight);
-                    cardFooter.append(footerRow);
-                    cardInner.append(cardFooter);
-                    var cardCol = $("<div class='col-lg-6 mb-4 cardCol' />");
-                    cardCol.append(cardInner);
-                    $("#attachPanels").append(cardCol);
-                    if ((data[x][y].running_task == 1 && data[x][y].start_time != null)) { //change background of current running task entries.
-                        cardInner.css("background", "#e7d3fe");
-                        cardHeader.css("background", "#e7d3fe");
-                        cardFooter.css("background", "#e7d3fe");
-                    }
-                }
-            }
-        }
-    });
-}
-
-
 
 
 $(document).ready(function () {
@@ -387,7 +383,6 @@ $(document).ready(function () {
     $('#chart-navigation a').on('shown.bs.tab', function (event) {
         var x = $(event.target).attr("href"); // active tab
         var y = $(event.relatedTarget); // previous tab
-        console.log('new tab', x);
         if (x == '#daily-view') {
             loadDailyChart();
         }
