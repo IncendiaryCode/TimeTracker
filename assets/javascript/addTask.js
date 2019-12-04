@@ -12,4 +12,17 @@ addTask.onsubmit = function (e) {
 		return true;
 }
 }
-$('select').selectpicker();
+
+$(document).ready(function() {
+	var i=1;
+	var icon = $('.icon-plus').click(function()
+	{
+		var element = $('<select class="form-control mt-3"  id="user-name'+i+'" name="user_name'+i+'">'+
+			+'<option>Select User</option>'+
+			+'<?php foreach($names as $name){ ?> '+
+			+'<option> <?php echo $name["name"]; ?></option> '+
+			+' <?php } ?></select>');
+		$('#append-new-user').append(element);
+	})
+	i++;
+})

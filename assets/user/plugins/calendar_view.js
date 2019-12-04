@@ -114,7 +114,6 @@ function retrieveChartData(type, date) {
                 $('#weekly').hide();
                 }
                 if (type == 'daily_chart') {
-                    console.log("daily");
                 document.getElementById('daily-error').innerHTML = res['data'];
                 $('#daily').hide();
                 $('#attachPanels').hide();
@@ -367,9 +366,7 @@ function draw_customized_chart(res)
                 }
         printChart(start_time_pixel, width, 300, color);
      }
-    pixel.push([start_time_pixel, width]);
-
-        
+    pixel.push([start_time_pixel, width]); 
     }
     }
 
@@ -429,7 +426,6 @@ function __get_date(w,y)
 }
 function loadMonthlyChart() {
     var year = document.getElementById('monthly-chart').value;
-    console.log(year);
     if (year == "" || year == " " || year == null) {
         var cur_year = parseInt(new Date().toString().slice(10, 15));
         document.getElementById('monthly-chart').value = cur_year;
@@ -451,7 +447,6 @@ function loadMonthlyChart() {
 
 function drawMonthlyChart(res) {
     var dataTable = new google.visualization.DataTable();
-
     dataTable.addColumn({ type: 'date', id: 'Date' });
     dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
     for(var k=0; k<res["data"].length; k++)
@@ -470,8 +465,9 @@ function drawMonthlyChart(res) {
 
     var options = {
         title: " ",
-        calendar: { cellSize: 17 },
+        calendar: { cellSize: 15, },
         height: 220,
+        width: 900,
         noDataPattern: {
            backgroundColor: '#ebedf0',
          },

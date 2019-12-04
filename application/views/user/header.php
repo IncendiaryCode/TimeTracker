@@ -36,16 +36,19 @@ $this->load->helper('url_helper');
                 <a href="<?=site_url();?>/user" class="link-to-back">
                     <img src="<?=base_url();?>assets/images/logo-white.png" height="40px">
                 </a>
+                <a href="#" class="pl-5" id="dark-mode"><i class="fas fa-wrench text-white"></i></a>
             </div>
             <?php
             
              if(empty($GLOBALS['page_title'])) { 
                 ?>
             <!-- refers to home page -->
-            <div class="col-md-4 col-6 text-right ">
+            <div class="col-md-2 col-3 text-right ">
                 <a href="<?=site_url();?>/user/add_tasks" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
             </div>
-            <div class="col-md-2 col-12 text-center" id="append">
+            <div class="col-md-2 col-3 text-center">
+            </div>
+            <div class="col-md-2 col-12 text-left" id="append">
                 <!-- to chage image -->
                 <h2><a href="#" class="text-white"><i class="fas fa-bars figure " id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></a></h2>
             </div>

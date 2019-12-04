@@ -376,7 +376,6 @@ $(document).ready(function () {
         infiniteLoop: false,
         controls: false,
     });
-
    
 });
 

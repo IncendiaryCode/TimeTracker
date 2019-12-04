@@ -81,8 +81,9 @@ $profile = $this->session->userdata('user_profile');
     <main class="container-fluid container-fluid-main">
         <div class="container-fluid">
             <div class="main-container-inner">
-                <div class="row mt-5">
-                    <div class="col-6 offset-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-8 offset-2">
                         <?php 
                         $this->load->library('form_validation');
                         if(validation_errors()) { ?>
@@ -90,15 +91,16 @@ $profile = $this->session->userdata('user_profile');
                         <?php } ?>
                         <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>  
                         <form action="<?php echo base_url();?>index.php/admin/add_tasks" id="addTask" method="post">
-                            <div class="form-group mt-3">
+                            <div class="form-group mt-5" id="append-new-user">
                                 <label for="user-name ">Choose the name of User to assign task</label>
-                                <select class="form-control selectpicker" multiple data-live-search="true" id="user_name" name="user_name">
+                                <select class="form-control"  id="user-name" name="user_name0">
                                     <option>Select User</option>
                                     <?php
                                         foreach($names as $name){ ?>
                                         <option><?php echo $name['name']; ?></option>
                                     <?php } ?>
                                 </select>
+                                <div><i class="fas fa-plus icon-plus text-success"></i></div>
                             </div>
                             <div class="form-group">
                                 <label for="task-name">Enter the Task name</label>
@@ -119,8 +121,9 @@ $profile = $this->session->userdata('user_profile');
                             </select>
                             </div>
                         
-                            <button type="submit" class="save-task">Assign Task</button>
+                            <button type="submit" class="btn btn-primary">Assign Task</button>
                         </form>
+                    </div>
                     </div>
                 </div>
             </div>

@@ -159,8 +159,9 @@ header.main-header h1 {
     border-style: solid;
 }
 
-.save-task {
+.btn-primary {
     color: white;
+    padding: 5px;
     background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #e485fb);
     border-style: none;
     border-radius: 7px;
@@ -176,4 +177,13 @@ header.main-header h1 {
 .previous:hover
 {
     opacity: 0.5;
+}
+.icon-plus
+{   
+    position: absolute;
+    padding: 10px;
+    top: 80px;
+    left: 100%;
+    border-radius: 100%;
+    background-color: #e9ecef;
 }
