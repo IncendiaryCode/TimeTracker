@@ -234,15 +234,14 @@ class Dashboard_model extends CI_Model
                 $query_check = $this->db->get('login_details');
                 if ($query_check->num_rows() > 0) { //multiple logins on the same date
                     $login_data = $query_check->row_array();
-                    $data       = array(
+                    /*$data       = array(
                         'userid' => $row->id,
                         'email' => $row->email,
                         'logged_in' => TRUE,
                         'user_profile' => $row->profile,
                         'username' => $row->name,
                         'login_time' => $login_data['end_time']
-                    );
-                    ;
+                    );*/
                 }
                 else { //first login for the day
                     $array = array(
@@ -253,20 +252,23 @@ class Dashboard_model extends CI_Model
                     );
                     $this->db->set($array);
                     $query = $this->db->insert('login_details', $array);
-                    $data  = array(
+                    /*$data  = array(
                         'userid' => $row->id,
                         'email' => $row->email,
                         'logged_in' => TRUE,
                         'user_profile' => $row->profile,
                         'username' => $row->name,
                         'login_time' => date('Y:m:d H:i:s')
-                    );
+                    );*/
                     //$this->session->set_userdata($data);    
                 }
                 $data          = array();
                 $data['id']    = $row->id;
                 $data['type']  = $row->type;
                 $data['email'] = $row->email;
+                $data['username'] = $row->name;
+                $data['profile_pic'] = $row->profile;
+                $data['login_time'] = date('Y:m:d H:i:s');
                 return $data;
             }
             else {

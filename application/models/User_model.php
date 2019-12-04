@@ -596,5 +596,17 @@ class User_model extends CI_Model {
             return false;
         }
     }
+
+    public function get_user_projects($user_id)
+    {
+        $this->db->select('p.name as project_name,p.id');
+        $this->db->from('project AS p');
+        $this->db->join('project_assignee AS pa','p.id = pa.project_id');
+        if($user_id!=null)
+            $this->db->where(array('pa.user_id'=>$user_id));
+        $query = $this->db->get();
+        $data = $query->result_array();
+        return $data;
+    }
 }
 ?>

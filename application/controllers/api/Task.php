@@ -23,7 +23,7 @@ class Task extends REST_Controller {
      *
      * @return Response
     */
-	public function index_post($id = 0)
+	public function index_post()
 	{
         // Get all the headers
         $headers = $this->input->request_headers();
@@ -32,6 +32,7 @@ class Task extends REST_Controller {
         {
         
             $input = $this->input->post();
+            $data['success'] = 1;
             if(!empty($input['userid'])){
                 $type = 'task';
                 $data['details'] =  $this->user_model->get_user_task_info($type,$input['userid']);
@@ -63,12 +64,25 @@ class Task extends REST_Controller {
      *
      * @return Response
     */
-    public function index_put($id)
+    public function projects_post()
     {
-        $input = $this->put();
-        $this->db->update('items', $input, array('id'=>$id));
-     
-        $this->response(['Item updated successfully.'], REST_Controller::HTTP_OK);
+        $headers = $this->input->request_headers();
+        $verify_data = $this->verify->verify_request($headers);
+        if(isset($verify_data->username))
+        {
+            $data['success'] = 1;
+            $post = json_decode(file_get_contents("php://input"), true);
+            if(!empty($post['userid'])){
+                $data['details'] =  $this->user_model->get_user_projects($post['userid']);
+                //$data = $this->db->get_where("task", ['id' => $input['id']])->row_array();
+            }else{
+                $data['details'] = $this->user_model->get_user_projects(null);
+            }
+            $this->response($data, REST_Controller::HTTP_OK);
+        }else{
+            $this->response($verify_data, REST_Controller::HTTP_OK);
+        }
+        
     }
      
     /**
