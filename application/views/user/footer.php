@@ -176,7 +176,7 @@
 <script type="text/javascript">
  $(function() {
  $('.edit-date-time').datetimepicker({
-          useCurrent: false, format: 'YYYY-MM-DD hh:mm',
+          useCurrent: false, format: 'YYYY-MM-DD hh:mm A',
      });
  });
  $(function() {

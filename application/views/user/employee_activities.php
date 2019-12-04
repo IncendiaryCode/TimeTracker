@@ -27,12 +27,30 @@
                                     <label for="end-date">Select date</label>
                                     <div class="input-group">
                                         <!-- chart that shows daily activities -->
-                                        <input type="text" class="form-control edit-date" id="daily-chart" data-date-format="YYYY-mm-DD">
+                                        <input type="text" class="form-control edit-date" id="daily-chart" data-date-format="YYYY-mm-DD ">
                                         <button class="btn btn-primary" onclick="loadDailyChart()">view chart</button>
                                     </div>
                                 </div>
                             </div>
-                            <canvas id="daily" style="width:1000px; height:120px;"></canvas>
+                            <p id="daily-error"class="text-center"></p>
+                            <div id="daily">
+                                <div class="cust_chart-row1" style="color: white"> ..</div>
+                                <p class="cust_daily_chart">
+                                    <span class="cust_chart">8AM</span>
+                                    <span class="cust_chart">9AM</span>
+                                    <span class="cust_chart">10AM</span>
+                                    <span class="cust_chart">11AM</span>            
+                                    <span class="cust_chart">12AM</span>
+                                    <span class="cust_chart">1PM</span>
+                                    <span class="cust_chart">2PM</span>
+                                    <span class="cust_chart">3PM</span>
+                                    <span class="cust_chart">4PM</span>
+                                    <span class="cust_chart">5PM</span>
+                                    <span class="cust_chart">6PM</span>
+                                    <span class="cust_chart">7PM</span>
+                                    <span class="cust_chart">8PM</span>
+                                </p>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="weekly-view" role="tabpanel" aria-labelledby="weekly-view-tab">
                             <div class="daily-chart">
@@ -66,9 +84,8 @@
             <div class="au-task js-list-load">
                 <div class="au-task-list js-scrollbar3">
                     <div class="au-task__item au-task__item--danger">
-                        <div class="row au-task__item-inner attach  m-1" id="attachPanels">
-                            <!-- Loading in js-->
-                            
+                        <div class="row au-task__item-inner attach  m-1 pt-4" id="attachPanels">
+                            <!-- Loading in js-->                            
                         </div>
                     </div>
                 </div>

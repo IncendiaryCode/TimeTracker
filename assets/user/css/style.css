@@ -517,3 +517,22 @@ opacity: 0.5;
 {
     margin-top: 130px;
 }
+
+
+.cust_daily_chart
+{
+    padding-left: 120px;
+}
+.cust_chart
+{
+    padding-left: 24px; 
+}
+.cust_chart-row1
+{
+    margin-left: 120px;
+}
+
+.chart-value {
+  background-size: 200px 30px;
+  /*background-color: #000;*/
+}

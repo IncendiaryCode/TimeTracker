@@ -68,7 +68,7 @@ class User extends CI_Controller
         $post_data = $this->input->post();
         if ($this->input->post('id')) {
             $task_id = $this->input->post('id', TRUE);
-            $end_time = isset($post_data['end_time']) ? $post_data['end_time'] : '';
+            $end_time = !empty($this->input->post('end_time')) ? $this->input->post('end_time') : '';
             $result = $this->user_model->stop_timer($task_id, $end_time);
             if ($result == FALSE) {
                 $output_result['status'] = FALSE;
@@ -180,33 +180,35 @@ class User extends CI_Controller
                 echo json_encode($output_result);
             }
         }
-        $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|callback_task_exists|xss_clean');
-        $this->form_validation->set_rules('task_desc', 'Task Description', 'trim|required');
-        $this->form_validation->set_rules('project_name', 'Project name', 'required');
-        $this->form_validation->set_rules('project_module', 'Module name', 'required');
-        $this->form_validation->set_rules('task_type', 'Radio button', 'required');
-        if ($this->form_validation->run() == FALSE) {
-            $GLOBALS['page_title'] = 'Add Task';
-            $this->load->view('user/header');
-            $data['result'] = $this->user_model->get_project_name();
-            $this->load->view('user/add_task', $data);
-            $this->load->view('user/footer');
-        }
         else {
-            $result = $this->user_model->add_tasks();
-            if (!$result) {
+            $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|callback_task_exists|xss_clean');
+            //$this->form_validation->set_rules('task_desc', 'Task Description', 'trim|required');
+            $this->form_validation->set_rules('project_name', 'Project name', 'required');
+            $this->form_validation->set_rules('project_module', 'Module name', 'required');
+            $this->form_validation->set_rules('task_type', 'Radio button', 'required');
+            if ($this->form_validation->run() == FALSE) {
+                $GLOBALS['page_title'] = 'Add Task';
                 $this->load->view('user/header');
-                $data['result']  = $this->user_model->get_project_name();
-                $data['failure'] = "Something went wrong.";
+                $data['result'] = $this->user_model->get_project_name();
                 $this->load->view('user/add_task', $data);
                 $this->load->view('user/footer');
             }
             else {
-                $this->load->view('user/header');
-                $data['result']  = $this->user_model->get_project_name();
-                $data['success'] = "Successfully added.";
-                $this->load->view('user/add_task', $data);
-                $this->load->view('user/footer');
+                $result = $this->user_model->add_tasks();
+                if (!$result) {
+                    $this->load->view('user/header');
+                    $data['result']  = $this->user_model->get_project_name();
+                    $data['failure'] = "Something went wrong.";
+                    $this->load->view('user/add_task', $data);
+                    $this->load->view('user/footer');
+                }
+                else {
+                    $this->load->view('user/header');
+                    $data['result']  = $this->user_model->get_project_name();
+                    $data['success'] = "Successfully added.";
+                    $this->load->view('user/add_task', $data);
+                    $this->load->view('user/footer');
+                }
             }
         }
     }
@@ -303,6 +305,7 @@ class User extends CI_Controller
         $this->load->view('user/profile', $data);
         $this->load->view('user/footer');
     }
+
     public function password_exists()
     {
         if ($this->user_model->password_exists() == TRUE) {
