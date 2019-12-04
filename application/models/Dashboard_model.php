@@ -31,6 +31,7 @@ class Dashboard_model extends CI_Model
         $array1 = array(
             'name' => $this->input->post('task_name'),
             'email' => $this->input->post('user_email'),
+            'password' => $this->input->post('task_pass'),
             'phone' => $this->input->post('contact'),
             'type' => 'user',
             'created_on' => date('Y:m:d H:i:s')
