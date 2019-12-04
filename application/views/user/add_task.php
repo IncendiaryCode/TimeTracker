@@ -32,15 +32,15 @@ $profile = $this->session->userdata('user_profile');
                         </button>
                         <div class="form-group">
                             <label for="task-name ">Write the task name</label>
-                            <input type="text" class="form-control" name="task_name" id="Taskname">
+                            <input type="text" class="form-control" name="task_name" id="Taskname" value="<?=set_value('task_name')?>">
                         </div>
                         <div class="form-group">
                             <label for="description">Write a small description</label>
-                            <textarea class="form-control" id="description" name="task_desc" rows="4"></textarea>
+                            <textarea class="form-control" id="description" name="task_desc" rows="4" value="<?=set_value('task_desc')?>"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
-                            <select type="number" class="form-control project_name" id="choose-project" name="project_name">
+                            <select type="number" class="form-control project_name" id="choose-project" name="project_name" value="<?=set_value('project_name')?>">
                                 <option>Select Project</option>
                                 <?php
                                  foreach($result as $p){ ?>
@@ -53,7 +53,7 @@ $profile = $this->session->userdata('user_profile');
                         </div>
                         <div class="form-group">
                             <label for="choose-module">Choose project module</label>
-                            <select type="number" class="form-control project_name" id="choose-module" name="project_module">
+                            <select type="number" class="form-control project_name" id="choose-module" name="project_module" value="<?=set_value('project_module')?>">
                                 <option>Select module</option>
                             </select>
                         </div>

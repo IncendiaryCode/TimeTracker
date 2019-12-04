@@ -9,6 +9,7 @@ class Dashboard_model extends CI_Model
     //Dashboard model
     public function get_users()
     {
+        $this->db->where('type','user');
         $get_users_q = $this->db->get('users');
         $row         = $get_users_q->num_rows();
         return $row;
@@ -62,25 +63,20 @@ class Dashboard_model extends CI_Model
         $result = $query->result_array();
         return $result;
     }
-    public function username_exists()
-    {
-        $this->db->where('name', $this->input->post('user-name'));
-        $query = $this->db->get('users');
-        if ($query->num_rows() > 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    
+    public function get_usernames(){
+        $this->db->select('name');
+        $this->db->from('users');
+        $this->db->where('type','user');
+        $query = $this->db->get();
+        $names = $query->result_array();
+        return $names;
     }
     //add task model
     public function add_tasks()
     {
-        $query1 = $this->db->get_where('project', array(
-            'name' => $this->input->post('chooseProject')
-        ));
-        if ($query1->num_rows() > 0) {
-            $proj_id = $query1->row_array();
+        $select = $_POST['user_name'];
+        print_r($select);exit;
             $query2  = $this->db->get_where('users', array(
                 'name' => $this->input->post('user-name')
             ));
@@ -118,10 +114,7 @@ class Dashboard_model extends CI_Model
             else {
                 echo "Not a valid user id.";
             }
-        } //end of if($query1->num_rows() > 0)
-        else {
-            echo "project id not present.";
-        }
+        
     }
     //add project model
     public function project_exists()

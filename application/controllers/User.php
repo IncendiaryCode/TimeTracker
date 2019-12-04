@@ -184,7 +184,7 @@ class User extends CI_Controller
             $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|callback_task_exists|xss_clean');
             //$this->form_validation->set_rules('task_desc', 'Task Description', 'trim|required');
             $this->form_validation->set_rules('project_name', 'Project name', 'required');
-            $this->form_validation->set_rules('project_module', 'Module name', 'required');
+            //$this->form_validation->set_rules('project_module', 'Module name', 'required');
             $this->form_validation->set_rules('task_type', 'Radio button', 'required');
             if ($this->form_validation->run() == FALSE) {
                 $GLOBALS['page_title'] = 'Add Task';
@@ -272,7 +272,7 @@ class User extends CI_Controller
             $config['upload_path']   = '/var/www/html/time_tracker_ci/assets/user/images/user_profiles/';
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
             $config['overwrite']     = FALSE;
-            $config['encrypt_name']  = TRUE;
+           // $config['encrypt_name']  = TRUE;
             $config['remove_spaces'] = TRUE;
             $config['file_name']     = $_FILES['change_img']['name'];
             $this->load->library('upload', $config);
@@ -280,10 +280,11 @@ class User extends CI_Controller
             if ($this->upload->do_upload('change_img')) {
                 $uploadData = $this->upload->data();
                 $picture    = array(
-                    'profile' => $uploadData['file_name']
+                    'profile' => $uploadData['file_path'].$uploadData['file_name']
                 ); //to update profile in db(profile column)
             }
             else {
+                
                 echo $this->upload->display_errors();
                 $picture = '';
             }

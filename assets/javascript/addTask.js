@@ -12,3 +12,4 @@ addTask.onsubmit = function (e) {
 		return true;
 }
 }
+$('select').selectpicker();

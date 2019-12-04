@@ -239,7 +239,7 @@ class User_model extends CI_Model {
                         $task[] = $d['task_name'];
                         $start[] = $d['start_time'];
                         $end[] = $d['end_time'];
-                        $total_minutes = $d['total_minutes'];
+                        $total_minutes[] = $d['total_minutes'];
                 }
                 $tasks = array_count_values($task); 
                 foreach($tasks as $key=>$count){

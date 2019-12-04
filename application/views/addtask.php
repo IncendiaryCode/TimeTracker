@@ -91,8 +91,14 @@ $profile = $this->session->userdata('user_profile');
                         <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>  
                         <form action="<?php echo base_url();?>index.php/admin/add_tasks" id="addTask" method="post">
                             <div class="form-group mt-3">
-                                <label for="user-name ">Enter the name of User to assign task</label>
-                                <input type="text" class="form-control" name="user-name" id="Username">
+                                <label for="user-name ">Choose the name of User to assign task</label>
+                                <select class="form-control selectpicker" multiple data-live-search="true" id="user_name" name="user_name">
+                                    <option>Select User</option>
+                                    <?php
+                                        foreach($names as $name){ ?>
+                                        <option><?php echo $name['name']; ?></option>
+                                    <?php } ?>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="task-name">Enter the Task name</label>

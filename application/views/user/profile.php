@@ -4,6 +4,8 @@ $GLOBALS['page_title'] = 'My profile';
 $this->load->helper('url_helper');
 //$this->load->library('session');
 //$profile = $this->session->userdata('user_profile');
+
+$picture = substr($res['profile'],30);
 ?>
 <main class="container-fluid container-fluid-main">
     <div class="main-container container">
@@ -11,7 +13,7 @@ $this->load->helper('url_helper');
             <div class="row mt-5">
                 <div class="col-6 offset-3">
                     <div class="text-center mt-4">
-                        <img src="<?=base_url();?>assets/user/images/user_profiles/<?=$res['profile'];?>" width="30%;" class="rounded-circle figure mt-4 text-center">
+                        <img src="<?=base_url().$picture?>" width="30%;" class="rounded-circle figure mt-4 text-center">
                         <h4 class="text-center employee-name mt-3">
                             <?php echo $res['name'];?>
                         </h4>

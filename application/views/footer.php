@@ -9,6 +9,8 @@
 <script src="<?=base_url();?>assets/javascript/addTask.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/javascript/admin.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/javascript/script.js?v=<?=VERSION?>"></script>
-
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/js/bootstrap-select.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>-->
 </body>
 </html>

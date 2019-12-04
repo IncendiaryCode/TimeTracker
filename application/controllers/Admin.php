@@ -135,7 +135,7 @@
 			}
 		}
 		//To check whether username exists inorder to assign task to him
-		public function username_exists()
+	/*	public function username_exists()
 	    {
 	       	$this->load->model('dashboard_model');
 	        if ($this->dashboard_model->username_exists() == TRUE)
@@ -146,7 +146,7 @@
 	        	$this->form_validation->set_message('username_exists','User do not exist.');
 	            return false;
 	        }
-	    }
+	    }*/
 	    //Assign tasks to users
 		public function add_tasks(){
 			if($this->session->userdata('logged_in')){
@@ -155,7 +155,7 @@
 				$this->lang->load('form_validation_lang');
 				$this->load->library('form_validation');
 		  		$this->load->helper('security');
-		  		$this->form_validation->set_rules('user-name','Username','required|min_length[1]|trim|callback_username_exists|xss_clean');
+		  		$this->form_validation->set_rules('user_name','Username','required|min_length[1]|trim|xss_clean');
 		        $this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|xss_clean');
 		        $this->form_validation->set_rules('description','Task Description','trim|required');
 		        $this->form_validation->set_rules('chooseProject','Project name','required');
@@ -164,6 +164,7 @@
 				{
 					$this->load->helper('url');
 					$this->load->view('header');
+					$data['names'] = $this->dashboard_model->get_usernames();
 					$data['result'] = $this->dashboard_model->get_project_name();
 					$this->load->view('addtask',$data);
 					$this->load->view('footer');
@@ -177,6 +178,7 @@
 		            }else{
 		            	$this->load->helper('url');
 		               	$this->load->view('header');
+		               	$data['names'] = $this->dashboard_model->get_usernames();
 		               	$data['result'] = $this->dashboard_model->get_project_name();
 		                $data['success'] = "Successfully added.";
 						$this->load->view('addtask',$data);

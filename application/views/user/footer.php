@@ -1,6 +1,7 @@
 <?php
     $this->load->library('session');
     $profile = $this->session->userdata('user_profile');
+    $picture = substr($profile,30);
     $name = $this->session->userdata('username');
 ?>
 <div class="modal modal-transparent fade" id="change-profile" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
@@ -9,7 +10,7 @@
             <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times  main-modal-close"></i></button>
         </div>
         <div class="modal-content text-center">
-            <img id="new_img" src="<?=base_url();?>assets/user/images/user_profiles/<?=$profile;?>" class="rounded-circle img-fluid" >
+            <img id="new_img" src="<?=base_url().$picture;?>" class="rounded-circle img-fluid" >
 
             <div class="edit">
                 <a href="#" class="text-white"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#changeimage"></i></a>
