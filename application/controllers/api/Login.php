@@ -26,7 +26,7 @@ class Login extends REST_Controller {
         log_message('info', 'username:::'.$this->input->post('username'), false);
         log_message('info', 'password:::'.$this->input->post('password'), false);
         $data = $this->dashboard_model->login_device();
-        log_message('info', 'POST :::'.print_r($_POST, TRUE), false);
+        log_message('info', 'POST :::'.print_r($_REQUEST, TRUE), false);
         if($data == false)
         {
             $result['success'] = 0;
