@@ -599,7 +599,7 @@ class User_model extends CI_Model {
 
     public function get_user_projects($user_id)
     {
-        $this->db->select('p.name as project_name,p.id');
+        $this->db->select('p.name as project_name,p.id,p.color_code,p.image_name');
         $this->db->from('project AS p');
         $this->db->join('project_assignee AS pa','p.id = pa.project_id');
         if($user_id!=null)
