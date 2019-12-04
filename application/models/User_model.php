@@ -153,7 +153,7 @@ class User_model extends CI_Model {
             }else{
                 return false;
             }
-        }else if($task_type == 'task'){ //check if the timer-start request for task
+        }else if($task025+_type == 'task'){ //check if the timer-start request for task
             $id = $this->input->post('id');
             $array2 = array('task_id'=>$id,'user_id'=>$userid,'task_date'=>date('Y:m:d'),'start_time'=>date('Y:m:d H:i:s'),'total_hours'=>'0','total_minutes'=>'0','created_on'=>date('Y:m:d H:i:s'));
             $this->db->set($array2);
@@ -239,6 +239,7 @@ class User_model extends CI_Model {
                         $task[] = $d['task_name'];
                         $start[] = $d['start_time'];
                         $end[] = $d['end_time'];
+                        $total_minutes = $d['total_minutes'];
                 }
                 $tasks = array_count_values($task); 
                 foreach($tasks as $key=>$count){
@@ -251,7 +252,7 @@ class User_model extends CI_Model {
                     $chart_data = array('daily_chart',
                             "status"=>TRUE,
                             //"labels"=> $week_days,
-                            "data"=> array($task,array($start,$end))
+                            "data"=> array($task,array($start,$end,$total_minutes))
                         );
                 return $chart_data;
             }else{
@@ -437,9 +438,9 @@ class User_model extends CI_Model {
     }
     //add task model
     public function add_tasks(){
-
+        //date("H:i", strtotime("1:30 PM"));
         $userid = $this->session->userdata('userid');
-        if($this->input->post('project_module') != 'Select module'){
+        if(($this->input->post('project_module') != 'Select module') ||($this->input->post('project_module') != '')){
             $module_id = $this->input->post('project_module');
         }else{
             $module_id = 1;

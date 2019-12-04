@@ -104,7 +104,7 @@
 		  		$this->form_validation->set_rules('task_name','Username','required|min_length[2]|trim|callback_users_exists|xss_clean');
 		        $this->form_validation->set_rules('task_pass','Password','trim|required|min_length[6]|max_length[100]|md5|trim|xss_clean');
 		        $this->form_validation->set_rules('user_email','Email','trim|required|valid_email');
-		        $this->form_validation->set_rules('contact','Contact Number','required|min_length[10]|max_length[10]|numeric');
+		        //$this->form_validation->set_rules('contact','Contact Number','required|min_length[10]|max_length[10]|numeric');
 
 		        if ($this->form_validation->run() == FALSE)
 				{
