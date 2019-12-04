@@ -216,10 +216,10 @@ class Dashboard_model extends CI_Model
             return false;
         }
     }
-    public function login_device()
+    public function login_device($post)
     {
-        $username = $this->input->post('username');
-        $password = $this->input->post('password');
+        $username = $post['username'];//$this->input->post('username');
+        $password = $post['password'];//$this->input->post('password');
         $query    = $this->db->get_where('users', array(
             'email' => $username,
             'password' => md5($password)
