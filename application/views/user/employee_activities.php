@@ -34,9 +34,9 @@
                             </div>
                             <p id="daily-error"class="text-center"></p>
                             <div id="daily">
-                                <div class="cust_chart-row1" style="color: white"> ..</div>
+<!--                                 <div class="cust_chart-row1" style="color: white"> ..</div> -->
                                 <p class="cust_daily_chart">
-                                    <span class="cust_chart">8AM</span>
+                                    <span class="">8AM</span>
                                     <span class="cust_chart">9AM</span>
                                     <span class="cust_chart">10AM</span>
                                     <span class="cust_chart">11AM</span>            
@@ -50,6 +50,7 @@
                                     <span class="cust_chart">7PM</span>
                                     <span class="cust_chart">8PM</span>
                                 </p>
+                                <p id="print-chart"></p>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="weekly-view" role="tabpanel" aria-labelledby="weekly-view-tab">

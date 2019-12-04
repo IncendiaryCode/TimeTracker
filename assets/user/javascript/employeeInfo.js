@@ -193,7 +193,7 @@ function loadTaskActivities(formData) {
                             url: timeTrackerBaseURL + 'index.php/user/start_timer',
                             data: { 'action': 'task', 'id': t_id },
                             success: function (res) {
-                                var msg = JSON.parse(res);
+                                var msg = res;
                                 document.getElementById("alarmmsg").innerHTML = msg['msg'];
                                 setTimeout(function(){
                                     document.getElementById("alarmmsg").innerHTML = '';
