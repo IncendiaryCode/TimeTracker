@@ -91,8 +91,8 @@ $profile = $this->session->userdata('user_profile');
                             <?php } ?>
                             <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>  
                             <form action="<?php echo base_url();?>index.php/admin/add_tasks" id="addTask" method="post">
-                                <div class="form-group mt-5 row" id="append-new-user">
-                                    <div class="col-10">
+                                <div class="form-group mt-5 row " id="append-new-user">
+                                    <div class="col-10 ">
                                         <label for="user-name ">Choose the name of user to assign task</label>
                                         <select class="form-control user"  id="user-name0" name="user-name[0][name]">
                                             <option>Select User</option>
@@ -103,9 +103,13 @@ $profile = $this->session->userdata('user_profile');
                                         </select>
                                     </div>
                                     <div class="col-2 pt-4">
-                                        <i class="fas fa-plus icon-plus text-success"></i>
+                                        <a href="javascript:void(0);" id="add-new-user" title="Add">
+                                            <i class="fas fa-plus icon-plus text-success" ></i>
+                                        </a>
                                     </div>
                                 </div>
+                                <div class="row assign-user pb-3"></div>
+                                <div>
                                 <div class="form-group">
                                     <label for="task-name">Enter the Task name</label>
                                     <input type="text" class="form-control" id="task_name" name="task_name">
