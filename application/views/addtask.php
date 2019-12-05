@@ -84,50 +84,54 @@ $profile = $this->session->userdata('user_profile');
                 <div class="container">
                     <div class="row">
                         <div class="col-8 offset-2">
-                        <?php 
-                        $this->load->library('form_validation');
-                        if(validation_errors()) { ?>
-                            <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
-                        <?php } ?>
-                        <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>  
-                        <form action="<?php echo base_url();?>index.php/admin/add_tasks" id="addTask" method="post">
-                            <div class="form-group mt-5" id="append-new-user">
-                                <label for="user-name ">Choose the name of user to assign task</label>
-                                <select class="form-control"  id="user-name0" name="user_name0">
-                                    <option>Select User</option>
-                                    <?php
-                                        foreach($names as $name){ ?>
-                                        <option><?php echo $name['name']; ?></option>
-                                    <?php } ?>
+                            <?php 
+                            $this->load->library('form_validation');
+                            if(validation_errors()) { ?>
+                                <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
+                            <?php } ?>
+                            <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>  
+                            <form action="<?php echo base_url();?>index.php/admin/add_tasks" id="addTask" method="post">
+                                <div class="form-group mt-5 row" id="append-new-user">
+                                    <div class="col-10">
+                                        <label for="user-name ">Choose the name of user to assign task</label>
+                                        <select class="form-control user"  id="user-name0" name="user-name[0][name]">
+                                            <option>Select User</option>
+                                            <?php
+                                                foreach($names as $name){ ?>
+                                                <option ><?php echo $name['name']; ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-2 pt-4">
+                                        <i class="fas fa-plus icon-plus text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="task-name">Enter the Task name</label>
+                                    <input type="text" class="form-control" id="task_name" name="task_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Write a small description</label>
+                                    <textarea class="form-control" id="description" name="description"rows="5"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="choose-project">Choose a project</label>
+                                    <select class="form-control" id="chooseProject" name="chooseProject">
+                                    <option>Select Project</option>
+                                    <?php 
+                                        foreach($result as $p){ ?>
+                                        <option value="<?= $p['id']; ?>"><?=$p['name']; ?></option>
+                                    <?php } ?> 
                                 </select>
-                                <div><i class="fas fa-plus icon-plus text-success"></i></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="task-name">Enter the Task name</label>
-                                <input type="text" class="form-control" id="task_name" name="task_name">
-                            </div>
-                            <div class="form-group">
-                                <label for="description">Write a small description</label>
-                                <textarea class="form-control" id="description" name="description"rows="5"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="choose-project">Choose a project</label>
-                                <select class="form-control" id="chooseProject" name="chooseProject">
-                                <option>Select Project</option>
-                                <?php 
-                                    foreach($result as $p){ ?>
-                                    <option><?=$p['name']; ?></option>
-                                <?php } ?> 
-                            </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="module">Choose module</label>
-                                <select class="form-control" id="module" name="module">
-                                    
-                                </select>
-                            </div>
-                            <p id="user-name-error" class="text-danger"></p>
-                            <button type="submit" class="btn btn-primary">Assign Task</button>
+                                </div>
+                                <div class="form-group">
+                                    <label for="module">Choose module</label>
+                                    <select class="form-control" id="module" name="module">
+                                        
+                                    </select>
+                                </div>
+                                <p id="user-name-error" class="text-danger"></p>
+                                <button type="submit" class="btn btn-primary">Assign Task</button>
                         </form>
                     </div>
                     </div>

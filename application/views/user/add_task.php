@@ -42,8 +42,7 @@ $profile = $this->session->userdata('user_profile');
                                 <option>Select Project</option>
                                 <?php
                                  foreach($result as $p){ ?>
-                                <option value=<?php echo $p['id']?> label=
-                                    <?php echo $p['name']; ?> >
+                                <option value=<?php echo $p['id']?> label= <?php echo $p['name']; ?> >
                                     <?php echo $p['name']; ?>
                                 </option>
                                 <?php }?>
@@ -53,7 +52,7 @@ $profile = $this->session->userdata('user_profile');
                             <label for="choose-module">Choose project module</label>
                             <select type="number" class="form-control project_name" id="choose-module" name="project_module" value="<?=set_value('project_module')?>">
                                 <option>Select module</option>
-                                
+
                             </select>
                         </div>
                         <div class="form-group pl-4">
