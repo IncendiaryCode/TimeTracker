@@ -79,6 +79,7 @@
 	            $this->load->view('footer');
 	        }
 	    }
+	    
 	    //To check whether user exists...
 	    public function users_exists()
 	    {
@@ -147,8 +148,23 @@
 	            return false;
 	        }
 	    }*/
+
+	    //get user name list into add task page
+	    public function get_username_list(){
+
+	    	$data['users'] = $this->dashboard_model->get_usernames();
+	    	echo json_encode($data);
+
+	    }
+	    //get project module list to add task page 
+	    public function get_project_module(){
+	    	$projectid      = $this->input->post('id');
+	        $data['result'] = $this->dashboard_model->get_module_name($projectid);
+	        echo json_encode($data);
+	    }
 	    //Assign tasks to users
 		public function add_tasks(){
+			
 			if($this->session->userdata('logged_in')){
 				$this->load->helper('url_helper');
 		        $this->load->helper(array('form','url'));

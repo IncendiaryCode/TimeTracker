@@ -33,19 +33,20 @@ class User_model extends CI_Model {
         $userid =  $this->session->userdata('userid');
         $this->db->select('p.name,d.start_time,p.image_name,t.task_name,t.id');
         $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task",FALSE); //get running tasks of the user 
-        $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);         //get completed tasks of the user
-        $this->db->select_sum('d.total_minutes','t_minutes');                      //get total minutes for a particular task
+        $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);         //get completed tasks of the user                     
         $this->db->from('task AS t');
         $this->db->join('task_assignee AS a','a.task_id = t.id');
         $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
         $this->db->join('project AS p', 'p.id = t.project_id');
         $this->db->join('project_module AS m','m.id = t.module_id'); 
         if($date == null){ 
-                
+            $this->db->select_sum('d.total_minutes','t_minutes');       //get total minutes for a particular task
             $this->db->where(array('a.user_id'=>$userid));
         }else{
             if($sort_type == 'daily_chart'){
+
                 $this->db->where(array('d.task_date'=>$date));
+                $this->db->select_sum('d.total_minutes','t_minutes');   //get total minutes for a particular task
                 $this->db->where('d.end_time IS NOT NULL');
             }
             else if($sort_type == 'weekly_chart'){
@@ -54,13 +55,15 @@ class User_model extends CI_Model {
                 $week = explode('W',$week_value);  //format: W23
                 $getdate = $this->get_start_and_end_date($week[1], $year_value[0]);  //start and end date for 23rd week and year 2019
                 $this->db->where('d.task_date BETWEEN "'. date('Y-m-d', strtotime($getdate[0])). '" and "'. date('Y-m-d', strtotime($getdate[1])).'"');
+                $this->db->select_sum('d.total_minutes','t_minutes');  //get total minutes for a particular task
                 $this->db->where('d.end_time IS NOT NULL');
             }
             else{
-                //condition for monthly chart
+                //for monthly chart
                 $year_start = date('Y-m-d',strtotime(date($date.'-01-01')));
                 $year_end = date('Y-m-d', strtotime(date($date.'-12-31')));
                 $this->db->where('d.task_date BETWEEN "'.$year_start. '" and "'.$year_end.'"');
+                $this->db->select_sum('d.total_minutes','t_minutes');   //get total minutes for a particular task
                 $this->db->where('d.end_time IS NOT NULL');
             }
         }
