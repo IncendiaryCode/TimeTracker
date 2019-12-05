@@ -63,7 +63,12 @@ class Dashboard_model extends CI_Model
         $result = $query->result_array();
         return $result;
     }
-    
+    public function get_module_name($project_id){
+        $p_id = $project_id;
+        $query = $this->db->query("SELECT * FROM project_module WHERE project_id = {$p_id} OR project_id = 0");
+        $result = $query->result();
+        return $result;
+    }
     public function get_usernames(){
         $this->db->select('name');
         $this->db->from('users');

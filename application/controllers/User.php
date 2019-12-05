@@ -37,7 +37,7 @@ class User extends CI_Controller
         }else if(!empty($this->input->get('chart_type'))){
             $date = $this->input->get('date');
             if($this->input->get('chart_type') == 'daily_chart'){
-                $type = 'daily_chart';    
+                $type = 'daily_chart'; 
             }else if($this->input->get('chart_type') == 'weekly_chart'){
                 $type = 'weekly_chart';
             }else{
