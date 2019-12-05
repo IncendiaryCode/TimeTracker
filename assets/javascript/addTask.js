@@ -8,7 +8,6 @@ addTask.onsubmit = function (e) {
 		return false;
 	}
 	else
-
 		return true;
 }
 }
@@ -19,7 +18,7 @@ $(document).ready(function() {
 	{
 		$.ajax({
             type: 'POST',
-            url: timeTrackerBaseURL + 'index.php/user/get_project_module',
+            url: timeTrackerBaseURL + 'index.php/admin/get_project_module',
             data: { 'type': "get_user" },
             success: function(res) {
                var element = $('<select class="form-control mt-3"  id="user-name'+i+'" name="user_name'+i+'">'+

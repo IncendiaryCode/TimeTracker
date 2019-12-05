@@ -19,4 +19,7 @@ $this->load->helper('url_helper');
     <link rel="stylesheet" href="<?=base_url();?>assets/css/theme.css?v=<?=VERSION?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/new.css?v=<?=VERSION?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/admin.css?v=<?=VERSION?>">
+    <script type="text/javascript">
+    var timeTrackerBaseURL = "<?=base_url();?>";
+    </script>
 </head>

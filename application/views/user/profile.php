@@ -5,6 +5,8 @@ $this->load->helper('url_helper');
 //$this->load->library('session');
 //$profile = $this->session->userdata('user_profile');
 
+
+
 $picture = substr($res['profile'],30);
 ?>
 <main class="container-fluid container-fluid-main">
@@ -17,6 +19,15 @@ $picture = substr($res['profile'],30);
                         <h4 class="text-center employee-name mt-3">
                             <?php echo $res['name'];?>
                         </h4>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="dropdown text-right" id="dropdown-recent-acts">
+                        <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
+                            <!-- sorting options -->
+                            <div class="dropdown-item checkbox"><input type="checkbox"  id="dark-mode" name="dark-mode"> Dark mode</div>
+                        </div>
                     </div>
                 </div>
             </div>
