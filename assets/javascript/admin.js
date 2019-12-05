@@ -16,8 +16,6 @@ changePsw.onsubmit = function (e) {
     	return false;
     }
 
-    /*else if () {}*//*validate old password */
-
     var psw1 = document.getElementById('psw1').value;
     var psw2 = document.getElementById('psw2').value;
     if (psw1 == "" || psw1 == " ") {

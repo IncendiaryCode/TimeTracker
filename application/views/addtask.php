@@ -92,8 +92,8 @@ $profile = $this->session->userdata('user_profile');
                         <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>  
                         <form action="<?php echo base_url();?>index.php/admin/add_tasks" id="addTask" method="post">
                             <div class="form-group mt-5" id="append-new-user">
-                                <label for="user-name ">Choose the name of User to assign task</label>
-                                <select class="form-control"  id="user-name" name="user_name0">
+                                <label for="user-name ">Choose the name of user to assign task</label>
+                                <select class="form-control"  id="user-name0" name="user_name0">
                                     <option>Select User</option>
                                     <?php
                                         foreach($names as $name){ ?>
@@ -120,7 +120,13 @@ $profile = $this->session->userdata('user_profile');
                                 <?php } ?> 
                             </select>
                             </div>
-                        
+                            <div class="form-group">
+                                <label for="module">Choose module</label>
+                                <select class="form-control" id="module" name="module">
+                                    
+                                </select>
+                            </div>
+                            <p id="user-name-error" class="text-danger"></p>
                             <button type="submit" class="btn btn-primary">Assign Task</button>
                         </form>
                     </div>

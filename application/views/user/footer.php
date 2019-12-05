@@ -188,10 +188,9 @@
 
 function dark_mode()
 {
-    console.log("ddsgh");
    $("body").css( "background-image", "linear-gradient(-40deg, #212529 40%, #212529 100%)");
-        $(".stop-time").css( "background-image", "linear-gradient(-40deg, #212529 40%, #212529 100%)");
-        $(".start-time").css( "background-image", "linear-gradient(-40deg, #212529 40%, #212529 100%)");
+        $(".stop-time").css( "background-image", "linear-gradient(-40deg, #212529 40%, #6c757d 100%)");
+        $(".start-time").css( "background-image", "linear-gradient(-40deg, #212529 40%, #6c757d 100%)");
         $(".primary-timer").css( "font-size", "100px", "color", "#c0b1f2");
         $(".card-style-1").css( "background-color", "#000000", "color", "#ffffff");
         $(".card-header").css( "background-color", "#000000", "color", "#ffffff");

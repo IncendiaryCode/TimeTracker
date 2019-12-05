@@ -354,9 +354,6 @@ $(document).ready(function() {
                                                 setTimeout(function(){
                                                     document.getElementById("alarmmsg").innerHTML = '';
                                                 }, 5000);
-                                            //window.location.reload();
-                                       // }
-
                                     }
                                 });
                                 return false;

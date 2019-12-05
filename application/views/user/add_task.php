@@ -53,6 +53,7 @@ $profile = $this->session->userdata('user_profile');
                             <label for="choose-module">Choose project module</label>
                             <select type="number" class="form-control project_name" id="choose-module" name="project_module" value="<?=set_value('project_module')?>">
                                 <option>Select module</option>
+                                
                             </select>
                         </div>
                         <div class="form-group pl-4">
