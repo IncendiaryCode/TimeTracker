@@ -36,7 +36,7 @@ class Login extends REST_Controller {
 
         }else{
             // Create a token from the user data and send it as reponse
-            $token = AUTHORIZATION::generateToken(['username' => $this->input->post('username')]);
+            $token = AUTHORIZATION::generateToken(['username' => $post['username']]);
             $data['auth_key'] = $token;
             $result['success'] = 1;
             $result['user_details'] = $data;
