@@ -25,7 +25,8 @@ class Login extends REST_Controller {
         log_message('info', 'Login Api', false);
         log_message('info', 'username:::'.$this->input->post('username'), false);
         log_message('info', 'password:::'.$this->input->post('password'), false);
-        $post = json_decode(file_get_contents("php://input"), true);
+        //$post = json_decode(file_get_contents("php://input"), true);
+        $post = $this->input->post();
         $data = $this->dashboard_model->login_device($post);
         log_message('info', 'POST :::'.print_r($post, TRUE), false);
         if($data == false)

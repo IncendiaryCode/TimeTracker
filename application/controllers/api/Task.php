@@ -76,7 +76,8 @@ class Task extends REST_Controller {
         if(isset($verify_data->username))
         {
             $data['success'] = 1;
-            $post = json_decode(file_get_contents("php://input"), true);
+            //$post = json_decode(file_get_contents("php://input"), true);
+            $post = $this->input->post();
             if(!empty($post['userid'])){
                 $data['details'] =  $this->user_model->get_user_projects($post['userid']);
                 //$data = $this->db->get_where("task", ['id' => $input['id']])->row_array();
