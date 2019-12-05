@@ -32,15 +32,20 @@ class Task extends REST_Controller {
         {
         
             $input = $this->input->post();
-            $data['success'] = 1;
+            $data['success'] = 0;
             if(!empty($input['userid'])){
+                $data['success'] = 1;
                 $type = 'task';
                 $data['details'] =  $this->user_model->get_user_task_info($type,$input['userid']);
+                $this->response($data, REST_Controller::HTTP_OK);
                 //$data = $this->db->get_where("task", ['id' => $input['id']])->row_array();
             }else{
-                $data['details'] = $this->db->get("task")->result();
+                $data['success'] = 0;
+                //$data['details'] = $this->db->get("task")->result();
+                $data['msg'] = 'Userid is required!';
+                $this->response($data, parent::HTTP_NOT_FOUND);
             }
-            $this->response($data, REST_Controller::HTTP_OK);
+            
         }else{
             $this->response($verify_data, REST_Controller::HTTP_OK);
         }
