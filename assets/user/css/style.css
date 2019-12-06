@@ -259,15 +259,6 @@ a:hover {
     color: #bbbbbb;
 }
 
-.save-task {
-    color: white;
-    background-image: linear-gradient(to bottom right, #6f79fd, #d788fb);
-    border-style: none;
-    border-radius: 7px;
-    margin: 5% 0% 1% 0%;
-    height: 40px;
-}
-
 
 .vertical-line {
     color: #867bfe;

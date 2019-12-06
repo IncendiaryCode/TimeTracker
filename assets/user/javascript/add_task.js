@@ -161,8 +161,6 @@ var addTime = {
 
             }
         });
-
-
     },
     init: function(eleID) {
         //initial settings

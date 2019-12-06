@@ -1,6 +1,6 @@
 var addUser = {
     username: [],
-    i: 0,
+    i: 1,
     layout: function(usernames, i) {
         var _this = this;
         var i = _this.i;
@@ -21,6 +21,7 @@ var addUser = {
         removeBtn.on('click', function() {
             $('.assign-user' + i).remove();
             _this.i--;
+            username.pop();
         });
             $('.assign-user').append(row);
             $('.assign-user').append(row1);
@@ -32,7 +33,11 @@ var addUser = {
         var username = __this.username;
         var i = __this.i;
         var sameName = 0;
-        var id = 'user-name' + i;
+
+
+        var id = 'user-name' + (i-1);
+
+        console.log('i', i);
         var user = document.getElementById(id).value;
         if ((user == "Select User") || (user == "") || (user == " ")) {
             document.getElementById('user-name-error').innerHTML = "Please select user..";
@@ -40,6 +45,7 @@ var addUser = {
             for (var k = 0; k < username.length; k++) {
                 if ((username[k] == user) && (k != 1)) {
                     sameName = 1;
+                    console.log(username[k], user);
                     break;
                 } else sameName = 0;
             }
@@ -52,12 +58,15 @@ var addUser = {
                         document.getElementById('user-name-error').innerHTML = " ";
                         var result = JSON.parse(res);
                         var usernames = result['users'];
+                        __this.layout(usernames, __this.i);
                         __this.i++;
-                        __this.layout(usernames, __this);
                         username.push(user);
                     }
                 }
                 );
+            }
+            else{
+                document.getElementById('user-name-error').innerHTML = "User name is repeated.";
             }
         }
     },
@@ -84,11 +93,11 @@ $(document).ready(function() {
     addUser.init("#append-new-user");
 
     $("#chooseProject").change(function() {
-        var project_name = $(this).children("option:selected").val();
+        var project_id = $(this).children("option:selected").val();
         $.ajax({
             type: 'POST',
             url: timeTrackerBaseURL + 'index.php/admin/get_project_module',
-            data: { 'project name': project_name },
+            data: { 'project_id': project_id },
             success: function(res) {
                 var result = JSON.parse(res);
                 var array = result['result'];
