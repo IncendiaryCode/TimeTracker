@@ -57,7 +57,18 @@ $picture = substr($profile,29);
         </nav>
     </header>
     
-
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-4">
+            <p><strong>User names</strong></p>
+        </div>
+        <div class="col-4">
+            <p><strong>Project names</strong></p>
+        </div>
+        <div class="col-4">
+            <p><strong>Task details</strong></p>
+        </div>
+    </div>
 <footer class="admin-footer">
 <hr>
   <p class="text-center m-3">Copyright © 2019 Printgreener.com</p>

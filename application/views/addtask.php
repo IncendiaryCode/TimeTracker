@@ -124,16 +124,6 @@ $picture = substr($profile,29);
                                         </a>
                                     </div>
                                 </div>
-                                <div class="row assign-user pb-3"></div>
-                                <div>
-                                <div class="form-group">
-                                    <label for="task-name">Enter the Task name</label>
-                                    <input type="text" class="form-control" id="task_name" name="task_name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="description">Write a small description</label>
-                                    <textarea class="form-control" id="description" name="description"rows="5"></textarea>
-                                </div>
                                 <div class="form-group">
                                     <label for="choose-project">Choose a project</label>
                                     <select class="form-control" id="chooseProject" name="chooseProject">
@@ -150,6 +140,18 @@ $picture = substr($profile,29);
                                         
                                     </select>
                                 </div>
+                                
+                                <div class="row assign-user pb-3"></div>
+                                <div>
+                                <div class="form-group">
+                                    <label for="task-name">Enter the Task name</label>
+                                    <input type="text" class="form-control" id="task_name" name="task_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Write a small description</label>
+                                    <textarea class="form-control" id="description" name="description"rows="5"></textarea>
+                                </div>
+                                
                                 <p id="user-name-error" class="text-danger"></p>
                                 <button type="submit" class="btn btn-primary">Assign Task</button>
                         </form>

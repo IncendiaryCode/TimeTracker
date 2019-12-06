@@ -108,6 +108,35 @@ $picture = substr($profile,29);
                                 <label for="task-name ">Enter the Project name<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="project-name" id="project-name">
                             </div>
+                            <div class="form-group mt-3 row " id="append-new-module">
+                                <div class="col-10 ">
+                                    <label for="new-module0">Enter module name</label>
+                                    <input class="form-control user"  id="new-module0" name="new-module[0][module]" placeholder="General">     
+                                </div>
+                                <div class="col-2 pt-4">
+                                    <a href="#" id="add-new-module" title="Add">
+                                        <i class="fas fa-plus icon-plus text-success" ></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3 row " id="assign-new-user">
+                                <div class="col-10 ">
+                                    <label for="assign-name">Choose the name of user to assign project</label>
+                                    <select class="form-control user"  id="assign-name0" name="assign-name[0][name]">
+                                        <option>Select User</option>
+                                        <?php
+                                            foreach($names as $name){ ?>
+                                            <option ><?php echo $name['name']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="col-2 pt-4">
+                                    <a href="javascript:void(0);" id="assign-new-user" title="Add">
+                                        <i class="fas fa-plus icon-plus text-success" ></i>
+                                    </a>
+                                </div>
+                            </div>
+
                             <div class="form-group mt-3">
                                 <label for="task-name ">Choose logo for project</label>
                                 <input type="file" class="form-control" name="project-logo" id="Project-logo">
@@ -126,17 +155,6 @@ $picture = substr($profile,29);
                             <div class="form-group mt-3">
                                 <label for="task-name ">Enter end date</label>
                                 <input type="text" class="form-control edit-date" name="end-date" id="end-date">
-                            </div>
-                            <div class="form-group mt-5 row " id="append-new-module">
-                                <div class="col-10 ">
-                                    <label for="new-module0">Enter module name</label>
-                                    <input class="form-control user"  id="new-module0" name="new-module[0][module]" placeholder="General">     
-                                </div>
-                                <div class="col-2 pt-4">
-                                    <a href="#" id="add-new-module" title="Add">
-                                        <i class="fas fa-plus icon-plus text-success" ></i>
-                                    </a>
-                                </div>
                             </div>
                             <p id="module-error" class="text-danger"></p>
                             <button type="submit" class="btn btn-primary">Add Project</button>
