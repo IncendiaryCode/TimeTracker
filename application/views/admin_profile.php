@@ -82,8 +82,8 @@ $picture = substr($profile,29);
     <main class="container-fluid container-fluid-main">
         <div class="container main-container">
             <div class="main-container-inner">
-                <div class="row mt-2 pt-4">
-                    <div class="col-6 offset-3">
+                <div class="row pt-5">
+                    <div class="container">
                        <!--  <?php 
                         $this->load->library('form_validation');
                         if(validation_errors()) { ?>
@@ -92,17 +92,17 @@ $picture = substr($profile,29);
                         <div class="alert-success"><?php echo isset($success)?$success:""; ?></div> -->
                         <div class="text-center">
                             <span>
-                                <img id="profile-pic" src="<?=base_url().$picture;?>" class="rounded-circle img-fluid" >
+                                <img id="profile-pic" src="<?=base_url().$picture;?>" class="rounded-circle img-fluid" width="200px;" height="200px;">
                                  <div class="edit">
                                     <a href="#" class="text-white"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#change-profile-pic"></i></a>
                                 </div> 
                             </span>
                         </div>
 
-                        <div>
+                        <div class="col-4 offset-4">
                             <form action="<?=base_url();?>index.php/admin/change_password" id="changePsw">
                                 <p class="text-center display-5 mt-4">Change password</p>
-                                <div class="form-group mt-5">
+                                <div class="form-group mt-4">
                                     <input type="password" class="form-control-file border-top-0 border-left-0 border-right-0" name="old-pass" id="old-pass" placeholder="Enter old password">
                                 </div>
                                 <div class="form-group mt-5">
