@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-$this->load->library('session');
 $profile = $this->session->userdata('user_profile');
+$picture = substr($profile,29);
 ?>
 <body>
     <header>
@@ -33,7 +33,7 @@ $profile = $this->session->userdata('user_profile');
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th scope="row"><a href="#" onclick=window.location.href="adminNotifications.php">See all notifications</a></th>
+                                                <th scope="row"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_notification"'>See all notifications</a></th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -43,10 +43,10 @@ $profile = $this->session->userdata('user_profile');
                     </div>
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <a href="#" class="text-white"><img src="<?=base_url();?>assets/images/<?=$profile?>" height="40px" class="rounded-circle"></a>
+                            <a href="#" class="text-white"><img src="<?=base_url().$picture?>" height="40px" class="rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class=" text-center">
-                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/change_password"' class="text-display">Profile</a></p>
+                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display">Profile</a></p>
                                     <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display"><i class="fas fa-power-off"></i> Logout</a></p>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@ $profile = $this->session->userdata('user_profile');
                     </div>
                     <hr>
                     <div class="text-center">
-                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/add_tasks'"><i class="fas fa-plus"></i> Tasks</button>
+                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/load_add_task'"><i class="fas fa-plus"></i> Tasks</button>
                     </div>
                 </div>
             </div>

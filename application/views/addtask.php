@@ -2,7 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->helper('url_helper');
 $this->load->library('session');
+$this->load->library('form_validation');
 $profile = $this->session->userdata('user_profile');
+$picture = substr($profile,29);
 ?>
 <body>
     <header>
@@ -65,7 +67,7 @@ $profile = $this->session->userdata('user_profile');
                     </div>
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="<?=base_url();?>assets/images/<?=$profile?>" height="40px" class="rounded-circle">
+                            <img src="<?=base_url().$picture?>" height="40px" class="rounded-circle">
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class=" text-center">
                                     <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/profile"' class="text-display">Profile</a></p>
@@ -85,11 +87,25 @@ $profile = $this->session->userdata('user_profile');
                     <div class="row">
                         <div class="col-8 offset-2">
                             <?php 
-                            $this->load->library('form_validation');
                             if(validation_errors()) { ?>
-                                <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
-                            <?php } ?>
-                            <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>  
+                                <div class="alert alert-danger">
+                                    <?php 
+                                        echo validation_errors();
+                                    ?>    
+                                </div>
+                            <?php } 
+                            if($this->session->flashdata('true')){ ?>
+                                <div class="alert-success">
+                                    <?php  
+                                        echo $this->session->flashdata('true'); 
+                                    ?>    
+                                </div>
+                            <?php } 
+                            else if($this->session->flashdata('err')){ ?>
+                                <div class = "alert alert-danger">
+                                    <?php echo $this->session->flashdata('err'); ?>
+                                </div>
+                            <?php } ?>  
                             <form action="<?php echo base_url();?>index.php/admin/add_tasks" id="addTask" method="post">
                                 <div class="form-group mt-5 row " id="append-new-user">
                                     <div class="col-10 ">

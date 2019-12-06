@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->helper('url_helper');
-$this->load->library('session');
 $profile = $this->session->userdata('user_profile');
+$picture = substr($profile,29);
 ?>
 <body>
     <header>
@@ -65,7 +65,7 @@ $profile = $this->session->userdata('user_profile');
                     </div>
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="<?=base_url();?>assets/images/<?=$profile?>" height="40px" class="rounded-circle">
+                            <img src="<?=base_url().$picture?>" height="40px" class="rounded-circle">
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class=" text-center">
                                     <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/profile"' class="text-display">Profile</a></p>

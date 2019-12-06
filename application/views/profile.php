@@ -1,21 +1,21 @@
 <?php 
     defined('BASEPATH') OR exit('No direct script access allowed');
     $this->load->helper('url_helper');
-    $this->load->library('session');
     $profile = $this->session->userdata('user_profile');
+    $picture = substr($res['profile'],29);
 ?>
-<!--     <header class="container-fluid">
+     <header class="container-fluid">
         <div class="row">
             <div class="col-6 m-3">
                 <img src="<?=base_url();?>assets/images/logo-white.png" height="40px" onclick="window.location.href='<?=base_url();?>index.php/admin'">
             </div>
         </div>
-    </header> -->
+    </header> 
     
     <main class="container-fluid-main">
         <div class="main-container-inner mt-3">
         <div class="md main-container-employee text-center">
-            <img id="new_img" src="<?=base_url();?>assets/images/<?=$profile?>" width="10%;" class="rounded-circle figure mt-4" data-toggle="modal" data-target="#changeImage" data-toggle="tooltip" data-placement="top" title="Upload profile picture">
+            <img id="new_img" src="<?=base_url().$picture?>" width="10%;" class="rounded-circle figure mt-4" data-toggle="modal" data-target="#changeImage" data-toggle="tooltip" data-placement="top" title="Upload profile picture">
             <div class="container ">
                 <?php 
                     $this->load->library('form_validation');
@@ -51,7 +51,7 @@
             </footer>
         </div>
     </main>
-<!--     <div class="modal" id="changeImage">
+     <div class="modal" id="changeImage">
         <div class="modal-dialog animated">
             <div class="modal-content ">
                 <div class="modal-header ">Upload image
@@ -67,4 +67,4 @@
             </div>
         </div>
     </div>
-     -->
+    

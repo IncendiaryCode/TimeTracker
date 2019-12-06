@@ -79,7 +79,7 @@
 	            $this->load->view('footer');
 	        }
 	    }
-	    
+
 	    //To check whether user exists...
 	    public function users_exists()
 	    {
@@ -148,7 +148,14 @@
 	            return false;
 	        }
 	    }*/
-
+	    //Load add task page
+	    public function load_add_task(){
+	    	$this->load->view('header');
+		    $data['names'] = $this->dashboard_model->get_usernames();
+		    $data['result'] = $this->dashboard_model->get_project_name();
+		   	$this->load->view('addtask',$data);
+			$this->load->view('footer');
+	    }
 	    //get user name list into add task page
 	    public function get_username_list(){
 
@@ -158,7 +165,7 @@
 	    }
 	    //get project module list to add task page 
 	    public function get_project_module(){
-	    	$projectid      = $this->input->post('id');
+	    	$projectid      = $this->input->post('project_id');
 	        $data['result'] = $this->dashboard_model->get_module_name($projectid);
 	        echo json_encode($data);
 	    }
@@ -171,35 +178,25 @@
 				$this->lang->load('form_validation_lang');
 				$this->load->library('form_validation');
 		  		$this->load->helper('security');
-		  		$this->form_validation->set_rules('user_name','Username','required|min_length[1]|trim|xss_clean');
+		  		//$this->form_validation->set_rules('user-name','Username','required|min_length[1]|trim|xss_clean');
 		        $this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|xss_clean');
-		        $this->form_validation->set_rules('description','Task Description','trim|required');
+		        //$this->form_validation->set_rules('description','Task Description','trim|required');
 		        $this->form_validation->set_rules('chooseProject','Project name','required');
 
 		        if ($this->form_validation->run() == FALSE)
 				{
-					$this->load->helper('url');
-					$this->load->view('header');
-					$data['names'] = $this->dashboard_model->get_usernames();
-					$data['result'] = $this->dashboard_model->get_project_name();
-					$this->load->view('addtask',$data);
-					$this->load->view('footer');
+					redirect('admin/load_task_data');
 		        }
 		        else
 		        {
 		            $this->load->model('dashboard_model');
-		            $result=$this->dashboard_model->add_tasks();
+		            $result=$this->dashboard_model->assign_tasks();
 		            if(!$result){
-		                echo "Something went wrong.";
+		            	$this->session->set_flashdata('err', "Something went wrong.");
+		                redirect('admin/load_add_task','refresh');
 		            }else{
-		            	$this->load->helper('url');
-		               	$this->load->view('header');
-		               	$data['names'] = $this->dashboard_model->get_usernames();
-		               	$data['result'] = $this->dashboard_model->get_project_name();
-		                $data['success'] = "Successfully added.";
-						$this->load->view('addtask',$data);
-						$this->load->view('footer');
-		               
+		            	$this->session->set_flashdata('true', 'Successfully Added.');
+		               	redirect('admin/load_add_task','refresh');
 		            }
 		        }
 		    }else{
@@ -207,6 +204,23 @@
 	            $this->load->view('login');
 	            $this->load->view('footer');
 		    }
+		}
+
+		//function to add project module
+		public function add_module(){
+			$result = $this->dashboard_model->add_project_module();
+			if($result == TRUE){
+
+			}else{
+
+			}
+		}
+
+		public function load_profile(){
+			$this->load->view('header');
+			$data['res']           = $this->dashboard_model->my_profile();
+			$this->load->view('admin_profile',$data);
+			$this->load->view('footer');
 		}
 		//Profile...
 		public function upload_profile(){
@@ -223,7 +237,7 @@
 		                $uploadData = $this->upload->data();
 		               // $picture = $uploadData['file_name'];
 		                $picture = array(
-		                'profile' => $uploadData['file_name']);//to update profile in db(profile column)
+		                'profile' => $uploadData['file_path'].$uploadData['file_name']);//to update profile in db(profile column)
 		            }else{
 		            	echo $this->upload->display_errors();
 		                $picture = '';
@@ -233,15 +247,19 @@
 		        }
 				$this->dashboard_model->submit_profile($picture);
 				if($this->dashboard_model->submit_profile($picture) == TRUE){
-					$this->load->view('header');
-					$this->load->view('profile');
-					$this->load->view('footer');
+					redirect('admin/load_profile','refresh');
 				}
 			}else{
 				$this->load->view('header');
 				$this->load->view('login');
 				$this->load->view('footer');
 			}
+		}
+		//function to show admin notifications
+		public function load_notification(){
+			$this->load->view('header');
+			$this->load->view('adminNotifications');
+			$this->load->view('footer');
 		}
 		public function password_exists(){
 			$this->load->model('dashboard_model');

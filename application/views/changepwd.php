@@ -1,6 +1,9 @@
 <?php 
     defined('BASEPATH') OR exit('No direct script access allowed');   
     $this->load->helper('url_helper');
+    $this->load->library('form_validation');
+    $this->load->helper('form');
+    $this->load->library('session');
 ?>
 
 <body>
@@ -14,9 +17,7 @@
                     </div>
                 </div>
                 <?php 
-                    $this->load->library('form_validation');
-                    $this->load->helper('form');
-                    $this->load->library('session');
+                    
                     if($this->session->flashdata('err_msg'))
                     { ?>
                         <div class="alert alert-danger"><?php echo $this->session->flashdata('err_msg');?></div>

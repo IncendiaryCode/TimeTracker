@@ -57,6 +57,18 @@ class Dashboard_model extends CI_Model
             return true;
         }
     }
+    public function add_project_module(){
+        
+        $array = array('project_id'=>$this->input->post(''),'name'=>$this->input->post(''),'meta_data'=>$this->input->post(''),'created_on'=>date('Y-m-d H:i:s'));
+        $this->db->set($array);
+        $query = $this->db->insert('project_module',$array);
+        if($query){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
     public function get_project_name()
     {
         $query  = $this->db->query("SELECT * FROM project");
@@ -78,48 +90,41 @@ class Dashboard_model extends CI_Model
         return $names;
     }
     //add task model
-    public function add_tasks()
+    public function assign_tasks()
     {
-        $select = $_POST['user_name'];
-        print_r($select);exit;
-            $query2  = $this->db->get_where('users', array(
-                'name' => $this->input->post('user-name')
-            ));
-            if ($query2->num_rows() > 0) {
-                $user_id = $query2->row_array();
-                $array   = array(
+        $select = $this->input->post('user-name');
+        if(!empty($this->input->post('module'))){
+            $module_id = $this->input->post('module');
+        }
+        else{
+            $module_id = 1;
+        }
+        $array   = array(
                     'task_name' => $this->input->post('task_name'),
                     'description' => $this->input->post('description'),
-                    'project_id' => $proj_id['id'],
-                    'module_id' => '1',
-                    'created_on' => date('Y:m:d H:i:s')
+                    'project_id' => $this->input->post('chooseProject'),
+                    'module_id' => $module_id,
+                    'created_on' => date('Y-m-d H:i:s')
                 );
-                $this->db->set($array);
-                $query3 = $this->db->insert('task', $array);
-                if (!$query3) {
-                    return false;
-                } //!$query3
-                else {
-                    $last_insert_id = $this->db->insert_id();
-                    $array2         = array(
-                        'user_id' => $user_id['id'],
+        $this->db->set($array);
+        $query = $this->db->insert('task', $array);
+        $last_insert_id = $this->db->insert_id();
+        if(sizeof($select) > 0){
+            for($i=0;$i<sizeof($select);$i++){
+                $query  = $this->db->get_where('users', array(
+                    'name' => $select[$i]['name']
+                ));
+                $user_id[$i] = $query->row_array();
+                $array  = array(
+                        'user_id' => $user_id[$i]['id'],
                         'task_id' => $last_insert_id,
                         'created_on' => date('Y:m:d H:i:s')
-                    );
-                    $this->db->set($array2);
-                    $query4 = $this->db->insert('task_assignee', $array2);
-                    if (!$query4) {
-                        return false;
-                    }
-                    else {
-                        return true;
-                    }
-                }
-            } //end of if($query2->num_rows() > 0)
-            else {
-                echo "Not a valid user id.";
+                );
+                $this->db->set($array);
+                $query = $this->db->insert('task_assignee', $array);
             }
-        
+        }
+        return $last_insert_id;
     }
     //add project model
     public function project_exists()
@@ -148,12 +153,20 @@ class Dashboard_model extends CI_Model
             return true;
         }
     }
+
+    public function my_profile(){
+        $userid = $this->session->userdata('userid');
+        $this->db->where('id',$userid);
+        $query = $this->db->get('users');
+        if($query->num_rows() == 1){
+            return $query->row_array();
+        }
+    }
+
     //update profile model
     public function submit_profile($picture)
     {
         $useremail = $this->session->userdata('email');
-        print_r($picture);
-        exit;
         $this->db->where('email', $useremail);
         $query = $this->db->update('users', $picture);
         if (!$query) {
