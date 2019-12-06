@@ -83,32 +83,32 @@ $picture = substr($profile,29);
             <div class="main-container-inner">
                 <div class="row mt-2 pt-4">
                     <div class="col-6 offset-3">
-                    <?php 
+                    <!-- <?php 
                         $this->load->library('form_validation');
-                        if(validation_errors()) { ?>
+                       if(validation_errors()) { ?>
                             <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
                         <?php } ?>
-                        <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
+                        <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>  -->
                       
                         <form action="<?php echo base_url();?>index.php/admin/add_users" id="addUser" method="post">
                             <div class="form-group mt-3">
-                                <label for="task-name ">Enter the Name of new User</label>
+                                <label for="task-name ">Enter the Name of new User<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="task_name" id="newUser" value="">
                             </div>
                             <div class="form-group mt-3">
-                                <label for="task-name ">Enter the Email of new User</label>
+                                <label for="task-name ">Enter the Email of new User<span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" name="user_email" id="user_email" value="">
                             </div>
                             <div class="form-group mt-3">
-                                <label for="task-name ">Enter the Contact number of new User</label>
+                                <label for="task-name ">Enter the Contact number of new User<span class="text-danger">*</span></label>
                                 <input type="tel" minlength="10" maxlength="10" class="form-control" name="contact" id="contact" value="">
                             </div>
                             <div class="form-group mt-3">
                                 <label for="task-name ">Enter Password</label>
                                 <input type="password" class="form-control" name="task_pass" id="task_pass" value="">
                             </div>
-                            
-                            <button type="submit" class="save-task" value="submit">Add User</button>
+                            <p id="user-error" class="text-danger"></p>
+                            <button type="submit" class="btn btn-primary" value="submit">Add User</button>
                         </form>
                     </div>
                 </div>
@@ -116,6 +116,6 @@ $picture = substr($profile,29);
         </div>
     </main>
     <hr>
-    <footer>
+    <footer class="admin-footer">
         <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</ p>
     </footer>

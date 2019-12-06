@@ -35,10 +35,10 @@
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
-                <form id="uploadImage" method="post" action="<?=base_url();?>index.php/user/upload_profile" enctype="multipart/form-data">
+                <form id="upload-image" method="post" action="<?=base_url();?>index.php/user/upload_profile" enctype="multipart/form-data">
                     <p><input type="file" name="change_img" placeholder="Upload image" id="image"></p>
                     <p class="text-danger" id="imageerror"></p>
-                    <button type="submit" class="btn save-task" id="submit-profile">Upload</button>
+                    <button type="submit" class="btn btn-primary" id="submit-profile-pic">Upload</button>
                 </form>
             </div>
         </div>

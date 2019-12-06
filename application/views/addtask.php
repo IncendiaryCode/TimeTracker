@@ -160,6 +160,6 @@ $picture = substr($profile,29);
         </div>
     </main>
     <hr>
-    <footer>
+    <footer class="admin-footer">
         <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</ p>
     </footer>

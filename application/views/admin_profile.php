@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->helper('url_helper');
 $this->load->library('session');
 $profile = $this->session->userdata('user_profile');
+$picture = substr($profile,29);
 ?>
 <body>
     <header>
@@ -83,18 +84,61 @@ $profile = $this->session->userdata('user_profile');
             <div class="main-container-inner">
                 <div class="row mt-2 pt-4">
                     <div class="col-6 offset-3">
-                        <?php 
+                       <!--  <?php 
                         $this->load->library('form_validation');
                         if(validation_errors()) { ?>
                             <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
                         <?php } ?> 
-                        <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
+                        <div class="alert-success"><?php echo isset($success)?$success:""; ?></div> -->
+                        <div class="text-center">
+                            <span>
+                                <img id="profile-pic" src="<?=base_url().$picture;?>" class="rounded-circle img-fluid" >
+                                 <div class="edit">
+                                    <a href="#" class="text-white"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#change-profile-pic"></i></a>
+                                </div> 
+                            </span>
+                        </div>
+
+                        <div>
+                            <form action="<?=base_url();?>index.php/admin/change_password" id="changePsw">
+                                <p class="text-center display-5 mt-4">Change password</p>
+                                <div class="form-group mt-5">
+                                    <input type="password" class="form-control-file border-top-0 border-left-0 border-right-0" name="old-pass" id="old-pass" placeholder="Enter old password">
+                                </div>
+                                <div class="form-group mt-5">
+                                    <input type="password" class="form-control-file border-top-0 border-left-0 border-right-0" name="new-pass" id="new-pass" placeholder="Enter new password">
+                                </div>
+                                <div class="form-group mt-5">
+                                    <input type="password" class="form-control-file border-top-0 border-left-0 border-right-0" name="confirm-pass" id="confirm-pass" placeholder="Confirm password">
+                                </div>
+                                <p class="text-danger pt-3" id="psw-error"></p>
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+    <div class="modal" id="change-profile-pic" data-backdrop="false">
+    <!-- to change the profile picture of user-->
+    <div class="modal-dialog animated">
+        <div class="modal-content text-center">
+            <div class="modal-header ">Upload image
+                <button type="button" class="close text-danger" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadImage" method="post" action="<?=base_url();?>index.php/admin/upload_profile" enctype="multipart/form-data">
+                    <p><input type="file" name="change_img" placeholder="Upload image" id="profile-image"></p>
+                    <p class="text-danger pt-3" id="imageerror"></p>
+                    <button type="submit" class="btn btn-primary" id="submit-profile">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <footer class="text-center admin-footer">
     <hr>
-    <footer>
         <p class="text-center p-3 ">Copyright © 2019 Printgreener.com </p>
     </footer>

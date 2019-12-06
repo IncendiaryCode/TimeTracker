@@ -2,15 +2,16 @@ var addUser = document.getElementById('addUser');
 if (addUser) {
 addUser.onsubmit = function(e) {
     var name = document.getElementById('newUser').value;
-    if (name == "" || name == " ") {
-        document.getElementById('userError').innerHTML = "Empty username";
+    var email = document.getElementById('user_email').value;
+    var ph_no = document.getElementById('contact').value;
+    if ((name == "" || name == " ") || (email == "" || email == " ")  (ph_no == "" || ph_no == " ")) {
+        document.getElementById('user-error').innerHTML = "Please enter valid details";
         return false;
     } else {
-        document.getElementById('userError').innerHTML = " ";
+        document.getElementById('user-error').innerHTML = " ";
 
         return true;
-
+    }
         return false;
     }
-}
 }

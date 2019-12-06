@@ -1,4 +1,4 @@
-<?php
+ <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
@@ -118,10 +118,10 @@ $picture = substr($profile,29);
         <canvas id="canvas" width="300" height="100"></canvas>
     </div>
     <hr>
-    <div class="container table ">
+    <div class="container table">
         <h3 class="text-center mt-5 pb-3">Activities</h3>
         <p class="text-right"><i class="fas fa-list-ul"></i></p>
-        <div class="col-8 text-right ">
+        <div class="col-8 text-right">
         </div>
         <div class="table-responsive  table-responsive-data2">
             <table class="table table-hover">
