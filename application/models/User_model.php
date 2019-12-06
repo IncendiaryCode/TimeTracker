@@ -82,8 +82,6 @@ class User_model extends CI_Model {
         return $data; 
     }
     public function get_user_task_info($sort_type,$post_data){
-        $limit  =10;
-        $offset =$limit*($post_data['page_no']-1);
         $this->db->select('p.name as project_name,p.id as project_id,p.image_name,t.task_name,t.description,t.id');
         $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);         //get completed tasks of the user
         $this->db->from('task AS t');
@@ -116,8 +114,11 @@ class User_model extends CI_Model {
         }else if($sort_type == 'task'){
             $this->db->order_by("t.id", "asc");         //sort by task id
         }
-        if(isset($post_data['page_no']))
+        if(isset($post_data['page_no'])){
+            $limit  =10;
+            $offset =$limit*($post_data['page_no']-1);
             $this->db->limit($limit,$offset);  
+        }
         $query = $this->db->get();
         $data = $query->result_array();
         $result = $data;
