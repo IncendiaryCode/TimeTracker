@@ -81,14 +81,16 @@ class User_model extends CI_Model {
         //print_r($data);exit;
         return $data; 
     }
-    public function get_user_task_info($sort_type,$userid){
+    public function get_user_task_info($sort_type,$post_data){
+        $limit  =10;
+        $offset =$limit*($post_data['page_no']-1);
         $this->db->select('p.name as project_name,p.id as project_id,p.image_name,t.task_name,t.description,t.id');
         $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);         //get completed tasks of the user
         $this->db->from('task AS t');
         $this->db->join('task_assignee AS a','a.task_id = t.id');
         $this->db->join('project AS p', 'p.id = t.project_id');
         $this->db->join('project_module AS m','m.id = t.module_id');
-        $this->db->where(array('a.user_id'=>$userid));
+        $this->db->where(array('a.user_id'=>$post_data['userid']));
         /*if($date == null){       
             $this->db->where(array('a.user_id'=>$userid));
         }else{
@@ -114,13 +116,15 @@ class User_model extends CI_Model {
         }else if($sort_type == 'task'){
             $this->db->order_by("t.id", "asc");         //sort by task id
         }
+        if(isset($post_data['page_no']))
+            $this->db->limit($limit,$offset);  
         $query = $this->db->get();
         $data = $query->result_array();
         $result = $data;
         foreach ($data as $key => $value) {
            $this->db->select('td.id,td.start_time,td.end_time,td.task_description,td.total_hours,td.total_minutes');
            $this->db->from('time_details AS td');
-           $this->db->where(array('td.task_id'=>$value['id'],'td.user_id'=>$userid));
+           $this->db->where(array('td.task_id'=>$value['id'],'td.user_id'=>$post_data['userid']));
            $query = $this->db->get();
            $sub_data = $query->result_array();
            $result[$key]['time_details'] = $sub_data;

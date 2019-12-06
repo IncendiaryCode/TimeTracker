@@ -36,7 +36,7 @@ class Task extends REST_Controller {
             if(!empty($input['userid'])){
                 $data['success'] = 1;
                 $type = 'task';
-                $data['details'] =  $this->user_model->get_user_task_info($type,$input['userid']);
+                $data['details'] =  $this->user_model->get_user_task_info($type,$input);
                 $this->response($data, REST_Controller::HTTP_OK);
                 //$data = $this->db->get_where("task", ['id' => $input['id']])->row_array();
             }else{
@@ -89,18 +89,6 @@ class Task extends REST_Controller {
             $this->response($verify_data, REST_Controller::HTTP_OK);
         }
         
-    }
-     
-    /**
-     * Get All Data from this method.
-     *
-     * @return Response
-    */
-    public function index_delete($id)
-    {
-        $this->db->delete('items', array('id'=>$id));
-       
-        $this->response(['Item deleted successfully.'], REST_Controller::HTTP_OK);
     }
     	
 }
