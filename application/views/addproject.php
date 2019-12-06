@@ -82,7 +82,7 @@ $picture = substr($profile,29);
         <div class="container main-container">
             <div class="main-container-inner">
                 <div class="row mt-2 pt-4">
-                    <div class="col-6 offset-3">
+                    <div class="col-md-6 offset-md-3">
                         <?php 
                             if(validation_errors()) { ?>
                                 <div class="alert alert-danger">
@@ -127,7 +127,18 @@ $picture = substr($profile,29);
                                 <label for="task-name ">Enter end date</label>
                                 <input type="text" class="form-control edit-date" name="end-date" id="end-date">
                             </div>
-                            <p id="project-error" class="text-danger"></p>
+                            <div class="form-group mt-5 row " id="append-new-module">
+                                <div class="col-10 ">
+                                    <label for="new-module0">Enter module name</label>
+                                    <input class="form-control user"  id="new-module0" name="new-module[0][module]" placeholder="General">     
+                                </div>
+                                <div class="col-2 pt-4">
+                                    <a href="#" id="add-new-module" title="Add">
+                                        <i class="fas fa-plus icon-plus text-success" ></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <p id="module-error" class="text-danger"></p>
                             <button type="submit" class="btn btn-primary">Add Project</button>
                         </form>
                     </div>
@@ -136,6 +147,6 @@ $picture = substr($profile,29);
         </div>
     </main>
     <hr>
-    <footer class="admin-footer">
+    <footer class="">
         <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</ p>
     </footer>

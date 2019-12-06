@@ -85,7 +85,7 @@ $picture = substr($profile,29);
             <div class="main-container-inner">
                 <div class="container">
                     <div class="row">
-                        <div class="col-8 offset-2">
+                        <div class="col-md-6 offset-md-3">
                             <?php 
                             if(validation_errors()) { ?>
                                 <div class="alert alert-danger">

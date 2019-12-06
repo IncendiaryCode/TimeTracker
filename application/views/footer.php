@@ -13,6 +13,7 @@
 <script src="<?=base_url();?>assets/javascript/addTask.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/javascript/admin.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/javascript/script.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/javascript/user_snapshot.js?v=<?=VERSION?>"></script>
 
 <script type="text/javascript">
 /* $(function() {

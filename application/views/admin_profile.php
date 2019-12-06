@@ -94,7 +94,7 @@ $picture = substr($profile,29);
                                 </div> 
                             </span>
                         </div>
-                        <div class="col-4 offset-4">   
+                        <div class="col-md-4 offset-md-4">   
                             <form action="<?=base_url();?>index.php/admin/change_password" id="changePsw" method="post">
                                 <p class="text-center display-5 mt-4">Change password</p>
                                 <?php 
