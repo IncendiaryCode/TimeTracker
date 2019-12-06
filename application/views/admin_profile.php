@@ -66,7 +66,7 @@ $picture = substr($profile,29);
                     </div>
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="<?=base_url();?>assets/images/<?=$profile?>" height="40px" class="rounded-circle">
+                            <img src="<?=base_url().$picture;?>" height="40px" class="rounded-circle">
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class=" text-center">
                                     <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display">Profile</a></p>
@@ -84,12 +84,8 @@ $picture = substr($profile,29);
             <div class="main-container-inner">
                 <div class="row pt-5">
                     <div class="container">
-                       <!--  <?php 
-                        $this->load->library('form_validation');
-                        if(validation_errors()) { ?>
-                            <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
-                        <?php } ?> 
-                        <div class="alert-success"><?php echo isset($success)?$success:""; ?></div> -->
+                          
+                        <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
                         <div class="text-center">
                             <span>
                                 <img id="profile-pic" src="<?=base_url().$picture;?>" class="rounded-circle img-fluid" width="200px;" height="200px;">
@@ -98,10 +94,18 @@ $picture = substr($profile,29);
                                 </div> 
                             </span>
                         </div>
-
-                        <div class="col-4 offset-4">
-                            <form action="<?=base_url();?>index.php/admin/change_password" id="changePsw">
+                        <div class="col-4 offset-4">   
+                            <form action="<?=base_url();?>index.php/admin/change_password" id="changePsw" method="post">
                                 <p class="text-center display-5 mt-4">Change password</p>
+                                <?php 
+                        if(validation_errors()) { ?>
+                            <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
+                        <?php } 
+                        else if($this->session->flashdata('err_msg')){ ?>
+                                <div class = "alert alert-danger">
+                                    <?php echo $this->session->flashdata('err_msg'); ?>
+                                </div>
+                            <?php } ?>
                                 <div class="form-group mt-4">
                                     <input type="password" class="form-control-file border-top-0 border-left-0 border-right-0" name="old-pass" id="old-pass" placeholder="Enter old password">
                                 </div>

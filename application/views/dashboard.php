@@ -67,7 +67,7 @@ $picture = substr($profile,29);
                         <div class="col-lg-7 col-8 text-center">
                             <span class="font-weight-bold text-display number-font shadow-lg"><?php echo $total_users; ?></span>
                             <span class="text-display pt-3">Total Users</span>
-                            <span class="text-display pt-3"><a href="<?=base_url();?>index.php/admin/user_snapshot" class="text-white">Analytics</a></span>
+                            <span class="text-display pt-3"><a href="<?=base_url();?>index.php/admin/load_user_snapshot" class="text-white">Analytics</a></span>
                         </div>
                     </div>
                     <hr>

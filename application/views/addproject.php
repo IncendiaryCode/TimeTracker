@@ -83,12 +83,26 @@ $picture = substr($profile,29);
             <div class="main-container-inner">
                 <div class="row mt-2 pt-4">
                     <div class="col-6 offset-3">
-                        <!-- <?php 
-                        $this->load->library('form_validation');
-                        if(validation_errors()) { ?>
-                            <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
-                        <?php } ?> 
-                        <div class="alert-success"><?php echo isset($success)?$success:""; ?></div> -->
+                        <?php 
+                            if(validation_errors()) { ?>
+                                <div class="alert alert-danger">
+                                    <?php 
+                                        echo validation_errors();
+                                    ?>    
+                                </div>
+                            <?php } 
+                            if($this->session->flashdata('true')){ ?>
+                                <div class="alert-success">
+                                    <?php  
+                                        echo $this->session->flashdata('true'); 
+                                    ?>    
+                                </div>
+                            <?php } 
+                            else if($this->session->flashdata('err')){ ?>
+                                <div class = "alert alert-danger">
+                                    <?php echo $this->session->flashdata('err'); ?>
+                                </div>
+                            <?php } ?> 
                         <form action="<?php echo base_url();?>index.php/admin/add_projects" id="add-project" method="post">
                             <div class="form-group mt-3">
                                 <label for="task-name ">Enter the Project name<span class="text-danger">*</span></label>

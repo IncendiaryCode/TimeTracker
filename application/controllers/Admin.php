@@ -9,13 +9,16 @@
 		    $this->load->model('dashboard_model');
 	        $this->load->helper('url_helper');
 	        $this->load->library('session');
+		    $this->load->helper(array('form','url'));
+			$this->lang->load('form_validation_lang');
+			$this->load->library('form_validation');
+		  	$this->load->helper('security');
 	    }
 
 		public function index()
 		{
 			if($this->session->userdata('logged_in')){
 				//loading admin dashboard
-				$this->lang->load('form_validation_lang');
 				$this->load->view('header');
 				$data['total_users'] = $this->dashboard_model->get_users();
 				$data['total_tasks'] = $this->dashboard_model->get_tasks();
@@ -28,49 +31,45 @@
 			    $this->load->view('footer');
 			}
 		}
+		//Function to load add project page
+		public function load_add_project(){
+			$this->load->view('header');
+			$this->load->view('addproject');
+			$this->load->view('footer');
+		}
 		//To check whether Project exists.....
 		public function project_exists()
 	    {
-
-	       	$this->load->model('dashboard_model');
 	        if ($this->dashboard_model->project_exists() == TRUE)
 	        { 
 	           	return true;
 	        }else
 	        {
-	        	$this->form_validation->set_message('project_exists','Project Already Exists.');
+	        	//$this->form_validation->set_message('project_exists','Project Already Exists.');
 	            return false;
 	        }
 	    }
 	    //To Add Projects..
 		public function add_projects(){
 			if($this->session->userdata('logged_in')){
-				$this->load->helper('url_helper');
-		        $this->load->helper(array('form','url'));
-				$this->lang->load('form_validation_lang');
-				$this->load->library('form_validation');
-		  		$this->load->helper('security');
-		  		$this->form_validation->set_rules('task-name','Project Name','required|min_length[1]|trim|callback_project_exists|xss_clean');
+		  		$this->form_validation->set_rules('project-name','Project Name','required|min_length[1]|trim|callback_project_exists|xss_clean');
+		  		//$this->form_validation->set_rules('project-logo','Project Logo','required');
 		  		if ($this->form_validation->run() == FALSE)
 				{
-					$this->load->helper('url');
 					$this->load->view('header');
 					$this->load->view('addproject');
 					$this->load->view('footer');
+					//redirect('admin/load_add_project');
 		        }
 		        else
 		        {
-		            $this->load->model('dashboard_model');
 		            $result=$this->dashboard_model->add_projects();
-		            if(!$result){
-		                echo "Something went wrong.";
+		            if($result == FALSE){
+		                $this->session->set_flashdata('err', "Something went wrong.");
+		                redirect('admin/load_add_project','refresh');
 		            }else{
-		            	$this->load->helper('url');
-		            	$this->load->view('header');
-		                $data['success'] = "Successfully added.";
-						$this->load->view('addproject',$data);
-						$this->load->view('footer');
-		               
+		            	$this->session->set_flashdata('true', 'Successfully Added.');
+		               	redirect('admin/load_add_project','refresh');   
 		            }
 		        }
 		    }else{
@@ -83,7 +82,6 @@
 	    //To check whether user exists...
 	    public function users_exists()
 	    {
-	       	$this->load->model('dashboard_model');
 	        if ($this->dashboard_model->users_exists() == TRUE)
 	        { 
 	           
@@ -97,11 +95,7 @@
 	    //To add users...
 	    public function add_users(){
 	    	if($this->session->userdata('logged_in')){
-				$this->load->helper('url_helper');
-		        $this->load->helper(array('form','url'));
-				$this->lang->load('form_validation_lang');
-				$this->load->library('form_validation');
-		  		$this->load->helper('security');
+				
 		  		$this->form_validation->set_rules('task_name','Username','required|min_length[2]|trim|callback_users_exists|xss_clean');
 		        $this->form_validation->set_rules('task_pass','Password','trim|required|min_length[6]|max_length[100]|md5|trim|xss_clean');
 		        $this->form_validation->set_rules('user_email','Email','trim|required|valid_email');
@@ -109,19 +103,16 @@
 
 		        if ($this->form_validation->run() == FALSE)
 				{
-					$this->load->helper('url');
 					$this->load->view('header');
 					$this->load->view('adduser');
 					$this->load->view('footer');
 		        }
 		        else
 		        {
-		            $this->load->model('dashboard_model');
 		            $result=$this->dashboard_model->add_users();
 		            if(!$result){
 		                echo "Something went wrong.";//mysqli_error($result);
 		            }else{
-		            	$this->load->helper('url');
 		            	$this->load->view('header');
 		                $data['success'] = "Successfully added.";
 						$this->load->view('adduser',$data);
@@ -135,19 +126,12 @@
 	            $this->load->view('footer');
 			}
 		}
-		//To check whether username exists inorder to assign task to him
-	/*	public function username_exists()
-	    {
-	       	$this->load->model('dashboard_model');
-	        if ($this->dashboard_model->username_exists() == TRUE)
-	        { 
-	           	return true;
-	        }else
-	        {
-	        	$this->form_validation->set_message('username_exists','User do not exist.');
-	            return false;
-	        }
-	    }*/
+		//Load user analytics page
+		public function load_user_snapshot(){
+			$this->load->view('header');
+	        $this->load->view('user_snapshot');
+	        $this->load->view('footer');
+		}
 	    //Load add task page
 	    public function load_add_task(){
 	    	$this->load->view('header');
@@ -173,11 +157,6 @@
 		public function add_tasks(){
 			
 			if($this->session->userdata('logged_in')){
-				$this->load->helper('url_helper');
-		        $this->load->helper(array('form','url'));
-				$this->lang->load('form_validation_lang');
-				$this->load->library('form_validation');
-		  		$this->load->helper('security');
 		  		//$this->form_validation->set_rules('user-name','Username','required|min_length[1]|trim|xss_clean');
 		        $this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|xss_clean');
 		        //$this->form_validation->set_rules('description','Task Description','trim|required');
@@ -189,7 +168,6 @@
 		        }
 		        else
 		        {
-		            $this->load->model('dashboard_model');
 		            $result=$this->dashboard_model->assign_tasks();
 		            if(!$result){
 		            	$this->session->set_flashdata('err', "Something went wrong.");
@@ -215,7 +193,7 @@
 
 			}
 		}
-
+		//To load admin profile
 		public function load_profile(){
 			$this->load->view('header');
 			$data['res']           = $this->dashboard_model->my_profile();
@@ -225,15 +203,14 @@
 		//Profile...
 		public function upload_profile(){
 			if($this->session->userdata('logged_in')){
-				$this->load->library('session');
-		    	if(!empty($_FILES['change_image']['name'])){
+		    	if(!empty($_FILES['change_img']['name'])){
 			    	$config['upload_path'] = '/var/www/html/time_tracker_ci/assets/images/';
 					$config['allowed_types'] = 'gif|jpg|png|jpeg';
 					$config['overwrite'] = TRUE;
-				    $config['file_name'] = $_FILES['change_image']['name'];
+				    $config['file_name'] = $_FILES['change_img']['name'];
 				    $this->load->library('upload',$config);
 		            $this->upload->initialize($config);
-					if($this->upload->do_upload('change_image')){
+					if($this->upload->do_upload('change_img')){
 		                $uploadData = $this->upload->data();
 		               // $picture = $uploadData['file_name'];
 		                $picture = array(
@@ -262,7 +239,6 @@
 			$this->load->view('footer');
 		}
 		public function password_exists(){
-			$this->load->model('dashboard_model');
 	        if ($this->dashboard_model->password_exists() == TRUE)
 	        { 
 	           	return true;
@@ -275,34 +251,24 @@
 		//Change password..
 		public function change_password(){
 			if($this->session->userdata('logged_in')){
-				$this->load->helper('url_helper');
-		        $this->load->helper(array('form','url'));
-				$this->lang->load('form_validation_lang');
-				$this->load->library('form_validation');
-		  		$this->load->helper('security');
-		  		$this->form_validation->set_rules('psw1','Old Password','trim|required|min_length[3]|max_length[100]|md5|trim|callback_password_exists|xss_clean');
-		  		$this->form_validation->set_rules('psw11','New Password','trim|required|min_length[3]|max_length[100]|trim|xss_clean');
-  				$this->form_validation->set_rules('psw22','Confirm Password','trim|required|matches[psw11]|min_length[3]|max_length[100]|trim|xss_clean');
+		  		$this->form_validation->set_rules('old-pass','Old Password','trim|required|min_length[3]|max_length[100]|md5|trim|callback_password_exists|xss_clean');
+		  		$this->form_validation->set_rules('new-pass','New Password','trim|required|min_length[3]|max_length[100]|trim|xss_clean');
+  				$this->form_validation->set_rules('confirm-pass','Confirm Password','trim|required|matches[new-pass]|min_length[3]|max_length[100]|trim|xss_clean');
   				
 		  		if ($this->form_validation->run() == FALSE)
 				{
-					$this->load->helper('url');
 					$this->load->view('header');
-					$this->load->view('profile');
+					$this->load->view('admin_profile');
 					$this->load->view('footer');
 		        }
 		        else
 		        {
-		            $this->load->model('dashboard_model');
 		            $result=$this->dashboard_model->change_password();
-		            if(!$result){
-		     			$this->session->set_flashdata('err_msg', 'Passwords do not match..');
-		            	$this->load->view('header');
-						$this->load->view('profile');
-						$this->load->view('footer');
+		            if($result == FALSE){
+		     			$this->session->set_flashdata('err_msg', 'Unable to change password..');
+		            	redirect('admin/load_profile','refresh');
 		            }else{
 		            	$data['success'] = "Successfully changed.";
-		            	$this->load->helper('url');
 		            	$this->load->view('header');
 						$this->load->view('login',$data);
 						$this->load->view('footer'); 

@@ -129,7 +129,7 @@ class Dashboard_model extends CI_Model
     //add project model
     public function project_exists()
     {
-        $this->db->where('name', $this->input->post('task-name'));
+        $this->db->where('name', $this->input->post('project-name'));
         $query = $this->db->get('project');
         if ($query->num_rows() > 0) {
             $this->form_validation->set_message('project_exists', 'Project Name Already Exists.');
@@ -141,9 +141,17 @@ class Dashboard_model extends CI_Model
     }
     public function add_projects()
     {
+        if(!empty($this->input->post('start-date'))){
+            $project_started_on = $this->input->post('start-date');
+        }else{
+            $project_started_on = date('Y-m-d H:i:s');
+        }
+        $file_name = $_FILES['project-logo']['name'];
         $array = array(
-            'name' => $this->input->post('task-name'),
-            'created_on' => date('Y:m:d H:i:s')
+            'color_code' => $this->input->post('project-color'),
+            'image_name' => $file_name,
+            'name' => $this->input->post('project-name'),
+            'created_on' => $project_started_on
         );
         $query = $this->db->insert('project', $array);
         if (!$query) {
@@ -190,7 +198,7 @@ class Dashboard_model extends CI_Model
         $email = $this->session->userdata('email');
         $query = $this->db->get_where('users', array(
             'email' => $email,
-            'password' => md5($this->input->post('psw1'))
+            'password' => md5($this->input->post('old-pass'))
         ));
         if ($query->num_rows() == 1) {
             return true;
@@ -203,8 +211,8 @@ class Dashboard_model extends CI_Model
     //function to change password
     public function change_password()
     {
-        $new_pwd     = $this->input->post('psw11');
-        $confirm_pwd = $this->input->post('psw22');
+        $new_pwd     = $this->input->post('new-pass');
+        $confirm_pwd = $this->input->post('confirm-pass');
         if ($new_pwd == $confirm_pwd) {
             if ($this->session->userdata('email')) {
                 $email = $this->session->userdata('email');
