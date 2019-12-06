@@ -161,7 +161,8 @@ header.main-header h1 {
 
 .btn-primary {
     color: white;
-    padding: 5px;
+    padding: 10px;
+    border-radius: 100px;
     background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #e485fb);
     border-style: none;
     border-radius: 7px;

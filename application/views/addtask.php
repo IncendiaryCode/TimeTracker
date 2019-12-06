@@ -70,7 +70,7 @@ $picture = substr($profile,29);
                             <img src="<?=base_url().$picture?>" height="40px" class="rounded-circle">
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class=" text-center">
-                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/profile"' class="text-display">Profile</a></p>
+                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display">Profile</a></p>
                                     <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display"><i class="fas fa-power-off"></i> Logout</a></p>
                                 </div>
                             </div>

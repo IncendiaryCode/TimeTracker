@@ -68,7 +68,7 @@ $picture = substr($profile,29);
                             <img src="<?=base_url().$picture?>" height="40px" class="rounded-circle">
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class=" text-center">
-                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/profile"' class="text-display">Profile</a></p>
+                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display">Profile</a></p>
                                     <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display"><i class="fas fa-power-off"></i> Logout</a></p>
                                 </div>
                             </div>
@@ -83,19 +83,38 @@ $picture = substr($profile,29);
             <div class="main-container-inner">
                 <div class="row mt-2 pt-4">
                     <div class="col-6 offset-3">
-                        <?php 
+                        <!-- <?php 
                         $this->load->library('form_validation');
                         if(validation_errors()) { ?>
                             <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
                         <?php } ?> 
-                        <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
-                        <form action="<?php echo base_url();?>index.php/admin/add_projects" id="addProject" method="post">
+                        <div class="alert-success"><?php echo isset($success)?$success:""; ?></div> -->
+                        <form action="<?php echo base_url();?>index.php/admin/add_projects" id="add-project" method="post">
                             <div class="form-group mt-3">
-                                <label for="task-name ">Enter the Project name</label>
-                                <input type="text" class="form-control" name="task-name" id="Projectname">
+                                <label for="task-name ">Enter the Project name<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="project-name" id="project-name">
                             </div>
-                        
-                            <button type="submit" class="save-task">Add Project</button>
+                            <div class="form-group mt-3">
+                                <label for="task-name ">Choose logo for project</label>
+                                <input type="file" class="form-control" name="project-logo" id="Project-logo">
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label for="task-name ">Choose color for project</label>
+                                <input type="color"  value="#e384fb" class="form-control" name="project-color" id="Project-color">
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label for="task-name ">Enter start date</label>
+                                <input type="text" class="form-control edit-date" name="start-date" id="start-date">
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label for="task-name ">Enter end date</label>
+                                <input type="text" class="form-control edit-date" name="end-date" id="end-date">
+                            </div>
+                            <p id="project-error" class="text-danger"></p>
+                            <button type="submit" class="btn btn-primary">Add Project</button>
                         </form>
                     </div>
                 </div>

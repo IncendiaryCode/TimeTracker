@@ -1,9 +1,9 @@
-var addProject = document.getElementById('addProject');
+var addProject = document.getElementById('add-project');
 if (addProject != null) {
 addProject.onsubmit = function (e) {
-	var task = document.getElementById('Projectname').value;
+	var task = document.getElementById('project-name').value;
 	if (task =="" || task == " ") {
-		document.getElementById('projectError').innerHTML = "Enter Project name";
+		document.getElementById('project-error').innerHTML = "Enter Project name";
 		return false;
 	}
 	else

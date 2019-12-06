@@ -139,7 +139,13 @@ function loadTaskActivities(formData) {
                             $('.alert-box').show();
                         }
                     }
+                    if (data[x][y].start_time == null) {
+                        cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>Not yet started.</div>');
+                    }
+                    else
+                    {
                     cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
+                    }
                     var stopCol = $('<div class="col-6 text-right" />');
                     if (data[x][y].running_task == 0)  /*check whether task is ended or not*/ {
                         var timeUsed = minutesToTime(data[x][y].t_minutes);
