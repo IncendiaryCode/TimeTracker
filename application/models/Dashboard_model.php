@@ -141,23 +141,58 @@ class Dashboard_model extends CI_Model
     }
     public function add_projects()
     {
+        $userid = $this->session->userdata('userid');
         if(!empty($this->input->post('start-date'))){
             $project_started_on = $this->input->post('start-date');
         }else{
             $project_started_on = date('Y-m-d H:i:s');
         }
-        $file_name = $_FILES['project-logo']['name'];
-        $array = array(
+        $file_name = isset($_FILES['project-logo']['name']) ? $_FILES['project-logo']['name'] : '';
+        if($this->input->post('new-module[0][module]')==''){
+            $module = '';
+        }else{
+            $module = $this->input->post('new-module');
+        }
+        if($this->input->post('assign-name[0][name]') == 'Select User'){
+            $users = '';
+        }else{
+            $users = $this->input->post('assign-name');
+        }
+        //add project into project table
+        $array = array(                                 
             'color_code' => $this->input->post('project-color'),
             'image_name' => $file_name,
             'name' => $this->input->post('project-name'),
             'created_on' => $project_started_on
         );
+        $this->db->set($array);
         $query = $this->db->insert('project', $array);
         if (!$query) {
             return false;
         }
         else {
+
+            $last_insert_id = $this->db->insert_id(); //get last insert id of project table
+
+            if($module != ''){   //if module name is entered store 'module' into project_module table
+                for($i=0;$i<sizeof($module);$i++) {
+                    if(!empty($module[$i]['module'])){
+                       $array = array('project_id'=>$last_insert_id,'name'=>$module[$i]['module']);
+                        $this->db->set($array);
+                        $query = $this->db->insert('project_module', $array);
+                    }
+                }
+            }
+            
+            if($users != ''){    //if User name is entered store the details into project_assignee table
+                for($i=0;$i<sizeof($users);$i++){
+                    $query  = $this->db->get_where('users', array('name' => $users[$i]['name']));
+                    $user_id[$i] = $query->row_array();
+                    $array = array('project_id'=>$last_insert_id,'user_id'=>$user_id[$i]['id'],'created_on'=>date('Y-m-d H:i:s'));
+                    $this->db->set($array);
+                    $assignee_query = $this->db->insert('project_assignee',$array);
+                }
+            }
             return true;
         }
     }

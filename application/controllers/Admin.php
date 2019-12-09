@@ -26,38 +26,103 @@
 				$this->load->view('dashboard',$data);
 				$this->load->view('footer');
 			}else{
-				$this->load->view('header');
-			    $this->load->view('login');
-			    $this->load->view('footer');
+				redirect('login/index','refresh');
 			}
 		}
+
+		//Load user analytics page
+		public function load_user_snapshot(){
+			$this->load->view('header');
+	        $this->load->view('user_snapshot');
+	        $this->load->view('footer');
+		}
+
+		//To load add user page
+	    public function load_add_user(){
+	    	$this->load->view('header');
+			$this->load->view('adduser');
+			$this->load->view('footer');
+	    }
+
 		//Function to load add project page
 		public function load_add_project(){
 			$this->load->view('header');
-			$this->load->view('addproject');
+			$data['names'] = $this->dashboard_model->get_usernames();
+			$this->load->view('addproject',$data);
 			$this->load->view('footer');
 		}
+
+		//Load add task page
+	    public function load_add_task(){
+	    	$this->load->view('header');
+		    $data['names'] = $this->dashboard_model->get_usernames();
+		    $data['result'] = $this->dashboard_model->get_project_name();
+		   	$this->load->view('addtask',$data);
+			$this->load->view('footer');
+	    }
+
+	    //To load admin profile
+		public function load_profile(){
+			$this->load->view('header');
+			$data['res']           = $this->dashboard_model->my_profile();
+			$this->load->view('admin_profile',$data);
+			$this->load->view('footer');
+		}
+
+		//function to show admin notifications
+		public function load_notification(){
+			$this->load->view('header');
+			$this->load->view('adminNotifications');
+			$this->load->view('footer');
+		}
+
 		//To check whether Project exists.....
 		public function project_exists()
 	    {
 	        if ($this->dashboard_model->project_exists() == TRUE)
 	        { 
 	           	return true;
-	        }else
+	        }
+	        else
 	        {
-	        	//$this->form_validation->set_message('project_exists','Project Already Exists.');
 	            return false;
 	        }
 	    }
+
+	    //To check whether user exists to add user
+	    public function users_exists()
+	    {
+	        if ($this->dashboard_model->users_exists() == TRUE)
+	        { 
+	           	return true;
+	        }
+	        else
+	        {
+	            return false;
+	        }
+	    }
+
+	    public function password_exists(){
+	        if ($this->dashboard_model->password_exists() == TRUE)
+	        { 
+	           	return true;
+	        }else
+	        {
+	            return false;
+	        }
+		}
+
 	    //To Add Projects..
 		public function add_projects(){
 			if($this->session->userdata('logged_in')){
 		  		$this->form_validation->set_rules('project-name','Project Name','required|min_length[1]|trim|callback_project_exists|xss_clean');
 		  		//$this->form_validation->set_rules('project-logo','Project Logo','required');
+		  		//$this->form_validation->set_rules('new-module','Project Module','required');
 		  		if ($this->form_validation->run() == FALSE)
 				{
 					$this->load->view('header');
-					$this->load->view('addproject');
+					$data['names'] = $this->dashboard_model->get_usernames();
+					$this->load->view('addproject',$data);
 					$this->load->view('footer');
 					//redirect('admin/load_add_project');
 		        }
@@ -72,35 +137,20 @@
 		               	redirect('admin/load_add_project','refresh');   
 		            }
 		        }
-		    }else{
-	            $this->load->view('header');
-	            $this->load->view('login');
-	            $this->load->view('footer');
+		    }
+		    else
+		    {
+	            redirect('login/index','refresh');
 	        }
 	    }
-
-	    //To check whether user exists...
-	    public function users_exists()
-	    {
-	        if ($this->dashboard_model->users_exists() == TRUE)
-	        { 
-	           
-	           	return true;
-	        }else
-	        {
-	        	$this->form_validation->set_message('users_exists','User Already Exists.');
-	            return false;
-	        }
-	    }
+	    
 	    //To add users...
 	    public function add_users(){
 	    	if($this->session->userdata('logged_in')){
-				
 		  		$this->form_validation->set_rules('task_name','Username','required|min_length[2]|trim|callback_users_exists|xss_clean');
 		        $this->form_validation->set_rules('task_pass','Password','trim|required|min_length[6]|max_length[100]|md5|trim|xss_clean');
 		        $this->form_validation->set_rules('user_email','Email','trim|required|valid_email');
 		        //$this->form_validation->set_rules('contact','Contact Number','required|min_length[10]|max_length[10]|numeric');
-
 		        if ($this->form_validation->run() == FALSE)
 				{
 					$this->load->view('header');
@@ -111,51 +161,35 @@
 		        {
 		            $result=$this->dashboard_model->add_users();
 		            if(!$result){
-		                echo "Something went wrong.";//mysqli_error($result);
+		                $this->session->set_flashdata('err', "Something went wrong.");
+		                redirect('admin/load_add_user','refresh');
 		            }else{
-		            	$this->load->view('header');
-		                $data['success'] = "Successfully added.";
-						$this->load->view('adduser',$data);
-						$this->load->view('footer');
-		               
+		            	$this->session->set_flashdata('true', 'Successfully Added.');
+		               	redirect('admin/load_add_user','refresh'); 
 		            }
 		        }
-			}else{
-				$this->load->view('header');
-	            $this->load->view('login');
-	            $this->load->view('footer');
+			}
+			else
+			{
+				redirect('login/index','refresh');
 			}
 		}
-		//Load user analytics page
-		public function load_user_snapshot(){
-			$this->load->view('header');
-	        $this->load->view('user_snapshot');
-	        $this->load->view('footer');
-		}
-	    //Load add task page
-	    public function load_add_task(){
-	    	$this->load->view('header');
-		    $data['names'] = $this->dashboard_model->get_usernames();
-		    $data['result'] = $this->dashboard_model->get_project_name();
-		   	$this->load->view('addtask',$data);
-			$this->load->view('footer');
-	    }
+		 
 	    //get user name list into add task page
 	    public function get_username_list(){
-
 	    	$data['users'] = $this->dashboard_model->get_usernames();
 	    	echo json_encode($data);
-
 	    }
+
 	    //get project module list to add task page 
 	    public function get_project_module(){
 	    	$projectid      = $this->input->post('project_id');
 	        $data['result'] = $this->dashboard_model->get_module_name($projectid);
 	        echo json_encode($data);
 	    }
+
 	    //Assign tasks to users
 		public function add_tasks(){
-			
 			if($this->session->userdata('logged_in')){
 		  		//$this->form_validation->set_rules('user-name','Username','required|min_length[1]|trim|xss_clean');
 		        $this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|xss_clean');
@@ -164,7 +198,12 @@
 
 		        if ($this->form_validation->run() == FALSE)
 				{
-					redirect('admin/load_task_data');
+					//redirect('admin/load_add_task');
+					$this->load->view('header');
+				    $data['names'] = $this->dashboard_model->get_usernames();
+				    $data['result'] = $this->dashboard_model->get_project_name();
+				   	$this->load->view('addtask',$data);
+					$this->load->view('footer');
 		        }
 		        else
 		        {
@@ -177,29 +216,13 @@
 		               	redirect('admin/load_add_task','refresh');
 		            }
 		        }
-		    }else{
-		    	$this->load->view('header');
-	            $this->load->view('login');
-	            $this->load->view('footer');
+		    }
+		    else
+		    {
+		    	redirect('login/index','refresh');
 		    }
 		}
-
-		//function to add project module
-		public function add_module(){
-			$result = $this->dashboard_model->add_project_module();
-			if($result == TRUE){
-
-			}else{
-
-			}
-		}
-		//To load admin profile
-		public function load_profile(){
-			$this->load->view('header');
-			$data['res']           = $this->dashboard_model->my_profile();
-			$this->load->view('admin_profile',$data);
-			$this->load->view('footer');
-		}
+		
 		//Profile...
 		public function upload_profile(){
 			if($this->session->userdata('logged_in')){
@@ -227,27 +250,10 @@
 					redirect('admin/load_profile','refresh');
 				}
 			}else{
-				$this->load->view('header');
-				$this->load->view('login');
-				$this->load->view('footer');
+				redirect('login/index','refresh');
 			}
 		}
-		//function to show admin notifications
-		public function load_notification(){
-			$this->load->view('header');
-			$this->load->view('adminNotifications');
-			$this->load->view('footer');
-		}
-		public function password_exists(){
-	        if ($this->dashboard_model->password_exists() == TRUE)
-	        { 
-	           	return true;
-	        }else
-	        {
-	        	//$this->form_validation->set_message('password_exists','Unable to update your password.');
-	            return false;
-	        }
-		}
+		
 		//Change password..
 		public function change_password(){
 			if($this->session->userdata('logged_in')){
@@ -268,16 +274,12 @@
 		     			$this->session->set_flashdata('err_msg', 'Unable to change password..');
 		            	redirect('admin/load_profile','refresh');
 		            }else{
-		            	$data['success'] = "Successfully changed.";
-		            	$this->load->view('header');
-						$this->load->view('login',$data);
-						$this->load->view('footer'); 
+		            	$this->session->set_flashdata('success', 'Password changed successfully.');
+		            	redirect('login/index','refresh');
 		            }
 		        }
 			}else{
-				$this->load->view('header');
-				$this->load->view('login');
-				$this->load->view('footer');
+				redirect('login/index','refresh');
 			}	
 		}
 	}

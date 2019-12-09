@@ -79,7 +79,7 @@ var assign = {
         var i = _this.i;
         var username = _this.username;
         var row = $('<div class="col-10 assign-new-user' + i + '"></div>');
-        var element = $('<select class="form-control mt-3"  id="assign-name' + i + '" name="assign-name[' + i + '][assign]"><option>Select User</option>');
+        var element = $('<select class="form-control mt-3"  id="assign-name' + i + '" name="assign-name[' + i + '][name]">');
         for (var j = 0; j < usernames.length; j++) {
             var option = $('<option>' + usernames[j]["name"] + '</option>');
             option.appendTo(element);

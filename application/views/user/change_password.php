@@ -1,9 +1,8 @@
 <?php
     $GLOBALS['page_title'] = 'Change password';
     defined('BASEPATH') OR exit('No direct script access allowed');
-   // $this->load->library('session');
-   // $profile = $this->session->userdata('user_profile');
-    $picture = substr($res['profile'],30);
+    $profile = $this->session->userdata('user_profile');
+    $picture = substr($profile,30);
 ?>
 <main class="container-fluid container-fluid-main"><p class="display-4 text-white  text-center">Change password</p>
     <div class="main-container container">

@@ -16,8 +16,10 @@
             if( $this->session->flashdata('err_message') )
             { ?>
                <div class="alert alert-danger"><?php echo $this->session->flashdata('err_message');?></div>
-            <?php } ?>
+            <?php } 
+            if($this->session->flashdata('success')){ ?>
              <div class="alert-success"><?php echo $this->session->flashdata('success');?></div>
+         <?php } ?>
                 <form id="loginForm" class="login-form"  method="post" action="<?=base_url();?>index.php/login/login_process" novalidate>
                 <div class="form-group">
                     <div class="input-group">
