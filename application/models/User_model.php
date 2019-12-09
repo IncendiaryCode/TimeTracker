@@ -464,6 +464,7 @@ class User_model extends CI_Model {
             if(sizeof($time_range) > 0){
 
                 for($i=0;$i<sizeof($time_range);$i++){
+                    $task_description = "";
                     $table_id[$i] = null;
                     if(isset($time_range[$i]['table_id'])){
                         $table_id[$i] = $time_range[$i]['table_id'];
@@ -471,7 +472,9 @@ class User_model extends CI_Model {
                     //$table_id[$i] = $time_range[$i]['table_id'];
                     $start_value = $time_range[$i]['start'];
                     $end_value = $time_range[$i]['end'];
-                    $description = $time_range[$i]['task_description'];
+                    if(isset($time_range[$i]['task_description'])){
+                        $description = $time_range[$i]['task_description'];
+                    }
                     $date =  date("Y-m-d",strtotime($start_value));
                     $diff = strtotime($end_value) - strtotime($start_value);
                     $minutes = round((abs($diff) /60),2);           
