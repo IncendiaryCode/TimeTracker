@@ -637,7 +637,25 @@ class User_model extends CI_Model {
             $this->db->where(array('pa.user_id'=>$user_id));
         $query = $this->db->get();
         $data = $query->result_array();
+        foreach ($data as $key => $value) {
+            $this->db->select('id,name');
+            $this->db->from('project_module');
+            $this->db->where(array('project_id'=>$value['id']));
+            $query = $this->db->get();
+            $proj_mod = $query->result_array();
+            //print_r($this->db->last_query());die;    
+            $data[$key]['modules'] = $proj_mod;
+        }
         return $data;
+    }
+
+    public function get_default_module(){
+        $this->db->select('id,name');
+        $this->db->from('project_module');
+        $this->db->where(array('project_id'=> 0));
+        $query = $this->db->get();
+        $default_mod = $query->result_array();
+        return $default_mod;
     }
 }
 ?>
