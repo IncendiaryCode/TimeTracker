@@ -151,10 +151,12 @@ class User extends CI_Controller
     public function task_exists()
     {
         if ($this->user_model->task_exists() == TRUE) {
-            return true;
+            $this->form_validation->set_message('task_exists','Task name exists.');
+            return false;
+            
         }
         else {
-            return false;
+            return true;
         }
     }
     //Add tasks

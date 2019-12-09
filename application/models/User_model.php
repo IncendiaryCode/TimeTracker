@@ -428,30 +428,27 @@ class User_model extends CI_Model {
     public function task_exists(){
         $userid = $this->session->userdata('userid');
         $task_name = $this->input->post('task_name');
-        $this->db->select('task_name');
+        $this->db->select('t.task_name');
         $this->db->from('task AS t');
         $this->db->join('task_assignee AS a','a.task_id = t.id');
         $this->db->join('project_module AS m','m.project_id = t.project_id');
         $this->db->where(array('t.project_id'=>$this->input->post('project_name'),'a.user_id'=>$userid));
         $query = $this->db->get();
         if($query->num_rows() > 0){
-            $row = $query->row_array();
-            if($row['task_name'] == $task_name){
-                $this->form_validation->set_message('task_exists','Task name exists.');
+            $this->form_validation->set_message('task_exists','Task name exists.');
+            return true;
+        }else{
                 return false;
-            }else{
-                return true;
-            }
         }
     }
     //add task model
     public function add_tasks(){
         //date("H:i", strtotime("1:30 PM"));
         $userid = $this->session->userdata('userid');
-        if(($this->input->post('project_module') != 'Select module') ||($this->input->post('project_module') != '')){
-            $module_id = $this->input->post('project_module');
+        if(($this->input->post('project_module') == 'Select module') ||($this->input->post('project_module') == '')){
+            $module_id = '1';
         }else{
-            $module_id = 1;
+            $module_id = $this->input->post('project_module');
         }
         if($this->input->get('type') == 'edit'){
 
@@ -498,8 +495,7 @@ class User_model extends CI_Model {
                         return $last_insert_id;
                     }
                 }
-            }else{
-                
+            }else{ 
                 $array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('task_desc'),'project_id'=>$this->input->post('project_name'),'module_id'=>$module_id,'created_on'=>date('Y:m:d H:i:s'));
                 $this->db->set($array);
                 $query = $this->db->insert('task',$array);
