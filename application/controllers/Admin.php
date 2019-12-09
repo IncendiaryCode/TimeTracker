@@ -33,7 +33,8 @@
 		//Load user analytics page
 		public function load_user_snapshot(){
 			$this->load->view('header');
-	        $this->load->view('user_snapshot');
+			$result['data'] = $this->dashboard_model->get_task_details();
+	        $this->load->view('user_snapshot',$result);
 	        $this->load->view('footer');
 		}
 

@@ -26,6 +26,20 @@ class Dashboard_model extends CI_Model
         $row_proj   = $get_proj_q->num_rows();
         return $row_proj;
     }
+    public function get_task_details(){
+        $this->db->select('p.*,u.name,m.name,d.*,d.id AS table_id,t.task_name,t.module_id');
+        $this->db->from('project AS p');
+        $this->db->join('project_assignee AS a','a.project_id = p.id');
+        $this->db->join('users AS u','u.id = a.user_id');
+        $this->db->join('task AS t','t.project_id = p.id');
+        $this->db->join('task_assignee AS ta','ta.task_id = t.id');
+        $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
+        $this->db->join('project_module AS m','m.id = t.module_id');
+       // $this->db->from('project_module AS m','m.project_id = p.id');
+        $this->db->where('d.end_time IS NOT NULL');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
     //add user model
     public function add_users()
     {
