@@ -440,23 +440,24 @@ class User_model extends CI_Model {
         }else{
                 return false;
         }
+        return true;
     }
     //add task model
-    public function add_tasks(){
+    public function add_tasks($data){
         //date("H:i", strtotime("1:30 PM"));
-        $userid = $this->session->userdata('userid');
-        if(($this->input->post('project_module') == 'Select module') ||($this->input->post('project_module') == '')){
-            $module_id = '1';
+        $userid = $data['userid'];
+        if(($data['project_module'] == 'Select module') || ($data['project_module'] == '')){
+            $module_id = 1;
         }else{
-            $module_id = $this->input->post('project_module');
+            $module_id = $data['project_module'];
         }
-        if($this->input->get('type') == 'edit'){
+        if($data['action'] == 'edit'){
 
-            $array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('task_desc'),'modified_on'=>date('Y:m:d H:i:s'));
-            $this->db->where(array('project_id'=>$this->input->post('project_name'),'id'=>$this->input->post('task_id')));
+            $array = array('task_name'=>$data['task_name'],'description'=>$data['task_desc'],'modified_on'=>date('Y:m:d H:i:s'));
+            $this->db->where(array('project_id'=>$data['project_id'],'id'=>$data['task_id']));
             $query = $this->db->update('task',$array);
 
-            $time_range = $this->input->post('time');
+            $time_range = $data['time_range'];
             if(sizeof($time_range) > 0){
 
                 for($i=1;$i<=sizeof($time_range);$i++){
@@ -469,8 +470,8 @@ class User_model extends CI_Model {
                     $minutes = round((abs($diff) /60),2);           
                     $hours = round(abs($diff / ( 60 * 60 )));
 
-                    $array = array('start_time'=>$start_value,'end_time'=>$end_value,'task_description'=>$description,'user_id'=>$userid,'task_id'=>$this->input->post('task_id'),'total_hours'=>$hours,'total_minutes'=>$minutes,'task_date'=>$date);
-                    $this->db->where(array('user_id'=>$userid,'task_id'=>$this->input->post('task_id'),'id'=>$table_id[$i]));
+                    $array = array('start_time'=>$start_value,'end_time'=>$end_value,'task_description'=>$description,'user_id'=>$userid,'task_id'=>$data['task_id'],'total_hours'=>$hours,'total_minutes'=>$minutes,'task_date'=>$date);
+                    $this->db->where(array('user_id'=>$userid,'task_id'=>$data['task_id'],'id'=>$table_id[$i]));
                     $query = $this->db->update('time_details',$array);
                     
                 }
@@ -478,8 +479,8 @@ class User_model extends CI_Model {
             return true;
         }
         else{
-            if($this->input->post('action') == 'save_and_start'){
-                $array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('description'),'project_id'=>$this->input->post('project'),'module_id'=>$this->input->post('project_module'),'created_on'=>date('Y:m:d H:i:s'));
+            if($data['action'] == 'save_and_start'){
+                $array = array('task_name'=>$data['task_name'],'description'=>$data['task_desc'],'project_id'=>$data['project_id'],'module_id'=>$module_id,'created_on'=>date('Y:m:d H:i:s'));
                 $this->db->set($array);
                 $query = $this->db->insert('task',$array);
                 if(!$query){
@@ -495,8 +496,9 @@ class User_model extends CI_Model {
                         return $last_insert_id;
                     }
                 }
-            }else{ 
-                $array = array('task_name'=>$this->input->post('task_name'),'description'=>$this->input->post('task_desc'),'project_id'=>$this->input->post('project_name'),'module_id'=>$module_id,'created_on'=>date('Y:m:d H:i:s'));
+            }else{
+                
+                $array = array('task_name'=>$data['task_name'],'description'=>$data['task_desc'],'project_id'=> $data['project_id'],'module_id'=>$module_id,'created_on'=>date('Y:m:d H:i:s'));
                 $this->db->set($array);
                 $query = $this->db->insert('task',$array);
                 if(!$query){
@@ -510,7 +512,7 @@ class User_model extends CI_Model {
                         return false;
                     }else{
                         //Add timings into time_details table
-                        $date_value = ($this->input->post('daterange'));
+                        $date_value = $data['time_range'];///($this->input->post('daterange'));
                         if(sizeof($date_value) > 1){
                             for($i=1;$i<sizeof($date_value);$i++)
                             {
