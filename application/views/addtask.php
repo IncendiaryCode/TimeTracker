@@ -105,7 +105,8 @@ $picture = substr($profile,29);
                                 <div class = "alert alert-danger">
                                     <?php echo $this->session->flashdata('err'); ?>
                                 </div>
-                            <?php } ?>  
+                            <?php } ?>
+                            <p class="text-center display-4 m-3 text-primary">Add task</p>
                             <form action="<?php echo base_url();?>index.php/admin/add_tasks" id="addTask" method="post">
                                 <div class="form-group mt-5 row " id="append-new-user">
                                     <div class="col-10 ">
@@ -124,6 +125,8 @@ $picture = substr($profile,29);
                                         </a>
                                     </div>
                                 </div>
+                                <div class="row assign-user pb-3"></div>
+                                <div>
                                 <div class="form-group">
                                     <label for="choose-project">Choose a project</label>
                                     <select class="form-control" id="chooseProject" name="chooseProject">
@@ -141,8 +144,6 @@ $picture = substr($profile,29);
                                     </select>
                                 </div>
                                 
-                                <div class="row assign-user pb-3"></div>
-                                <div>
                                 <div class="form-group">
                                     <label for="task-name">Enter the Task name</label>
                                     <input type="text" class="form-control" id="task_name" name="task_name">

@@ -65,14 +65,14 @@ $picture = substr($profile,29);
                             <i class="fas fa-user-circle"></i>
                         </div>
                         <div class="col-lg-7 col-8 text-center">
-                            <span class="font-weight-bold text-display number-font shadow-lg"><?php echo $total_users; ?></span>
+                            <span class="font-weight-bold text-display number-font shadow-lg rounded-circle"><?php echo $total_users; ?></span>
                             <span class="text-display pt-3">Total Users</span>
                         </div>
                     </div>
                     <hr>
                     <div class="text-center">
                         <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/add_users'"><i class="fas fa-plus"></i> Users</button>
-                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/load_user_snapshot'">Analytics</button>
+                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/load_user_snapshot'">Vew details</button>
                     </div>
                 </div>
             </div>
@@ -83,13 +83,14 @@ $picture = substr($profile,29);
                             <i class="fas fa-chalkboard"></i>
                         </div>
                         <div class="col-lg-7 col-8 text-center">
-                            <span class="font-weight-bold text-display number-font shadow-lg"><?php echo $total_projects; ?></span>
+                            <span class="font-weight-bold text-display number-font shadow-lg rounded-circle"><?php echo $total_projects; ?></span>
                             <span class="text-display pt-3">Total Projects</span>
                         </div>
                     </div>
                     <hr>
                     <div class="text-center">
                         <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/add_projects'"><i class="fas fa-plus"></i> Projects</button>
+                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/load_project_snapshot'">Vew details</button>
                     </div>
                 </div>
             </div>
@@ -100,13 +101,14 @@ $picture = substr($profile,29);
                             <i class=" fa fa-tasks"></i>
                         </div>
                         <div class="col-lg-7 col-8 text-center">
-                            <span class="font-weight-bold text-display number-font shadow-lg"><?php echo $total_tasks; ?></span>
+                            <span class="font-weight-bold text-display number-font shadow-lg rounded-circle"><?php echo $total_tasks; ?></span>
                             <span class="text-display pt-3">Total Tasks</span>
                         </div>
                     </div>
                     <hr>
                     <div class="text-center">
                         <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/load_add_task'"><i class="fas fa-plus"></i> Tasks</button>
+                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/load_task_snapshot'">Vew details</button>
                     </div>
                 </div>
             </div>
@@ -119,7 +121,7 @@ $picture = substr($profile,29);
         <canvas id="canvas" width="300" height="100"></canvas>
     </div>
     <hr>
-    <div class="container table">
+    <!--<div class="container table">
         <h3 class="text-center mt-5 pb-3">Activities</h3>
         <p class="text-right"><i class="fas fa-list-ul"></i></p>
         <div class="col-8 text-right">
@@ -163,8 +165,8 @@ $picture = substr($profile,29);
                 </tbody>
             </table>
         </div>
-    </div>
-    <hr>
+    </div> -->
+
     <footer>
       <p class="text-center m-5">Copyright © 2019 Printgreener.com</p>
     </footer>

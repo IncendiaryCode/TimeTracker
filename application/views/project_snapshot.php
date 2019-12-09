@@ -62,10 +62,10 @@ print_r(sizeof($data));
 <div class="container">
     <div class="row mt-5">
         <div class="col-4">
-            <p><strong>User name</strong></p>
+            <p><strong>Project name</strong></p>
             </div>
         <div class="col-4">
-            <p><strong>Project name</strong></p>
+            <p><strong>Task name</strong></p>
         </div>
         <div class="col-4 text-center">
             <p><strong>Task details</strong></p>
@@ -87,10 +87,6 @@ print_r(sizeof($data));
         </div>
         <div class="col-4 text-center">
             <div class="row">
-                <!-- <?php
-                foreach ($variable as $user) {
-
-                }?> -->
                 <div class="col-6 pb-4"><strong><u>Task name</u>:  Login page</strong></div>
                 <div class="col-6 pb-4"><strong><u>Timer taken</u>:  8:00 hrs</strong></div>
                 <div class="col-6 "><strong>Start time</strong></div>

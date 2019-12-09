@@ -103,6 +103,7 @@ $picture = substr($profile,29);
                                     <?php echo $this->session->flashdata('err'); ?>
                                 </div>
                             <?php } ?> 
+                        <p class="text-center display-4 m-3 text-primary">Add user</p>
                         <form action="<?php echo base_url();?>index.php/admin/add_users" id="addUser" method="post">
                             <div class="form-group mt-3">
                                 <label for="task-name ">Enter the Name of new User<span class="text-danger">*</span></label>
@@ -128,7 +129,7 @@ $picture = substr($profile,29);
             </div>
         </div>
     </main>
-    <hr>
     <footer class="admin-footer">
+    <hr>
         <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</ p>
     </footer>
