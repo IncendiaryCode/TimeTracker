@@ -26,41 +26,36 @@ class Dashboard_model extends CI_Model
         $row_proj   = $get_proj_q->num_rows();
         return $row_proj;
     }
-    public function get_task_details(){
+    public function get_task_details($type){
 
-
-       /* $this->db->select('p.*,u.name AS user_name');
+        if($type == 'user'){
+        $this->db->select('p.*,u.name AS user_name');
         $this->db->from('project AS p');
         $this->db->join('project_assignee AS a','a.project_id = p.id');
         $this->db->join('users AS u','u.id = a.user_id');
+        $this->db->group_by('p.id');
         $query=$this->db->get();
-        print_r($query->result_array());exit;
-*/
 
-
-
-
-
-
+        $info = $query->result_array();
+        print_r($info);exit;
+        foreach($info as $d){
         $this->db->select('p.*,u.name AS user_name,m.name AS module_name,d.*,d.id AS table_id,t.task_name,t.module_id');
         $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task",FALSE); //get running tasks of the user 
         $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);         //get completed tasks of the user
         $this->db->select_sum('d.total_minutes','t_minutes');       //get total minutes for a particular task
-$this->db->from('users AS u');
+        $this->db->from('users AS u');
         $this->db->from('project AS p');
-        
-        $this->db->join('project_assignee AS a','a.user_id = u.id');
-        
-
         $this->db->join('task AS t','t.project_id = p.id');
         $this->db->join('task_assignee AS ta','ta.task_id = t.id');
         $this->db->join('time_details AS d','d.user_id = u.id','LEFT');
         $this->db->join('project_module AS m','m.id = t.module_id');
        // $this->db->from('project_module AS m','m.project_id = p.id');
-        $this->db->where('d.end_time IS NOT NULL');
+        $this->db->where(array('d.end_time IS NOT NULL','p.id'=>$d['id']));
         $this->db->group_by(array('u.id','p.id'));
         $query = $this->db->get();
         print_r($query->result_array());
+    }exit;
+}
         return $query->result_array();
     }
     //add user model
