@@ -513,10 +513,10 @@ class User_model extends CI_Model {
                     }else{
                         //Add timings into time_details table
                         $date_value = $data['time_range'];
-                        if(sizeof($date_value) >= 1){
-                            if(!is_array($date_value)){
+                        if(!is_array($date_value)){
                                 $date_value = json_decode($date_value, true);
-                            }
+                        }
+                        if(sizeof($date_value) >= 1){
                             for($i=0;$i<sizeof($date_value);$i++)
                             {
                                 $start_time = strtotime($date_value[$i]['start']);
