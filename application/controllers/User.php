@@ -164,7 +164,13 @@ class User extends CI_Controller
     {
         $GLOBALS['page_title'] = 'Add Task';
         if ($this->input->post('action') == 'save_and_start') {
-            $result = $this->user_model->add_tasks();
+            $data['userid'] = $this->session->userdata('userid');
+            $data['project_module'] = $this->input->post('project_module');
+            $data['project_id'] = $this->input->post('project');
+            $data['action'] = $this->input->post('action');
+            $data['task_name'] = $this->input->post('task_name');
+            $data['task_desc'] = $this->input->post('task_desc');
+            $result = $this->user_model->add_tasks($data);
             if (!$result) {
                 $output_result['status'] = FALSE;
                 $output_result['msg']    = "Something went wrong.";
@@ -183,6 +189,7 @@ class User extends CI_Controller
             }
         }
         else {
+            $data['action'] = 'add_task';
             $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|callback_task_exists|xss_clean');
             //$this->form_validation->set_rules('task_desc', 'Task Description', 'trim|required');
             $this->form_validation->set_rules('project_name', 'Project name', 'required');
@@ -196,7 +203,13 @@ class User extends CI_Controller
                 $this->load->view('user/footer');
             }
             else {
-                $result = $this->user_model->add_tasks();
+                $data['userid'] = $this->session->userdata('userid');
+                $data['project_module'] = $this->input->post('project_module');
+                $data['project_id'] = $this->input->post('project_name');
+                $data['task_name'] = $this->input->post('task_name');
+                $data['task_desc'] = $this->input->post('task_desc');
+                $data['time_range'] = $this->input->post('daterange');
+                $result = $this->user_model->add_tasks($data);
                 if (!$result) {
                     $this->load->view('user/header');
                     $data['result']  = $this->user_model->get_project_name();
@@ -248,7 +261,15 @@ class User extends CI_Controller
             $this->load->view('user/footer');
         }
         else {
-            $result = $this->user_model->add_tasks();
+            $data['action'] = 'edit';
+            $data['userid'] = $this->session->userdata('userid');
+            $data['project_module'] = $this->input->post('project_module');
+            $data['project_id'] = $this->input->post('project_name');
+            $data['task_name'] = $this->input->post('task_name');
+            $data['task_id'] = $this->input->post('task_id');
+            $data['task_desc'] = $this->input->post('task_desc');
+            $data['time_range'] = $this->input->post('time');
+            $result = $this->user_model->add_tasks($data);
             if (!$result) {
                 $this->load->view('user/header');
                 $t_id              = $this->input->post('task_id', TRUE);
