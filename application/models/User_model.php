@@ -512,17 +512,25 @@ class User_model extends CI_Model {
                         return false;
                     }else{
                         //Add timings into time_details table
-                        $date_value = $data['time_range'];///($this->input->post('daterange'));
-                        if(sizeof($date_value) > 1){
-                            for($i=1;$i<sizeof($date_value);$i++)
+                        $date_value = $data['time_range'];
+                        if(sizeof($date_value) >= 1){
+                            if(!is_array($date_value)){
+                                $date_value = json_decode($date_value, true);
+                            }
+                            for($i=0;$i<sizeof($date_value);$i++)
                             {
                                 $start_time = strtotime($date_value[$i]['start']);
                                 $end_itme = strtotime($date_value[$i]['end']);
+                                $task_description = "";
+                                if(isset($date_value[$i]['task_description'])){
+                                    $task_description = $date_value[$i]['task_description'];
+                                }
+                                
                                 $diff = $end_itme - $start_time;
                                 $hours = $diff / ( 60 * 60 );
                                 $minutes = $diff/60; 
                                 $total_mins = ($minutes < 0 ? 0 : abs($minutes));
-                                $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'task_date'=>$date_value[$i]['date'],'start_time'=>$date_value[$i]['date'].' '.date('H:i:s',$start_time),'end_time'=>$date_value[$i]['date'].' '.date('H:i:s',$end_itme),'total_hours'=>$hours,'total_minutes'=>$total_mins,'created_on'=>date('Y:m:d H:i:s'));
+                                $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'task_date'=>$date_value[$i]['date'],'start_time'=>$date_value[$i]['date'].' '.date('H:i:s',$start_time),'end_time'=>$date_value[$i]['date'].' '.date('H:i:s',$end_itme),'task_description'=>$task_description,'total_hours'=>$hours,'total_minutes'=>$total_mins,'created_on'=>date('Y:m:d H:i:s'));
                                 $this->db->set($array);
                                 $query = $this->db->insert('time_details',$array);
                                 /*if($query){  

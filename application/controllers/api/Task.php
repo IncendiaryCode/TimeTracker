@@ -52,17 +52,37 @@ class Task extends REST_Controller {
 	}
       
     /**
-     * Get All Data from this method.
+     * Post method to add new task
      *
      * @return Response
     */
-    /*public function index_post()
+    public function create_post()
     {
-        $input = $this->input->post();
-        $this->db->insert('items',$input);
-     
-        $this->response(['Item created successfully.'], REST_Controller::HTTP_OK);
-    }*/
+        $headers = $this->input->request_headers();
+        $verify_data = $this->verify->verify_request($headers);
+        if(isset($verify_data->username))
+        {
+            $data['success'] = 1;
+            $post = $this->input->post();
+            $post['action'] = 'create';
+            if(!empty($post['userid'])){
+                $result = $this->user_model->add_tasks($post);
+                if (!$result) {
+                    $data['success'] = 0;
+                    $data['msg'] = 'Failed to add task!';
+                }else{
+                    $data['success'] = 1;
+                    $data['msg'] = 'Task Added Successfully!';
+                }
+            }else{
+                $data['success'] = 0;
+                $data['msg'] = 'Userid is required!';
+            }
+            $this->response($data, REST_Controller::HTTP_OK);
+        }else{
+            $this->response($verify_data, REST_Controller::HTTP_OK);
+        }
+    }
      
     /**
      * Get All Data from this method.
