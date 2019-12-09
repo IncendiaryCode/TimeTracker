@@ -458,21 +458,35 @@ class User_model extends CI_Model {
             $query = $this->db->update('task',$array);
 
             $time_range = $data['time_range'];
+            if(!is_array($time_range)){
+                $time_range = json_decode($time_range, true);
+            } 
             if(sizeof($time_range) > 0){
 
-                for($i=1;$i<=sizeof($time_range);$i++){
-                    $table_id[$i] = $time_range[$i]['table_id'];
+                for($i=0;$i<sizeof($time_range);$i++){
+                    $table_id[$i] = null;
+                    if(isset($time_range[$i]['table_id'])){
+                        $table_id[$i] = $time_range[$i]['table_id'];
+                    }
+                    //$table_id[$i] = $time_range[$i]['table_id'];
                     $start_value = $time_range[$i]['start'];
                     $end_value = $time_range[$i]['end'];
-                    $description = $time_range[$i]['description'];
+                    $description = $time_range[$i]['task_description'];
                     $date =  date("Y-m-d",strtotime($start_value));
                     $diff = strtotime($end_value) - strtotime($start_value);
                     $minutes = round((abs($diff) /60),2);           
                     $hours = round(abs($diff / ( 60 * 60 )));
 
                     $array = array('start_time'=>$start_value,'end_time'=>$end_value,'task_description'=>$description,'user_id'=>$userid,'task_id'=>$data['task_id'],'total_hours'=>$hours,'total_minutes'=>$minutes,'task_date'=>$date);
-                    $this->db->where(array('user_id'=>$userid,'task_id'=>$data['task_id'],'id'=>$table_id[$i]));
-                    $query = $this->db->update('time_details',$array);
+                    if($table_id[$i] != null){
+                        $this->db->where(array('user_id'=>$userid,'task_id'=>$data['task_id'],'id'=>$table_id[$i]));
+                        $query = $this->db->update('time_details',$array);
+                    }else{
+                        $array = array('user_id'=>$userid,'start_time'=>$start_value,'end_time'=>$end_value,'task_description'=>$description,'user_id'=>$userid,'task_id'=>$data['task_id'],'total_hours'=>$hours,'total_minutes'=>$minutes,'task_date'=>$date);
+                        $this->db->set($array);
+                        $query = $this->db->insert('time_details',$array);
+                    }
+                    
                     
                 }
             }

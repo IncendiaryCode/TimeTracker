@@ -46,7 +46,7 @@ $profile = $this->session->userdata('user_profile');
                             <div class="col-4"><b>End time</b></div>
                             <div class="col-3"><b>Description</b></div>
                         </div>
-                            <?php $num = 1;
+                            <?php $num = 0;
                           foreach($task_data as $task){
                             ?>
                             <div class="row mt-3">
@@ -61,7 +61,7 @@ $profile = $this->session->userdata('user_profile');
                                     <input class="form-control edit-date-time" type="text" id="start<?=$num?>"  name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>" placeholder="<?=$task['end_time'];?>">
                                 </div>
                                 <div class="col-3">
-                                    <input type="text" class="form-control" name="time[<?=$num?>][description]" value="<?=$task['task_description'];?>">
+                                    <input type="text" class="form-control" name="time[<?=$num?>][task_description]" value="<?=$task['task_description'];?>">
                                 </div>
                             </div>  
                             <?php $num=$num+1;
