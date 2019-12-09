@@ -65,18 +65,19 @@ class Task extends REST_Controller {
             $data['success'] = 1;
             $post = $this->input->post();
             $post['action'] = 'create';
-            if(!empty($post['userid'])){
+            if(!empty($post['userid']) && !empty($post['task_name']) && !empty($post['task_desc']) && !empty($post['project_id']) && !empty($post['project_module'])){
                 $result = $this->user_model->add_tasks($post);
                 if (!$result) {
                     $data['success'] = 0;
                     $data['msg'] = 'Failed to add task!';
                 }else{
                     $data['success'] = 1;
+                    $data['task_id'] = $result;
                     $data['msg'] = 'Task Added Successfully!';
                 }
             }else{
                 $data['success'] = 0;
-                $data['msg'] = 'Userid is required!';
+                $data['msg'] = 'Parameters error!';
             }
             $this->response($data, REST_Controller::HTTP_OK);
         }else{
