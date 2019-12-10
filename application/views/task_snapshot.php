@@ -105,7 +105,6 @@ print_r($data); exit();
 <!-- end of task snapshot -->
 
 
-
 <hr>
 <footer class="admin-footer">
 <hr>

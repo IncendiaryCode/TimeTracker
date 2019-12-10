@@ -96,7 +96,13 @@ $picture = substr($profile,29);
             </div>
         </div>
     </div>
+    <div class="row mt-5">
+        <div class="col-6 offset-3">
+                <canvas id="user-chart"></canvas>
+            </div>
+        </div>
 </div>
+
 
 
 <hr>
