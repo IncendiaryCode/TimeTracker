@@ -72,7 +72,7 @@ $picture = substr($profile,29);
                     <hr>
                     <div class="text-center">
                         <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/add_users'"><i class="fas fa-plus"></i> Users</button>
-                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/load_user_snapshot?type=user'">Vew details</button>
+                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/load_snapshot?type=user'">Vew details</button>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@ $picture = substr($profile,29);
                     <hr>
                     <div class="text-center">
                         <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/add_projects'"><i class="fas fa-plus"></i> Projects</button>
-                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/load_project_snapshot?type=project'">Vew details</button>
+                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/load_snapshot?type=project'">Vew details</button>
                     </div>
                 </div>
             </div>
@@ -108,7 +108,7 @@ $picture = substr($profile,29);
                     <hr>
                     <div class="text-center">
                         <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/load_add_task'"><i class="fas fa-plus"></i> Tasks</button>
-                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/load_task_snapshot?type=task'">Vew details</button>
+                        <button class="btn btn-link text-white" onclick="window.location.href='<?=base_url();?>index.php/admin/load_snapshot?type=task'">Vew details</button>
                     </div>
                 </div>
             </div>
