@@ -62,8 +62,7 @@ var addUser = {
                         __this.i++;
                         username.push(user);
                     }
-                }
-                );
+                });
             }
             else{
                 document.getElementById('user-name-error').innerHTML = "User name is repeated.";

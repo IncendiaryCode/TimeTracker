@@ -349,7 +349,7 @@ function draw_customized_chart(res)
         var interval = res['data'][1][2][i];
 
         var width = ((interval/60)*24);
-        var start_time_pixel = ((start_time_min/60)*24);
+        var start_time_pixel = ((start_time_min/60)*24)+96;
        
         for(var k=0;k<pixel.length;k++)
         {

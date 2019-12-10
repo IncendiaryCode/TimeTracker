@@ -42,14 +42,14 @@
                         </div>
                         <div class="text-right">
                             <p class="text-danger" id="alertMsg"></p>
-                            <button type="submit" class="btn save-task  text-white">Submit</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <hr class="change_psw-footer">
-        <footer>
+        <hr class="change_psw-footer text-center" >
+        <footer class="profile-footer ">
             <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
         </footer>
     </div>

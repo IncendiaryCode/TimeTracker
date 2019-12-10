@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
-print_r($data); exit();
 ?>
 <body>
     <header>
@@ -62,34 +61,34 @@ print_r($data); exit();
 
 <div class="container">
     <div class="row mt-5">
-        <div class="col-4"> 
+        <div class="col-2"> 
             <p><strong>Task name</strong></p>
             </div>
-        <div class="col-4">
+        <div class="col-2">
             <p><strong>Project name</strong></p>
         </div>
-        <div class="col-4 text-center">
+        <div class="col-8 ">
             <p><strong>Task details</strong></p>
         </div>
     </div>
     <hr>
     <div class="row">
-        <div class="col-4">
+        <div class="col-2">
             <div id="display-name">
-                <div class="mt-5">
+                <div>
                     <p>Timer</p>
                     <p>Number of working users: 3</p>
                     <p>Total time spent: 30 hrs</p>
                 </div>
             </div>
         </div>
-        <div class="col-4">
-            <div class="mt-5">
+        <div class="col-2">
+            <div>
                 <p>TimeTracker</p>
             </div>
         </div>
-        <div class="col-4 textright">
-            <div class="row">
+        <div class="col-8">
+            <div class="row ">
                 <div class="col-6 pb-4 text-left"><strong><u>Task name</u>:  Login-page (completed)</strong></div>
                 <div class="col-6 pb-4 text-left"><strong><u>Total time taken</u>:  4:00 hrs</strong></div>
                 <div class="col-12 pb-4 text-left"><strong><u>Users</u>:  vinay.</strong></div>
@@ -100,13 +99,22 @@ print_r($data); exit();
             </div><hr>
         </div>
     </div>
+        <div class="text-right">
+            <select class="project-list">
+            </select>
+        </div>
+    <div class="row mt-5">
+        <div class="col-md-8 offset-md-2">
+            <canvas id="task-chart"></canvas>
+        </div>
+    </div>
+
 </div>
+
 
 <!-- end of task snapshot -->
 
-
-<hr>
-<footer class="admin-footer">
+<footer class="r">
 <hr>
   <p class="text-center">Copyright © 2019 Printgreener.com</p>
 </footer>

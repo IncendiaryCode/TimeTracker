@@ -59,31 +59,31 @@ $picture = substr($profile,29);
     
 <div class="container">
     <div class="row mt-5">
-        <div class="col-4">
+        <div class="col-2">
             <p><strong>User name</strong></p>
             </div>
-        <div class="col-4">
+        <div class="col-2">
             <p><strong>Project name</strong></p>
         </div>
-        <div class="col-4 text-center">
+        <div class="col-8">
             <p><strong>Task details</strong></p>
         </div>
     </div>
     <hr>
     <div class="row">
-        <div class="col-4">
+        <div class="col-2">
             <div id="display-name">
-                <div class="mt-5">
+                <div>
                     <p>Vinay</p>
                 </div>
             </div>
         </div>
-        <div class="col-4">
-            <div class="mt-5">
+        <div class="col-2">
+            <div>
                 <p>Time Tracker</p>
             </div>
         </div>
-        <div class="col-4 text-center">
+        <div class="col-8">
             <div class="row">
                 <div class="col-6 pb-4"><strong><u>Task name</u>:  Login page</strong></div>
                 <div class="col-6 pb-4"><strong><u>Timer taken</u>:  8:00 hrs</strong></div>
@@ -96,17 +96,17 @@ $picture = substr($profile,29);
             </div>
         </div>
     </div>
+    <div class="text-right mt-5">
+        <select class="project-list">
+        </select>
+    </div>
     <div class="row mt-5">
-        <div class="col-6 offset-3">
-                <canvas id="user-chart"></canvas>
-            </div>
+        <div class="col-md-8 offset-md-2">
+            <canvas id="user-chart"></canvas>
         </div>
+    </div>
 </div>
-
-
-
 <hr>
-<footer class="admin-footer">
-<hr>
+<footer class="">
   <p class="text-center">Copyright © 2019 Printgreener.com</p>
 </footer>

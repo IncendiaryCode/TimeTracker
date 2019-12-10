@@ -72,6 +72,8 @@ Validation.prototype.isValidateEmail = function(e) {
 };
 
 var loginForm = document.getElementById('loginForm');
+if(loginForm)
+{
 loginForm.onsubmit = function(e) {
     var validateForm = new Validation(e.currentTarget);
     var finalValue = validateForm.correctCheck();
@@ -85,6 +87,7 @@ loginForm.onsubmit = function(e) {
         return true;
     } else
         return false;
+}
 }
 
 var forgotPsw = document.getElementById('forgotPassword');

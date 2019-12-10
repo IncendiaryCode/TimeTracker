@@ -7,22 +7,17 @@
 <script src="<?=base_url();?>assets/user/javascript/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/javascript/addProject.js?v=<?=VERSION?>"></script>
-<script src="<?=base_url();?>assets/javascript/chart.js?v=<?=VERSION?>"></script>
-<!-- <script src="<?=base_url();?>assets/javascript/Chart.min.js?v=<?=VERSION?>"></script> -->
+<script src="<?=base_url();?>assets/javascript/Chart.min.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/utils.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/javascript/addUser.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/javascript/addTask.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/javascript/admin.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/javascript/script.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/javascript/project_snapshot.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/javascript/task_snapshot.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/javascript/user_snapshot.js?v=<?=VERSION?>"></script>
-
+<script src="<?=base_url();?>assets/javascript/chart.js?v=<?=VERSION?>"></script>
 <script type="text/javascript">
-/* $(function() {
- $('.edit-date-time').datetimepicker({
-          useCurrent: false, format: 'YYYY-MM-DD hh:mm A',
-     });
- });
- */
  $(function() {
  $('.edit-date').datepicker({
           useCurrent: false, format: 'yyyy-mm-dd',

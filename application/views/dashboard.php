@@ -115,10 +115,10 @@ $picture = substr($profile,29);
         </div>
     </div>
     <hr>
-    <div class="container ">
+    <div class="container">
         <h2 class="text-center pt-3">Project Chart</h2>
-        <p class="text-right"><i class="fas fa-list-ul"></i></p>  
-        <canvas id="canvas" width="300" height="100"></canvas>
+        <p class="text-right"><i class="fas fa-list-ul"></i></p>
+        <canvas id="main-chart" height="80px;"></canvas>
     </div>
     <hr>
     <!--<div class="container table">
