@@ -82,7 +82,7 @@ class User_model extends CI_Model {
         return $data; 
     }
     public function get_user_task_info($sort_type,$post_data){
-        $this->db->select('p.name as project_name,p.id as project_id,p.image_name,t.task_name,t.description,t.id');
+        $this->db->select('p.name as project_name,p.id as project_id,p.image_name,t.task_name,t.description,t.id,t.module_id');
         $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);         //get completed tasks of the user
         $this->db->from('task AS t');
         $this->db->join('task_assignee AS a','a.task_id = t.id');
@@ -140,8 +140,8 @@ class User_model extends CI_Model {
         $userid = $this->session->userdata('userid');
         $taskid = $id;
         $this->db->select('*,d.id');
-        $this->db->from('time_details AS d');
-        $this->db->join('task AS t', 't.id = d.task_id');
+        $this->db->join('task AS t');
+        $this->db->from('time_details AS d','t.id = d.task_id');
         $this->db->join('project AS p', 'p.id = t.project_id');
         $this->db->where(array('t.id'=>$taskid,'d.user_id'=>$userid));
         $query = $this->db->get();
