@@ -141,9 +141,10 @@ class User_model extends CI_Model {
         $taskid = $id;
         $this->db->select('*,d.id');
         $this->db->from('task AS t');
-        $this->db->join('time_details AS d','t.id = d.task_id');
+        $this->db->join('task_assignee AS ta','t.id = ta.task_id');
+        $this->db->join('time_details AS d','t.id = d.task_id','left');
         $this->db->join('project AS p', 'p.id = t.project_id');
-        $this->db->where(array('t.id'=>$taskid,'d.user_id'=>$userid));
+        $this->db->where(array('t.id'=>$taskid,'ta.user_id'=>$userid));
         $query = $this->db->get();
         $data = $query->result_array();
         return $data;
