@@ -29,34 +29,58 @@ class Dashboard_model extends CI_Model
     public function get_task_details($type){
 
         if($type == 'user'){
-        $this->db->select('p.*,u.name AS user_name');
-        $this->db->from('project AS p');
-        $this->db->join('project_assignee AS a','a.project_id = p.id');
-        $this->db->join('users AS u','u.id = a.user_id');
-        $this->db->group_by('p.id');
-        $query=$this->db->get();
-
-        $info = $query->result_array();
-        print_r($info);exit;
-        foreach($info as $d){
-        $this->db->select('p.*,u.name AS user_name,m.name AS module_name,d.*,d.id AS table_id,t.task_name,t.module_id');
-        $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task",FALSE); //get running tasks of the user 
-        $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);         //get completed tasks of the user
-        $this->db->select_sum('d.total_minutes','t_minutes');       //get total minutes for a particular task
-        $this->db->from('users AS u');
-        $this->db->from('project AS p');
-        $this->db->join('task AS t','t.project_id = p.id');
-        $this->db->join('task_assignee AS ta','ta.task_id = t.id');
-        $this->db->join('time_details AS d','d.user_id = u.id','LEFT');
-        $this->db->join('project_module AS m','m.id = t.module_id');
-       // $this->db->from('project_module AS m','m.project_id = p.id');
-        $this->db->where(array('d.end_time IS NOT NULL','p.id'=>$d['id']));
-        $this->db->group_by(array('u.id','p.id'));
-        $query = $this->db->get();
-        print_r($query->result_array());
-    }exit;
-}
-        return $query->result_array();
+            $this->db->select('d.user_id,u.name AS user_name,p.name AS project_name,a.project_id,d.task_id,t.task_name,d.id AS table_id,m.name AS module_name');
+            $this->db->select('d.start_time,d.end_time,d.total_minutes,d.total_hours'); 
+            $this->db->from('project_assignee AS a');
+            
+            $this->db->join('task AS t','t.project_id = a.project_id');
+            $this->db->join('task_assignee AS ta','ta.task_id = t.id');
+            
+            $this->db->join('project AS p','p.id = a.project_id');
+            $this->db->join('project_module AS m','m.id = t.module_id');
+            $this->db->join('time_details AS d','d.task_id = t.id');
+            $this->db->join('users AS u','u.id = d.user_id');
+            $this->db->where(array('u.type'=>'user','d.end_time IS NOT NULL'));
+            $query = $this->db->get()->result_array();
+            foreach($query as $q){
+                //print_r($q['project_name']."\n\n\n\t".$q['user_id']."\n\n\t");
+                $details[] = array('user'=> $q['user_name'],
+                    'project'=>$q['project_name'],
+                    'task'=>array($q['task_name'],array('start_time'=>$q['start_time'],'end_time'=>$q['end_time']),'total_minutes'=>$q['total_minutes']),
+                    'module'=>$q['module_name']);
+            }
+           // print_r($details);
+           // exit;
+            
+        
+        }else if($type == 'project'){
+            $this->db->select('u.name AS user_name');
+            $this->db->select('p.*,m.name AS module_name,d.*,d.id AS table_id,t.task_name,t.module_id');
+            $this->db->from('users AS u');
+            $this->db->from('project AS p');
+            $this->db->join('task AS t','t.project_id = p.id');
+            $this->db->join('project_assignee AS a','a.user_id = u.id');
+            $this->db->join('task_assignee AS ta','ta.task_id = t.id');
+            $this->db->join('time_details AS d','d.user_id = u.id');
+            $this->db->join('project_module AS m','m.id = t.module_id');
+            $this->db->where(array('d.end_time IS NOT NULL','u.type'=>'user'));
+            $query = $this->db->get();
+            $details = $query->result_array();
+        }else if($type == 'task'){
+            $this->db->select('u.name AS user_name');
+            $this->db->select('p.*,m.name AS module_name,d.*,d.id AS table_id,t.task_name,t.module_id');
+            $this->db->from('users AS u');
+            $this->db->from('project AS p');
+            $this->db->join('task AS t','t.project_id = p.id');
+            $this->db->join('project_assignee AS a','a.user_id = u.id');
+            $this->db->join('task_assignee AS ta','ta.task_id = t.id');
+            $this->db->join('time_details AS d','d.user_id = u.id');
+            $this->db->join('project_module AS m','m.id = t.module_id');
+            $this->db->where(array('d.end_time IS NOT NULL','u.type'=>'user'));
+            $query = $this->db->get();
+            $details = $query->result_array();
+        }
+        return $details;
     }
     //add user model
     public function add_users()

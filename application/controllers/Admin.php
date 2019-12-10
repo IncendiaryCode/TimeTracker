@@ -31,26 +31,27 @@
 		}
 
 		//Load user analytics page
-		public function load_user_snapshot(){
-			$this->load->view('header');
-			$type = 'user';
-			$result['data'] = $this->dashboard_model->get_task_details($type);
-	        $this->load->view('user_snapshot',$result);
-	        $this->load->view('footer');
-		}
-		public function load_project_snapshot(){
-			$this->load->view('header');
-			$type = 'project';
-			$result['data'] = $this->dashboard_model->get_task_details($type);
-	        $this->load->view('user_snapshot',$result);
-	        $this->load->view('footer');
-		}
-		public function load_task_snapshot(){
-			$this->load->view('header');
-			$type = 'task';
-			$result['data'] = $this->dashboard_model->get_task_details($type);
-	        $this->load->view('user_snapshot',$result);
-	        $this->load->view('footer');
+		public function load_snapshot(){
+			
+			$type = $this->input->get('type',TRUE);
+			if($type == 'user'){
+				$this->load->view('header');
+				$result['data'] = $this->dashboard_model->get_task_details($type);
+		        $this->load->view('user_snapshot',$result);
+		        $this->load->view('footer');
+			}
+			else if($type == 'project'){
+				$this->load->view('header');
+				$result['data'] = $this->dashboard_model->get_task_details($type);
+		        $this->load->view('project_snapshot',$result);
+		        $this->load->view('footer');
+			}
+			else if($type == 'task'){
+				$this->load->view('header');
+				$result['data'] = $this->dashboard_model->get_task_details($type);
+		        $this->load->view('task_snapshot',$result);
+		        $this->load->view('footer');
+			}	
 		}
 		//To load add user page
 	    public function load_add_user(){
