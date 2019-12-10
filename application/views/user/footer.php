@@ -45,7 +45,6 @@
     </div>
 </div>
 
-
 <div class="modal" id="logout-modal" data-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content text-center">
@@ -88,7 +87,7 @@
         </div>
     </div>
 
-<div class="modal fade" id="end-time-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="end-time-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form action="<?=base_url();?>index.php/user/stop_timer?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-endtime" method="post">
@@ -104,8 +103,8 @@
                                 <?php echo $task_info['task_status'][0]['task_name'] ?></strong></p>
                     </div>
                     <div class="input-group">
-                        <p>Started at: <strong>
-                                <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
+                        <p>Started at: <strong id="old-start-date">
+                        <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
                     </div>
                     <div>
                         <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
@@ -153,11 +152,8 @@
         </div>
     </div>
 </div>
-<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js" type="text/javascript"></script> -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
@@ -167,6 +163,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 <script src="<?=base_url();?>assets/user/plugins/calendar_view.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/add_task.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/user/javascript/edit_task.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/utils.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/change_password.js?v=<?=VERSION?>"></script>

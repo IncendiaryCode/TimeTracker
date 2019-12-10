@@ -27,6 +27,7 @@ $picture = substr($res['profile'],30);
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
                             <!-- sorting options -->
                             <div class="dropdown-item checkbox"><input type="checkbox"  id="dark-mode" name="dark-mode"> Dark mode</div>
+                            <div class="dropdown-item checkbox"><input type="checkbox"  id="normal-mode" name="normal-mode"> Normal mode</div>
                         </div>
                     </div>
                 </div>

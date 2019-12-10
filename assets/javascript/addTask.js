@@ -101,6 +101,7 @@ $(document).ready(function() {
             success: function(res) {
                 var result = JSON.parse(res);
                 var array = result['result'];
+                $("#module").empty();
                 for (var i = 0; i < array.length; i++) {
                     var module_name = $('<option value=' + array[i]["id"] + '>' + array[i]["name"] + '</option>');
                     $("#module").append(module_name);
