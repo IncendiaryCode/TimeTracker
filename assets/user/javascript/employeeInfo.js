@@ -290,20 +290,26 @@ function setTaskTime(startTime, id) {
 }
 
 var oldEndTime = document.getElementById('update-endtime');
-if (oldEndTime) {
-    $('#save-changes').click(function () {
-        var oldTime = document.getElementById('old-datepicker').value;
-        console.log(oldTime)
-        if (oldTime == "" || oldTime == " ") {
-            document.getElementById('old-date-error').innerHTML = "Please enter correct end time.";
-            oldEndTime.onsubmit = function () {
-                return false;
-            }
-        } else
-            oldEndTime.onsubmit = function () {
-                return true;
-            }
-    })
+if(oldEndTime)
+{
+oldEndTime.onsubmit = function()
+{
+    var oldTime = document.getElementById('old-datepicker').value;
+    var start_date = document.getElementById('old-start-date').textContent;
+    start_date = start_date.trim().slice(0,10);
+    var old_date = oldTime.slice(0,10);
+
+    if (oldTime == "" || oldTime == " ") {
+        document.getElementById('old-date-error').innerHTML = "Please enter correct end time.";
+        return false;
+    }
+    else if(start_date != old_date)
+    {
+        document.getElementById('old-date-error').innerHTML = "Entered date is not matching...";
+        return false;
+    }
+    return true
+}
 }
 
 $(document).ready(function () {

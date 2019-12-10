@@ -21,9 +21,9 @@ $profile = $this->session->userdata('user_profile');
                     <div class="alert-success">
                         <?php echo isset($success)?$success:""; ?>
                     </div>
-                    <form action="<?=base_url();?>index.php/user/edit_task?type=edit" method="post" id="addTask" class="mt-5 ">
+                    <form action="<?=base_url();?>index.php/user/edit_task?type=edit" method="post" id="editTask" class="mt-5 ">
                         <input type="hidden" name="task_id" value="<?=$task_data[0]['task_id'];?>">
-                        <div class="form-group  ">
+                        <div class="form-group">
                             <label for="task-name ">Write the task name</label>
                             <input type="text" class="form-control" name="task_name" id="Taskname" value="<?=$task_data[0]['task_name'];?>">
                         </div>
@@ -46,30 +46,30 @@ $profile = $this->session->userdata('user_profile');
                             <div class="col-4"><b>End time</b></div>
                             <div class="col-3"><b>Description</b></div>
                         </div>
+                        <div class="row" id="total-row">
                             <?php $num = 0;
                           foreach($task_data as $task){
                             ?>
-                            <div class="row mt-3">
-                                <div class="col-1">
+                                <div class="col-1  mt-3">
                                 <input type="hidden" name="time[<?=$num?>][table_id]" value="<?php echo $task['id']?>" >
                                     <?=$num;?>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-4 mt-3">
                                     <input class="form-control edit-date-time" type="text" id="start<?=$num?>"  name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>" placeholder="<?=$task['start_time'];?>">
                                 </div>
-                                <div class="col-4">
-                                    <input class="form-control edit-date-time" type="text" id="start<?=$num?>"  name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>" placeholder="<?=$task['end_time'];?>">
+                                <div class="col-4 mt-3">
+                                    <input class="form-control edit-date-time" type="text" id="end<?=$num?>"  name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>" placeholder="<?=$task['end_time'];?>">
                                 </div>
-                                <div class="col-3">
+                                <div class="col-3 mt-3">
                                     <input type="text" class="form-control" name="time[<?=$num?>][task_description]" value="<?=$task['task_description'];?>">
                                 </div>
-                            </div>  
                             <?php $num=$num+1;
                         } ?>
-                        <p id="taskError" class=" text-danger"></p>
-                        <p>&nbsp;</p>
-                        <hr />
-                        <button type="submit" class="btn btn-primary">Save Task</button>
+                        </div>
+                            <p id="taskError" class=" text-danger mt-3"></p>
+                            <p>&nbsp;</p>
+                            <hr />
+                            <button type="submit" class="btn btn-primary">Save Task</button>
                     </form>
                 </div>
             </div>

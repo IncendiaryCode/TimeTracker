@@ -2,10 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
-print_r(sizeof($data));
 ?>
 <body>
-
     <header>
         <nav class="navbar navbar-expand-lg navbar-light">
             <a href="#" class="text-white previous"><img src="<?=base_url();?>assets/images/logo-white.png" height="40px;" onclick="window.location.href='<?=base_url();?>index.php/admin'"></a>
@@ -87,10 +85,6 @@ print_r(sizeof($data));
         </div>
         <div class="col-4 text-center">
             <div class="row">
-                <!-- <?php
-                foreach ($variable as $user) {
-
-                }?> -->
                 <div class="col-6 pb-4"><strong><u>Task name</u>:  Login page</strong></div>
                 <div class="col-6 pb-4"><strong><u>Timer taken</u>:  8:00 hrs</strong></div>
                 <div class="col-6 "><strong>Start time</strong></div>
@@ -102,7 +96,15 @@ print_r(sizeof($data));
             </div>
         </div>
     </div>
+    <div class="row mt-5">
+        <div class="col-6 offset-3">
+                <canvas id="user-chart"></canvas>
+            </div>
+        </div>
 </div>
+
+
+
 <hr>
 <footer class="admin-footer">
 <hr>

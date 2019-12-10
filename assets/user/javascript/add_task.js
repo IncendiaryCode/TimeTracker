@@ -152,8 +152,7 @@ var addTime = {
                 var date = document.getElementById('date-picker-start').value;
                 var start_time = document.getElementById('start-time-0').value;
                 var end_time = document.getElementById('end-time-0').value;
-
-
+                
                 _this.layout(date, start_time, end_time); //display multiple timings
                 document.getElementById('date-picker-start').value = " ";
                 document.getElementById('start-time-0').value = " ";

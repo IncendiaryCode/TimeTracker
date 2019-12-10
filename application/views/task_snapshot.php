@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
-print_r(sizeof($data));
+print_r($data); exit();
 ?>
 <body>
     <header>
@@ -58,13 +58,15 @@ print_r(sizeof($data));
         </nav>
     </header>
     
+<!-- UI for task snapshot -->
+
 <div class="container">
     <div class="row mt-5">
-        <div class="col-4">
-            <p><strong>Project name</strong></p>
+        <div class="col-4"> 
+            <p><strong>Task name</strong></p>
             </div>
         <div class="col-4">
-            <p><strong>Task name</strong></p>
+            <p><strong>Project name</strong></p>
         </div>
         <div class="col-4 text-center">
             <p><strong>Task details</strong></p>
@@ -75,29 +77,34 @@ print_r(sizeof($data));
         <div class="col-4">
             <div id="display-name">
                 <div class="mt-5">
-                    <p>Vinay</p>
+                    <p>Timer</p>
+                    <p>Number of working users: 3</p>
+                    <p>Total time spent: 30 hrs</p>
                 </div>
             </div>
         </div>
         <div class="col-4">
             <div class="mt-5">
-                <p>Time Tracker</p>
+                <p>TimeTracker</p>
             </div>
         </div>
-        <div class="col-4 text-center">
+        <div class="col-4 textright">
             <div class="row">
-                <div class="col-6 pb-4"><strong><u>Task name</u>:  Login page</strong></div>
-                <div class="col-6 pb-4"><strong><u>Timer taken</u>:  8:00 hrs</strong></div>
+                <div class="col-6 pb-4 text-left"><strong><u>Task name</u>:  Login-page (completed)</strong></div>
+                <div class="col-6 pb-4 text-left"><strong><u>Total time taken</u>:  4:00 hrs</strong></div>
+                <div class="col-12 pb-4 text-left"><strong><u>Users</u>:  vinay.</strong></div>
                 <div class="col-6 "><strong>Start time</strong></div>
                 <div class="col-6 "><strong>End time</strong></div>
-                <div class="col-6">04:30 AM</div>
+                <div class="col-6">12:30 PM</div>
                 <div class="col-6">04:30 PM</div>
-                <div class="col-6">04:30 AM</div>
-                <div class="col-6">04:30 PM</div>
-            </div>
+            </div><hr>
         </div>
     </div>
 </div>
+
+<!-- end of task snapshot -->
+
+
 <hr>
 <footer class="admin-footer">
 <hr>

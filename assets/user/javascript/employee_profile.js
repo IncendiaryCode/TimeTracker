@@ -24,16 +24,13 @@ $(document).ready(function()
 {	
 	$('#dark-mode').click(function()
 	{
-		var dark_mode = document.getElementById('dark-mode').checked;
-		console.log(dark_mode);
-		if (dark_mode) {
-		document.getElementById("dark-mode").checked = true;
 		localStorage.setItem("dark_mode", "checked");
-	}
-	else
-	{	
-		document.getElementById("dark-mode").checked = false;
+        window.location.reload();
+    });
+
+	$('#normal-mode').click(function()
+    {	
 		localStorage.setItem("dark_mode", "Not checked");
-	}
+        window.location.reload();
 	});
 });

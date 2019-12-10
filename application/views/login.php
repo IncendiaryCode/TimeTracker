@@ -36,7 +36,7 @@
                 <div class="row top-space" style="width: 100%;">
                     <a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/load_forgot_pwd"' class="col-6 forgot-color" id="forgot">Forgot password?</a>
 
-                    <button type="submit" class=" col-3 offset-3 login-color btn btn-primary" id="submit">Login</button>
+                    <button type="submit" class=" col-3 offset-3 login-color" id="submit">Login</button>
                     <div class="error"><?php echo isset($error) ? $error : ''?></div>
                 </div>
             </form>
