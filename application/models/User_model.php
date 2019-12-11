@@ -115,7 +115,7 @@ class User_model extends CI_Model {
             $this->db->order_by("t.id", "asc");         //sort by task id
         }
         if(isset($post_data['page_no'])){
-            $limit  =10;
+            $limit  = 10;
             $offset =$limit*($post_data['page_no']-1);
             $this->db->limit($limit,$offset);  
         }
@@ -646,6 +646,19 @@ class User_model extends CI_Model {
         $query = $this->db->get();
         $default_mod = $query->result_array();
         return $default_mod;
+    }
+
+    public function get_login_details($userid,$page_no){
+        $limit  = 10;
+        $offset =$limit*($page_no-1);
+        $this->db->select('task_date,start_time,end_time');
+        $this->db->from('login_details');
+        $this->db->where(array('user_id'=> $userid));
+        $this->db->order_by("task_date", "desc");         //sort by task id
+        $this->db->limit($limit,$offset);
+        $query = $this->db->get();
+        $login_list = $query->result_array();
+        return $login_list;
     }
 }
 ?>

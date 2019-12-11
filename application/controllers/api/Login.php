@@ -16,6 +16,7 @@ class Login extends REST_Controller {
        $this->load->database();
        $this->load->model('user_model');
        $this->load->model('dashboard_model');
+       $this->load->library('verify');
     }
 
 
@@ -44,5 +45,30 @@ class Login extends REST_Controller {
             $this->response($result,REST_Controller::HTTP_OK);
         }
 
+    }
+
+    public function details_post()
+    {
+        $headers = $this->input->request_headers();
+        $verify_data = $this->verify->verify_request($headers);
+        if(isset($verify_data->username))
+        {
+            $post = $this->input->post();
+            if(!empty($post['userid'])){
+                $data['success'] = 1;
+                if(!empty($post['page_no']))
+                    $page_no = $post['page_no'];
+                else
+                    $page_no = 1;
+                $data['details'] =  $this->user_model->get_login_details($post['userid'],$page_no);
+                $this->response($data, REST_Controller::HTTP_OK);
+            }else{
+                $data['success'] = 0;
+                $data['msg'] = 'Userid is required!';
+                $this->response($data, parent::HTTP_NOT_FOUND);
+            }
+        }else{
+            $this->response($verify_data, REST_Controller::HTTP_OK);
+        }
     }
 }
