@@ -149,11 +149,11 @@ class Task extends REST_Controller {
                     $result = $this->user_model->update_logout_time($post['userid']);
                     if ($result) {
                         $data['success'] = 1;
-                        $data['msg']    = "Logout time updated successfully.";
+                        $data['msg']    = "Timer stopped Successfully.";
                     } //$data
                     else {
                         $data['success'] = 0;
-                        $data['msg']    = "Logout time updated successfully.";
+                        $data['msg']    = "Something went wrong.";
                     }
                 }
                 $this->response($data, REST_Controller::HTTP_OK);
