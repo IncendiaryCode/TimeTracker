@@ -173,17 +173,18 @@ class User_model extends CI_Model {
         }
     }
     //Function to Stop Timer
-    public function stop_timer($task_id, $end_time){
+    public function stop_timer($req_data){
 
-        $userid = $this->session->userdata('userid');
+        $userid = $req_data['userid'];
         $this->db->select('*');
         $this->db->from('time_details');
-        $this->db->where(array('task_id'=>$task_id,'user_id'=>$userid,'total_minutes'=>'0'));
+        $this->db->where(array('task_id'=>$req_data['task_id'],'user_id'=>$userid,'total_minutes'=>'0'));
         $query = $this->db->get();
+        //print_r($this->db->last_query());die;    
         if($query->num_rows() > 0){
             $data = $query->row_array(); 
-            if($end_time != ''){
-                $update_time = date('Y-m-d H:i:s',strtotime($end_time)); 
+            if($req_data['end_time'] != ''){
+                $update_time = date('Y-m-d H:i:s',strtotime($req_data['end_time'])); 
             }else{
                 $update_time = date('Y-m-d H:i:s'); 
             }
@@ -193,11 +194,11 @@ class User_model extends CI_Model {
             $hours = round(abs($diff / ( 60 * 60 )));
 
             $this->db->where(array('id'=>$data['id']));
-            $query2 = $this->db->update('time_details',array('task_description'=>$this->input->post('task-description'),'end_time'=>$update_time,'total_hours'=>$hours, 'total_minutes' => $t_minutes,'modified_on' => date('Y:m:d H:i:s') ));
+            $query2 = $this->db->update('time_details',array('task_description'=>$req_data['task_desc'],'end_time'=>$update_time,'total_hours'=>$hours, 'total_minutes' => $t_minutes,'modified_on' => date('Y:m:d H:i:s') ));
             if($query2){
-                if($this->input->post('flag') == 1) //if flag is 1, request is to complete the task
+                if($req_data['flag'] == 1) //if flag is 1, request is to complete the task
                 { 
-                    $this->db->where('id',$task_id);
+                    $this->db->where('id',$req_data['task_id']);
                     $query = $this->db->update('task',array('complete_task'=>'1'));
                     if($query){  
                         $flag_status = "complete";
@@ -205,7 +206,7 @@ class User_model extends CI_Model {
                     }else{
                         return false;
                     }
-                }else if($this->input->post('flag') == 0){ //if flag is 0, request is to stop the task
+                }else if($req_data['flag'] == 0){ //if flag is 0, request is to stop the task
                     return true;
                 }
             }else{

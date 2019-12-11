@@ -70,10 +70,16 @@ class User extends CI_Controller
     public function stop_timer()
     {
         $post_data = $this->input->post();
+        $end_time = isset($post_data['end_time']) ? $post_data['end_time'] : '';
+        $data['userid'] = $this->session->userdata('userid');
+        $data['end_time'] = $end_time;
+        $data['task_desc'] = isset($post_data['task-description'])?$post_data['task-description']:'';
+        $data['flag'] = $post_data['flag'];
         if ($this->input->post('id')) {
             $task_id = $this->input->post('id', TRUE);
-            $end_time = !empty($this->input->post('end_time')) ? $this->input->post('end_time') : '';
-            $result = $this->user_model->stop_timer($task_id, $end_time);
+            //$end_time = !empty($this->input->post('end_time')) ? $this->input->post('end_time') : '';
+            $data['task_id'] = $task_id;
+            $result = $this->user_model->stop_timer($data);
             if ($result == FALSE) {
                 $output_result['status'] = FALSE;
                 $output_result['msg']    = "Something went wrong.";
@@ -87,7 +93,7 @@ class User extends CI_Controller
         }
         else {
             $task_id = $this->input->get('id', TRUE);
-            $end_time = isset($post_data['end_time']) ? $post_data['end_time'] : '';
+            $data['task_id'] = $task_id;
             if ($task_id == '') {
                 $output_result['status'] = FALSE;
                 $output_result['msg'] = "Bad request parameter missing.";
@@ -98,7 +104,7 @@ class User extends CI_Controller
 
             }else{
                 
-                $result = $this->user_model->stop_timer($task_id, $end_time);
+                $result = $this->user_model->stop_timer($data);
                 if ($result == FALSE) {
                     $output_result['status'] = $result;
                     $output_result['msg']    = "Something went wrong.";
