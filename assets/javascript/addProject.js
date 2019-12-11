@@ -163,8 +163,9 @@ $(document).ready(function () {
     var new_project = document.getElementById("new-project").checked;
     var old_project = document.getElementById("old-project").checked;
     if (old_project == true) {
-        $('#new-project-input').hide();
         document.getElementById("new-project").checked = false;
+        $('#new-project-input').hide();
+        
         $.ajax({
             type: 'POST',
             url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
