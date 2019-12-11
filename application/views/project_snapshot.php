@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
-//print_r($data);
+print_r(($data[24]['task']));
 ?>
 <body>
     <header>
@@ -74,64 +74,70 @@ $picture = substr($profile,29);
     </div>
     <hr>
     <div class="row">
-        <div class="col-2">
-            <div id="display-name">
-                <div>
-                   <?php for($i=0;$i<sizeof($data);$i++){ 
+                   <?php
+                   $project = " ";
+                   $module = " ";
+
+                    for($i=0; $i<sizeof($data); $i++){
+                        ?> <div class="col-2">
+                            <div id="display-name">
+                                <div>
+                        <?php 
+                        if($project == $data[$i]['project'])
+                        {   
+
+                            ?><div class="col-2"></div><?php 
+                        }
+                        else
+                        {
                     $project = $data[$i]['project'];
-                    
-                    ?>
-                    <p><?=$project;?></p>
+                    ?><div class="min-height"><p><?=$project;?></p>
                     <p>Number of working users: 3</p>
-                    <p>Total time spent: 30 hrs</p>
-                <?php }?>
+                    <p>Total time spent: 30 hrs</p></div><?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>
         <div class="col-2">
             <div>
-                <?php for($i=0;$i<sizeof($data);$i++){
+                <?php 
+                    if(($module == $data[$i]['module']) && ($project == $data[$i-1]['project']))
+                        {
+                            ?><div class="col-2"></div><?php 
+                        }
+                        else
+                        {
                     $module = $data[$i]['module'];
+                    ?><p class="min-height"><?=$module;?></p><?php
+                    }
                     ?>
-                <p><?=$module;?></p>
-                <?php }?>
+                
             </div>
         </div>
         <div class="col-8">
-            <?php for($i=0;$i<sizeof($data);$i++){
-                    $task = $data[$i]['task'];
-                    ?>
+                    <?php $task = $data[$i]['task']; ?>
             <div class="row">
-                
+
                 <div class="col-6 pb-4"><strong><u>Task name</u>:  <?=$task['task_name'];?></strong></div>
-                <div class="col-6 pb-4"><strong><u>Timer taken</u>:  <?=$task['total_minutes'];?></strong></div>
+                <div class="col-6 pb-4"><strong><u>Timer taken</u>:  <?=$task['total_minutes'];?> minutes</strong></div>
                 <div class="col-12 pb-4"><strong><u>Working users</u>:  <?=$task['user_name'];?></strong></div>
                 <div class="col-6 "><strong>Start time</strong></div>
                 <div class="col-6 "><strong>End time</strong></div>
                 <div class="col-6"><?=$task[0]['start_time'];?></div>
-                <div class="col-6"><?=$task[0]['end_time'];?></div>
-            </div><hr>
-        <?php } ?>
-            <!-- <div class="row">
-                <div class="col-6 pb-4"><strong><u>Task name</u>:  Timer-page (active)</strong></div>
-                <div class="col-6 pb-4"><strong><u>Timer taken</u>:  00:00 hrs</strong></div>
-                <div class="col-12 pb-4"><strong><u>Working users</u>:  vinay.</strong></div>
-                <div class="col-6 "><strong>Start time</strong></div>
-                <div class="col-6 "><strong>End time</strong></div>
-                <div class="col-6">08:30 AM</div>
-                <div class="col-6">04:30 PM</div>
-            </div> -->
+                <div class="col-6"><?=$task[0]['end_time'];?></div><hr>
+            </div>
+            <hr>
         </div>
-    </div>
+        <?php }  ?>
     <hr>
+    </div>
     <div class="row mt-5">
         <div class="col-md-8 offset-md-2">
             <canvas id="project-chart"></canvas>
         </div>
     </div>
 </div>
-
-<!-- end of project snapshot -->
 <hr>
 <footer class="">
   <p class="text-center">Copyright © 2019 Printgreener.com</p>

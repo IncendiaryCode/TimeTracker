@@ -111,15 +111,15 @@ $picture = substr($profile,29);
                             </div>
                             <div class="form-group mt-3">
                                 <label for="task-name ">Enter the Email of new User<span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" name="user_email" id="user_email" value="">
+                                <input type="email" class="form-control" name="user_email" id="user_email">
                             </div>
                             <div class="form-group mt-3">
-                                <label for="task-name ">Enter the Contact number of new User<span class="text-danger">*</span></label>
-                                <input type="tel" minlength="10" maxlength="10" class="form-control" name="contact" id="contact" value="">
-                            </div>
-                            <div class="form-group mt-3">
-                                <label for="task-name ">Enter Password</label>
+                                <label for="task-name ">Enter Password<span class="text-danger">*</span></label>
                                 <input type="password" class="form-control" name="task_pass" id="task_pass" value="">
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="task-name ">Enter the Contact number of new User</label>
+                                <input type="tel" minlength="10" maxlength="10" class="form-control" name="contact" id="contact" value="">
                             </div>
                             <p id="user-error" class="text-danger"></p>
                             <button type="submit" class="btn btn-primary" value="submit">Add User</button>

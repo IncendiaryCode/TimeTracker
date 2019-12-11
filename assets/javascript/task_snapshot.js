@@ -75,8 +75,8 @@ $(document).ready(function()
             url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
             data: { 'type': "get_user" },
             success: function(res) {
-                var result = JSON.parse(res);
-                console.log(result);
+				var result = JSON.parse(res);
+				console.log(result)
                 usernames = result['result'];
 		        for (var j = 0; j < usernames.length; j++) {
 		            var option = $('<option>' + usernames[j]["name"] + '</option>');

@@ -34,7 +34,7 @@ var addUser = {
         var i = __this.i;
         var sameName = 0;
 
-
+        
         var id = 'user-name' + (i-1);
 
         console.log('i', i);

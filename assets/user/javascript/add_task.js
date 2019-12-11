@@ -2,7 +2,7 @@ var addTask = document.getElementById('addTask');
 if (addTask) {
     var m = new Date();
     var start_date = m.getUTCFullYear() + "-" + m.getUTCMonth() + "-" + m.getUTCDate() + " " + m.getHours() + ":" + m.getMinutes() + ":" + m.getSeconds();
-    addTask.onsubmit = function(e) {
+    addTask.onsubmit = function (e) {
 
         var taskName = document.getElementById('Taskname').value;
         var project = document.getElementById('choose-project').value;
@@ -46,7 +46,7 @@ var addTime = {
     ele: null,
     addBtn: null,
     array_of_timings: [],
-    layout: function(date, start_time, end_time) {
+    layout: function (date, start_time, end_time) {
 
         var section = $('<div class="time-section" />');
         var row = $('<div class="row" />');
@@ -85,13 +85,13 @@ var addTime = {
             '</a>' +
             '</div>');
 
-        removeBtn.on('click', function() {
+        removeBtn.on('click', function () {
             //remove the row
             $(this).closest(".time-section").remove();
         });
         array_of_timings.push({ date, start_time, end_time });
         removeBtn.appendTo(row);
-        
+
         section.append(row);
         this.ele.prepend(section);
 
@@ -110,7 +110,7 @@ var addTime = {
             todayHighlight: true,
         });
     },
-    validate: function() {
+    validate: function () {
 
         var __this = this;
         var date = document.getElementById('date-picker-start').value;
@@ -143,16 +143,16 @@ var addTime = {
             return true;
         }
     },
-    attachEvents: function() {
+    attachEvents: function () {
         var _this = this;
-        this.addBtn.on('click', function(e) {
+        this.addBtn.on('click', function (e) {
             e.preventDefault();
             if (_this.validate()) { // validate the timing details
                 _this.id++;
                 var date = document.getElementById('date-picker-start').value;
                 var start_time = document.getElementById('start-time-0').value;
                 var end_time = document.getElementById('end-time-0').value;
-                
+
                 _this.layout(date, start_time, end_time); //display multiple timings
                 document.getElementById('date-picker-start').value = " ";
                 document.getElementById('start-time-0').value = " ";
@@ -161,14 +161,14 @@ var addTime = {
             }
         });
     },
-    init: function(eleID) {
+    init: function (eleID) {
         //initial settings
         this.ele = $(eleID);
         this.addBtn = this.ele.find('#add-new-time');
         this.attachEvents();
 
     },
-    check_for_timeintervals: function(__start_seconds, __end_seconds, date) { // check current task is already entered.
+    check_for_timeintervals: function (__start_seconds, __end_seconds, date) { // check current task is already entered.
         var _this = this;
         var element = document.getElementById("task-add-time");
         var input_values = this.array_of_timings;
@@ -192,7 +192,7 @@ var addTime = {
         }
         return true;
     },
-    get_inputvalues: function() { // to get entered input values.
+    get_inputvalues: function () { // to get entered input values.
         /*input_array = this.input_array;*/
         var input_array = [{}];
         var k = 0;
@@ -206,7 +206,7 @@ var addTime = {
         }
         return input_array;
     },
-    check_for_greatertime: function(date, start_time, end_time) { // to check whether entered timings is greater than current time or not.
+    check_for_greatertime: function (date, start_time, end_time) { // to check whether entered timings is greater than current time or not.
         var __this = this;
         var cur_date = new Date();
         var cur_date1 = cur_date.getDate() + '/' + (cur_date.getMonth() + 1) + '/' + cur_date.getFullYear();
@@ -225,7 +225,7 @@ var addTime = {
         }
         return true;
     },
-    check_date: function(date) { // check entered date with current date.
+    check_date: function (date) { // check entered date with current date.
         var cur_date = new Date();
         if ((parseInt(cur_date.getFullYear()) > parseInt(date.slice(6, 10)))) {
             return true;
@@ -251,16 +251,16 @@ var addTime = {
     }
 };
 
-$(document).ready(function() {
+$(document).ready(function () {
     //add multiple time to form
 
-    $('#editTask').click(function() {
+    $('#editTask').click(function () {
         $('#task-times').show();
         $('#save-and-start').hide();
 
     });
     addTime.init("#task-add-time");
-    $('#newTask').click(function() {
+    $('#newTask').click(function () {
         $('#task-times').hide();
         $('#save-and-start').show();
     });
@@ -279,16 +279,16 @@ $(document).ready(function() {
     $('.timepicker1').timepicker({
         uiLibrary: 'bootstrap4'
     });
-    $('#choose-project').click(function() {
+    $('#choose-project').click(function () {
         $('#choose-module').empty().html('<option>Select module</option>');
     })
-    $("select.project_name").change(function() {
+    $("select.project_name").change(function () {
         var project_id = $(this).children("option:selected").val();
         $.ajax({
             type: 'POST',
             url: timeTrackerBaseURL + 'index.php/user/get_project_module',
             data: { 'id': project_id },
-            success: function(res) {
+            success: function (res) {
                 var result = JSON.parse(res);
                 var array = result['result'];
                 for (var i = 0; i < array.length; i++) {
@@ -299,63 +299,63 @@ $(document).ready(function() {
             }
         });
     });
-    $('#save-and-start').click(function()
-        {
-            var addTask = document.getElementById('addTask');
-                if (addTask) {
-                    var m = new Date();
-                    var start_date = m.getUTCFullYear() + "-" + m.getUTCMonth() + "-" + m.getUTCDate() + " " + m.getHours() + ":" + m.getMinutes() + ":" + m.getSeconds();
-                    addTask.onsubmit = function(e) {
+    $('#save-and-start').click(function () {
+        var addTask = document.getElementById('addTask');
+        if (addTask) {
+            var m = new Date();
+            var start_date = m.getUTCFullYear() + "-" + m.getUTCMonth() + "-" + m.getUTCDate() + " " + m.getHours() + ":" + m.getMinutes() + ":" + m.getSeconds();
+            addTask.onsubmit = function (e) {
 
-                        var taskName = document.getElementById('Taskname').value;
-                        var description = document.getElementById('description').value
-                        var project = document.getElementById('choose-project').value;
-                        var project_module = document.getElementById('choose-module').value;
-                        if (taskName == "" || taskName == " ") {
-                            document.getElementById('taskError').innerHTML = "Please Enter Task Name ";
-                            return false;
-                        }
-
-                        if (project == "" || project == "Select Project") {
-                            document.getElementById('taskError').innerHTML = "Please Choose Project Name ";
-                            return false;
-                        }
-
-                        if (document.getElementById('editTask').checked) { //check radio button for multiple timings
-                            var date = document.getElementById('date-picker-start').value;
-                            var start_time = document.getElementById('start-time-0').value;
-                            var end_time = document.getElementById('end-time-0').value;
-                            var flag = true;
-
-                            if (date !== "" && date !== " " && start_time !== "" && start_time !== " " && end_time !== "" && end_time !== " ") {
-                            document.getElementById('taskError').innerHTML = "You can not start completed task";
-                            return false;
-                        }
-                        } else {
-
-                                $.ajax({
-                                    type: "POST",
-                                    url: timeTrackerBaseURL + 'index.php/user/add_tasks',
-                                    data: {'action': 'save_and_start',
-                                            'task_name':taskName,
-                                            'description':description,
-                                            'project':project,
-                                            'project_module':project_module,
-                                          },    /*call to start the task timer.*/
-                                    dataType: 'json',
-                                    success: function(res) {
-                                      //  if (res.status) {
-                                        console.log(res)
-                                            document.getElementById("alartmsg").innerHTML = res['msg'];
-                                                setTimeout(function(){
-                                                    document.getElementById("alarmmsg").innerHTML = '';
-                                                }, 5000);
-                                    }
-                                });
-                                return false;
-                        }
-                    }
+                var taskName = document.getElementById('Taskname').value;
+                var description = document.getElementById('description').value
+                var project = document.getElementById('choose-project').value;
+                var project_module = document.getElementById('choose-module').value;
+                if (taskName == "" || taskName == " ") {
+                    document.getElementById('taskError').innerHTML = "Please Enter Task Name ";
+                    return false;
                 }
-        
-            });
+
+                if (project == "" || project == "Select Project") {
+                    document.getElementById('taskError').innerHTML = "Please Choose Project Name ";
+                    return false;
+                }
+
+                if (document.getElementById('editTask').checked) { //check radio button for multiple timings
+                    var date = document.getElementById('date-picker-start').value;
+                    var start_time = document.getElementById('start-time-0').value;
+                    var end_time = document.getElementById('end-time-0').value;
+                    var flag = true;
+
+                    if (date !== "" && date !== " " && start_time !== "" && start_time !== " " && end_time !== "" && end_time !== " ") {
+                        document.getElementById('taskError').innerHTML = "You can not start completed task";
+                        return false;
+                    }
+                } else {
+
+                    $.ajax({
+                        type: "POST",
+                        url: timeTrackerBaseURL + 'index.php/user/add_tasks',
+                        data: {
+                            'action': 'save_and_start',
+                            'task_name': taskName,
+                            'description': description,
+                            'project': project,
+                            'project_module': project_module,
+                        },    /*call to start the task timer.*/
+                        dataType: 'json',
+                        success: function (res) {
+                            //  if (res.status) {
+                            console.log(res)
+                            document.getElementById("alartmsg").innerHTML = res['msg'];
+                            setTimeout(function () {
+                                document.getElementById("alarmmsg").innerHTML = '';
+                            }, 5000);
+                        }
+                    });
+                    return false;
+                }
+            }
+        }
+
+    });
 });
