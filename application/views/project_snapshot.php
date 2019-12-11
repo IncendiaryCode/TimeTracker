@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
-print_r(($data[24]['task']));
 ?>
 <body>
     <header>
@@ -62,6 +61,12 @@ print_r(($data[24]['task']));
 
 <div class="container">
     <div class="row mt-5">
+        <div class="col-md-8 offset-md-2">
+            <canvas id="project-chart"></canvas>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
         <div class="col-2"> 
             <p><strong>Project name</strong></p>
             </div>
@@ -77,10 +82,9 @@ print_r(($data[24]['task']));
                    <?php
                    $project = " ";
                    $module = " ";
-
                     for($i=0; $i<sizeof($data); $i++){
                         ?> <div class="col-2">
-                            <div id="display-name">
+                            <div id="display-uname">
                                 <div>
                         <?php 
                         if($project == $data[$i]['project'])
@@ -132,11 +136,7 @@ print_r(($data[24]['task']));
         <?php }  ?>
     <hr>
     </div>
-    <div class="row mt-5">
-        <div class="col-md-8 offset-md-2">
-            <canvas id="project-chart"></canvas>
-        </div>
-    </div>
+    
 </div>
 <hr>
 <footer class="">

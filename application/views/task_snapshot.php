@@ -56,10 +56,17 @@ $picture = substr($profile,29);
             </div>
         </nav>
     </header>
-    
 <!-- UI for task snapshot -->
-
 <div class="container">
+            <div class="text-right">
+            <select class="project-list">
+            </select>
+        </div>
+    <div class="row mt-5">
+        <div class="col-md-8 offset-md-2">
+            <canvas id="task-chart"></canvas>
+        </div>
+    </div>
     <div class="row mt-5">
         <div class="col-2"> 
             <p><strong>Task name</strong></p>
@@ -72,7 +79,7 @@ $picture = substr($profile,29);
         </div>
     </div>
     <hr>
-    <div class="row">
+<!--     <div class="row">
         <div class="col-2">
             <div id="display-name">
                 <div>
@@ -98,23 +105,71 @@ $picture = substr($profile,29);
                 <div class="col-6">04:30 PM</div>
             </div><hr>
         </div>
-    </div>
-        <div class="text-right">
-            <select class="project-list">
-            </select>
+    </div> -->
+
+        <div class="row">
+                    <?php 
+                    $task_name = " ";
+                    $project = " ";
+                        for($i=0;$i<sizeof($data);$i++){
+                        ?><div class="col-2">
+                            <div id="display-name">
+                            <div><?php
+                            $user = $data[$i]['task'];
+
+                            if($task_name == $user['task_name'])
+                            {
+                                ?><div class="col-2"></div><?php 
+                            }
+                            else
+                            {
+                            
+                            ?><p><?=$user['task_name']?></p>
+                        <?php } ?>
+                </div>
+            </div>
         </div>
-    <div class="row mt-5">
-        <div class="col-md-8 offset-md-2">
-            <canvas id="task-chart"></canvas>
+        <div class="col-2">
+            <div>
+                <?php
+                if($task_name == $user['task_name'])
+                    {   
+                        ?><div class="col-2"></div><?php 
+                    }
+                    else
+                    {
+                    $project = $data[$i]['project'];
+                    ?><p><?=$project;?></p><?php
+                    }
+                    $task_name = $user['task_name'];
+                    ?>
+
+
+            </div>
         </div>
+        <div class="col-8">
+            <div class="row">
+                <?php
+                    $task = $data[$i]['task'];
+                     ?>
+                <div class="col-6 pb-4"><strong><u>Task Name</u>:  <?=$task['task_name'];?></strong></div>
+                <div class="col-6 pb-4"><strong><u>Timer taken</u>:  <?=$task['total_minutes'];?></strong></div>
+                <div class="col-6 "><strong>Start time</strong></div>
+                <div class="col-6 "><strong>End time</strong></div>
+                
+                <div class="col-6"><?=$task[0]['start_time'];?></div>
+                <div class="col-6"><?=$task[0]['end_time'];?></div>
+            </div>
+            <hr>
+        </div>
+                <?php } ?>
     </div>
+
+
 
 </div>
-
-
 <!-- end of task snapshot -->
-
-<footer class="r">
+<footer>
 <hr>
   <p class="text-center">Copyright © 2019 Printgreener.com</p>
 </footer>

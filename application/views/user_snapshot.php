@@ -58,6 +58,16 @@ $picture = substr($profile,29);
     </header>
     
 <div class="container">
+    <div class="text-right mt-5">
+        <select class="project-list">
+        </select>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-8 offset-md-2">
+            <canvas id="user-chart"></canvas>
+        </div>
+    </div>
+    
     <div class="row mt-5">
         <div class="col-2">
             <p><strong>User name</strong></p>
@@ -71,36 +81,44 @@ $picture = substr($profile,29);
     </div>
     <hr>
     <div class="row">
-        <div class="col-2">
-            <div id="display-name">
-                <div>
                     <?php 
+                    $user = " ";
+                    $project = " ";
                         for($i=0;$i<sizeof($data);$i++){
-                           
-            $user = $data[$i]['user_name'];
-                       
-                        
-                        ?>
-                    <p><?=$user?></p>
-                    <?php } ?>
+                        ?><div class="col-2">
+                            <div id="display-username">
+                            <div><?php
+
+                            if($user == $data[$i]['user_name'])
+                            {
+                                ?><div class="col-2"></div><?php 
+                            }
+                            else
+                            {
+                            $user = $data[$i]['user_name'];
+                            ?><p><?=$user?></p>
+                        <?php } ?>
                 </div>
             </div>
         </div>
         <div class="col-2">
             <div>
-                <?php 
-                for($i=0;$i<sizeof($data);$i++){ 
+                <?php
+                if(($project == $data[$i]['project']) && ($user == $data[$i-1]['user_name']))
+                    {   
+                        ?><div class="col-2"></div><?php 
+                    }
+                    else
+                    {
                     $project = $data[$i]['project'];
-                    ?>
-                <p><?=$project;?></p>
-              <?php } ?>
+                    ?><p><?=$project;?></p><?php
+                    }?>
 
             </div>
         </div>
         <div class="col-8">
             <div class="row">
                 <?php
-                for($i=0;$i<sizeof($data);$i++){
                     $task = $data[$i]['task'];
                      ?>
                 <div class="col-6 pb-4"><strong><u>Task Name</u>:  <?=$task['task_name'];?></strong></div>
@@ -110,20 +128,12 @@ $picture = substr($profile,29);
                 
                 <div class="col-6"><?=$task[0]['start_time'];?></div>
                 <div class="col-6"><?=$task[0]['end_time'];?></div>
-                <?php } ?>
             </div>
             <hr>
         </div>
+                <?php } ?>
     </div>
-    <div class="text-right mt-5">
-        <select class="project-list">
-        </select>
-    </div>
-    <div class="row mt-5">
-        <div class="col-md-8 offset-md-2">
-            <canvas id="user-chart"></canvas>
-        </div>
-    </div>
+    
 </div>
 <hr>
 <footer class="">

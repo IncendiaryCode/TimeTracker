@@ -103,6 +103,7 @@ $picture = substr($profile,29);
                                     <?php echo $this->session->flashdata('err'); ?>
                                 </div>
                             <?php } ?> 
+                            <p class="text-center display-4 m-3 text-primary">Add project</p>
                         <form action="<?php echo base_url();?>index.php/admin/add_projects" id="add-project" method="post">
                             <div class="form-group mt-3">
                             <p><input type="radio" name="type" id="old-project" checked>Existing project
