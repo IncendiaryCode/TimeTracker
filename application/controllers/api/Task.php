@@ -100,10 +100,10 @@ class Task extends REST_Controller {
         {
             $post = $this->input->post();
             if(!empty($post['type']) && !empty($post['userid']) && (($post['type'] =='task' && !empty($post['task_id'])) || $post['type'] == 'login')){
-                $data['userid'] = $post['userid'];
-                $data['task_type'] = $post['type'];//task or login
-                $data['task_id'] = $post['task_id'];
-                $resp = $this->user_model->start_timer($data);
+                $input['userid'] = $post['userid'];
+                $input['task_type'] = $post['type'];//task or login
+                $input['task_id'] = $post['task_id'];
+                $resp = $this->user_model->start_timer($input);
                 if ($resp) {
                     $data['success'] = 1;
                     $data['msg']    = "Timer started Successfully.";
@@ -131,12 +131,12 @@ class Task extends REST_Controller {
             if(!empty($post['type']) && !empty($post['userid']) && (($post['type'] =='task' && !empty($post['task_id'])) || $post['type'] == 'login')){
                 if($post['type'] == 'task')
                 {
-                    $data['userid'] = $post['userid'];
-                    $data['end_time'] = '';
-                    $data['task_desc'] = isset($post_data['task_desc'])?$post_data['task_desc']:'';
-                    $data['flag'] = 0;
-                    $data['task_id'] = $post['task_id'];
-                    $resp = $this->user_model->stop_timer($data);
+                    $input['userid'] = $post['userid'];
+                    $input['end_time'] = '';
+                    $input['task_desc'] = isset($post_data['task_desc'])?$post_data['task_desc']:'';
+                    $input['flag'] = 0;
+                    $input['task_id'] = $post['task_id'];
+                    $resp = $this->user_model->stop_timer($input);
                     if ($resp) {
                         $data['success'] = 1;
                         $data['msg']    = "Timer stopped Successfully.";
