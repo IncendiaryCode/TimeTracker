@@ -55,6 +55,7 @@ class Login extends REST_Controller {
         {
             $post = $this->input->post();
             if(!empty($post['userid'])){
+                $data['success'] = 1;
                 if(!empty($post['page_no']))
                     $page_no = $post['page_no'];
                 else
