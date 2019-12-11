@@ -50,8 +50,12 @@ class User extends CI_Controller
     //Start timer function
     public function start_timer()
     {
-        $type   = $this->input->post('action', TRUE);
-        $result = $this->user_model->start_timer($type);
+        $task_type   = $this->input->post('id');
+        $data['userid'] = $this->session->userdata('userid');
+        $data['task_type'] = $this->input->post('action', TRUE);
+        if($data['task_type']  == 'task')
+            $data['task_id'] = $this->input->post('id'); 
+        $result = $this->user_model->start_timer($data);
         if (!$result) {
             $output_result['status'] = FALSE;
             $output_result['msg']    = "Timer did not start.";
@@ -176,7 +180,10 @@ class User extends CI_Controller
                 $output_result['msg']    = "Something went wrong.";
             }
             else {
-                $data = $this->user_model->start_timer($result);
+                $timer['userid'] = $this->session->userdata('userid');
+                $timer['task_type'] = 'task';
+                $timer['task_id'] = $result;
+                $data = $this->user_model->start_timer($timer);
                 if ($data) {
                     $output_result['status'] = TRUE;
                     $output_result['msg']    = "Task Saved and Timer started.";
