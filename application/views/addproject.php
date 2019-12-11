@@ -105,9 +105,9 @@ $picture = substr($profile,29);
                             <?php } ?> 
                         <form action="<?php echo base_url();?>index.php/admin/add_projects" id="add-project" method="post">
                             <div class="form-group mt-3">
-                            <p><input type="radio" id="old-project" checked>Existing project
-                            <input type="radio" id="new-project" class="ml-5" >New project</p>
-                            <select class="project-list form-control mt-3" id="old-project-input">
+                            <p><input type="radio" name="type" id="old-project" checked>Existing project
+                            <input type="radio" name="type" id="new-project" class="ml-5" >New project</p>
+                            <select class="project-list form-control mt-3" id="old-project-input" name="project_name">
                             <option>Select project</option></select>
                             </div>
                             <div class="form-group mt-3" id="new-project-input">

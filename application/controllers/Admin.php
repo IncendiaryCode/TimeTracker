@@ -136,7 +136,13 @@
 	    //To Add Projects..
 		public function add_projects(){
 			if($this->session->userdata('logged_in')){
-		  		$this->form_validation->set_rules('project-name','Project Name','required|min_length[1]|trim|callback_project_exists|xss_clean');
+				if($this->input->post('project_name') == ''){
+					$this->form_validation->set_rules('project-name','Project Name','required|min_length[1]|trim|callback_project_exists|xss_clean');
+				}else{
+					$this->form_validation->set_rules('project_name','Project Name','required');
+				}
+				$this->form_validation->set_rules('type', 'Radio button', 'required');
+		  		
 		  		//$this->form_validation->set_rules('project-logo','Project Logo','required');
 		  		//$this->form_validation->set_rules('new-module','Project Module','required');
 		  		if ($this->form_validation->run() == FALSE)
