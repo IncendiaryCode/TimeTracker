@@ -599,10 +599,9 @@ class User_model extends CI_Model {
             return $query->row_array();
         }
     }
-    public function update_logout_time(){
-        $userid = $this->session->userdata('userid');
+    public function update_logout_time($userid){
         //check for entry with the same login date
-        $this->db->where(array('task_date'=>date('Y:m:d'),'end_time IS NULL'));
+        $this->db->where(array('task_date'=>date('Y:m:d'),'user_id'=>$userid,'end_time IS NULL'));
         $query_check = $this->db->get('login_details');
         if($query_check->num_rows()>0){
             $data = $query_check->row_array();

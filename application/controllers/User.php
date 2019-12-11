@@ -380,7 +380,8 @@ class User extends CI_Controller
     //update logout time
     public function update_end_time()
     {
-        $result = $this->user_model->update_logout_time();
+        $userid = $this->session->userdata('userid');
+        $result = $this->user_model->update_logout_time($userid);
         if ($result == TRUE) {
             $this->load->view('user/header');
             $task_details['task_info'] = $this->user_model->task_status();

@@ -92,7 +92,79 @@ class Task extends REST_Controller {
             $this->response($verify_data, REST_Controller::HTTP_OK);
         }
     }
+
+    public function start_timer_post(){
+        $headers = $this->input->request_headers();
+        $verify_data = $this->verify->verify_request($headers);
+        if(isset($verify_data->username))
+        {
+            $post = $this->input->post();
+            if(!empty($post['type']) && !empty($post['userid']) && (($post['type'] =='task' && !empty($post['task_id'])) || $post['type'] == 'login')){
+                $data['userid'] = $post['userid'];
+                $data['task_type'] = $post['type'];//task or login
+                $data['task_id'] = $post['task_id'];
+                $resp = $this->user_model->start_timer($data);
+                if ($resp) {
+                    $data['success'] = 1;
+                    $data['msg']    = "Timer started Successfully.";
+                } //$data
+                else {
+                    $data['success'] = 0;
+                    $data['msg']    = "Something went wrong.";
+                }
+            }else{
+                $data['success'] = 0;
+                $data['msg'] = 'Parameters error!';
+            }
+            $this->response($data, REST_Controller::HTTP_OK);
+        }else{
+            $this->response($verify_data, REST_Controller::HTTP_OK);
+        }
+    }
      
+     public function stop_timer_post(){
+        $headers = $this->input->request_headers();
+        $verify_data = $this->verify->verify_request($headers);
+        if(isset($verify_data->username))
+        {
+            $post = $this->input->post();
+            if(!empty($post['task_id']) && !empty($post['type']) && !empty($post['userid'])){
+                if($post['type'] == 'task')
+                {
+                    $data['userid'] = $post['userid'];
+                    $data['end_time'] = '';
+                    $data['task_desc'] = isset($post_data['task_desc'])?$post_data['task_desc']:'';
+                    $data['flag'] = 0;
+                    $data['task_id'] = $post['task_id'];
+                    $resp = $this->user_model->stop_timer($data);
+                    if ($resp) {
+                        $data['success'] = 1;
+                        $data['msg']    = "Timer stopped Successfully.";
+                    } //$data
+                    else {
+                        $data['success'] = 0;
+                        $data['msg']    = "Something went wrong.";
+                    }
+                }else if($post['type'] == 'login'){
+                    $result = $this->user_model->update_logout_time($post['userid']);
+                    if ($result) {
+                        $data['success'] = 1;
+                        $data['msg']    = "Logout time updated successfully.";
+                    } //$data
+                    else {
+                        $data['success'] = 0;
+                        $data['msg']    = "Logout time updated successfully.";
+                    }
+                }
+                
+            }else{
+                $data['success'] = 0;
+                $data['msg'] = 'Parameters error!';
+            }
+        }else{
+            $this->response($verify_data, REST_Controller::HTTP_OK);
+        }
+    }
     /**
      * Get All Data from this method.
      *
