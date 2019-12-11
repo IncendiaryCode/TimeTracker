@@ -289,7 +289,6 @@ $(document).ready(function() {
             url: timeTrackerBaseURL + 'index.php/user/get_project_module',
             data: { 'id': project_id },
             success: function(res) {
-                console.log(res);
                 var result = JSON.parse(res);
                 var array = result['result'];
                 for (var i = 0; i < array.length; i++) {

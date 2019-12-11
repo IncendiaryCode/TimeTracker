@@ -94,6 +94,7 @@ $picture = substr($profile,29);
                 <div class="col-6">04:30 AM</div>
                 <div class="col-6">04:30 PM</div>
             </div>
+            <hr>
         </div>
     </div>
     <div class="text-right mt-5">
