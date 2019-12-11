@@ -27,32 +27,27 @@ class Dashboard_model extends CI_Model
         return $row_proj;
     }
     public function get_task_details($type){
-
         if($type == 'user'){
-            
-            $this->db->select('d.user_id,u.name AS user_name,p.name AS project_name,a.project_id,d.task_id,t.task_name,d.id AS table_id,m.name AS module_name');
-            $this->db->select('d.start_time,d.end_time,d.total_minutes,d.total_hours'); 
-            $this->db->from('project_assignee AS a');
-            
-            $this->db->join('task AS t','t.project_id = a.project_id');
+            $this->db->select('u.name AS user_name');
+            $this->db->select('d.user_id,p.name AS project_name,t.project_id,d.task_id,t.task_name,d.id AS table_id,m.name AS module_name');
+            $this->db->select('d.start_time,d.end_time,d.total_minutes,d.total_hours');
+            $this->db->from('project AS p');
+            $this->db->join('task AS t','t.project_id = p.id');
             $this->db->join('task_assignee AS ta','ta.task_id = t.id');
-            
-            $this->db->join('project AS p','p.id = a.project_id');
-            $this->db->join('project_module AS m','m.id = t.module_id');
-            $this->db->join('time_details AS d','d.task_id = t.id');
+            $this->db->join('time_details AS d','d.task_id = ta.task_id');
             $this->db->join('users AS u','u.id = d.user_id');
+            $this->db->join('project_module AS m','m.project_id = p.id');
             $this->db->where(array('u.type'=>'user','d.end_time IS NOT NULL'));
+            $this->db->order_by('u.name');
             $query = $this->db->get()->result_array();
+            
             foreach($query as $q){
                 $details[] = array(
                     'user_name'=> $q['user_name'],
                     'project'=>$q['project_name'],
                     'task'=>array('task_name'=>$q['task_name'],array('start_time'=>$q['start_time'],'end_time'=>$q['end_time']),'total_minutes'=>$q['total_minutes']),
                     'module'=>$q['module_name']);
-            }
-            
-               // exit;
-                
+            } 
         }else if($type == 'project'){
             $this->db->select('u.name AS user_name');
             $this->db->select('p.*,p.name AS project_name,m.name AS module_name,d.*,d.id AS table_id,t.task_name,t.module_id');
@@ -65,6 +60,7 @@ class Dashboard_model extends CI_Model
             $this->db->join('project_module AS m','m.id = t.module_id');
             $this->db->join('users AS u','u.id = d.user_id');
             $this->db->where(array('d.end_time IS NOT NULL','u.type'=>'user'));
+            $this->db->order_by('p.name');
             $query = $this->db->get()->result_array();
 
             foreach($query as $q){
@@ -87,6 +83,7 @@ class Dashboard_model extends CI_Model
             $this->db->join('users AS u','u.id = d.user_id');
             $this->db->join('project_module AS m','m.id = t.module_id');
             $this->db->where(array('d.end_time IS NOT NULL','u.type'=>'user'));
+            $this->db->order_by('t.task_name');
             $query = $this->db->get()->result_array();
             foreach($query as $q){
                 $details[] = array(
