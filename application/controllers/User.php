@@ -180,10 +180,10 @@ class User extends CI_Controller
                 $output_result['msg']    = "Something went wrong.";
             }
             else {
-                $data['userid'] = $this->session->userdata('userid');
-                $data['task_type'] = 'task';
-                $data['task_id'] = $result;
-                $data = $this->user_model->start_timer($data);
+                $timer['userid'] = $this->session->userdata('userid');
+                $timer['task_type'] = 'task';
+                $timer['task_id'] = $result;
+                $data = $this->user_model->start_timer($timer);
                 if ($data) {
                     $output_result['status'] = TRUE;
                     $output_result['msg']    = "Task Saved and Timer started.";
