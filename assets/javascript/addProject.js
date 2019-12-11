@@ -217,7 +217,20 @@ $(document).ready(function () {
                 document.getElementById('module-error').innerHTML = "Enter Project name";
                 return false;
             }
-            else
+            var project_checked = document.getElementById('old-project').checked;
+                if (project_checked) {
+                    var project_name = document.getElementById('old-project-input').value;
+                    var user_name = document.getElementById('assign-name0').value;
+                    console.log(project_name, user_name);
+
+                    if (project_name == "" || project_name == " ") {
+                        document.getElementById('module-error').innerHTML = "Enter Project name";
+                        return false;
+                    } else if (user_name == "Select User") {
+                        document.getElementById('module-error').innerHTML = "Enter user name";
+                        return false;
+                    }
+                }
                 return true;
         }
     }
