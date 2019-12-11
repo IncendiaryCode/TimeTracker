@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
+//print_r($data);
 ?>
 <body>
     <header>
@@ -76,28 +77,42 @@ $picture = substr($profile,29);
         <div class="col-2">
             <div id="display-name">
                 <div>
-                    <p>Time tracker</p>
+                   <?php for($i=0;$i<sizeof($data);$i++){ 
+                    $project = $data[$i]['project'];
+                    
+                    ?>
+                    <p><?=$project;?></p>
                     <p>Number of working users: 3</p>
                     <p>Total time spent: 30 hrs</p>
+                <?php }?>
                 </div>
             </div>
         </div>
         <div class="col-2">
             <div>
-                <p>General</p>
+                <?php for($i=0;$i<sizeof($data);$i++){
+                    $module = $data[$i]['module'];
+                    ?>
+                <p><?=$module;?></p>
+                <?php }?>
             </div>
         </div>
         <div class="col-8">
+            <?php for($i=0;$i<sizeof($data);$i++){
+                    $task = $data[$i]['task'];
+                    ?>
             <div class="row">
-                <div class="col-6 pb-4"><strong><u>Task name</u>:  Login-page (completed)</strong></div>
-                <div class="col-6 pb-4"><strong><u>Timer taken</u>:  4:00 hrs</strong></div>
-                <div class="col-12 pb-4"><strong><u>Working users</u>:  vinay.</strong></div>
+                
+                <div class="col-6 pb-4"><strong><u>Task name</u>:  <?=$task['task_name'];?></strong></div>
+                <div class="col-6 pb-4"><strong><u>Timer taken</u>:  <?=$task['total_minutes'];?></strong></div>
+                <div class="col-12 pb-4"><strong><u>Working users</u>:  <?=$task['user_name'];?></strong></div>
                 <div class="col-6 "><strong>Start time</strong></div>
                 <div class="col-6 "><strong>End time</strong></div>
-                <div class="col-6">12:30 PM</div>
-                <div class="col-6">04:30 PM</div>
+                <div class="col-6"><?=$task[0]['start_time'];?></div>
+                <div class="col-6"><?=$task[0]['end_time'];?></div>
             </div><hr>
-            <div class="row">
+        <?php } ?>
+            <!-- <div class="row">
                 <div class="col-6 pb-4"><strong><u>Task name</u>:  Timer-page (active)</strong></div>
                 <div class="col-6 pb-4"><strong><u>Timer taken</u>:  00:00 hrs</strong></div>
                 <div class="col-12 pb-4"><strong><u>Working users</u>:  vinay.</strong></div>
@@ -105,7 +120,7 @@ $picture = substr($profile,29);
                 <div class="col-6 "><strong>End time</strong></div>
                 <div class="col-6">08:30 AM</div>
                 <div class="col-6">04:30 PM</div>
-            </div>
+            </div> -->
         </div>
     </div>
     <hr>

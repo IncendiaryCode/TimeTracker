@@ -74,25 +74,43 @@ $picture = substr($profile,29);
         <div class="col-2">
             <div id="display-name">
                 <div>
-                    <p>Vinay</p>
+                    <?php 
+                        for($i=0;$i<sizeof($data);$i++){
+                           
+            $user = $data[$i]['user_name'];
+                       
+                        
+                        ?>
+                    <p><?=$user?></p>
+                    <?php } ?>
                 </div>
             </div>
         </div>
         <div class="col-2">
             <div>
-                <p>Time Tracker</p>
+                <?php 
+                for($i=0;$i<sizeof($data);$i++){ 
+                    $project = $data[$i]['project'];
+                    ?>
+                <p><?=$project;?></p>
+              <?php } ?>
+
             </div>
         </div>
         <div class="col-8">
             <div class="row">
-                <div class="col-6 pb-4"><strong><u>Task name</u>:  Login page</strong></div>
-                <div class="col-6 pb-4"><strong><u>Timer taken</u>:  8:00 hrs</strong></div>
+                <?php
+                for($i=0;$i<sizeof($data);$i++){
+                    $task = $data[$i]['task'];
+                     ?>
+                <div class="col-6 pb-4"><strong><u>Task Name</u>:  <?=$task['task_name'];?></strong></div>
+                <div class="col-6 pb-4"><strong><u>Timer taken</u>:  <?=$task['total_minutes'];?></strong></div>
                 <div class="col-6 "><strong>Start time</strong></div>
                 <div class="col-6 "><strong>End time</strong></div>
-                <div class="col-6">04:30 AM</div>
-                <div class="col-6">04:30 PM</div>
-                <div class="col-6">04:30 AM</div>
-                <div class="col-6">04:30 PM</div>
+                
+                <div class="col-6"><?=$task[0]['start_time'];?></div>
+                <div class="col-6"><?=$task[0]['end_time'];?></div>
+                <?php } ?>
             </div>
             <hr>
         </div>

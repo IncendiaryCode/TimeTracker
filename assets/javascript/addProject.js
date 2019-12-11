@@ -167,11 +167,11 @@ $(document).ready(function () {
         document.getElementById("new-project").checked = false;
         $.ajax({
             type: 'POST',
-            url: timeTrackerBaseURL + 'index.php/admin/get_username_list',
+            url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
             data: { 'type': "get_user" },
             success: function (res) {
                 var result = JSON.parse(res);
-                usernames = result['users'];
+                usernames = result['result'];
                 for (var j = 0; j < usernames.length; j++) {
                     var option = $('<option>' + usernames[j]["name"] + '</option>');
                     $('.project-list').append(option);
@@ -192,11 +192,11 @@ $(document).ready(function () {
         document.getElementById("new-project").checked = false;
         $.ajax({
             type: 'POST',
-            url: timeTrackerBaseURL + 'index.php/admin/get_username_list',
+            url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
             data: { 'type': "get_user" },
             success: function (res) {
                 var result = JSON.parse(res);
-                usernames = result['users'];
+                usernames = result['result'];
                 for (var j = 0; j < usernames.length; j++) {
                     var option = $('<option>' + usernames[j]["name"] + '</option>');
                     $('.project-list').append(option);

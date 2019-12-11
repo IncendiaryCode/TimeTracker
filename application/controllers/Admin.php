@@ -53,6 +53,11 @@
 		        $this->load->view('footer');
 			}	
 		}
+		//load list of projects for an ajax call
+		public function get_project_list(){
+			$data['result'] = $this->dashboard_model->get_project_name();
+			echo json_encode($data);
+		}
 		//To load add user page
 	    public function load_add_user(){
 	    	$this->load->view('header');
