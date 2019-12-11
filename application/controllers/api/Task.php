@@ -128,7 +128,7 @@ class Task extends REST_Controller {
         if(isset($verify_data->username))
         {
             $post = $this->input->post();
-            if(!empty($post['type']) && !empty($post['userid']) && && (($post['type'] =='task' && !empty($post['task_id'])) || $post['type'] == 'login')){
+            if(!empty($post['type']) && !empty($post['userid']) && (($post['type'] =='task' && !empty($post['task_id'])) || $post['type'] == 'login')){
                 if($post['type'] == 'task')
                 {
                     $data['userid'] = $post['userid'];
