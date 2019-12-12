@@ -12,42 +12,13 @@ $picture = substr($profile,29);
             </button>
             <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
                 <div class="navbar-nav ml-auto flex-column-reverse flex-lg-row">
-                    
-                    <div class="nav-item nav-link pr-4">
-                        <div class="dropdown" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <a href="#"><i class="far fa-bell"></i></a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class=" text-center">
-                                    <table class="table table-hover">
-                                        <thead>You have 3 notificatoins</thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">2</th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">3</th>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th scope="row"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_notification"'>See all notifications</a></th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
                             <a href="#" class="text-white"><img src="<?=base_url().$picture?>" height="40px" class="rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <div class=" text-center">
-                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display">Profile</a></p>
-                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display"><i class="fas fa-power-off"></i> Logout</a></p>
+                                <div>
+                                    <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display">1. Profile</a></p>
+                                    <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display">2. <i class="fas fa-power-off"></i> Logout</a></p>
                                 </div>
                             </div>
                         </div>
@@ -56,9 +27,9 @@ $picture = substr($profile,29);
             </div>
         </nav>
     </header>
-    <div class="container-fluid text-white">
+    <div class="container text-white">
         <div class="row mt-5 mb-5">
-            <div class="col-xl-2 col-sm-4 col-12 offset-xl-2 mt-1">
+            <div class="col-sm-4 col-12  mt-1">
                 <div class="card-body card1 shadow-lg pb-4">
                     <div class="row pt-5">
                         <div class="col-lg-5 col-4 text-right">
@@ -76,7 +47,7 @@ $picture = substr($profile,29);
                     </div>
                 </div>
             </div>
-            <div class="col-xl-2 col-sm-4 col-12 offset-xl-1 mt-1">
+            <div class="col-sm-4 col-12  mt-1">
                 <div class="card-body card2 shadow-lg pb-4">
                     <div class="row pt-5">
                         <div class="col-lg-5 col-4 text-right">
@@ -94,7 +65,7 @@ $picture = substr($profile,29);
                     </div>
                 </div>
             </div>
-            <div class="col-xl-2 col-sm-4 col-12 offset-xl-1 mt-1">
+            <div class="col-sm-4 col-12  mt-1">
                 <div class="card-body card3 shadow-lg pb-4">
                     <div class="row pt-5">
                         <div class="col-lg-5 col-4 text-right">

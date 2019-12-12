@@ -28,7 +28,7 @@
                     <form action="<?=base_url();?>index.php/user/change_password" class="mt-4" id="myProfile" method="post">
                         <div class="form-group">
                             <div class="input-group mb-3 ">
-                                <input type="password" class="mb-4 form-control-file font-weight-light border-top-0 border-left-0 border-right-0" id="oldPsw" name="psw1" placeholder="Enter Old Password">
+                                <input type="password" class="mb-4 form-control-file  font-weight-light border-top-0 border-left-0 border-right-0" id="oldPsw" name="psw1" placeholder="Enter Old Password">
                             </div>
                             <div class="input-group mb-3 ">
                                 <input type="password" class="mb-4 form-control-file font-weight-light border-top-0 border-left-0 border-right-0" id="psw1" name="psw11" placeholder="Enter New Password">
@@ -36,7 +36,7 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group mb-3">
-                                <input type="password" class="form-control-file top-space font-weight-light border-top-0 border-left-0 border-right-0" id="psw2" name="psw22" placeholder="Confirm Password">
+                                <input type="password" class="form-control-file  top-space font-weight-light border-top-0 border-left-0 border-right-0" id="psw2" name="psw22" placeholder="Confirm Password">
                             </div>
                             <p class="text-danger"></p>
                         </div>

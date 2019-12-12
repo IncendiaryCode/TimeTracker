@@ -13,41 +13,13 @@ $picture = substr($profile,29);
             <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
                 <div class="navbar-nav ml-auto flex-column-reverse flex-lg-row">
                     
-                    <div class="nav-item nav-link pr-4">
-                        <div class="dropdown" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <a href="#"><i class="far fa-bell"></i></a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class=" text-center">
-                                    <table class="table table-hover">
-                                        <thead>You have 3 notificatoins</thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">2</th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">3</th>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th scope="row"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_notification"'>See all notifications</a></th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
                             <a href="#" class="text-white"><img src="<?=base_url().$picture?>" height="40px" class="rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <div class=" text-center">
-                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display">Profile</a></p>
-                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display"><i class="fas fa-power-off"></i> Logout</a></p>
+                                <div>
+                                    <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display">1. Profile</a></p>
+                                    <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display">2. <i class="fas fa-power-off"></i> Logout</a></p>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +31,7 @@ $picture = substr($profile,29);
 <!-- UI for task snapshot -->
 <div class="container">
             <div class="text-right">
-            <select class="project-list">
+            <select class="project-list" id="total-project">
             </select>
         </div>
     <div class="row mt-5">
@@ -99,9 +71,10 @@ $picture = substr($profile,29);
                             }
                             else
                             {
-                            
                             ?><p><?=$user['task_name']?></p>
-                        <?php } ?>
+                        <?php
+                        $username = $data[$i]['user_name'];
+                         } ?>
                 </div>
             </div>
         </div>
@@ -114,10 +87,13 @@ $picture = substr($profile,29);
                     }
                     else
                     {
+                    $task_name = $user['task_name'];
                     $project = $data[$i]['project'];
                     $count= 1;
                     ?><p><?=$project;?></p>
+
                     <?php
+
                     }
                     
                     ?>
@@ -127,12 +103,12 @@ $picture = substr($profile,29);
             <div class="row">
                 <?php
                     $task = $data[$i]['task']; ?>
-                <div class="col-6 pb-4"><strong><u>User name</u>:  <?php echo $data[$i]['user_name']; $username = $data[$i]['user_name'];?></strong></div>
+                <div class="col-6 pb-4"><span><?=$count ?>.)  </span><strong><u>User name</u>:  <?php echo $data[$i]['user_name']; $username = $data[$i]['user_name'];?></strong></div>
                 <div class="col-6 pb-4"><strong><u>Timer taken</u>:  <?=$task['total_minutes'];?></strong></div>
                 <div class="col-6 "><strong>Start time</strong></div>
                 <div class="col-6 "><strong>End time</strong></div>
            
-                <div class="col-6"><span><?=$count ?>.)  </span><?=$task[0]['start_time'];?></div>
+                <div class="col-6"><?=$task[0]['start_time'];?></div>
                 <div class="col-6"><?=$task[0]['end_time'];?></div>
             </div>
             <hr>

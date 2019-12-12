@@ -1,3 +1,5 @@
+function __draw_task_chart(res)
+{
 var task_chart = document.getElementById('task-chart').getContext('2d');
 var color = Chart.helpers.color;
 
@@ -11,28 +13,7 @@ var color = Chart.helpers.color;
 					backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
 					borderColor: window.chartColors.red,
 					data: [5,10,15,12,4,5],
-				},/* {
-					type: 'line',
-					label: 'user 1',
-					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.green,
-					fill: false,
-					data: [5,1,2,4,1,2],
-				},{
-					type: 'line',
-					label: 'user 2',
-					backgroundColor: "red",
-					borderColor: window.chartColors.orange,
-					fill: false,
-					data: [4,2,5,0,3,5],
-				},{
-					type: 'line',
-					label: 'user 3',
-					backgroundColor: "red",
-					borderColor: window.chartColors.blue,
-					fill: false,
-					data: [0,1,2,5,6,2],
-				}*/]
+				}]
 			},
 			options: {
 				title: {
@@ -67,6 +48,8 @@ var color = Chart.helpers.color;
                 },
 			}
 		};
+		new Chart(task_chart, configs);
+	}
 
 $(document).ready(function()
 {
@@ -76,13 +59,33 @@ $(document).ready(function()
             data: { 'type': "get_user" },
             success: function(res) {
 				var result = JSON.parse(res);
-				console.log(result)
                 usernames = result['result'];
 		        for (var j = 0; j < usernames.length; j++) {
 		            var option = $('<option>' + usernames[j]["name"] + '</option>');
 		            $('.project-list').append(option);
-		            new Chart(task_chart, configs);
 		        	}
 		        }
         });
+	var project_name = document.getElementById('total-project').value;
+
+        $.ajax({
+            type: 'POST',
+            url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
+            data: { 'project_name': project_name },
+            success: function(res) {
+            	var result = JSON.parse(res);
+            	__draw_task_chart(res);
+            }    
+        });
+    $('#project-list').click(function() {
+        $.ajax({
+            type: 'POST',
+            url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
+            data: { 'project_name': project_name },
+            success: function(res) {
+                var result = JSON.parse(res);
+                __draw_task_chart(res);
+            }
+        });
+	});
 })

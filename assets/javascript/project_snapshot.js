@@ -1,9 +1,10 @@
+function __draw_project_chart()
+{
 var project_chart = document.getElementById('project-chart');
 
 var chartColors = window.chartColors;
-		var color = Chart.helpers.color;
-		var config = {
-			data: {
+var color = Chart.helpers.color;
+var project_values = {
 				datasets: [{
 					data: [100,20,50,25,45],
 					backgroundColor: [
@@ -16,7 +17,9 @@ var chartColors = window.chartColors;
 					label: 'My dataset' // for legend
 				}],
 				labels: ['project1','project2','project3','project4','project5']
-			},
+			};
+		var config = {
+			data: project_values,
 			options: {
 				responsive: true,
 				legend: {
@@ -35,16 +38,18 @@ var chartColors = window.chartColors;
 				}
 			}
 		};
+		window.myPolarArea = Chart.PolarArea(project_chart, config);
+}
 
-		window.onload = function() {
 
-		$.ajax({
-            type: 'POST',
-            url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
-            data: { 'project_name': p_name },
-            success: function(res) {
-                var result = JSON.parse(res);
-					window.myPolarArea = Chart.PolarArea(project_chart, config);
-                }
-            });
-        };
+window.onload = function() {
+$.ajax({
+    type: 'POST',
+    url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
+    data: { 'project_name': "p_name" },
+    success: function(res) {
+        var result = JSON.parse(res);
+		__draw_project_chart();
+        }
+    });
+};

@@ -15,63 +15,13 @@ $picture = substr($profile,29);
             </button>
             <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
                 <div class="navbar-nav ml-auto flex-column-reverse flex-lg-row">
-                    <div class="nav-item nav-link pr-4">
-                        <div class="dropdown" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <i class="far fa fa-qrcode"></i>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class=" text-center">
-                                    <table class="table table-hover">
-                                        <thead>Options</thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row"><a href="#">Assign Task</a></th>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th scope="row"><a href="#" onclick=window.location.href="adminOptions.html">See all </a></th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="nav-item nav-link pr-4">
-                        <div class="dropdown" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <i class="far fa-bell"></i>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class=" text-center">
-                                    <table class="table table-hover">
-                                        <thead>You have 3 notificatoins</thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">2</th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">3</th>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th scope="row"><a href="#" onclick=window.location.href="adminNotifications.php">See all notifications</a></th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
                             <img src="<?=base_url().$picture?>" height="40px" class="rounded-circle">
                             <div class="dropdown-menu dropdown-menu-right">
-                                <div class=" text-center">
-                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display">Profile</a></p>
-                                    <p><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display"><i class="fas fa-power-off"></i> Logout</a></p>
+                                <div>
+                                    <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display">1. Profile</a></p>
+                                    <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display">2. <i class="fas fa-power-off"></i> Logout</a></p>
                                 </div>
                             </div>
                         </div>

@@ -1,20 +1,30 @@
-    var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        var ctx = document.getElementById('main-chart').getContext('2d'); 
-        gradient = ctx.createLinearGradient(0, 0, 0, 600);
-        gradient.addColorStop(0, '#7077ff');
-        gradient.addColorStop(0.5, '#e485fb');
-        gradient.addColorStop(1, '#e484fb');
-    var config = {
-        type: 'line',
-        data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+function __project_details(res)
+{
+    var ctx = document.getElementById('main-chart').getContext('2d'); 
+    gradient = ctx.createLinearGradient(0, 0, 0, 600);
+    gradient.addColorStop(0, '#7077ff');
+    gradient.addColorStop(0.5, '#e485fb');
+    gradient.addColorStop(1, '#e484fb');
+        console.log(res)
+    var project_names = [];
+    var data = [];
+    for(var i=0;i<res.length; i++)
+    {
+        project_names[i] = res[i]['project_name'];
+        data[i] = res[i]['t_minutes']/60;
+    }
+    var project_data = {
+            labels: project_names,
             datasets: [{
-                label: 'Projects',
+                label: 'Total time in hrs',
                 borderColor: "rgb(255, 99, 132)",
                 backgroundColor: gradient,
-                data: [25,20,55,15,25,40,2,10,75,10],
+                data: data,
             }]
-        },
+        };
+    var config = {
+        type: 'line',
+        data: project_data,
         options: {
             responsive: true,
             title: {
@@ -36,13 +46,25 @@
                 yAxes: [{
                     stacked: false,
                     scaleLabel: {
-                        display: false,
-                        labelString: 'Value'
+                        display: true,
+                        labelString: 'Time in hours'
                     }
                 }]
             }
         }
     };
+    new Chart(ctx, config);
+}
     window.onload = function() {
-        new Chart(ctx, config);
+        $.ajax({
+        type: 'POST',
+        url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
+        data: { 'type': "get_user" },
+        success: function(res) {
+            var result = JSON.parse(res);
+                usernames = result['result'];
+            __project_details(usernames);
+            }
+        });
+        
     };
