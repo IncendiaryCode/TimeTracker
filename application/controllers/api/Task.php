@@ -64,7 +64,7 @@ class Task extends REST_Controller {
         {
             $data['success'] = 1;
             $post = $this->input->post();
-             if(!empty($post['userid']) && !empty($post['task_name']) && !empty($post['task_desc']) && !empty($post['project_id']) && !empty($post['project_module'])){
+             if(!empty($post['userid']) && !empty($post['task_name']) && !empty($post['task_desc']) && (!empty($post['project_id']) || $post['project_id'] == 0) && !empty($post['project_module'])){
                 if(!empty($post['task_id'])){
                     $post['action'] = 'edit';
                     $result = $this->user_model->add_tasks($post);

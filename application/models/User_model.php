@@ -483,6 +483,15 @@ class User_model extends CI_Model {
                     
                     
                 }
+            } 
+            if(isset($data['deleted_time_range'])){ 
+                $data['deleted_time_range'] = json_decode($data['deleted_time_range'], true);
+                foreach ($data['deleted_time_range'] as $key => $value) {
+                    $this->db->where('id', $value);
+                    $this->db->where('user_id', $userid);
+                    $this->db->where('task_id', $data['task_id']);
+                    $this->db->delete('time_details');
+                }
             }
             return true;
         }
