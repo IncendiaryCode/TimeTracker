@@ -58,6 +58,12 @@
 			$data['result'] = $this->dashboard_model->get_project_name();
 			echo json_encode($data);
 		}
+
+		//get graph data
+		public function get_graph_data(){
+			$data['result'] = $this->dashboard_model->user_graph_data();
+			echo json_encode($data);
+		}
 		//To load add user page
 	    public function load_add_user(){
 	    	$this->load->view('header');
