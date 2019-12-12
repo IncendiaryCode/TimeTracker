@@ -80,6 +80,8 @@ $(document).ready(function() {
                 var option = $('<option>' + usernames[j]["name"] + '</option>');
                 $('.project-list').append(option);
             }
+        }
+    	});
 
             var p_name = document.getElementById('project-list').value;
             $.ajax({
@@ -90,9 +92,8 @@ $(document).ready(function() {
                     	var result = JSON.parse(res);
                         new Chart(user_chart, configs);
                     }
-                }
+                
             });
-        });
     $('#project-list').click(function() {
         var p_name = document.getElementById('project-list').value;
         $.ajax({
