@@ -75,43 +75,19 @@ $picture = substr($profile,29);
             <p><strong>Project name</strong></p>
         </div>
         <div class="col-8 ">
-            <p><strong>Task details</strong></p>
+            <p ><strong>Task details</strong></p>
         </div>
     </div>
     <hr>
-<!--     <div class="row">
-        <div class="col-2">
-            <div id="display-name">
-                <div>
-                    <p>Timer</p>
-                    <p>Number of working users: 3</p>
-                    <p>Total time spent: 30 hrs</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-2">
-            <div>
-                <p>TimeTracker</p>
-            </div>
-        </div>
-        <div class="col-8">
-            <div class="row ">
-                <div class="col-6 pb-4 text-left"><strong><u>Task name</u>:  Login-page (completed)</strong></div>
-                <div class="col-6 pb-4 text-left"><strong><u>Total time taken</u>:  4:00 hrs</strong></div>
-                <div class="col-12 pb-4 text-left"><strong><u>Users</u>:  vinay.</strong></div>
-                <div class="col-6 "><strong>Start time</strong></div>
-                <div class="col-6 "><strong>End time</strong></div>
-                <div class="col-6">12:30 PM</div>
-                <div class="col-6">04:30 PM</div>
-            </div><hr>
-        </div>
-    </div> -->
 
         <div class="row">
                     <?php 
                     $task_name = " ";
                     $project = " ";
+                    $username = " ";
+                    $count = 1;
                         for($i=0;$i<sizeof($data);$i++){
+                            $count++;
                         ?><div class="col-2">
                             <div id="display-name">
                             <div><?php
@@ -139,30 +115,29 @@ $picture = substr($profile,29);
                     else
                     {
                     $project = $data[$i]['project'];
-                    ?><p><?=$project;?></p><?php
+                    $count= 1;
+                    ?><p><?=$project;?></p>
+                    <?php
                     }
-                    $task_name = $user['task_name'];
+                    
                     ?>
-
-
             </div>
         </div>
         <div class="col-8">
             <div class="row">
                 <?php
-                    $task = $data[$i]['task'];
-                     ?>
-                <div class="col-6 pb-4"><strong><u>Task Name</u>:  <?=$task['task_name'];?></strong></div>
+                    $task = $data[$i]['task']; ?>
+                <div class="col-6 pb-4"><strong><u>User name</u>:  <?php echo $data[$i]['user_name']; $username = $data[$i]['user_name'];?></strong></div>
                 <div class="col-6 pb-4"><strong><u>Timer taken</u>:  <?=$task['total_minutes'];?></strong></div>
                 <div class="col-6 "><strong>Start time</strong></div>
                 <div class="col-6 "><strong>End time</strong></div>
-                
-                <div class="col-6"><?=$task[0]['start_time'];?></div>
+           
+                <div class="col-6"><span><?=$count ?>.)  </span><?=$task[0]['start_time'];?></div>
                 <div class="col-6"><?=$task[0]['end_time'];?></div>
             </div>
             <hr>
         </div>
-                <?php } ?>
+                <?php  } ?>
     </div>
 
 

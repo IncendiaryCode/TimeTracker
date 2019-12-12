@@ -24,7 +24,7 @@ var chartColors = window.chartColors;
 				},
 				title: {
 					display: true,
-					text: 'Chart.js Polar Area Chart'
+					text: 'Project chart'
 				},
 				scale: {
 					reverse: false
@@ -37,5 +37,14 @@ var chartColors = window.chartColors;
 		};
 
 		window.onload = function() {
-			window.myPolarArea = Chart.PolarArea(project_chart, config);
-		};
+
+		$.ajax({
+            type: 'POST',
+            url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
+            data: { 'project_name': p_name },
+            success: function(res) {
+                var result = JSON.parse(res);
+					window.myPolarArea = Chart.PolarArea(project_chart, config);
+                }
+            });
+        };

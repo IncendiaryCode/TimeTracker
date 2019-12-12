@@ -59,7 +59,7 @@ $picture = substr($profile,29);
     
 <div class="container">
     <div class="text-right mt-5">
-        <select class="project-list">
+        <select class="project-list" id="project-list">
         </select>
     </div>
     <div class="row mt-5">
@@ -67,7 +67,7 @@ $picture = substr($profile,29);
             <canvas id="user-chart"></canvas>
         </div>
     </div>
-    
+
     <div class="row mt-5">
         <div class="col-2">
             <p><strong>User name</strong></p>
@@ -122,7 +122,7 @@ $picture = substr($profile,29);
                     $task = $data[$i]['task'];
                      ?>
                 <div class="col-6 pb-4"><strong><u>Task Name</u>:  <?=$task['task_name'];?></strong></div>
-                <div class="col-6 pb-4"><strong><u>Timer taken</u>:  <?=$task['total_minutes'];?></strong></div>
+                <div class="col-6 pb-4"><strong><u>Timer taken</u>:  <?=$task['total_minutes'];?> minutes</strong></div>
                 <div class="col-6 "><strong>Start time</strong></div>
                 <div class="col-6 "><strong>End time</strong></div>
                 

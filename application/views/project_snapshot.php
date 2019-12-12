@@ -25,7 +25,7 @@ $picture = substr($profile,29);
                                                 <th scope="row">1</th>
                                             </tr>
                                             <tr>
-                                                <th scope="row">2</th>
+                                                <th scope="row">2</th>`
                                             </tr>
                                             <tr>
                                                 <th scope="row">3</th>
@@ -65,7 +65,7 @@ $picture = substr($profile,29);
             <canvas id="project-chart"></canvas>
         </div>
     </div>
-    
+
     <div class="row mt-5">
         <div class="col-2"> 
             <p><strong>Project name</strong></p>
