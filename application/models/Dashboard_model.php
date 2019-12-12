@@ -136,10 +136,11 @@ class Dashboard_model extends CI_Model
             $this->db->group_by('u.id');
             $tasks = $this->db->get()->result_array();       
             foreach($tasks as $t){
+                print_r($t);
                         $data[] = array(
-                   'user'=>array($t['user_name'],$t['t_minutes']));  //total minutes for each user
+                   'user'=>array($t['user_name'],array($t['task_name'],$t['t_minutes'])));  //total minutes for each task assigned to user
             }
-        }
+        }exit;
             return $data;
     }
     //add user model
@@ -190,17 +191,20 @@ class Dashboard_model extends CI_Model
         $query  = $this->db->query("SELECT id FROM project");
         $result = $query->result_array();
         foreach($result as $r){
-            $this->db->select('p.name AS project_name,d.total_minutes');
+            $this->db->select('p.name AS project_name');
             $this->db->select_sum('d.total_minutes','t_minutes');   //get total minutes for a particular task
             $this->db->from('project AS p');
-            $this->db->join('project_assignee AS a','a.project_id = p.id');
+            //$this->db->join('project_assignee AS a','a.project_id = p.id');
             $this->db->join('task AS t','t.project_id = p.id');
             $this->db->join('time_details AS d','d.task_id = t.id');
-            $this->db->where(array('a.project_id'=>$r['id']));
+            $this->db->where(array('t.project_id'=>$r['id']));
             //$this->db->group_by('t.project_id');
-            $tasks[] = $this->db->get()->result_array();
+            $tasks = $this->db->get()->result_array();
+            foreach($tasks as $t){
+                $project_data[] = $t;
+            }
         }
-        return $tasks;
+        return $project_data;
     }
     public function get_module_name($project_id){
         $p_id = $project_id;
