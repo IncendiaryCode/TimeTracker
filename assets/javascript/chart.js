@@ -10,8 +10,11 @@ function __project_details(res)
     var data = [];
     for(var i=0;i<res.length; i++)
     {
+        if((res[i]["project_name"] != undefined) && (res[i]["project_name"] != null))
+                {
         project_names[i] = res[i]['project_name'];
         data[i] = res[i]['t_minutes']/60;
+        }
     }
     var project_data = {
             labels: project_names,
@@ -28,28 +31,34 @@ function __project_details(res)
         options: {
             responsive: true,
             title: {
-                display: false
-            },
-            tooltips: {
-                mode: 'index',
-            },
-            hover: {
-                mode: 'index'
+                display: true
             },
             scales: {
                 xAxes: [{
-                    scaleLabel: {
-                        display: false,
-                        labelString: 'Month'
-                    }
-                }],
+                        gridLines: {
+                            display: false,
+                            beginAtZero: true,
+                        },ticks: {
+                            display: true,
+                            beginAtZero: true,
+                            stacked: true
+                        },
+                    }],
                 yAxes: [{
-                    stacked: false,
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Time in hours'
-                    }
-                }]
+                        gridLines: {
+                            display: false,
+                            drawBorder: true
+                        },
+                        ticks: {
+                            display: true,
+                            beginAtZero: true,
+                            stacked: true
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Projects',
+                        }
+                    }]
             }
         }
     };

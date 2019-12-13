@@ -29,7 +29,7 @@ $picture = substr($profile,29);
     </header>
     
 <!-- for Project snap_shot -->
-
+<p class="display-4 text-primary text-center">Project details</p>
 <div class="container">
     <div class="row mt-5">
         <div class="col-md-8 offset-md-2">

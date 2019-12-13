@@ -27,12 +27,12 @@ $picture = substr($profile,29);
             </div>
         </nav>
     </header>
-    
+<p class="display-4 m-3 text-primary text-center">User details</p>
 <div class="container">
     <div class="text-right mt-5">
-        <select class="project-list" id="project-list">
+        <select class="project-names" id="project-list">
         </select>
-    </div>
+    </div> 
     <div class="row mt-5">
         <div class="col-md-8 offset-md-2">
             <canvas id="user-chart"></canvas>
@@ -58,7 +58,6 @@ $picture = substr($profile,29);
                     ?><div class="col-2">
                         <div id="display-username">
                         <div><?php
-
                         if($user == $data[$i]['user_name'])
                         {
                             ?><div class="col-2"></div><?php 

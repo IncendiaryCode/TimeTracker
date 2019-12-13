@@ -29,9 +29,10 @@ $picture = substr($profile,29);
         </nav>
     </header>
 <!-- UI for task snapshot -->
+<p class="display-4 text-primary text-center">Task details</p>
 <div class="container">
             <div class="text-right">
-            <select class="project-list" id="total-project">
+            <select class="project-name-list" id="total-project">
             </select>
         </div>
     <div class="row mt-5">

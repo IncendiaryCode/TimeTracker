@@ -41,15 +41,14 @@ var project_values = {
 		window.myPolarArea = Chart.PolarArea(project_chart, config);
 }
 
-
-window.onload = function() {
+$(document).ready(function()
+{
 $.ajax({
     type: 'POST',
-    url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
-    data: { 'project_name': "p_name" },
+    url: timeTrackerBaseURL + 'index.php/admin/get_project_data',
     success: function(res) {
         var result = JSON.parse(res);
 		__draw_project_chart();
         }
     });
-};
+})
