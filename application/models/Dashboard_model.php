@@ -126,7 +126,7 @@ class Dashboard_model extends CI_Model
                    array('task_name'=>$t['task_name'],'time_used'=>$t['t_minutes']); //total minutes for each task
             }
         }
-
+        //get task details for each user
         foreach($users as $u){
             $this->db->select('d.task_id,u.name AS user_name,d.total_minutes,t.task_name');
             $this->db->select_sum('d.total_minutes','t_minutes');   //get total minutes for a particular task
@@ -142,23 +142,25 @@ class Dashboard_model extends CI_Model
                 
             }
         }
-            foreach($data2 as $d){
-                $usernames[] = $d['user_name'];
-     
-            }
-            $user_names = array_unique($usernames);
-            foreach($user_names as $u){
+        foreach($data2 as $d){
+            $usernames[] = $d['user_name']; //list of user names
+        }
+        $user_names = array_unique($usernames); //list of unique usernames
+
+        foreach($user_names as $u){
             $i = 0;
-            $r[] =$u;
             while($i<sizeof($data2)){
-
-                    if($data2[$i]['user_name'] == $u){
-                        $r[] = array($data2[$i]['task_name'],$data2[$i]['time_used']); 
-                    }$i = $i+1;
-                   } 
-                }
-
+                if($data2[$i]['user_name'] == $u){
+                    $r[$u][] = array($data2[$i]['task_name'],$data2[$i]['time_used']); 
+                }$i = $i+1;
+            } 
+        }
         return array($data1,$r);
+    }
+
+    //get project data to project graph
+    public function project_graph_data(){
+
     }
     //add user model
     public function add_users()
