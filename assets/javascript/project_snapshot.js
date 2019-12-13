@@ -40,7 +40,7 @@ var project_values = {
 				},
 				title: {
 					display: true,
-					text: 'Project chart'
+					text: 'Project chart w.r.t. hours'
 				},
 				scale: {
 					reverse: false
