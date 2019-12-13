@@ -106,7 +106,9 @@ class Dashboard_model extends CI_Model
         $this->db->from('project_assignee AS a');
         $this->db->join('users AS u','u.id = a.user_id');
         $this->db->where('a.project_id',$project_id);
-        $users = $this->db->get()->result_array();
+        $query = $this->db->get();
+        if($query->num_rows() > 0){
+        $users = $query->result_array();
         foreach($users as $tu){
             $usernames[] = $tu['name'];
         }
@@ -153,13 +155,29 @@ class Dashboard_model extends CI_Model
                 if($data2[$i]['user_name'] == $u){
                     $r[$u][] = array($data2[$i]['task_name'],$data2[$i]['time_used']); 
                 }$i = $i+1;
-            } 
+            }
         }
         return array($data1,$r);
+    }else{
+        $data = false;
+        return $data;
+    }
     }
 
     //get project data to project graph
     public function project_graph_data(){
+        $projects = $this->db->get('project')->result_array();
+        foreach($projects as $project){
+            //print_r($project['name']);
+            $this->db->select('p.*,t.task_name,t.id AS task_id');
+            $this->db->from('project AS p');
+            $this->db->join('task AS t','t.project_id = p.id');
+            $this->db->where('t.project_id',$project['id']);
+            $data = $this->db->get()->result_array();
+           // print_r($data);exit;
+
+        }
+        
 
     }
     //add user model
@@ -210,7 +228,7 @@ class Dashboard_model extends CI_Model
         $query  = $this->db->query("SELECT id FROM project");
         $result = $query->result_array();
         foreach($result as $r){
-            $this->db->select('p.name AS project_name');
+            $this->db->select('p.name AS project_name,p.color_code,p.image_name');
             $this->db->select_sum('d.total_minutes','t_minutes');   //get total minutes for a particular task
             $this->db->from('project AS p');
             //$this->db->join('project_assignee AS a','a.project_id = p.id');
@@ -218,9 +236,14 @@ class Dashboard_model extends CI_Model
             $this->db->join('time_details AS d','d.task_id = t.id');
             $this->db->where(array('t.project_id'=>$r['id']));
             //$this->db->group_by('t.project_id');
-            $tasks = $this->db->get()->result_array();
-            foreach($tasks as $t){
-                $project_data[] = $t;
+            $projects = $this->db->get();
+            if($projects->num_rows() > 0){
+                $tasks = $projects->result_array();
+                foreach($tasks as $t){
+                    $project_data[] = $t;
+                }
+            }else{
+                $project_data = false;
             }
         }
         return $project_data;

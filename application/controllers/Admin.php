@@ -56,7 +56,13 @@
 		
 		//load list of projects for an ajax call
 		public function get_project_list(){
-			$data['result'] = $this->dashboard_model->get_project_name();	
+			$data['result'] = $this->dashboard_model->get_project_name();
+			if($data['result'] == FALSE){
+				$data['status'] = FALSE;
+				$data['result'] = NULL;
+			}else{
+				$data['status'] = TRUE;
+			}
 			echo json_encode($data);
 		}
 
@@ -67,10 +73,16 @@
 				$data['status'] = FALSE; 
 			}else{
 				$data['result'] = $this->dashboard_model->user_graph_data();
-				$data['status'] = TRUE;
+				if($data['result'] == FALSE){
+					$data['status'] = FALSE;
+					$data['result'] = NULL;
+				}else{
+					$data['status'] = TRUE;
+				}
 			}
 			echo json_encode($data);
 		}
+		
 		//To load add user page
 	    public function load_add_user(){
 	    	$this->load->view('header');
@@ -225,6 +237,12 @@
 	    public function get_project_module(){
 	    	$projectid      = $this->input->post('project_id');
 	        $data['result'] = $this->dashboard_model->get_module_name($projectid);
+	        if($data['result'] == FALSE){
+	        	$data['result'] = NULL;
+	        	$data['status'] = FALSE;
+	        }else{
+	        	$data['status'] = TRUE;
+	        }
 	        echo json_encode($data);
 	    }
 
