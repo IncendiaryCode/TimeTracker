@@ -3,7 +3,14 @@ function __draw_user_chart(res)
 
 var user_chart = document.getElementById('user-chart').getContext('2d');
 var color = Chart.helpers.color;
-
+if(res['status'] == false)
+{
+    document.getElementById('user-chart-error').innerHTML = "This project does not have any data.";
+    $('#user-chart').hide();
+}
+else{
+$('#user-chart').show();
+document.getElementById('user-chart-error').innerHTML = " ";
 var user_data = [];
 
 var task_labels = [];
@@ -16,7 +23,8 @@ var user_task_name = [];
 var task_value = res['result'][0];
 var user_value = res['result'][1];
 
-console.log("user_value", task_value, Object.keys(user_value).length, Object.keys(user_value)[0], Object.values(user_value), Object.values(user_value)[0].length, );
+var chart_color = "000000";
+
 for(var i=0; i<task_value.length; i++)
 {
 task_labels[i] = task_value[i]['task_name'];
@@ -38,16 +46,18 @@ for(var j=0; j<Object.keys(user_value).length; j++)
     user_labels = Object.keys(user_value)[j];
     for(var k=0; k<Object.values(user_value)[0].length; k++)
     {
-        user_time_value[[k]] = Object.values(user_value)[0][k][1]/60;
+        user_time_value.push(Object.values(user_value)[0][k][1]/60);
     }
+    chart_color= parseInt(chart_color)+123456;
     var inner_array = { 
         type: 'line',
         label: user_labels,
-        backgroundColor:color(window.chartColors.red).alpha(0.5).rgbString(),
-        borderColor:window.chartColors.green,
+        backgroundColor: '#'+chart_color,
+        borderColor:window.chartColors.blue,
         fill: false,
         data: user_time_value,
         };
+        user_time_value = [0];
        user_data[j+1] = inner_array;
 }
 
@@ -60,10 +70,10 @@ var configs = {
     data: chart_values,
     options: {
         title: {
-            text: 'User snapshot'
+            text: 'User snapshot',
         },
         hover: {
-                mode: 'index'
+                enabled: false
             },
         scales: {
             xAxes: [{
@@ -96,6 +106,7 @@ var configs = {
     }
 };
 new Chart(user_chart, configs);
+}
 }
 $(document).ready(function() {
     //var flag = 0;

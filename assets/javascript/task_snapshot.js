@@ -4,6 +4,15 @@ var task_chart = document.getElementById('task-chart').getContext('2d');
 var color = Chart.helpers.color;
 var label = [];
 var time = [];
+if(res['status'] == false)
+{
+    document.getElementById('task-chart-error').innerHTML = "This project does not have any data.";
+    $('#task-chart').hide();
+}
+else{
+$('#task-chart').show();
+document.getElementById('task-chart-error').innerHTML = " ";
+
 var data = res['result'][0];
 
 for(var i=0;i<data.length; i++)
@@ -60,6 +69,7 @@ time[i] = data[i]['time_used']/60;
 		};
 		new Chart(task_chart, configs);
 	}
+}
 
 $(document).ready(function()
 {

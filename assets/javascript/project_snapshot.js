@@ -1,22 +1,35 @@
-function __draw_project_chart()
+function __draw_project_chart(res)
 {
 var project_chart = document.getElementById('project-chart');
-
+console.log(res);
 var chartColors = window.chartColors;
 var color = Chart.helpers.color;
+
+var data = [];
+var project = [];
+for(var i=0; i<res.length; i++)
+{
+	if(res[i]['project_name'] != null)
+	{
+		data.push(res[i]['t_minutes']/60);
+		project.push(res[i]['project_name']);
+	}
+}
 var project_values = {
 				datasets: [{
-					data: [100,20,50,25,45],
+					data: data,
 					backgroundColor: [
 						color(chartColors.red).alpha(0.5).rgbString(),
 						color(chartColors.black).alpha(0.5).rgbString(),
 						color(chartColors.yellow).alpha(0.5).rgbString(),
 						color(chartColors.green).alpha(0.5).rgbString(),
 						color(chartColors.blue).alpha(0.5).rgbString(),
+						color(chartColors.orange).alpha(0.5).rgbString(),
+						color(chartColors.silver).alpha(0.5).rgbString(),
 					],
 					label: 'My dataset' // for legend
 				}],
-				labels: ['project1','project2','project3','project4','project5']
+				labels: project
 			};
 		var config = {
 			data: project_values,
@@ -45,10 +58,12 @@ $(document).ready(function()
 {
 $.ajax({
     type: 'POST',
-    url: timeTrackerBaseURL + 'index.php/admin/get_project_data',
+    url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
+    data: { 'type': "get_user" },
     success: function(res) {
         var result = JSON.parse(res);
-		__draw_project_chart();
+            p_names = result['result'];
+    		__draw_project_chart(p_names);
         }
     });
 })

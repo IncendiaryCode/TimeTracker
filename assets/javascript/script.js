@@ -116,7 +116,8 @@ forgotPsw.onsubmit = function(e) {
                     type: "POST",
                     url: '../php/change_pwd.php',
                     data: { Username: email, psw11: psw1, psw22: psw2 },
-                    success: function(data) {}
+                    success: function(data) {
+                    }
                 });
                 alert('password changed successfully!!!');
 
