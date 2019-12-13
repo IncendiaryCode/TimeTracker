@@ -53,15 +53,22 @@
 		        $this->load->view('footer');
 			}	
 		}
+		
 		//load list of projects for an ajax call
 		public function get_project_list(){
-			$data['result'] = $this->dashboard_model->get_project_name();
+			$data['result'] = $this->dashboard_model->get_project_name();	
 			echo json_encode($data);
 		}
 
 		//get graph data
 		public function get_graph_data(){
-			$data['result'] = $this->dashboard_model->user_graph_data();
+			if($this->input->post('project_name') == 'undefined' || $this->input->post('project_name') == ''){
+				$data['result'] = NULL;
+				$data['status'] = FALSE; 
+			}else{
+				$data['result'] = $this->dashboard_model->user_graph_data();
+				$data['status'] = TRUE;
+			}
 			echo json_encode($data);
 		}
 		//To load add user page

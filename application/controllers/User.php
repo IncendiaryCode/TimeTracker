@@ -74,7 +74,10 @@ class User extends CI_Controller
         $data['userid'] = $this->session->userdata('userid');
         $data['end_time'] = $end_time;
         $data['task_desc'] = isset($post_data['task-description'])?$post_data['task-description']:'';
-        $data['flag'] = $post_data['flag'];
+        if($this->input->post('flag')){
+            $data['flag'] = $post_data['flag'];
+        }
+        
         if ($this->input->post('id')) {
             $task_id = $this->input->post('id', TRUE);
             //$end_time = !empty($this->input->post('end_time')) ? $this->input->post('end_time') : '';

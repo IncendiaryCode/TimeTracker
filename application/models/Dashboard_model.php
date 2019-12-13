@@ -122,10 +122,11 @@ class Dashboard_model extends CI_Model
             $this->db->group_by('d.task_id');
             $tasks = $this->db->get()->result_array();       
             foreach($tasks as $t){
-            $data[] = array(
-                   'task'=>array($t['task_name'],$t['t_minutes'])); //total minutes for each task
+            $data1[] = 
+                   array('task_name'=>$t['task_name'],'time_used'=>$t['t_minutes']); //total minutes for each task
             }
         }
+
         foreach($users as $u){
             $this->db->select('d.task_id,u.name AS user_name,d.total_minutes,t.task_name');
             $this->db->select_sum('d.total_minutes','t_minutes');   //get total minutes for a particular task
@@ -133,15 +134,31 @@ class Dashboard_model extends CI_Model
             $this->db->join('time_details AS d','d.task_id = t.id');
             $this->db->join('users AS u','u.id = d.user_id');
             $this->db->where(array('u.type'=>'user','d.user_id'=>$u['id'],'t.project_id'=>$project_id));
-            $this->db->group_by('u.id');
-            $tasks = $this->db->get()->result_array();       
-            foreach($tasks as $t){
-                print_r($t);
-                        $data[] = array(
-                   'user'=>array($t['user_name'],array($t['task_name'],$t['t_minutes'])));  //total minutes for each task assigned to user
+            $this->db->group_by('t.id');
+            $tasks = $this->db->get()->result_array(); 
+
+            foreach($tasks as $t){  //total minutes for each task assigned to user
+                $data2[] = array('user_name'=>$t['user_name'],'task_name'=>$t['task_name'],'time_used'=>$t['t_minutes']);
+                
             }
-        }exit;
-            return $data;
+        }
+            foreach($data2 as $d){
+                $usernames[] = $d['user_name'];
+     
+            }
+            $user_names = array_unique($usernames);
+            foreach($user_names as $u){
+            $i = 0;
+            $r[] =$u;
+            while($i<sizeof($data2)){
+
+                    if($data2[$i]['user_name'] == $u){
+                        $r[] = array($data2[$i]['task_name'],$data2[$i]['time_used']); 
+                    }$i = $i+1;
+                   } 
+                }
+
+        return array($data1,$r);
     }
     //add user model
     public function add_users()
