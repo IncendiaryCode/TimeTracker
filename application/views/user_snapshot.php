@@ -1,4 +1,4 @@
- <?php
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
@@ -54,25 +54,27 @@ $picture = substr($profile,29);
         </div>
     </div>
     <hr>
-    <div class="row">
-                <?php 
-                $user = " ";
-                $project = " ";
-                    for($i=0; $i<sizeof($data); $i++){
-                    ?><div class="col-2">
-                        <div id="display-username">
-                        <div><?php
-                        if($user == $data[$i]['user_name'])
-                        {
-                            ?><div class="col-2"></div><?php 
-                        }
-                        else
-                        {
-                        $user = $data[$i]['user_name'];
-                        ?><p><?=$user?></p>
-                    <?php } ?>
-                </div>
+    <div>
+        <?php 
+        $user = " ";
+        $project = " ";
+            for($i=0; $i<sizeof($data); $i++){
+            ?>
+            <div class="row">
+                <div class="col-2">
+                    <div id="display-username">
+                    <div><?php
+                    if($user == $data[$i]['user_name'])
+                    {
+                        ?><div class="col-2"></div><?php
+                    }
+                    else
+                    {
+                    $user = $data[$i]['user_name'];
+                    ?><p><?=$user?></p>
+            <?php } ?>
             </div>
+        </div>
         </div>
         <div class="col-2">
             <div>
@@ -98,10 +100,11 @@ $picture = substr($profile,29);
                 <?php } ?>
                 <div class="col-4 "><?=$task['task_name'];?></div>
                 <div class="col-4 "><?=$task['total_minutes'];?> minutes</div>
-                <div class="col-4 "><i class="fas fa-minus icon-plus icon-remove text-danger"></i></div>
+                <!-- <div class="col-4 "><i class="fas fa-trash-alt icon-plus icon-remove text-danger"></i></div> -->
             </div>
             <hr>
         </div>
+    </div>
         <?php } ?>
     </div>
 </div>

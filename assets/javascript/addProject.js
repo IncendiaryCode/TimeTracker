@@ -159,25 +159,28 @@ var assign = {
 }
 
 $(document).ready(function () {
-    var new_project = document.getElementById("new-project").checked;
-    var old_project = document.getElementById("old-project").checked;
-    if (old_project == true) {
-        document.getElementById("new-project").checked = false;
-        $('#new-project-input').hide();
-        
-        $.ajax({
-            type: 'POST',
-            url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
-            data: { 'type': "get_user" },
-            success: function (res) {
-                var result = JSON.parse(res);
-                usernames = result['result'];
-                for (var j = 0; j < usernames.length; j++) {
-                    var option = $('<option>' + usernames[j]["name"] + '</option>');
-                    $('.project-list').append(option);
+    if(document.getElementById("new-project"))
+    {
+        var new_project = document.getElementById("new-project").checked;
+        var old_project = document.getElementById("old-project").checked;
+        if (old_project == true) {
+            document.getElementById("new-project").checked = false;
+            $('#new-project-input').hide();
+            
+            $.ajax({
+                type: 'POST',
+                url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
+                data: { 'type': "get_user" },
+                success: function (res) {
+                    var result = JSON.parse(res);
+                    usernames = result['result'];
+                    for (var j = 0; j < usernames.length; j++) {
+                        var option = $('<option>' + usernames[j]["name"] + '</option>');
+                        $('.project-list').append(option);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
     $('#new-project').click(function()
     {
@@ -209,7 +212,8 @@ $(document).ready(function () {
             }
         });
     });
-
+    if(document.getElementById('old-project-input'))
+    {
     $('#old-project-input').show();
         $('#new-project-input').hide();
         document.getElementById("new-project").checked = false;
@@ -231,7 +235,7 @@ $(document).ready(function () {
                 }
             }
         });
-
+    }
         
     add_module.init("#append-new-module");
     assign.init("#assign-new-user");

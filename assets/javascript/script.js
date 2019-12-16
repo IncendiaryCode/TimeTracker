@@ -72,6 +72,8 @@ Validation.prototype.isValidateEmail = function(e) {
 };
 
 var loginForm = document.getElementById('loginForm');
+if(loginForm)
+{
 loginForm.onsubmit = function(e) {
     var validateForm = new Validation(e.currentTarget);
     var finalValue = validateForm.correctCheck();
@@ -86,10 +88,11 @@ loginForm.onsubmit = function(e) {
     } else
         return false;
 }
-
+}
 var forgotPsw = document.getElementById('forgotPassword');
+if(forgotPsw)
+{
 forgotPsw.onsubmit = function(e) {
-
     user_email = document.getElementById('Uname').value;
     console.log(user_email);
     var validateForm = new Validation(e.currentTarget);
@@ -133,7 +136,7 @@ forgotPsw.onsubmit = function(e) {
     }
     return false;
 }
-
+}
 function validateOtp() {
     $(document).ready(function() {
         $('#getOTP').click(function() {

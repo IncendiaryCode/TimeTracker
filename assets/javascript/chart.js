@@ -5,7 +5,6 @@ function __project_details(res)
     gradient.addColorStop(0, '#7077ff');
     gradient.addColorStop(0.5, '#e485fb');
     gradient.addColorStop(1, '#e484fb');
-        console.log(res)
     var project_names = [];
     var data = [];
     for(var i=0;i<res.length; i++)
@@ -65,6 +64,8 @@ function __project_details(res)
     new Chart(ctx, config);
 }
     window.onload = function() {
+        if(document.getElementById('main-chart'))
+        {
         $.ajax({
         type: 'POST',
         url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
@@ -75,5 +76,5 @@ function __project_details(res)
             __project_details(usernames);
             }
         });
-        
+    }   
     };

@@ -32,6 +32,8 @@ changePsw.onsubmit = function (e) {
     }
 
 var changeImage = document.getElementById('uploadImage');
+if(changeImage)
+{
 changeImage.onsubmit = function (e) {
 	var image = document.getElementById('profile-image').value;
 	if (image =="" || image == " ") {
@@ -40,5 +42,6 @@ changeImage.onsubmit = function (e) {
 	}
 	else
 		return true;
+}
 }
 });

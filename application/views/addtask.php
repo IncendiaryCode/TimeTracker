@@ -30,6 +30,7 @@ $picture = substr($profile,29);
             </div>
         </nav>
     </header>
+    
     <main class="container-fluid container-fluid-main">
         <div class="container-fluid">
             <div class="main-container-inner">

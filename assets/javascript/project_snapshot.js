@@ -1,7 +1,6 @@
 function __draw_project_chart(res)
 {
 var project_chart = document.getElementById('project-chart');
-console.log(res);
 var chartColors = window.chartColors;
 var color = Chart.helpers.color;
 
@@ -56,14 +55,17 @@ var project_values = {
 
 $(document).ready(function()
 {
-$.ajax({
-    type: 'POST',
-    url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
-    data: { 'type': "get_user" },
-    success: function(res) {
-        var result = JSON.parse(res);
-            p_names = result['result'];
-    		__draw_project_chart(p_names);
-        }
-    });
-})
+	if(document.getElementById('project-chart'))
+	{
+	$.ajax({
+	    type: 'POST',
+	    url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
+	    data: { 'type': "get_user" },
+	    success: function(res) {
+	        var result = JSON.parse(res);
+	            p_names = result['result'];
+	    		__draw_project_chart(p_names);
+	        }
+	    });
+	}
+	})

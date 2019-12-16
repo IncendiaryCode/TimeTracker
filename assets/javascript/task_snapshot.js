@@ -1,3 +1,4 @@
+var taskChart;
 function __draw_task_chart(res)
 {
 var task_chart = document.getElementById('task-chart').getContext('2d');
@@ -67,12 +68,15 @@ time[i] = data[i]['time_used']/60;
                 },
 			}
 		};
-		new Chart(task_chart, configs);
+        if(taskChart) taskChart.destroy();
+		taskChart = new Chart(task_chart, configs);
 	}
 }
 
 $(document).ready(function()
 {
+    if(document.getElementById('task-chart'))
+    {
 	$.ajax({
             type: 'POST',
             url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
@@ -101,7 +105,7 @@ $(document).ready(function()
                 });
 	        }
         });
-	
+	}
     $('#total-project').change(function() {
         var project_name = document.getElementById('total-project').value;
         $.ajax({
@@ -110,7 +114,6 @@ $(document).ready(function()
             data: { 'project_name': project_name },
             success: function(res) {
                 var result = JSON.parse(res);
-                console.log(result)
                 __draw_task_chart(result);
             }
         });

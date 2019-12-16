@@ -1,3 +1,4 @@
+var myChart;
 function __draw_user_chart(res)
 {
 var user_chart = document.getElementById('user-chart').getContext('2d');
@@ -26,6 +27,7 @@ var chart_color = "000000";
 for(var i=0; i<task_value.length; i++)
 {
 task_labels[i] = task_value[i]['task_name'];
+
 task_time_value[i] = task_value[i]['time_used']/60;
 
 }
@@ -44,21 +46,33 @@ for(var j=0; j<Object.keys(user_value).length; j++)
     user_labels = Object.keys(user_value)[j];
     for(var k=0; k<Object.values(user_value)[0].length; k++)
     {
-        user_time_value.push(Object.values(user_value)[0][k][1]/60);
+        for(var e=0; e<task_labels.length; e++)
+        {
+        if(Object.values(user_value)[j][k][0] == task_labels[e])
+        {
+        user_time_value[e] = Object.values(user_value)[j][k][1]/60;
+        }
+        }
+    }
+    for(var index=0; index<user_time_value.length; index++)
+    {
+        if(user_time_value[index] == undefined)
+        {
+            user_time_value[index] = 0;
+        }
     }
     chart_color= parseInt(chart_color)+123456;
     var inner_array = { 
         type: 'line',
         label: user_labels,
         backgroundColor: '#'+chart_color,
-        borderColor:window.chartColors.blue,
+        borderColor: '#'+chart_color,
         fill: false,
         data: user_time_value,
         };
-        user_time_value = [0];
        user_data[j+1] = inner_array;
+       user_time_value = [0];
 }
-
 var chart_values = {
     labels: task_labels,
     datasets: user_data
@@ -71,7 +85,7 @@ var configs = {
             text: 'User snapshot',
         },
         hover: {
-                enabled: false
+                mode: "nearest"
             },
         scales: {
             xAxes: [{
@@ -103,11 +117,13 @@ var configs = {
         },
     }
 };
-new Chart(user_chart, configs);
+if (myChart) myChart.destroy();
+ myChart = new Chart(user_chart, configs);
 }
 }
 $(document).ready(function() {
-    //var flag = 0;
+    if(document.getElementById('user-chart'))
+    {
     $.ajax({
         type: 'POST',
         url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
@@ -115,11 +131,9 @@ $(document).ready(function() {
         success: function(res) {
             var result = JSON.parse(res);
             usernames = result['result'];
-            console.log(usernames.length)
             for (var j = 0; j < usernames.length; j++) {
                 if((usernames[j]["project_name"] != undefined) && (usernames[j]["project_name"] != null))
                 {
-                    console.log(usernames[j]["project_name"]);
                     var option = $('<option>' + usernames[j]["project_name"] + '</option>');
                     $('.project-names').append(option);
                 }
@@ -136,6 +150,7 @@ $(document).ready(function() {
                 });
             }
     	});
+    }
     $('#project-list').change(function() {
         var p_name = document.getElementById('project-list').value;
         $.ajax({

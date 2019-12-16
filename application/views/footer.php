@@ -26,9 +26,9 @@
 
  $('.icon-remove').click(function()
     {
-        console.log(this.parentNode.parentNode.parentNode);
-        console.log(this.parentNode.parentNode.parentNode.childNodes.length,this.parentNode.parentNode.parentNode.childNodes);
+        var ele = this.parentNode.parentNode.parentNode.parentNode.parentNode;
         $(this.parentNode.parentNode).remove();
+        console.log(ele.childElementCount, ele, this);
     });
 
 
