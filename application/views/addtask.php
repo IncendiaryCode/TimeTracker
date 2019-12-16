@@ -83,7 +83,7 @@ $picture = substr($profile,29);
                                     <option>Select Project</option>
                                     <?php 
                                         foreach($result as $p){ ?>
-                                        <option value="<?= $p['id']; ?>"><?=$p['name']; ?></option>
+                                        <option value="<?= $p['id']; ?>"><?=$p['project_name']; ?></option>
                                     <?php } ?> 
                                 </select>
                                 </div>

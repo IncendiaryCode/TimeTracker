@@ -19,7 +19,7 @@ function __project_details(res)
     var project_data = {
             labels: project_names,
             datasets: [{
-                label: 'Total time in hrs',
+                label: 'Projects',
                 borderColor: "rgb(255, 99, 132)",
                 backgroundColor: gradient,
                 data: data,
@@ -56,7 +56,7 @@ function __project_details(res)
                         },
                         scaleLabel: {
                             display: true,
-                            labelString: 'Projects',
+                            labelString: 'Total time in hrs',
                         }
                     }]
             }

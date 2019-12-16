@@ -24,6 +24,14 @@
      });
  });
 
+ $('.icon-remove').click(function()
+    {
+        console.log(this.parentNode.parentNode.parentNode);
+        console.log(this.parentNode.parentNode.parentNode.childNodes.length,this.parentNode.parentNode.parentNode.childNodes);
+        $(this.parentNode.parentNode).remove();
+    });
+
+
  </script>
 </body>
 </html>

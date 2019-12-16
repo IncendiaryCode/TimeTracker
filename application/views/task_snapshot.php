@@ -105,10 +105,10 @@ $picture = substr($profile,29);
             <div class="row">
                 <?php
                     $task = $data[$i]['task']; ?>
-                <div class="col-6 pb-4"><span><?=$count ?>.)  </span><strong><u>User name</u>:  <?php echo $data[$i]['user_name']; $username = $data[$i]['user_name'];?></strong></div>
-                <div class="col-6 pb-4"><strong><u>Timer taken</u>:  <?=$task['total_minutes'];?></strong></div>
-                <div class="col-6 "><strong>Start time</strong></div>
-                <div class="col-6 "><strong>End time</strong></div>
+                <div class="col-6 pb-4"><span><?=$count ?>.)  </span><u>User name</u>:  <?php echo $data[$i]['user_name']; $username = $data[$i]['user_name'];?></div>
+                <div class="col-6 pb-4"><u>Timer taken</u>:  <?=$task['total_minutes'];?></div>
+                <div class="col-6 ">Start time</div>
+                <div class="col-6 ">End time</div>
            
                 <div class="col-6"><?=$task[0]['start_time'];?></div>
                 <div class="col-6"><?=$task[0]['end_time'];?></div>

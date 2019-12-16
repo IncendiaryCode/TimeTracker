@@ -27,7 +27,6 @@ var addUser = {
             $('.assign-user').append(row1);
     },
 
-
     validate: function() {
         var __this = this;
         var username = __this.username;

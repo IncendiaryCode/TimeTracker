@@ -1,6 +1,5 @@
 function __draw_user_chart(res)
 {
-
 var user_chart = document.getElementById('user-chart').getContext('2d');
 var color = Chart.helpers.color;
 if(res['status'] == false)
@@ -18,7 +17,6 @@ var user_labels = [];
 
 var task_time_value = [];
 var user_time_value = [];
-var user_task_name = [];
 
 var task_value = res['result'][0];
 var user_value = res['result'][1];

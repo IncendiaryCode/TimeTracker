@@ -47,7 +47,10 @@ $picture = substr($profile,29);
             <p><strong>Project name</strong></p>
         </div>
         <div class="col-8">
-            <p><strong>Task details</strong></p>
+            <div class="row">
+                <div class="col-4"><u><strong>Task name</strong></u></div>
+                <div class="col-4"><u><strong>Time used</strong></u></div>
+            </div>
         </div>
     </div>
     <hr>
@@ -76,7 +79,7 @@ $picture = substr($profile,29);
             <?php
             if(($project == $data[$i]['project']) && ($user == $data[$i-1]['user_name']))
                 {   
-                    ?><div class="col-2"></div><?php 
+                    ?><div class="col-2"></div><?php
                 }
                 else
                 {
@@ -86,25 +89,24 @@ $picture = substr($profile,29);
             </div>
         </div>
         <div class="col-8">
-            <div class="row">
+            <div class="row remove-user">
                 <?php
                     $task = $data[$i]['task'];
+                     if($project != $data[$i]['project'])
+                     {
                      ?>
-                <div class="col-6 pb-4"><strong><u>Task Name</u>:  <?=$task['task_name'];?></strong></div>
-                <div class="col-6 pb-4"><strong><u>Timer taken</u>:  <?=$task['total_minutes'];?> minutes</strong></div>
-                <div class="col-6 "><strong>Start time</strong></div>
-                <div class="col-6 "><strong>End time</strong></div>
-                
-                <div class="col-6"><?=$task[0]['start_time'];?></div>
-                <div class="col-6"><?=$task[0]['end_time'];?></div>
+                <?php } ?>
+                <div class="col-4 "><?=$task['task_name'];?></div>
+                <div class="col-4 "><?=$task['total_minutes'];?> minutes</div>
+                <div class="col-4 "><i class="fas fa-minus icon-plus icon-remove text-danger"></i></div>
             </div>
             <hr>
         </div>
         <?php } ?>
     </div>
-    
 </div>
 <hr>
+
 <footer class="">
   <p class="text-center">Copyright © 2019 Printgreener.com</p>
 </footer>

@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
-print_r($data[0])
 ?>
 <body>
     <header>
@@ -69,9 +68,10 @@ print_r($data[0])
                     {
                 $project = $data[$i]['project'];
                 ?><div class="min-height"><p><?=$project;?></p>
-                <p>Number of working users: (total_users)</p>
-                <p>Total time spent:(total_time) </p></div><?php
-                }
+                <p>Total users: (total_users)</p>
+                <p>Project started:(start_time) </p>
+                <p>Total time:(total_time) </p></div>
+            <?php }
             ?>
             </div>
         </div>
@@ -96,10 +96,10 @@ print_r($data[0])
                     <?php $task = $data[$i]['task']; ?>
             <div class="row">
 
-                <div class="col-6 pb-4"><strong><u>Task name</u>:  <?=$task['task_name'];?></strong></div>
-                <div class="col-6 pb-4"><strong><u>Time taken</u>:  <?=$task['total_minutes'];?> minutes</strong></div>
-                <div class="col-6 pb-4"><strong>Working users</strong></div>
-                <div class="col-6 pb-4"><strong>Time taken</strong></div>
+                <div class="col-6 pb-4"><u>Task name</u>: <?=$task['task_name'];?></div>
+                <div class="col-6 pb-4"><u>Time taken</u>: <?=$task['total_minutes'];?> minutes</div>
+                <div class="col-6 pb-4"><u>Working users</u></div>
+                <div class="col-6 pb-4"><u>Time taken</u></div>
                 
             </div>
             <hr>

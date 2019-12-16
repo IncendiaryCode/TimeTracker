@@ -29,7 +29,6 @@ var add_module = {
         var username = __this.username;
         var i = __this.i;
         var sameName = 0;
-
         var id = 'new-module' + (i - 1);
         var module_name = document.getElementById(id).value;
         if ((module_name == "Select User") || (module_name == "") || (module_name == " ")) {
@@ -198,14 +197,42 @@ $(document).ready(function () {
             success: function (res) {
                 var result = JSON.parse(res);
                 usernames = result['result'];
+                console.log(usernames);
+                $('.project-list').empty();
                 for (var j = 0; j < usernames.length; j++) {
-                    var option = $('<option>' + usernames[j]["name"] + '</option>');
+                    if(usernames[j]["project_name"] != null)
+                    {
+                    var option = $('<option>' + usernames[j]["project_name"] + '</option>');
                     $('.project-list').append(option);
+                    }
                 }
             }
         });
     });
 
+    $('#old-project-input').show();
+        $('#new-project-input').hide();
+        document.getElementById("new-project").checked = false;
+        $.ajax({
+            type: 'POST',
+            url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
+            data: { 'type': "get_user" },
+            success: function (res) {
+                var result = JSON.parse(res);
+                usernames = result['result'];
+                console.log(usernames);
+                $('.project-list').empty();
+                for (var j = 0; j < usernames.length; j++) {
+                    if(usernames[j]["project_name"] != null)
+                    {
+                    var option = $('<option>' + usernames[j]["project_name"] + '</option>');
+                    $('.project-list').append(option);
+                    }
+                }
+            }
+        });
+
+        
     add_module.init("#append-new-module");
     assign.init("#assign-new-user");
     var addProject = document.getElementById('add-project');
@@ -221,8 +248,6 @@ $(document).ready(function () {
                 if (project_checked) {
                     var project_name = document.getElementById('old-project-input').value;
                     var user_name = document.getElementById('assign-name0').value;
-                    console.log(project_name, user_name);
-
                     if (project_name == "" || project_name == " ") {
                         document.getElementById('module-error').innerHTML = "Enter Project name";
                         return false;

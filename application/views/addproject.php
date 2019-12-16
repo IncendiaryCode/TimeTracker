@@ -44,7 +44,7 @@ $picture = substr($profile,29);
                             <?php } 
                             if($this->session->flashdata('true')){ ?>
                                 <div class="alert-success">
-                                    <?php  
+                                    <?php
                                         echo $this->session->flashdata('true'); 
                                     ?>    
                                 </div>
