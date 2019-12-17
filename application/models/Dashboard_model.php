@@ -28,31 +28,50 @@ class Dashboard_model extends CI_Model
     }
     public function get_task_details($type){
         if($type == 'user'){
-            $this->db->select('u.name AS user_name');
+
+            $this->db->select('p.id AS project_id,p.name AS project_name,u.name AS user_name,u.id AS user_id');
+            $this->db->from('project AS p');
+            $this->db->join('task AS t','t.project_id = p.id');
+            $this->db->join('project_assignee AS a','a.project_id = t.project_id');
+            $this->db->join('users AS u','u.id = a.user_id');
+            $this->db->group_by('p.id,u.id');
+            $projects = $this->db->get()->result_array();
+
+            foreach ($projects as $p) {
+
+            
+
+
+
+            $this->db->select('u.id AS user_id,u.name AS user_name');
             $this->db->select('d.user_id,p.name AS project_name,t.project_id,d.task_id,t.task_name,d.id AS table_id,m.name AS module_name');
-            $this->db->select('d.start_time,d.end_time,d.total_minutes,d.total_hours');
+            $this->db->select('d.task_id,d.total_minutes');
+            $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->from('project AS p');
             $this->db->join('task AS t','t.project_id = p.id');
             $this->db->join('task_assignee AS ta','ta.task_id = t.id');
             $this->db->join('time_details AS d','d.task_id = ta.task_id');
             $this->db->join('users AS u','u.id = d.user_id');
             $this->db->join('project_module AS m','m.project_id = p.id');
-            $this->db->where(array('u.type'=>'user','d.end_time IS NOT NULL'));
+            $this->db->where(array('u.type'=>'user','d.end_time IS NOT NULL','t.project_id'=>$p['project_id'],'d.user_id'=>$p['user_id']));
+            $this->db->group_by('t.project_id,d.task_id');
             $this->db->order_by('u.name');
             $query = $this->db->get()->result_array();
             
             foreach($query as $q){
                 $details[] = array(
+                    'user_id'=>$q['user_id'],
                     'user_name'=> $q['user_name'],
                     'project'=>$q['project_name'],
-                    'task'=>array('task_name'=>$q['task_name'],array('start_time'=>$q['start_time'],'end_time'=>$q['end_time']),'total_minutes'=>$q['total_minutes']),
-                    'module'=>$q['module_name']);
+                    'task'=>array('task_id'=>$q['task_id'],'task_name'=>$q['task_name'],'total_minutes'=>$q['t_minutes'],));
             } 
+        }
+            //print_r(($details));
             return $details;
         }
 
         else if($type == 'project'){
-            $this->db->distinct()->select('count(d.user_id) AS user_count');
+            $this->db->distinct()->select('count(u.id) AS user_count');
             $this->db->select('p.id,p.name AS project_name');
             $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->from('time_details AS d');
@@ -63,14 +82,14 @@ class Dashboard_model extends CI_Model
             $this->db->group_by('p.id');
             $proj_time = $this->db->get()->result_array();
             foreach($proj_time as $p){
-                //print_r($p);
+               // print_r($p);
                 $timings[] = array('project'=>$p['project_name'],'time_used'=>$p['t_minutes']); 
             }
 
-            $this->db->select('p.id,p.name AS project_name,ta.user_id,u.name AS user_name');
+            $this->db->select('p.id AS project_id,p.name AS project_name,ta.user_id,u.name AS user_name');
             $this->db->select('m.id AS module_id,m.name AS module_name');
             $this->db->select('t.id AS task_id,t.task_name,d.total_minutes');
-            //$this->db->select_sum('d.total_minutes','t_minutes');
+            $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->from('task AS t');
             $this->db->join('project AS p','p.id = t.project_id');
             //$this->db->join('project_assignee AS a','a.project_id = p.id');
@@ -78,51 +97,39 @@ class Dashboard_model extends CI_Model
             $this->db->join('time_details AS d','d.task_id = ta.task_id');
             $this->db->join('users AS u','u.id = d.user_id');
             $this->db->join('project_module AS m','m.project_id = t.project_id');
-           // $this->db->group_by('p.id');
+            $this->db->group_by('d.task_id');
             $tasks = $this->db->get()->result_array();
                 foreach($tasks as $t){
                     //print_r($t['project_name'].$t['task_name']);
                     $proj[] = $t['project_name'];
-                    $module[] = $t['module_name'];
                     $this->db->select('*');
                     $this->db->from('time_details');
                     $this->db->where(array('user_id'=>$t['user_id'],'task_id'=>$t['task_id']));
-                    $this->db->group_by('user_id');
+                    //$this->db->group_by('task_id');
                     $users_array = $this->db->get();
                     if($users_array->num_rows() > 0){
                         $users = $users_array->result_array();
 
                         foreach($users as $u){
-                               $details[] = array('project'=>$t['project_name'],'module_id'=>$t['module_id'],'module'=>$t['module_name'],'task_name'=>$t['task_name'],'user_id'=>$t['user_id'],'task_id'=>$t['task_id'],'user'=>$t['user_name'],'total_minutes'=>$t['total_minutes']);
+                               $details[] = array('project_id'=>$t['project_id'],'project'=>$t['project_name'],'module_id'=>$t['module_id'],'module'=>$t['module_name'],'task_name'=>$t['task_name'],'user_id'=>$t['user_id'],'task_id'=>$t['task_id'],'user'=>$t['user_name'],'total_minutes'=>$t['t_minutes']);
                         }
                     }else{
-                        $details = array('project'=>$t['project_name'],'module'=>$t['module_name'],'task_name'=>$t['task_name']);
+                        $details = array('project_id'=>$t['project_id'],'project'=>$t['project_name'],'module_id'=>$t['module_id'],'module'=>$t['module_name'],'user_id'=>$t['user_id'],'task_id'=>$t['task_id'],'task_name'=>$t['task_name']);
                     }
                 }
                 $projects = array_unique($proj);
+                //print_r($projects);
                 $j=0;
                 while($j<sizeof($projects)){
                     foreach($projects as $p){
                         for($i=0;$i<sizeof($details);$i++){
                             if($details[$i]['project'] == $p){
-                                $arr[$j][$i] = array('task'=>$details[$i]['task_name'],'time_used'=>$details[$i]['total_minutes']);
+                                $arr[$j][$i] = array('project_id'=>$details[$i]['project_id'],'user_id'=>$details[$i]['user_id'],'task_id'=>$details[$i]['task_id'],'task'=>$details[$i]['task_name'],'time_used'=>$details[$i]['total_minutes']);
                             }
                         }$j = $j+1;
                     }  
                 }
-                $modules = array_unique($module);
-                /*$k=0;
-                while($k<sizeof($modules)){
-                    foreach($modules as $m){
-                        for($i=0;$i<sizeof($details);$i++){
-                            if($details[$i]['module_id'] == $m){
-                                $arr2[$m][$i] = $details[$i]['module'];
-                            }
-                        }$k=$k+1;
-                    }  
-                }*/
                 //print_r($arr);
-               //print_r(array('project'=>$projects,'data'=>$arr));
                 return array($projects,$arr);
                
 

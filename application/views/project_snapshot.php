@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
-
+print_r(sizeof($data[1]));
 ?>
 
 <body>
@@ -47,12 +47,12 @@ $picture = substr($profile,29);
                 </div>
             </div>
             <hr>
-                    <?php for($i=0;$i<sizeof($data[0]);$i++){ ?>
+                    <?php foreach($data[0] as $proj){ ?>
             <div class="row">
                 <div class="col-2">
                     <div class="min-height">
                         <p>
-                            <?=$data[0][11];?>
+                            <?=$proj;?>
                         </p>
                         <p>Total users: (total_users)</p>
                         <p>Project started:(start_time) </p>
