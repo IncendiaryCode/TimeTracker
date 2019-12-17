@@ -233,7 +233,7 @@ header.main-header h1 {
     background-image: linear-gradient(150deg, #7277fe, #ca82fb, #f2c2fd, #fffacc);
 }
 
-.btn-primary:hover {
+.btn-primary:hover {z-index: 
     background-image: linear-gradient(150deg, #7277fe, #ca82fb, #f2c2fd, #fffacc);
 }
 
@@ -315,6 +315,22 @@ a:hover {
 .card-style-1:hover .card-footer .card-actions .card-action {
     display: block;
 }
+.card-style-1:hover
+{
+    background-color: #b081fc;
+    color: white;
+}
+
+.card-style-1:hover .card-header
+{
+background-color: #b081fc;
+color: white;
+}
+.card-style-1:hover .card-footer
+{
+background-color: #b081fc;
+color: white;
+}
 
 .modal-transparent {
     background-image: linear-gradient(to bottom right, rgb(111, 121, 253, 0.95), rgb(215, 136, 251, 0.95), rgb(250, 223, 253, 0.95));
@@ -393,7 +409,7 @@ a:hover {
 
 .card-action
 {
-    font-size: 32px;
+    font-size: 22px;
 }
 .position_edit_icon
 {
@@ -511,7 +527,6 @@ opacity: 0.5;
 
 .cust_daily_chart
 {
-    padding-left: 120px;
     padding-top: 80px;
 }
 
@@ -526,10 +541,10 @@ opacity: 0.5;
     width: 25px;
 }
 
-.cust_chart
+/*.cust_chart
 {
-    padding-left: 24px; 
-}
+    padding-left: 3%; 
+}*/
 .edit-date
 {
     margin-bottom: 25px;

@@ -4,7 +4,8 @@ Date.prototype.getWeek = function () {
     return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 }
 
-
+var daily_chart;
+    var panel_id= 0;
 function loadTask(type, date) {
     $("#attachPanels").empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
     $.ajax({
@@ -14,40 +15,35 @@ function loadTask(type, date) {
         success: function (values) {
             var data = JSON.parse(values);
             $("#attachPanels").empty();
+            
             var timerModal = timerStopModal();
             for (x in data) {
                 for (var y = 0; y < data[x].length; y++) {
                     if (data[x][y].running_task == 0)
                     { 
-                        var cardHeader = $('<div class="card-header" />');
+                        var cardHeader = $('<div class="card-header panel'+panel_id+'"'+' />');
                         var cardHeaderRow = $('<div class="row pt-2" />');
                         var today = getTime();
-                        if (data[x][y].start_time != null) {
-                            var task_date = data[x][y].start_time.slice(0, 10);
-                            if (today != task_date) {
-                                $('.alert-box').show();
-                            }
-                        }
                         cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
                         var stopCol = $('<div class="col-6 text-right" />');
                         var timeUsed = minutesToTime(data[x][y].t_minutes);
-                        stopCol.append('<i class="far fa-clock"></i>Total timeused=' + timeUsed);
+                        stopCol.append('<i class="far fa-clock"></i> ' + timeUsed);
                         cardHeaderRow.append(stopCol);
                         cardHeader.append(cardHeaderRow);
 
-                        var cardInner = $("<div class='card card-style-1 animated fadeInUp'  />");
+                        var cardInner = $("<div class='card card-style-1 animated fadeInUp panel"+panel_id+"' />");
                         cardInner.append(cardHeader);
 
                         var cardBody = $("<div class='card-body' />");
                         cardBody.append(data[x][y].task_name);
                         cardInner.append(cardBody);
-                        var cardFooter = $("<div class='card-footer'>");
+                        var cardFooter = $("<div class='card-footer panel"+panel_id+"'>");
                         var footerRow = $('<div class="row" />');
                         footerRow.append("<div class='col-6'> <i class='fab fa-twitter'></i> " + data[x][y].name + "</div>");
 
                         var footerRight = $("<div class='col-6 text-right card-actions'>");
                         //action Edit
-                        var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit position_edit_icon animated fadeIn" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
+                        var actionEdit = $('<a href="#" class="card-action action-edit text-white" id="action-edit"><i class="far fa-edit position_edit_icon animated fadeIn" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
                         actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_edit_task?t_id=' + data[x][y].id);
 
                         if (data[x][y].completed == 1) {
@@ -61,14 +57,13 @@ function loadTask(type, date) {
                             cardHeader.css("background", "#000000");
                             cardFooter.css("background", "#000000");
                         }
-                        
                         footerRow.append(footerRight);
                         cardFooter.append(footerRow);
                         cardInner.append(cardFooter);
-                        var cardCol = $("<div class='col-lg-6 mb-4 cardCol' />");
+                        var cardCol = $("<div class='col-lg-6 mb-4 cardCol' id='panel"+panel_id+"'></div>");
                         cardCol.append(cardInner);
                         $("#attachPanels").append(cardCol);
-                    
+                        panel_id++;
                     }
                 }
             }
@@ -122,8 +117,8 @@ function retrieveChartData(type, date) {
                 }
                 if (type == 'daily_chart') {
                 document.getElementById('daily-error').innerHTML = res['data'];
-                $('#daily').hide();
-                $('#attachPanels').hide();
+                //$('#daily').hide();
+                //$('#attachPanels').hide();
                 }
             }
             else
@@ -138,14 +133,18 @@ function retrieveChartData(type, date) {
                 loadTask(type, date);
                 document.getElementById('daily-error').innerHTML = " ";
                 draw_customized_chart(res);
-                $('#daily').show();
-                $('#attachPanels').show();
+                //$('#daily').show();
+                //$('#attachPanels').show();
             }
             }
         }
     });
 }
 
+function dateFromDay(year, day){
+  var date = new Date(year, 0); // initialize a date in `year-01-01`
+  return new Date(date.setDate(day)); // add the number of days
+}
 
 function drawChart(type, res) {
    
@@ -196,13 +195,13 @@ function drawChart(type, res) {
                             var item = tooltipItem.xLabel;
                             var week_count = document.getElementById('weekly-chart').value;
                             weekly.onclick = function () {
-                                var value = week_count.slice(0, 4) + week_count.slice(-2) + item;
-                                var date = __get_date(value.slice(4,6), value.slice(0,4)).toString();
-                                var month = getMonth(date.slice(4,7));
-                                var day1 = parseInt(getDay(date.slice(0,3)));
-                                var day = day1+parseInt(date.slice(8,10));
-                                var d = date.slice(11,15)+'-'+month+'-'+day;
-                                document.getElementById('daily-chart').value=d;
+                                var day = getDay(item)-1;
+                                var year = parseInt(week_count.slice(0,4));
+                                var day_from_week = parseInt(week_count.slice(-2)-1)*7;
+                                day_from_week = day_from_week+parseInt(day);
+                                var new_day = dateFromDay(year, day_from_week).toString();
+                                new_day = new_day.slice(11,15)+'-'+getMonth(new_day.slice(4,7))+'-'+new_day.slice(8,10)
+                                document.getElementById('daily-chart').value = new_day;
                                 $('#chart-navigation a[href="#daily-view"]').tab('show');
                             }
                         }
@@ -235,24 +234,24 @@ function drawChart(type, res) {
                 }
             }
         };
-    new Chart(chart, config);
-
+        if(daily_chart) daily_chart.destroy();
+        daily_chart = new Chart(chart, config);
 }
 
 function draw_customized_chart(res)
-{   
+{  
     var element = document.getElementById('daily');
     var pixel= [];
-    console.log(res);
     var top = 25; 
-    var top1 = top; 
-
+    var top1 = top;
+    var window_width = $('.cust_daily_chart').width();
+    var p_left = parseInt(window_width)/13;
     if (res['data'] != "No activity in this date.") {
-     console.log(res['data'][1][0].length);
-     var color = "000000";
+    var color = "000000";
     for(var i=0; i<res['data'][1][0].length; i++)
     {
         color= parseInt(color)+123456;
+
         var start_time = res['data'][1][0][i].slice(10,16);
         var end_time = res['data'][1][1][i].slice(10,16);
 
@@ -262,45 +261,85 @@ function draw_customized_chart(res)
         //calculate width for the graph.
         var interval = res['data'][1][2][i];
 
-        var width = ((interval/60)*24);
-        var start_time_pixel = ((start_time_min/60)*24)+96;
-       
-        for(var k=0;k<pixel.length;k++)
+        var width = ((interval/60)*p_left);
+        var start_time_pixel = (((start_time_min/60)-8)*p_left);
+
+        for(var k=0; k<pixel.length; k++)
         {
+            var v = 0;
             if ((start_time_pixel >= pixel[k][0]) && (width < pixel[k][1])) {
-                if (width >= 900) {
-                width = 900-(start_time_pixel);
+             v = 25;
+                if ((start_time_pixel+width) >= window_width ) {
+                width = window_width -(start_time_pixel);
                 }
-                printChart(start_time_pixel, width, 300-top, color);
-                break;
+                var pixel1 = pixel;
+                pixel1[k][0] = null;
+                pixel1[k][1] = null;
+                for(var e=0; e<pixel1.length; e++)
+                {
+                    if ((start_time_pixel+width) >= window_width ) {
+                        width = window_width -(start_time_pixel);
+                        }
+                    if (((start_time_pixel >= pixel1[e][0]) && (width < pixel1[e][1]))) {
+                    v=v+25;
+                    printChart(start_time_pixel, width, 300-v, color);
+                    break;
+                    }
+                    else
+                    {
+                    printChart(start_time_pixel, width, 300-v, color);
+                    break;
+                    }
+                }
             }
-    }
-    if ((top1==top) && (pixel.length != 0)) {
-        if (width >= 900) {
-                width = 900-(start_time_pixel);
-                }
-        printChart(start_time_pixel, width, 300, color);
-    }
+        }
+    
+        if ((top1==top) && (pixel.length != 0)) {
+            if(v==0)
+            {
+            if ((start_time_pixel+width) >= window_width ) {
+                    width = window_width -(start_time_pixel);
+                    }
+                printChart(start_time_pixel, width, 300, color);
+            }
+        }
      if (pixel.length == 0) {
-        if (width >= 900) {
-                width = 900-(start_time_pixel);
+        if ((start_time_pixel+width) >= window_width ) {
+                width = window_width -(start_time_pixel);
                 }
         printChart(start_time_pixel, width, 300, color);
      }
     pixel.push([start_time_pixel, width]); 
     }
     }
-
+width = 0;
+start_time_pixel = 0;
 }
+var id=0;
+var last_index
 function printChart(start, width, top, color)
 {
-    var row = $('<span class="print-chart-row1">.</span>');
+    var row = $('<span class="print-chart-row1" id="new-daily-chart'+id+'">.<input type = "hidden" value = '+id+' ></span>');
     $(row).css("margin-left", start);
     $(row).css("top", top);
     $(row).css("width", width);
     $(row).css("backgroundColor", '#'+color);
     $(row).css("color", '#'+color);
     $("#print-chart").append(row);
+    
+    $('.print-chart-row1').unbind().click(function()
+    {
+        var ele = document.getElementById(this.id);
+        var index = ele.childNodes[1].value;
+        console.log(last_index);
+        if(last_index)
+        {
+            $('.panel'+last_index).css("backgroundColor", "#ffffff");
+        }
+        last_index = index;
+        $('.panel'+index).css("backgroundColor", "#f5d0fe");
+    });
+    id++;
 }
 
 function getMonth(month)
@@ -376,18 +415,18 @@ function drawMonthlyChart(res) {
         var month = parseInt(res['data'][k][0].slice(5,7))-1;
         var day = parseInt(res['data'][k][0].slice(8,10));
         var value = parseInt(res['data'][k][1]);
-        dataTable.addRows([
-        [new Date(year, month, day), value],
+        dataTable.addRows([[new Date(year, month, day), value],
     ]);
     }
     var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
 
-
+    var chart_width = $('#calendar_basic').width();
+    var cellsize = chart_width/60;
     var options = {
         title: " ",
-        calendar: { cellSize: 15, },
-        height: 220,
-        width: 900,
+        calendar: { cellSize: cellsize,
+        yearLabel: {fontSize: 1}
+        },
         noDataPattern: {
            backgroundColor: '#ebedf0',
          },
@@ -401,8 +440,10 @@ function drawMonthlyChart(res) {
 }
 
 $(document).ready(function () {
-
     //Tab Change
+    var win_width = $('.cust_daily_chart').width();
+    var p_l = parseInt(win_width)/23;
+    $('.cust_chart').css("padding-left",p_l);
     $('#chart-navigation a').on('shown.bs.tab', function (event) {
         var x = $(event.target).attr("href"); // active tab
         var y = $(event.relatedTarget); // previous tab
@@ -418,7 +459,12 @@ $(document).ready(function () {
         }
         if (x == '#monthly-view') {
             loadMonthlyChart();
+            var year = document.getElementById('monthly-chart').value;
         }
+    });
+    $('#new-daily-chart0').click(function()
+    {
+        alert("clicked");
     });
 
 });
@@ -427,6 +473,7 @@ window.onload = function () {
     if (document.getElementById('daily-chart')) {
         loadDailyChart();
         var date = document.getElementById('daily-chart').value;
+        loadMonthlyChart();
         loadTask('daily_chart', date);
     }
 }

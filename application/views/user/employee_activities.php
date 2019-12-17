@@ -34,7 +34,6 @@
                             </div>
                             <p id="daily-error"class="text-center"></p>
                             <div id="daily">
-<!--                                 <div class="cust_chart-row1" style="color: white"> ..</div> -->
                                 <p class="cust_daily_chart">
                                     <span class="">8AM</span>
                                     <span class="cust_chart">9AM</span>
@@ -77,7 +76,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="p-5" id="calendar_basic"></div>
+                            <div class="pl-2" id="calendar_basic"></div>
                         </div>
                     </div>
                 </div>

@@ -48,8 +48,8 @@
                 </div>
             </div>
         </div>
-        <hr class="change_psw-footer text-center" >
         <footer class="profile-footer ">
+        <hr>
             <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
         </footer>
     </div>

@@ -27,6 +27,8 @@ $picture = substr($profile,29);
             </div>
         </nav>
     </header>
+
+    
     <div class="container text-white">
         <div class="row mt-5 mb-5">
             <div class="col-sm-4 col-12  mt-1">

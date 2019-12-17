@@ -27,9 +27,7 @@ var chart_color = "000000";
 for(var i=0; i<task_value.length; i++)
 {
 task_labels[i] = task_value[i]['task_name'];
-
 task_time_value[i] = task_value[i]['time_used']/60;
-
 }
 var user_data =  [];
 var task_array = {
@@ -44,7 +42,8 @@ user_data[0] = task_array;
 for(var j=0; j<Object.keys(user_value).length; j++)
 {
     user_labels = Object.keys(user_value)[j];
-    for(var k=0; k<Object.values(user_value)[0].length; k++)
+
+    for(var k=0; k<Object.values(user_value)[j].length; k++)
     {
         for(var e=0; e<task_labels.length; e++)
         {

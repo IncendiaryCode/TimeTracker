@@ -103,8 +103,8 @@ function minutesToTime(mins) {
     var m = Math.floor(total_mins % 3600 / 60);
 
 
-    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes. ") : "";
+    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : "h:") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : "m.") : "";
     return hDisplay + mDisplay;
 }
 
@@ -130,7 +130,7 @@ function loadTaskActivities(formData) {
 
             for (x in data) {
                 for (var y = 0; y < data[x].length; y++) {
-                    var cardHeader = $('<div class="card-header" />');
+                    var cardHeader = $('<div class="card-header card-header" />');
                     var cardHeaderRow = $('<div class="row pt-2" />');
                     var today = getTime();
                     if (data[x][y].start_time != null) {
@@ -149,7 +149,7 @@ function loadTaskActivities(formData) {
                     var stopCol = $('<div class="col-6 text-right" />');
                     if (data[x][y].running_task == 0)  /*check whether task is ended or not*/ {
                         var timeUsed = minutesToTime(data[x][y].t_minutes);
-                        stopCol.append('<i class="far fa-clock"></i>Total timeused=' + timeUsed);
+                        stopCol.append('<i class="far fa-clock"></i> ' + timeUsed);
                     } else {
                         if (data[x][y].start_time != null) {
                             var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x][y].id);
@@ -169,13 +169,13 @@ function loadTaskActivities(formData) {
                     var cardBody = $("<div class='card-body' />");
                     cardBody.append(data[x][y].task_name);
                     cardInner.append(cardBody);
-                    var cardFooter = $("<div class='card-footer'>");
+                    var cardFooter = $("<div class='card-footer card-footer'>");
                     var footerRow = $('<div class="row" />');
                     footerRow.append("<div class='col-6'> <i class='fab fa-twitter'></i> " + data[x][y].name + "</div>");
 
                     var footerRight = $("<div class='col-6 text-right card-actions'>");
                     //action Edit
-                    var actionEdit = $('<a href="#" class="card-action action-edit text-success" id="action-edit"><i class="far fa-edit position_edit_icon animated fadeIn" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
+                    var actionEdit = $('<a href="#" class="card-action action-edit text-white" id="action-edit"><i class="far fa-edit position_edit_icon" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
                     actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_edit_task?t_id=' + data[x][y].id);
 
                     if (data[x][y].completed == 1) {
@@ -189,7 +189,7 @@ function loadTaskActivities(formData) {
                         }
                     footerRight.append(actionEdit);
 
-                    var actionPlay = $('<a href="#" class="card-action action-delete" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon animated fadeIn fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
+                    var actionPlay = $('<a href="#" class="card-action action-delete text-white" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
 
                     if (data[x][y].running_task == 0 || data[x][y].start_time == null) {
                         if (data[x][y].completed == 0) {
