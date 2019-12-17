@@ -174,11 +174,9 @@ class User_model extends CI_Model {
     }
     //Function to Stop Timer
     public function stop_timer($req_data){
-
-        $userid = $req_data['userid'];
         $this->db->select('*');
         $this->db->from('time_details');
-        $this->db->where(array('task_id'=>$req_data['task_id'],'user_id'=>$userid,'total_minutes'=>'0'));
+        $this->db->where(array('task_id'=>$req_data['task_id'],'user_id'=>$req_data['userid'],'total_minutes'=>'0'));
         $query = $this->db->get();
         //print_r($this->db->last_query());die;    
         if($query->num_rows() > 0){

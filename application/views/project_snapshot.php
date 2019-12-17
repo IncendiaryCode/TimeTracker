@@ -42,70 +42,45 @@ $picture = substr($profile,29);
             <div class="col-2"> 
                 <p><strong>Project name</strong></p>
                 </div>
-            <div class="col-2">
-                <p><strong>Module name</strong></p>
-            </div>
+            
             <div class="col-8">
                 <p><strong>Task details</strong></p>
             </div>
         </div>
         <hr>
+        
         <div class="row">
-               <?php
-               $project = " ";
-               $module = " ";
-                for($i=0; $i<sizeof($data); $i++){
-                    ?> <div class="col-2">
-                        <div id="display-uname">
-                            <div>
-                    <?php 
-                    if($project == $data[$i]['project'])
-                    {   
-
-                        ?><div class="col-2"></div><?php 
-                    }
-                    else
-                    {
-                $project = $data[$i]['project'];
-                ?><div class="min-height"><p><?=$project;?></p>
+           
+               <div class="col-2">
+                 <?php for($i=0;$i<sizeof($data[0]);$i++){
+               ?>
+                           
+            <div class="min-height"><p><?=$data[0][$i];?></p>
                 <p>Total users: (total_users)</p>
                 <p>Project started:(start_time) </p>
                 <p>Total time:(total_time) </p></div>
-            <?php }
-            ?>
-            </div>
-        </div>
+            <?php } ?>
+  
     </div>
-        <div class="col-2">
-            <div>
-                <?php 
-                    if(($module == $data[$i]['module']) && ($project == $data[$i-1]['project']))
-                        {
-                            ?><div class="col-2"></div><?php 
-                        }
-                        else
-                        {
-                    $module = $data[$i]['module'];
-                    ?><p class="min-height"><?=$module;?></p><?php
-                    }
-                    ?>
-                
-            </div>
-        </div>
+                 
+         
         <div class="col-8">
-                    <?php $task = $data[$i]['task']; ?>
+<?php for($i=0;$i<sizeof($data[1]);$i++){ 
+        foreach($data[1][$i] as $d){
+            ?>
             <div class="row">
 
-                <div class="col-6 pb-4"><u>Task name</u>: <?=$task['task_name'];?></div>
-                <div class="col-6 pb-4"><u>Time taken</u>: <?=$task['total_minutes'];?> minutes</div>
+                <div class="col-6 pb-4"><u>Task name</u>: <?=$d['task'];?></div>
+                <div class="col-6 pb-4"><u>Time taken</u>: <?=$d['time_used'];?> minutes</div>
                 <div class="col-6 pb-4"><u>Working users</u></div>
-                <div class="col-6 pb-4"><u>Time taken</u></div>
-                
+               
             </div>
+            <?php } ?>
             <hr>
+        <?php } ?> 
         </div>
-        <?php }  ?>
-    <hr>
+      <hr>
+    
     </div>
     
 </div>

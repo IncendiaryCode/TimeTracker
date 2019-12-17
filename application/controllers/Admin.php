@@ -167,7 +167,6 @@
 					$this->form_validation->set_rules('project_name','Project Name','required');
 				}
 				$this->form_validation->set_rules('type', 'Radio button', 'required');
-		  		
 		  		//$this->form_validation->set_rules('project-logo','Project Logo','required');
 		  		//$this->form_validation->set_rules('new-module','Project Module','required');
 		  		if ($this->form_validation->run() == FALSE)
