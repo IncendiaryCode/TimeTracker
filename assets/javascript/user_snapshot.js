@@ -152,6 +152,7 @@ $(document).ready(function() {
     }
     $('#project-list').change(function() {
         var p_name = document.getElementById('project-list').value;
+        //call for list of  project data on change of project name.
         $.ajax({
             type: 'POST',
             url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
@@ -162,4 +163,23 @@ $(document).ready(function() {
             }
         });
 	});
+
+     $('.icon-remove').click(function()
+    {
+        $(this.parentNode.parentNode.parentNode.parentNode).remove();
+        $(this.parentNode.parentNode.parentNode.childNodes).remove();
+        // delete call
+        /*$.ajax({
+            type: 'POST',
+            url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
+            data: { 'project_name': p_name },
+            success: function(res) {
+                var result = JSON.parse(res);
+                __draw_user_chart(result);
+                window.location.reload();
+            }
+        });*/
+    });
+
+
 });

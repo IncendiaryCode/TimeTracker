@@ -63,17 +63,18 @@ $picture = substr($profile,29);
             <div class="row">
                 <div class="col-2">
                     <div id="display-username">
-                    <div><?php
+                    <?php
                     if($user == $data[$i]['user_name'])
                     {
-                        ?><div class="col-2"></div><?php
+                        $user = $data[$i]['user_name']; ?>
+                        <div class="col-2" style="display: none"><p><?=$user?></p></div><?php
                     }
                     else
                     {
                     $user = $data[$i]['user_name'];
                     ?><p><?=$user?></p>
             <?php } ?>
-            </div>
+            
         </div>
         </div>
         <div class="col-2">
@@ -100,9 +101,9 @@ $picture = substr($profile,29);
                 <?php } ?>
                 <div class="col-4 "><?=$task['task_name'];?></div>
                 <div class="col-4 "><?=$task['total_minutes'];?> minutes</div>
-                <!-- <div class="col-4 "><i class="fas fa-trash-alt icon-plus icon-remove text-danger"></i></div> -->
+                <div class="col-4 "><i class="fas fa-trash-alt icon-plus icon-remove text-danger"></i></div>
             </div>
-            <hr>
+            <hr class="icon-remove">
         </div>
     </div>
         <?php } ?>

@@ -118,4 +118,19 @@ $(document).ready(function()
             }
         });
 	});
+
+    $(".task-remove").click(function()
+    {
+        this.parentNode.parentNode.remove();
+        /*$.ajax({
+            type: 'POST',
+            url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
+            data: { 'project_name': p_name },
+            success: function(res) {
+                var result = JSON.parse(res);
+                __draw_user_chart(result);
+                window.location.reload();
+            }
+        });*/
+    });
 })

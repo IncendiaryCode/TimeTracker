@@ -48,25 +48,23 @@ $picture = substr($profile,29);
         <div class="col-2">
             <p><strong>Project name</strong></p>
         </div>
-        <div class="col-8 ">
+        <div class="col-6">
             <p ><strong>Task details</strong></p>
         </div>
     </div>
     <hr>
-
-        <div class="row">
                     <?php 
                     $task_name = " ";
                     $project = " ";
                     $username = " ";
                     $count = 1;
                         for($i=0;$i<sizeof($data);$i++){
-                            $count++;
-                        ?><div class="col-2">
+                            $count++; ?>
+                    <div class="row">
+                        <div class="col-2">
                             <div id="display-name">
                             <div><?php
                             $user = $data[$i]['task'];
-
                             if($task_name == $user['task_name'])
                             {
                                 ?><div class="col-2"></div><?php 
@@ -74,12 +72,15 @@ $picture = substr($profile,29);
                             else
                             {
                             ?><p><?=$user['task_name']?></p>
+                            <p>Started on <?="(start date)"?></p>
+                            <p>Ended on <?="(end date)"?></p>
+                            <p>Time used <?="(time used)"?></p>
                         <?php
                         $username = $data[$i]['user_name'];
-                         } ?>
+                             } ?>
+                    </div>
                 </div>
             </div>
-        </div>
         <div class="col-2">
             <div>
                 <?php
@@ -101,7 +102,7 @@ $picture = substr($profile,29);
                     ?>
             </div>
         </div>
-        <div class="col-8">
+        <div class="col-6">
             <div class="row">
                 <?php
                     $task = $data[$i]['task']; ?>
@@ -115,8 +116,10 @@ $picture = substr($profile,29);
             </div>
             <hr>
         </div>
-                <?php  } ?>
+        <div class="col-2 "><i class="fas fa-trash-alt icon-plus task-remove text-danger"></i>
+        </div>
     </div>
+                <?php  } ?>
 
 
 

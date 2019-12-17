@@ -1,11 +1,11 @@
-
+var panel_id= 0;
+var id=0;
 Date.prototype.getWeek = function () {
     var onejan = new Date(this.getFullYear(), 0, 1);
     return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 }
 
 var daily_chart;
-    var panel_id= 0;
 function loadTask(type, date) {
     $("#attachPanels").empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
     $.ajax({
@@ -15,7 +15,6 @@ function loadTask(type, date) {
         success: function (values) {
             var data = JSON.parse(values);
             $("#attachPanels").empty();
-            
             var timerModal = timerStopModal();
             for (x in data) {
                 for (var y = 0; y < data[x].length; y++) {
@@ -63,7 +62,10 @@ function loadTask(type, date) {
                         var cardCol = $("<div class='col-lg-6 mb-4 cardCol' id='panel"+panel_id+"'></div>");
                         cardCol.append(cardInner);
                         $("#attachPanels").append(cardCol);
+                        if(type == "daily_chart")
+                        {
                         panel_id++;
+                        }
                     }
                 }
             }
@@ -315,7 +317,7 @@ function draw_customized_chart(res)
 width = 0;
 start_time_pixel = 0;
 }
-var id=0;
+
 var last_index
 function printChart(start, width, top, color)
 {
@@ -338,10 +340,11 @@ function printChart(start, width, top, color)
         }
         last_index = index;
         $('.panel'+index).css("backgroundColor", "#f5d0fe");
+        var elmnt = document.getElementById('panel'+index);
+        elmnt.scrollIntoView();
     });
     id++;
 }
-
 function getMonth(month)
 {   
     var month_no = 0;

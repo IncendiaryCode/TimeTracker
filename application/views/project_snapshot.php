@@ -2,7 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
+
 ?>
+
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light">
@@ -27,65 +29,57 @@ $picture = substr($profile,29);
             </div>
         </nav>
     </header>
-    
-<!-- for Project snap_shot -->
-<p class="display-4 text-primary text-center">Project details</p>
-<form method="post" action="#">
-    <div class="container">
-        <div class="row mt-5">
-            <div class="col-md-8 offset-md-2">
-                <canvas id="project-chart"></canvas>
-            </div>
-        </div>
-
-        <div class="row mt-5">
-            <div class="col-2"> 
-                <p><strong>Project name</strong></p>
+    <!-- for Project snap_shot -->
+    <p class="display-4 text-primary text-center">Project details</p>
+    <form method="post" action="#">
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-md-8 offset-md-2">
+                    <canvas id="project-chart"></canvas>
                 </div>
-            
-            <div class="col-8">
-                <p><strong>Task details</strong></p>
             </div>
-        </div>
-        <hr>
-        
-        <div class="row">
-           
-               <div class="col-2">
-                 <?php for($i=0;$i<sizeof($data[0]);$i++){
-               ?>
-                           
-            <div class="min-height"><p><?=$data[0][$i];?></p>
-                <p>Total users: (total_users)</p>
-                <p>Project started:(start_time) </p>
-                <p>Total time:(total_time) </p></div>
-            <?php } ?>
-  
-    </div>
-                 
-         
-        <div class="col-8">
-<?php for($i=0;$i<sizeof($data[1]);$i++){ 
-        foreach($data[1][$i] as $d){
-            ?>
-            <div class="row">
-
-                <div class="col-6 pb-4"><u>Task name</u>: <?=$d['task'];?></div>
-                <div class="col-6 pb-4"><u>Time taken</u>: <?=$d['time_used'];?> minutes</div>
-                <div class="col-6 pb-4"><u>Working users</u></div>
-               
+            <div class="row mt-5">
+                <div class="col-2">
+                    <p><strong>Project name</strong></p>
+                </div>
+                <div class="col-8">
+                    <p><strong>Task details</strong></p>
+                </div>
             </div>
-            <?php } ?>
             <hr>
-        <?php } ?> 
+                    <?php for($i=0;$i<sizeof($data[0]);$i++){ ?>
+            <div class="row">
+                <div class="col-2">
+                    <div class="min-height">
+                        <p>
+                            <?=$data[0][11];?>
+                        </p>
+                        <p>Total users: (total_users)</p>
+                        <p>Project started:(start_time) </p>
+                        <p>Total time:(total_time) </p>
+                    </div>
+                    
+                </div>
+                <div class="col-8">
+                    <?php for($j=0;$j<sizeof($data[1]);$j++){ 
+                        foreach($data[1][$j] as $d){ ?>
+                    <div class="row">
+                        <div class="col-6 pb-4"><u>Task name</u>:
+                            <?=$d['task'];?>
+                        </div>
+                        <div class="col-6 pb-4"><u>Time taken</u>:
+                            <?=$d['time_used'];?> minutes</div>
+                        <div class="col-6 pb-4"><u>Working users</u></div>
+                    </div>
+                    <hr>
+                    <?php } }?>
+                </div>
+                <div class="col-2"><i class="fas fa-trash-alt icon-plus project-remove text-danger"></i></div>
+            </div>
+                <?php  } ?>
         </div>
-      <hr>
-    
-    </div>
-    
-</div>
-</form>
-<hr>
-<footer class="">
-  <p class="text-center">Copyright © 2019 Printgreener.com</p>
-</footer>
+    </form>
+    <hr>
+    <footer>
+        <p class="text-center">Copyright © 2019 Printgreener.com</p>
+    </footer>
