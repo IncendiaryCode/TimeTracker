@@ -49,6 +49,7 @@ class Login extends REST_Controller {
 
     public function details_post()
     {
+        $records_per_page  = 10;
         $headers = $this->input->request_headers();
         $verify_data = $this->verify->verify_request($headers);
         if(isset($verify_data->username))
@@ -60,7 +61,11 @@ class Login extends REST_Controller {
                     $page_no = $post['page_no'];
                 else
                     $page_no = 1;
-                $data['details'] =  $this->user_model->get_login_details($post['userid'],$page_no);
+                $data['records_per_page'] = $records_per_page;
+                $login_count = $this->user_model->total_login_details($post['userid']);
+                $total_pages = ($login_count  <= $records_per_page)?1:ceil($login_count / $records_per_page);   
+                $data['total_pages'] =  $total_pages;
+                $data['details'] =  $this->user_model->get_login_details($post['userid'],$page_no,$records_per_page);
                 $this->response($data, REST_Controller::HTTP_OK);
             }else{
                 $data['success'] = 0;

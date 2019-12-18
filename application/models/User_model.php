@@ -649,8 +649,7 @@ class User_model extends CI_Model {
         return $default_mod;
     }
 
-    public function get_login_details($userid,$page_no){
-        $limit  = 10;
+    public function get_login_details($userid,$page_no,$limit){
         $offset =$limit*($page_no-1);
         $this->db->select('task_date,start_time,end_time');
         $this->db->from('login_details');
@@ -660,6 +659,15 @@ class User_model extends CI_Model {
         $query = $this->db->get();
         $login_list = $query->result_array();
         return $login_list;
+    }
+
+    public function total_login_details($userid){
+        $this->db->select('COUNT(*) as count');
+        $this->db->from('login_details');
+        $this->db->where(array('user_id'=> $userid));
+        $query = $this->db->get();
+        $login_count = $query->result_array();
+        return $login_count[0]['count'];
     }
 }
 ?>
