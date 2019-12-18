@@ -45,7 +45,7 @@ class User extends CI_Controller
             }
         }
         $task_details['data'] = $this->user_model->get_task_details($type,$date);
-        if($task_details['data'] == FALSE){
+        if($task_details['data'] == NULL){
             $task_details['status'] = FALSE;
             $task_details['data'] = NULL;
             $task_details['msg'] = "No activity in this date.";
