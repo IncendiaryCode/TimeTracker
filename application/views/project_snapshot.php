@@ -38,17 +38,17 @@ $picture = substr($profile,29);
                 </div>
             </div>
             <div class="row mt-5">
-                <div class="col-2">
+                <div class="col-3">
                     <p><strong>Project name</strong></p>
                 </div>
-                <div class="col-8">
+                <div class="col-7">
                     <p><strong>Task details</strong></p>
                 </div>
             </div>
             <hr>
                     <?php foreach($data as $proj){ ?>
             <div class="row">
-                <div class="col-2">
+                <div class="col-3">
                     <div class="min-height">
                         <p><u>
                             <?=$proj['project'];?></u>
@@ -58,7 +58,7 @@ $picture = substr($profile,29);
                     </div>
                     
                 </div>
-                <div class="col-8">
+                <div class="col-7">
                     <?php foreach($proj['task_details'] as $d){ 
                          ?>
                     <div class="row">

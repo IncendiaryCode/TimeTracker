@@ -68,18 +68,12 @@
 
 		//get graph data
 		public function get_graph_data(){
-			if($this->input->post('project_name') == 'undefined' || $this->input->post('project_name') == ''){
-				$data['result'] = NULL;
-				$data['status'] = FALSE; 
-			}else{
 				$data['result'] = $this->dashboard_model->user_graph_data();
-				if($data['result'] == FALSE){
+				if($data['result'] == NULL){
 					$data['status'] = FALSE;
-					$data['result'] = NULL;
 				}else{
 					$data['status'] = TRUE;
 				}
-			}
 			echo json_encode($data);
 		}
 		

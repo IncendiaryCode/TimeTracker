@@ -27,6 +27,7 @@ class Dashboard_model extends CI_Model
         return $row_proj;
     }
     public function get_task_details($type){
+
         if($type == 'user'){
 
             $this->db->select('p.id AS project_id,p.name AS project_name,u.name AS user_name,u.id AS user_id');
@@ -111,6 +112,7 @@ class Dashboard_model extends CI_Model
                         'task'=>array('task_id'=>$q['task_id'],'task_name'=>$q['task_name'],'user_name'=>$q['user_name'],array('start_time'=>$q['start_time'],'end_time'=>$q['end_time']),'total_minutes'=>$q['total_minutes'])
                     );
             }
+
             return $details;
         }
         
@@ -118,67 +120,39 @@ class Dashboard_model extends CI_Model
 
     //get task details for user snapshot graph
     public function user_graph_data(){
-        $project_name = $this->input->post('project_name');
-        $get_project_id = $this->db->get_where('project',array('name'=>$project_name));
-        $project_id = $get_project_id->row_array()['id'];
+        if(!empty($this->input->post('project_name'))){
+            $project_name = $this->input->post('project_name');
+            $get_project_id = $this->db->get_where('project',array('name'=>$project_name));
+            $project_id = $get_project_id->row_array()['id'];
+        }else{
+            $project_id = '';
+        }
         //get usernames assigned to projects
-        $this->db->select('u.name,u.id');
+        $this->db->distinct()->select('u.name,u.id');
         $this->db->from('project_assignee AS a');
         $this->db->join('users AS u','u.id = a.user_id');
-        $this->db->where('a.project_id',$project_id);
+        if($project_id != ''){
+            $this->db->where('a.project_id',$project_id);
+        }
         $query = $this->db->get();
         if($query->num_rows() > 0){
             $users = $query->result_array();
-            foreach($users as $tu){
-                $usernames[] = $tu['name'];
-            }
             //get task names under those usernames
             foreach($users as $u){
-                $this->db->select('d.task_id,u.name AS user_name,t.task_name,d.total_minutes');
-                $this->db->select_sum('d.total_minutes','t_minutes');   //get total minutes for a particular task
-                $this->db->from('task AS t');
-                $this->db->join('task_assignee AS ta','ta.task_id = t.id');
-                $this->db->join('time_details AS d','d.task_id = ta.task_id');
-                $this->db->join('users AS u','u.id = ta.user_id');
-                $this->db->where(array('u.type'=>'user','ta.user_id'=>$u['id'],'t.project_id'=>$project_id));
-                $this->db->group_by('d.task_id');
-                $tasks = $this->db->get()->result_array();       
-                foreach($tasks as $t){
-                $data1[] = 
-                       array('task_name'=>$t['task_name'],'time_used'=>$t['t_minutes']); //total minutes for each task
-                }
-            }
-            //get task details for each user
-            foreach($users as $u){
-                $this->db->select('d.task_id,u.name AS user_name,d.total_minutes,t.task_name');
+                $this->db->select('d.total_minutes');
                 $this->db->select_sum('d.total_minutes','t_minutes');   //get total minutes for a particular task
                 $this->db->from('task AS t');
                 $this->db->join('time_details AS d','d.task_id = t.id');
-                $this->db->join('users AS u','u.id = d.user_id');
-                $this->db->where(array('u.type'=>'user','d.user_id'=>$u['id'],'t.project_id'=>$project_id));
-                $this->db->group_by('t.id');
-                $tasks = $this->db->get()->result_array(); 
-
-                foreach($tasks as $t){  //total minutes for each task assigned to user
-                    $data2[] = array('user_name'=>$t['user_name'],'task_name'=>$t['task_name'],'time_used'=>$t['t_minutes']);   
+                $this->db->where(array('d.user_id'=>$u['id']));
+                $this->db->group_by('d.user_id');
+                $tasks = $this->db->get()->result_array();       
+                foreach($tasks as $t){
+                    $data[] = array('user_name'=>$u['name'],'time_used'=>$t['t_minutes']); //total minutes for each task
                 }
             }
-            foreach($data2 as $d){
-                $usernames[] = $d['user_name']; //list of user names
-            }
-            $user_names = array_unique($usernames); //list of unique usernames
-            foreach($user_names as $u){
-                $i = 0;
-                while($i<sizeof($data2)){
-                    if($data2[$i]['user_name'] == $u){
-                        $r[$u][] = array($data2[$i]['task_name'],$data2[$i]['time_used']); 
-                    }
-                    $i = $i+1;
-                }
-            }
-            return array($data1,$r);
+            return $data;
         }else{
-            $data = false;
+            $data = NULL;
             return $data;
         }
     }
