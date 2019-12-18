@@ -103,8 +103,8 @@ function minutesToTime(mins) {
     var m = Math.floor(total_mins % 3600 / 60);
 
 
-    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : "h:") : "";
-    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : "m.") : "";
+    var hDisplay = h > 0 ? h + (h == 1 ? " h. " : "h:") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " m. " : "m.") : "";
     return hDisplay + mDisplay;
 }
 
@@ -221,6 +221,9 @@ function loadTaskActivities(formData) {
                     cardCol.append(cardInner);
                     $("#attach-card").append(cardCol);
                     if ((data[x][y].running_task == 1 && data[x][y].start_time != null)) { //change background of current running task entries.
+                        /*$('.title').html(data[x][y].task_name);*/
+                        document.getElementsByClassName("title").innerText += data[x][y].task_name; 
+                        console.log(document.getElementsByClassName("title").innerText);
                         if (mode == "checked") {
                             cardInner.css("background", "#444");
                             cardHeader.css("background", "#444");

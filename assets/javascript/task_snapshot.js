@@ -21,55 +21,63 @@ for(var i=0;i<data.length; i++)
 label[i] = data[i]['task_name'];
 time[i] = data[i]['time_used']/60;
 }
-		var configs = {
-			type: 'bar',
-			data: {
-				labels: label,
-				datasets: [{
-					type: 'bar',
-					label: 'Time used',
-					backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.red,
-					data: time,
-				}]
-			},
-			options: {
-				title: {
-					text: 'Task snapshot'
-				},hover: {
-                    display: false
-                },
-				scales: {
-                    xAxes: [{
-                        gridLines: {
-                            display: false,
-                            beginAtZero: true,
-                        },ticks: {
-                            display: true,
-                            beginAtZero: true,
-                            stacked: true
-                        },
-                    }],
-                    yAxes: [{
-                        gridLines: {
-                            display: false,
-                            drawBorder: true
-                        },
-                        ticks: {
-                            display: true,
-                            beginAtZero: true,
-                            stacked: true
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Time in hours',
-                        }
-                    }]
-                },
-			}
-		};
-        if(taskChart) taskChart.destroy();
-		taskChart = new Chart(task_chart, configs);
+
+for(var ind=0; ind<time.length; ind++)
+    {
+        var task_time_dec = time[ind] - Math.floor(time[ind]);
+        task_time_dec = task_time_dec.toString().slice(0,4);
+        var total_time = Math.floor(time[ind]) + parseFloat(task_time_dec);
+        time[ind] = total_time;
+    }
+	var configs = {
+		type: 'bar',
+		data: {
+			labels: label,
+			datasets: [{
+				type: 'bar',
+				label: 'Time used',
+				backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+				borderColor: window.chartColors.red,
+				data: time,
+			}]
+		},
+		options: {
+			title: {
+				text: 'Task snapshot'
+			},hover: {
+                display: false
+            },
+			scales: {
+                xAxes: [{
+                    gridLines: {
+                        display: false,
+                        beginAtZero: true,
+                    },ticks: {
+                        display: true,
+                        beginAtZero: true,
+                        stacked: true
+                    },
+                }],
+                yAxes: [{
+                    gridLines: {
+                        display: false,
+                        drawBorder: true
+                    },
+                    ticks: {
+                        display: true,
+                        beginAtZero: true,
+                        stacked: true
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Time in hours',
+                    }
+                }]
+            },
+		}
+	};
+    if(taskChart) taskChart.destroy();
+	taskChart = new Chart(task_chart, configs);
 	}
 }
 

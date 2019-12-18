@@ -1,5 +1,5 @@
 var panel_id= 0;
-var id=0;
+var graph_id=0;
 Date.prototype.getWeek = function () {
     var onejan = new Date(this.getFullYear(), 0, 1);
     return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
@@ -14,6 +14,12 @@ function loadTask(type, date) {
         data: { 'chart_type': type, 'date': date },
         success: function (values) {
             var data = JSON.parse(values);
+            if(values == "No activity in this date.")
+            {
+                $("#attachPanels").empty();
+            }
+            else
+            {
             $("#attachPanels").empty();
             var timerModal = timerStopModal();
             for (x in data) {
@@ -39,7 +45,6 @@ function loadTask(type, date) {
                         var cardFooter = $("<div class='card-footer panel"+panel_id+"'>");
                         var footerRow = $('<div class="row" />');
                         footerRow.append("<div class='col-6'> <i class='fab fa-twitter'></i> " + data[x][y].name + "</div>");
-
                         var footerRight = $("<div class='col-6 text-right card-actions'>");
                         //action Edit
                         var actionEdit = $('<a href="#" class="card-action action-edit text-white" id="action-edit"><i class="far fa-edit position_edit_icon animated fadeIn" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
@@ -69,6 +74,7 @@ function loadTask(type, date) {
                     }
                 }
             }
+          }
         }
     });
 }
@@ -150,6 +156,12 @@ function dateFromDay(year, day){
 
 function drawChart(type, res) {
    
+    if (res == "No activity in this week.") {
+        if(daily_chart) daily_chart.destroy();
+        document.getElementById('week-error').innerHTML = "No activity in this week."
+    }
+    else
+    {
     var chart = document.getElementById('weekly').getContext('2d');
     gradient = chart.createLinearGradient(0, 0, 0, 600);
 
@@ -235,6 +247,7 @@ function drawChart(type, res) {
                     }]
                 }
             }
+        }
         };
         if(daily_chart) daily_chart.destroy();
         daily_chart = new Chart(chart, config);
@@ -266,9 +279,9 @@ function draw_customized_chart(res)
         var width = ((interval/60)*p_left);
         var start_time_pixel = (((start_time_min/60)-8)*p_left);
 
+            var v = 0;
         for(var k=0; k<pixel.length; k++)
         {
-            var v = 0;
             if ((start_time_pixel >= pixel[k][0]) && (width < pixel[k][1])) {
              v = 25;
                 if ((start_time_pixel+width) >= window_width ) {
@@ -300,7 +313,7 @@ function draw_customized_chart(res)
             if(v==0)
             {
             if ((start_time_pixel+width) >= window_width ) {
-                    width = window_width -(start_time_pixel);
+                    width = window_width - (start_time_pixel);
                     }
                 printChart(start_time_pixel, width, 300, color);
             }
@@ -317,11 +330,10 @@ function draw_customized_chart(res)
 width = 0;
 start_time_pixel = 0;
 }
-
 var last_index
 function printChart(start, width, top, color)
 {
-    var row = $('<span class="print-chart-row1" id="new-daily-chart'+id+'">.<input type = "hidden" value = '+id+' ></span>');
+    var row = $('<span class="print-chart-row1" id="new-daily-chart'+graph_id+'">.<input type = "hidden" value = '+graph_id+' ></span>');
     $(row).css("margin-left", start);
     $(row).css("top", top);
     $(row).css("width", width);
@@ -333,7 +345,7 @@ function printChart(start, width, top, color)
     {
         var ele = document.getElementById(this.id);
         var index = ele.childNodes[1].value;
-        console.log(last_index);
+        console.log(last_index, index);
         if(last_index)
         {
             $('.panel'+last_index).css("backgroundColor", "#ffffff");
@@ -343,8 +355,10 @@ function printChart(start, width, top, color)
         var elmnt = document.getElementById('panel'+index);
         elmnt.scrollIntoView();
     });
-    id++;
+    graph_id++;
 }
+last_index = undefined;
+
 function getMonth(month)
 {   
     var month_no = 0;

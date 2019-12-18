@@ -14,26 +14,6 @@ $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Login';
-/*if (!empty($task_info['task_status'])) {     //fetching task details 
-    //for ($i=0; $i < sizeof($task_info); $i++) { 
-        foreach($task_info['task_status'] as $taskinfo){
-        //print_r($taskinfo['task_name']);
-    $start_text = 'Started at '.$taskinfo['start_time'];
-    
-    $task_name = $taskinfo['task_name'];
-    $timerClass = 'fa-stop';
-    $task_id = $taskinfo['task_id'];
-
-    $timer = $taskinfo['start_time'];
-   // $timer =($task_info[0]['task_date'].$task_info[0]['start_time']);
-    $datetime1 = new DateTime();
-    $datetime2 = new DateTime($timer);
-    $timer_start = $datetime2->getTimestamp();
-    $interval = date_diff($datetime1, $datetime2);
-    $timer =  strtotime($taskinfo['task_date'] . $interval->format(' %h:%i:%s'));
-
-}
-}*/
 ?>
 <script type="text/javascript">
 //this will be send to JS for timer to start
@@ -96,20 +76,22 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
         </div>
         <div class="container">
             <?php if(!empty($task_info['task_status'])){ 
+                $first_dislpay = 0;
                foreach($task_info['task_status'] as $taskinfo){ 
                 $today_date = date("Y-m-d");
                 $task_date = substr($taskinfo['start_time'],0,10);
                 if(strcmp($today_date,$task_date) != 0) {
+                    if($first_dislpay != 1 ) {
+                    $first_dislpay = 1;
                 ?>
             <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4 alert-box">
                 <i class="text-danger  fas fa-exclamation-triangle"></i>
-
                 As task "<?php echo $taskinfo['task_name'] ?>" has not been ended.
                 <a href="#" class="forgot-color" id="stop-now" data-toggle="modal" data-target="#end-time-update"> Stop now!</a>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-            </div> <?php } } } ?>
+            </div> <?php } } } } ?>
             <div class="row mb-3 pt-4">
                 <p id="alarmmsg" class="text-center"></p>
                 <div class="col-6">

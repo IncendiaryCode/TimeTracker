@@ -44,23 +44,29 @@ header {
 
 .card1 {
     padding: 5px;
-    border-radius: 15px;
+    border-radius: 8px;
     border-width: 1px;
     background-image: linear-gradient(-50deg, #ef4774, #9253bb, #475cf4);
+    box-shadow: 1px 1px 0px #aaa;
+    min-width: 100px;
 }
 
 .card2 {
     padding: 5px;
-    border-radius: 15px;
+    border-radius: 8px;
     border-width: 1px;
     background-image: linear-gradient(-50deg, #35ea7d, #119a8d);
+    box-shadow: 1px 1px 0px #aaa;
+    min-width: 100px;
 }
 
 .card3 {
     padding: 5px;
-    border-radius: 15px;
+    border-radius: 8px;
     border-width: 1px;
     background-image: linear-gradient(-50deg, #fe6407, #ee0c74);
+    box-shadow: 1px 1px 0px #aaa;
+    min-width: 100px;
 }
 
 .card4 {

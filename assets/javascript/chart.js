@@ -15,6 +15,10 @@ function __project_details(res)
         data[i] = res[i]['t_minutes']/60;
         }
     }
+    for(var j=0; j<data.length; j++)
+    {
+        data[j] = Math.floor(data[j]);
+    }
     var project_data = {
             labels: project_names,
             datasets: [{

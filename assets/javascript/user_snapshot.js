@@ -9,20 +9,20 @@ if(res['status'] == false)
     $('#user-chart').hide();
 }
 else{
-$('#user-chart').show();
-document.getElementById('user-chart-error').innerHTML = " ";
-var user_data = [];
+    $('#user-chart').show();
+    document.getElementById('user-chart-error').innerHTML = " ";
+    var user_data = [];
 
-var task_labels = [];
-var user_labels = [];
+    var task_labels = [];
+    var user_labels = [];
 
-var task_time_value = [];
-var user_time_value = [];
+    var task_time_value = [];
+    var user_time_value = [];
 
-var task_value = res['result'][0];
-var user_value = res['result'][1];
+    var task_value = res['result'][0];
+    var user_value = res['result'][1];
 
-var chart_color = "000000";
+    var chart_color = "000000";
 
 for(var i=0; i<task_value.length; i++)
 {
@@ -30,6 +30,16 @@ task_labels[i] = task_value[i]['task_name'];
 task_time_value[i] = task_value[i]['time_used']/60;
 }
 var user_data =  [];
+
+for(var ind=0; ind<task_time_value.length; ind++)
+{
+    var task_time_dec = task_time_value[ind] - Math.floor(task_time_value[ind]);
+    task_time_dec = task_time_dec.toString().slice(0,4);
+    var total_time = Math.floor(task_time_value[ind]) + parseFloat(task_time_dec);
+    task_time_value[ind] = total_time;
+}
+
+
 var task_array = {
         type: 'bar',
         label: 'Total tasks',
@@ -60,6 +70,16 @@ for(var j=0; j<Object.keys(user_value).length; j++)
             user_time_value[index] = 0;
         }
     }
+
+
+    for(var ind=0; ind<user_time_value.length; ind++)
+    {
+        var task_time_dec = user_time_value[ind] - Math.floor(user_time_value[ind]);
+        task_time_dec = task_time_dec.toString().slice(0,4);
+        var total_time = Math.floor(user_time_value[ind]) + parseFloat(task_time_dec);
+        user_time_value[ind] = total_time;
+    }
+
     chart_color= parseInt(chart_color)+123456;
     var inner_array = { 
         type: 'line',

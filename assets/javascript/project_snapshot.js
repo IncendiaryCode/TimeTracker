@@ -14,6 +14,17 @@ for(var i=0; i<res.length; i++)
 		project.push(res[i]['project_name']);
 	}
 }
+
+    for(var ind=0; ind<data.length; ind++)
+    {
+        var task_time_dec = data[ind] - Math.floor(data[ind]);
+        task_time_dec = task_time_dec.toString().slice(0,4);
+        var total_time = Math.floor(data[ind]) + parseFloat(task_time_dec);
+        data[ind] = total_time;
+    }
+
+
+
 var project_values = {
 				datasets: [{
 					data: data,

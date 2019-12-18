@@ -65,7 +65,7 @@ $picture = substr($res['profile'],30);
         </div>
         <footer  class="profile-footer">
         <hr>
-            <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
+            <p class="text-center">Copyright © 2019 Printgreener.com</p>
         </footer>
     </div>
 </main>
