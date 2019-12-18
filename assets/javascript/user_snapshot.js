@@ -1,6 +1,7 @@
 var myChart;
 function __draw_user_chart(res)
 {
+    console.log(res)
 var user_chart = document.getElementById('user-chart').getContext('2d');
 var color = Chart.helpers.color;
 if(res['status'] == false)
@@ -18,7 +19,7 @@ else{
 
     var task_time_value = [];
     var user_time_value = [];
-
+    
     var task_value = res['result'][0];
     var user_value = res['result'][1];
 
@@ -157,19 +158,22 @@ $(document).ready(function() {
                     $('.project-names').append(option);
                 }
                 }
-                var p_name = document.getElementById('project-list').value;
-                $.ajax({
-                    type: 'POST',
-                    url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
-                    data: { 'project_name': p_name },
-                    success: function(res) {
-                        var result = JSON.parse(res);
-                        __draw_user_chart(result);
-                    }    
-                });
             }
     	});
     }
+
+
+    $.ajax({
+        type: 'POST',
+        url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
+        data: {  },
+        success: function(res) {
+            var result = JSON.parse(res);
+            __draw_user_chart(result);
+        }    
+    });
+
+
     $('#project-list').change(function() {
         var p_name = document.getElementById('project-list').value;
         //call for list of  project data on change of project name.
