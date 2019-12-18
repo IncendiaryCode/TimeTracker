@@ -45,6 +45,7 @@ class Task extends REST_Controller {
                     $total_pages = ceil($task_count / $task_per_page);   
                 }
                 $data['total_pages'] = $total_pages;
+                $data['task_per_page'] = $task_per_page;
                 $data['details'] =  $this->user_model->get_user_task_info($type,$input,$task_per_page);
                 $this->response($data, REST_Controller::HTTP_OK);
                 //$data = $this->db->get_where("task", ['id' => $input['id']])->row_array();
