@@ -81,7 +81,7 @@ class User_model extends CI_Model {
             return false;
         }
     }
-    public function get_user_task_info($sort_type,$post_data){
+    public function get_user_task_info($sort_type,$post_data,$limit){
         $this->db->select('p.name as project_name,p.id as project_id,p.image_name,t.task_name,t.description,t.id,t.module_id');
         $this->db->select('IF(t.complete_task=1,1,0) AS completed',FALSE);         //get completed tasks of the user
         $this->db->from('task AS t');
@@ -98,7 +98,6 @@ class User_model extends CI_Model {
             $this->db->order_by("t.id", "desc");         //sort by task id
         }
         if(isset($post_data['page_no'])){
-            $limit  = 10;
             $offset =$limit*($post_data['page_no']-1);
             $this->db->limit($limit,$offset);  
         }
@@ -118,6 +117,18 @@ class User_model extends CI_Model {
         //print_r($data);exit;
         return $result; 
     }
+
+    public function get_user_task_count($userid){
+        $this->db->select('COUNT(*) as count');
+        $this->db->from('task AS t');
+        $this->db->join('task_assignee AS a','a.task_id = t.id');
+        $this->db->where(array('a.user_id'=>$userid));
+        $query = $this->db->get();
+        $task_count = $query->result_array();
+        return $task_count[0]['count'];
+
+    }
+
     //get task details to edit task
     public function get_task_info($id){
         $userid = $this->session->userdata('userid');

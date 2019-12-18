@@ -36,7 +36,16 @@ class Task extends REST_Controller {
             if(!empty($input['userid'])){
                 $data['success'] = 1;
                 $type = 'task';
-                $data['details'] =  $this->user_model->get_user_task_info($type,$input);
+                $task_count = $this->user_model->get_user_task_count($input['userid']);
+                $task_per_page  = 10;
+                if($task_count  <= $task_per_page)
+                {
+                    $total_pages = 1;
+                }else{
+                    $total_pages = ceil($task_count / $task_per_page);   
+                }
+                $data['total_pages'] = $total_pages;
+                $data['details'] =  $this->user_model->get_user_task_info($type,$input,$task_per_page);
                 $this->response($data, REST_Controller::HTTP_OK);
                 //$data = $this->db->get_where("task", ['id' => $input['id']])->row_array();
             }else{
