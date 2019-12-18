@@ -107,7 +107,7 @@ $picture = substr($profile,29);
                 <?php
                     $task = $data[$i]['task']; ?>
                 <div class="col-6 pb-4"><span><?=$count ?>.)  </span><u>User name</u>:  <?php echo $data[$i]['user_name']; $username = $data[$i]['user_name'];?></div>
-                <div class="col-6 pb-4"><u>Timer taken</u>:  <?=$task['total_minutes'];?></div>
+                <div class="col-6 pb-4"><u>Timer taken</u>:  <?=round(($task['total_minutes']/60),2);?> hours</div>
                 <div class="col-6 ">Start time</div>
                 <div class="col-6 ">End time</div>
            

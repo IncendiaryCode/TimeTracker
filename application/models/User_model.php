@@ -77,9 +77,11 @@ class User_model extends CI_Model {
         }
         $query = $this->db->get();
         $data = $query->result_array();
-        //print_r($this->db->last_query());die;    
-        //print_r($data);exit;
-        return $data; 
+        if($query->num_rows() > 0){
+            return $data;
+        }else{
+            return false;
+        }
     }
     public function get_user_task_info($sort_type,$post_data){
         $this->db->select('p.name as project_name,p.id as project_id,p.image_name,t.task_name,t.description,t.id,t.module_id');

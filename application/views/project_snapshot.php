@@ -46,32 +46,31 @@ $picture = substr($profile,29);
                 </div>
             </div>
             <hr>
-                    <?php foreach($data[0] as $proj){ ?>
+                    <?php foreach($data as $proj){ ?>
             <div class="row">
                 <div class="col-2">
                     <div class="min-height">
-                        <p>
-                            <?=$proj;?>
+                        <p><u>
+                            <?=$proj['project'];?></u>
                         </p>
-                        <p>Total users: (total_users)</p>
-                        <p>Project started:(start_time) </p>
-                        <p>Total time:(total_time) </p>
+                        <p>Total users: (<?=$proj['total_users'];?>)</p>
+                        <p>Total time:(<?=round(($proj['time_used']/60),2);?> hours)</p>
                     </div>
                     
                 </div>
                 <div class="col-8">
-                    <?php for($j=0;$j<sizeof($data[1]);$j++){ 
-                        foreach($data[1][$j] as $d){ ?>
+                    <?php foreach($proj['task_details'] as $d){ 
+                         ?>
                     <div class="row">
                         <div class="col-6 pb-4"><u>Task name</u>:
-                            <?=$d['task'];?>
+                            <?=$d['task_name'];?>
                         </div>
                         <div class="col-6 pb-4"><u>Time taken</u>:
-                            <?=$d['time_used'];?> minutes</div>
-                        <div class="col-6 pb-4"><u>Working users</u></div>
+                            <?=round(($d['t_minutes']/60),2);?> hours</div>
+                        <div class="col-6 pb-4"><u>Working users</u>: <?=$d['user_count'];?></div>
                     </div>
                     <hr>
-                    <?php } }?>
+                    <?php  }?>
                 </div>
                 <div class="col-2"><i class="fas fa-trash-alt icon-plus project-remove text-danger"></i></div>
             </div>
