@@ -57,19 +57,19 @@ $picture = substr($profile,29);
                         <p class="text-center display-4 m-3 text-primary">Add user</p>
                         <form action="<?php echo base_url();?>index.php/admin/add_users" id="addUser" method="post">
                             <div class="form-group mt-3">
-                                <label for="task-name ">Enter the Name of new User<span class="text-danger">*</span></label>
+                                <label for="task-name ">Name:<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="task_name" id="newUser" value="">
                             </div>
                             <div class="form-group mt-3">
-                                <label for="task-name ">Enter the Email of new User<span class="text-danger">*</span></label>
+                                <label for="task-name ">Email:<span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" name="user_email" id="user_email">
                             </div>
                             <div class="form-group mt-3">
-                                <label for="task-name ">Enter Password<span class="text-danger">*</span></label>
+                                <label for="task-name ">Password:<span class="text-danger">*</span></label>
                                 <input type="password" class="form-control" name="task_pass" id="task_pass" value="">
                             </div>
                             <div class="form-group mt-3">
-                                <label for="task-name ">Enter the Contact number of new User</label>
+                                <label for="task-name ">Contact number:</label>
                                 <input type="tel" minlength="10" maxlength="10" class="form-control" name="contact" id="contact" value="">
                             </div>
                             <p id="user-error" class="text-danger"></p>

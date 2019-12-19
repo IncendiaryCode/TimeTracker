@@ -1,6 +1,6 @@
 function __draw_project_chart(res)
 {
-var project_chart = document.getElementById('project-chart');
+/*var project_chart = document.getElementById('project-chart');
 var chartColors = window.chartColors;
 var color = Chart.helpers.color;
 
@@ -61,36 +61,65 @@ var project_values = {
 				}
 			}
 		};
-		window.myPolarArea = Chart.PolarArea(project_chart, config);
+		window.myPolarArea = Chart.new(project_chart, config);*/
+
 }
 
-$(document).ready(function()
-{
-	if(document.getElementById('project-chart'))
-	{
-	$.ajax({
+      function drawProjectChart() {
+
+      	var result;
+      	$.ajax({
 	    type: 'POST',
 	    url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
 	    data: { 'type': "get_user" },
 	    success: function(res) {
-	        var result = JSON.parse(res);
-	            p_names = result['result'];
-	    		__draw_project_chart(p_names);
+	        result = JSON.parse(res);
+	        result = result['result'];
+	    	console.log(result);
 	        }
 	    });
+        var data = google.visualization.arrayToDataTable([
+          ['ID', 'X', 'Y', 'Temperature'],
+          ['',   80,  397,      120],
+          ['',   79,  136,      130],
+          ['',   78,  184,      50],
+          ['',   72,  278,      230],
+          ['',   81,  200,      210],
+          ['',   72,  170,      100],
+          ['',   68,  477,      80]
+        ]);
+
+        var options = {
+          colorAxis: {colors: ['yellow', 'red']}
+        };
+
+        var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+
+$(document).ready(function()
+{
+	if(document.getElementById('chart_div'))
+	{
+	google.charts.load("current", {packages:["corechart"]});
+	google.setOnLoadCallback(drawProjectChart);
 	}
 	$(".project-remove").click(function()
 	{
-		this.parentNode.parentNode.remove();
-		/*$.ajax({
+		$("#delete-proj").click(function()
+        {
+        var project_id = this.childNodes[0].value;
+        window.location.reload();
+		$.ajax({
             type: 'POST',
-            url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
-            data: { 'project_name': p_name },
+            url: timeTrackerBaseURL + 'index.php/admin/delete_project',
+            data: { 'project_id': project_id },
             success: function(res) {
                 var result = JSON.parse(res);
-                __draw_user_chart(result);
                 window.location.reload();
             }
-        });*/
+        });
 	});
+
 	})
+});

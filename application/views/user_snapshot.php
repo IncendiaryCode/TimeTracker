@@ -31,85 +31,82 @@ $picture = substr($profile,29);
 <div class="container">
     <div class="text-right mt-5">
         <select class="project-names" id="project-list">
+            <option>All users</option>
         </select>
     </div> 
     <div class="row mt-5">
         <div class="col-12">
-            <canvas id="user-chart" height="80px;"></canvas>
+            <canvas id="user_chart" height="80px;"></canvas>
             <p id="user-chart-error" class="text-center"></p>
         </div>
     </div>
     <div class="row mt-5">
         <div class="col-2">
             <p><strong>User name</strong></p>
-            </div>
-        <div class="col-2">
+        </div>
+        <div class="col-6 ">
             <p><strong>Project name</strong></p>
         </div>
-        <div class="col-8">
-            <div class="row">
-                <div class="col-4"><u><strong>Task name</strong></u></div>
-                <div class="col-4"><u><strong>Time used</strong></u></div>
+        <div class="col-2">
+            <p><strong>Time spent</strong></p>
+        </div>
+        <div class="col-2">
+            <p><strong>Action</strong></p>
+            </div>
+    </div>
+    <hr>
+    <div>
+        <?php
+            foreach ($data as $k) {
+            ?>
+            <div class="row pt-3">
+                <div class="col-2">
+                    
+                    <a href="#" class="badge badge-info " id="<?=$k['user_name']?>">
+                        <?=$k['user_name'];?>
+                    </a>
+            </div>
+            <div class="col-6">
+                    <?php
+                    foreach ($k['project'] as $d) { ?>                
+                    <a href="#" class="badge">
+                        <div class="row badge-light mr-2">
+                            <div class="col-2"><img src=""></div>
+                            <div class="col-8"><?= $d['project_name']; ?></div>
+                        </div>
+                    </a>
+            <?php }  ?>
+            </div>
+            <div  class="col-2">
+                <p><?=round($k['total_minutes']/60,2);?> hrs</p>
+            </div>
+        <div class="col-2">
+            <div class="row remove-user">
+                <i class="fas fa-trash-alt icon-plus icon-remove text-danger" data-toggle="modal" data-target="#delete-entry"><input type="hidden" name=""  class="user_id" value="<?=$k['user_id'];?>"></i>
             </div>
         </div>
     </div>
     <hr>
-    <div>
-        <?php 
-        $user = " ";
-        $project = " ";
-            for($i=0; $i<sizeof($data); $i++){
-            ?>
-            <div class="row">
-                <div class="col-2">
-                    <div id="display-username">
-                    <?php
-                    if($user == $data[$i]['user_name'])
-                    {
-                        $user = $data[$i]['user_name']; ?>
-                        <div class="col-2" style="display: none"><p><?=$user?></p></div><?php
-                    }
-                    else
-                    {
-                    $user = $data[$i]['user_name'];
-                    ?><p><?=$user?></p>
-            <?php } ?>
-            
-        </div>
-        </div>
-        <div class="col-2">
-            <div>
-            <?php
-            if(($project == $data[$i]['project']) && ($user == $data[$i-1]['user_name']))
-                {   
-                    ?><div class="col-2"></div><?php
-                }
-                else
-                {
-                $project = $data[$i]['project'];
-                ?><p><?=$project;?></p><?php
-                }?>
-            </div>
-        </div>
-        <div class="col-8">
-            <div class="row remove-user">
-                <?php
-                    $task = $data[$i]['task'];
-                     if($project != $data[$i]['project'])
-                     {
-                     ?>
-                <?php } ?>
-                <div class="col-4 "><?=$task['task_name'];?></div>
-                <div class="col-4 "><?=round(($task['total_minutes']/60),2);?> hours</div>
-                <div class="col-4 "><i class="fas fa-trash-alt icon-plus icon-remove text-danger"></i></div>
-            </div>
-            <hr class="icon-remove">
-        </div>
-    </div>
         <?php } ?>
     </div>
 </div>
 <hr>
+<div class="modal" id="delete-entry" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+            <div class="modal-header ">
+                <span>Do you want to delete? </span></p>
+                <button type="button" class="close text-danger" data-dismiss="modal">×</button>
+            </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-primary card11" id="cancel-delete" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary card11" id="delete-user" >Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 <footer class="">
   <p class="text-center">Copyright © 2019 Printgreener.com</p>
