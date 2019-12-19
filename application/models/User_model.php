@@ -603,6 +603,7 @@ class User_model extends CI_Model {
     public function update_logout_time($userid){
         //check for entry with the same login date
         $this->db->where(array('task_date'=>date('Y:m:d'),'user_id'=>$userid,'end_time IS NULL'));
+        $this->db->order_by("id", "desc");
         $query_check = $this->db->get('login_details');
         if($query_check->num_rows()>0){
             $data = $query_check->row_array();
