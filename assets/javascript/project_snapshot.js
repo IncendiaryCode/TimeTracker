@@ -65,37 +65,46 @@ var project_values = {
 
 }
 
-      function drawProjectChart() {
+  function drawProjectChart() {
 
-      	var result;
-      	$.ajax({
-	    type: 'POST',
-	    url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
-	    data: { 'type': "get_user" },
-	    success: function(res) {
-	        result = JSON.parse(res);
-	        result = result['result'];
-	    	console.log(result);
-	        }
-	    });
-        var data = google.visualization.arrayToDataTable([
-          ['ID', 'X', 'Y', 'Temperature'],
-          ['',   80,  397,      120],
-          ['',   79,  136,      130],
-          ['',   78,  184,      50],
-          ['',   72,  278,      230],
-          ['',   81,  200,      210],
-          ['',   72,  170,      100],
-          ['',   68,  477,      80]
-        ]);
+  	var result;
+  	$.ajax({
+    type: 'POST',
+    url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
+    data: { 'type': "get_user" },
+    success: function(res) {
+        result = JSON.parse(res);
+        result = result['result'];
+	    var x=10;
+	    var y=10;
+	    var data = google.visualization.arrayToDataTable([
+          ['ID', 'X', 'Y','radius','Time spent'],
+          ['', 0, 0,0, 0],]);
+	    for(var i=0; i<result.length; i++)
+	    {
+	    	if(result[i]['project_name'] != null)
+	    	{
+	    		x= result[i]["t_minutes"]/60;
+	    		y= result[i]["t_minutes"]/60;
+	    		r= result[i]["t_minutes"]/500;
 
-        var options = {
-          colorAxis: {colors: ['yellow', 'red']}
-        };
+	    		var value = {'c':[{'v':result[i]["project_name"]},{'v':x},{'v':y},{'v':r},{'v':result[i]["t_minutes"]/60}]};
+		    }
+		data['wg'][i+1] = (value);
+		}
+    var options = {
+      colorAxis: {colors: ['yellow', 'red']}
+    };
 
-        var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
+    var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+
+        }
+    });
+
+
+
+  }
 
 $(document).ready(function()
 {
@@ -104,22 +113,4 @@ $(document).ready(function()
 	google.charts.load("current", {packages:["corechart"]});
 	google.setOnLoadCallback(drawProjectChart);
 	}
-	$(".project-remove").click(function()
-	{
-		$("#delete-proj").click(function()
-        {
-        var project_id = this.childNodes[0].value;
-        window.location.reload();
-		$.ajax({
-            type: 'POST',
-            url: timeTrackerBaseURL + 'index.php/admin/delete_project',
-            data: { 'project_id': project_id },
-            success: function(res) {
-                var result = JSON.parse(res);
-                window.location.reload();
-            }
-        });
-	});
-
-	})
 });

@@ -62,20 +62,18 @@ $picture = substr($profile,29);
             <div class="row pt-3">
                 <div class="col-2">
                     
-                    <a href="#" class="badge badge-info " id="<?=$k['user_name']?>">
+                    <a href="#" class=" " id="<?=$k['user_name']?>">
                         <?=$k['user_name'];?>
                     </a>
             </div>
             <div class="col-6">
                     <?php
                     foreach ($k['project'] as $d) { ?>                
-                    <a href="#" class="badge">
-                        <div class="row badge-light mr-2">
-                            <div class="col-2"><img src=""></div>
-                            <div class="col-8"><?= $d['project_name']; ?></div>
-                        </div>
+                    <a href="#" class=""><div class="mr-2"><img src="">
+                        <?= $d['project_name']; ?></div>
+                        
                     </a>
-            <?php }  ?>
+                <?php }  ?>
             </div>
             <div  class="col-2">
                 <p><?=round($k['total_minutes']/60,2);?> hrs</p>
@@ -99,8 +97,8 @@ $picture = substr($profile,29);
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
                 <div class="modal-footer text-center">
-                    <button type="button" class="btn btn-primary card11" id="cancel-delete" data-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-primary card11" id="delete-user" >Yes</button>
+                    <button type="button" class="btn btn-secondary" id="cancel-delete" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary" id="delete-user" >Yes</button>
                 </div>
             </div>
         </div>
