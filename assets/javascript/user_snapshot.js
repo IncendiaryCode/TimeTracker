@@ -1,16 +1,19 @@
 var myChart;
 function __draw_user_chart(res)
 {
-    console.log(res)
-var user_chart = document.getElementById('user-chart').getContext('2d');
+var user_chart = document.getElementById('user_chart').getContext('2d');
 var color = Chart.helpers.color;
+gradient = user_chart.createLinearGradient(0, 0, 0, 600);
+
+    gradient.addColorStop(0, '#4b5bf0');
+    gradient.addColorStop(1, '#ea4776');
 if(res['status'] == false)
 {
     document.getElementById('user-chart-error').innerHTML = "This project does not have any data.";
-    $('#user-chart').hide();
+    $('#user_chart').hide();
 }
 else{
-    $('#user-chart').show();
+    $('#user_chart').show();
     document.getElementById('user-chart-error').innerHTML = " ";
     var user_data = [];
 
@@ -19,18 +22,16 @@ else{
 
     var task_time_value = [];
     var user_time_value = [];
-    
-    var task_value = res['result'][0];
-    var user_value = res['result'][1];
 
     var chart_color = "000000";
 
-for(var i=0; i<task_value.length; i++)
+for(var i=0; i<res['result'].length; i++)
 {
-task_labels[i] = task_value[i]['task_name'];
-task_time_value[i] = task_value[i]['time_used']/60;
+task_labels[i] = res['result'][i]['user_name'];
+task_time_value[i] = res['result'][i]['time_used']/60;
 }
-var user_data =  [];
+
+console.log(task_labels, task_time_value);
 
 for(var ind=0; ind<task_time_value.length; ind++)
 {
@@ -40,67 +41,32 @@ for(var ind=0; ind<task_time_value.length; ind++)
     task_time_value[ind] = total_time;
 }
 
-
-var task_array = {
-        type: 'bar',
-        label: 'Total tasks',
-        backgroundColor:color(window.chartColors.red).alpha(0.5).rgbString(),
+var configs = {
+    type: 'bar',
+    data: {
+        labels: task_labels,
+        datasets : [{
+        backgroundColor: gradient,
         borderColor:window.chartColors.green,
         fill: false,
         data: task_time_value
-    };
-user_data[0] = task_array;
-for(var j=0; j<Object.keys(user_value).length; j++)
-{
-    user_labels = Object.keys(user_value)[j];
-
-    for(var k=0; k<Object.values(user_value)[j].length; k++)
-    {
-        for(var e=0; e<task_labels.length; e++)
-        {
-        if(Object.values(user_value)[j][k][0] == task_labels[e])
-        {
-        user_time_value[e] = Object.values(user_value)[j][k][1]/60;
-        }
-        }
-    }
-    for(var index=0; index<user_time_value.length; index++)
-    {
-        if(user_time_value[index] == undefined)
-        {
-            user_time_value[index] = 0;
-        }
-    }
-
-
-    for(var ind=0; ind<user_time_value.length; ind++)
-    {
-        var task_time_dec = user_time_value[ind] - Math.floor(user_time_value[ind]);
-        task_time_dec = task_time_dec.toString().slice(0,4);
-        var total_time = Math.floor(user_time_value[ind]) + parseFloat(task_time_dec);
-        user_time_value[ind] = total_time;
-    }
-
-    chart_color= parseInt(chart_color)+123456;
-    var inner_array = { 
-        type: 'line',
-        label: user_labels,
-        backgroundColor: '#'+chart_color,
-        borderColor: '#'+chart_color,
-        fill: false,
-        data: user_time_value,
-        };
-       user_data[j+1] = inner_array;
-       user_time_value = [0];
-}
-var chart_values = {
-    labels: task_labels,
-    datasets: user_data
-};
-var configs = {
-    type: 'bar',
-    data: chart_values,
+    }],
+    },
     options: {
+        tooltips: {
+                enabled: true,
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        var item = tooltipItem.xLabel;
+                        var user = document.getElementById('user_chart').value;
+                        $('#user_chart').unbind().click(function()
+                        {
+                            var elmnt = document.getElementById(item);
+                            elmnt.scrollIntoView();
+                        });
+                    }
+                }
+                },
         title: {
             text: 'User snapshot',
         },
@@ -118,10 +84,13 @@ var configs = {
                     beginAtZero: true,
                     stacked: true
                 },
+                scaleLabel: {
+                    display: true,//labelString: 'Users',
+                }
             }],
             yAxes: [{
                 gridLines: {
-                    display: false,
+                    display: true,
                     drawBorder: true
                 },
                 ticks: {
@@ -142,7 +111,7 @@ if (myChart) myChart.destroy();
 }
 }
 $(document).ready(function() {
-    if(document.getElementById('user-chart'))
+    if(document.getElementById('user_chart'))
     {
     $.ajax({
         type: 'POST',
@@ -190,19 +159,20 @@ $(document).ready(function() {
 
      $('.icon-remove').click(function()
     {
-        $(this.parentNode.parentNode.parentNode.parentNode).remove();
-        $(this.parentNode.parentNode.parentNode.childNodes).remove();
+        var user_id = this.childNodes[0].value;
+        $("#delete-user").click(function()
+        {
         // delete call
-        /*$.ajax({
+        $.ajax({
             type: 'POST',
-            url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
-            data: { 'project_name': p_name },
+            data: { 'user_id': user_id },
+            url: timeTrackerBaseURL + 'index.php/admin/delete_user',
             success: function(res) {
                 var result = JSON.parse(res);
-                __draw_user_chart(result);
                 window.location.reload();
             }
-        });*/
+        });
+        })
     });
 
 

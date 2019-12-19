@@ -1,8 +1,10 @@
 var add_module = {
     username: [],
     i: 1,
+    last_row : 0,
     layout: function (i) {
         var _this = this;
+        var last_row = _this.last_row;
         var username = _this.username;
         var i = _this.i;
         var row = $('<div class="col-10 assign-module' + i + '"></div>');
@@ -10,14 +12,23 @@ var add_module = {
 
         row.append(element);
         var row1 = $('<div class="col-2 mt-3 assign-module' + i + '"></div>');
-        var removeBtn = $('<a href="javascript:void(0);" title="Remove" id="remove-module-' + i + '">' +
-            '<i class="fas fa-minus icon-plus text-danger"></i></a>');
-        removeBtn.appendTo(row1);
-        removeBtn.on('click', function () {
-            $('.assign-module' + i).remove();
-
-            _this.i--;
-            username.pop();
+        var addBtn = $('<a href="javascript:void(0);" title="Remove" id="add-module-' + i + '">');
+        var icon = $('<i class="fas fa-plus icon-plus text-success"></i></a>');
+        addBtn.append(icon);
+        addBtn.appendTo(row1);
+        if(_this.last_row != 0)
+        {
+            _this.last_row.addClass('fas fa-minus icon-plus text-danger');
+            _this.last_row.removeClass('fas fa-plus');
+        }
+        $(_this.last_row).click(function()
+        {
+            $('.assign-module'+i-1).remove();
+        })
+        _this.last_row = icon;
+        
+        addBtn.on('click', function () {
+        _this.validate();
         });
         $('#append-new-module').append(row);
         $('#append-new-module').append(row1);
@@ -126,8 +137,8 @@ var assign = {
                     data: { 'type': "get_user" },
                     success: function (res) {
                         document.getElementById('module-error').innerHTML = " ";
+
                         var result = JSON.parse(res);
-                        console.log(result)
                         var usernames = result['users'];
                         __this.layout(usernames, __this.i);
                         __this.i++;
@@ -145,7 +156,6 @@ var assign = {
         var _this = this;
         this.addBtn.on('click', function (e) {
             e.preventDefault();
-            console.log("clicked");
             _this.validate() // validate the timing details
 
         });
@@ -161,8 +171,8 @@ var assign = {
 $(document).ready(function () {
     if(document.getElementById("new-project"))
     {
-        var new_project = document.getElementById("new-project").checked;
-        var old_project = document.getElementById("old-project").checked;
+        /*var new_project = document.getElementById("new-project").checked;
+        var old_project = document.getElementById("old-project").checked;*/
         if (old_project == true) {
             document.getElementById("new-project").checked = false;
             $('#new-project-input').hide();
@@ -182,7 +192,7 @@ $(document).ready(function () {
             });
         }
     }
-    $('#new-project').click(function()
+    /*$('#new-project').click(function()
     {
         $('#old-project-input').hide();
         $('#new-project-input').show();
@@ -211,7 +221,7 @@ $(document).ready(function () {
                 }
             }
         });
-    });
+    });*/
     if(document.getElementById('old-project-input'))
     {
     $('#old-project-input').show();
@@ -224,7 +234,6 @@ $(document).ready(function () {
             success: function (res) {
                 var result = JSON.parse(res);
                 usernames = result['result'];
-                console.log(usernames);
                 $('.project-list').empty();
                 for (var j = 0; j < usernames.length; j++) {
                     if(usernames[j]["project_name"] != null)
@@ -243,13 +252,10 @@ $(document).ready(function () {
     if (addProject != null) {
         addProject.onsubmit = function (e) {
             var project_title = document.getElementById('project-name').value;
-            var project_title_old = document.getElementById('old-project-input').value;
-            if ((project_title == "" || project_title == " ") && (project_title_old == "Select project")) {
+            if ((project_title == "" || project_title == " ")) {
                 document.getElementById('module-error').innerHTML = "Enter Project name";
                 return false;
             }
-            var project_checked = document.getElementById('old-project').checked;
-                if (project_checked) {
                     var project_name = document.getElementById('old-project-input').value;
                     var user_name = document.getElementById('assign-name0').value;
                     if (project_name == "" || project_name == " ") {
@@ -259,8 +265,6 @@ $(document).ready(function () {
                         document.getElementById('module-error').innerHTML = "Enter user name";
                         return false;
                     }
-                }
-                return true;
         }
     }
 

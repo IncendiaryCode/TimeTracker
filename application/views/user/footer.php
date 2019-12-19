@@ -209,7 +209,7 @@ $(document).ready(function()
     var dark = localStorage.getItem('dark_mode');
     if(dark == "checked")
     {
-        dark_mode();
+        //dark_mode();
     }
 });
 </script>

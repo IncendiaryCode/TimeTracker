@@ -56,61 +56,55 @@ $picture = substr($profile,29);
                             <?php } ?> 
                             <p class="text-center display-4 m-3 text-primary">Add project</p>
                         <form action="<?php echo base_url();?>index.php/admin/add_projects" id="add-project" method="post">
-                            <div class="form-group mt-3">
+                            <!-- <div class="form-group mt-3">
                             <p><input type="radio" name="type" id="old-project" checked>Existing project
                             <input type="radio" name="type" id="new-project" class="ml-5" >New project</p>
                             <select class="project-list form-control mt-3" id="old-project-input" name="project_name">
                             <option>Select project</option></select>
-                            </div>
+                            </div> -->
                             <div class="form-group mt-3" id="new-project-input">
-                                <label for="task-name ">Enter the Project name<span class="text-danger">*</span></label>
+                                <label for="task-name ">Project name:<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control " name="project-name" id="project-name" placeholder="">  
                             </div>
                             <div class="form-group mt-3 row " id="append-new-module">
-                                <div class="col-10 ">
-                                    <label for="new-module0">Enter module name</label>
+                                <div class="col-10 assign-module0">
+                                    <label for="new-module0">Module name:</label>
                                     <input class="form-control user"  id="new-module0" name="new-module[0][module]" placeholder="General">     
                                 </div>
-                                <div class="col-2 pt-4">
+                                <div class="col-2 assign-module0 pt-4">
                                     <a href="#" id="add-new-module" title="Add">
                                         <i class="fas fa-plus icon-plus text-success" ></i>
                                     </a>
                                 </div>
                             </div>
                             <div class="form-group mt-3 row " id="assign-new-user">
-                                <div class="col-10 ">
-                                    <label for="assign-name">Choose the name of user to assign project</label>
-                                    <select class="form-control user"  id="assign-name0" name="assign-name[0][name]">
-                                        <option>Select User</option>
+                                <div class="col-12">
+                                    <label for="assign-name">Name:</label>
+                                    <select class="form-control user"  id="assign-name0" multiple="" name="assign-name[0][name]">
                                         <?php
                                             foreach($names as $name){ ?>
                                             <option ><?php echo $name['name']; ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
-                                <div class="col-2 pt-4">
-                                    <a href="javascript:void(0);" id="assign-new-user" title="Add">
-                                        <i class="fas fa-plus icon-plus text-success" ></i>
-                                    </a>
-                                </div>
                             </div>
                             <div class="form-group mt-3">
-                                <label for="task-name ">Choose logo for project</label>
+                                <label for="task-name ">Choose logo:</label>
                                 <input type="file" class="form-control" name="project-logo" id="Project-logo">
                             </div>
 
                             <div class="form-group mt-3">
-                                <label for="task-name ">Choose color for project</label>
+                                <label for="task-name ">Choose color:</label>
                                 <input type="color"  value="#e384fb" class="form-control" name="project-color" id="Project-color">
                             </div>
 
                             <div class="form-group mt-3">
-                                <label for="task-name ">Enter start date</label>
+                                <label for="task-name ">Start date:</label>
                                 <input type="text" class="form-control edit-date" name="start-date" id="start-date">
                             </div>
 
                             <div class="form-group mt-3">
-                                <label for="task-name ">Enter end date</label>
+                                <label for="task-name ">End date:</label>
                                 <input type="text" class="form-control edit-date" name="end-date" id="end-date">
                             </div>
                             <p id="module-error" class="text-danger"></p>
