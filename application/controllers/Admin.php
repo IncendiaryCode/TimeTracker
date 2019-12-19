@@ -32,8 +32,12 @@
 
 		//Load user analytics page
 		public function load_snapshot(){
+			if($this->input->get('type')){
+				$type = $this->input->get('type',TRUE);
+			}else{
+				$type = $this->input->post('type',TRUE);
+			}
 			
-			$type = $this->input->get('type',TRUE);
 			if($type == 'user'){
 				$this->load->view('header');
 				$result['data'] = $this->dashboard_model->get_task_details($type);
@@ -47,13 +51,23 @@
 		        $this->load->view('footer');
 			}
 			else if($type == 'task'){
-				$this->load->view('header');
+				
 				$result['data'] = $this->dashboard_model->get_task_details($type);
-		        $this->load->view('task_snapshot',$result);
-		        $this->load->view('footer');
+				if($result['data'] == NULL){
+					$result['status'] = FALSE;
+					$result['msg'] = "No task data.";
+				}else{
+					$result['status'] = TRUE;
+				}
+		        echo json_encode($result);
 			}	
 		}
 		
+		public function load_task_snapshot(){
+			$this->load->view('header');
+	        $this->load->view('task_snapshot');
+	        $this->load->view('footer');
+		}
 		//load list of projects for an ajax call
 		public function get_project_list(){
 			$data['result'] = $this->dashboard_model->get_project_name();
@@ -160,7 +174,7 @@
 				}else{
 					$this->form_validation->set_rules('project_name','Project Name','required');
 				}
-				$this->form_validation->set_rules('type', 'Radio button', 'required');
+				//$this->form_validation->set_rules('type', 'Radio button', 'required');
 		  		//$this->form_validation->set_rules('project-logo','Project Logo','required');
 		  		//$this->form_validation->set_rules('new-module','Project Module','required');
 		  		if ($this->form_validation->run() == FALSE)
@@ -173,7 +187,32 @@
 		        }
 		        else
 		        {
-		            $result=$this->dashboard_model->add_projects();
+		        	if (!empty($_FILES['project-logo']['name'])) {
+
+			            $config['upload_path']   = '/var/www/html/time_tracker_ci/assets/images/';
+			            $config['allowed_types'] = 'gif|jpg|png|jpeg';
+			            $config['overwrite']     = FALSE;
+			           // $config['encrypt_name']  = TRUE;
+			            $config['remove_spaces'] = TRUE;
+			            $config['file_name']     = $_FILES['project-logo']['name'];
+			            $this->load->library('upload', $config);
+			            $this->upload->initialize($config);
+			            if ($this->upload->do_upload('project-logo')) {
+			                $uploadData = $this->upload->data();
+			                $picture    = array(
+			                    'image_name' => $uploadData['file_path'].$uploadData['file_name']
+			                ); //to update profile in db(profile column)
+			            }
+			            else {
+			                
+			                echo $this->upload->display_errors();
+			                $picture = '';
+			            }
+			        }
+			        else {
+			            $picture = '';
+			        }
+		            $result=$this->dashboard_model->add_projects($picture);
 		            if($result == FALSE){
 		                $this->session->set_flashdata('err', "Something went wrong.");
 		                redirect('admin/load_add_project','refresh');
@@ -274,6 +313,38 @@
 		    }
 		}
 		
+		//delete user
+		public function delete_data(){
+
+			if($this->input->post('user_id')){
+				$data['result'] = $this->dashboard_model->delete_user($this->input->post('user_id'));
+				if(($data['result']) == FALSE){
+					$data['status'] = FALSE;
+					$data['msg'] = "User not removed.";
+				}else{
+					$data['status'] = TRUE;
+					$data['msg'] = "User removed successfully.";
+				}
+			}else if($this->input->post('task_id')){
+				$data['result'] = $this->dashboard_model->delete_project($this->input->post('task_id'));
+				if(($data['result']) == FALSE){
+					$data['status'] = FALSE;
+					$data['msg'] = "Task not removed.";
+				}else if(($data['result']) == TRUE){
+					$data['status'] = TRUE;
+					$data['msg'] = "Task removed successfully.";
+				}else{
+					$data['msg'] = $data['result'];
+					$data['status'] = FALSE;
+				}
+			}
+			else{
+				$data['status'] = FALSE; 
+				$data['msg'] = "Something went wrong.";
+			}
+			echo json_encode($data);
+		}
+
 		//Profile...
 		public function upload_profile(){
 			if($this->session->userdata('logged_in')){

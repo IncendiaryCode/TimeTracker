@@ -97,7 +97,7 @@ $picture = substr($profile,29);
                                 <button class="btn btn-primary card33" onclick="window.location.href='<?=base_url();?>index.php/admin/load_add_task'"><i class="fas fa-plus"></i> Tasks</button>
                             </div>
                             <div class="col-6 text-left">
-                                <button class="btn btn-primary card33" onclick="window.location.href='<?=base_url();?>index.php/admin/load_snapshot?type=task'">Vew details</button>
+                                <button class="btn btn-primary card33" onclick="window.location.href='<?=base_url();?>index.php/admin/load_task_snapshot'">Vew details</button>
                             </div>
                         </div>
                     </div>
