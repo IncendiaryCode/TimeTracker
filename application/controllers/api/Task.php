@@ -112,7 +112,7 @@ class Task extends REST_Controller {
             if(!empty($post['type']) && !empty($post['userid']) && (($post['type'] =='task' && !empty($post['task_id'])) || $post['type'] == 'login')){
                 $input['userid'] = $post['userid'];
                 $input['task_type'] = $post['type'];//task or login
-                $input['task_id'] = $post['task_id'];
+                $input['task_id'] = isset($post['task_id'])?$post['task_id']:null;
                 $resp = $this->user_model->start_timer($input);
                 if ($resp) {
                     $data['success'] = 1;
