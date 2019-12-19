@@ -52,6 +52,7 @@ $picture = substr($profile,29);
             <p ><strong>Task details</strong></p>
         </div>
     </div>
+    <table id="example" class="display" width="100%"></table>
     <hr>
                     <?php 
                     $task_name = " ";
@@ -60,7 +61,7 @@ $picture = substr($profile,29);
                     $count = 1;
                         for($i=0;$i<sizeof($data);$i++){
                             $count++; ?>
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-2">
                             <div id="display-name">
                             <div><?php
@@ -118,8 +119,8 @@ $picture = substr($profile,29);
         </div>
         <div class="col-2 "><i class="fas fa-trash-alt icon-plus task-remove text-danger"></i>
         </div>
-    </div>
-<?php  } ?>
+    </div> 
+<?php  } ?>-->
 </div>
 <!-- end of task snapshot -->
 <footer>

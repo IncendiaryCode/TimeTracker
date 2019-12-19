@@ -166,7 +166,7 @@ $(document).ready(function() {
         $.ajax({
             type: 'POST',
             data: { 'user_id': user_id },
-            url: timeTrackerBaseURL + 'index.php/admin/delete_user',
+            url: timeTrackerBaseURL + 'index.php/admin/delete_data',
             success: function(res) {
                 var result = JSON.parse(res);
                 window.location.reload();
