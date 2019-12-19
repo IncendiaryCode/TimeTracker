@@ -171,6 +171,7 @@ class User_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('time_details');
         $this->db->where(array('task_id'=>$req_data['task_id'],'user_id'=>$req_data['userid'],'total_minutes'=>'0'));
+        $this->db->order_by("id", "desc");
         $query = $this->db->get();
         //print_r($this->db->last_query());die;    
         if($query->num_rows() > 0){
