@@ -69,6 +69,12 @@
 			}	
 		}
 		
+		//load user details page
+		public function load_userdetails_page(){
+			$this->load->view('header');
+	        $this->load->view('user_detail');
+	        $this->load->view('footer');
+		}
 		public function load_task_snapshot(){
 			$this->load->view('header');
 	        $this->load->view('task_snapshot');

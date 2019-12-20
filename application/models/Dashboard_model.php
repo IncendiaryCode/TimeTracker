@@ -142,11 +142,11 @@ class Dashboard_model extends CI_Model
             }else{
                 $data = '';
             }
-        }else if($this->input->post()){
+        }else if($this->input->post('project_name')){
             if(!empty($this->input->post('project_name'))){
                 $project_name = $this->input->post('project_name');
                 $get_project_id = $this->db->get_where('project',array('name'=>$project_name));
-                $project_id = $get_project_id->row_array()['id'];
+                $project_id = $get_project_id->row_array()['id'];    
             }else{
                 $project_id = '';
             }
@@ -174,8 +174,33 @@ class Dashboard_model extends CI_Model
                     }
                 }  
             }else{
-                $data = NULL;
+                $data = '';
             }
+        }else{
+            $this->db->select('id,name');
+            $this->db->from('project');
+            $projects = $this->db->get()->result_array();
+            foreach ($projects as $p) {
+                
+            }
+            $this->db->select('p.name AS project_name,u.id AS user_id,u.name AS user_name');
+            $this->db->select_sum('d.total_minutes','t_minutes');
+            $this->db->from('project AS p');
+            $this->db->join('project_assignee AS a','a.project_id = p.id');
+            $this->db->join('users AS u','u.id = a.user_id');
+            $this->db->join('task AS t','t.project_id = p.id');
+            $this->db->join('time_details AS d','d.task_id = t.id');
+            $this->db->group_by('u.id');
+            $details = $this->db->get();
+            if($details->num_rows() > 0){
+                $project_data = $details->result_array();
+                foreach ($project_data as $d) {
+                    print_r($d);
+                    $data[] = array('user_name'=>$d['user_name'],'time_used'=>$d['t_minutes']);
+                }
+            }else{
+                $data = '';
+            }   
         }
         return $data;
     }

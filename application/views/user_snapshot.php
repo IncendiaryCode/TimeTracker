@@ -61,7 +61,7 @@ $picture = substr($profile,29);
             ?>
             <div class="row pt-3">
                 <div class="col-2">                    
-                    <a href="<?=base_url();?>index.php/admin/user-detail" class=" " id="<?=$k['user_name']?>">
+                    <a href="<?=base_url();?>index.php/admin/load_userdetails_page" class=" " id="<?=$k['user_name']?>">
                         <?=$k['user_name'];?>
                     </a>
                 </div>
