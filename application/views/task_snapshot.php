@@ -57,7 +57,7 @@ $picture = substr($profile,29);
     </table>
 </div>
 
-<div class="modal" id="delete-task" data-backdrop="false">
+<div class="modal" id="delete-task-modal" data-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content text-center">
             <div class="modal-header ">

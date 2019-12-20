@@ -31,7 +31,6 @@ task_labels[i] = res['result'][i]['user_name'];
 task_time_value[i] = res['result'][i]['time_used']/60;
 }
 
-console.log(task_labels, task_time_value);
 
 for(var ind=0; ind<task_time_value.length; ind++)
 {

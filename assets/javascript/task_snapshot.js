@@ -82,45 +82,6 @@ function __draw_task_chart(res) {
 $(document).ready(function() {
 
     //rendering datatable
-    /*var dataSet = [];
-    $.ajax({
-        type: 'POST',
-        url: timeTrackerBaseURL + 'index.php/admin/load_snapshot',
-        data: { 'type': "task" },
-        success: function(res) {
-            var result = JSON.parse(res);
-            result = result['data']
-            for (var i = 0; i < result.length; i++) {
-
-                var task_time = (result[i]['total_minutes'] / 60) - (Math.floor(result[i]['total_minutes'] / 60));
-                task_time = task_time.toString().slice(0, 4);
-                var total_task_time = Math.floor(result[i]['total_minutes'] / 60) + parseFloat(task_time);
-
-                var element = [result[i]['task_name'],
-                    result[i]['description'],
-                    result[i]['project'][0]['project_name'],
-                    result[i]['start_time'],
-                    result[i]['end_time'],
-                    total_task_time,
-                    "<i class='fas fa-trash-alt icon-plus del-tasks text-danger' data-toggle='modal' data-target='#delete-task' ><input type='hidden' id='task' class='task_id' value='" + result[i]['task_id'] + "'></i>"
-                ];
-                dataSet[i] = element;
-
-            }
-            $('#example').DataTable({
-                data: dataSet,
-                columns: [
-                    { title: "Task name" },
-                    { title: "Description" },
-                    { title: "Project" },
-                    { title: "Start date" },
-                    { title: "End date" },
-                    { title: "Time spent" },
-                    { title: "Action" }
-                ]
-            });
-        }
-    });*/
 
     $('#task-lists-datatable').DataTable({
         "processing": true,
@@ -143,69 +104,49 @@ $(document).ready(function() {
         },{
             "targets": 2,
             "render": function ( data, type, row, meta ) {
-                return row.description;
+                return row.project_name;
             }
         },{
             "targets": 3,
             "render": function ( data, type, row, meta ) {
-                return row.description;
+                return row.start_time;
             }
         },{
             "targets": 4,
             "render": function ( data, type, row, meta ) {
-                return row.description;
+                return row.end_time;
             }
         },{
             "targets": 5,
             "render": function ( data, type, row, meta ) {
-                return row.description;
+                return row.total_minutes;
             }
         },{
             "targets": 6,
             "render": function ( data, type, row, meta ) {
                 return "<a href='#' data-id='"+ row.task_id +"' class='text-danger delete-task' data-toggle='modal' data-target='#delete-task-modal'><i class='fas fa-trash-alt icon-plus del-tasks'></i></a>";
             },
-            "orderable": false
+            "orderable": false,
         }]
     }).on( 'init.dt', function () {
-        console.log( 'Table initialisation complete: '+new Date().getTime() );
-    });
-
-    $('.del-tasks').click(function() {
-        console.log("fgdjf");
-    });
-
-    $(".remove-tasks").click(function() {
-        var task_id = this.childNodes[0].value;
-        $("#delete-task").click(function() {
-            $.ajax({
-                type: 'POST',
-                url: timeTrackerBaseURL + 'index.php/admin/delete_data',
-                data: { 'task_id': task_id },
-                success: function(res) {
-                    var result = JSON.parse(res);
-                    window.location.reload();
-                }
-            });
-        });
-    });
-
-
-
-    /*$("#delete-task").click(function()
+        $('.delete-task').click(function()
         {
-    var task_id = this.childNodes[0].value;
-    console.log(this)
-        $.ajax({
+        $('#delete-task').click(function()
+            {
+            var task_id = this.getAttribute("data-id");
+            $.ajax({
             type: 'POST',
             url: timeTrackerBaseURL + 'index.php/admin/delete_data',
             data: { 'task_id': task_id },
-                success: function(res) {
-                    var result = JSON.parse(res);
-                    window.location.reload();
-                }
-            });
-        });*/
+            success: function(res) {
+                var result = JSON.parse(res);
+                window.location.reload();
+                    }
+                });
+            })
+        })
+    });
+
 
     if (document.getElementById('task-chart')) {
         if ((document.getElementById('curr-month').value == "") || (document.getElementById('curr-month').value == " ")) {
