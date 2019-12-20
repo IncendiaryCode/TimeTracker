@@ -31,10 +31,11 @@ $picture = substr($profile,29);
 <!-- UI for task snapshot -->
 <p class="display-4 text-primary text-center">Task details</p>
 <div class="container">
-            <div class="text-right">
-            <select class="project-name-list" id="total-project">
-            </select>
+    <div class="form-group">
+        <div class="text-right form">
+            <input type="month" class="border p-1" id="curr-month" name="cur_month"><span><button class="btn btn-primary" id="view-chart"> view chart</button></span>
         </div>
+    </div>
     <div class="row mt-5">
         <div class="col-12">
             <canvas id="task-chart" height="80px"></canvas>
@@ -53,7 +54,7 @@ $picture = substr($profile,29);
             </div>
                 <div class="modal-footer text-center">
                     <button type="button" class="btn btn-secondary" id="cancel-delete" data-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-primary" id="delete-task" >Yes</button>
+                    <button type="button" class="btn btn-primary" id="delete-task" ><input type="hidden" id="task" name=""> Yes</button>
                 </div>
             </div>
         </div>

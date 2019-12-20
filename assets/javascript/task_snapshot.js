@@ -83,6 +83,8 @@ for(var ind=0; ind<time.length; ind++)
 
 $(document).ready(function()
 {
+
+
 var dataSet = [];
 $.ajax({
 type: 'POST',
@@ -93,23 +95,27 @@ success: function(res) {
     result = result['data']
     for(var i=0; i<result.length; i++)
     {
-
+        
         var task_time = (result[i]['total_minutes']/60) - (Math.floor(result[i]['total_minutes']/60));
         task_time = task_time.toString().slice(0,4);
         var total_task_time = Math.floor(result[i]['total_minutes']/60) + parseFloat(task_time);
 
-        var element = [result[i]['task_name'],result[i]['description'],
+        var element = [result[i]['task_name'],
+        result[i]['description'],
+        result[i]['project'][0]['project_name'],
         result[i]['start_time'],
         result[i]['end_time'],
         total_task_time,
-        "<i class='fas fa-trash-alt icon-plus remove-tasks text-danger' data-toggle='modal' data-target='#delete-task'><input type='hidden' class='task_id' value='"+result[i]['task_id']+"'></i>" ];
+        "<i class='fas fa-trash-alt icon-plus del-tasks text-danger' data-toggle='modal' data-target='#delete-task' ><input type='hidden' id='task' class='task_id' value='"+result[i]['task_id']+"'></i>" ];
         dataSet[i] = element;
+
     }
         $('#example').DataTable( {
         data: dataSet,
         columns: [
             { title: "Task name" },
             { title: "Description" },
+            { title: "Project" },
             { title: "Start date" },
             { title: "End date" },
             { title: "Time spent" },
@@ -119,13 +125,33 @@ success: function(res) {
 }
 });
 
-
-$(".remove-tasks").click(function()
+$('.del-tasks').click(function()
 {
-console.log("dgsjhfs"); 
-var task_id = this.childNodes[0].value;
-$("#delete-task").click(function()
+    console.log("fgdjf");
+});
+$(".remove-tasks").click(function()
     {
+    var task_id = this.childNodes[0].value;
+    $("#delete-task").click(function()
+        {
+        $.ajax({
+            type: 'POST',
+            url: timeTrackerBaseURL + 'index.php/admin/delete_data',
+            data: { 'task_id': task_id },
+                success: function(res) {
+                    var result = JSON.parse(res);
+                    window.location.reload();
+                }
+            });
+        });
+    });
+
+
+
+/*$("#delete-task").click(function()
+    {
+var task_id = this.childNodes[0].value;
+console.log(this)
     $.ajax({
         type: 'POST',
         url: timeTrackerBaseURL + 'index.php/admin/delete_data',
@@ -135,50 +161,39 @@ $("#delete-task").click(function()
                 window.location.reload();
             }
         });
-    });
-});
-
+    });*/
 
 if(document.getElementById('task-chart'))
 {
-$.ajax({
-        type: 'POST',
-        url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
-        data: { 'type': "get_user" },
-        success: function(res) {
-			var result = JSON.parse(res);
-            usernames = result['result'];
-	        for (var j = 0; j < usernames.length; j++) {
-                if(usernames[j]["project_name"] != null)
-                {
-	            var option = $('<option>' + usernames[j]["project_name"] + '</option>');
-	            $('.project-name-list').append(option);
-	        	}
-            }
-            var project_name = document.getElementById('total-project').value;
-            $.ajax({
-                type: 'POST',
-                url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
-                data: { 'project_name': project_name },
-                success: function(res) {
-                    var result = JSON.parse(res);
-                    __draw_task_chart(result);
-                }    
-            });
-        }
-    });
-}
-
-$('#total-project').change(function() {
-    var project_name = document.getElementById('total-project').value;
+    if((document.getElementById('curr-month').value =="") || (document.getElementById('curr-month').value ==" "))
+    {
+        var curr_month = new Date().getMonth()+1;
+        document.getElementById('curr-month').value = "2019-12";
+    }
+    document.getElementById('curr-month').value;
     $.ajax({
         type: 'POST',
         url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
-        data: { 'project_name': project_name },
+        data: { 'month': document.getElementById('curr-month').value },
         success: function(res) {
             var result = JSON.parse(res);
             __draw_task_chart(result);
-            }
-        });
+        }    
     });
+}
+$('#view-chart').click(function()
+{
+    if(document.getElementById('curr-month').value != '')
+        {
+        $.ajax({
+            type: 'POST',
+            url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
+            data: { 'month': document.getElementById('curr-month').value },
+            success: function(res) {
+                var result = JSON.parse(res);
+            __draw_task_chart(result);
+                }
+            });
+        }
+    })
 });
