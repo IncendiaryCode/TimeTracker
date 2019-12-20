@@ -59,35 +59,43 @@ $picture = substr($profile,29);
                             <?php } ?>
                             <p class="text-center display-4 m-3 text-primary">Add task</p>
                             <form action="<?php echo base_url();?>index.php/admin/add_tasks" id="addTask" method="post">
+                                <div class="form-group">
+                                    <label for="task-name">Task name</label>
+                                    <input type="text" class="form-control" id="task_name" name="task_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea class="form-control" id="description" name="description"rows="5"></textarea>
+                                </div>
+                                
                                 <div class="form-group mt-5 row " id="append-new-user">
-                                    <div class="col-10 ">
-                                        <label for="user-name ">Choose the name of user to assign task</label>
-                                        <select class="form-control user"  id="user-name0" name="user-name[0][name]">
-                                            <option>Select User</option>
+                                    <div class="col-12">
+                                        <label for="user-name ">Choose the name </label>
+                                        <select class="form-control user" multiple="" name="user-name[0][name]">
                                             <?php
                                                 foreach($names as $name){ ?>
                                                 <option ><?php echo $name['name']; ?></option>
                                             <?php } ?>
                                         </select>
                                     </div>
-                                    <div class="col-2 pt-4">
+                                <!-- <div class="col-2 pt-4">
                                         <a href="javascript:void(0);" id="add-new-user" title="Add">
                                             <i class="fas fa-plus icon-plus text-success" ></i>
                                         </a>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="row assign-user pb-3"></div>
                                 <div>
                                 <div class="form-group">
-                                    <label for="choose-project">Choose a project</label>
+                                    <label for="choose-project">Choose project</label>
                                     <select class="form-control" id="chooseProject" name="chooseProject">
                                     <option>Select Project</option>
                                     <?php 
                                         foreach($result as $p){ 
                                             if($p['project_name'] != "")
-                                                {?>
-                                        <option value="<?= $p['id']; ?>"><?=$p['project_name']; ?></option>
-                                    <?php } } ?> 
+                                                { ?>
+                                            <option value="<?= $p['id']; ?>"><?=$p['project_name']; ?></option>
+                                        <?php } } ?> 
                                 </select>
                                 </div>
                                 <div class="form-group">
@@ -97,14 +105,7 @@ $picture = substr($profile,29);
                                     </select>
                                 </div>
                                 
-                                <div class="form-group">
-                                    <label for="task-name">Enter the Task name</label>
-                                    <input type="text" class="form-control" id="task_name" name="task_name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="description">Write a small description</label>
-                                    <textarea class="form-control" id="description" name="description"rows="5"></textarea>
-                                </div>
+                                
                                 
                                 <p id="user-name-error" class="text-danger"></p>
                                 <button type="submit" class="btn btn-primary">Assign Task</button>

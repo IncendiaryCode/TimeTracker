@@ -52,15 +52,25 @@ $picture = substr($profile,29);
                 <?php foreach($data as $proj){ 
                     ?>
             <div class="row" style="min-height: 50px;">
-                <div class="col-5">
-
-                    <div class=" project-name">
-                        <a href="#" class="">
-                            <div class=""><img src=""><?= $proj['project_name']; ?></div>
-                        </a>
+                <div class="col-5">                
+                    <a href="#" class="">
+                        <div class="mr-2">
+                        <?php
+                        if($proj['project_icon'] != ''){
+                            $image = substr($proj['project_icon'],29);
+                            ?>
+                            <img src="<?=base_url().$image?>" width="30px;">
+                            <?php
+                        } ?>
+                        <?=$proj['project_name']; ?>
                     </div>
-                    
-                </div>
+                        
+                    </a>
+            </div>
+
+
+
+
                 <div class="col-5">
                     <p>Total users: <?=$proj['total_users'];?></p>
                      <?php foreach($proj['user_details'] as $user){  ?>

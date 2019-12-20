@@ -110,6 +110,7 @@ if (myChart) myChart.destroy();
  myChart = new Chart(user_chart, configs);
 }
 }
+
 $(document).ready(function() {
     if(document.getElementById('user_chart'))
     {
@@ -130,7 +131,6 @@ $(document).ready(function() {
             }
     	});
     }
-
 
     $.ajax({
         type: 'POST',

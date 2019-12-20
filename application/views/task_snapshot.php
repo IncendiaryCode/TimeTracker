@@ -36,92 +36,30 @@ $picture = substr($profile,29);
             </select>
         </div>
     <div class="row mt-5">
-        <div class="col-md-6 offset-md-3">
-            <canvas id="task-chart"></canvas>
+        <div class="col-12">
+            <canvas id="task-chart" height="80px"></canvas>
             <p id="task-chart-error" class="text-center"></p>
         </div>
     </div>
-    <div class="row mt-5">
-        <div class="col-2"> 
-            <p><strong>Task name</strong></p>
-            </div>
-        <div class="col-2">
-            <p><strong>Project name</strong></p>
-        </div>
-        <div class="col-6">
-            <p ><strong>Task details</strong></p>
-        </div>
-    </div>
     <table id="example" class="display" width="100%"></table>
-    <hr>
-                    <?php 
-                    $task_name = " ";
-                    $project = " ";
-                    $username = " ";
-                    $count = 1;
-                        for($i=0;$i<sizeof($data);$i++){
-                            $count++; ?>
-                    <!-- <div class="row">
-                        <div class="col-2">
-                            <div id="display-name">
-                            <div><?php
-                            $user = $data[$i]['task'];
-                            if($task_name == $user['task_name'])
-                            {
-                                ?><div class="col-2"></div><?php 
-                            }
-                            else
-                            {
-                            ?><p><?=$user['task_name']?></p>
-                            <p>Started on <?="(start date)"?></p>
-                            <p>Ended on <?="(end date)"?></p>
-                            <p>Time used <?="(time used)"?></p>
-                        <?php
-                        $username = $data[$i]['user_name'];
-                             } ?>
-                    </div>
+</div>
+
+<div class="modal" id="delete-task" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+            <div class="modal-header ">
+                <span>Do you want to delete? </span></p>
+                <button type="button" class="close text-danger" data-dismiss="modal">×</button>
+            </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-secondary" id="cancel-delete" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary" id="delete-task" >Yes</button>
                 </div>
             </div>
-        <div class="col-2">
-            <div>
-                <?php
-                if($task_name == $user['task_name'])
-                    {   
-                        ?><div class="col-2"></div><?php 
-                    }
-                    else
-                    {
-                    $task_name = $user['task_name'];
-                    $project = $data[$i]['project'];
-                    $count= 1;
-                    ?><p><?=$project;?></p>
+        </div>
+    </div>
 
-                    <?php
 
-                    }
-                    
-                    ?>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="row">
-                <?php
-                    $task = $data[$i]['task']; ?>
-                <div class="col-6 pb-4"><span><?=$count ?>.)  </span><u>User name</u>:  <?php echo $data[$i]['user_name']; $username = $data[$i]['user_name'];?></div>
-                <div class="col-6 pb-4"><u>Timer taken</u>:  <?=round(($task['total_minutes']/60),2);?> hours</div>
-                <div class="col-6 ">Start time</div>
-                <div class="col-6 ">End time</div>
-           
-                <div class="col-6"><?=$task[0]['start_time'];?></div>
-                <div class="col-6"><?=$task[0]['end_time'];?></div>
-            </div>
-            <hr>
-        </div>
-        <div class="col-2 "><i class="fas fa-trash-alt icon-plus task-remove text-danger"></i>
-        </div>
-    </div> 
-<?php  } ?>-->
-</div>
 <!-- end of task snapshot -->
 <footer>
 <hr>

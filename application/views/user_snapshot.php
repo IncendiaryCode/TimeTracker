@@ -62,11 +62,11 @@ $picture = substr($profile,29);
             <div class="row pt-3">
                 <div class="col-2">
                     
-                    <a href="#" class=" " id="<?=$k['user_name']?>">
+                    <a href="#" class=" " id="<?=$k['user_name']?>" data-toggle="modal" data-target="#user-detail">
                         <?=$k['user_name'];?>
                     </a>
             </div>
-            <div class="col-6">
+            <!-- <div class="col-6">
                     <?php
                     foreach ($k['project'] as $d) { ?>                
                     <a href="#" class=""><div class="mr-2"><img src="">
@@ -74,7 +74,26 @@ $picture = substr($profile,29);
                         
                     </a>
                 <?php }  ?>
+            </div> -->
+
+            <div class="col-6">
+                    <?php
+                    foreach ($k['project'] as $d) { 
+                        
+                        ?>                
+                    <a href="#" class=""><div class="mr-2">
+                        <?php
+                        if($d['image_name'] != ''){
+                            $image = substr($d['image_name'],29);
+                            ?>
+                            <img src="<?=base_url().$image?>" width="30px;">
+                            <?php
+                        } echo $d['project_name']; ?></div>
+                        
+                    </a>
+                <?php }  ?>
             </div>
+            
             <div  class="col-2">
                 <p><?=round($k['total_minutes']/60,2);?> hrs</p>
             </div>
@@ -88,21 +107,42 @@ $picture = substr($profile,29);
         <?php } ?>
     </div>
 </div>
-<hr>
+
 <div class="modal" id="delete-entry" data-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content text-center">
             <div class="modal-header ">
-                <span>Do you want to delete? </span></p>
+                <span>Do you want to delete? </span>
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
-                <div class="modal-footer text-center">
-                    <button type="button" class="btn btn-secondary" id="cancel-delete" data-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-primary" id="delete-user" >Yes</button>
-                </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-secondary" id="cancel-delete" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" id="delete-user" >Yes</button>
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal" id="user-detail" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+            <div class="modal-header text-center">
+                <span class=""> <strong>User details</strong></span>
+                <button type="button" class="close text-danger" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-bodyn text-left">
+                <div class="ml-3">
+                    <p>User name:</p>
+                    <p>Working projects:</p>
+                    <a href="#" >change password?</a>
+                </div>
+            </div>
+
+            <div class="modal-footer text-center">
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
