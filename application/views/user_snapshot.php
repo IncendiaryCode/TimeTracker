@@ -86,7 +86,7 @@ $picture = substr($profile,29);
                         if($d['image_name'] != ''){
                             $image = substr($d['image_name'],29);
                             ?>
-                            <img src="<?=base_url().$image?>" width="30px;">
+                            <img src="<?=base_url().$image?>" height="15px;" width="18px;">
                             <?php
                         } echo $d['project_name']; ?></div>
                         

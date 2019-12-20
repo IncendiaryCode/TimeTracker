@@ -313,7 +313,7 @@ class User extends CI_Controller
     public function upload_profile()
     {
         if (!empty($_FILES['change_img']['name'])) {
-            $config['upload_path']   = '/var/www/html/time_tracker_ci/assets/user/images/user_profiles/';
+            $config['upload_path']   = USER_UPLOAD_PATH;
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
             $config['overwrite']     = FALSE;
            // $config['encrypt_name']  = TRUE;

@@ -57,7 +57,14 @@
 		        $this->load->view('footer');
 			}
 			else if($type == 'task'){
-				$result = $this->dashboard_model->get_task_details($type, $get_data);				
+				
+				$result['data'] = $this->dashboard_model->get_task_details($type, $get_data);
+				if($result['data'] == NULL){
+					$result['status'] = FALSE;
+					$result['msg'] = "No task data.";
+				}else{
+					$result['status'] = TRUE;
+				}
 		        echo json_encode($result);
 			}	
 		}
@@ -83,6 +90,7 @@
 		public function get_graph_data(){
 				$data['result'] = $this->dashboard_model->user_graph_data();
 				if($data['result'] == NULL){
+					$data['result'] = NULL;
 					$data['status'] = FALSE;
 				}else{
 					$data['status'] = TRUE;
@@ -188,7 +196,7 @@
 		        {
 		        	if (!empty($_FILES['project-logo']['name'])) {
 
-			            $config['upload_path']   = '/var/www/html/time_tracker_ci/assets/images/';
+			            $config['upload_path']   = UPLOAD_PATH;
 			            $config['allowed_types'] = 'gif|jpg|png|jpeg';
 			            $config['overwrite']     = FALSE;
 			           // $config['encrypt_name']  = TRUE;
@@ -329,12 +337,9 @@
 				if(($data['result']) == FALSE){
 					$data['status'] = FALSE;
 					$data['msg'] = "Task not removed.";
-				}else if(($data['result']) == TRUE){
+				}else{
 					$data['status'] = TRUE;
 					$data['msg'] = "Task removed successfully.";
-				}else{
-					$data['msg'] = $data['result'];
-					$data['status'] = FALSE;
 				}
 			}
 			else{
@@ -348,7 +353,7 @@
 		public function upload_profile(){
 			if($this->session->userdata('logged_in')){
 		    	if(!empty($_FILES['change_img']['name'])){
-			    	$config['upload_path'] = '/var/www/html/time_tracker_ci/assets/images/';
+			    	$config['upload_path'] = UPLOAD_PATH;
 					$config['allowed_types'] = 'gif|jpg|png|jpeg';
 					$config['overwrite'] = TRUE;
 				    $config['file_name'] = $_FILES['change_img']['name'];
