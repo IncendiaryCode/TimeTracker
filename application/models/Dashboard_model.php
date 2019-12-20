@@ -26,7 +26,7 @@ class Dashboard_model extends CI_Model
         $row_proj   = $get_proj_q->num_rows();
         return $row_proj;
     }
-    public function get_task_details($type){
+    public function get_task_details($type, $get_data = NULL){
 
         if($type == 'user'){
 
@@ -85,7 +85,7 @@ class Dashboard_model extends CI_Model
             }
             return $final_result;
                
-        }else if($type == 'task'){
+        } else if($type == 'task') {
 
             $this->db->select('t.id AS task_id,t.task_name');
             $this->db->select('t.description,d.start_time,d.end_time,d.total_minutes,d.total_hours');
@@ -96,8 +96,13 @@ class Dashboard_model extends CI_Model
             $this->db->group_by('d.task_id');
             $query = $this->db->get();
             if($query->num_rows() > 0){
-                $data = $query->result_array();
-                foreach($data as $q){
+                
+                //TODO: Implement datatables filters (pagination, ordering, search)
+                //handle empty get data case                                
+                $reults_data = $query->result_array();
+                $details = array();
+                // echo '<pre>'; print_r($reults['data']); exit;
+                foreach($reults_data as $q){
                     $this->db->select('t.id AS task_id,p.id AS project_id,p.name AS project_name');
                     $this->db->from('project AS p');
                     $this->db->join('task AS t','t.project_id = p.id');
@@ -105,6 +110,15 @@ class Dashboard_model extends CI_Model
                     $proj_names = $this->db->get()->result_array();
                     $details[] = array('task_id'=>$q['task_id'],'task_name'=>$q['task_name'],'description'=>$q['description'],'start_time'=>$q['start_time'],'end_time'=>$q['end_time'],'total_minutes'=>$q['t_minutes'],'project'=>$proj_names);
                 }
+
+                $reults = array();
+                $reults['data'] = $details;
+                $reults["draw"] = $get_data["draw"];
+                $reults['recordsTotal'] = count($reults_data);
+                $reults["recordsFiltered"] = count($reults_data);
+
+                return $reults;
+
             }else{
                 $details = null;
             }

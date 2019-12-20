@@ -32,6 +32,12 @@
 
 		//Load user analytics page
 		public function load_snapshot(){
+
+			$result = array();
+			$get_data = $this->input->get();
+
+			// echo '<pre>'; print_r($get_data); exit;
+
 			if($this->input->get('type')){
 				$type = $this->input->get('type',TRUE);
 			}else{
@@ -51,14 +57,7 @@
 		        $this->load->view('footer');
 			}
 			else if($type == 'task'){
-				
-				$result['data'] = $this->dashboard_model->get_task_details($type);
-				if($result['data'] == NULL){
-					$result['status'] = FALSE;
-					$result['msg'] = "No task data.";
-				}else{
-					$result['status'] = TRUE;
-				}
+				$result = $this->dashboard_model->get_task_details($type, $get_data);				
 		        echo json_encode($result);
 			}	
 		}

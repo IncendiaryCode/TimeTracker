@@ -42,7 +42,19 @@ $picture = substr($profile,29);
             <p id="task-chart-error" class="text-center"></p>
         </div>
     </div>
-    <table id="example" class="display" width="100%"></table>
+    <table id="task-lists-datatable" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Task name</th>
+                <th>Description</th>
+                <th>Project</th>
+                <th>Start date</th>
+                <th>End date</th>
+                <th>Time spent</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+    </table>
 </div>
 
 <div class="modal" id="delete-task" data-backdrop="false">
