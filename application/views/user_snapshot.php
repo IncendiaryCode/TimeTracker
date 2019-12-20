@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
+print_r($data)
 ?>
 <body>
     <header>
@@ -52,7 +53,7 @@ $picture = substr($profile,29);
         </div>
         <div class="col-2">
             <p><strong>Action</strong></p>
-            </div>
+        </div>
     </div>
     <hr>
     <div>
@@ -61,7 +62,7 @@ $picture = substr($profile,29);
             ?>
             <div class="row pt-3">
                 <div class="col-2">                    
-                    <a href="<?=base_url();?>index.php/admin/load_userdetails_page" class=" " id="<?=$k['user_name']?>">
+                    <a href="<?=base_url();?>index.php/admin/load_userdetails_page?user_id=<?=$k['user_id'] ?>" class=" " id="<?=$k['user_name']?>">
                         <?=$k['user_name'];?>
                     </a>
                 </div>

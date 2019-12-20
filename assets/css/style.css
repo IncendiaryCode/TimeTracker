@@ -205,3 +205,13 @@ header.main-header h1 {
 {
     background-color: silver;
 }
+.user-card
+{
+    border :0px;
+}
+.vl
+{
+  border-left: 1px solid #ccc;
+  height: 200px;
+}
+}
