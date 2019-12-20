@@ -1,40 +1,43 @@
 var taskChart;
 
 function __draw_task_chart(res) {
+    var result = res['result'];
+    console.log(result);
     var task_chart = document.getElementById('task-chart').getContext('2d');
+    gradient = task_chart.createLinearGradient(0, 0, 0, 600);
+    gradient.addColorStop(0, '#7077ff');
+    gradient.addColorStop(0.5, '#e485fb');
+    gradient.addColorStop(1, '#e484fb');
     var color = Chart.helpers.color;
     var label = [];
-    var time = [];
+    var count = [];
     if (res['status'] == false) {
         document.getElementById('task-chart-error').innerHTML = "This project does not have any data.";
         $('#task-chart').hide();
-    } else {
+    }
+    else {
         $('#task-chart').show();
         document.getElementById('task-chart-error').innerHTML = " ";
-
-        var data = res['result'][0];
-
-        for (var i = 0; i < data.length; i++) {
-            label[i] = data[i]['task_name'];
-            time[i] = data[i]['time_used'] / 60;
+        for (var i = 0; i < result.length; i++) {
+            label[i] = result[i]['task_date'];
+            count[i] = result[i]['tasks_count'] / 60;
         }
-
-        for (var ind = 0; ind < time.length; ind++) {
-            var task_time_dec = time[ind] - Math.floor(time[ind]);
+        for (var ind = 0; ind < count.length; ind++) {
+            var task_time_dec = count[ind] - Math.floor(count[ind]);
             task_time_dec = task_time_dec.toString().slice(0, 4);
-            var total_time = Math.floor(time[ind]) + parseFloat(task_time_dec);
-            time[ind] = total_time;
+            var total_time = Math.floor(count[ind]) + parseFloat(task_time_dec);
+            count[ind] = total_time;
         }
         var configs = {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: label,
                 datasets: [{
-                    type: 'bar',
+                    type: 'line',
                     label: 'Time used',
-                    backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-                    borderColor: window.chartColors.red,
-                    data: time,
+                    backgroundColor: gradient,
+                    borderColor: window.chartColors.black,
+                    data: count,
                 }]
             },
             options: {
@@ -82,7 +85,6 @@ function __draw_task_chart(res) {
 $(document).ready(function() {
 
     //rendering datatable
-
     $('#task-lists-datatable').DataTable({
         "processing": true,
         "serverSide": true,
@@ -100,11 +102,11 @@ $(document).ready(function() {
             "targets": 1,
             "render": function ( data, type, row, meta ) {
                 return row.description;
-            }
+            }, "orderable": false,
         },{
             "targets": 2,
             "render": function ( data, type, row, meta ) {
-                return row.project_name;
+                return row.project;
             }
         },{
             "targets": 3,
@@ -131,9 +133,9 @@ $(document).ready(function() {
     }).on( 'init.dt', function () {
         $('.delete-task').click(function()
         {
+        var task_id = this.getAttribute("data-id");
         $('#delete-task').click(function()
             {
-            var task_id = this.getAttribute("data-id");
             $.ajax({
             type: 'POST',
             url: timeTrackerBaseURL + 'index.php/admin/delete_data',
@@ -177,4 +179,8 @@ $(document).ready(function() {
             });
         }
     })
+    var search = document.getElementById("task-lists-datatable_filter").childNodes[0]['control'];
+    var att = document.createAttribute("class");       
+    att.value = "border";                           
+    search.setAttributeNode(att);  
 });

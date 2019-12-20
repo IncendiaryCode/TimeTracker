@@ -17,8 +17,8 @@ $picture = substr($profile,29);
                             <a href="#" class="text-white"><img src="<?=base_url().$picture?>" height="40px" class="rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div>
-                                    <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display">1. Profile</a></p>
-                                    <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display">2. <i class="fas fa-power-off"></i> Logout</a></p>
+                                    <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display"> Profile</a></p>
+                                    <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display"> <i class="fas fa-power-off"></i> Logout</a></p>
                                 </div>
                             </div>
                         </div>
@@ -31,7 +31,7 @@ $picture = substr($profile,29);
 <div class="container">
     <div class="text-right mt-5">
         <select class="project-names" id="project-list">
-            <option>All users</option>
+            <option>All projects</option>
         </select>
     </div> 
     <div class="row mt-5">
@@ -62,20 +62,10 @@ $picture = substr($profile,29);
             <div class="row pt-3">
                 <div class="col-2">
                     
-                    <a href="#" class=" " id="<?=$k['user_name']?>" data-toggle="modal" data-target="#user-detail">
+                    <a href="<?=base_url();?>index.php/admin/user-detail" class=" " id="<?=$k['user_name']?>" data-toggle="modal" data-target="#user-detail">
                         <?=$k['user_name'];?>
                     </a>
             </div>
-            <!-- <div class="col-6">
-                    <?php
-                    foreach ($k['project'] as $d) { ?>                
-                    <a href="#" class=""><div class="mr-2"><img src="">
-                        <?= $d['project_name']; ?></div>
-                        
-                    </a>
-                <?php }  ?>
-            </div> -->
-
             <div class="col-6">
                     <?php
                     foreach ($k['project'] as $d) { 
