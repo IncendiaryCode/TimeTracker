@@ -146,14 +146,24 @@ class User_model extends CI_Model {
     //Function to Start Timer...
     public function start_timer($data){
         if($data['task_type'] == 'login'){ //check if the timer-start request for login
-            $array1 = array('user_id'=>$data['userid'],'task_date'=>date('Y:m:d'),'start_time'=>date('Y:m:d H:i:s'),'created_on'=>date('Y:m:d H:i:s'));
-            $this->db->set($array1);
-            $query1 = $this->db->insert('login_details',$array1);
-            if($query1){
+            $this->db->where(array(
+                    'task_date' => date('Y:m:d'),
+                    'user_id' => $data['userid']
+                ));
+            $query_check = $this->db->get('login_details');
+            if ($query_check->num_rows() > 0) {
                 return true;
             }else{
-                return false;
+                 $array1 = array('user_id'=>$data['userid'],'task_date'=>date('Y:m:d'),'start_time'=>date('Y:m:d H:i:s'),'created_on'=>date('Y:m:d H:i:s'));
+                $this->db->set($array1);
+                $query1 = $this->db->insert('login_details',$array1);
+                if($query1){
+                    return true;
+                }else{
+                    return false;
+                }
             }
+           
         }else if($data['task_type'] == 'task'){ //check if the timer-start request for task
             $id = $this->input->post('id');
             $array2 = array('task_id'=>$data['task_id'],'user_id'=>$data['userid'],'task_date'=>date('Y:m:d'),'start_time'=>date('Y:m:d H:i:s'),'total_hours'=>'0','total_minutes'=>'0','created_on'=>date('Y:m:d H:i:s'));
