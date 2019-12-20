@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
-
+print_r($data)
 ?>
 <body>
     <header>
@@ -29,26 +29,25 @@ $picture = substr($profile,29);
         </nav>
     </header>
 <div class="container">
-    <div class="row">
+    <div class="row mt-5">
         <div class="col-md-3 ">
             <div class="card user-card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-6 text-right">
+                        <div class="col-2 text-right">
                             <div class="mx-auto d-block">
-                                <!-- <?php
-                                if($d['image_name'] != ''){
-                                    $image = substr($d['image_name'],29);
+                                <?php
+                                if($data['profile'] != ''){
+                                    $image = substr($data['profile'],29);
                                     ?>
-                                    <img class="rounded-circle mx-auto d-block" src="<?=base_url().$image?>">
-                                <?php } ?> -->
-                                    <img class="rounded-circle mx-auto d-block" src="images/icon/avatar-01.jpg" >
+                                    <img src="<?=base_url().$image?>" class="img-fluid">
+                                <?php } ?>
                             </div>
                         </div>
-                        <div class="col-6 text-left">
-                            <h5 class="text-sm-center mt-2 mb-1">John</h5>
-                            <p>email address</p>
-                            <p>Mbl No:</p>
+                        <div class="col-10 text-left">
+                            <h3 class="text-sm-center mt-2 mb-1"><?=($data['user_name']) ?></h3>
+                            <a href=""><?=($data['email']) ?></a>
+                            <p><?=($data['phone']) ?></p>
                         </div>
                     </div>
                 </div>
@@ -58,61 +57,18 @@ $picture = substr($profile,29);
         <div class="col-md-3 offset-md-1">
             <div class="card user-card">
                 <div class="card-body">
-                    <div class="mx-auto d-block">
-                        <img class="rounded-circle mx-auto d-block" src="images/icon/avatar-01.jpg" alt="Card image cap">
-                        <h5 class="text-sm-center mt-2 mb-1">Steven Lee</h5>
-                        <div class="location text-sm-center">
-                            <i class="fa fa-map-marker"></i> California, United States</div>
-                    </div>
-                    <hr>
-                    <div class="card-text text-sm-center">
-                        <a href="#">
-                            <i class="fa fa-facebook pr-1"></i>
-                        </a>
-                        <a href="#">
-                            <i class="fa fa-twitter pr-1"></i>
-                        </a>
-                        <a href="#">
-                            <i class="fa fa-linkedin pr-1"></i>
-                        </a>
-                        <a href="#">
-                            <i class="fa fa-pinterest pr-1"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <strong class="card-title mb-3">Profile Card</strong>
+                    <div ><span class="display-3"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div>
+                    <p class="text-center">Time spent</p>
                 </div>
             </div>
         </div>
         <div class="vl"></div>
         <div class="col-md-3 offset-md-1">
             <div class="card user-card">
-                <div class="card-header">
-                    <i class="fa fa-user"></i>
-                    <strong class="card-title pl-2">Profile Card</strong>
-                </div>
                 <div class="card-body">
                     <div class="mx-auto d-block">
-                        <img class="rounded-circle mx-auto d-block" src="images/icon/avatar-01.jpg" alt="Card image cap">
-                        <h5 class="text-sm-center mt-2 mb-1">Steven Lee</h5>
-                        <div class="location text-sm-center">
-                            <i class="fa fa-map-marker"></i> California, United States</div>
-                    </div>
-                    <hr>
-                    <div class="card-text text-sm-center">
-                        <a href="#">
-                            <i class="fa fa-facebook pr-1"></i>
-                        </a>
-                        <a href="#">
-                            <i class="fa fa-twitter pr-1"></i>
-                        </a>
-                        <a href="#">
-                            <i class="fa fa-linkedin pr-1"></i>
-                        </a>
-                        <a href="#">
-                            <i class="fa fa-pinterest pr-1"></i>
-                        </a>
+                        <div class="text-center"><span class="display-3"><?=($data['project_count']) ?></span>
+                            <p class="text-center">Active projects</p></div>
                     </div>
                 </div>
             </div>

@@ -208,6 +208,7 @@ header.main-header h1 {
 .user-card
 {
     border :0px;
+    align-content: center;
 }
 .vl
 {
