@@ -205,6 +205,20 @@ class Dashboard_model extends CI_Model
         return $data;
     }
 
+    //get user info
+    public function get_user_data(){
+        $user_id = $this->input->get('user_id');
+        $this->db->select('u.id,u.name AS user_name,u.email,u.profile,u.phone');
+        $this->db->select_sum('d.total_minutes','t_minutes');
+        $this->db->select('count(distinct p.id) AS project_count');
+        $this->db->from('project AS p');
+        $this->db->join('project_assignee AS a','a.project_id = p.id');
+        $this->db->join('time_details AS d','d.user_id = a.user_id');
+        $this->db->join('users AS u','u.id = d.user_id');
+        $this->db->where('u.id',$user_id);
+        $user_data = $this->db->get()->row_array();
+        return $user_data;
+    }
     //add user model
     public function add_users()
     {
