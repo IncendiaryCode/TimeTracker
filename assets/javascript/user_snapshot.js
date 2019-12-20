@@ -134,7 +134,6 @@ $(document).ready(function() {
     $.ajax({
         type: 'POST',
         url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
-        data: { 'project_name': "All projects" },
         success: function(res) {
             var result = JSON.parse(res);
             __draw_user_chart(result);

@@ -60,13 +60,12 @@ $picture = substr($profile,29);
             foreach ($data as $k) {
             ?>
             <div class="row pt-3">
-                <div class="col-2">
-                    
-                    <a href="<?=base_url();?>index.php/admin/user-detail" class=" " id="<?=$k['user_name']?>" data-toggle="modal" data-target="#user-detail">
+                <div class="col-2">                    
+                    <a href="<?=base_url();?>index.php/admin/user-detail" class=" " id="<?=$k['user_name']?>">
                         <?=$k['user_name'];?>
                     </a>
-            </div>
-            <div class="col-6">
+                </div>
+                <div class="col-6">
                     <?php
                     foreach ($k['project'] as $d) { 
                         
@@ -112,29 +111,6 @@ $picture = substr($profile,29);
         </div>
     </div>
 </div>
-
-<div class="modal" id="user-detail" data-backdrop="false">
-    <div class="modal-dialog">
-        <div class="modal-content text-center">
-            <div class="modal-header text-center">
-                <span class=""> <strong>User details</strong></span>
-                <button type="button" class="close text-danger" data-dismiss="modal">×</button>
-            </div>
-            <div class="modal-bodyn text-left">
-                <div class="ml-3">
-                    <p>User name:</p>
-                    <p>Working projects:</p>
-                    <a href="#" >change password?</a>
-                </div>
-            </div>
-
-            <div class="modal-footer text-center">
-            </div>
-        </div>
-    </div>
-</div>
-
-
 
 <footer class="">
   <p class="text-center">Copyright © 2019 Printgreener.com</p>
