@@ -72,16 +72,13 @@ class Login extends CI_Controller
         } else {
             $send = $this->dashboard_model->send_otp();
             if ($send == true) {
-                $this->session->set_flashdata('success', 'OTP Sent.');
                 $result['status'] = TRUE;
-                $result['msg'] = "OTP is sent...";
-                echo json_encode($result);
+                $result['msg'] = "OTP sent...";
             } else {
-                $this->session->set_flashdata('err_msg', 'Error sending OTP.');
                 $result['status'] = FALSE;
-                $result['msg'] = "OTP is sent...";
-                echo json_encode($result);
+                $result['msg'] = "OTP not sent...";
             }
+            echo json_encode($result);
         }
     }
     //function to validate OTP

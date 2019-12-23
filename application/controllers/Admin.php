@@ -57,8 +57,7 @@
 		        $this->load->view('footer');
 			}
 			else if($type == 'task'){
-				
-				$result['data'] = $this->dashboard_model->get_task_details($type, $get_data);
+				$result['data'] = $this->dashboard_model->get_task_details($type);
 				if($result['data'] == NULL){
 					$result['status'] = FALSE;
 					$result['msg'] = "No task data.";
@@ -74,6 +73,12 @@
 			$this->load->view('header');
 			$result['data'] = $this->dashboard_model->get_user_data();
 	        $this->load->view('user_detail',$result);
+	        $this->load->view('footer');
+		}
+
+		public function load_project_detail(){
+			$this->load->view('header');
+	        $this->load->view('project_details');
 	        $this->load->view('footer');
 		}
 

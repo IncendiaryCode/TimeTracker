@@ -26,8 +26,7 @@ class Dashboard_model extends CI_Model
         $row_proj   = $get_proj_q->num_rows();
         return $row_proj;
     }
-    public function get_task_details($type, $get_data){
-print_r($get_data);
+    public function get_task_details($type){
         if($type == 'user'){
 
             $this->db->select('u.name AS user_name,u.id AS user_id');
@@ -44,7 +43,7 @@ print_r($get_data);
                 $this->db->join('time_details AS d','d.task_id = t.id');
                 $this->db->where('d.user_id',$u['user_id']);
                 $task_count = $this->db->get()->row_array();
-                $this->db->select('p.id,p.name AS project_name,p.image_name,p.color_code');
+                $this->db->select('p.id AS project_id,p.name AS project_name,p.image_name,p.color_code');
                 $this->db->from('project AS p');
                 $this->db->join('project_assignee AS a','a.project_id = p.id');
                 $this->db->where(array('a.user_id'=>$u['user_id']));
@@ -77,7 +76,7 @@ print_r($get_data);
 
                 foreach($proj_time as $p){
                     //get each prject data and assign to main array
-                    $this->db->select('u.name AS user_name');
+                    $this->db->select('u.name AS user_name,u.id AS user_id');
                     $this->db->distinct()->select('u.id');
                     $this->db->from('task AS t');
                     $this->db->join('project_assignee AS a','a.project_id = t.project_id');
@@ -88,11 +87,14 @@ print_r($get_data);
                     $final_result[$project['project_id']] = array('project_id'=>$project['project_id'],'project_name'=>$project['project_name'],'project_icon'=>$project['image_name'],'project_color'=>$project['color_code'],'time_used'=>$p['t_minutes'], 'total_users'=>$p['user_count'], 'user_details' =>$user_details );
                 }
             }
+            
             return $final_result;
                
         } else if($type == 'task') {
+            $get_data = $this->input->get();
+            print_r($get_data);
 
-            $this->db->select('t.id AS task_id,t.task_name,p.name AS project_name');
+            $this->db->select('t.id AS task_id,t.task_name,p.name AS project_name,p.id AS project_id');
             $this->db->select('t.description,d.start_time,d.end_time,d.total_minutes,d.total_hours');
             $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->from('task AS t');
@@ -109,7 +111,7 @@ print_r($get_data);
                 $details = array();
                  /*echo '<pre>'; print_r($reults_data); exit;*/
                 foreach($results_data as $q){
-                    $details[] = array('task_id'=>$q['task_id'],'task_name'=>$q['task_name'],'description'=>$q['description'],'start_time'=>$q['start_time'],'end_time'=>$q['end_time'],'total_minutes'=>$q['t_minutes'],'project'=>$q['project_name']);
+                    $details[] = array('task_id'=>$q['task_id'],'task_name'=>$q['task_name'],'description'=>$q['description'],'start_time'=>$q['start_time'],'end_time'=>$q['end_time'],'total_minutes'=>$q['t_minutes'],'project'=>$q['project_name'],'project_id'=>$q['project_id']);
                 
 
                 $results = array();
@@ -121,7 +123,7 @@ print_r($get_data);
                // return $results;
 
             }else{
-                $details = null;
+                $details = '';
             }
            // print_r($details);
             return $details;
