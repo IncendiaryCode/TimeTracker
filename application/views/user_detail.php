@@ -60,7 +60,7 @@ print_r($data)
                 <div class="card-body">
                     <div ><span class="display-4"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div>
                     <p class="text-center">Time spent</p><hr>
-                    <div ><span class="efficiency"><?=round($data['t_minutes']/60)/5 ?></span><span class="display-5"> Efficiency</span></div>
+                    <div ><span class="efficiency"><?=round($data['t_minutes']/60)/$data['project_count'] ?></span><span class="display-5"> Efficiency</span></div>
                     
                 </div>
             </div>
@@ -77,11 +77,32 @@ print_r($data)
             </div>
         </div>
     </div>
-    <div class="row">
-        <canvas id="time_chart" height="80px;"></canvas>
-    </div> 
+    <div class="row mt-4">
+        <canvas id="user_time_chart" height="80px;"></canvas>
+    </div><hr>
+    <p class="efficiency text-center">Task table</p>
+    <table id="user-task-lists-datatable" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Task name</th>
+                <th>Project name</th>
+                <th>Time spent</th>
+            </tr>
+        </thead>
+    </table>
+    <p class="efficiency text-center">Project table</p>
+    <table id="user-project-lists-datatable" class="table table-striped table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>Project name</th>
+                <th>Task count</th>
+                <th>Time spent</th>
+            </tr>
+        </thead>
+    </table>
 </div>
 
 <footer class="">
+    <hr>
     <p class="text-center">Copyright © 2019 Printgreener.com</p>
 </footer>
