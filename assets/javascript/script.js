@@ -140,14 +140,14 @@ forgotPsw.onsubmit = function(e) {
 function validateOtp() {
     $(document).ready(function() {
         $('#getOTP').click(function() {
-            $('.here').show();
+            $('.email-error').show();
         });
     });
 
 
     var otpp = document.getElementById('otp1').value;
     if (otpp === "" || otpp === " ") {
-        document.getElementById('here').innerHTML = " Enter OTP ";
+        document.getElementById('email-error').innerHTML = " Enter OTP ";
         return false;
     } else {
         document.getElementById('rotate-text').innerHTML = " ";
@@ -164,7 +164,7 @@ function validateOtp() {
                     });
                     return true;
                 } else {
-                    document.getElementById("here").innerHTML = "Wrong OTP.";
+                    document.getElementById("email-error").innerHTML = "Wrong OTP.";
                     return false;
                 }
             }
@@ -172,26 +172,46 @@ function validateOtp() {
     }
 }
 
+function validateEmail(email)
+{
+var emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!emailRegEx.test(email)) {
+            document.getElementById("email-error").innerHTML = "Email format is not correct.";
+            return false;
+        } else {
+            document.getElementById("email-error").innerHTML = " ";
+            return true;
+        }
+}
 function sendOTP() {
     var email = document.getElementById('Uname').value;
     if (email == "" || email == " ") {
         document.getElementById('Uname-error').innerHTML = "Enter email.";
-    } else {    
+    }
+    else {
+        var validate_mail = validateEmail(email);
+        if(validate_mail)
+        {
         $.ajax({
             type: "POST",
             url: '../login/send_otp',
             data: { email: email },
             success: function(data) {
-                if(data == null || data == ""){
+                var result = JSON.parse(data);
+                if(result['status'] == true){
+                    $('#email-error').addClass('text-success');
+                    $('#email-error').removeClass('text-danger');
+                    document.getElementById('email-error').innerHTML = result['msg'];
                 $(document).ready(function() {
                     $('#form2').show();
                     });
                 return true;
             }else{
-                document.getElementById('here').innerHTML = "Enter valid email.";
+                document.getElementById('email-error').innerHTML = result['msg'];
                 return false;
             }
         }
         });
+        }
     }
 }

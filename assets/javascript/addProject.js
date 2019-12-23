@@ -7,31 +7,36 @@ var add_module = {
         var last_row = _this.last_row;
         var username = _this.username;
         var i = _this.i;
-        var row = $('<div class="col-10 assign-module' + i + '"></div>');
-        var element = $('<input type="text" class="form-control mt-3"  id="new-module' + i + '" name="new-module[' + i + '][module]" placeholder="Enter module name">');
+        console.log(this)
+        var main_row = $('<div class = "row"></div>')
+        var element = $('<div class="col-10 assign-module' + i + '"><input type="text" class="form-control mt-3"  id="new-module' + i + '" name="new-module[' + i + '][module]" placeholder="Enter module name"></div>');
 
-        row.append(element);
-        var row1 = $('<div class="col-2 mt-3 assign-module' + i + '"></div>');
+        main_row.append(element);
+        var row1 = $('<div class="col-2 assign-module' + i + '"></div>');
         var addBtn = $('<a href="javascript:void(0);" title="Remove" id="add-module-' + i + '">');
         var icon = $('<i class="fas fa-plus icon-plus text-success"></i></a>');
         addBtn.append(icon);
-        addBtn.appendTo(row1);
+        row1.append(addBtn);
+        row1.appendTo(main_row);
         if(_this.last_row != 0)
         {
-            _this.last_row.addClass('fas fa-minus icon-plus text-danger');
             _this.last_row.removeClass('fas fa-plus');
+            _this.last_row.addClass('fas fa-minus icon-plus text-danger');
         }
-        $(_this.last_row).click(function()
+        console.log(_this.last_row);
+        $(".fa-minus").click(function()
         {
-            $('.assign-module'+i-1).remove();
-        })
+            this.parentNode.parentNode.parentNode.remove();
+        });
         _this.last_row = icon;
         
         addBtn.on('click', function () {
         _this.validate();
+        /*$('#add-new-module').removeClass('fas fa-plus');
+        $('#add-new-module').addClass('fas fa-minus icon-plus text-danger');*/
         });
-        $('#append-new-module').append(row);
-        $('#append-new-module').append(row1);
+        $('#append-new-module').append(main_row);
+        /*$('#append-new-module').append(row1);*/
     },
 
 

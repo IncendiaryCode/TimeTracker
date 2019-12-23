@@ -121,7 +121,10 @@ $(document).ready(function() {
         },{
             "targets": 5,
             "render": function ( data, type, row, meta ) {
-                return row.total_minutes;
+                var task_time_sec = row.total_minutes/60 - Math.floor(row.total_minutes/60);
+                task_time_sec = task_time_sec.toString().slice(0, 4);
+                var total_time = Math.floor(row.total_minutes/60) + parseFloat(task_time_sec)+' hrs';
+                return total_time;
             }
         },{
             "targets": 6,

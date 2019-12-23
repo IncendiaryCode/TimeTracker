@@ -33,7 +33,6 @@ $picture = substr($profile,29);
         <div class="container">
             <div class="row mt-5">
                 <div class="col-12">
-                    <!-- <canvas id="project-chart"></canvas> -->
                     <div id="chart_div" style=" height: 500px;"></div>
                 </div>
             </div>
@@ -53,7 +52,7 @@ $picture = substr($profile,29);
                     ?>
             <div class="row" style="min-height: 50px;">
                 <div class="col-5">                
-                    <a href="#" class="">
+                    <a href="" class="">
                         <div class="mr-2">
                         <?php
                         if($proj['project_icon'] != ''){
@@ -67,22 +66,18 @@ $picture = substr($profile,29);
                         
                     </a>
             </div>
-
-
-
-
-                <div class="col-5">
-                    <p>Total users: <?=$proj['total_users'];?></p>
-                     <?php foreach($proj['user_details'] as $user){  ?>
-                         <a href="#" class="pt-2 mr-3 mt-2">
-                            <?= $user['user_name']; ?>
-                        </a>
-                    <?php  }?>
-                </div>
-                <div class="col-2"><?=round($proj['time_used']/60,2)?> hrs</div>
-                
-            </div><hr>
-                <?php  } ?>
+            <div class="col-5">
+                <p>Total users: <?=$proj['total_users'];?></p>
+                 <?php foreach($proj['user_details'] as $user){  ?>     <!-- redirect to user detail page -->
+                     <a href="<?=base_url();?>index.php/admin/load_userdetails_page?user_id=3" class="pt-2 mr-3 mt-2">
+                        <?= $user['user_name']; ?>
+                    </a>
+                <?php  }?>
+            </div>
+            <div class="col-2"><?=round($proj['time_used']/60,2)?> hrs</div>
+            
+        </div><hr>
+            <?php  } ?>
         </div>
 
     <hr>

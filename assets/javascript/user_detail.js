@@ -105,8 +105,6 @@ if (user_Chart) user_Chart.destroy();
 }
 
 $(document).ready(function() {
-
-
 if(document.getElementById('user-id') != null)
 {
 
@@ -147,11 +145,13 @@ if(document.getElementById('user-id') != null)
         },{
             "targets": 2,
             "render": function ( data, type, row, meta ) {
-                return row.time_spent;
+                var task_time_sec = row.t_minutes/60 - Math.floor(row.t_minutes/60);
+                task_time_sec = task_time_sec.toString().slice(0, 4);
+                var total_time = Math.floor(row.t_minutes/60) + parseFloat(task_time_sec)+' hrs';
+                return total_time;
             }
         }]
     }).on( 'init.dt', function () {
-        console.log("djfhsdkjf");
     });
 
     $('#user-project-datatable').DataTable({
@@ -170,22 +170,25 @@ if(document.getElementById('user-id') != null)
         },{
             "targets": 1,
             "render": function ( data, type, row, meta ) {
-                return row.task_count;
+                return row.tasks_count;
             },
         },{
             "targets": 2,
             "render": function ( data, type, row, meta ) {
-                return row.time_spent;
+                var task_time_sec = row.t_minutes/60 - Math.floor(row.t_minutes/60);
+                task_time_sec = task_time_sec.toString().slice(0, 4);
+                var total_time = Math.floor(row.t_minutes/60) + parseFloat(task_time_sec)+' hrs';
+                return total_time;
             }
         }]
     });
 
-    var search1 = document.getElementById("user-task-datatable_wrapper").childNodes[0]['control'];
+    var search1 = document.getElementById("user-task-datatable_filter").childNodes[0]['control'];
     var att1 = document.createAttribute("class");       
     att1.value = "border";                           
     search1.setAttributeNode(att1);
 
-    var search2 = document.getElementById("user-project-datatable_wrapper").childNodes[0]['control'];
+    var search2 = document.getElementById("user-project-datatable_filter").childNodes[0]['control'];
     var att2 = document.createAttribute("class");       
     att2.value = "border";                           
     search2.setAttributeNode(att2);

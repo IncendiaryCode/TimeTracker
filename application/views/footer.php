@@ -22,6 +22,7 @@
 <script src="<?=base_url();?>assets/javascript/user_snapshot.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/javascript/chart.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/javascript/user_detail.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/javascript/project_details.js?v=<?=VERSION?>"></script>
 <script type="text/javascript">
  $(function() {
  $('.edit-date').datepicker({
