@@ -26,8 +26,8 @@ class Dashboard_model extends CI_Model
         $row_proj   = $get_proj_q->num_rows();
         return $row_proj;
     }
-    public function get_task_details($type, $get_data = NULL){
-
+    public function get_task_details($type, $get_data){
+print_r($get_data);
         if($type == 'user'){
 
             $this->db->select('u.name AS user_name,u.id AS user_id');
@@ -182,9 +182,6 @@ class Dashboard_model extends CI_Model
             $this->db->select('id,name');
             $this->db->from('project');
             $projects = $this->db->get()->result_array();
-            foreach ($projects as $p) {
-                
-            }
             $this->db->select('p.name AS project_name,u.id AS user_id,u.name AS user_name');
             $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->from('project AS p');
@@ -194,35 +191,52 @@ class Dashboard_model extends CI_Model
             $this->db->join('time_details AS d','d.task_id = t.id');
             $this->db->group_by('u.id');
             $details = $this->db->get();
+        
             if($details->num_rows() > 0){
                 $project_data = $details->result_array();
                 foreach ($project_data as $d) {
-                    print_r($d);
                     $data[] = array('user_name'=>$d['user_name'],'time_used'=>$d['t_minutes']);
                 }
-            }else{
+            }
+            else{
                 $data = '';
             }   
         }
+
         return $data;
     }
 
     //get user chart data (onclick Username)
-    public function get_user_chart(){
-        if(!empty($this->input->post())){
+    public function get_user_chart($type){
+        
+        if($type == 'user-chart'){
             $user_id = $this->input->post('user_id');
             $date = $this->input->post('date');
+            $start = date('Y-m-d',strtotime($date.'-30 days'));
+
+            $this->db->select('d.task_date,count(distinct t.id) AS tasks_count');
+            $this->db->select_sum('d.total_minutes','t_minutes');
+            $this->db->from('task AS t');
+            $this->db->join('time_details AS d','d.task_id = t.id');
+            $this->db->where('d.task_date BETWEEN "'.$start.'" AND "'.$date.'"');
+            $this->db->group_by('d.task_date');
+
+        }/*else if($type == 'user-task'){
+            $this->db->select('t.task_name,p.name AS project_name');
+            $this->db->select_sum('d.total_minutes','t_minutes');
+            $this->db->from('task AS t');
+            $this->db->join('time_details AS d','d.task_id = t.id');
+            $this->db->join('project AS p','p.id = t.project_id');
+            $this->db->group_by('t.id');
         }else{
-            return false;
-        }
-        $start = date('Y-m-d',strtotime($date.'-30 days'));
-        $this->db->select('d.task_date,count(distinct t.id) AS tasks_count');
-        $this->db->select_sum('d.total_minutes','t_minutes');
-        $this->db->from('task AS t');
-        $this->db->join('time_details AS d','d.task_id = t.id');
-        $this->db->where('d.task_date BETWEEN "'.$start.'" AND "'.$date.'"');
+            $this->db->select('p.name AS project_name');
+            $this->db->select_sum('d.total_minutes','t_minutes');
+            $this->db->from('project AS p');
+            $this->db->join('task AS t','t.project_id = p.id');
+            $this->db->join('time_details AS d','d.task_id = t.id');
+            $this->db->group_by('p.id');
+        }*/
         $this->db->where('d.user_id',$user_id);
-        $this->db->group_by('d.task_date');
         $result = $this->db->get();
         if($result->num_rows() > 0){
             $data = $result->result_array();
@@ -231,10 +245,49 @@ class Dashboard_model extends CI_Model
         }
         return $data;
     }
+
+    public function user_task_data(){
+        $user_id = $this->input->get('user_id');
+        $this->db->select('t.task_name,p.name AS project_name');
+        $this->db->select_sum('d.total_minutes','t_minutes');
+        $this->db->from('task AS t');
+        $this->db->join('time_details AS d','d.task_id = t.id');
+        $this->db->join('project AS p','p.id = t.project_id');
+        $this->db->group_by('t.id');
+        $this->db->where('d.user_id',$user_id);
+        $result = $this->db->get();
+        if($result->num_rows() > 0){
+            $data = $result->result_array();
+        }else{
+            $data = '';
+        }
+        return $data;
+    }
+
+    public function user_project_data(){
+        $user_id = $this->input->get('user_id');
+        $this->db->select('p.name AS project_name');
+        $this->db->select('count(distinct t.id) AS tasks_count');
+        $this->db->select_sum('d.total_minutes','t_minutes');
+        $this->db->from('project AS p');
+        $this->db->join('task AS t','t.project_id = p.id');
+        $this->db->join('time_details AS d','d.task_id = t.id');
+        $this->db->group_by('p.id');
+        $this->db->where('d.user_id',$user_id);
+        $result = $this->db->get();
+        if($result->num_rows() > 0){
+            $data = $result->result_array();
+        }else{
+            $data = '';
+        }
+        return $data;
+    }
+
     //get user info
     public function get_user_data(){
         $user_id = $this->input->get('user_id');
         $this->db->select('u.id,u.name AS user_name,u.email,u.profile,u.phone');
+        $this->db->select('count(distinct d.task_id) AS tasks_count');
         $this->db->select_sum('d.total_minutes','t_minutes');
         $this->db->select('count(distinct p.id) AS project_count');
         $this->db->from('project AS p');

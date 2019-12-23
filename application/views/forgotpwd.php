@@ -9,9 +9,6 @@
 	<div id="form2" class="animated fadeInRightBig login-form">
 								
     <?php 
-          $this->load->library('form_validation');
-  	  $this->load->helper('form');
-  	  $this->load->library('session');
           if($this->session->flashdata('error_msg'))
             { ?>
             <div class="alert alert-danger"><?php echo $this->session->flashdata('error_msg');?></div>
@@ -24,13 +21,13 @@
       <p style="color: green" class="animated rotateIn" id="rotate-text"></p>
 </div>
 <?php 
-      $this->load->library('form_validation');
-      $this->load->helper('form');
-      $this->load->library('session');
 if($this->session->flashdata('err_msg'))
     { ?>
         <div class="alert alert-danger"><?php echo $this->session->flashdata('err_msg');?></div>
-    <?php }?>
+<?php } else if($this->session->flashdata('success')){ ?>
+      <div id="success" class="alert alert-success"><?php echo $this->session->flashdata('success');
+      return true;?></div>
+<?php } ?>
 <div class="form-group">
      <div class="input-group mb-3 top-space">
         	<input type="email" class="form-control-file  has-email-validation has-empty-validation font-weight-light border-top-0 border-left-0 border-right-0" id="Uname" name="email" value="<?php set_value('email');?>" placeholder="Enter email">

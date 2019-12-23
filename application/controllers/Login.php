@@ -71,12 +71,16 @@ class Login extends CI_Controller
             redirect('/login/load_forgot_pwd', 'refresh');
         } else {
             $send = $this->dashboard_model->send_otp();
-            if ($send) {
-                return true;
+            if ($send == true) {
+                $this->session->set_flashdata('success', 'OTP Sent.');
+                $result['status'] = TRUE;
+                $result['msg'] = "OTP is sent...";
+                echo json_encode($result);
             } else {
                 $this->session->set_flashdata('err_msg', 'Error sending OTP.');
-                redirect('/login/load_forgot_pwd', 'refresh');
-                return false;
+                $result['status'] = FALSE;
+                $result['msg'] = "OTP is sent...";
+                echo json_encode($result);
             }
         }
     }

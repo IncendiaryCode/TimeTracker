@@ -85,7 +85,32 @@
 
 		//get user gragh data
 		public function user_chart(){
-			$result['data'] = $this->dashboard_model->get_user_chart();
+			if($this->input->post('type')){
+				$type = $this->input->post('type');
+				$result['data'] = $this->dashboard_model->get_user_chart($type);
+				if($result['data'] == NULL || $result['data'] == FALSE){
+					$result['status'] = FALSE;
+					$result['data'] = NULL;
+				}else{
+					$result['status'] = TRUE;
+				}	
+			}
+			echo json_encode($result);
+		}
+
+		public function user_task_table(){
+			$result['data'] = $this->dashboard_model->user_task_data();
+			if($result['data'] == NULL || $result['data'] == FALSE){
+				$result['status'] = FALSE;
+				$result['data'] = NULL;
+			}else{
+				$result['status'] = TRUE;
+			}
+			echo json_encode($result);
+		}
+
+		public function user_project_table(){
+			$result['data'] = $this->dashboard_model->user_project_data();
 			if($result['data'] == NULL || $result['data'] == FALSE){
 				$result['status'] = FALSE;
 				$result['data'] = NULL;
