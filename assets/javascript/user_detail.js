@@ -109,15 +109,31 @@ $(document).ready(function() {
 
 if(document.getElementById('user-id') != null)
 {
-var user_id = document.getElementById('user-id').value;
-/*    $('#user-task-lists-datatable').DataTable({
+
+    var curr = new Date();
+    var user_id = document.getElementById('user-id').value;
+
+
+    var cur_date = curr.getFullYear()+'-'+parseInt(curr.getMonth()+1)+'-'+curr.getDate();
+    $.ajax({
+        type: 'POST',
+        url: timeTrackerBaseURL + 'index.php/admin/user_chart',
+        data: { 'user_id': user_id , "date": cur_date , 'type': "user-chart" },
+        success: function(res) {
+            __draw_chart(res);
+        }    
+    });
+
+
+
+    $('#user-task-datatable').DataTable({
         "processing": true,
         "serverSide": true,
         "ajax": {
-            "url": timeTrackerBaseURL + 'index.php/admin/user_chart',
-            "data": {'user_id': user_id ,'type': "user-task"}
+            "url": timeTrackerBaseURL + 'index.php/admin/user_task_table',
+            "data": {'user_id': user_id }
         },
-        "order": [[ 3, "desc" ]],
+        "order": [[ 0, "asc" ]],
         "columnDefs": [{
             "targets": 0,
             "render": function ( data, type, row, meta ) {
@@ -134,16 +150,18 @@ var user_id = document.getElementById('user-id').value;
                 return row.time_spent;
             }
         }]
+    }).on( 'init.dt', function () {
+        console.log("djfhsdkjf");
     });
 
-    $('#user-project-lists-datatable').DataTable({
+    $('#user-project-datatable').DataTable({
         "processing": true,
         "serverSide": true,
         "ajax": {
-            "url": timeTrackerBaseURL + 'index.php/admin/user_chart',
-            "data": {'user_id': user_id ,'type': "user-project"}
+            "url": timeTrackerBaseURL + 'index.php/admin/user_project_table',
+            "data": {'user_id': user_id}
         },
-        "order": [[ 3, "desc" ]],
+        "order": [[ 0, "asc" ]],
         "columnDefs": [{
             "targets": 0,
             "render": function ( data, type, row, meta ) {
@@ -160,19 +178,19 @@ var user_id = document.getElementById('user-id').value;
                 return row.time_spent;
             }
         }]
-    });*/
-
-    var curr = new Date();
-    var cur_date = curr.getFullYear()+'-'+parseInt(curr.getMonth()+1)+'-'+curr.getDate();
-    $.ajax({
-        type: 'POST',
-        url: timeTrackerBaseURL + 'index.php/admin/user_chart',
-        data: { 'user_id': user_id , "date": cur_date , 'type': "user-chart" },
-        success: function(res) {
-            __draw_chart(res);
-        }    
     });
-}
+
+    var search1 = document.getElementById("user-task-datatable_wrapper").childNodes[0]['control'];
+    var att1 = document.createAttribute("class");       
+    att1.value = "border";                           
+    search1.setAttributeNode(att1);
+
+    var search2 = document.getElementById("user-project-datatable_wrapper").childNodes[0]['control'];
+    var att2 = document.createAttribute("class");       
+    att2.value = "border";                           
+    search2.setAttributeNode(att2);
+    }
+
 });
 
 

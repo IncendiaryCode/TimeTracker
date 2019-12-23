@@ -80,7 +80,7 @@ $picture = substr($profile,29);
         <canvas id="user_time_chart" height="80px;"></canvas>
     </div><hr>
     <p class="efficiency text-center mt-4">Task table</p>
-    <table id="user-task-lists-datatable" class="table table-striped table-bordered">
+    <table id="user-task-datatable" class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>Task name</th>
@@ -90,7 +90,7 @@ $picture = substr($profile,29);
         </thead>
     </table>
     <p class="efficiency text-center mt-4">Project table</p>
-    <table id="user-project-lists-datatable" class="table table-striped table-bordered ">
+    <table id="user-project-datatable" class="table table-striped table-bordered ">
         <thead>
             <tr>
                 <th>Project name</th>
