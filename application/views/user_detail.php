@@ -57,10 +57,13 @@ $picture = substr($profile,29);
         <div class="col-md-3 offset-md-1">
             <div class="card user-card">
                 <div class="card-body">
+                    <?php
+                    if($data['t_minutes']) { ?>
                     <div ><span class="display-4"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div>
                     <p class="text-center">Time spent</p><hr>
                     <div ><span class="efficiency"><?=round($data['t_minutes']/60)/$data['project_count'] ?></span><span class="display-5"> Efficiency</span></div>
-                    
+                    <?php } else { ?>
+                        <div ><span class="display-4"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div> <?php } ?>
                 </div>
             </div>
         </div>
@@ -76,10 +79,10 @@ $picture = substr($profile,29);
             </div>
         </div>
     </div>
-    <div class="row mt-4">
+    <div class="row mt-5">
         <canvas id="user_time_chart" height="80px;"></canvas>
     </div><hr>
-    <p class="efficiency text-center mt-4">Task table</p>
+    <p class="efficiency text-center mt-5">Task table</p>
     <table id="user-task-datatable" class="table table-striped table-bordered">
         <thead>
             <tr>
@@ -88,8 +91,8 @@ $picture = substr($profile,29);
                 <th>Time spent</th>
             </tr>
         </thead>
-    </table>
-    <p class="efficiency text-center mt-4">Project table</p>
+    </table><hr>
+    <p class="efficiency text-center mt-5">Project table</p>
     <table id="user-project-datatable" class="table table-striped table-bordered ">
         <thead>
             <tr>

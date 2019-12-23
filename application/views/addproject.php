@@ -68,14 +68,14 @@ $picture = substr($profile,29);
                             </div>
                             <div class="form-group mt-3 " id="append-new-module">
 
+                                <label for="new-module0">Module name:</label>
                                 <div class="row">
                                     <div class="col-10 assign-module0">
-                                        <label for="new-module0">Module name:</label>
                                         <input class="form-control user"  id="new-module0" name="new-module[0][module]" placeholder="General">     
                                     </div>
-                                    <div class="col-2 assign-module0 pt-4">
-                                        <a href="#" id="add-new-module" title="Add">
-                                            <i class="fas fa-plus icon-plus text-success" ></i>
+                                    <div class="col-2 assign-module0">
+                                        <a href="#" id="add-new-module" >
+                                            <i class="fas fa-plus icon-plus text-success" id="adding-module" ></i>
                                         </a>
                                     </div>
                                 </div>

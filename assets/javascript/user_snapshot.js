@@ -1,4 +1,4 @@
-var myChart;
+var user_detail_chart;
 function __draw_user_chart(res)
 {
 var user_chart = document.getElementById('user-chart').getContext('2d');
@@ -56,7 +56,6 @@ var configs = {
                 callbacks: {
                     label: function (tooltipItem, data) {
                         var item = tooltipItem.xLabel;
-                        var user = document.getElementById('user_chart').value;
                         $('#user_chart').unbind().click(function()
                         {
                             var elmnt = document.getElementById(item);
@@ -104,8 +103,8 @@ var configs = {
         },
     }
 };
-if (myChart) myChart.destroy();
- myChart = new Chart(user_chart, configs);
+if (user_detail_chart) user_detail_chart.destroy();
+ user_detail_chart = new Chart(user_chart, configs);
 }
 }
 
@@ -135,7 +134,7 @@ $(document).ready(function() {
             url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
             success: function(res) {
                var result = JSON.parse(res);
-                __draw_user_chart(res);
+                __draw_user_chart(result);
             }    
         });
     }
@@ -148,7 +147,6 @@ $(document).ready(function() {
             url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
             data: { 'project_name': p_name },
             success: function(res) {
-                console.log(res);
                 var result = JSON.parse(res);
                 __draw_user_chart(result);
             }

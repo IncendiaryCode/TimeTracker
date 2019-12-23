@@ -52,7 +52,7 @@ $picture = substr($profile,29);
                     ?>
             <div class="row" style="min-height: 50px;">
                 <div class="col-5">                
-                    <a href="" class="">
+                    <a href="<?=base_url();?>index.php/admin/load_project_detail?project_id=<?=$proj['project_id'] ?>" class="">
                         <div class="mr-2">
                         <?php
                         if($proj['project_icon'] != ''){
@@ -69,7 +69,7 @@ $picture = substr($profile,29);
             <div class="col-5">
                 <p>Total users: <?=$proj['total_users'];?></p>
                  <?php foreach($proj['user_details'] as $user){  ?>     <!-- redirect to user detail page -->
-                     <a href="<?=base_url();?>index.php/admin/load_userdetails_page?user_id=3" class="pt-2 mr-3 mt-2">
+                     <a href="<?=base_url();?>index.php/admin/load_userdetails_page?user_id=<?= $user['user_id']; ?>" class="pt-2 mr-3 mt-2">
                         <?= $user['user_name']; ?>
                     </a>
                 <?php  }?>

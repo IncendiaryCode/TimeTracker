@@ -12,17 +12,22 @@ var add_module = {
         var element = $('<div class="col-10 assign-module' + i + '"><input type="text" class="form-control mt-3"  id="new-module' + i + '" name="new-module[' + i + '][module]" placeholder="Enter module name"></div>');
 
         main_row.append(element);
-        var row1 = $('<div class="col-2 assign-module' + i + '"></div>');
-        var addBtn = $('<a href="javascript:void(0);" title="Remove" id="add-module-' + i + '">');
+        var row1 = $('<div class="col-2 pt-3 assign-module' + i + '"></div>');
+        var addBtn = $('<a href="javascript:void(0);" id="add-module-' + i + '">');
         var icon = $('<i class="fas fa-plus icon-plus text-success"></i></a>');
         addBtn.append(icon);
         row1.append(addBtn);
         row1.appendTo(main_row);
+        
+        $('#add-new-module').removeClass('fa-plus');
         if(_this.last_row != 0)
         {
             _this.last_row.removeClass('fas fa-plus');
             _this.last_row.addClass('fas fa-minus icon-plus text-danger');
+
         }
+        $('#adding-module').removeClass('fas fa-plus');
+            $('#adding-module').addClass('fas fa-minus icon-plus text-danger');
         console.log(_this.last_row);
         $(".fa-minus").click(function()
         {
@@ -32,8 +37,6 @@ var add_module = {
         
         addBtn.on('click', function () {
         _this.validate();
-        /*$('#add-new-module').removeClass('fas fa-plus');
-        $('#add-new-module').addClass('fas fa-minus icon-plus text-danger');*/
         });
         $('#append-new-module').append(main_row);
         /*$('#append-new-module').append(row1);*/
@@ -197,36 +200,7 @@ $(document).ready(function () {
             });
         }
     }
-    /*$('#new-project').click(function()
-    {
-        $('#old-project-input').hide();
-        $('#new-project-input').show();
-        document.getElementById("old-project").checked = false;
-    });
-    $('#old-project').click(function()
-    {
-        $('#old-project-input').show();
-        $('#new-project-input').hide();
-        document.getElementById("new-project").checked = false;
-        $.ajax({
-            type: 'POST',
-            url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
-            data: { 'type': "get_user" },
-            success: function (res) {
-                var result = JSON.parse(res);
-                usernames = result['result'];
-                console.log(usernames);
-                $('.project-list').empty();
-                for (var j = 0; j < usernames.length; j++) {
-                    if(usernames[j]["project_name"] != null)
-                    {
-                    var option = $('<option>' + usernames[j]["project_name"] + '</option>');
-                    $('.project-list').append(option);
-                    }
-                }
-            }
-        });
-    });*/
+    
     if(document.getElementById('old-project-input'))
     {
     $('#old-project-input').show();
@@ -272,7 +246,6 @@ $(document).ready(function () {
                     }
         }
     }
-
 
 })
 

@@ -207,6 +207,8 @@ function sendOTP() {
                     });
                 return true;
             }else{
+                $('#email-error').removeClass('text-success');
+                $('#email-error').addClass('text-danger');
                 document.getElementById('email-error').innerHTML = result['msg'];
                 return false;
             }

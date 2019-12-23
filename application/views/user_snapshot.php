@@ -2,6 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
+print_r($data);
+
 ?>
 <body>
     <header>
@@ -27,7 +29,7 @@ $picture = substr($profile,29);
             </div>
         </nav>
     </header>
-<p class="display-4 m-3 text-primary text-center">User details</p>
+<p class="display-4 m-3 text-primary text-center">User snapshot</p>
 <div class="container">
     <div class="text-right mt-5">
         <select class="project-names" id="project-list">
@@ -68,9 +70,8 @@ $picture = substr($profile,29);
                 <div class="col-6">
                     <?php
                     foreach ($k['project'] as $d) { 
-                        
                         ?>                
-                    <a href="#" class=""><div class="mr-2">
+                    <a href="<?=base_url();?>index.php/admin/load_userdetails_page?project_id=<?=$k['project_id'] ?>" class=""><div class="mr-2">
                         <?php
                         if($d['image_name'] != ''){
                             $image = substr($d['image_name'],29);
