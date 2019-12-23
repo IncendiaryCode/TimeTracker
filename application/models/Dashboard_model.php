@@ -39,7 +39,11 @@ class Dashboard_model extends CI_Model
             $user_names = $this->db->get()->result_array();
 
             foreach ($user_names as $u) {
-
+                $this->db->select('count(distinct t.id) AS tasks_count');
+                $this->db->from('task AS t');
+                $this->db->join('time_details AS d','d.task_id = t.id');
+                $this->db->where('d.user_id',$u['user_id']);
+                $task_count = $this->db->get()->row_array();
                 $this->db->select('p.id,p.name AS project_name,p.image_name,p.color_code');
                 $this->db->from('project AS p');
                 $this->db->join('project_assignee AS a','a.project_id = p.id');
@@ -49,7 +53,8 @@ class Dashboard_model extends CI_Model
                         'user_id'=>$u['user_id'],
                         'user_name'=> $u['user_name'],
                         'project'=>$query,
-                        'total_minutes'=>$u['t_minutes']
+                        'total_minutes'=>$u['t_minutes'],
+                        'tasks_count'=>$task_count['tasks_count']
                     );
             }
             return $details;
@@ -128,9 +133,6 @@ class Dashboard_model extends CI_Model
         if($this->input->post('month')){
             if(!empty($this->input->post('month'))){
                 $month = $this->input->post('month');
-                /*$month_split = explode('-',$month);
-                $year = $month_split[0];
-                $month_no = $month_split[1];*/
                 $start_date = date($month.'-01');
                 $end_date = date('Y-m-t',strtotime($month));
                 $this->db->select('d.task_date,count(distinct t.id) AS tasks_count');
@@ -205,6 +207,30 @@ class Dashboard_model extends CI_Model
         return $data;
     }
 
+    //get user chart data (onclick Username)
+    public function get_user_chart(){
+        if(!empty($this->input->post())){
+            $user_id = $this->input->post('user_id');
+            $date = $this->input->post('date');
+        }else{
+            return false;
+        }
+        $start = date('Y-m-d',strtotime($date.'-30 days'));
+        $this->db->select('d.task_date,count(distinct t.id) AS tasks_count');
+        $this->db->select_sum('d.total_minutes','t_minutes');
+        $this->db->from('task AS t');
+        $this->db->join('time_details AS d','d.task_id = t.id');
+        $this->db->where('d.task_date BETWEEN "'.$start.'" AND "'.$date.'"');
+        $this->db->where('d.user_id',$user_id);
+        $this->db->group_by('d.task_date');
+        $result = $this->db->get();
+        if($result->num_rows() > 0){
+            $data = $result->result_array();
+        }else{
+            $data = '';
+        }
+        return $data;
+    }
     //get user info
     public function get_user_data(){
         $user_id = $this->input->get('user_id');

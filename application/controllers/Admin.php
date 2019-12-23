@@ -77,11 +77,22 @@
 	        $this->load->view('footer');
 		}
 
-
 		public function load_task_snapshot(){
 			$this->load->view('header');
 	        $this->load->view('task_snapshot');
 	        $this->load->view('footer');
+		}
+
+		//get user gragh data
+		public function user_chart(){
+			$result['data'] = $this->dashboard_model->get_user_chart();
+			if($result['data'] == NULL || $result['data'] == FALSE){
+				$result['status'] = FALSE;
+				$result['data'] = NULL;
+			}else{
+				$result['status'] = TRUE;
+			}
+			echo json_encode($result);
 		}
 		//load list of projects for an ajax call
 		public function get_project_list(){
