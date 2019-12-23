@@ -603,8 +603,7 @@ class User_model extends CI_Model {
         }
     }
     //fetch user profile data to profile page
-    public function my_profile(){
-        $userid = $this->session->userdata('userid');
+    public function my_profile($userid){
         $this->db->where('id',$userid);
         $query = $this->db->get('users');
         if($query->num_rows() == 1){
@@ -680,6 +679,33 @@ class User_model extends CI_Model {
         $query = $this->db->get();
         $login_count = $query->result_array();
         return $login_count[0]['count'];
+    }
+
+    public function check_credentials($post){
+        $username = $post['email'];
+        $password = $post['password'];
+        $query    = $this->db->get_where('users', array(
+            'email' => $username,
+            'password' => md5($password)
+        ));
+        if ($query->num_rows() == 1) {
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public function change_password_device($new_pwd,$email){
+        $this->db->set('password',md5($new_pwd));
+        $this->db->where('email', $email);
+        $query = $this->db->update('users');
+        //print_r($this->db->last_query());die;
+        if($query){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
 ?>

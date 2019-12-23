@@ -345,7 +345,8 @@ class User extends CI_Controller
     public function load_my_profile()
     {
         $GLOBALS['page_title'] = 'My profile';
-        $data['res']           = $this->user_model->my_profile();
+        $userid = $this->session->userdata('userid');
+        $data['res']           = $this->user_model->my_profile($userid);
         $this->load->view('user/header');
         $this->load->view('user/profile', $data);
         $this->load->view('user/footer');
