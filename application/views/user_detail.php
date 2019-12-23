@@ -29,24 +29,25 @@ print_r($data)
         </nav>
     </header>
 <div class="container">
-    <div class="row mt-5">
-        <div class="col-md-3 ">
+    <div class="row mt-5  shadow-sm">
+        <div class="col-md-4 ">
             <div class="card user-card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-2 text-right">
+                        <div class="col-3 ">
                             <div class="mx-auto d-block">
                                 <?php
                                 if($data['profile'] != ''){
                                     $image = substr($data['profile'],29);
                                     ?>
-                                    <img src="<?=base_url().$image?>" class="img-fluid">
+                                    <img src="<?=base_url().$image?>" class="rounded-circle" width="50px;" height="50px;">
                                 <?php } ?>
                             </div>
                         </div>
-                        <div class="col-10 text-left">
+                        <input type="hidden" name="" id="user-id" value="<?=($data['id']) ?>">
+                        <div class="col-9 text-left">
                             <h3 class="text-sm-center mt-2 mb-1"><?=($data['user_name']) ?></h3>
-                            <a href=""><?=($data['email']) ?></a>
+                            <a href="#"><?=($data['email']) ?></a>
                             <p><?=($data['phone']) ?></p>
                         </div>
                     </div>
@@ -57,13 +58,15 @@ print_r($data)
         <div class="col-md-3 offset-md-1">
             <div class="card user-card">
                 <div class="card-body">
-                    <div ><span class="display-3"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div>
-                    <p class="text-center">Time spent</p>
+                    <div ><span class="display-4"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div>
+                    <p class="text-center">Time spent</p><hr>
+                    <div ><span class="efficiency"><?=round($data['t_minutes']/60)/5 ?></span><span class="display-5"> Efficiency</span></div>
+                    
                 </div>
             </div>
         </div>
         <div class="vl"></div>
-        <div class="col-md-3 offset-md-1">
+        <div class="col-md-2 offset-md-1">
             <div class="card user-card">
                 <div class="card-body">
                     <div class="mx-auto d-block">
@@ -74,6 +77,9 @@ print_r($data)
             </div>
         </div>
     </div>
+    <div class="row">
+        <canvas id="time_chart" height="80px;"></canvas>
+    </div> 
 </div>
 
 <footer class="">
