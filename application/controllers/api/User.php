@@ -20,7 +20,7 @@ class User extends REST_Controller {
     }
 
 
-    public function resetpassword_post()
+    public function changepassword_post()
     {
       $headers = $this->input->request_headers();
       $verify_data = $this->verify->verify_request($headers);
