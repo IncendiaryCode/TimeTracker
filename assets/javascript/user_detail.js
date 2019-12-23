@@ -1,5 +1,5 @@
 var user_Chart;
-function __draw_user_chart(res)
+function __draw_chart(res)
 {
 var user_chart = document.getElementById('user_time_chart').getContext('2d');
 var color = Chart.helpers.color;
@@ -107,7 +107,9 @@ if (user_Chart) user_Chart.destroy();
 $(document).ready(function() {
 
 
-user_id = document.getElementById('user-id').value;
+if(document.getElementById('user-id') != null)
+{
+var user_id = document.getElementById('user-id').value;
 /*    $('#user-task-lists-datatable').DataTable({
         "processing": true,
         "serverSide": true,
@@ -160,7 +162,6 @@ user_id = document.getElementById('user-id').value;
         }]
     });*/
 
-    user_id = document.getElementById('user-id').value;
     var curr = new Date();
     var cur_date = curr.getFullYear()+'-'+parseInt(curr.getMonth()+1)+'-'+curr.getDate();
     $.ajax({
@@ -168,9 +169,10 @@ user_id = document.getElementById('user-id').value;
         url: timeTrackerBaseURL + 'index.php/admin/user_chart',
         data: { 'user_id': user_id , "date": cur_date , 'type': "user-chart" },
         success: function(res) {
-            __draw_user_chart(res);
+            __draw_chart(res);
         }    
     });
+}
 });
 
 

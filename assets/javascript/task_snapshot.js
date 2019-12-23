@@ -165,7 +165,7 @@ $(document).ready(function() {
                 __draw_task_chart(result);
             }
         });
-    }
+    
     $('#view-chart').click(function() {
         if (document.getElementById('curr-month').value != '') {
             $.ajax({
@@ -178,9 +178,11 @@ $(document).ready(function() {
                 }
             });
         }
-    })
+    });
+
     var search = document.getElementById("task-lists-datatable_filter").childNodes[0]['control'];
     var att = document.createAttribute("class");       
     att.value = "border";                           
-    search.setAttributeNode(att);  
+    search.setAttributeNode(att);
+}  
 });

@@ -1,10 +1,9 @@
 var myChart;
 function __draw_user_chart(res)
 {
-var user_chart = document.getElementById('user_chart').getContext('2d');
+var user_chart = document.getElementById('user-chart').getContext('2d');
 var color = Chart.helpers.color;
 gradient = user_chart.createLinearGradient(0, 0, 0, 600);
-
     gradient.addColorStop(0, '#4b5bf0');
     gradient.addColorStop(1, '#ea4776');
 if(res['status'] == false)
@@ -111,7 +110,7 @@ if (myChart) myChart.destroy();
 }
 
 $(document).ready(function() {
-    if(document.getElementById('user_chart'))
+    if(document.getElementById('user-chart'))
     {
     $.ajax({
         type: 'POST',
@@ -129,17 +128,17 @@ $(document).ready(function() {
                 }
             }
     	});
-    }
+    
 
     $.ajax({
         type: 'POST',
-        url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
-        success: function(res) {
-            var result = JSON.parse(res);
-            __draw_user_chart(result);
-        }    
-    });
-
+            url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
+            success: function(res) {
+               var result = JSON.parse(res);
+                __draw_user_chart(res);
+            }    
+        });
+    }
 
     $('#project-list').change(function() {
         var p_name = document.getElementById('project-list').value;
@@ -149,6 +148,7 @@ $(document).ready(function() {
             url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
             data: { 'project_name': p_name },
             success: function(res) {
+                console.log(res);
                 var result = JSON.parse(res);
                 __draw_user_chart(result);
             }

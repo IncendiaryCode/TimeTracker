@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
-print_r($data)
 ?>
 <body>
     <header>
@@ -80,7 +79,7 @@ print_r($data)
     <div class="row mt-4">
         <canvas id="user_time_chart" height="80px;"></canvas>
     </div><hr>
-    <p class="efficiency text-center">Task table</p>
+    <p class="efficiency text-center mt-4">Task table</p>
     <table id="user-task-lists-datatable" class="table table-striped table-bordered">
         <thead>
             <tr>
@@ -90,8 +89,8 @@ print_r($data)
             </tr>
         </thead>
     </table>
-    <p class="efficiency text-center">Project table</p>
-    <table id="user-project-lists-datatable" class="table table-striped table-bordered mt-4">
+    <p class="efficiency text-center mt-4">Project table</p>
+    <table id="user-project-lists-datatable" class="table table-striped table-bordered ">
         <thead>
             <tr>
                 <th>Project name</th>

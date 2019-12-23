@@ -36,7 +36,7 @@ $picture = substr($profile,29);
     </div> 
     <div class="row mt-5">
         <div class="col-12">
-            <canvas id="user_chart" height="80px;"></canvas>
+            <canvas id="user-chart" height="80px;"></canvas>
             <p id="user-chart-error" class="text-center"></p>
         </div>
     </div>
