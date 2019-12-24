@@ -71,7 +71,7 @@ print_r($data);
                     <?php
                     foreach ($k['project'] as $d) { 
                         ?>                
-                    <a href="<?=base_url();?>index.php/admin/load_userdetails_page?project_id=<?=$k['project_id'] ?>" class=""><div class="mr-2">
+                    <a href="<?=base_url();?>index.php/admin/load_project_detail?project_id=<?=$d['project_id'] ?>" class=""><div class="mr-2">
                         <?php
                         if($d['image_name'] != ''){
                             $image = substr($d['image_name'],29);

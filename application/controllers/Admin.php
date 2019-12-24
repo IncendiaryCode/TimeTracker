@@ -78,7 +78,8 @@
 
 		public function load_project_detail(){
 			$this->load->view('header');
-	        $this->load->view('project_details');
+			$result['data'] = $this->dashboard_model->get_project_data($this->input->get('project_id'));
+	        $this->load->view('project_details',$result);
 	        $this->load->view('footer');
 		}
 
