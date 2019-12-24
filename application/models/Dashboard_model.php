@@ -3,7 +3,7 @@ class Dashboard_model extends CI_Model
 {
     public function __construct()
     {
-        $this->load->library('email');
+        
         $this->load->database();
     }
     //Dashboard model
@@ -845,14 +845,28 @@ class Dashboard_model extends CI_Model
                 $this->db->where('email', $email);
                 $query = $this->db->update('users');
                 if ($query) {
+                    $this->load->library('email');
                     //send OTP through mail
                     $to = $email;
-                    $this->email->from('admin@printgreener.com', 'Admin');
+                    $this->email->initialize(array(
+                    'protocol' => PROTOCOL,
+                    'smtp_host' => SMTP_HOST,
+                    'smtp_user' => SMTP_USER,
+                    'smtp_pass' => SMTP_PASS,
+                    'smtp_port' => SMTP_PORT,
+                    'charset' => CHARSET,
+                    'crlf' => CRLF,
+                    'newline' => NEWLINE,
+                    'mailtype' => MAILTYPE,
+                    'validation' => TRUE
+                ));
+                    $this->email->from('admin@printgreener.com');
                     $this->email->to($email);
                     $this->email->subject('OTP for login');
                     $this->email->message('Use this OTP:'.$token);
-                    $this->email->send();
+                    //$this->email->send();
                     if(!$this->email->send()){
+                        print_r($this->email->print_debugger());
                         return false;
                     }else{
                         return true;

@@ -18,19 +18,7 @@ class Login extends CI_Controller
         ));
         $this->load->helper('security');
         $this->lang->load('form_validation_lang');
-        $this->load->library('email');
-        $this->email->initialize(array(
-            'protocol' => PROTOCOL,
-            'smtp_host' => SMTP_HOST,
-            'smtp_user' => SMTP_USER,
-            'smtp_pass' => SMTP_PASS,
-            'smtp_port' => SMTP_PORT,
-            'charset' => CHARSET,
-            'crlf' => CRLF,
-            'newline' => NEWLINE,
-            'mailtype' => MAILTYPE,
-            'validation' => TRUE
-        ));
+        //$this->load->library('email');
     }
     // Show login page
     public function index()

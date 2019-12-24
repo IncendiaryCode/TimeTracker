@@ -3,7 +3,7 @@ class User_model extends CI_Model {
 
     public function __construct()
     {
-        $this->load->library('email');
+        //$this->load->library('email');
         $this->load->database();
         $this->load->library('session');
         $userid = $this->session->userdata('userid');
