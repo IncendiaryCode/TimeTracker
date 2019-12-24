@@ -232,9 +232,8 @@ class Dashboard_model extends CI_Model
             $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->from('project AS p');
             $this->db->join('project_assignee AS a','a.project_id = p.id');
-            $this->db->join('users AS u','u.id = a.user_id');
-            $this->db->join('task AS t','t.project_id = p.id');
-            $this->db->join('time_details AS d','d.task_id = t.id');
+            $this->db->join('time_details AS d','d.user_id = a.user_id');
+            $this->db->join('users AS u','u.id = d.user_id');
             $this->db->group_by('u.id');
             $details = $this->db->get();
         
@@ -270,7 +269,7 @@ class Dashboard_model extends CI_Model
 
         }else if($type == 'project_chart'){
             $project_id = $this->input->post('project_id');
-            $project_start_date = $this->db->get_where('id',$project_id);
+            $project_start_date = $this->db->get_where('project',array('id'=>$project_id));
             $start_date = $project_start_date->row_array()['created_on'];
             $start = date('Y-m-d',strtotime($start_date));
 
@@ -301,45 +300,81 @@ class Dashboard_model extends CI_Model
         return $data;
     }
 
-    public function user_task_data(){
+    public function user_task_data($table_type){
+        if($table_type == 'user_task'){
         $user_id = $this->input->get('user_id');
-        $this->db->select('t.task_name,p.name AS project_name');
-        $this->db->select_sum('d.total_minutes','t_minutes');
-        $this->db->from('task AS t');
-        $this->db->join('time_details AS d','d.task_id = t.id');
-        $this->db->join('project AS p','p.id = t.project_id');
-        $this->db->group_by('t.id');
-        $this->db->where('d.user_id',$user_id);
-        $result = $this->db->get();
-        if($result->num_rows() > 0){
-            $data = $result->result_array();
-        }else{
-            $data = '';
+            $this->db->select('t.task_name,p.name AS project_name');
+            $this->db->select_sum('d.total_minutes','t_minutes');
+            $this->db->from('task AS t');
+            $this->db->join('time_details AS d','d.task_id = t.id');
+            $this->db->join('project AS p','p.id = t.project_id');
+            $this->db->group_by('t.id');
+            $this->db->where('d.user_id',$user_id);
+            $result = $this->db->get();
+            if($result->num_rows() > 0){
+                $data = $result->result_array();
+            }else{
+                $data = '';
+            }
+        }else if($table_type == 'project_task'){
+            $project_id = $this->input->get('project_id');
+            $this->db->select('u.name AS user_name');
+            $this->db->select('count(distinct t.id) AS tasks_count');
+            $this->db->select_sum('d.total_minutes','t_minutes');
+            $this->db->from('project AS p');
+            $this->db->join('project_assignee AS a','a.project_id = p.id');
+            $this->db->join('time_details AS d','d.user_id = a.user_id');
+            $this->db->join('users AS u','u.id = d.user_id');
+            $this->db->where(array('u.type'=>'user','p.id'=>$project_id));
+            $this->db->group_by('d.user_id');
+            $result = $this->db->get();
+            if($result->num_rows() > 0){
+                $data = $result->result_array();
+            }else{
+                $data = '';
+            }
         }
         return $data;
     }
 
-    public function user_project_data(){
-        $user_id = $this->input->get('user_id');
-        $this->db->select('p.name AS project_name');
-        $this->db->select('count(distinct t.id) AS tasks_count');
-        $this->db->select_sum('d.total_minutes','t_minutes');
-        $this->db->from('project AS p');
-        $this->db->join('task AS t','t.project_id = p.id');
-        $this->db->join('time_details AS d','d.task_id = t.id');
-        $this->db->group_by('p.id');
-        $this->db->where('d.user_id',$user_id);
-        $result = $this->db->get();
-        if($result->num_rows() > 0){
-            $data = $result->result_array();
-        }else{
-            $data = '';
+    public function user_project_data($table_type){
+        if($table_type == 'user_project'){
+            $user_id = $this->input->get('user_id');
+            $this->db->select('p.name AS project_name');
+            $this->db->select('count(distinct t.id) AS tasks_count');
+            $this->db->select_sum('d.total_minutes','t_minutes');
+            $this->db->from('project AS p');
+            $this->db->join('task AS t','t.project_id = p.id');
+            $this->db->join('time_details AS d','d.task_id = t.id');
+            $this->db->group_by('p.id');
+            $this->db->where('d.user_id',$user_id);
+            $result = $this->db->get();
+            if($result->num_rows() > 0){
+                $data = $result->result_array();
+            }else{
+                $data = '';
+            }
+        }else if($table_type == 'project_user'){
+            $project_id = $this->input->get('project_id');
+            $this->db->select('t.task_name,count(distinct d.user_id) AS users_count');
+            $this->db->select_sum('d.total_minutes','t_minutes');
+            $this->db->from('task AS t');
+            $this->db->join('time_details AS d','d.task_id = t.id');
+            $this->db->where('t.project_id',$project_id);
+            $this->db->group_by('t.id');
+            $result = $this->db->get();
+            if($result->num_rows() > 0){
+                $data = $result->result_array();
+            }else{
+                $data = '';
+            }
         }
         return $data;
+    
     }
 
     public function get_project_data($proj_id){
-        $this->db->select('p.name AS project_name');
+        $this->db->select('p.name AS project_name,p.image_name,p.id AS project_id');
         $this->db->select('count(distinct t.id) AS tasks_count,count(distinct d.user_id) AS users_count');
         $this->db->select_sum('d.total_minutes','t_minutes');
         $this->db->from('project AS p');

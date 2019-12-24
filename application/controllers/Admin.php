@@ -105,7 +105,8 @@
 		}
 
 		public function user_task_table(){
-			$result['data'] = $this->dashboard_model->user_task_data();
+			$table_type = $this->input->get('type');
+			$result['data'] = $this->dashboard_model->user_task_data($table_type);
 			if($result['data'] == NULL || $result['data'] == FALSE){
 				$result['status'] = FALSE;
 				$result['data'] = NULL;
@@ -116,7 +117,8 @@
 		}
 
 		public function user_project_table(){
-			$result['data'] = $this->dashboard_model->user_project_data();
+			$table_type = $this->input->get('type');
+			$result['data'] = $this->dashboard_model->user_project_data($table_type);
 			if($result['data'] == NULL || $result['data'] == FALSE){
 				$result['status'] = FALSE;
 				$result['data'] = NULL;
