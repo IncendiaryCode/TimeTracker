@@ -113,18 +113,26 @@ $picture = substr($profile,29);
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
-                <form method="post" action="<?=base_url();?>index.php/admin/assign_user_to_project?project_id=<?=$data[0]['project_id']?>?user_id=" id="adding-user">
-                    <label for="assing-user-name" class="text-left">Name:</label>
-
-                    <select class="form-control user"  id="assigning-user-name">
-                        <option>select user</option>
-                        <?php
-                            foreach($user_names as $name){ ?>
-                            <option ><?php echo $name['name']; ?></option>
-                        <?php } ?>
-                    </select>
-                    <button type="submit" class="btn btn-primary mt-2">Add user</button>
-                    <p class="text-danger" id="adding-user-error"></p>
+                <form method="post" action="<?=base_url();?>index.php/admin/assign_user_to_project?project_id=<?=$data[0]['project_id']?>" id="adding-user">
+                    <?php
+                    if($this->session->flashdata('error')){ ?>
+                    <div class="alert alert-danger"><?php echo $this->session->flashdata('error');?></div>
+                    <?php } else if($this->session->flashdata('success')){ ?>
+                    <div class="alert alert-success"><?php echo $this->session->flashdata('success');?></div>
+                <?php } ?>
+                
+                <label for="assing-user-name" class="text-left">Name:</label>
+                <select class="form-control user" id="assigning-user-name" name="assigning-user-name">
+                <option>select user</option>
+                <?php
+                foreach($user_names as $name){ ?>
+                    <option value="<?=$name['id']?>"><?php echo $name['name']; ?></option>
+                    
+                <?php } ?>
+                </select>
+                <input type="hidden" name="project-id" id="project-existing-id" value="<?=$data[0]['project_id']?>">
+                <button type="submit" class="btn btn-primary mt-2">Add user</button>
+                <p class="text-danger" id="adding-user-error"></p>
                 </form>
             </div>
         </div>

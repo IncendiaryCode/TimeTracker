@@ -142,6 +142,8 @@ class Dashboard_model extends CI_Model
                     $this->db->from('task AS t');
                     $this->db->join('project AS p','p.id = t.project_id');
                     $this->db->join('time_details AS d','d.task_id = t.id');
+                    $this->db->where(array('d.end_time IS NOT NULL'));
+                    $this->db->group_by('d.task_id');
                     $i=0;
                     foreach($column as $item){
                         if($_GET['search']['value']) // if datatable send POST for search
@@ -400,6 +402,17 @@ class Dashboard_model extends CI_Model
         }
         return $data;
     }
+
+    public function assign_user($user_id,$project_id){
+        $array = array('project_id'=>$project_id,'user_id'=>$user_id,'created_on'=>date('Y-m-d H:i:s'));
+        $this->db->set($array);
+        $assign = $this->db->insert('project_assignee',$array);
+        if($assign){
+            return true;
+        }else{
+            return false;
+        }
+    }
     //get user info
     public function get_user_data(){
         $user_id = $this->input->get('user_id');
@@ -492,7 +505,7 @@ class Dashboard_model extends CI_Model
     }
 
     public function get_usernames(){
-        $this->db->select('name');
+        $this->db->select('name,id');
         $this->db->from('users');
         $this->db->where('type','user');
         $query = $this->db->get();

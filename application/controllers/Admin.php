@@ -57,6 +57,7 @@
 		        $this->load->view('footer');
 			}
 			else if($type == 'task'){
+				//$list = $this->dashboard_model->get_datatables();
 				$result['data'] = $this->dashboard_model->get_task_details($type);
 				if($result['data'] == NULL){
 					$result['status'] = FALSE;
@@ -67,7 +68,20 @@
 		        echo json_encode($result);
 			}	
 		}
-		
+		public function assign_user_to_project(){
+			$user_id = $this->input->post('assigning-user-name');
+			$project_id = $this->input->post('project-id');
+			$result = $this->dashboard_model->assign_user($user_id,$project_id);
+			if($result == TRUE){
+				$this->session->set_flashdata('success','User Assigned Successfully.');
+				//return true;
+				redirect('admin/load_project_detail','refresh');
+			}else{
+				$this->session->set_flashdata('error','Could not assign the user!');
+				redirect('admin/load_project_detail','refresh');
+				//return false;
+			}
+		}
 		//load user details page
 		public function load_userdetails_page(){
 			$this->load->view('header');
@@ -79,6 +93,7 @@
 		public function load_project_detail(){
 			$this->load->view('header');
 			$result['data'] = $this->dashboard_model->get_project_data($this->input->get('project_id'));
+			$result['user_names'] = $this->dashboard_model->get_usernames();
 	        $this->load->view('project_details',$result);
 	        $this->load->view('footer');
 		}
