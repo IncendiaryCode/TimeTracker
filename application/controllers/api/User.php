@@ -110,19 +110,22 @@ class User extends REST_Controller {
 
     public function resetpassword_post(){
       $post = $this->input->post();
-      if(!empty($post['email']) && !empty($post['otp']))
-      {
-        $result = $this->dashboard_model->check_otp();
-        if(!empty($result) || $result != false) {
+      if(!empty($post['email']) && !empty($post['new_password'])){
+        $res = $this->user_model->change_password_device($post['new_password'],$post['email']);
+        if($res){
           $data['success'] = 1;
-          $data['msg'] = "Paasword updated successfully";
+          $data['msg'] = 'Password updated successfully!';
+          $this->response($data, REST_Controller::HTTP_OK);
         }else{
-
-        }
-      }else{
           $data['success'] = 0;
-          $data['msg'] = 'Fields are invalid!';
+          $data['msg'] = 'Password update failed!';
           $this->response($data, parent::HTTP_NOT_FOUND);
+        }
+                
+      }else{
+        $data['success'] = 0;
+        $data['msg'] = 'Fields are invalid!';
+        $this->response($data, parent::HTTP_NOT_FOUND);
       }
     }
 
