@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
+print_r($data);
 ?>
 <body>
     <header>
@@ -28,7 +29,7 @@ $picture = substr($profile,29);
         </nav>
     </header>
 <div class="container">
-    <div class="row mt-5  shadow-sm">
+    <div class="row mt-5 shadow-sm">
         <div class="col-md-4 ">
             <div class="card user-card">
                 <div class="card-body">
@@ -43,10 +44,9 @@ $picture = substr($profile,29);
                                 <?php } ?>
                             </div>
                         </div>
-                        <input type="hidden" name="" id="user-id" value="<?=($data['id']) ?>">
                         <div class="col-9 text-left">
-                            <h3 class="text-sm-center mt-2 mb-1"><?=($data['project_name']) ?></h3>
-                            <p><?=($data['time_used']) ?></p>
+                            <h3 class="text-sm-center mt-2 mb-1">project_name</h3>
+                            <p>total time spent </p>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,6 @@ $picture = substr($profile,29);
                 <div class="card-body">
                     <div ><span class="display-4"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div>
                     <p class="text-center">Time spent</p><hr>
-                    <div ><span class="efficiency"><?=round($data['t_minutes']/60)/$data['project_count'] ?></span><span class="display-5"> Efficiency</span></div>
                     
                 </div>
             </div>

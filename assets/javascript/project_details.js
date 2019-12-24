@@ -3,12 +3,13 @@
 $(document).ready(function() {
 if(document.getElementById('user-id') != null)
 {
+    var project_id = document.getElementById("project-id").value;
    $('#project-datatable').DataTable({
         "processing": true,
         "serverSide": true,
         "ajax": {
-            "url": timeTrackerBaseURL + 'index.php/admin/project_table',
-            "data": {'user_id': project_id }
+            "url": timeTrackerBaseURL + 'index.php/admin/user_chart',
+            "data": { "type": "project_chart" , 'project_id': project_id }
         },
         "order": [[ 0, "asc" ]],
         "columnDefs": [{

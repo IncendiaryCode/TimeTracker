@@ -2,7 +2,6 @@ var taskChart;
 
 function __draw_task_chart(res) {
     var result = res['result'];
-    console.log(result);
     var task_chart = document.getElementById('task-chart').getContext('2d');
     gradient = task_chart.createLinearGradient(0, 0, 0, 600);
     gradient.addColorStop(0, '#7077ff');

@@ -59,6 +59,7 @@ $picture = substr($profile,29);
                             $image = substr($proj['project_icon'],29);
                             ?>
                             <img src="<?=base_url().$image?>" width="30px;">
+                            <input type="hidden" id="project-id" name="" value="<?=$proj['project_id'] ?>">
                             <?php
                         } ?>
                         <?=$proj['project_name']; ?>

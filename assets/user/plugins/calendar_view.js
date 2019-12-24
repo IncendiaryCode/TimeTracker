@@ -17,6 +17,7 @@ function loadTask(type, date) {
             if(values == "No activity in this date.")
             {
                 $("#attachPanels").empty();
+                $("#attachPanels").empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
             }
             else
             {
@@ -122,11 +123,10 @@ function retrieveChartData(type, date) {
                 if (type == 'weekly_chart') {
                 document.getElementById('week-error').innerHTML = res['data'];
                 $('#weekly').hide();
+                $("#attachPanels").empty();
                 }
                 if (type == 'daily_chart') {
                 document.getElementById('daily-error').innerHTML = res['data'];
-                //$('#daily').hide();
-                //$('#attachPanels').hide();
                 }
             }
             else
@@ -134,6 +134,7 @@ function retrieveChartData(type, date) {
             if (type == 'weekly_chart') {   
                 loadTask(type, date);
                 document.getElementById('week-error').innerHTML = " ";
+                console.log(type, res)
                 drawChart(type, res);
                 $('#weekly').show();
             }
@@ -141,8 +142,6 @@ function retrieveChartData(type, date) {
                 loadTask(type, date);
                 document.getElementById('daily-error').innerHTML = " ";
                 draw_customized_chart(res);
-                //$('#daily').show();
-                //$('#attachPanels').show();
             }
             }
         }
@@ -162,8 +161,8 @@ function drawChart(type, res) {
     }
     else
     {
-    var chart = document.getElementById('weekly').getContext('2d');
-    gradient = chart.createLinearGradient(0, 0, 0, 600);
+    var week_chart = document.getElementById('weekly').getContext('2d');
+    gradient = week_chart.createLinearGradient(0, 0, 0, 600);
 
     gradient.addColorStop(0, '#7078ff');
     gradient.addColorStop(0.5, '#e58dfb');
@@ -250,7 +249,7 @@ function drawChart(type, res) {
         }
         };
         if(daily_chart) daily_chart.destroy();
-        daily_chart = new Chart(chart, config);
+        daily_chart = new Chart(week_chart, config);
 }
 
 function draw_customized_chart(res)
