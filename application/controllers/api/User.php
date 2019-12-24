@@ -62,20 +62,66 @@ class User extends REST_Controller {
     public function send_otp_post()
     {
       $post = $this->input->post();
-      $res = $this->user_model->check_email($post['email']);
-      if($res == true){
-          $send = $this->dashboard_model->send_otp();
-          if ($send == true) {
-            $data['success'] = 1;
-            $data['msg'] = "OTP sent";
-          } else {
-            $data['success'] = 0;
-            $data['msg'] = "OTP not sent";
+      if(!empty($post['email']))
+      {
+          $res = $this->user_model->check_email($post['email']);
+          if($res == true){
+              $send = $this->dashboard_model->send_otp();
+              if ($send == true) {
+                $data['success'] = 1;
+                $data['msg'] = "OTP sent";
+              } else {
+                $data['success'] = 0;
+                $data['msg'] = "OTP not sent";
+              }
+              $this->response($data, REST_Controller::HTTP_OK);
+          }else{
+              $data['success'] = 0;
+              $data['msg'] = 'Invalid Email!';
+              $this->response($data, parent::HTTP_NOT_FOUND);
           }
-          $this->response($data, REST_Controller::HTTP_OK);
       }else{
           $data['success'] = 0;
-          $data['msg'] = 'Invalid Email!';
+          $data['msg'] = 'Fields are invalid!';
+          $this->response($data, parent::HTTP_NOT_FOUND);
+      }
+      
+    }
+
+    public function validate_otp_post(){
+      $post = $this->input->post();
+      if(!empty($post['email']) && !empty($post['otp']))
+      {
+        $result = $this->dashboard_model->check_otp();
+        if(!empty($result) || $result !== false) {
+          $data['success'] = 1;
+          $data['msg'] = "Valid OTP";
+        }else{
+          $data['success'] = 0;
+          $data['msg'] = "Invalid OTP";
+        }
+        $this->response($data, REST_Controller::HTTP_OK);
+      }else{
+          $data['success'] = 0;
+          $data['msg'] = 'Fields are invalid!';
+          $this->response($data, parent::HTTP_NOT_FOUND);
+      }
+    }
+
+    public function resetpassword_post(){
+      $post = $this->input->post();
+      if(!empty($post['email']) && !empty($post['otp']))
+      {
+        $result = $this->dashboard_model->check_otp();
+        if(!empty($result) || $result != false) {
+          $data['success'] = 1;
+          $data['msg'] = "Paasword updated successfully";
+        }else{
+
+        }
+      }else{
+          $data['success'] = 0;
+          $data['msg'] = 'Fields are invalid!';
           $this->response($data, parent::HTTP_NOT_FOUND);
       }
     }
