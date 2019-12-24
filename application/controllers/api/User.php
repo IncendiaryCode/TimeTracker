@@ -69,7 +69,7 @@ class User extends REST_Controller {
             $data['success'] = 1;
             $data['msg'] = "OTP sent";
           } else {
-            $data['status'] = 0;
+            $data['success'] = 0;
             $data['msg'] = "OTP not sent";
           }
           $this->response($data, REST_Controller::HTTP_OK);

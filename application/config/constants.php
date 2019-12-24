@@ -94,7 +94,7 @@ define('PROTOCOL', 'smtp');
 define('SMTP_HOST', 'mail.brightlightventures.com');
 define('SMTP_USER', 'timetracker@brightlightventures.com');
 define('SMTP_PASS', 'BB(i4)o.zTjK');
-define('SMTP_PORT', 25);
+define('SMTP_PORT', 587);
 define('CHARSET', 'utf-8');
 define('CRLF', "\r\n");
 define('NEWLINE', "\r\n");
