@@ -22,9 +22,9 @@ function __draw_task_chart(res) {
             count[i] = result[i]['tasks_count'] / 60;
         }
         for (var ind = 0; ind < count.length; ind++) {
-            var task_time_dec = count[ind] - Math.floor(count[ind]);
+            var task_time_dec = count[ind]/60 - Math.floor(count[ind]);
             task_time_dec = task_time_dec.toString().slice(0, 4);
-            var total_time = Math.floor(count[ind]) + parseFloat(task_time_dec);
+            var total_time = Math.floor(count[ind]/60) + parseFloat(task_time_dec);
             count[ind] = total_time;
         }
         var configs = {

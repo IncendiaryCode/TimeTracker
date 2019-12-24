@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
-print_r($data);
 ?>
 <body>
     <header>
@@ -30,34 +29,22 @@ print_r($data);
     </header>
 <div class="container">
     <div class="row mt-5 shadow-sm">
+        <?php foreach($data as $details) { ?>
         <div class="col-md-4 ">
             <div class="card user-card">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-3 ">
                             <div class="mx-auto d-block">
-                                <?php
-                                if($data['profile'] != ''){
-                                    $image = substr($data['profile'],29);
-                                    ?>
-                                    <img src="<?=base_url().$image?>" class="rounded-circle" width="50px;" height="50px;">
-                                <?php } ?>
+                               <div ><span class="display-4"><?=$details['users_count'] ?></span><p class="display-5">total users</p><input type="hidden" id="project_id" name="" value="<?=$details['project_id'] ?>"></div>
                             </div>
-                        </div>
-                        <div class="col-9 text-left">
-                            <h3 class="text-sm-center mt-2 mb-1">project_name</h3>
-                            <p>total time spent </p>
-                        </div>
                     </div>
                 </div>
             </div>
-        </div>
             <div class="vl"></div>
         <div class="col-md-3 offset-md-1">
             <div class="card user-card">
                 <div class="card-body">
-                    <div ><span class="display-4"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div>
-                    <p class="text-center">Time spent</p><hr>
+                    <div ><span class="display-4"><?=$details['tasks_count'] ?></span></div>
+                    <p class="text-center">Total tasks</p>
                     
                 </div>
             </div>
@@ -67,12 +54,16 @@ print_r($data);
             <div class="card user-card">
                 <div class="card-body">
                     <div class="mx-auto d-block">
-                        <div class="text-center"><span class="display-3"><?=($data['project_count']) ?></span>
+                        <div class="text-center"><span class="display-4"><?=round($details['t_minutes']/60,2) ?></span>
                             <p class="text-center">Active projects</p></div>
                     </div>
                 </div>
             </div>
         </div>
+    <?php } ?>
+    </div><hr>
+    <div class="row mt-5">
+        <canvas id="project_time_chart" height="80px;"></canvas>
     </div><hr>
     <p class="efficiency text-center mt-4">Task table</p>
     <table id="project-datatable" class="table table-striped table-bordered">
