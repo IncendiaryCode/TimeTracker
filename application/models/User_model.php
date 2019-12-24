@@ -700,8 +700,7 @@ class User_model extends CI_Model {
         $this->db->set('password',md5($new_pwd));
         $this->db->where('email', $email);
         $query = $this->db->update('users');
-        //print_r($this->db->last_query());die;
-        if($query){
+        if($this->db->affected_rows() == 1){
             return true;
         }else{
             return false;
