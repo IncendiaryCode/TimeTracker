@@ -34,7 +34,7 @@ $picture = substr($profile,29);
             <div class="card user-card">
                 <div class="card-body">
                             <div class="mx-auto d-block">
-                               <div ><span class="display-4"><?=$details['users_count'] ?></span><p class="display-5">total users</p><input type="hidden" id="project_id" name="" value="<?=$details['project_id'] ?>"></div>
+                               <div class="text-center" ><span class="display-4"><?=$details['users_count'] ?></span><p class="display-5">Total users</p><input type="hidden" id="project_id" name="" value="<?=$details['project_id'] ?>"></div>
                             </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@ $picture = substr($profile,29);
         <div class="col-md-3 offset-md-1">
             <div class="card user-card">
                 <div class="card-body">
-                    <div ><span class="display-4"><?=$details['tasks_count'] ?></span></div>
+                    <div class="text-center"><span class="display-4 "><?=$details['tasks_count'] ?></span></div>
                     <p class="text-center">Total tasks</p>
                     
                 </div>
@@ -54,8 +54,8 @@ $picture = substr($profile,29);
             <div class="card user-card">
                 <div class="card-body">
                     <div class="mx-auto d-block">
-                        <div class="text-center"><span class="display-4"><?=round($details['t_minutes']/60,2) ?></span>
-                            <p class="text-center">Active projects</p></div>
+                        <div class="text-center"><span class="display-4"><?=round($details['t_minutes']/60,2) ?></span>h
+                            <p class="text-center">Total time spent</p></div>
                     </div>
                 </div>
             </div>
@@ -65,18 +65,36 @@ $picture = substr($profile,29);
     <div class="row mt-5">
         <canvas id="project_time_chart" height="80px;"></canvas>
     </div><hr>
-    <p class="efficiency text-center mt-4">Task table</p>
-    <table id="project-datatable" class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Task name</th>
-                <th>Description</th>
-                <th>Start date</th>
-                <th>End date</th>
-                <th>Time spent</th>
-            </tr>
-        </thead>
-    </table>
+    
+    <div class="row">
+        <div class="col-12">
+            <p class="efficiency text-center mt-4">Project table</p>
+            <table id="project-list-datatable" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>User name</th>
+                        <th>Task count</th>
+                        <th>Time spent</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <p class="efficiency text-center mt-4">Task table</p>
+            <table id="task-list-datatable" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Task name</th>
+                        <th>user count</th>
+                        <th>Time spent</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
     
 </div>
 
