@@ -836,17 +836,17 @@ class Dashboard_model extends CI_Model
                 $query = $this->db->update('users');
                 if ($query) {
                     //send OTP through mail
-                    /* $to = $email;
-                    $this->email->from('admin1@printgreener.com', 'Admin');
-                    $this->email->to('swasthika@printgreener.com');
+                    $to = $email;
+                    $this->email->from('admin@printgreener.com', 'Admin');
+                    $this->email->to($email);
                     $this->email->subject('OTP for login');
                     $this->email->message('Use this OTP:'.$token);
                     $this->email->send();
                     if(!$this->email->send()){
-                    echo "mail not sent.";exit;
+                        return false;
                     }else{
-                    echo "sent.";
-                    }*/
+                        return true;
+                    }
                     return true;
                 } //$query
                 else {

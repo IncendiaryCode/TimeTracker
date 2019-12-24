@@ -707,5 +707,17 @@ class User_model extends CI_Model {
             return false;
         }
     }
+
+    public function check_email($email){
+        $query    = $this->db->get_where('users', array(
+            'email' => $email
+        ));
+        if ($query->num_rows() == 1) {
+            return true;
+        }else{
+            return false;
+        }
+
+    }
 }
 ?>

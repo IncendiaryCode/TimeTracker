@@ -85,3 +85,22 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+
+
+
+// SMTP MAIL CONFIG CONSTANTS
+define('PROTOCOL', 'smtp');
+define('SMTP_HOST', 'mail.brightlightventures.com');
+define('SMTP_USER', 'timetracker@brightlightventures.com');
+define('SMTP_PASS', 'BB(i4)o.zTjK');
+define('SMTP_PORT', 25);
+define('CHARSET', 'utf-8');
+define('CRLF', "\r\n");
+define('NEWLINE', "\r\n");
+define('MAILTYPE', 'html');
+define('SMTP_NO_REPLY_USER', 'timetracker@brightlightventures.com');
+define('SMTP_FROM_NAME', 'Time Tracker');
+
+
+//define('SMTP_BCC_USER', 'sales@pinzacord.com');
