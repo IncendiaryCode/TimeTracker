@@ -19,21 +19,16 @@ function __draw_task_chart(res) {
         document.getElementById('task-chart-error').innerHTML = " ";
         for (var i = 0; i < result.length; i++) {
             label[i] = result[i]['task_date'];
-            count[i] = result[i]['tasks_count'] / 60;
+            count[i] = result[i]['tasks_count'];
         }
-        for (var ind = 0; ind < count.length; ind++) {
-            var task_time_dec = count[ind]/60 - Math.floor(count[ind]);
-            task_time_dec = task_time_dec.toString().slice(0, 4);
-            var total_time = Math.floor(count[ind]/60) + parseFloat(task_time_dec);
-            count[ind] = total_time;
-        }
+        
         var configs = {
             type: 'line',
             data: {
                 labels: label,
                 datasets: [{
                     type: 'line',
-                    label: 'Time used',
+                    label: 'hours',
                     backgroundColor: gradient,
                     borderColor: window.chartColors.black,
                     data: count,
@@ -41,7 +36,7 @@ function __draw_task_chart(res) {
             },
             options: {
                 title: {
-                    text: 'Task snapshot'
+                    text: 'task snapshot'
                 },
                 hover: {
                     display: false
@@ -70,7 +65,7 @@ function __draw_task_chart(res) {
                         },
                         scaleLabel: {
                             display: true,
-                            labelString: 'Time in hours',
+                            labelString: 'time in hours',
                         }
                     }]
                 },

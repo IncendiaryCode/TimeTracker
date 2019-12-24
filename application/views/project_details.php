@@ -33,9 +33,12 @@ $picture = substr($profile,29);
         <div class="col-md-4 ">
             <div class="card user-card">
                 <div class="card-body">
-                            <div class="mx-auto d-block">
-                               <div class="text-center" ><span class="display-4"><?=$details['users_count'] ?></span><p class="display-5">Total users</p><input type="hidden" id="project_id" name="" value="<?=$details['project_id'] ?>"></div>
-                            </div>
+                    <div class="mx-auto d-block">
+                       <div class="text-center" ><span class="display-4"><?=$details['users_count'] ?></span><p class="display-5">Total users</p><input type="hidden" id="project_id" value="<?=$details['project_id'] ?>">
+                       </div>
+                       <div class="text-center "><i class="fas fa-plus icon-plus text-success" data-target="#add-user" data-toggle='modal'></i>
+                       </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -43,9 +46,13 @@ $picture = substr($profile,29);
         <div class="col-md-3 offset-md-1">
             <div class="card user-card">
                 <div class="card-body">
-                    <div class="text-center"><span class="display-4 "><?=$details['tasks_count'] ?></span></div>
-                    <p class="text-center">Total tasks</p>
-                    
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <div><span class="display-4"><strong><?=$details['project_name'] ?></strong></span></div>
+                            <div><span class="display-4 "><?=$details['tasks_count'] ?></span></div>
+                            <p class="text-center">Total tasks</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -68,7 +75,7 @@ $picture = substr($profile,29);
     
     <div class="row">
         <div class="col-12">
-            <p class="efficiency text-center mt-4">Project table</p>
+            <p class="efficiency text-center mt-5">Project table</p>
             <table id="project-list-datatable" class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -83,7 +90,7 @@ $picture = substr($profile,29);
 
     <div class="row">
         <div class="col-12">
-            <p class="efficiency text-center mt-4">Task table</p>
+            <p class="efficiency text-center mt-5">Task table</p>
             <table id="task-list-datatable" class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -98,7 +105,33 @@ $picture = substr($profile,29);
     
 </div>
 
-<footer class="">
+<div class="modal" id="add-user" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Adding users</h4>
+                <button type="button" class="close text-danger" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="<?=base_url();?>index.php/admin/assign_user_to_project?project_id=<?=$data[0]['project_id']?>?user_id=" id="adding-user">
+                    <label for="assing-user-name" class="text-left">Name:</label>
+
+                    <select class="form-control user"  id="assigning-user-name">
+                        <option>select user</option>
+                        <?php
+                            foreach($user_names as $name){ ?>
+                            <option ><?php echo $name['name']; ?></option>
+                        <?php } ?>
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-2">Add user</button>
+                    <p class="text-danger" id="adding-user-error"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
     <hr>
     <p class="text-center">Copyright © 2019 Printgreener.com</p>
 </footer>

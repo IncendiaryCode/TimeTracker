@@ -99,12 +99,12 @@ $(document).ready(function() {
         "columnDefs": [{
             "targets": 0,
             "render": function ( data, type, row, meta ) {
-                return row.task_name;
+                return row.user_name;
             }
         },{
             "targets": 1,
             "render": function ( data, type, row, meta ) {
-                return row.users_count;
+                return row.tasks_count;
             },
         },{
             "targets": 2,
@@ -130,8 +130,7 @@ $(document).ready(function() {
         "columnDefs": [{
             "targets": 0,
             "render": function ( data, type, row, meta ) {
-                console.log(row);
-                return row.ptask_name;
+                return row.task_name;
             }
         },{
             "targets": 1,
@@ -159,4 +158,13 @@ $(document).ready(function() {
     att_task.value = "border";                           
     search_task.setAttributeNode(att_task);
 
+var adding_user =document.getElementById('adding-user');
+adding_user.onsubmit = function()
+{
+    var user_name = document.getElementById('assigning-user-name').value;
+    if (user_name == "select user" ) {
+        document.getElementById("adding-user-error").innerHTML = "please enter user name";
+        return false;
+    }    
+}
 });
