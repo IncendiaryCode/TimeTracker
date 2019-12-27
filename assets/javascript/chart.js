@@ -75,41 +75,36 @@ function __project_details(res)
     new Chart(ctx, config);
 }
     $(document).ready(function() {
-        if(document.getElementById('main-chart'))
-        {
-        $.ajax({
-        type: 'POST',
-        url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
-        data: { 'type': "get_user" },
-        success: function(res) {
-            var result = JSON.parse(res);
-                usernames = result['result'];
-            __project_details(usernames);
-            }
-        });
-    }
 
-    if ((document.getElementById('cur-month').value == "") || (document.getElementById('cur-month').value == " ")) {
-            var curr_month =  new Date().getFullYear().toString() +'-'+ (new Date().getMonth() + 1).toString();
-            document.getElementById('cur-month').value = curr_month;
-        }
-       
-    
-    $('#view-dashboard-chart').click(function() {
-        if (document.getElementById('cur-month').value != '') {
-            $.ajax({
-            type: 'POST',
-            url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
-            data: { 'type': "get_user" },
-            success: function(res) {
-                var result = JSON.parse(res);
-                    usernames = result['result'];
-                __project_details(usernames);
-                }
-            });
-        }
-    });
-    
+if (document.getElementById('main-chart')) {
+
+if ((document.getElementById('cur-month').value == "") || (document.getElementById('cur-month').value == " ")) {
+var curr_month = new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString();
+document.getElementById('cur-month').value = curr_month;
 
 
+$.ajax({
+type: 'POST',
+url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
+data: { 'type': "get_graph_data", "month": curr_month },
+success: function(res) {
+var result = JSON.parse(res);
+usernames = result['result'];
+__project_details(usernames);
+}
+});
+}
+}
+$('#view-dashboard-chart').click(function() {
+$.ajax({
+type: 'POST',
+url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
+data: { 'type': "get_graph_data", "month": document.getElementById('cur-month').value },
+success: function(res) {
+var result = JSON.parse(res);
+usernames = result['result'];
+__project_details(usernames);
+}
+});
+});
 });

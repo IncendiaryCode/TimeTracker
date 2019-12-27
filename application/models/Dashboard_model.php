@@ -26,6 +26,47 @@ class Dashboard_model extends CI_Model
         $row_proj   = $get_proj_q->num_rows();
         return $row_proj;
     }
+
+    public function dashboard_graph(){
+        $month = date('Y-m-d',strtotime($this->input->post('month')));
+        $end = date('Y-m-t',strtotime($month));
+        $days = array();
+        for($i=strtotime($month); $i<=strtotime($end); $i+=86400)
+        {
+           $days[] = date('Y-m-d', $i);
+        }
+        $this->db->distinct()->select('a.project_id');
+        $this->db->from('project_assignee AS a');
+        $this->db->join('task AS t','t.project_id = a.project_id');
+        $this->db->join('time_details AS d','d.task_id = t.id');
+        $projects = $this->db->get()->result_array();
+        $i=0;
+        foreach($projects as $p){
+            foreach($days as $d){
+            $this->db->select('d.task_date,t.project_id,p.name AS project_name');
+            $this->db->select_sum('d.total_minutes','t_minutes');
+            $this->db->select('SUM(IF(d.task_date="'.$d.'",1,0)) AS work_date');
+            $this->db->from('task AS t');
+            $this->db->join('project AS p','p.id = t.project_id');
+            $this->db->join('time_details AS d','d.task_id = t.id');
+            //$this->db->where('d.task_date BETWEEN "'.$month.'" AND "'.$end.'"');
+            $this->db->where(array('t.project_id'=>$p['project_id'],'d.task_date'=>$d));
+            $query = $this->db->get()->result_array();
+            foreach($query as $q){
+                    if($q['work_date'] == '1'){
+                        $array[$i][] = array('project_name'=>$q['project_name'],'time_used'=>$q['t_minutes'],'task_date'=>$q['task_date']);
+                    }else{
+                        $array[$i][] = array('project_name'=>$q['project_name'],'time_used'=>$q['t_minutes'],'task_date'=>$d);
+                    }
+            } 
+            }$i= $i+1;
+        }
+    
+        
+        //print_r($array);
+
+        return $array;
+    }
     public function get_task_details($type){
         if($type == 'user'){
 
@@ -408,6 +449,7 @@ class Dashboard_model extends CI_Model
         $this->db->set($array);
         $assign = $this->db->insert('project_assignee',$array);
         if($assign){
+            print_r("NJK");
             return true;
         }else{
             return false;

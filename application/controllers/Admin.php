@@ -74,10 +74,11 @@
 			$result = $this->dashboard_model->assign_user($user_id,$project_id);
 			if($result == TRUE){
 				$this->session->set_flashdata('success','User Assigned Successfully.');
-				//return true;
+				print_r("bhjlk");exit;
 				redirect('admin/load_project_detail','refresh');
 			}else{
 				$this->session->set_flashdata('error','Could not assign the user!');
+				print_r("nope");exit;
 				redirect('admin/load_project_detail','refresh');
 				//return false;
 			}
@@ -144,12 +145,27 @@
 		}
 		//load list of projects for an ajax call
 		public function get_project_list(){
-			$data['result'] = $this->dashboard_model->get_project_name();
-			if($data['result'] == FALSE){
-				$data['status'] = FALSE;
-				$data['result'] = NULL;
+			if($this->input->post('type')){
+				if($this->input->post('type') == 'get_graph_data'){
+					$data['result'] = $this->dashboard_model->dashboard_graph();
+					if($data['result'] == NULL){
+						$data['status'] = FALSE;
+						$data['result'] = NULL;
+					}else{
+						$data['status'] = TRUE;
+					}
+				}else if($this->input->post('type') == 'get_user'){
+					$data['result'] = $this->dashboard_model->get_project_name();
+					if($data['result'] == FALSE){
+						$data['status'] = FALSE;
+						$data['result'] = NULL;
+					}else{
+						$data['status'] = TRUE;
+					}
+				}
 			}else{
-				$data['status'] = TRUE;
+				$data['result'] = NULL;
+				$data['status'] = FALSE;
 			}
 			echo json_encode($data);
 		}

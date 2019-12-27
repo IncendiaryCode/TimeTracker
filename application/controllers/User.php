@@ -180,7 +180,7 @@ class User extends CI_Controller
     //Add tasks
     public function add_tasks()
     {
-        $GLOBALS['page_title'] = 'Add Task';
+        $GLOBALS['page_title'] = 'Add task';
         if ($this->input->post('action') == 'save_and_start') {
             $data['userid'] = $this->session->userdata('userid');
             $data['project_module'] = $this->input->post('project_module');
@@ -217,7 +217,7 @@ class User extends CI_Controller
             //$this->form_validation->set_rules('project_module', 'Module name', 'required');
             $this->form_validation->set_rules('task_type', 'Radio button', 'required');
             if ($this->form_validation->run() == FALSE) {
-                $GLOBALS['page_title'] = 'Add Task';
+                $GLOBALS['page_title'] = 'Add task';
                 $this->load->view('user/header');
                 $data['result'] = $this->user_model->get_project_name();
                 $this->load->view('user/add_task', $data);
@@ -251,7 +251,7 @@ class User extends CI_Controller
     // Load Edit task Page
     public function load_edit_task()
     {
-        $GLOBALS['page_title'] = 'Edit Task';
+        $GLOBALS['page_title'] = 'Edit task';
         if (isset($_GET['t_id'])) {
             $t_id = $this->input->get('t_id', TRUE);
         }
@@ -269,7 +269,7 @@ class User extends CI_Controller
     //Function to edit task
     public function edit_task()
     {
-        $GLOBALS['page_title'] = 'Edit Task';
+        $GLOBALS['page_title'] = 'Edit task';
         $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|xss_clean');
         $this->form_validation->set_rules('task_desc', 'Task Description', 'trim|required');
        // $this->form_validation->set_rules('start_time','Task Start Date','required');
