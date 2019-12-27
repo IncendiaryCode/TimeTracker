@@ -4,7 +4,7 @@
     $this->load->library('session');
     $profile = $this->session->userdata('user_profile');
 ?>
-<main class="container-fluid container-fluid-main"><p class="display-4 text-white  text-center">My activities</p>
+<main class="container-fluid container-fluid-main"><p class="display-heading text-white  text-center">My activities</p>
     <div class="main-container container">
         <div class="main-container-inner mt-3">
             <div class="au-card au-card--no-shadow au-card--no-pad mb-2">

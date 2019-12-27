@@ -224,17 +224,21 @@ header.main-header h1 {
         font-size: 32px;
         font-weight: 300;
         line-height: 1.2;
+        margin-top: 50px;
     }
 }
 @media (max-width: 700px ) {
     .display-heading
     {
         font-size: 24px;
-        font-weight: 300;
-        line-height: 1.2;
+        margin-top: 50px;
     }
 }
 .efficiency
 {
     font-size: 30px;
+}
+.navbar
+{
+    height: 120px;
 }

@@ -33,7 +33,7 @@ $picture = substr($profile,29);
     <main class="container-fluid container-fluid-main">
         <div class="container main-container">
             <div class="main-container-inner">
-                <div class="row mt-2 pt-4">
+                <div class="row mt-2">
                     <div class="col-md-6 offset-md-3">
                         <?php 
                             if(validation_errors()) { ?>
@@ -55,7 +55,7 @@ $picture = substr($profile,29);
                                     <?php echo $this->session->flashdata('err'); ?>
                                 </div>
                             <?php } ?> 
-                            <p class="text-center display-heading m-3 text-primary">Add project</p>
+                            <p class="text-center display-heading text-primary">Add project</p>
                         <form action="<?php echo base_url();?>index.php/admin/add_projects" id="add-project" method="post" enctype="multipart/form-data">
                             <!-- <div class="form-group mt-3">
                             <p><input type="radio" name="type" id="old-project" checked>Existing project

@@ -17,7 +17,7 @@ body {
 header.main-header {
     color: white;
     padding: 3% 0% 1% 0%;
-}
+} 
 
 header.main-header h1 {
     color: white;
@@ -529,7 +529,13 @@ opacity: 0.5;
 {
     padding-top: 80px;
 }
-
+@media (max-width: 700px)
+{
+    .cust_daily_chart
+{
+    padding-top: 10px;
+}
+}
 #daily
 {
     padding-top: 10px;
@@ -541,11 +547,24 @@ opacity: 0.5;
     width: 25px;
 }
 
-/*.cust_chart
-{
-    padding-left: 3%; 
-}*/
 .edit-date
 {
     margin-bottom: 25px;
+}
+
+@media (min-width: 700px ) {
+    .display-heading
+    {
+        font-size: 32px;
+        font-weight: 300;
+        line-height: 1.2;
+    }
+}
+@media (max-width: 700px ) {
+    .display-heading
+    {
+        font-size: 24px;
+        font-weight: 300;
+        line-height: 1.2;
+    }
 }

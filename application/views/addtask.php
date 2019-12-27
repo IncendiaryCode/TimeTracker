@@ -57,7 +57,7 @@ $picture = substr($profile,29);
                                     <?php echo $this->session->flashdata('err'); ?>
                                 </div>
                             <?php } ?>
-                            <p class="text-center display-heading m-3 text-primary">Add task</p>
+                            <p class="text-center display-heading text-primary">Add task</p>
                             <form action="<?php echo base_url();?>index.php/admin/add_tasks" id="addTask" method="post">
                                 <div class="form-group">
                                     <label for="task-name">Task name</label>

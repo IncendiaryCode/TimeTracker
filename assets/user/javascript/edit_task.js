@@ -1,6 +1,8 @@
 $(document).ready(function()
 {
 	var form_edit = document.getElementById('editTask');
+	if(form_edit)
+	{
 	form_edit.onsubmit = function(e) {
 
 	var x = document.getElementById("total-row").childElementCount/4
@@ -17,5 +19,6 @@ $(document).ready(function()
 			return false;
 		}
 	} return true;
+}
 }
 });

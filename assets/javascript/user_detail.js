@@ -33,7 +33,6 @@ for(var ind=0; ind<task_time_value.length; ind++)
     var total_time = Math.floor(task_time_value[ind]) + parseFloat(task_time_dec);
     task_time_value[ind] = total_time;
 }
-
 var configs = {
     type: 'bar',
     data: {

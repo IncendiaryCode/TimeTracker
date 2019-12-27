@@ -221,9 +221,7 @@ function loadTaskActivities(formData) {
                     cardCol.append(cardInner);
                     $("#attach-card").append(cardCol);
                     if ((data[x][y].running_task == 1 && data[x][y].start_time != null)) { //change background of current running task entries.
-                        /*$('.title').html(data[x][y].task_name);*/
                         document.getElementsByClassName("title").innerText += data[x][y].task_name; 
-                        console.log(document.getElementsByClassName("title").innerText);
                         if (mode == "checked") {
                             cardInner.css("background", "#444");
                             cardHeader.css("background", "#444");
