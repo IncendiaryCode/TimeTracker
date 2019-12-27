@@ -23,6 +23,8 @@
 				$data['total_users'] = $this->dashboard_model->get_users();
 				$data['total_tasks'] = $this->dashboard_model->get_tasks();
 				$data['total_projects'] = $this->dashboard_model->get_projects();
+				$data['top_users'] = $this->dashboard_model->get_top_users();
+				$data['top_projects'] = $this->dashboard_model->get_top_projects();
 				$this->load->view('dashboard',$data);
 				$this->load->view('footer');
 			}else{
@@ -74,7 +76,6 @@
 			$result = $this->dashboard_model->assign_user($user_id,$project_id);
 			if($result == TRUE){
 				$this->session->set_flashdata('success','User Assigned Successfully.');
-				print_r("bhjlk");exit;
 				redirect('admin/load_project_detail','refresh');
 			}else{
 				$this->session->set_flashdata('error','Could not assign the user!');
