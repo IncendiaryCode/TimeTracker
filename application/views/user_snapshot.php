@@ -27,7 +27,7 @@ $picture = substr($profile,29);
             </div>
         </nav>
     </header>
-<p class="display-4 m-3 text-primary text-center">User snapshot</p>
+<p class="display-heading m-3 text-primary text-center">User snapshot</p>
 <div class="container">
     <div class="text-right mt-5">
         <select class="project-names" id="project-list">

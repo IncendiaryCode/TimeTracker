@@ -44,6 +44,7 @@ var configs = {
     data: {
         labels: task_labels,
         datasets : [{
+        label:"users chart",
         backgroundColor: gradient,
         borderColor:window.chartColors.green,
         fill: false,
@@ -82,7 +83,7 @@ var configs = {
                     stacked: true
                 },
                 scaleLabel: {
-                    display: true,//labelString: 'Users',
+                    display: true,
                 }
             }],
             yAxes: [{

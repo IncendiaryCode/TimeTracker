@@ -56,7 +56,7 @@ header {
     background-image: linear-gradient(-50deg, #ef4774, #9253bb, #475cf4);
     box-shadow: 1px 1px 0px #aaa;
     color: white;
-    min-width: 100px;
+    min-width:  92px;
 }
 .card11:hover
 {
@@ -66,7 +66,7 @@ header {
     color: white;
     background-image: linear-gradient(-50deg, #475cf4, #9253bb, #ef4774);
     box-shadow: 1px 1px 0px #aaa;
-    min-width: 100px;
+    min-width: 92px;
 }
 .card2 {
     padding: 5px;
@@ -83,7 +83,7 @@ header {
     background-image: linear-gradient(-50deg, #35ea7d, #119a8d);
     box-shadow: 1px 1px 0px #aaa;
     color: white;
-    min-width: 100px;
+    min-width: 92px;
 }
 .card22:hover {
     padding: 5px;
@@ -92,7 +92,7 @@ header {
     background-image: linear-gradient(-50deg, #119a8d, #35ea7d);
     color: white;
     box-shadow: 1px 1px 0px #aaa;
-    min-width: 100px;
+    min-width: 92px;
 }
 
 .card3 {
@@ -109,7 +109,7 @@ header {
     background-image: linear-gradient(-50deg, #fe6407, #ee0c74);
     box-shadow: 1px 1px 0px #aaa;
     color: white;
-    min-width: 100px;
+    min-width: 92px;
 }
 .card33:hover {
     padding: 5px;
@@ -118,7 +118,7 @@ header {
     background-image: linear-gradient(-50deg, #ee0c74, #fe6407);
     color: white;
     box-shadow: 1px 1px 0px #aaa;
-    min-width: 100px;
+    min-width: 92px;
 }
 
 .card4 {

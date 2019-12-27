@@ -134,7 +134,6 @@ function retrieveChartData(type, date) {
             if (type == 'weekly_chart') {   
                 loadTask(type, date);
                 document.getElementById('week-error').innerHTML = " ";
-                console.log(type, res)
                 drawChart(type, res);
                 $('#weekly').show();
             }
@@ -259,7 +258,7 @@ function draw_customized_chart(res)
     var top = 25; 
     var top1 = top;
     var window_width = $('.cust_daily_chart').width();
-    var p_left = parseInt(window_width)/13;
+    var p_left = parseInt(window_width)/12;
     if (res['data'] != "No activity in this date.") {
     var color = "000000";
     for(var i=0; i<res['data'][1][0].length; i++)
@@ -276,16 +275,17 @@ function draw_customized_chart(res)
         var interval = res['data'][1][2][i];
 
         var width = ((interval/60)*p_left);
+        if(start_time_min < (8*60)) // graph leess than 8 am is not shown
+        {
+            start_time_min = 480;
+        }
         var start_time_pixel = (((start_time_min/60)-8)*p_left);
 
-            var v = 0;
+        var v = 0;
         for(var k=0; k<pixel.length; k++)
         {
             if ((start_time_pixel >= pixel[k][0]) && (width < pixel[k][1])) {
              v = 25;
-                if ((start_time_pixel+width) >= window_width ) {
-                width = window_width -(start_time_pixel);
-                }
                 var pixel1 = pixel;
                 pixel1[k][0] = null;
                 pixel1[k][1] = null;
@@ -307,7 +307,6 @@ function draw_customized_chart(res)
                 }
             }
         }
-    
         if ((top1==top) && (pixel.length != 0)) {
             if(v==0)
             {
@@ -344,7 +343,6 @@ function printChart(start, width, top, color)
     {
         var ele = document.getElementById(this.id);
         var index = ele.childNodes[1].value;
-        console.log(last_index, index);
         if(last_index)
         {
             $('.panel'+last_index).css("backgroundColor", "#ffffff");
@@ -449,9 +447,24 @@ function drawMonthlyChart(res) {
          monthOutlineColor: {
             stroke: 'white',
             strokeOpacity: 0.0,
-            strokeWidth: 2
+            strokeWidth: 2,
       },
     };
+     function selectHandler() {
+          var selectedItem = chart.getSelection();
+          if (selectedItem[0]['row']) {
+            var topping = dataTable.getValue(selectedItem[0].row, 0);
+            var day_from_year = (topping.toString().slice(11,15)) +'-'+ getMonth(topping.toString().slice(4,7)) +'-'+ topping.toString().slice(8,10);
+            document.getElementById('daily-chart').value = day_from_year;
+            $('#chart-navigation a[href="#daily-view"]').tab('show');
+            }
+            else
+            {
+                alert("No activities in this date");
+            }
+        }
+
+    google.visualization.events.addListener(chart, 'select', selectHandler);  
     chart.draw(dataTable, options);
 }
 
@@ -477,10 +490,6 @@ $(document).ready(function () {
             loadMonthlyChart();
             var year = document.getElementById('monthly-chart').value;
         }
-    });
-    $('#new-daily-chart0').click(function()
-    {
-        alert("clicked");
     });
 
 });

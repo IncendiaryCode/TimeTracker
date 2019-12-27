@@ -27,8 +27,6 @@ $picture = substr($profile,29);
             </div>
         </nav>
     </header>
-
-    
     <div class="container text-white">
         <div class="row mt-5 mb-5">
             <div class="col-sm-4 col-12  mt-1">
@@ -104,13 +102,39 @@ $picture = substr($profile,29);
                 </div>
             </div>
         </div>
+        <hr>
+        <div>
+            <h2 class="text-center pt-3">Project Chart</h2><!-- TODO.. -->
+            <div class="form-group">
+                <div class="text-right form">
+                    <input type="month" class="border p-1" id="cur-month" name="cur_month"><span><button class="btn btn-primary" id="view-dashboard-chart"> view chart</button></span>
+                </div>
+            </div>
+            <canvas id="main-chart" height="80px;"></canvas>
+        </div>
+        <div class="row mt-5 text-dark"><!-- TODO.. -->
+            <div class="col-md-6 mt-md-3 mt-0">
+                <h3 class="text-center">Top 5 expensive projects</h3>
+                <ul class="list-group">
+                  <li class="list-group-item">Sphere</li>
+                  <li class="list-group-item">Time tracker</li>
+                  <li class="list-group-item">Buck</li>
+                  <li class="list-group-item">Latli</li>
+                  <li class="list-group-item">xyz</li>
+                </ul>
+            </div>
+            <div class="col-md-6 mt-md-3 mt-0">
+                <h3 class="text-center">Top 5 expensive users</h3>
+                <ul class="list-group">
+                  <li class="list-group-item">aaa</li>
+                  <li class="list-group-item">bbb</li>
+                  <li class="list-group-item">ccc</li>
+                  <li class="list-group-item">ddd</li>
+                  <li class="list-group-item">eee</li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <hr>
-    <div class="container">
-        <h2 class="text-center pt-3">Project Chart</h2>
-        <canvas id="main-chart" height="80px;"></canvas>
-    </div>
-
     <!--<div class="container table">
         <h3 class="text-center mt-5 pb-3">Activities</h3>
         <p class="text-right"><i class="fas fa-list-ul"></i></p>

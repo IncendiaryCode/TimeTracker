@@ -1,5 +1,4 @@
 var taskChart;
-
 function __draw_task_chart(res) {
     var result = res['result'];
     var task_chart = document.getElementById('task-chart').getContext('2d');
@@ -28,7 +27,7 @@ function __draw_task_chart(res) {
                 labels: label,
                 datasets: [{
                     type: 'line',
-                    label: 'hours',
+                    label: 'total tasks',
                     backgroundColor: gradient,
                     borderColor: window.chartColors.black,
                     data: count,
@@ -65,7 +64,7 @@ function __draw_task_chart(res) {
                         },
                         scaleLabel: {
                             display: true,
-                            labelString: 'time in hours',
+                            labelString: 'task count',
                         }
                     }]
                 },
@@ -100,7 +99,7 @@ $(document).ready(function() {
         },{
             "targets": 2,
             "render": function ( data, type, row, meta ) {
-                return row.project;
+                return '<a href="../admin/load_project_detail?project_id='+row.project_id+'">'+row.project+'</a>';
             }
         },{
             "targets": 3,
@@ -149,8 +148,8 @@ $(document).ready(function() {
 
     if (document.getElementById('task-chart')) {
         if ((document.getElementById('curr-month').value == "") || (document.getElementById('curr-month').value == " ")) {
-            var curr_month = new Date().getMonth() + 1;
-            document.getElementById('curr-month').value = "2019-12";
+            var curr_month =  new Date().getFullYear().toString() +'-'+ (new Date().getMonth() + 1).toString();
+            document.getElementById('curr-month').value = curr_month;
         }
         document.getElementById('curr-month').value;
         $.ajax({

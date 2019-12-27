@@ -41,10 +41,10 @@ $this->load->helper('url_helper');
              if(empty($GLOBALS['page_title'])) {
                 ?>
             <!-- refers to home page -->
-            <div class="col-md-4 col-6 text-right ">
+            <div class="col-md-6 col-6 text-right">
                 <a href="<?=site_url();?>/user/add_tasks" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
                 <!-- to chage image -->
-                <span style="font-size: 30px;" class="p-3"><a href="#" class="text-white"><i class="fas fa-bars figure " id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></a></span>
+                <span style="font-size: 30px;" class="ml-md-3"><a href="#" class="text-white"><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></a></span>
              </div>
             <?php } else { ?>
            

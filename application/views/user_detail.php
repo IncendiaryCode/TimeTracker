@@ -5,8 +5,11 @@ $picture = substr($profile,29);
 ?>
 <body>
     <header>
+        <script>
+            <?php $myPhpLink='document.referrer';?> 
+    </script>
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a href="#" class="text-white previous"><img src="<?=base_url();?>assets/images/logo-white.png" height="40px;" onclick="window.location.href='<?=base_url();?>index.php/admin'"></a>
+            <a href="#" class="text-white previous"><img src="<?=base_url();?>assets/images/logo-white.png" height="40px;" onclick="window.location.href=<?=$myPhpLink ?>"></a>
             <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon "></span>
             </button>
@@ -44,8 +47,8 @@ $picture = substr($profile,29);
                             </div>
                         </div>
                         <input type="hidden" name="" id="user-id" value="<?=($data['id']) ?>">
-                        <div class="col-9 text-left">
-                            <h3 class="text-sm-center mt-2 mb-1"><?=($data['user_name']) ?></h3>
+                        <div class="col-9">
+                            <h3 class="text-left mt-2 mb-1"><?=($data['user_name']) ?></h3>
                             <a href="#"><?=($data['email']) ?></a>
                             <p><?=($data['phone']) ?></p>
                         </div>
@@ -59,11 +62,11 @@ $picture = substr($profile,29);
                 <div class="card-body">
                     <?php
                     if($data['t_minutes']) { ?>
-                    <div ><span class="display-4"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div>
+                    <div ><span class="display-heading"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div>
                     <p class="text-center">Time spent</p><hr>
                     <div ><span class="efficiency"><?=round($data['t_minutes']/60)/$data['project_count'] ?></span><span class="display-5"> Efficiency</span></div>
                     <?php } else { ?>
-                        <div ><span class="display-4"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div> <?php } ?>
+                        <div ><span class="display-heading"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div> <?php } ?>
                 </div>
             </div>
         </div>
@@ -103,7 +106,6 @@ $picture = substr($profile,29);
         </thead>
     </table>
 </div>
-
 <footer class="">
     <hr>
     <p class="text-center">Copyright © 2019 Printgreener.com</p>

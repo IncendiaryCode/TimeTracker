@@ -39,6 +39,7 @@ var configs = {
     data: {
         labels: task_labels,
         datasets : [{
+        label:"user chart",
         backgroundColor: gradient,
         borderColor:window.chartColors.green,
         fill: false,

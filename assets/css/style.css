@@ -210,14 +210,30 @@ header.main-header h1 {
     border :0px;
     align-content: center;
 }
-@media (min-width: 700px) {
+@media (min-width: 768px) {
     .vl
     {
       border-left: 1px solid #ccc;
       height: 200px;
     }
+    
 }
-
+@media (min-width: 700px ) {
+    .display-heading
+    {
+        font-size: 32px;
+        font-weight: 300;
+        line-height: 1.2;
+    }
+}
+@media (max-width: 700px ) {
+    .display-heading
+    {
+        font-size: 24px;
+        font-weight: 300;
+        line-height: 1.2;
+    }
+}
 .efficiency
 {
     font-size: 30px;

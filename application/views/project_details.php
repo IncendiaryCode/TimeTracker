@@ -5,8 +5,11 @@ $picture = substr($profile,29);
 ?>
 <body>
     <header>
+        <script>
+            <?php $myPhpLink='document.referrer';?> 
+    </script>
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a href="#" class="text-white previous"><img src="<?=base_url();?>assets/images/logo-white.png" height="40px;" onclick="window.location.href='<?=base_url();?>index.php/admin'"></a>
+            <a href="#" class="text-white previous"><img src="<?=base_url();?>assets/images/logo-white.png" height="40px;" onclick="window.location.href=<?=$myPhpLink ?>"></a>
             <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon "></span>
             </button>
@@ -34,7 +37,7 @@ $picture = substr($profile,29);
             <div class="card user-card">
                 <div class="card-body">
                     <div class="mx-auto d-block">
-                       <div class="text-center" ><span class="display-4"><?=$details['users_count'] ?></span><p class="display-5">Total users</p><input type="hidden" id="project_id" value="<?=$details['project_id'] ?>">
+                       <div class="text-center" ><span class="display-heading"><?=$details['users_count'] ?></span><p class="display-5">Total users</p><input type="hidden" id="project_id" value="<?=$details['project_id'] ?>">
                        </div>
                        <div class="text-center "><i class="fas fa-plus icon-plus text-success" data-target="#add-user" data-toggle='modal'></i>
                        </div>
@@ -48,8 +51,8 @@ $picture = substr($profile,29);
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 text-center">
-                            <div><span class="display-4"><strong><?=$details['project_name'] ?></strong></span></div>
-                            <div><span class="display-4 "><?=$details['tasks_count'] ?></span></div>
+                            <div><span class="display-heading"><strong><?=$details['project_name'] ?></strong></span></div>
+                            <div><span class="display-heading "><?=$details['tasks_count'] ?></span></div>
                             <p class="text-center">Total tasks</p>
                         </div>
                     </div>
@@ -61,7 +64,7 @@ $picture = substr($profile,29);
             <div class="card user-card">
                 <div class="card-body">
                     <div class="mx-auto d-block">
-                        <div class="text-center"><span class="display-4"><?=round($details['t_minutes']/60,2) ?></span>h
+                        <div class="text-center"><span class="display-heading"><?=round($details['t_minutes']/60,2) ?></span>h
                             <p class="text-center">Total time spent</p></div>
                     </div>
                 </div>

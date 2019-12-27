@@ -29,7 +29,7 @@ $picture = substr($profile,29);
         </nav>
     </header>
 <!-- UI for task snapshot -->
-<p class="display-4 text-primary text-center">Task snapshot</p>
+<p class="display-heading text-primary text-center">Task snapshot</p>
 <div class="container">
     <div class="form-group">
         <div class="text-right form">
@@ -71,7 +71,7 @@ $picture = substr($profile,29);
             </div>
         </div>
     </div>
-
+    
 
 <!-- end of task snapshot -->
 <footer>

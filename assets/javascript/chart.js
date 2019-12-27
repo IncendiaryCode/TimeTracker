@@ -7,25 +7,32 @@ function __project_details(res)
     gradient.addColorStop(1, '#e484fb');
     var project_names = [];
     var data = [];
+    var color = [];
     for(var i=0;i<res.length; i++)
     {
         if((res[i]["project_name"] != undefined) && (res[i]["project_name"] != null))
                 {
         project_names[i] = res[i]['project_name'];
         data[i] = res[i]['t_minutes']/60;
+        color[i] = res[i]['color_code'];
         }
     }
-    for(var j=0; j<data.length; j++)
-    {
-        data[j] = Math.floor(data[j]);
-    }
+   
+    for(var ind=0; ind<data.length; ind++)
+        {
+            var task_time_dec = data[ind] - Math.floor(data[ind]);
+            task_time_dec = task_time_dec.toString().slice(0,4);
+            var total_time = Math.floor(data[ind]) + parseFloat(task_time_dec);
+            data[ind] = total_time;
+        }
     var project_data = {
             labels: project_names,
+            borderColor: color,
+            backgroundColor: color,
             datasets: [{
                 label: 'Projects',
-                borderColor: "rgb(255, 99, 132)",
-                backgroundColor: gradient,
                 data: data,
+                fill: false,
             }]
         };
     var config = {
@@ -67,7 +74,7 @@ function __project_details(res)
     };
     new Chart(ctx, config);
 }
-    window.onload = function() {
+    $(document).ready(function() {
         if(document.getElementById('main-chart'))
         {
         $.ajax({
@@ -80,5 +87,29 @@ function __project_details(res)
             __project_details(usernames);
             }
         });
-    }   
-    };
+    }
+
+    if ((document.getElementById('cur-month').value == "") || (document.getElementById('cur-month').value == " ")) {
+            var curr_month =  new Date().getFullYear().toString() +'-'+ (new Date().getMonth() + 1).toString();
+            document.getElementById('cur-month').value = curr_month;
+        }
+       
+    
+    $('#view-dashboard-chart').click(function() {
+        if (document.getElementById('cur-month').value != '') {
+            $.ajax({
+            type: 'POST',
+            url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
+            data: { 'type': "get_user" },
+            success: function(res) {
+                var result = JSON.parse(res);
+                    usernames = result['result'];
+                __project_details(usernames);
+                }
+            });
+        }
+    });
+    
+
+
+});

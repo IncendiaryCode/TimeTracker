@@ -8,7 +8,7 @@ $profile = $this->session->userdata('user_profile');
     <div class="main-container container">
         <div class="main-container-inner">
             <div class="row">
-                <div class="col-6 offset-3">
+                <div class="col-md-6 offset-md-3">
                     <?php 
                         $this->load->library('form_validation');
                         if(validation_errors()) { ?>
@@ -41,26 +41,26 @@ $profile = $this->session->userdata('user_profile');
                         </div>
                         <h4 class="mt-4 text-center">Task activities</h4>
                         <div class="row">
-                            <div class="col-1"><b>#</b></div>
-                            <div class="col-4"><b>Start time</b></div>
-                            <div class="col-4"><b>End time</b></div>
-                            <div class="col-3"><b>Description</b></div>
+                            <div class="col-1 col-md-1"><b>#</b></div>
+                            <div class="col-4 col-md-4"><b>Start time</b></div>
+                            <div class="col-3 col-md-4"><b>End time</b></div>
+                            <div class="col-3 col-md-3"><b>Description</b></div>
                         </div>
                         <div class="row" id="total-row">
                             <?php $num = 0;
                           foreach($task_data as $task){
                             ?>
-                                <div class="col-1  mt-3">
+                                <div class="col-1 col-md-1  mt-3">
                                 <input type="hidden" name="time[<?=$num?>][table_id]" value="<?php echo $task['id']?>" >
                                     <?=$num;?>
                                 </div>
-                                <div class="col-4 mt-3">
+                                <div class="col-4 col-md-4 mt-3">
                                     <input class="form-control edit-date-time" type="text" id="start<?=$num?>"  name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>" placeholder="<?=$task['start_time'];?>">
                                 </div>
-                                <div class="col-4 mt-3">
+                                <div class="col-3 col-md-4 mt-3">
                                     <input class="form-control edit-date-time" type="text" id="end<?=$num?>"  name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>" placeholder="<?=$task['end_time'];?>">
                                 </div>
-                                <div class="col-3 mt-3">
+                                <div class="col-3 col-md-3 mt-3">
                                     <input type="text" class="form-control" name="time[<?=$num?>][task_description]" value="<?=$task['task_description'];?>">
                                 </div>
                             <?php $num=$num+1;

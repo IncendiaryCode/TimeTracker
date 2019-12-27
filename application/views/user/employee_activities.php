@@ -34,7 +34,7 @@
                             </div>
                             <p id="daily-error"class="text-center"></p>
                             <div id="daily">
-                                <p class="cust_daily_chart">
+                                <p class="cust_daily_chart" id="cust_daily_chart">
                                     <span class="">8AM</span>
                                     <span class="cust_chart">9AM</span>
                                     <span class="cust_chart">10AM</span>

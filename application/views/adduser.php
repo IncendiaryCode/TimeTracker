@@ -54,7 +54,7 @@ $picture = substr($profile,29);
                                     <?php echo $this->session->flashdata('err'); ?>
                                 </div>
                             <?php } ?> 
-                        <p class="text-center display-4 m-3 text-primary">Add user</p>
+                        <p class="text-center display-heading m-3 text-primary">Add user</p>
                         <form action="<?php echo base_url();?>index.php/admin/add_users" id="addUser" method="post">
                             <div class="form-group mt-3">
                                 <label for="task-name ">Name:<span class="text-danger">*</span></label>
