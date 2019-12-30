@@ -423,19 +423,16 @@ class User_model extends CI_Model {
     public function task_exists(){
         $userid = $this->session->userdata('userid');
         $task_name = $this->input->post('task_name');
-        $this->db->select('t.task_name');
-        $this->db->from('task AS t');
-        $this->db->join('task_assignee AS a','a.task_id = t.id');
-        $this->db->join('project_module AS m','m.project_id = t.project_id');
-        $this->db->where(array('t.project_id'=>$this->input->post('project_name'),'a.user_id'=>$userid));
+        $this->db->select('task_name');
+        $this->db->from('task');
+        $this->db->where(array('task.task_name'=>$task_name,'task.project_id'=>$this->input->post('project_name')));
         $query = $this->db->get();
         if($query->num_rows() > 0){
             $this->form_validation->set_message('task_exists','Task name exists.');
             return true;
         }else{
-                return false;
+            return false;
         }
-        return true;
     }
     //add task model
     public function add_tasks($data){

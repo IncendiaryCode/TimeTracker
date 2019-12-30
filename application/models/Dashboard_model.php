@@ -90,37 +90,30 @@ class Dashboard_model extends CI_Model
         $projects = $this->db->get()->result_array();
         $i=0;
         foreach($projects as $p){
-            $this->db->select('d.task_date');
+            foreach($days as $d){
+            $this->db->select('d.task_date,t.project_id,p.name AS project_name,p.color_code');
             $this->db->select_sum('d.total_minutes','t_minutes');
-            //$this->db->select('SUM(IF(d.task_date="'.$d.'",1,0)) AS work_date');
+            $this->db->select('SUM(IF(d.task_date="'.$d.'",1,0)) AS work_date');
             $this->db->from('project AS p');
             $this->db->join('task AS t','t.project_id = p.id');
             $this->db->join('time_details AS d','d.task_id = t.id');
-            $this->db->where('d.task_date BETWEEN "'.$month.'" AND "'.$end.'"');
-            $this->db->where(array('p.id'=>$p['project_id']));
-            $this->db->group_by('d.task_date');
-            $query_get = $this->db->get();
-            if($query_get->num_rows() > 0){
-                $query = $query_get->result_array();
-                foreach($query as $q){
-                    $array[$i][] = $q['task_date'];
-                }
-            }else{
-                $array[$i][] = NULL;
-            }
-            for($k=0;$k<sizeof($days);$k++){
-                for($j=0;$j<sizeof($array[$i]);$j++) {
-                    if($array[$i][$j] == $days[$k]){
-                        $arr[$k][$j] = $array[$i][$j];
+            //$this->db->where('d.task_date BETWEEN "'.$month.'" AND "'.$end.'"');
+            $this->db->where(array('t.project_id'=>$p['project_id'],'d.task_date'=>$d));
+            $query = $this->db->get()->result_array();
+            foreach($query as $q){
+                    if($q['work_date'] == '1'){
+                        $array[$i][] = $q['t_minutes'];
                     }else{
-                        $arr[$k][$j] = '0';
+                        $array[$i][] = '0';
                     }
-                }
+                } 
             }
-            $data[] = array('label'=>$p['project_name'],'backgroundColor'=>$p['color_code'],'borderColor'=>$p['color_code'],'fill'=>'false','data'=>$arr); 
+            
+            $data[$i] = array('label'=>$q['project_name'],'backgroundColor'=>$q['color_code'],'borderColor'=>$q['color_code'],'fill'=>'false','data'=>$array[$i]);
             $i= $i+1;
-        } 
-        return $data;
+        }
+        $final = array('labels'=>$days,'datasets'=>$data);
+        return $final;
     }
 
     public function get_task_details($type){
