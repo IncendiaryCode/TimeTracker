@@ -44,7 +44,6 @@ class User_model extends CI_Model {
             $this->db->where('a.user_id',$userid);
         }else{
             if($sort_type == 'daily_chart'){
-
                 $this->db->select_sum('d.total_minutes','t_minutes');   //get total minutes for a particular task
                 $this->db->where(array('d.task_date'=>$date,'d.end_time IS NOT NULL','a.user_id'=>$userid));
             }
@@ -53,15 +52,17 @@ class User_model extends CI_Model {
                 $week_value = $year_value[1];      //W23
                 $week = explode('W',$week_value);  //format: W23
                 $getdate = $this->get_start_and_end_date($week[1], $year_value[0]);  //start and end date for 23rd week and year 2019
-                $this->db->where(array('d.task_date BETWEEN "'. date('Y-m-d', strtotime($getdate[0])). '" and "'. date('Y-m-d', strtotime($getdate[1])).'",d.end_time IS NOT NULL','d.user_id'=>$userid));
                 $this->db->select_sum('d.total_minutes','t_minutes');  //get total minutes for a particular task
+                $this->db->where(array('d.end_time IS NOT NULL','a.user_id'=>$userid));
+                $this->db->where('d.task_date BETWEEN "'. date('Y-m-d', strtotime($getdate[0])). '" and "'. date('Y-m-d', strtotime($getdate[1])).'"');
             }
             else{
                 //for monthly chart
                 $year_start = date('Y-m-d',strtotime(date($date.'-01-01')));
                 $year_end = date('Y-m-d', strtotime(date($date.'-12-31')));
-                $this->db->where(array('d.task_date BETWEEN "'.$year_start. '" and "'.$year_end.'",d.end_time IS NOT NULL','a.user_id'=>$userid));
                 $this->db->select_sum('d.total_minutes','t_minutes');   //get total minutes for a particular task
+                $this->db->where(array('d.end_time IS NOT NULL','a.user_id'=>$userid));
+                $this->db->where('d.task_date BETWEEN "'.$year_start. '" and "'.$year_end.'"');
             }
         }
         $this->db->group_by('a.task_id');
