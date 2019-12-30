@@ -319,16 +319,13 @@ var last_index;
 var last_task_name=[];
 var same_task=0;
 function printChart(start, width, top, color, task_name) {
-
-    
-    var row = $("<span class='print-chart-row1'  data-toggle='tooltip' data-placement='top' title="+task_name.toString()+" id='new-daily-chart" + graph_id + "'>.<input type = 'hidden' value = " + graph_id + "></span>");
+    var row = $("<span class='print-chart-row1'  data-toggle='tooltip' data-placement='top' title="+task_name+" id='new-daily-chart" + graph_id + "'>.<input type = 'hidden' value = " + graph_id + "></span>");
     $(row).css("margin-left", start);
     $(row).css("top", top);
     $(row).css("width", width);
     $(row).css("backgroundColor", '#' + color);
     $(row).css("color", '#' + color);
     $("#print-chart").append(row);
-
     $('.print-chart-row1').unbind().click(function() {
         var ele = document.getElementById(this.id);
         var index = ele.childNodes[1].value;
@@ -431,7 +428,6 @@ function getDay(day) {
 
 function __get_date(w, y) {
     var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
-
     return new Date(y, 0, d);
 }
 

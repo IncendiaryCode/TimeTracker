@@ -81,6 +81,7 @@ $(document).ready(function() {
     $('#task-lists-datatable').DataTable({
         "processing": true,
         "serverSide": true,
+         /*"scrollX": true,*/
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/load_snapshot',
             "data": {'type': "task"}

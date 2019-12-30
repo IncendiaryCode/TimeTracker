@@ -11,7 +11,7 @@ function __project_details(res) {
     var color = [];
     var dataset = [];
     var project_data;
-    for (var i = 0; i < res.length; i++) {
+/*    for (var i = 0; i < res.length; i++) {
         color[i] = res[i]['color_code'];
         for (var j = 0; j < res[i].length; j++) {
             if ((res[i][j]["project_name"] == null)) {
@@ -39,34 +39,10 @@ function __project_details(res) {
         };
         data_values = 0;
         dataset[i] = project_data;        
-    }
+    }*/
     var chartData = {
-        labels: [ // Date Objects
-            "2019-12-01",
-            "2019-12-02",
-            "2019-12-03"
-        ],
-        datasets: [{
-            label: 'Project A',
-            backgroundColor: '#333',
-            borderColor: '#333',
-            fill: false,
-            data: [
-                20,
-                0,
-                50
-            ],
-        }, {
-            label: 'Project B',
-            backgroundColor: '#0ff',
-            borderColor: '#0ff',
-            fill: false,
-            data: [
-                0,
-                15,
-                20
-            ],
-        }]
+        labels: res['labels'],
+        datasets: res["datasets"]
     };
 
     var config = {
