@@ -94,7 +94,6 @@ if(forgotPsw)
 {
 forgotPsw.onsubmit = function(e) {
     user_email = document.getElementById('Uname').value;
-    console.log(user_email);
     var validateForm = new Validation(e.currentTarget);
     var finalValue = validateForm.correctCheck();
     if (finalValue.isValid == true) {

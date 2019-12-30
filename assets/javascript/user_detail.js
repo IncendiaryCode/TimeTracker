@@ -38,7 +38,7 @@ var configs = {
     data: {
         labels: task_labels,
         datasets : [{
-        label:"user chart",
+        label:"time spent in hrs",
         backgroundColor: gradient,
         borderColor:window.chartColors.green,
         fill: false,
@@ -48,7 +48,7 @@ var configs = {
     options: {
         tooltips: {
                 enabled: true,
-                callbacks: {
+                /*callbacks: {
                     label: function (tooltipItem, data) {
                         var item = tooltipItem.xLabel;
                         var user = document.getElementById('user_time_chart').value;
@@ -58,7 +58,7 @@ var configs = {
                             elmnt.scrollIntoView();
                         });
                     }
-                }
+                }*/
                 },
         title: {
             text: 'User snapshot',

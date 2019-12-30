@@ -1,3 +1,127 @@
+header {
+    background-image: linear-gradient(-40deg, #e485fb 40%, #6d77ff 100%);
+}
+
+.login-color {
+    background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #fadffd);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.text-display {
+    display: block;
+}
+
+.pr-4 {
+    display: inline;
+    font-size: 28px;
+}
+
+.nav-link {
+    display: block;
+}
+
+.dropdown-menu-right {
+    width: 250px;
+}
+
+.number-font {
+    font-size: 45px;
+}
+
+.col-lg-5 {
+    font-size: 70px;
+}
+
+.canvasjs-chart-credit {
+    display: none
+}
+
+/* Dashboard Cards */
+
+#dashboard-stats .card {
+    border-radius: 7px;
+    color: #fff;
+    border: none;
+}
+
+#dashboard-stats .card .card-body {
+    padding: 2.25rem;
+}
+
+#dashboard-stats .card .card-body .fas {
+    font-size: 100px;
+    line-height: normal;
+}
+
+#dashboard-stats .card h1 {
+    font-size: 60px;
+    font-weight: 600;
+    line-height: normal;
+    margin-top: 5px;
+}
+
+#dashboard-stats .card .card-footer {
+    padding: 1.25rem 2rem;
+}
+
+#dashboard-stats .card-footer a {
+    background: none;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(255,255,255,0.2);
+    line-height: normal;
+}
+
+#dashboard-stats .card-footer a:hover {
+    border-color: rgba(255,255,255,1);
+}
+
+.card-theme-a {
+    background-image: linear-gradient(-50deg, #ef4774, #9253bb, #475cf4);    
+}
+
+.card-theme-a h1,
+.card-theme-b h1,
+.card-theme-c h1 {
+    color: #fff;
+}
+
+.card-theme-b {
+    background-image: linear-gradient(-50deg, #35ea7d, #119a8d);
+}
+
+.card-theme-c {
+    background-image: linear-gradient(-50deg, #fe6407, #ee0c74);    
+}
+
+/* END: Dashboard Cards */
+
+.text-underline {
+    color: white;
+    text-decoration: underline;
+}
+
+@media(max-width: 1200px) {
+    .number-font {
+        font-size: 30px;
+    }
+
+    .col-lg-5 {
+        font-size: 40px;
+    }
+
+}
+
+.m-0 {
+    text-decoration: underline;
+}
+
 html {
     background-color: #fff;
     font-family: 'Roboto', sans-serif;
@@ -169,7 +293,7 @@ header.main-header h1 {
 }
 
 .btn-primary:hover {
-    background-image: linear-gradient(150deg, #7277fe, #ca82fb, #f2c2fd, #fffacc);
+    background-image: linear-gradient(150deg, #7277fe, #ca82fb, #f2c2fd);
 }
 
 
@@ -194,13 +318,7 @@ header.main-header h1 {
     color: black;
     padding: 12px;
 }
-.admin-footer
-{
-    position: absolute;;
-    bottom: 0px;
-    text-align: center;
-    margin-left: 43%;
-}
+
 .items:hover
 {
     background-color: silver;
@@ -240,5 +358,5 @@ header.main-header h1 {
 }
 .navbar
 {
-    height: 120px;
+    height: 150px;
 }

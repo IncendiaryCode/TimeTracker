@@ -38,11 +38,8 @@ function __project_details(res) {
             data: data_values,
         };
         data_values = 0;
-        console.log(data_values);
         dataset[i] = project_data;        
     }
-
-
     var chartData = {
         labels: [ // Date Objects
             "2019-12-01",
@@ -72,9 +69,6 @@ function __project_details(res) {
         }]
     };
 
-    // console.log('000', JSON.stringify(res));
-
-    //
     var config = {
         type: 'line',
         data: chartData,

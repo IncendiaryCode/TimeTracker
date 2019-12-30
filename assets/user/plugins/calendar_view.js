@@ -152,7 +152,8 @@ function drawChart(type, res) {
 
     if (res == "No activity in this week.") {
         if (daily_chart) daily_chart.destroy();
-        document.getElementById('week-error').innerHTML = "No activity in this week."
+        document.getElementById('week-error').innerHTML = "No activity in this week.";
+        $("#attachPanels").empty();
     } else {
         var week_chart = document.getElementById('weekly').getContext('2d');
         gradient = week_chart.createLinearGradient(0, 0, 0, 600);
@@ -243,6 +244,7 @@ function drawChart(type, res) {
 }
 
 function draw_customized_chart(res) {
+    console.log(res);
     var element = document.getElementById('daily');
     var pixel = [];
     var top = 25;
@@ -314,8 +316,12 @@ function draw_customized_chart(res) {
     start_time_pixel = 0;
 }
 var last_index;
+var last_task_name=[];
+var same_task=0;
 function printChart(start, width, top, color, task_name) {
-    var row = $("<span class='print-chart-row1'  data-toggle='tooltip' data-placement='top' title="+task_name+" id='new-daily-chart" + graph_id + "'>.<input type = 'hidden' value = " + graph_id + "></span>");
+
+    
+    var row = $("<span class='print-chart-row1'  data-toggle='tooltip' data-placement='top' title="+task_name.toString()+" id='new-daily-chart" + graph_id + "'>.<input type = 'hidden' value = " + graph_id + "></span>");
     $(row).css("margin-left", start);
     $(row).css("top", top);
     $(row).css("width", width);
@@ -334,7 +340,21 @@ function printChart(start, width, top, color, task_name) {
         var elmnt = document.getElementById('panel' + index);
         elmnt.scrollIntoView();
     });
-    graph_id++;
+    for(var j=0; j<last_task_name.length; j++)
+    {
+        if (task_name == last_task_name[j]) {
+            same_task = 1;
+            console.log(task_name, last_task_name )
+            break;
+        }
+    }
+   if(!same_task) 
+    {
+        graph_id++;
+    }
+    
+    same_task=0;
+    last_task_name.push(task_name);
 }
 last_index = undefined;
 

@@ -70,8 +70,8 @@ $picture = substr($profile,29);
                                 
                                 <div class="form-group mt-5 row " id="append-new-user">
                                     <div class="col-12">
-                                        <label for="user-name ">Choose the name </label>
-                                        <select class="form-control user" multiple="" name="user-name[0][name]">
+                                        <label for="user-name ">Choose users </label>
+                                        <select class="form-control user" id="select-users" multiple="" name="user-name[0][name]">
                                             <?php
                                                 foreach($names as $name){ ?>
                                                 <option ><?php echo $name['name']; ?></option>
@@ -108,6 +108,7 @@ $picture = substr($profile,29);
                                 
                                 
                                 <p id="user-name-error" class="text-danger"></p>
+                                <p id="taskError" class="text-danger"></p>
                                 <button type="submit" class="btn btn-primary">Assign Task</button>
                         </form>
                     </div>
@@ -116,7 +117,7 @@ $picture = substr($profile,29);
             </div>
         </div>
     </main>
-    <footer class="admin-footer">
+    <footer>
     <hr>
         <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</ p>
     </footer>

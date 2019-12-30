@@ -7,7 +7,7 @@ $picture = substr($profile,29);
     <header>
         <script>
             <?php $myPhpLink='document.referrer';?> 
-    </script>
+        </script>
         <nav class="navbar navbar-expand-lg navbar-light">
             <a href="#" class="text-white previous"><img src="<?=base_url();?>assets/images/logo-white.png" height="40px;" onclick="window.location.href=<?=$myPhpLink ?>"></a>
             <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,19 +32,22 @@ $picture = substr($profile,29);
     </header>
 <div class="container">
     <div class="row mt-5 shadow-sm">
-        <?php foreach($data as $details) { ?>
-        <div class="col-md-4 ">
-            <div class="card user-card">
-                <div class="card-body">
-                    <div class="mx-auto d-block">
-                       <div class="text-center" ><span class="display-heading"><?=$details['users_count'] ?></span><p class="display-5">Total users</p><input type="hidden" id="project_id" value="<?=$details['project_id'] ?>">
-                       </div>
-                       <div class="text-center "><i class="fas fa-plus icon-plus text-success" data-target="#add-user" data-toggle='modal'></i>
-                       </div>
-                    </div>
+        <?php
+        if($data)
+        {
+            foreach($data as $details) { ?>
+            <div class="col-md-4 ">
+                <div class="card user-card">
+                    <div class="card-body">
+                        <div class="mx-auto d-block">
+                           <div class="text-center" ><span class="display-heading"><?=$details['users_count'] ?></span><p class="display-5">Total users</p><input type="hidden" id="project_id" value="<?=$details['project_id'] ?>">
+                           </div>
+                           <div class="text-center "><i class="fas fa-plus icon-plus text-success" data-target="#add-user" data-toggle='modal'></i>
+                           </div>
+                        </div>
+                        </div>
                     </div>
                 </div>
-            </div>
             <div class="vl"></div>
         <div class="col-md-3 offset-md-1">
             <div class="card user-card">
@@ -70,7 +73,9 @@ $picture = substr($profile,29);
                 </div>
             </div>
         </div>
-    <?php } ?>
+    <?php } } else{ ?>
+        <div class="col-4 offset-4"><p class="text-center">Not yet started</p></div>
+    <?php }  ?>
     </div><hr>
     <div class="row mt-5">
         <canvas id="project_time_chart" height="80px;"></canvas>

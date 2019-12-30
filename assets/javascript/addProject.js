@@ -7,7 +7,6 @@ var add_module = {
         var last_row = _this.last_row;
         var username = _this.username;
         var i = _this.i;
-        console.log(this)
         var main_row = $('<div class = "row"></div>')
         var element = $('<div class="col-10 assign-module' + i + '"><input type="text" class="form-control mt-3"  id="new-module' + i + '" name="new-module[' + i + '][module]" placeholder="Enter module name"></div>');
 
@@ -28,7 +27,6 @@ var add_module = {
         }
         $('#adding-module').removeClass('fas fa-plus');
             $('#adding-module').addClass('fas fa-minus icon-plus text-danger');
-        console.log(_this.last_row);
         $(".fa-minus").click(function()
         {
             this.parentNode.parentNode.parentNode.remove();

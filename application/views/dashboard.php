@@ -1,12 +1,13 @@
- <?php
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
 $picture = substr($profile,29);
 ?>
+
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a href="#" class="text-white previous"><img src="<?=base_url();?>assets/images/logo-white.png" height="40px;"></a>
+            <img src="<?=base_url();?>assets/images/logo-white.png" height="40px;">
             <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon "></span>
             </button>
@@ -27,8 +28,7 @@ $picture = substr($profile,29);
             </div>
         </nav>
     </header>
-    <div class="container text-white-">
-
+    <div class="container">
         <div class="row mt-5 mb-5" id="dashboard-stats">
             <div class="col-sm-4 col-12">
                 <div class="card card-theme-a">
@@ -63,7 +63,9 @@ $picture = substr($profile,29);
                                 <i class="fas fa-chalkboard"></i>
                             </div>
                             <div class="col-6">
-                                <h1><?php echo $total_projects; ?></h1>
+                                <h1>
+                                    <?php echo $total_projects; ?>
+                                </h1>
                                 <p class="card-text">Total Users</p>
                             </div>
                         </div>
@@ -106,88 +108,9 @@ $picture = substr($profile,29);
                 </div>
             </div>
         </div>
-
-
-
-        <!-- <div class="row mt-5 mb-5">
-            <div class="col-sm-4 col-12  mt-1">
-                <div class="card-body card1 shadow-lg pb-4">
-                    <div class="row pt-5">
-                        <div class="col-lg-5 col-4 text-right">
-                            <i class="fas fa-user-circle"></i>
-                        </div>
-                        <div class="col-lg-7 col-8 text-center">
-                            <span class="font-weight-bold text-display number-font shadow-sm"><?php echo $total_users; ?></span>
-                            <span class="text-display pt-3">Total Users</span>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="text-center">
-                        <div class="row">
-                            <div class="col-6 text-right">
-                                <button class="btn btn-primary card11" onclick="window.location.href='<?=base_url();?>index.php/admin/add_users'"><i class="fas fa-plus"></i> Users</button>
-                            </div>
-                            <div class="col-6 text-left">
-                                <button class="btn btn-primary card11" onclick="window.location.href='<?=base_url();?>index.php/admin/load_snapshot?type=user'">Vew details</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4 col-12  mt-1">
-                <div class="card-body card2 shadow-lg pb-4">
-                    <div class="row pt-5">
-                        <div class="col-lg-5 col-4 text-right">
-                            <i class="fas fa-chalkboard"></i>
-                        </div>
-                        <div class="col-lg-7 col-8 text-center">
-                            <span class="font-weight-bold text-display number-font shadow-sm"><?php echo $total_projects; ?></span>
-                            <span class="text-display pt-3">Total Projects</span>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="text-center">
-                        <div class="row">
-                            <div class="col-6 text-right">
-                                <button class="btn btn-primary card22" onclick="window.location.href='<?=base_url();?>index.php/admin/add_projects'"><i class="fas fa-plus"></i> Projects</button>
-                            </div>
-                            <div class="col-6 text-left">
-                                <button class="btn btn-primary card22" onclick="window.location.href='<?=base_url();?>index.php/admin/load_snapshot?type=project'">Vew details</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4 col-12  mt-1">
-                <div class="card-body card3 shadow-lg pb-4">
-                    <div class="row pt-5">
-                        <div class="col-lg-5 col-4 text-right">
-                            <i class=" fa fa-tasks"></i>
-                        </div>
-                        <div class="col-lg-7 col-8 text-center">
-                            <span class="font-weight-bold text-display number-font shadow-sm"><?php echo $total_tasks; ?></span>
-                            <span class="text-display pt-3">Total Tasks</span>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="text-center">
-                        <div class="row">
-                            <div class="col-6 text-right">
-                                <button class="btn btn-primary card33" onclick="window.location.href='<?=base_url();?>index.php/admin/load_add_task'"><i class="fas fa-plus"></i> Tasks</button>
-                            </div>
-                            <div class="col-6 text-left">
-                                <button class="btn btn-primary card33" onclick="window.location.href='<?=base_url();?>index.php/admin/load_task_snapshot'">Vew details</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
         <hr>
-
         <div>
-            <p class="text-center text-dark pt-3 display-heading">Project chart</p><!-- TODO.. -->
+            <p class="text-center text-primary pt-3 display-heading">Project chart</p><!-- TODO.. -->
             <div class="form-group">
                 <div class="text-right form">
                     <input type="month" class="border p-1" id="cur-month" name="cur_month"><span><button class="btn btn-primary" id="view-dashboard-chart"> view chart</button></span>
@@ -195,30 +118,79 @@ $picture = substr($profile,29);
             </div>
             <canvas id="main-chart" height="80px;"></canvas>
         </div>
-        <div class="row mt-5 text-dark"><!-- TODO.. -->
-            <div class="col-md-6 mt-md-3 mt-0">
-                <h3 class="text-center">Top 5 expensive projects</h3>
-                <ul class="list-group">
-                  <li class="list-group-item">Sphere</li>
-                  <li class="list-group-item">Time tracker</li>
-                  <li class="list-group-item">Buck</li>
-                  <li class="list-group-item">Latli</li>
-                  <li class="list-group-item">xyz</li>
+        <div class="row pt-5 text-dark">
+            <!-- TODO.. -->
+            <div class="col-md-6">
+                <?php 
+                $count = 0;
+                    if($top_projects[0] < 5)
+                    {
+                        $count = $top_projects[0];
+                    }
+                    else
+                    {
+                     $count = 5;   
+                    }
+                 ?>
+                <h4 class="text-center">Top
+                    <?= $count; ?> expensive projects</h4>
+                <ul class="list-group mt-4">
+                    <?php foreach($top_projects[1] as $project)
+                    { ?>
+                    <!--  -->
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-6">
+                                <a href="<?=base_url();?>index.php/admin/load_project_detail?project_id=<?=$project['project_id'] ?>">
+                                    <?php
+                                    if($project['image_name'] != ''){
+                                        $image = substr($project['image_name'],29);
+                                        ?>
+                                    <img src="<?=base_url().$image?>" width="30px;">
+                                    <?php
+                                    } ?>
+                                    <?php echo $project["project_name"]; ?>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <?php echo round($project["t_minutes"]/60,2); ?> hrs</div>
+                        </div>
+                    </li>
+                    <?php } ?>
                 </ul>
             </div>
-            <div class="col-md-6 mt-md-3 mt-0">
-                <h3 class="text-center">Top 5 expensive users</h3>
-                <ul class="list-group">
-                  <li class="list-group-item">aaa</li>
-                  <li class="list-group-item">bbb</li>
-                  <li class="list-group-item">ccc</li>
-                  <li class="list-group-item">ddd</li>
-                  <li class="list-group-item">eee</li>
+            <div class="col-md-6">
+                <?php 
+                $cnt = 0;
+                    if($top_users[0] < 5)
+                    {
+                        $cnt = $top_users[0];
+                    }
+                    else
+                    {
+                     $cnt = 5;   
+                    }
+                 ?>
+                <h4 class="text-center">Top
+                    <?= $cnt;?> expensive projects</h4>
+                <ul class="list-group mt-4">
+                    <?php foreach($top_users[1] as $user)
+                    { ?>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-6"><a href="<?=base_url();?>index.php/admin/load_userdetails_page?user_id=<?= $user['user_id']; ?>">
+                                    <?php echo $user["user_name"]; ?>
+                                </a></div>
+                            <div class="col-6">
+                                <?php echo round($user["t_minutes"]/60,2); ?> hrs</div>
+                        </div>
+                    </li>
+                    <?php } ?>
                 </ul>
             </div>
         </div>
     </div>
     <footer>
-     <hr>
-      <p class="text-center">Copyright © 2019 Printgreener.com</p>
+        <hr>
+        <p class="text-center">Copyright © 2019 Printgreener.com</p>
     </footer>

@@ -52,34 +52,33 @@ $picture = substr($profile,29);
                     ?>
             <div class="row" style="min-height: 50px;">
                 <div class="col-5">                
-                    <a href="<?=base_url();?>index.php/admin/load_project_detail?project_id=<?=$proj['project_id'] ?>" class="">
+                    <a href="<?=base_url();?>index.php/admin/load_project_detail?project_id=<?=$proj['project_id'] ?>" >
                         <div class="mr-2">
-                        <?php
-                        if($proj['project_icon'] != ''){
-                            $image = substr($proj['project_icon'],29);
-                            ?>
-                            <img src="<?=base_url().$image?>" width="30px;">
-                            <input type="hidden" id="project-id" name="" value="<?=$proj['project_id'] ?>">
                             <?php
-                        } ?>
-                        <?=$proj['project_name']; ?>
-                    </div>
-                        
+                            if($proj['project_icon'] != ''){
+                                $image = substr($proj['project_icon'],29);
+                                ?>
+                                <img src="<?=base_url().$image?>" width="30px;">
+                                <input type="hidden" id="project-id" name="" value="<?=$proj['project_id'] ?>">
+                                <?php
+                            } ?>
+                            <?=$proj['project_name']; ?>
+                        </div>
                     </a>
+                </div>
+                <div class="col-5">
+                    <p>Total users: <?=$proj['total_users'];?></p>
+                     <?php foreach($proj['user_details'] as $user){  ?>     <!-- redirect to user detail page -->
+                         <a href="<?=base_url();?>index.php/admin/load_userdetails_page?user_id=<?= $user['user_id']; ?>" class="pt-2 mr-3 mt-2">
+                            <?= $user['user_name']; ?>
+                        </a>
+                    <?php  }?>
+                </div>
+                <div class="col-2"><?=round($proj['time_used']/60,2)?> hrs</div>
+                
+            </div><hr>
+                <?php  } ?>
             </div>
-            <div class="col-5">
-                <p>Total users: <?=$proj['total_users'];?></p>
-                 <?php foreach($proj['user_details'] as $user){  ?>     <!-- redirect to user detail page -->
-                     <a href="<?=base_url();?>index.php/admin/load_userdetails_page?user_id=<?= $user['user_id']; ?>" class="pt-2 mr-3 mt-2">
-                        <?= $user['user_name']; ?>
-                    </a>
-                <?php  }?>
-            </div>
-            <div class="col-2"><?=round($proj['time_used']/60,2)?> hrs</div>
-            
-        </div><hr>
-            <?php  } ?>
-        </div>
 
     <hr>
     <footer>
