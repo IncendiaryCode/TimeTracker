@@ -13,7 +13,7 @@
             <form id="reEnterPsw" method="post" class="login-form" action="<?=base_url();?>index.php/login/change_pass" novalidate>
                 <div class="text-center">
                     <div class=" logo-space">
-                        <h5 class="text-center">Change Password</h5>
+                        <h4 class="text-center">Change Password</h4>
                     </div>
                 </div>
                <!--  <?php 

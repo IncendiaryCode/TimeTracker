@@ -15,7 +15,7 @@
         <?php }?>
 <form id="forgotPassword" method="post" action="<?=base_url();?>index.php/login/check_otp" onsubmit="validateOtp()" novalidate>
 <div class="logo-space">
-    <h5 class="text-center">Forgot Password</h5>
+    <h4 class="text-center">Forgot Password</h4>
     <p class="text-danger" id="email-error"></p>
       <p class="error" id="Uname-error"></p>
       <p style="color: green" class="animated rotateIn" id="rotate-text"></p>
