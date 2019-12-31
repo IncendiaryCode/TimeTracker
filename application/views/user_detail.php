@@ -62,11 +62,11 @@ $picture = substr($profile,29);
                 <div class="card-body">
                     <?php
                     if($data['t_minutes']) { ?>
-                    <div ><span class="display-heading"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div>
+                    <div ><span class="display-heading"><?=round(($data['t_minutes']/60),2); ?></span><span class="display-5">h</span></div>
                     <p class="text-center">Time spent</p><hr>
-                    <div ><span class="efficiency"><?=round($data['t_minutes']/60)/$data['project_count'] ?></span><span class="display-5"> Efficiency</span></div>
+                    <div ><span class="efficiency"><?=round((($data['t_minutes']/60)/$data['project_count']),2); ?></span><span class="display-5"> Efficiency</span></div>
                     <?php } else { ?>
-                        <div ><span class="display-heading"><?=round($data['t_minutes']/60) ?></span><span class="display-5">h</span></div> <?php } ?>
+                        <div ><span class="display-heading"><?=round(($data['t_minutes']/60),2); ?></span><span class="display-5">h</span></div> <?php } ?>
                 </div>
             </div>
         </div>

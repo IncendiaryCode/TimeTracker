@@ -102,7 +102,7 @@ class Dashboard_model extends CI_Model
             $query = $this->db->get()->result_array();
             foreach($query as $q){
                     if($q['work_date'] == '1'){
-                        $array[$i][] = $q['t_minutes'];
+                        $array[$i][] = round(($q['t_minutes']/60),2);
                     }else{
                         $array[$i][] = '0';
                     }
@@ -112,7 +112,11 @@ class Dashboard_model extends CI_Model
             $data[$i] = array('label'=>$q['project_name'],'backgroundColor'=>$q['color_code'],'borderColor'=>$q['color_code'],'fill'=>'false','data'=>$array[$i]);
             $i= $i+1;
         }
-        $final = array('labels'=>$days,'datasets'=>$data);
+        foreach($days as $day){
+            $labels_array = explode('-',$day);
+            $labels[] = $labels_array[2];
+        }
+        $final = array('labels'=>$labels,'datasets'=>$data);
         return $final;
     }
 
@@ -212,7 +216,8 @@ class Dashboard_model extends CI_Model
                     $results["recordsFiltered"] = count($results_data);
                 }
 
-
+                $table_header = ['Task Name','Description','Project','Start date','End date','Time spent',null];
+                $final = array($table_header,$details);
 
 
 
@@ -270,10 +275,10 @@ class Dashboard_model extends CI_Model
                 print_r($results);*/
 
             }else{
-                $details = '';
+                $final = '';
             }
-           // print_r($details);
-            return $details;
+            
+            return $final;
         } 
     }
 
@@ -519,8 +524,8 @@ class Dashboard_model extends CI_Model
         $this->db->select_sum('d.total_minutes','t_minutes');
         $this->db->select('count(distinct p.id) AS project_count');
         $this->db->from('project AS p');
-        $this->db->join('project_assignee AS a','a.project_id = p.id');
-        $this->db->join('time_details AS d','d.user_id = a.user_id');
+        $this->db->join('task AS t','t.project_id = p.id');
+        $this->db->join('time_details AS d','d.task_id = t.id');
         $this->db->join('users AS u','u.id = d.user_id');
         $this->db->where('u.id',$user_id);
         $user_data = $this->db->get()->row_array();

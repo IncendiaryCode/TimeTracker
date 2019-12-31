@@ -83,7 +83,7 @@ $picture = substr($profile,29);
             </div>
             
             <div  class="col-2">
-                <p><?=round($k['total_minutes']/60,2);?> hrs</p>
+                <p><?=round(($k['total_minutes']/60),2);?> hrs</p>
             </div>
         <div class="col-2">
             <div class="row remove-user">
