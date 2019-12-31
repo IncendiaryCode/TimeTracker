@@ -59,6 +59,7 @@
 		        $this->load->view('footer');
 			}
 			else if($type == 'task'){
+				$draw = intval($this->input->get("draw"));
 				//$list = $this->dashboard_model->get_datatables();
 				$result['data'] = $this->dashboard_model->get_task_details($type);
 				if($result['data'] == NULL){
@@ -66,6 +67,12 @@
 					$result['msg'] = "No task data.";
 				}else{
 					$result['status'] = TRUE;
+					$result = array(
+					            "draw" => $draw,
+					            "recordsTotal" => count($result['data']),
+					            "recordsFiltered" => count($result['data']),
+					            "data" => $result['data']
+					        );
 				}
 		        echo json_encode($result);
 			}	
