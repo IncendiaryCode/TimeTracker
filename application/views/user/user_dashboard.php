@@ -99,7 +99,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 </div>
                 <div class="col-6">
                     <div class="dropdown text-right" id="dropdown-recent-acts">
-                        <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                        <i class="fas fa-sliders-h sorting-icon" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
                             <!-- sorting options -->
                             <a class="dropdown-item" href="#" data-type="name">Task name</a>

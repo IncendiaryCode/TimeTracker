@@ -37,26 +37,24 @@ $this->load->helper('url_helper');
                     <img src="<?=base_url();?>assets/images/logo-white.png" height="40px" >
                 </a>
             </div>
+            <!-- refers to home page -->
+            <div class="col-md-6 col-6 text-right">
             <?php
              if(empty($GLOBALS['page_title'])) {
                 ?>
-            <!-- refers to home page -->
-            <div class="col-md-6 col-6 text-right">
                 <a href="<?=site_url();?>/user/add_tasks" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
                 <!-- to chage image -->
                 <span style="font-size: 30px;" class="ml-md-3"><a href="#" class="text-white"><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></a></span>
-             </div>
             <?php } else { ?>
            
             <!-- refers to all other pages  -->
-            <div class="col-6 text-right">
                 <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-placement="top" title="User Profile"></i></h2>
             </div>
             <div class="col-12">
-                <p class="display-4 pt-3 text-center">
+                <p class="display-heading pt-3 text-center">
                     <?php echo $GLOBALS['page_title'] ?>
                 </p>
-            </div>
             <?php } ?>
+            </div>
         </div>
     </header>

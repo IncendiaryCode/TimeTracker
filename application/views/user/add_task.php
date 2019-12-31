@@ -4,11 +4,11 @@ $GLOBALS['page_title'] = 'Add Task';
 $this->load->library('session');
 $profile = $this->session->userdata('user_profile');
 ?>
-<main class="container-fluid container-fluid-main">
+<main class="container-fluid-main">
     <div class="main-container container">
         <div class="main-container-inner">
             <div class="row ">
-                <div class="col-6 offset-3">
+                <div class="col-sm-6 offset-sm-3">
                     <?php 
                         $this->load->library('form_validation');
                         if(validation_errors()) { ?>

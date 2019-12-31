@@ -4,7 +4,7 @@ $this->load->library('session');
 $profile = $this->session->userdata('user_profile');
 
 ?>
-<main class="container-fluid container-fluid-main">
+<main class="container-fluid-main">
     <div class="main-container container">
         <div class="main-container-inner">
             <div class="row">
@@ -44,7 +44,7 @@ $profile = $this->session->userdata('user_profile');
                             <div class="col-1 col-md-1"><b>#</b></div>
                             <div class="col-4 col-md-4"><b>Start time</b></div>
                             <div class="col-3 col-md-4"><b>End time</b></div>
-                            <div class="col-3 col-md-3"><b>Description</b></div>
+                            <div class="col-4 col-md-3"><b>Description</b></div>
                         </div>
                         <div class="row" id="total-row">
                             <?php $num = 0;
@@ -60,7 +60,7 @@ $profile = $this->session->userdata('user_profile');
                                 <div class="col-3 col-md-4 mt-3">
                                     <input class="form-control edit-date-time" type="text" id="end<?=$num?>"  name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>" placeholder="<?=$task['end_time'];?>">
                                 </div>
-                                <div class="col-3 col-md-3 mt-3">
+                                <div class="col-4 col-md-3 mt-3">
                                     <input type="text" class="form-control" name="time[<?=$num?>][task_description]" value="<?=$task['task_description'];?>">
                                 </div>
                             <?php $num=$num+1;

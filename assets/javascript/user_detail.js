@@ -134,19 +134,19 @@ if(document.getElementById('user-id') != null)
         "columnDefs": [{
             "targets": 0,
             "render": function ( data, type, row, meta ) {
-                return row.task_name;
+                return row[0];
             }
         },{
             "targets": 1,
             "render": function ( data, type, row, meta ) {
-                return row.project_name;
+                return row[1];
             },
         },{
             "targets": 2,
             "render": function ( data, type, row, meta ) {
-                var task_time_sec = row.t_minutes/60 - Math.floor(row.t_minutes/60);
+                var task_time_sec = row[2]/60 - Math.floor(row[2]/60);
                 task_time_sec = task_time_sec.toString().slice(0, 4);
-                var total_time = Math.floor(row.t_minutes/60) + parseFloat(task_time_sec)+' hrs';
+                var total_time = Math.floor(row[2]/60) + parseFloat(task_time_sec)+' hrs';
                 return total_time;
             }
         }]
@@ -164,19 +164,19 @@ if(document.getElementById('user-id') != null)
         "columnDefs": [{
             "targets": 0,
             "render": function ( data, type, row, meta ) {
-                return row.project_name;
+                return row[0];
             }
         },{
             "targets": 1,
             "render": function ( data, type, row, meta ) {
-                return row.tasks_count;
+                return row[1];
             },
         },{
             "targets": 2,
             "render": function ( data, type, row, meta ) {
-                var task_time_sec = row.t_minutes/60 - Math.floor(row.t_minutes/60);
+                var task_time_sec = row[2]/60 - Math.floor(row[2]/60);
                 task_time_sec = task_time_sec.toString().slice(0, 4);
-                var total_time = Math.floor(row.t_minutes/60) + parseFloat(task_time_sec)+' hrs';
+                var total_time = Math.floor(row[2]/60) + parseFloat(task_time_sec)+' hrs';
                 return total_time;
             }
         }]

@@ -9,12 +9,12 @@ $this->load->helper('url_helper');
 
 $picture = substr($res['profile'],30);
 ?>
-<main class="container-fluid container-fluid-main">
+<main class="container-fluid-main">
     <div class="main-container container">
         <div class="main-container-inner">
             <div class="row mt-5">
-                <div class="col-6 offset-3">
-                    <div class="text-center mt-4">
+                <div class="col-md-6 offset-md-3">
+                    <div class="text-center">
                         <img src="<?=base_url().$picture?>" width="30%;" class="rounded-circle figure mt-4 text-center">
                         <h4 class="text-center employee-name mt-3">
                             <?php echo $res['name'];?>
@@ -32,7 +32,7 @@ $picture = substr($res['profile'],30);
                 </div> -->
             </div>
             <div class="row">
-                <div class="offset-4 col-4 pl-5">
+                <div class="offset-md-4 col-md-4">
                     <table class="table mt-5">
                         <tbody id="table-body">
                             <table>

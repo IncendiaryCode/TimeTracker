@@ -16,7 +16,7 @@ body {
 
 header.main-header {
     color: white;
-    padding: 3% 0% 0% 0%;
+    padding-top: 3%;
 } 
 
 header.main-header h1 {
@@ -110,9 +110,9 @@ header.main-header h1 {
     text-align: center;
     height: 90px;
     width: 90px;
-    margin-left: 80%;
+    margin-left: 70%;
     border-radius: 50%;
-    top: -5%;
+    top: -16%;
     border: 0px; 
     z-index: 1;
     color: white;
@@ -576,4 +576,8 @@ opacity: 0.5;
 .nav-item .active 
 {
     border: 13px solid;
+}
+.sorting-icon
+{
+    font-size: 1.5rem;
 }

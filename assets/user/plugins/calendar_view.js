@@ -244,7 +244,6 @@ function drawChart(type, res) {
 }
 
 function draw_customized_chart(res) {
-    console.log(res);
     var element = document.getElementById('daily');
     var pixel = [];
     var top = 25;
@@ -272,10 +271,11 @@ function draw_customized_chart(res) {
                 start_time_min = 480;
             }
             var start_time_pixel = (((start_time_min / 60) - 8) * p_left);
+            var end_time_pixel = (((end_time_min / 60) - 8) * p_left);
 
             var v = 0;
             for (var k = 0; k < pixel.length; k++) {
-                if ((start_time_pixel >= pixel[k][0]) && (width < pixel[k][1])) {
+                if ((start_time_pixel >= pixel[k][0]) && (start_time_pixel < pixel[k][1])) {
                     v = 25;
                     var pixel1 = pixel;
                     pixel1[k][0] = null;
@@ -284,12 +284,12 @@ function draw_customized_chart(res) {
                         if ((start_time_pixel + width) >= window_width) {
                             width = window_width - (start_time_pixel);
                         }
-                        if (((start_time_pixel >= pixel1[e][0]) && (width < pixel1[e][1]))) {
+                        if (((start_time_pixel >= pixel1[e][0]) && (start_time_pixel < pixel1[e][1]))) {
                             v = v + 25;
-                            printChart(start_time_pixel, width, 300 - v, color, task_name);
+                            printChart(start_time_pixel, width, (300 - v), color, task_name);
                             break;
                         } else {
-                            printChart(start_time_pixel, width, 300 - v, color, task_name);
+                            printChart(start_time_pixel, width, (300 - v), color, task_name);
                             break;
                         }
                     }
@@ -309,7 +309,7 @@ function draw_customized_chart(res) {
                 }
                 printChart(start_time_pixel, width, 300, color, task_name);
             }
-            pixel.push([start_time_pixel, width]);
+            pixel.push([start_time_pixel, end_time_pixel]);
         }
     }
     width = 0;
@@ -341,7 +341,6 @@ function printChart(start, width, top, color, task_name) {
     {
         if (task_name == last_task_name[j]) {
             same_task = 1;
-            console.log(task_name, last_task_name )
             break;
         }
     }

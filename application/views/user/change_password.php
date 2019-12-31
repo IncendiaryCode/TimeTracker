@@ -4,7 +4,7 @@
     $profile = $this->session->userdata('user_profile');
     $picture = substr($profile,30);
 ?>
-<main class="container-fluid container-fluid-main"><p class="display-heading text-white  text-center">Change password</p>
+<main class="container-fluid-main"><p class="display-heading text-white  text-center">Change password</p>
     <div class="main-container container">
         <div class="main-container-inner">
             <div class="row mt-5">
