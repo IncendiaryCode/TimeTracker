@@ -130,24 +130,38 @@
 
 		public function user_task_table(){
 			$table_type = $this->input->get('type');
+			$draw = intval($this->input->get("draw"));
 			$result['data'] = $this->dashboard_model->user_task_data($table_type);
 			if($result['data'] == NULL || $result['data'] == FALSE){
 				$result['status'] = FALSE;
 				$result['data'] = NULL;
 			}else{
 				$result['status'] = TRUE;
+				$result = array(
+					            "draw" => $draw,
+					            "recordsTotal" => count($result['data']),
+					            "recordsFiltered" => count($result['data']),
+					            "data" => $result['data']
+					        );
 			}
 			echo json_encode($result);
 		}
 
 		public function user_project_table(){
 			$table_type = $this->input->get('type');
+			$draw = intval($this->input->get("draw"));
 			$result['data'] = $this->dashboard_model->user_project_data($table_type);
 			if($result['data'] == NULL || $result['data'] == FALSE){
 				$result['status'] = FALSE;
 				$result['data'] = NULL;
 			}else{
 				$result['status'] = TRUE;
+				$result = array(
+					            "draw" => $draw,
+					            "recordsTotal" => count($result['data']),
+					            "recordsFiltered" => count($result['data']),
+					            "data" => $result['data']
+					        );
 			}
 			echo json_encode($result);
 		}

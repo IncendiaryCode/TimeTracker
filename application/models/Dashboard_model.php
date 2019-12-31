@@ -278,213 +278,8 @@ class Dashboard_model extends CI_Model
                 );     
             }
             return $data;
-}}
-
-
-
-
-
-
-
-
-            /*$this->db->select('t.id AS task_id,t.task_name,p.name AS project_name,p.id AS project_id');
-            $this->db->select('t.description,d.start_time,d.end_time,d.total_minutes,d.total_hours');
-            $this->db->select_sum('d.total_minutes','t_minutes');
-            $this->db->from('task AS t');
-            $this->db->join('project AS p','p.id = t.project_id');
-            $this->db->join('time_details AS d','d.task_id = t.id');
-            $this->db->where(array('d.end_time IS NOT NULL'));
-            $this->db->group_by('d.task_id');
-            $query = $this->db->get();
-            if($query->num_rows() > 0){
-                
-                //TODO: Implement datatables filters (pagination, ordering, search)
-                //handle empty get data case                                
-                $results_data = $query->result_array();
-                $details = array();
-                 //echo '<pre>'; print_r($reults_data); exit;
-                foreach($results_data as $q){
-                    $details[] = array('task_id'=>$q['task_id'],'task_name'=>$q['task_name'],'description'=>$q['description'],'start_time'=>$q['start_time'],'end_time'=>$q['end_time'],'total_minutes'=>$q['t_minutes'],'project'=>$q['project_name'],'project_id'=>$q['project_id']);
-                
-
-                    $results = array();
-                    $results['data'] = $details;
-                    $results["draw"] = $get_data["draw"];
-                    $results['recordsTotal'] = count($results_data);
-                    $results["recordsFiltered"] = count($results_data);
-                }*/
-
-
-                /*$column = array('p.name AS project_name','t.task_name','d.start_time','d.end_time','d.total_minutes');
-                $order = array('d.start_time'=>'desc');
-
-                function get_datatables(){
-                    $this->_get_datatables_query();
-                    if($_GET['length'] != -1)
-                    $this->db->limit($_GET['length'], $_GET['start']);
-                    $query = $this->db->get();
-                    return $query->result();
-                }
-
-         function _get_datatables_query()
-                {
-                     
-                    $this->db->from('task AS t');
-                    $this->db->join('project AS p','p.id = t.project_id');
-                    $this->db->join('time_details AS d','d.task_id = t.id');
-                    $this->db->where(array('d.end_time IS NOT NULL'));
-                    $this->db->group_by('d.task_id');
-                    $i=0;
-                    foreach($column as $item){
-                        if($_GET['search']['value']) // if datatable send POST for search
-                        {
-                             
-                            if($i===0) // first loop
-                            {
-                                $this->db->group_start();
-                                $this->db->like($item, $_GET['search']['value']);
-                            }
-                            $this->db->like($item, $_POST['search']['value']);
-                            else
-                            {
-                                $this->db->or_like($item, $_GET['search']['value']);
-                            }
-         
-                            if(count($this->column) - 1 == $i) //last loop
-                                $this->db->group_end(); //close bracket
-                        }
-                        $column[$i] = $item; // set column array variable to order processing
-                        $i++;
-                    }
-                    if(isset($_GET['order'])) // here order processing
-                    {
-                        $this->db->order_by($column[$_GET['order']['0']['column']], $_GET['order']['0']['dir']);
-                    } 
-                    else if(isset($this->order))
-                    {
-                        $order = $this->order;
-                        $this->db->order_by(key($order), $order[key($order)]);
-                    }
-                } 
-                print_r($results);*/
-
-            /*}else{
-                $details = '';
-            }
-            
-            return $details;
-        } 
-    } */
-
-
-
-/*
-public function showEmployees()
-    {
-        $draw = intval($this->input->post("draw"));
-        $start = intval($this->input->post("start"));
-        $length = intval($this->input->post("length"));
-        $order = $this->input->post("order");
-        $search= $this->input->post("search");
-        $search = $search['value'];
-        $col = 0;
-        $dir = "";
-        if(!empty($order))
-        {
-            foreach($order as $o)
-            {
-                $col = $o['column'];
-                $dir= $o['dir'];
-            }
         }
-
-        if($dir != "asc" && $dir != "desc")
-        {
-            $dir = "desc";
-        }
-        $valid_columns = array(
-            0=>'emp_no',
-            1=>'birth_date',
-            2=>'first_name',
-            3=>'last_name',
-            4=>'gender',
-            5=>'hire_date',
-        );
-        if(!isset($valid_columns[$col]))
-        {
-            $order = null;
-        }
-        else
-        {
-            $order = $valid_columns[$col];
-        }
-        if($order !=null)
-        {
-            $this->db->order_by($order, $dir);
-        }
-        
-        if(!empty($search))
-        {
-            $x=0;
-            foreach($valid_columns as $sterm)
-            {
-                if($x==0)
-                {
-                    $this->db->like($sterm,$search);
-                }
-                else
-                {
-                    $this->db->or_like($sterm,$search);
-                }
-                $x++;
-            }                 
-        }
-        $this->db->limit($length,$start);
-        $employees = $this->db->get("employees");
-        $data = array();
-        foreach($employees->result() as $rows)
-        {
-
-            $data[]= array(
-                $rows->emp_no,
-                $rows->birth_date,
-                $rows->first_name,
-                $rows->last_name,
-                $rows->gender,
-                $rows->hire_date,
-                '<a href="#" class="btn btn-warning mr-1">Edit</a>
-                 <a href="#" class="btn btn-danger mr-1">Delete</a>'
-            );     
-        }
-        $total_employees = $this->totalEmployees();
-        $output = array(
-            "draw" => $draw,
-            "recordsTotal" => $total_employees,
-            "recordsFiltered" => $total_employees,
-            "data" => $data
-        );
-        echo json_encode($output);
-        exit();
     }
-    public function totalEmployees()
-    {
-        $query = $this->db->select("COUNT(*) as num")->get("employees");
-        $result = $query->row();
-        if(isset($result)) return $result->num;
-        return 0;
-    }
-}
-*/
-
-
-
-
-
-
-
-
-
-
 
     //get task details for user snapshot graph
     public function user_graph_data(){
@@ -593,14 +388,7 @@ public function showEmployees()
             $this->db->where('d.task_date BETWEEN "'.$start.'" AND "'.date('Y-m-d').'"');
             $this->db->where('p.id',$project_id);
             $this->db->group_by('d.task_date');
-        }/*else{
-            $this->db->select('p.name AS project_name');
-            $this->db->select_sum('d.total_minutes','t_minutes');
-            $this->db->from('project AS p');
-            $this->db->join('task AS t','t.project_id = p.id');
-            $this->db->join('time_details AS d','d.task_id = t.id');
-            $this->db->group_by('p.id');
-        }*/
+        }
         
         $result = $this->db->get();
         if($result->num_rows() > 0){
@@ -608,39 +396,162 @@ public function showEmployees()
         }else{
             $data = '';
         }
-        //print_r($data);
         return $data;
     }
 
     public function user_task_data($table_type){
         if($table_type == 'user_task'){
-        $user_id = $this->input->get('user_id');
+            $user_id = $this->input->get('user_id');
+            $draw = intval($this->input->get("draw"));
+            $start = intval($this->input->get("start"));
+            $length = intval($this->input->get("length"));
+            $order = $this->input->get("order");
+            $search= $this->input->get("search");
+            $search = $search['value'];
+            $col = 0;
+            $dir = "";
+            if(!empty($order))
+            {
+                foreach($order as $o)
+                {
+                    $col = $o['column'];
+                    $dir= $o['dir'];
+                }
+            }
+
+            if($dir != "asc" && $dir != "desc")
+            {
+                $dir = "desc";
+            }
+            $valid_columns = array(
+                0=>'t.task_name',
+                1=>'p.name',
+                2=>'d.total_minutes'
+            );
+            if(!isset($valid_columns[$col]))
+            {
+                $order = null;
+            }
+            else
+            {
+                $order = $valid_columns[$col];
+            }
+            if($order !=null)
+            {
+                $this->db->order_by($order, $dir);
+            }
+            
+            if(!empty($search))
+            {
+                $x=0;
+                foreach($valid_columns as $sterm)
+                {
+                    if($x==0)
+                    {
+                        $this->db->like($sterm,$search);
+                    }
+                    else
+                    {
+                        $this->db->or_like($sterm,$search);
+                    }
+                    $x++;
+                }                 
+            }
             $this->db->select('t.task_name,p.name AS project_name');
             $this->db->select_sum('d.total_minutes','t_minutes');
-            $this->db->from('task AS t');
+            $this->db->from('task as t');
+            $this->db->join('project as p','p.id = t.project_id');
             $this->db->join('time_details AS d','d.task_id = t.id');
-            $this->db->join('project AS p','p.id = t.project_id');
-            $this->db->group_by('t.id');
             $this->db->where('d.user_id',$user_id);
-            $result = $this->db->get();
-            if($result->num_rows() > 0){
-                $data = $result->result_array();
-            }else{
-                $data = '';
+            $this->db->group_by('t.id');
+            $this->db->limit($length,$start);
+            $employees = $this->db->get();
+            $data = array();
+            foreach($employees->result() as $rows)
+            {
+
+                $data[]= array(
+                    $rows->task_name,
+                    $rows->project_name,
+                    $rows->t_minutes
+                );     
             }
+
         }else if($table_type == 'project_task'){
             $project_id = $this->input->get('project_id');
+            $draw = intval($this->input->get("draw"));
+            $start = intval($this->input->get("start"));
+            $length = intval($this->input->get("length"));
+            $order = $this->input->get("order");
+            $search= $this->input->get("search");
+            $search = $search['value'];
+            $col = 0;
+            $dir = "";
+            if(!empty($order))
+            {
+                foreach($order as $o)
+                {
+                    $col = $o['column'];
+                    $dir= $o['dir'];
+                }
+            }
+
+            if($dir != "asc" && $dir != "desc")
+            {
+                $dir = "desc";
+            }
+            $valid_columns = array(
+                0=>'t.task_name',
+                1=>'users_count',
+                2=>'d.total_minutes'
+            );
+            if(!isset($valid_columns[$col]))
+            {
+                $order = null;
+            }
+            else
+            {
+                $order = $valid_columns[$col];
+            }
+            if($order !=null)
+            {
+                $this->db->order_by($order, $dir);
+            }
+            
+            if(!empty($search))
+            {
+                $x=0;
+                foreach($valid_columns as $sterm)
+                {
+                    if($x==0)
+                    {
+                        $this->db->like($sterm,$search);
+                    }
+                    else
+                    {
+                        $this->db->or_like($sterm,$search);
+                    }
+                    $x++;
+                }                 
+            }
             $this->db->select('t.task_name,count(distinct d.user_id) AS users_count');
             $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->from('task AS t');
             $this->db->join('time_details AS d','d.task_id = t.id');
             $this->db->where('t.project_id',$project_id);
             $this->db->group_by('t.id');
-            $result = $this->db->get();
-            if($result->num_rows() > 0){
-                $data = $result->result_array();
-            }else{
-                $data = '';
+            $this->db->limit($length,$start);
+            $employees = $this->db->get();
+            $data = array();
+
+            foreach($employees->result() as $rows)
+            {
+
+                $data[]= array(
+                    $rows->task_name,
+                    $rows->users_count,
+                    $rows->t_minutes
+                );     
             }
         }
         return $data;
@@ -649,6 +560,61 @@ public function showEmployees()
     public function user_project_data($table_type){
         if($table_type == 'user_project'){
             $user_id = $this->input->get('user_id');
+            $draw = intval($this->input->get("draw"));
+            $start = intval($this->input->get("start"));
+            $length = intval($this->input->get("length"));
+            $order = $this->input->get("order");
+            $search= $this->input->get("search");
+            $search = $search['value'];
+            $col = 0;
+            $dir = "";
+            if(!empty($order))
+            {
+                foreach($order as $o)
+                {
+                    $col = $o['column'];
+                    $dir= $o['dir'];
+                }
+            }
+
+            if($dir != "asc" && $dir != "desc")
+            {
+                $dir = "desc";
+            }
+            $valid_columns = array(
+                0=>'p.name',
+                1=>'tasks_count',
+                2=>'d.total_minutes'
+            );
+            if(!isset($valid_columns[$col]))
+            {
+                $order = null;
+            }
+            else
+            {
+                $order = $valid_columns[$col];
+            }
+            if($order !=null)
+            {
+                $this->db->order_by($order, $dir);
+            }
+            
+            if(!empty($search))
+            {
+                $x=0;
+                foreach($valid_columns as $sterm)
+                {
+                    if($x==0)
+                    {
+                        $this->db->like($sterm,$search);
+                    }
+                    else
+                    {
+                        $this->db->or_like($sterm,$search);
+                    }
+                    $x++;
+                }                 
+            }
             $this->db->select('p.name AS project_name');
             $this->db->select('count(distinct t.id) AS tasks_count');
             $this->db->select_sum('d.total_minutes','t_minutes');
@@ -657,14 +623,77 @@ public function showEmployees()
             $this->db->join('time_details AS d','d.task_id = t.id');
             $this->db->group_by('p.id');
             $this->db->where('d.user_id',$user_id);
-            $result = $this->db->get();
-            if($result->num_rows() > 0){
-                $data = $result->result_array();
-            }else{
-                $data = '';
+            $this->db->limit($length,$start);
+            $employees = $this->db->get();
+            $data = array();
+
+            foreach($employees->result() as $rows)
+            {
+
+                $data[]= array(
+                    $rows->project_name,
+                    $rows->tasks_count,
+                    $rows->t_minutes
+                );     
             }
+
         }else if($table_type == 'project_user'){
             $project_id = $this->input->get('project_id');
+            $draw = intval($this->input->get("draw"));
+            $start = intval($this->input->get("start"));
+            $length = intval($this->input->get("length"));
+            $order = $this->input->get("order");
+            $search= $this->input->get("search");
+            $search = $search['value'];
+            $col = 0;
+            $dir = "";
+            if(!empty($order))
+            {
+                foreach($order as $o)
+                {
+                    $col = $o['column'];
+                    $dir= $o['dir'];
+                }
+            }
+
+            if($dir != "asc" && $dir != "desc")
+            {
+                $dir = "desc";
+            }
+            $valid_columns = array(
+                0=>'u.name',
+                1=>'tasks_count',
+                2=>'d.total_minutes'
+            );
+            if(!isset($valid_columns[$col]))
+            {
+                $order = null;
+            }
+            else
+            {
+                $order = $valid_columns[$col];
+            }
+            if($order !=null)
+            {
+                $this->db->order_by($order, $dir);
+            }
+            
+            if(!empty($search))
+            {
+                $x=0;
+                foreach($valid_columns as $sterm)
+                {
+                    if($x==0)
+                    {
+                        $this->db->like($sterm,$search);
+                    }
+                    else
+                    {
+                        $this->db->or_like($sterm,$search);
+                    }
+                    $x++;
+                }                 
+            }
             $this->db->select('u.name AS user_name');
             $this->db->select('count(distinct d.task_id) AS tasks_count');
             $this->db->select_sum('d.total_minutes','t_minutes');
@@ -674,15 +703,21 @@ public function showEmployees()
             $this->db->join('users AS u','u.id = d.user_id');
             $this->db->where(array('u.type'=>'user','p.id'=>$project_id));
             $this->db->group_by('d.user_id');
-            $result = $this->db->get();
-            if($result->num_rows() > 0){
-                $data = $result->result_array();
-            }else{
-                $data = '';
-            }
+            $this->db->limit($length,$start);
+            $employees = $this->db->get();
+            $data = array();
+
+            foreach($employees->result() as $rows)
+            {
+
+                $data[]= array(
+                    $rows->user_name,
+                    $rows->tasks_count,
+                    $rows->t_minutes
+                );     
+            }  
         }
         return $data;
-    
     }
 
     public function get_project_data($proj_id){
