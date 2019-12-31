@@ -66,7 +66,7 @@ $picture = substr($profile,29);
                                 <h1>
                                     <?php echo $total_projects; ?>
                                 </h1>
-                                <p class="card-text">Total Users</p>
+                                <p class="card-text">Total projects</p>
                             </div>
                         </div>
                     </div>
@@ -91,7 +91,7 @@ $picture = substr($profile,29);
                             </div>
                             <div class="col-6">
                                 <h1><?php echo $total_tasks; ?></h1>
-                                <p class="card-text">Total Users</p>
+                                <p class="card-text">Total tasks</p>
                             </div>
                         </div>
                     </div>

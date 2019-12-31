@@ -20,7 +20,6 @@ function __draw_task_chart(res) {
             label[i] = result[i]['task_date'];
             count[i] = result[i]['tasks_count'];
         }
-        
         var configs = {
             type: 'line',
             data: {
@@ -78,10 +77,11 @@ function __draw_task_chart(res) {
 $(document).ready(function() {
 
     //rendering datatable
-    $('#task-lists-datatable').DataTable({
+    var table = $('#task-lists-datatable').DataTable({
         "processing": true,
         "serverSide": true,
-         /*"scrollX": true,*/
+        responsive: true,
+        "scrollX": true,
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/load_snapshot',
             "data": {'type': "task"}
@@ -89,35 +89,35 @@ $(document).ready(function() {
         "order": [[ 3, "desc" ]],
         "columnDefs": [{
             "targets": 0,
-            "render": function ( data, type, row, meta ) {
-                return row.task_name;
+            "render": function ( data, type, row, meta) {
+                return row[0];
             }
         },{
             "targets": 1,
             "render": function ( data, type, row, meta ) {
-                return row.description;
+                return row[1];
             }, "orderable": false,
         },{
             "targets": 2,
             "render": function ( data, type, row, meta ) {
-                return '<a href="../admin/load_project_detail?project_id='+row.project_id+'">'+row.project+'</a>';
+                return '<a href="../admin/load_project_detail?project_id='+row[2]+'">'+row[2]+'</a>';
             }
         },{
             "targets": 3,
             "render": function ( data, type, row, meta ) {
-                return row.start_time;
+                return row[3];
             }
         },{
             "targets": 4,
             "render": function ( data, type, row, meta ) {
-                return row.end_time;
+                return row[4];
             }
         },{
             "targets": 5,
             "render": function ( data, type, row, meta ) {
-                var task_time_sec = row.total_minutes/60 - Math.floor(row.total_minutes/60);
+                var task_time_sec = row[5]/60 - Math.floor(row[5]/60);
                 task_time_sec = task_time_sec.toString().slice(0, 4);
-                var total_time = Math.floor(row.total_minutes/60) + parseFloat(task_time_sec)+' hrs';
+                var total_time = Math.floor(row[5]/60) + parseFloat(task_time_sec)+' hrs';
                 return total_time;
             }
         },{
@@ -126,7 +126,12 @@ $(document).ready(function() {
                 return "<a href='#' data-id='"+ row.task_id +"' class='text-danger delete-task' data-toggle='modal' data-target='#delete-task-modal'><i class='fas fa-trash-alt icon-plus del-tasks'></i></a>";
             },
             "orderable": false,
-        }]
+        },/*{
+            "targets": 7,
+            "render": function ( data, type, row, meta ) {
+                return 4;
+            }
+        }*/]
     }).on( 'init.dt', function () {
         $('.delete-task').click(function()
         {
@@ -170,6 +175,7 @@ $(document).ready(function() {
                 url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
                 data: { 'month': document.getElementById('curr-month').value },
                 success: function(res) {
+
                     var result = JSON.parse(res);
                     __draw_task_chart(result);
                 }

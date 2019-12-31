@@ -41,22 +41,23 @@ $picture = substr($profile,29);
             <canvas id="task-chart" height="80px" class=" mb-5"></canvas>
             <p id="task-chart-error" class="text-center"></p>
         </div>
+        <div class="col-md-8 offset-md-2">
+            <table id="task-lists-datatable" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Task name</th>
+                        <th>Description</th>
+                        <th>Project</th>
+                        <th>Start date</th>
+                        <th>End date</th>
+                        <th>Time spent</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
-    <table id="task-lists-datatable" class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Task name</th>
-                <th>Description</th>
-                <th>Project</th>
-                <th>Start date</th>
-                <th>End date</th>
-                <th>Time spent</th>
-                <th>&nbsp;</th>
-            </tr>
-        </thead>
-    </table>
 </div>
-
 <div class="modal" id="delete-task-modal" data-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content text-center">
@@ -64,15 +65,14 @@ $picture = substr($profile,29);
                 <span>Do you want to delete? </span></p>
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
-                <div class="modal-footer text-center">
-                    <button type="button" class="btn btn-secondary" id="cancel-delete" data-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-primary" id="delete-task" ><input type="hidden" id="task" name=""> Yes</button>
-                </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-secondary" id="cancel-delete" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" id="delete-task" ><input type="hidden" id="task" name=""> Yes</button>
             </div>
         </div>
     </div>
+</div>
     
-
 <!-- end of task snapshot -->
 <footer>
 <hr>

@@ -504,14 +504,22 @@ function drawMonthlyChart(res) {
 $(document).ready(function() {
     //Tab Change
     var win_width = $('.cust_daily_chart').width();
-    var p_l = parseInt(win_width) / 24;
+    var p_l = parseInt(win_width) / 23;
     $('.cust_chart').css("padding-left", p_l);
-    if(win_width < 1000)
+    if(win_width < 400)
     {
         console.log(document.getElementById('cust_daily_chart').remove());
         var new_lebels = $('<p class="cust_daily_chart" id="cust_daily_chart"><span class="">8AM</span><span class="cust_chart">10AM</span><span class="cust_chart">12AM</span><span class="cust_chart">2PM</span><span class="cust_chart">4PM</span><span class="cust_chart">6PM</span><span class="cust_chart">8PM</span></p>');
         $('#daily').append(new_lebels);
         var p_l = parseInt(win_width) / 24;
+        $('.cust_chart').css("padding-left", p_l);
+    }
+    if((win_width < 1000) && (win_width > 400))
+    {
+        console.log(document.getElementById('cust_daily_chart').remove());
+        var new_lebels = $('<p class="cust_daily_chart" id="cust_daily_chart"><span class="">8AM</span><span class="cust_chart">10AM</span><span class="cust_chart">12AM</span><span class="cust_chart">2PM</span><span class="cust_chart">4PM</span><span class="cust_chart">6PM</span><span class="cust_chart">8PM</span></p>');
+        $('#daily').append(new_lebels);
+        var p_l = parseInt(win_width) / 10;
         $('.cust_chart').css("padding-left", p_l);
     }
 
