@@ -50,7 +50,7 @@ $picture = substr($profile,29);
                         <div class="col-9">
                             <h3 class="text-left mt-2 mb-1"><?=($data['user_name']) ?></h3>
                             <a href="#"><?=($data['email']) ?></a>
-                            <p><?=($data['phone']) ?></p>
+                            <p><?php echo (($data['phone']) !== '0') ? $data['phone'] : ''; ?></p>
                         </div>
                     </div>
                 </div>

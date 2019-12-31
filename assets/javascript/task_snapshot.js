@@ -100,7 +100,7 @@ $(document).ready(function() {
         },{
             "targets": 2,
             "render": function ( data, type, row, meta ) {
-                return '<a href="../admin/load_project_detail?project_id='+row[2]+'">'+row[2]+'</a>';
+                return '<a href="../admin/load_project_detail?project_id='+row[7]+'">'+row[2]+'</a>';
             }
         },{
             "targets": 3,
@@ -123,15 +123,10 @@ $(document).ready(function() {
         },{
             "targets": 6,
             "render": function ( data, type, row, meta ) {
-                return "<a href='#' data-id='"+ row.task_id +"' class='text-danger delete-task' data-toggle='modal' data-target='#delete-task-modal'><i class='fas fa-trash-alt icon-plus del-tasks'></i></a>";
+                return "<a href='#' data-id='"+ row[6] +"' class='text-danger delete-task' data-toggle='modal' data-target='#delete-task-modal'><i class='fas fa-trash-alt icon-plus del-tasks'></i></a>";
             },
             "orderable": false,
-        },/*{
-            "targets": 7,
-            "render": function ( data, type, row, meta ) {
-                return 4;
-            }
-        }*/]
+        },]
     }).on( 'init.dt', function () {
         $('.delete-task').click(function()
         {

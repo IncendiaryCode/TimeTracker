@@ -274,7 +274,9 @@ class Dashboard_model extends CI_Model
                     $rows->project_name,
                     $rows->start_time,
                     $rows->end_time,
-                    $rows->t_minutes
+                    $rows->t_minutes,
+                    $rows->task_id,
+                    $rows->project_id
                 );     
             }
             return $data;
