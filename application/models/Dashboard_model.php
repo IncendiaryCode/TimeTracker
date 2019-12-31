@@ -91,31 +91,35 @@ class Dashboard_model extends CI_Model
         $i=0;
         foreach($projects as $p){
             foreach($days as $d){
-            $this->db->select('d.task_date,t.project_id,p.name AS project_name,p.color_code');
-            $this->db->select_sum('d.total_minutes','t_minutes');
-            $this->db->select('SUM(IF(d.task_date="'.$d.'",1,0)) AS work_date');
-            $this->db->from('project AS p');
-            $this->db->join('task AS t','t.project_id = p.id');
-            $this->db->join('time_details AS d','d.task_id = t.id');
-            //$this->db->where('d.task_date BETWEEN "'.$month.'" AND "'.$end.'"');
-            $this->db->where(array('t.project_id'=>$p['project_id'],'d.task_date'=>$d));
-            $query = $this->db->get()->result_array();
-            foreach($query as $q){
-                    if($q['work_date'] == '1'){
-                        $array[$i][] = round(($q['t_minutes']/60),2);
-                    }else{
-                        $array[$i][] = '0';
-                    }
-                } 
+                $this->db->select('d.task_date,t.project_id,p.name AS project_name,p.color_code');
+                $this->db->select_sum('d.total_minutes','t_minutes');
+                $this->db->select('IF(d.task_date="'.$d.'",1,0) AS work_date');
+                $this->db->from('project AS p');
+                $this->db->join('task AS t','t.project_id = p.id');
+                $this->db->join('time_details AS d','d.task_id = t.id');
+                //$this->db->where('d.task_date BETWEEN "'.$month.'" AND "'.$end.'"');
+                $this->db->where(array('p.id'=>$p['project_id'],'d.task_date'=>$d));
+                //$this->db->group_by('p.id');
+                $query = $this->db->get()->result_array();
+                foreach($query as $q){
+                        if($q['work_date'] == '1'){
+                            $array[$i][] = round(($q['t_minutes']/60),2);
+                        }else{
+                            $array[$i][] = '0';
+                        }
+                }
             }
-            
-            $data[$i] = array('label'=>$q['project_name'],'backgroundColor'=>$q['color_code'],'borderColor'=>$q['color_code'],'fill'=>'false','data'=>$array[$i]);
+            $data[$i] = array('label'=>$p['project_name'],'backgroundColor'=>$p['color_code'],'borderColor'=>$p['color_code'],'fill'=>'false','data'=>$array[$i]);
+
             $i= $i+1;
         }
+
+        //to send dates in number format
         foreach($days as $day){
             $labels_array = explode('-',$day);
             $labels[] = $labels_array[2];
         }
+
         $final = array('labels'=>$labels,'datasets'=>$data);
         return $final;
     }
@@ -216,10 +220,6 @@ class Dashboard_model extends CI_Model
                     $results["recordsFiltered"] = count($results_data);
                 }
 
-                $table_header = ['Task Name','Description','Project','Start date','End date','Time spent',null];
-                $final = array($table_header,$details);
-
-
 
                 /*$column = array('p.name AS project_name','t.task_name','d.start_time','d.end_time','d.total_minutes');
                 $order = array('d.start_time'=>'desc');
@@ -275,10 +275,10 @@ class Dashboard_model extends CI_Model
                 print_r($results);*/
 
             }else{
-                $final = '';
+                $details = '';
             }
             
-            return $final;
+            return $details;
         } 
     }
 
