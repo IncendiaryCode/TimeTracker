@@ -2,7 +2,6 @@
 $GLOBALS['page_title'] = 'Edit task';
 $this->load->library('session');
 $profile = $this->session->userdata('user_profile');
-
 ?>
 <main class="container-fluid-main">
     <div class="main-container container">
@@ -22,7 +21,15 @@ $profile = $this->session->userdata('user_profile');
                         <?php echo isset($success)?$success:""; ?>
                     </div>
                     <form action="<?=base_url();?>index.php/user/edit_task?type=edit" method="post" id="editTask" class="mt-5 ">
-                        <input type="hidden" name="task_id" value="<?=$task_data[0]['task_id'];?>">
+                        <input type="hidden" name="task_id" id="curr-taskid" value="<?=$task_data[0]['task_id'];?>">
+                        <?php if($task_data[0]['running_task'] == 1)
+                        { ?>
+                        <button type="button" id="stop-or-complete" class="text-center shadow-lg icon-width stop-or-complete">
+                            <div data-tasktype="Task" data-id="80">
+                                <h3> <i class=" fas action-icon fa-stop"></i></h3>
+                            </div>
+                        </button>
+                        <?php } ?>
                         <div class="form-group">
                             <label for="task-name ">Write the task name</label>
                             <input type="text" class="form-control" name="task_name" id="Taskname" value="<?=$task_data[0]['task_name'];?>">
@@ -67,6 +74,7 @@ $profile = $this->session->userdata('user_profile');
                         } ?>
                         </div>
                             <p id="taskError" class=" text-danger mt-3"></p>
+                            <p id="user-alerting" class=" text-danger mt-3"></p>
                             <p>&nbsp;</p>
                             <hr />
                             <button type="submit" class="btn btn-primary">Save Task</button>

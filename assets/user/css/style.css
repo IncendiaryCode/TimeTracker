@@ -112,14 +112,27 @@ header.main-header h1 {
     width: 90px;
     margin-left: 70%;
     border-radius: 50%;
-    top: -16%;
+    top: -10%;
     border: 0px; 
     z-index: 1;
     color: white;
     background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #fadffd);
     margin-top: 15%;
 }
-
+.stop-or-complete
+{
+        position: relative;
+    text-align: center;
+    height: 100px;
+    width: 100px;
+    margin-left: 45%;
+    border-radius: 50%;
+    top: -10%;
+    z-index: 1;
+    color: white;
+    background-image: linear-gradient(to bottom right, #6f79fd, #df88fb, #ffdffd);
+    margin-top: 0%;
+}
 
 @media (min-width: 1024px) {
     .main-container-employee {
@@ -143,6 +156,21 @@ header.main-header h1 {
         font-size: 24px;
         margin-bottom: 1%;
     }
+    .stop-or-complete
+        {
+            position: relative;
+            text-align: center;
+            height: 100px;
+            width: 100px;
+            margin-left: 100%;
+            border-radius: 50%;
+            border:0px;
+            top: -100px;
+            z-index: 1;
+            color: white;
+            background-image: linear-gradient(to bottom right, #6f79fd, #df88fb, #ffdffd);
+            margin-top: 0%;
+        }
 
     .stop-time {
         position: relative;

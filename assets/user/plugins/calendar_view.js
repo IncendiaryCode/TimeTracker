@@ -14,6 +14,7 @@ function loadTask(type, date) {
         url: timeTrackerBaseURL + 'index.php/user/load_task_data',
         data: { 'chart_type': type, 'date': date },
         success: function(values) {
+
             if (values == "No activity in this date.") {
                 $("#attachPanels").empty();
                 $("#attachPanels").empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
@@ -30,7 +31,12 @@ function loadTask(type, date) {
                             cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
                             var stopCol = $('<div class="col-6 text-right" />');
                             var timeUsed = minutesToTime(data[x][y].t_minutes);
-                            stopCol.append('<i class="far fa-clock"></i> ' + timeUsed);
+
+                            var task_time_dec = data[x][y].t_minutes/60 - Math.floor(data[x][y].t_minutes/60);
+                            task_time_dec = task_time_dec.toString().slice(0,4);
+                            var total_time = Math.floor(data[x][y].t_minutes/60) + parseFloat(task_time_dec);
+
+                            stopCol.append('<i class="far fa-clock"></i> ' + total_time);
                             cardHeaderRow.append(stopCol);
                             cardHeader.append(cardHeaderRow);
 
@@ -42,7 +48,7 @@ function loadTask(type, date) {
                             cardInner.append(cardBody);
                             var cardFooter = $("<div class='card-footer panel" + panel_id + "'>");
                             var footerRow = $('<div class="row" />');
-                            footerRow.append("<div class='col-6'> <i class='fab fa-twitter'></i> " + data[x][y].name + "</div>");
+                            footerRow.append("<div class='col-6'> <img src=" + data[x][y].image_name + " width='20px;' alt=''> " + data[x][y].project + "</div>");
                             var footerRight = $("<div class='col-6 text-right card-actions'>");
                             //action Edit
                             var actionEdit = $('<a href="#" class="card-action action-edit text-white" id="action-edit"><i class="far fa-edit position_edit_icon animated fadeIn" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
@@ -54,11 +60,7 @@ function loadTask(type, date) {
                             footerRight.append(actionEdit);
 
                             var mode = localStorage.getItem('dark_mode');
-                            /*if (mode == "checked") {
-                                cardInner.css("background", "#000000");
-                                cardHeader.css("background", "#000000");
-                                cardFooter.css("background", "#000000");
-                            }*/
+                            
                             footerRow.append(footerRight);
                             cardFooter.append(footerRow);
                             cardInner.append(cardFooter);
@@ -99,6 +101,10 @@ function loadWeeklyChart() {
         if (week == "" || week == " " || week == null) {
             var today = new Date(); // get current date
             var weekNumber = today.getWeek(); // Returns the week number as an integer
+            if(weekNumber.toString().length == 1)
+            {
+                weekNumber = '0'+weekNumber;
+            }
             weekControl.value = today.getFullYear() + '-W' + weekNumber;
             week = today.getFullYear() + '-W' + weekNumber;
             document.getElementById("weekly-chart").setAttribute("max", week);
@@ -199,7 +205,7 @@ function drawChart(type, res) {
                             var item = tooltipItem.xLabel;
                             var week_count = document.getElementById('weekly-chart').value;
                             weekly.onclick = function() {
-                                var day = getDay(item) - 1;
+                                var day = getDay(item)-2;
                                 var year = parseInt(week_count.slice(0, 4));
                                 var day_from_week = parseInt(week_count.slice(-2) - 1) * 7;
                                 day_from_week = day_from_week + parseInt(day);

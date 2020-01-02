@@ -48,12 +48,11 @@ if (changeImage) {
 }
 
 function updateTimer(flag) {
-
     $.ajax({
         type: "POST",
         url: timeTrackerBaseURL + 'index.php/user/stop_timer',
         data: { 'action': 'task', 'id': localStorage.getItem('task_id'), 'flag': flag },
-        /*call to stop the task timer.*/
+        //call to stop the task timer.
         dataType: 'json',
         success: function (res) {
             //handle timer
@@ -65,37 +64,7 @@ function updateTimer(flag) {
         }
     });
 }
-//checking for stop or complete the task.
-var timerStopModal = function () {
-    var timerModal = $('#timestopmodal').modal({
-        'show': false,
-        'backdrop': 'static',
-    });
 
-    timerModal.on('shown.bs.modal', function (e) {
-        console.log('shown modal', localStorage.getItem('timeStamp'));
-    });
-
-    timerModal.on('hidden.bs.modal', function (e) {
-        console.log('hidden modal', localStorage.getItem('timeStamp'));
-        startTimer(localStorage.getItem('timeStamp'));
-    });
-
-    var flag = 0;
-    var completeBtn = timerModal.find('button#timestopmodal-complete-task');
-
-    completeBtn.unbind().on('click', function () {
-        flag = 1;
-        updateTimer(flag);
-    });
-
-    var stopBtn = timerModal.find('button#timestopmodal-stop-task');
-    flag = 0;
-    stopBtn.unbind().on('click', function () {
-        updateTimer(flag);
-    });
-    return timerModal;
-};
 
 function minutesToTime(mins) {
     var total_mins = Number(mins * 60);
@@ -126,8 +95,7 @@ function loadTaskActivities(formData) {
         success: function (values) {
             var data = JSON.parse(values);
             $("#attach-card").empty();
-            var timerModal = timerStopModal();
-
+            /*var timerModal = timerStopModal();*/
             for (x in data) {
                 for (var y = 0; y < data[x].length; y++) {
                     var cardHeader = $('<div class="card-header card-header" />');
@@ -150,12 +118,14 @@ function loadTaskActivities(formData) {
                     if (data[x][y].running_task == 0)  /*check whether task is ended or not*/ {
                         var timeUsed = minutesToTime(data[x][y].t_minutes);
                         stopCol.append('<i class="far fa-clock"></i> ' + timeUsed);
-                    } else {
+                    }else {
                         if (data[x][y].start_time != null) {
                             var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x][y].id);
-                            stopButton.on('click', function () {
+                            stopButton.on('click', function (e) {
                                 localStorage.setItem('task_id', $(this).data('taskid'));
-                                timerModal.modal('show');
+                                //timerModal.modal('show');
+                                e.preventDefault();
+                                updateTimer(0);
                             });
                         }
                         stopCol.append(stopButton);
@@ -182,11 +152,6 @@ function loadTaskActivities(formData) {
                     footerRight.append("<span class='text-success'>This task is completed.</span>");
                     }
                     var mode = localStorage.getItem('dark_mode');
-                        /*if (mode == "checked") {
-                            cardInner.css("background", "#000000");
-                            cardHeader.css("background", "#000000");
-                            cardFooter.css("background", "#000000");
-                        }*/
                     footerRight.append(actionEdit);
 
                     var actionPlay = $('<a href="#" class="card-action action-delete text-white" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
@@ -196,7 +161,6 @@ function loadTaskActivities(formData) {
                             footerRight.append(actionPlay);
                         }
                     }
-
 
                     actionPlay.on('click', function (e) {
                         var t_id = this.getElementsByTagName('input').item(0).value;
@@ -222,17 +186,7 @@ function loadTaskActivities(formData) {
                     $("#attach-card").append(cardCol);
                     if ((data[x][y].running_task == 1 && data[x][y].start_time != null)) { //change background of current running task entries.
                         document.getElementsByClassName("title").innerText += data[x][y].task_name; 
-                        /*if (mode == "checked") {
-                            cardInner.css("background", "#444");
-                            cardHeader.css("background", "#444");
-                            cardFooter.css("background", "#444");
-                        }
-                        else
-                        {
-                            cardInner.css("background", "#e7d3fe");
-                            cardHeader.css("background", "#e7d3fe");
-                            cardFooter.css("background", "#e7d3fe");
-                        }*/
+                        
                     }
                 }
             }
@@ -361,12 +315,16 @@ $(document).ready(function () {
             }
             else {
                 localStorage.setItem('task_id', t_id);
-                var timerModal = timerStopModal();
-                timerModal.modal('show');
+/*                var timerModal = timerStopModal();*/
+                //timerModal.modal('show');
+                updateTimer(0);
+
+
             }
         }
 
     });
+
     var curr_timeStamp = Math.floor(Date.now() / 1000);
     login_timer = parseInt(curr_timeStamp) - parseInt(__timeTrackerLoginTime);
     if ((typeof login_timer != 'undefined')) {
