@@ -122,7 +122,6 @@ class Dashboard_model extends CI_Model
             $labels_array = explode('-',$day);
             $labels[] = $labels_array[2];
         }
-
         $final = array('labels'=>$labels,'datasets'=>$data);
         return $final;
     }

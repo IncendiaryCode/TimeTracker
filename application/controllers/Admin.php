@@ -13,6 +13,7 @@
 			$this->lang->load('form_validation_lang');
 			$this->load->library('form_validation');
 		  	$this->load->helper('security');
+		  	
 	    }
 
 		public function index()

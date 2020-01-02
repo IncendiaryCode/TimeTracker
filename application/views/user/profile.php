@@ -22,7 +22,7 @@ $picture = substr($res['profile'],30);
                     </div>
                 </div>
                 <div class="col-12">
-                    <form method="post" action="#" id="dark-mode">
+                    <form method="post" action="<?=base_url();?>index.php/user/dark" id="dark-mode">
                         <div class="dropdown text-right" id="dropdown-recent-acts">
                             <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">

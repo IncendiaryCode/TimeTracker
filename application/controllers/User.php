@@ -5,6 +5,12 @@ class User extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $GLOBALS['dark_mode'] = 0;
+            if($GLOBALS['dark_mode'] == 0){
+                $GLOBALS['dark_mode'] = 0;
+            }else{
+                $GLOBALS['dark_mode'] = 1;
+            }
         $this->load->model('user_model');
         $this->load->helper('url');
         $this->load->helper('url_helper');
@@ -28,6 +34,15 @@ class User extends CI_Controller
         $task_details['task_info'] = $this->user_model->task_status();
         $this->load->view('user/user_dashboard', $task_details);
         $this->load->view('user/footer');
+    }
+    public function dark(){
+        $this->form_validation->set_rules('dark-mode', 'Check box', 'required');
+        if($GLOBALS['dark_mode'] == 0){
+                $GLOBALS['dark_mode'] = 1;
+            }else{
+                $GLOBALS['dark_mode'] = 0;
+            }
+        redirect('user/load_my_profile','refresh');
     }
     public function load_task_data() //Load task data to user dashboard
     {
