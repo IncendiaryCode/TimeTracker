@@ -182,11 +182,11 @@ function loadTaskActivities(formData) {
                     footerRight.append("<span class='text-success'>This task is completed.</span>");
                     }
                     var mode = localStorage.getItem('dark_mode');
-                        if (mode == "checked") {
+                        /*if (mode == "checked") {
                             cardInner.css("background", "#000000");
                             cardHeader.css("background", "#000000");
                             cardFooter.css("background", "#000000");
-                        }
+                        }*/
                     footerRight.append(actionEdit);
 
                     var actionPlay = $('<a href="#" class="card-action action-delete text-white" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
@@ -222,7 +222,7 @@ function loadTaskActivities(formData) {
                     $("#attach-card").append(cardCol);
                     if ((data[x][y].running_task == 1 && data[x][y].start_time != null)) { //change background of current running task entries.
                         document.getElementsByClassName("title").innerText += data[x][y].task_name; 
-                        if (mode == "checked") {
+                        /*if (mode == "checked") {
                             cardInner.css("background", "#444");
                             cardHeader.css("background", "#444");
                             cardFooter.css("background", "#444");
@@ -232,7 +232,7 @@ function loadTaskActivities(formData) {
                             cardInner.css("background", "#e7d3fe");
                             cardHeader.css("background", "#e7d3fe");
                             cardFooter.css("background", "#e7d3fe");
-                        }
+                        }*/
                     }
                 }
             }

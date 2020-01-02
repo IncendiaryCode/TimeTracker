@@ -30,12 +30,6 @@
      });
  });
 
-/* $('.icon-remove').click(function()
-    {
-        var ele = this.parentNode.parentNode.parentNode.parentNode.parentNode;
-        $(this.parentNode.parentNode).remove();
-        console.log(ele.childElementCount, ele, this);
-    });*/
 
  </script>
 </body>

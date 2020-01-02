@@ -26,8 +26,7 @@ $picture = substr($res['profile'],30);
                         <div class="dropdown text-right" id="dropdown-recent-acts">
                             <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
-                                <div class="dropdown-item checkbox"><input type="checkbox"  id="dark-mode-btn" name="dark-mode"> Dark mode</div>
-                                <!-- <div class="dropdown-item checkbox"><input type="checkbox"  id="normal-mode" name="normal-mode"> Normal mode</div> -->
+                                <div class="dropdown-item checkbox"><input type="checkbox"  id="dark-mode-checkbox" name="dark-mode"> Dark mode</div>
                             </div>
                         </div>
                     </form>
@@ -64,6 +63,17 @@ $picture = substr($res['profile'],30);
                 </div>
             </div>
         </div>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <?php
+    if ($GLOBALS['dark_mode'] == 1) { ?>
+        <script type="text/javascript">        
+                $('#dark-mode-checkbox').attr("checked","checked"); 
+        </script>
+        <?php }  else { ?>
+        <script type="text/javascript">
+                $('#dark-mode-checkbox').removeAttr("checked");
+        </script>
+      <?php } ?> 
         <footer  class="profile-footer">
         <hr>
             <p class="text-center">Copyright © 2019 Printgreener.com</p>

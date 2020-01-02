@@ -367,21 +367,6 @@ a:hover {
 .card-style-1:hover .card-footer .card-actions .card-action {
     display: block;
 }
-.card-style-1:hover
-{
-    background-color: #eeb3fd;
-}
-
-.card-style-1:hover .card-header
-{
-background-color: #000000;
-color:#ffffff;
-}
-.card-style-1:hover .card-footer
-{
-background-color: #000000;
-color:#ffffff;
-}
 
 .modal-transparent {
     background-image: linear-gradient(-40deg, #212529 40%, #212529 100%);

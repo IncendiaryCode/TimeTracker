@@ -299,8 +299,8 @@ a:hover {
 }
 
 .card-style-1 .card-footer {
-    border: none;
     background: #fff;
+    border: none;
     border-radius: 0 0 15px 15px;
     margin-left: 15px;
     color: #999;
