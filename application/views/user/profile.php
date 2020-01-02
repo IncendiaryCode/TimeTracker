@@ -26,7 +26,8 @@ $picture = substr($res['profile'],30);
                         <div class="dropdown text-right" id="dropdown-recent-acts">
                             <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
-                                <div class="dropdown-item checkbox"><input type="checkbox"  id="dark-mode-checkbox" name="dark-mode"> Dark mode</div>
+
+                                <div class="dropdown-item checkbox"><input type="hidden" name="status" id="hidden-status"><input type="checkbox"  id="dark-mode-checkbox" name="dark-mode"> Dark mode</div>
                             </div>
                         </div>
                     </form>
