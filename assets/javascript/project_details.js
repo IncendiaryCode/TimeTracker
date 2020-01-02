@@ -93,7 +93,7 @@ $(document).ready(function() {
         "serverSide": true,
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/user_project_table',
-            "type": "POST",
+            type: "POST",
             "data": { "type": "project_user" , 'project_id': project_id }
         },
         "order": [[ 0, "asc" ]],
@@ -125,7 +125,7 @@ $(document).ready(function() {
         "serverSide": true,
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/user_task_table',
-            "type": "POST",
+            type: "POST",
             "data": { "type": "project_task" , 'project_id': project_id }
         },
         "order": [[ 0, "asc" ]],

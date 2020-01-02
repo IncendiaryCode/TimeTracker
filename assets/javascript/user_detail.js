@@ -129,7 +129,7 @@ if(document.getElementById('user-id') != null)
 
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/user_task_table',
-            "type": "POST",
+            type: "POST",
             "data": {"type": "user_task" , 'user_id': user_id }
         },
         "order": [[ 0, "asc" ]],
@@ -160,7 +160,7 @@ if(document.getElementById('user-id') != null)
         "serverSide": true,
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/user_project_table',
-            "type": "POST",
+            type: "POST",
             "data": {"type":"user_project", 'user_id': user_id}
         },
         "order": [[ 0, "asc" ]],
