@@ -54,11 +54,11 @@ function loadTask(type, date) {
                             footerRight.append(actionEdit);
 
                             var mode = localStorage.getItem('dark_mode');
-                            if (mode == "checked") {
+                            /*if (mode == "checked") {
                                 cardInner.css("background", "#000000");
                                 cardHeader.css("background", "#000000");
                                 cardFooter.css("background", "#000000");
-                            }
+                            }*/
                             footerRow.append(footerRight);
                             cardFooter.append(footerRow);
                             cardInner.append(cardFooter);

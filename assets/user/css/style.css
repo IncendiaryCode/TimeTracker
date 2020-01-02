@@ -581,3 +581,7 @@ opacity: 0.5;
 {
     font-size: 1.5rem;
 }
+.stop-now-modal
+{
+    min-width: 120px;
+}

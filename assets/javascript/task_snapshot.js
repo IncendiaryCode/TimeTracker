@@ -81,9 +81,11 @@ $(document).ready(function() {
         "processing": true,
         "serverSide": true,
         responsive: true,
+        
         "scrollX": true,
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/load_snapshot',
+            "type": "POST",
             "data": {'type': "task"}
         },
         "order": [[ 3, "desc" ]],

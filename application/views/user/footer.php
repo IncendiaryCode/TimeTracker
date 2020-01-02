@@ -120,8 +120,8 @@
                     <p class="text-center text-danger" id="old-date-error"></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="save-changes">Save changes</button>
+                    <button type="button" class="btn btn-primary stop-now-modal" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary stop-now-modal" id="save-changes">Save changes</button>
                 </div>
             </form>
         </div>

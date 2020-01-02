@@ -3,6 +3,7 @@ function drawProjectChart() {
   	$.ajax({
     type: 'POST',
     url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
+    "type": "POST",
     data: { 'type': "get_user" },
     success: function(res) {
         result = JSON.parse(res);
