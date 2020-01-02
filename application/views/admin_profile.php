@@ -1,9 +1,6 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->helper('url_helper');
-$this->load->library('session');
-$profile = $this->session->userdata('user_profile');
-$picture = substr($profile,29);
 
 ?>
 <body>
@@ -18,7 +15,7 @@ $picture = substr($profile,29);
                     
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="<?=base_url(). 'assets/images/'.$picture;?>" height="40px" class="rounded-circle">
+                            <img src="<?=base_url();?>assets/images/<?=$res['profile'];?>" height="40px" class="rounded-circle">
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div>
                                     <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display pl-2"> Profile</a></p>
@@ -40,7 +37,7 @@ $picture = substr($profile,29);
                         <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
                         <div class="text-center">
                             <span>
-                                <img id="profile-pic" src="<?=base_url().$picture;?>" class="rounded-circle img-fluid" width="200px;" height="200px;">
+                                <img id="profile-pic" src="<?=base_url();?>assets/images/<?=$res['profile'];?>" class="rounded-circle img-fluid" width="200px;" height="200px;">
                                  <div class="edit">
                                     <a href="#" class="text-white"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#change-profile-pic"></i></a>
                                 </div> 

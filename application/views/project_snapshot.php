@@ -1,7 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
-$picture = substr($profile,29);
 ?>
 
 <body>
@@ -15,7 +14,7 @@ $picture = substr($profile,29);
                 <div class="navbar-nav ml-auto flex-column-reverse flex-lg-row">
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <a href="#" class="text-white"><img src="<?=base_url().$picture?>" height="40px" class="rounded-circle"></a>
+                            <a href="#" class="text-white"><img src="<?=base_url();?>assets/images/<?=$profile;?>" height="40px" class="rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div>
                                     <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display pl-2"> Profile</a></p>
@@ -56,9 +55,8 @@ $picture = substr($profile,29);
                         <div class="mr-2">
                             <?php
                             if($proj['project_icon'] != ''){
-                                $image = substr($proj['project_icon'],29);
                                 ?>
-                                <img src="<?=base_url().$image?>" width="30px;">
+                                <img src="<?=base_url();?>assets/images/<?=$proj['project_icon'];?>" width="30px;">
                                 <input type="hidden" id="project-id" name="" value="<?=$proj['project_id'] ?>">
                                 <?php
                             } ?>

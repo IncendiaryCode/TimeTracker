@@ -1,7 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 $profile = $this->session->userdata('user_profile');
-$picture = substr($profile,29);
 ?>
 <body>
     <header>
@@ -17,7 +16,7 @@ $picture = substr($profile,29);
                 <div class="navbar-nav ml-auto flex-column-reverse flex-lg-row">
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <a href="#" class="text-white"><img src="<?=base_url().$picture?>" height="40px" class="rounded-circle"></a>
+                            <a href="#" class="text-white"><img src="<?=base_url();?>assets/images/<?=$profile;?>" height="40px" class="rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div>
                                     <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display"> Profile</a></p>
@@ -40,9 +39,8 @@ $picture = substr($profile,29);
                             <div class="mx-auto d-block">
                                 <?php
                                 if($data['profile'] != ''){
-                                    $image = substr($data['profile'],29);
                                     ?>
-                                    <img src="<?=base_url().$image?>" class="rounded-circle" width="50px;" height="50px;">
+                                    <img src="<?=base_url();?>assets/user/images/user_profiles/<?=$data['profile'];?>" class="rounded-circle" width="50px;" height="50px;">
                                 <?php } ?>
                             </div>
                         </div>

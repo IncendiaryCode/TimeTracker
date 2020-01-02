@@ -1,8 +1,6 @@
 <?php
     $GLOBALS['page_title'] = 'Login Activities';
     defined('BASEPATH') OR exit('No direct script access allowed');
-    $this->load->library('session');
-    $profile = $this->session->userdata('user_profile');
 ?>
 <main class="container-fluid-main"><p class="display-heading text-white  text-center">My activities</p>
     <div class="main-container container">

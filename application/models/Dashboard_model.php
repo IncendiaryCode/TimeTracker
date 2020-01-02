@@ -444,19 +444,7 @@ class Dashboard_model extends CI_Model
             
             if(!empty($search))
             {
-                $x=0;
-                foreach($valid_columns as $sterm)
-                {
-                    if($x==0)
-                    {
-                        $this->db->like($sterm,$search);
-                    }
-                    else
-                    {
-                        $this->db->or_like($sterm,$search);
-                    }
-                    $x++;
-                }                 
+                $this->db->like('t.task_name',$search);                 
             }
             $this->db->select('t.task_name,p.name AS project_name');
             $this->db->select_sum('d.total_minutes','t_minutes');
@@ -521,19 +509,7 @@ class Dashboard_model extends CI_Model
             
             if(!empty($search))
             {
-                $x=0;
-                foreach($valid_columns as $sterm)
-                {
-                    if($x==0)
-                    {
-                        $this->db->like($sterm,$search);
-                    }
-                    else
-                    {
-                        $this->db->or_like($sterm,$search);
-                    }
-                    $x++;
-                }                 
+                $this->db->like('t.task_name',$search);                 
             }
             $this->db->select('t.task_name,count(distinct d.user_id) AS users_count');
             $this->db->select_sum('d.total_minutes','t_minutes');
@@ -603,19 +579,7 @@ class Dashboard_model extends CI_Model
             
             if(!empty($search))
             {
-                $x=0;
-                foreach($valid_columns as $sterm)
-                {
-                    if($x==0)
-                    {
-                        $this->db->like($sterm,$search);
-                    }
-                    else
-                    {
-                        $this->db->or_like($sterm,$search);
-                    }
-                    $x++;
-                }                 
+                $this->db->like('p.name',$search);                 
             }
             $this->db->select('p.name AS project_name');
             $this->db->select('count(distinct t.id) AS tasks_count');

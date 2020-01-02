@@ -9,7 +9,7 @@ $this->load->helper('url_helper');
             <div class="row mt-5">
                 <div class="col-md-6 offset-md-3">
                     <div class="text-center">
-                        <img src="<?=site_url();?>/assets/images/user_profiles/<?=$res['profile'];?>" width="30%;" class="rounded-circle figure mt-4 text-center">
+                        <img src="<?=base_url();?>assets/user/images/user_profiles/<?=$res['profile'];?>" width="30%;" class="rounded-circle figure mt-4 text-center">
                         <h4 class="text-center employee-name mt-3">
                             <?php echo $res['name'];?>
                         </h4>

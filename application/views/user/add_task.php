@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 $GLOBALS['page_title'] = 'Add Task';
-$this->load->library('session');
-$profile = $this->session->userdata('user_profile');
 ?>
 <main class="container-fluid-main">
     <div class="main-container container">

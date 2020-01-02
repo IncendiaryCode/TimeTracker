@@ -2,7 +2,6 @@
     $GLOBALS['page_title'] = 'Change password';
     defined('BASEPATH') OR exit('No direct script access allowed');
     $profile = $this->session->userdata('user_profile');
-    $picture = substr($profile,30);
 ?>
 <main class="container-fluid-main"><p class="display-heading text-white  text-center">Change password</p>
     <div class="main-container container">
@@ -10,7 +9,7 @@
             <div class="row mt-5">
                 <div class="col-6 offset-3">
                     <div class="text-center mt-4">
-                        <img src="<?=base_url().$picture?>" width="30%;" class="rounded-circle figure mt-4 text-center">
+                        <img src="<?=base_url();?>assets/user/images/user_profiles/<?=$profile?>" width="30%;" class="rounded-circle figure mt-4 text-center">
                     </div>
                     <?php 
                             $this->load->library('form_validation');
