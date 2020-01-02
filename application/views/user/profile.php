@@ -21,15 +21,17 @@ $picture = substr($res['profile'],30);
                         </h4>
                     </div>
                 </div>
-               <!--  <div class="col-12">
-                    <div class="dropdown text-right" id="dropdown-recent-acts">
-                        <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
-                            <div class="dropdown-item checkbox"><input type="checkbox"  id="dark-mode" name="dark-mode"> Dark mode</div>
-                            <div class="dropdown-item checkbox"><input type="checkbox"  id="normal-mode" name="normal-mode"> Normal mode</div>
+                <div class="col-12">
+                    <form method="post" action="#">
+                        <div class="dropdown text-right" id="dropdown-recent-acts">
+                            <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
+                                <div class="dropdown-item checkbox"><input type="checkbox"  id="dark-mode" name="dark-mode"> Dark mode</div>
+                                <!-- <div class="dropdown-item checkbox"><input type="checkbox"  id="normal-mode" name="normal-mode"> Normal mode</div> -->
+                            </div>
                         </div>
-                    </div>
-                </div> -->
+                    </form>
+                </div>
             </div>
             <div class="row">
                 <div class="offset-md-4 col-md-4">

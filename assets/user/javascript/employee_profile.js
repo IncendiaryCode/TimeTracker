@@ -19,18 +19,15 @@ function dark_mode()
         $(".modal-content").css( "background-image", "linear-gradient(-40deg, #212529 40%, #212529 100%)" ); 
 }
 
-
 $(document).ready(function()
 {	
-	$('#dark-mode').click(function()
-	{
-		localStorage.setItem("dark_mode", "checked");
-        window.location.reload();
-    });
 
-	$('#normal-mode').click(function()
-    {	
-		localStorage.setItem("dark_mode", "Not checked");
-        window.location.reload();
-	});
+    $("input:checkbox").change(
+        function()
+        {
+            $("#formName").submit();
+           
+        });
+    
+
 });
