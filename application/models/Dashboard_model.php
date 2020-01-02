@@ -723,13 +723,15 @@ class Dashboard_model extends CI_Model
 
     public function get_project_data($proj_id){
         $this->db->select('p.name AS project_name,p.image_name,p.id AS project_id');
-        $this->db->select('count(distinct t.id) AS tasks_count,count(distinct d.user_id) AS users_count');
+        $this->db->select('count(distinct u.id) AS users_count');
+        $this->db->select('count(distinct t.id) AS tasks_count');   
         $this->db->select_sum('d.total_minutes','t_minutes');
-        $this->db->from('project AS p');
-        $this->db->join('task AS t','t.project_id = p.id');
-        $this->db->join('time_details AS d','d.task_id = t.id');
-        $this->db->group_by('p.id');
+        $this->db->from('users AS u');
+        $this->db->join('time_details AS d','d.user_id = u.id');
+        $this->db->join('task AS t','t.id = d.task_id');
+        $this->db->join('project AS p','p.id = t.project_id');
         $this->db->where('p.id',$proj_id);
+        $this->db->group_by('p.id');
         $result = $this->db->get();
         if($result->num_rows() > 0){
             $data = $result->result_array();

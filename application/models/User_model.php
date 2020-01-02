@@ -75,7 +75,11 @@ class User_model extends CI_Model {
         $query = $this->db->get();
         
         if($query->num_rows() > 0){
-            $data = $query->result_array();
+            $dataa = $query->result_array();
+            foreach($dataa as $d){
+                $data[] = array('image_name'=>($d['image_name'] != NULL)?(base_url().substr($d['image_name'],30)):NULL,'project'=>$d['name'],'task_name'=>$d['task_name'],'running_task'=>$d['running_task'],'completed'=>$d['completed'],'total_minutes'=>$d['t_minutes']);
+            }
+
         }else{
             $data = NULL;
         }

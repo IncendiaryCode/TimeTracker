@@ -66,6 +66,7 @@ $picture = substr($res['profile'],30);
         </div>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <?php
+        if(!empty($GLOBALS['dark_mode'])){
     if ($GLOBALS['dark_mode'] == 1) { ?>
         <script type="text/javascript">        
                 $('#dark-mode-checkbox').attr("checked","checked"); 
@@ -74,7 +75,7 @@ $picture = substr($res['profile'],30);
         <script type="text/javascript">
                 $('#dark-mode-checkbox').removeAttr("checked");
         </script>
-      <?php } ?> 
+      <?php }} ?> 
         <footer  class="profile-footer">
         <hr>
             <p class="text-center">Copyright © 2019 Printgreener.com</p>

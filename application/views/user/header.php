@@ -23,11 +23,17 @@ $this->load->helper('url_helper');
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/plugins/bxslider/css/jquery.bxslider.min.css?v=<?=VERSION?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/animation.css?v=<?=VERSION?>">
     <?php
+    if(!empty($GLOBALS['dark_mode'])){
+
      if ($GLOBALS['dark_mode'] == 1) { ?>
+    
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/dark_mode_style.css?v=<?=VERSION?>">
     
     <?php }  else { ?>
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/style.css?v=<?=VERSION?>">
+      <?php }
+  }else{ ?>
+        <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/style.css?v=<?=VERSION?>">
       <?php } ?>  
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/bootstrap-datetimepicker.min.css?v=<?=VERSION?>">
     <script type="text/javascript">
