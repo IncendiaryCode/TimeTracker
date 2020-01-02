@@ -25,8 +25,7 @@ $(document).ready(function()
     $("input:checkbox").change(
         function()
         {
-            $("#formName").submit();
-           
+            $("#dark-mode").submit();
         });
     
 
