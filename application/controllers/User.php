@@ -207,7 +207,7 @@ class User extends CI_Controller
         if ($this->input->post('action') == 'save_and_start') {
             $data['userid'] = $this->session->userdata('userid');
             $data['project_module'] = $this->input->post('project_module');
-            $data['project_id'] = $this->input->post('project');
+            $data['project_id'] = $this->input->post('project_name');
             $data['action'] = $this->input->post('action');
             $data['task_name'] = $this->input->post('task_name');
             $data['task_desc'] = $this->input->post('task_desc');
@@ -347,7 +347,7 @@ class User extends CI_Controller
             if ($this->upload->do_upload('change_img')) {
                 $uploadData = $this->upload->data();
                 $picture    = array(
-                    'profile' => $uploadData['file_path'].$uploadData['file_name']
+                    'profile' => $uploadData['file_name']
                 ); //to update profile in db(profile column)
             }
             else {

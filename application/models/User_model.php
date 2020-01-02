@@ -77,7 +77,7 @@ class User_model extends CI_Model {
         if($query->num_rows() > 0){
             $dataa = $query->result_array();
             foreach($dataa as $d){
-                $data[] = array('image_name'=>($d['image_name'] != NULL)?(base_url().substr($d['image_name'],30)):NULL,'project'=>$d['name'],'task_name'=>$d['task_name'],'running_task'=>$d['running_task'],'completed'=>$d['completed'],'total_minutes'=>$d['t_minutes']);
+                $data[] = array('image_name'=>($d['image_name'] != NULL)?(base_url().substr($d['image_name'],30)):NULL,'project'=>$d['name'],'task_name'=>$d['task_name'],'running_task'=>$d['running_task'],'completed'=>$d['completed'],'start_time'=>$d['start_time'],'t_minutes'=>$d['t_minutes'],'id'=>$d['id']);
             }
 
         }else{
@@ -519,7 +519,7 @@ class User_model extends CI_Model {
                 }
             }else{
                 
-                $array = array('task_name'=>$data['task_name'],'description'=>$data['task_desc'],'project_id'=> $data['project_id'],'module_id'=>$module_id,'created_on'=>date('Y:m:d H:i:s'));
+                $array = array('task_name'=>$data['task_name'],'description'=>$data['task_desc'],'project_id'=>$data['project_id'],'module_id'=>$module_id,'created_on'=>date('Y:m:d H:i:s'));
                 $this->db->set($array);
                 $query = $this->db->insert('task',$array);
                 if(!$query){

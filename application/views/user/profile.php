@@ -2,12 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $GLOBALS['page_title'] = 'My profile';
 $this->load->helper('url_helper');
-//$this->load->library('session');
-//$profile = $this->session->userdata('user_profile');
-
-
-
-$picture = substr($res['profile'],30);
 ?>
 <main class="container-fluid-main">
     <div class="main-container container">
@@ -15,7 +9,7 @@ $picture = substr($res['profile'],30);
             <div class="row mt-5">
                 <div class="col-md-6 offset-md-3">
                     <div class="text-center">
-                        <img src="<?=base_url().$picture?>" width="30%;" class="rounded-circle figure mt-4 text-center">
+                        <img src="<?=site_url();?>/assets/images/user_profiles/<?=$res['profile'];?>" width="30%;" class="rounded-circle figure mt-4 text-center">
                         <h4 class="text-center employee-name mt-3">
                             <?php echo $res['name'];?>
                         </h4>

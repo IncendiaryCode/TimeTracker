@@ -192,13 +192,13 @@ class Dashboard_model extends CI_Model
             return $final_result;
                
         } else if($type == 'task') {
-            $get_data = $this->input->get();
+            $get_data = $this->input->post();
            // print_r($get_data);
-            $draw = intval($this->input->get("draw"));
-            $start = intval($this->input->get("start"));
-            $length = intval($this->input->get("length"));
-            $order = $this->input->get("order");
-            $search= $this->input->get("search");
+            $draw = intval($this->input->post("draw"));
+            $start = intval($this->input->post("start"));
+            $length = intval($this->input->post("length"));
+            $order = $this->input->post("order");
+            $search= $this->input->post("search");
             $search = $search['value'];
             $col = 0;
             $dir = "";
@@ -402,12 +402,12 @@ class Dashboard_model extends CI_Model
 
     public function user_task_data($table_type){
         if($table_type == 'user_task'){
-            $user_id = $this->input->get('user_id');
-            $draw = intval($this->input->get("draw"));
-            $start = intval($this->input->get("start"));
-            $length = intval($this->input->get("length"));
-            $order = $this->input->get("order");
-            $search= $this->input->get("search");
+            $user_id = $this->input->post('user_id');
+            $draw = intval($this->input->post("draw"));
+            $start = intval($this->input->post("start"));
+            $length = intval($this->input->post("length"));
+            $order = $this->input->post("order");
+            $search= $this->input->post("search");
             $search = $search['value'];
             $col = 0;
             $dir = "";
@@ -479,12 +479,12 @@ class Dashboard_model extends CI_Model
             }
 
         }else if($table_type == 'project_task'){
-            $project_id = $this->input->get('project_id');
-            $draw = intval($this->input->get("draw"));
-            $start = intval($this->input->get("start"));
-            $length = intval($this->input->get("length"));
-            $order = $this->input->get("order");
-            $search= $this->input->get("search");
+            $project_id = $this->input->post('project_id');
+            $draw = intval($this->input->post("draw"));
+            $start = intval($this->input->post("start"));
+            $length = intval($this->input->post("length"));
+            $order = $this->input->post("order");
+            $search= $this->input->post("search");
             $search = $search['value'];
             $col = 0;
             $dir = "";
@@ -560,12 +560,13 @@ class Dashboard_model extends CI_Model
 
     public function user_project_data($table_type){
         if($table_type == 'user_project'){
-            $user_id = $this->input->get('user_id');
-            $draw = intval($this->input->get("draw"));
-            $start = intval($this->input->get("start"));
-            $length = intval($this->input->get("length"));
-            $order = $this->input->get("order");
-            $search= $this->input->get("search");
+
+            $user_id = $this->input->post('user_id');
+            $draw = intval($this->input->post("draw"));
+            $start = intval($this->input->post("start"));
+            $length = intval($this->input->post("length"));
+            $order = $this->input->post("order");
+            $search= $this->input->post("search");
             $search = $search['value'];
             $col = 0;
             $dir = "";
@@ -639,12 +640,12 @@ class Dashboard_model extends CI_Model
             }
 
         }else if($table_type == 'project_user'){
-            $project_id = $this->input->get('project_id');
-            $draw = intval($this->input->get("draw"));
-            $start = intval($this->input->get("start"));
-            $length = intval($this->input->get("length"));
-            $order = $this->input->get("order");
-            $search= $this->input->get("search");
+            $project_id = $this->input->post('project_id');
+            $draw = intval($this->input->post("draw"));
+            $start = intval($this->input->post("start"));
+            $length = intval($this->input->post("length"));
+            $order = $this->input->post("order");
+            $search= $this->input->post("search");
             $search = $search['value'];
             $col = 0;
             $dir = "";
@@ -657,10 +658,10 @@ class Dashboard_model extends CI_Model
                 }
             }
 
-            if($dir != "asc" && $dir != "desc")
+            /*if($dir != "asc" && $dir != "desc")
             {
                 $dir = "desc";
-            }
+            }*/
             $valid_columns = array(
                 0=>'u.name',
                 1=>'tasks_count',
@@ -674,6 +675,7 @@ class Dashboard_model extends CI_Model
             {
                 $order = $valid_columns[$col];
             }
+
             if($order !=null)
             {
                 $this->db->order_by($order, $dir);
@@ -681,36 +683,23 @@ class Dashboard_model extends CI_Model
             
             if(!empty($search))
             {
-                $x=0;
-                foreach($valid_columns as $sterm)
-                {
-                    if($x==0)
-                    {
-                        $this->db->like($sterm,$search);
-                    }
-                    else
-                    {
-                        $this->db->or_like($sterm,$search);
-                    }
-                    $x++;
-                }                 
+                $this->db->like('u.name',$search);
             }
             $this->db->select('u.name AS user_name');
             $this->db->select('count(distinct d.task_id) AS tasks_count');
             $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->from('project AS p');
-            $this->db->join('project_assignee AS a','a.project_id = p.id');
-            $this->db->join('time_details AS d','d.user_id = a.user_id');
+            $this->db->join('task AS t','t.project_id = p.id');
+            $this->db->join('time_details AS d','d.task_id = t.id');
             $this->db->join('users AS u','u.id = d.user_id');
             $this->db->where(array('u.type'=>'user','p.id'=>$project_id));
             $this->db->group_by('d.user_id');
             $this->db->limit($length,$start);
             $employees = $this->db->get();
+            
             $data = array();
-
             foreach($employees->result() as $rows)
             {
-
                 $data[]= array(
                     $rows->user_name,
                     $rows->tasks_count,

@@ -60,7 +60,7 @@
 		        $this->load->view('footer');
 			}
 			else if($type == 'task'){
-				$draw = intval($this->input->get("draw"));
+				$draw = intval($this->input->post("draw"));
 				//$list = $this->dashboard_model->get_datatables();
 				$result['data'] = $this->dashboard_model->get_task_details($type);
 				if($result['data'] == NULL){
@@ -130,8 +130,8 @@
 		}
 
 		public function user_task_table(){
-			$table_type = $this->input->get('type');
-			$draw = intval($this->input->get("draw"));
+			$table_type = $this->input->post('type');
+			$draw = intval($this->input->post("draw"));
 			$result['data'] = $this->dashboard_model->user_task_data($table_type);
 			if($result['data'] == NULL || $result['data'] == FALSE){
 				$result['status'] = FALSE;
@@ -149,8 +149,8 @@
 		}
 
 		public function user_project_table(){
-			$table_type = $this->input->get('type');
-			$draw = intval($this->input->get("draw"));
+			$table_type = $this->input->post('type');
+			$draw = intval($this->input->post("draw"));
 			$result['data'] = $this->dashboard_model->user_project_data($table_type);
 			if($result['data'] == NULL || $result['data'] == FALSE){
 				$result['status'] = FALSE;
@@ -314,7 +314,7 @@
 			            if ($this->upload->do_upload('project-logo')) {
 			                $uploadData = $this->upload->data();
 			                $picture    = array(
-			                    'image_name' => $uploadData['file_path'].$uploadData['file_name']
+			                    'image_name' => $uploadData['file_name']
 			                ); //to update profile in db(profile column)
 			            }
 			            else {
@@ -470,7 +470,7 @@
 		                $uploadData = $this->upload->data();
 		               // $picture = $uploadData['file_name'];
 		                $picture = array(
-		                'profile' => $uploadData['file_path'].$uploadData['file_name']);//to update profile in db(profile column)
+		                'profile' => $uploadData['file_name']);//to update profile in db(profile column)
 		            }else{
 		            	echo $this->upload->display_errors();
 		                $picture = '';
