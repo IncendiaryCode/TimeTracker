@@ -91,7 +91,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 // SMTP MAIL CONFIG CONSTANTS
-/*define('PROTOCOL', 'smtp');
+define('PROTOCOL', 'smtp');
 define('SMTP_HOST', 'mail.brightlightventures.com');
 define('SMTP_USER', 'timetracker@brightlightventures.com');
 define('SMTP_PASS', 'BB(i4)o.zTjK');
@@ -101,9 +101,9 @@ define('CRLF', "\r\n");
 define('NEWLINE', "\r\n");
 define('MAILTYPE', 'html');
 define('SMTP_NO_REPLY_USER', 'timetracker@brightlightventures.com');
-define('SMTP_FROM_NAME', 'Time Tracker');*/
+define('SMTP_FROM_NAME', 'Time Tracker');
 
-define('PROTOCOL', 'smtp');
+/*define('PROTOCOL', 'smtp');
 define('SMTP_HOST', 'ssl://smtp.gmail.com');
 define('SMTP_USER', 'admin@printgreener.com');
 define('SMTP_PASS', 'admin.@12345');
@@ -113,7 +113,7 @@ define('CRLF', "\r\n");
 define('NEWLINE', "\r\n");
 define('MAILTYPE', 'text');
 define('SMTP_NO_REPLY_USER', 'timetracker@brightlightventures.com');
-//define('SMTP_FROM_NAME', 'Time Tracker');define('PROTOCOL', 'smtp');
+//define('SMTP_FROM_NAME', 'Time Tracker');define('PROTOCOL', 'smtp');*/
 
 
 //define('SMTP_BCC_USER', 'sales@pinzacord.com');
