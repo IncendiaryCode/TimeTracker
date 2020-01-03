@@ -79,7 +79,6 @@ class User_model extends CI_Model {
             foreach($dataa as $d){
                 $data[] = array('image_name'=>($d['image_name'] != NULL)?(base_url().'assets/user/images/'.$d['image_name']):NULL,'project'=>$d['name'],'task_name'=>$d['task_name'],'running_task'=>$d['running_task'],'completed'=>$d['completed'],'start_time'=>$d['start_time'],'t_minutes'=>$d['t_minutes'],'id'=>$d['id']);
             }
-
         }else{
             $data = NULL;
         }
@@ -313,7 +312,7 @@ class User_model extends CI_Model {
             $year_start = date('Y-m-d',strtotime(date($taskdate.'-01-01')));
             $year_end = date('Y-m-d', strtotime(date($taskdate.'-12-31')));
             $this->db->select('*');
-            $this->db->select_sum('total_hours','hours');
+            $this->db->select_sum('total_minutes','t_minutes');
             $this->db->from('time_details');
             $this->db->where(array('user_id'=>$userid));
             $this->db->where('end_time IS NOT NULL');
@@ -323,7 +322,7 @@ class User_model extends CI_Model {
             if($query->num_rows() > 0){
                 $data = $query->result_array();
                 foreach($data as $d){
-                    $values[] = array(date('Y-m-d',strtotime($d['task_date'])),$d['hours']);
+                    $values[] = array(date('Y-m-d',strtotime($d['task_date'])),round(($d['t_minutes']/60),2));
 
                 }
                 $chart_data = array('monthy_chart',

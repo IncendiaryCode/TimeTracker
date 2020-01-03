@@ -65,7 +65,7 @@
 				$result['data'] = $this->dashboard_model->get_task_details($type);
 				if($result['data'] == NULL){
 					$result['status'] = FALSE;
-					$result['msg'] = "No task data.";
+					$result['msg'] = "No results Found.";
 				}else{
 					$result['status'] = TRUE;
 					$result = array(
@@ -122,6 +122,7 @@
 				if($result['data'] == NULL || $result['data'] == FALSE){
 					$result['status'] = FALSE;
 					$result['data'] = NULL;
+					$result['msg'] = "No results Found.";
 				}else{
 					$result['status'] = TRUE;
 				}	
@@ -136,6 +137,7 @@
 			if($result['data'] == NULL || $result['data'] == FALSE){
 				$result['status'] = FALSE;
 				$result['data'] = NULL;
+				$result['msg'] = "No results Found.";
 			}else{
 				$result['status'] = TRUE;
 				$result = array(
@@ -155,6 +157,7 @@
 			if($result['data'] == NULL || $result['data'] == FALSE){
 				$result['status'] = FALSE;
 				$result['data'] = NULL;
+				$result['msg'] = "No results Found.";
 			}else{
 				$result['status'] = TRUE;
 				$result = array(
