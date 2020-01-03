@@ -605,12 +605,58 @@ class User_model extends CI_Model {
     }
     //fetch user profile data to profile page
     public function my_profile($userid){
-        $this->db->where('id',$userid);
-        $query = $this->db->get('users');
-        if($query->num_rows() == 1){
-            return $query->row_array();
+       
+        $this->db->select('u.*');
+        $this->db->select_sum('d.total_minutes','total_time');
+        $this->db->from('users AS u');
+        $this->db->from('time_details AS d','d.user_id = u.id');
+        $this->db->where('u.id',$userid);
+        $query = $this->db->get();
+        if($query->num_rows() > 0){
+            $user_data = $query->result_array();
+            $this->db->select_sum('d.total_minutes','t_minutes');
+            $this->db->from('users AS u');
+            $this->db->from('time_details AS d','d.user_id = u.id');
+            $this->db->where('u.id',$userid);
+            $this->db->where('d.task_date BETWEEN "'.date('Y-m-d',strtotime(date('Y-m-1'))). '" and "'.date('Y-m-d',strtotime(date('Y-m-t'))).'"');
+            $time = $this->db->get()->result_array();
+            $final = array($user_data,$time);
+        }else{
+            $final = '';
         }
+        return $final;
     }
+
+    //get chart data for user profile
+    public function user_chart_data(){
+        $userid = $this->session->userdata('userid');
+        for($i=1;$i<=12;$i++){
+            $months[$i] = date('Y-'.$i.'');
+
+        }
+        foreach($months as $month){
+            $start = date('Y-m-d',strtotime(date($month.'-01')));
+            $end = date('Y-m-d', strtotime(date($month.'-31')));
+            $this->db->select('*');
+            $this->db->select_sum('total_minutes','t_minutes');
+            $this->db->from('time_details');
+            $this->db->where(array('user_id'=>$userid));
+            $this->db->where('end_time IS NOT NULL');
+            $this->db->where('task_date BETWEEN "'.$start. '" and "'.$end.'"');
+            $query = $this->db->get();
+            if($query->num_rows() > 0){
+                $data = $query->result_array();
+                foreach($data as $d){
+                    $values[] = round(($d['t_minutes']/60),2);
+
+                }
+            }else{
+                $values = '';
+            }
+        }
+        return $values;
+    }
+
     public function update_logout_time($userid){
         //check for entry with the same login date
         $this->db->where(array('task_date'=>date('Y:m:d'),'user_id'=>$userid,'end_time IS NULL'));

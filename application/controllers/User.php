@@ -29,11 +29,15 @@ class User extends CI_Controller
     }
     public function index()
     {
-        //loading user dashboard
-        $this->load->view('user/header');
-        $task_details['task_info'] = $this->user_model->task_status();
-        $this->load->view('user/user_dashboard', $task_details);
-        $this->load->view('user/footer');
+        if ($this->session->userdata('logged_in')) {
+            //loading user dashboard
+            $this->load->view('user/header');
+            $task_details['task_info'] = $this->user_model->task_status();
+            $this->load->view('user/user_dashboard', $task_details);
+            $this->load->view('user/footer');
+        }else{
+            redirect('login/index', 'refresh');
+        }
     }
     public function dark(){
         $GLOBALS['dark_mode'] = 0;
@@ -370,9 +374,27 @@ class User extends CI_Controller
         $GLOBALS['page_title'] = 'My profile';
         $userid = $this->session->userdata('userid');
         $data['res']           = $this->user_model->my_profile($userid);
-        $this->load->view('user/header');
-        $this->load->view('user/profile', $data);
-        $this->load->view('user/footer');
+        if($data['res'] != NULL){
+            $this->load->view('user/header');
+            $this->load->view('user/profile', $data);
+            $this->load->view('user/footer');
+        }else{
+            $data['res'] = 'No profile Data present.';
+            $this->load->view('user/header');
+            $this->load->view('user/profile', $data);
+            $this->load->view('user/footer');
+        }
+    }
+
+    public function user_chart(){
+        $data['res'] = $this->user_model->user_chart_data();
+        if($data['res'] == NULL){
+            $data['status'] = FALSE;
+            $data['msg'] = "No chart Data.";
+        }else{
+            $data['status'] = TRUE;
+        }
+        echo json_encode($data);
     }
 
     public function password_exists()

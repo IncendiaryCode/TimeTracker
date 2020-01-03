@@ -5,6 +5,7 @@
 
 		public function __construct()
 		{
+			
 		    parent::__construct();
 		    $this->load->model('dashboard_model');
 	        $this->load->helper('url_helper');
@@ -13,12 +14,15 @@
 			$this->lang->load('form_validation_lang');
 			$this->load->library('form_validation');
 		  	$this->load->helper('security');
-		  	
-	    }
+			if(($this->session->userdata('logged_in'))==FALSE){
+				redirect('login/index','refresh');
+			}
+		}
 
 		public function index()
 		{
-			if($this->session->userdata('logged_in')){
+			
+			if(($this->session->userdata('logged_in'))==TRUE){
 				//loading admin dashboard
 				$this->load->view('header');
 				$data['total_users'] = $this->dashboard_model->get_users();
@@ -35,7 +39,7 @@
 
 		//Load user analytics page
 		public function load_snapshot(){
-
+if(($this->session->userdata('logged_in'))==TRUE){
 			$result = array();
 			$get_data = $this->input->get();
 
@@ -76,9 +80,13 @@
 					        );
 				}
 		        echo json_encode($result);
+			}
+			}else{
+				redirect('login/index','refresh');
 			}	
 		}
 		public function assign_user_to_project(){
+			if(($this->session->userdata('logged_in'))==TRUE){
 			$user_id = $this->input->post('assigning-user-name');
 			$project_id = $this->input->post('project-id');
 			$result = $this->dashboard_model->assign_user($user_id,$project_id);
@@ -91,46 +99,66 @@
 				redirect('admin/load_project_detail','refresh');
 				//return false;
 			}
+			}else{
+				redirect('login/index','refresh');
+			}
 		}
 		//load user details page
 		public function load_userdetails_page(){
+			if(($this->session->userdata('logged_in'))==TRUE){
 			$this->load->view('header');
 			$result['data'] = $this->dashboard_model->get_user_data();
 	        $this->load->view('user_detail',$result);
 	        $this->load->view('footer');
+	        }else{
+				redirect('login/index','refresh');
+			}
 		}
 
 		public function load_project_detail(){
+			if(($this->session->userdata('logged_in'))==TRUE){
 			$this->load->view('header');
 			$result['data'] = $this->dashboard_model->get_project_data($this->input->get('project_id'));
 			$result['user_names'] = $this->dashboard_model->get_usernames();
 	        $this->load->view('project_details',$result);
 	        $this->load->view('footer');
+	        }else{
+				redirect('login/index','refresh');
+			}
 		}
 
 		public function load_task_snapshot(){
+			if(($this->session->userdata('logged_in'))==TRUE){
 			$this->load->view('header');
 	        $this->load->view('task_snapshot');
 	        $this->load->view('footer');
+	        }else{
+				redirect('login/index','refresh');
+			}
 		}
 
 		//get user gragh data
 		public function user_chart(){
+			if(($this->session->userdata('logged_in'))==TRUE){
 			if($this->input->post('type')){
 				$type = $this->input->post('type');
 				$result['data'] = $this->dashboard_model->get_user_chart($type);
 				if($result['data'] == NULL || $result['data'] == FALSE){
 					$result['status'] = FALSE;
 					$result['data'] = NULL;
-					$result['msg'] = "No results Found.";
+					$result['msg'] = "No data Found.";
 				}else{
 					$result['status'] = TRUE;
 				}	
 			}
 			echo json_encode($result);
+			}else{
+				redirect('login/index','refresh');
+			}
 		}
 
 		public function user_task_table(){
+			if(($this->session->userdata('logged_in'))==TRUE){
 			$table_type = $this->input->post('type');
 			$draw = intval($this->input->post("draw"));
 			$result['data'] = $this->dashboard_model->user_task_data($table_type);
@@ -148,9 +176,13 @@
 					        );
 			}
 			echo json_encode($result);
+			}else{
+				redirect('login/index','refresh');
+			}
 		}
 
 		public function user_project_table(){
+			if(($this->session->userdata('logged_in'))==TRUE){
 			$table_type = $this->input->post('type');
 			$draw = intval($this->input->post("draw"));
 			$result['data'] = $this->dashboard_model->user_project_data($table_type);
@@ -168,9 +200,13 @@
 					        );
 			}
 			echo json_encode($result);
+			}else{
+				redirect('login/index','refresh');
+			}
 		}
 		//load list of projects for an ajax call
 		public function get_project_list(){
+			if(($this->session->userdata('logged_in'))==TRUE){
 			if($this->input->post('type')){
 				if($this->input->post('type') == 'get_graph_data'){
 					$data['result'] = $this->dashboard_model->dashboard_graph();
@@ -194,10 +230,14 @@
 				$data['status'] = FALSE;
 			}
 			echo json_encode($data);
+			}else{
+				redirect('login/index','refresh');
+			}
 		}
 
 		//get graph data
 		public function get_graph_data(){
+			if(($this->session->userdata('logged_in'))==TRUE){
 				$data['result'] = $this->dashboard_model->user_graph_data();
 				if($data['result'] == NULL){
 					$data['result'] = NULL;
@@ -206,45 +246,68 @@
 					$data['status'] = TRUE;
 				}
 			echo json_encode($data);
+			}else{
+				redirect('login/index','refresh');
+			}
 		}
 		
 		//To load add user page
 	    public function load_add_user(){
+	    	if(($this->session->userdata('logged_in'))==TRUE){
 	    	$this->load->view('header');
 			$this->load->view('adduser');
 			$this->load->view('footer');
+			}else{
+				redirect('login/index','refresh');
+			}
 	    }
 
 		//Function to load add project page
 		public function load_add_project(){
+			if(($this->session->userdata('logged_in'))==TRUE){
 			$this->load->view('header');
 			$data['names'] = $this->dashboard_model->get_usernames();
 			$this->load->view('addproject',$data);
 			$this->load->view('footer');
+			}else{
+				redirect('login/index','refresh');
+			}
 		}
 
 		//Load add task page
 	    public function load_add_task(){
+	    	if(($this->session->userdata('logged_in'))==TRUE){
 	    	$this->load->view('header');
 		    $data['names'] = $this->dashboard_model->get_usernames();
 		    $data['result'] = $this->dashboard_model->get_project_name();
 		   	$this->load->view('addtask',$data);
 			$this->load->view('footer');
+			}else{
+				redirect('login/index','refresh');
+			}
 	    }
 
 	    //To load admin profile
 		public function load_profile(){
+			if(($this->session->userdata('logged_in'))==TRUE){
 			$this->load->view('header');
 			$data['res']           = $this->dashboard_model->my_profile();
 			$this->load->view('admin_profile',$data);
 			$this->load->view('footer');
+			}else{
+				redirect('login/index','refresh');
+			}
 		}
 
 		//function to show admin notifications
 		public function load_notification(){
+			if(($this->session->userdata('logged_in'))==TRUE){
 			$this->load->view('header');
 			$this->load->view('adminNotifications');
 			$this->load->view('footer');
+			}else{
+				redirect('login/index','refresh');
+			}
 		}
 
 		//To check whether Project exists.....
@@ -432,7 +495,7 @@
 		
 		//delete user
 		public function delete_data(){
-
+if(($this->session->userdata('logged_in'))==TRUE){
 			if($this->input->post('user_id')){
 				$data['result'] = $this->dashboard_model->delete_user($this->input->post('user_id'));
 				if(($data['result']) == FALSE){
@@ -457,6 +520,9 @@
 				$data['msg'] = "Something went wrong.";
 			}
 			echo json_encode($data);
+			}else{
+				redirect('login/index','refresh');
+			}
 		}
 
 		//Profile...

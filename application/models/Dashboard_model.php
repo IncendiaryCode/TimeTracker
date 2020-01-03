@@ -956,6 +956,7 @@ class Dashboard_model extends CI_Model
         }
     }
 
+    
     //update profile model
     public function submit_profile($picture)
     {
