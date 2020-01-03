@@ -36,7 +36,7 @@ $GLOBALS['page_title'] = 'Add Task';
                         </div>
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
-                            <select type="number" class="form-control project_name" id="choose-project" name="project_name" value="<?=set_value('project_name')?>">
+                            <select type="number" class="form-control project_name" id="choose-project" name="project" value="<?=set_value('project_name')?>">
                                 <option>Select Project</option>
                                 <?php
                                  foreach($result as $p){ ?>
