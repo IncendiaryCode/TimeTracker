@@ -11,7 +11,7 @@ $this->load->helper('url_helper');
                     <div class="text-center">
                         <img src="<?=base_url();?>assets/user/images/user_profiles/<?=$res['profile'];?>" width="30%;" class="rounded-circle figure mt-4 text-center">
                         <h4 class="text-center employee-name mt-3">
-                            <?php echo $res[0]['name'];?>
+                            <?php echo $res['name'];?>
                         </h4>
                     </div>
                 </div>
@@ -31,7 +31,7 @@ $this->load->helper('url_helper');
                     <div class="card user-card ">
                         <div class="card-body">
                             <h6 class="text-center">Total working hours for this month</h6>
-                            <p class="display-heading text-center mt-4">hrs</p>
+                            <p class="display-heading text-center mt-4"><?php echo $res['t_minutes'];?> hrs</p>
                         </div>
                     </div>
                 </div>
@@ -40,7 +40,7 @@ $this->load->helper('url_helper');
                     <div class="card user-card ">
                         <div class="card-body">
                             <h6 class="text-center">Total working hours</h6>
-                            <p class="display-heading text-center mt-4">hrs</p>
+                            <p class="display-heading text-center mt-4"><?php echo $res['total_time'];?> hrs</p>
                         </div>
                     </div>
                 </div>
@@ -63,21 +63,16 @@ $this->load->helper('url_helper');
                                     <tr>
                                         <th width="50%">Email :</th>
                                         <td width="50%">
-                                            <?php echo $res[0]['email'];?>
+                                            <?=$res['email'];?>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th width="50%">Phone number :</th>
+                                        <th width="50%">Phone number:</th>
                                         <td width="50%">
-                                            <?=$res[0]['phone'];?>
+                                            <?php echo ($res['phone'] != 0)?$res['phone']:'';?>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th scope="row">Type :</th>
-                                        <td>
-                                            <?=$res[0]['type'];?>
-                                        </td>
-                                    </tr>
+                                    
                                 </tbody>
                             </table>
                         </tbody>

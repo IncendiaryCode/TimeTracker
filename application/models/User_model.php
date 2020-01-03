@@ -605,22 +605,20 @@ class User_model extends CI_Model {
     }
     //fetch user profile data to profile page
     public function my_profile($userid){
-       
-        $this->db->select('u.*');
+        $this->db->select('*');
         $this->db->select_sum('d.total_minutes','total_time');
         $this->db->from('users AS u');
-        $this->db->from('time_details AS d','d.user_id = u.id');
+        $this->db->join('time_details AS d','d.user_id = u.id');
         $this->db->where('u.id',$userid);
         $query = $this->db->get();
         if($query->num_rows() > 0){
-            $user_data = $query->result_array();
+            $u = $query->row_array();
             $this->db->select_sum('d.total_minutes','t_minutes');
-            $this->db->from('users AS u');
-            $this->db->from('time_details AS d','d.user_id = u.id');
-            $this->db->where('u.id',$userid);
+            $this->db->from('time_details AS d');
+            $this->db->where('d.user_id',$userid);
             $this->db->where('d.task_date BETWEEN "'.date('Y-m-d',strtotime(date('Y-m-1'))). '" and "'.date('Y-m-d',strtotime(date('Y-m-t'))).'"');
-            $time = $this->db->get()->result_array();
-            $final = array($user_data,$time);
+            $time = $this->db->get()->row_array();
+                $final = array('name'=>$u['name'],'email'=>$u['email'],'phone'=>$u['phone'],'profile'=>$u['profile'],'total_time'=>round(($u['total_time']/60),2),'t_minutes'=>round(($time['t_minutes']/60),2));
         }else{
             $final = '';
         }
@@ -628,11 +626,10 @@ class User_model extends CI_Model {
     }
 
     //get chart data for user profile
-    public function user_chart_data(){
+    public function user_chart_data($year){
         $userid = $this->session->userdata('userid');
         for($i=1;$i<=12;$i++){
-            $months[$i] = date('Y-'.$i.'');
-
+            $months[$i] = date($year."-".$i.'');
         }
         foreach($months as $month){
             $start = date('Y-m-d',strtotime(date($month.'-01')));

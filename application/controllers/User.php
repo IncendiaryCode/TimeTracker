@@ -387,7 +387,8 @@ class User extends CI_Controller
     }
 
     public function user_chart(){
-        $data['res'] = $this->user_model->user_chart_data();
+        $year = $this->input->post('date');
+        $data['res'] = $this->user_model->user_chart_data($year);
         if($data['res'] == NULL){
             $data['status'] = FALSE;
             $data['msg'] = "No chart Data.";

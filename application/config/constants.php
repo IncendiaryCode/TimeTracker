@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 define('VERSION','1.7.6');
 define('UPLOAD_PATH','/var/www/html/time_tracker_ci/assets/images/');
 define('USER_UPLOAD_PATH','/var/www/html/time_tracker_ci/assets/user/images/user_profiles/');
+//define('IMAGE_PREVIEW_PATH',base_url().'assets/user/images/user_profiles/');
 /*
 |--------------------------------------------------------------------------
 | Display Debug backtrace
