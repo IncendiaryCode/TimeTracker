@@ -85,7 +85,18 @@ $(document).ready(function() {
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/load_snapshot',
             type: "POST",
-            "data": {'type': "task"}
+            "data": {'type': "task"},
+            "dataSrc": function ( json ) {
+                //Make your callback here.
+                if(json["status"] ==  false)
+                {
+                document.getElementById('task-tabel-error').innerHTML = "No results found";
+                }
+                else{
+                   document.getElementById('task-tabel-error').innerHTML = " "; 
+                }
+                return json.data;
+            }
         },
         "order": [[ 3, "desc" ]],
         "columnDefs": [{
@@ -150,7 +161,14 @@ $(document).ready(function() {
 
     if (document.getElementById('task-chart')) {
         if ((document.getElementById('curr-month').value == "") || (document.getElementById('curr-month').value == " ")) {
-            var curr_month =  new Date().getFullYear().toString() +'-'+ (new Date().getMonth() + 1).toString();
+            var month_no = (new Date().getMonth() + 1).toString();
+                if(month_no == 1)
+                    {
+                        month_no = '0'+month_no;
+                    }
+            var curr_month = new Date().getFullYear().toString() + '-' + month_no;
+
+            
             document.getElementById('curr-month').value = curr_month;
         }
         document.getElementById('curr-month').value;

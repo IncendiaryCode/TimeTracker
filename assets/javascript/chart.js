@@ -66,8 +66,14 @@ function __project_details(res) {
 $(document).ready(function() {
     if (document.getElementById('main-chart')) {
         if ((document.getElementById('cur-month').value == "") || (document.getElementById('cur-month').value == " ")) {
-            var curr_month = new Date().getFullYear().toString() + '-' + (new Date().getMonth() + 1).toString();
+            var month_no = (new Date().getMonth() + 1).toString();
+                if(month_no == 1)
+                    {
+                        month_no = '0'+month_no;
+                    }
+            var curr_month = new Date().getFullYear().toString() + '-' + month_no;
             document.getElementById('cur-month').value = curr_month;
+            console.log(curr_month);
             $.ajax({
                 type: 'POST',
                 url: timeTrackerBaseURL + 'index.php/admin/get_project_list',

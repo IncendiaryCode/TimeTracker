@@ -48,17 +48,6 @@ var configs = {
     options: {
         tooltips: {
                 enabled: true,
-                /*callbacks: {
-                    label: function (tooltipItem, data) {
-                        var item = tooltipItem.xLabel;
-                        var user = document.getElementById('user_time_chart').value;
-                        $('#user_time_chart').unbind().click(function()
-                        {
-                            var elmnt = document.getElementById(item);
-                            elmnt.scrollIntoView();
-                        });
-                    }
-                }*/
                 },
         title: {
             text: 'User snapshot',
@@ -126,12 +115,23 @@ if(document.getElementById('user-id') != null)
     $('#user-task-datatable').DataTable({
         "processing": true,
         "serverSide": true,
-
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/user_task_table',
             type: "POST",
-            "data": {"type": "user_task" , 'user_id': user_id }
+            "data": {"type": "user_task" , 'user_id': user_id },
+             "dataSrc": function ( json ) {
+                //Make your callback here.
+                if(json["status"] ==  false)
+                {
+                document.getElementById('search-error').innerHTML = "No results found";
+                }
+                else{
+                   document.getElementById('search-error').innerHTML = " "; 
+                }
+                return json.data;
+            }  
         },
+
         "order": [[ 0, "asc" ]],
         "columnDefs": [{
             "targets": 0,
@@ -152,7 +152,6 @@ if(document.getElementById('user-id') != null)
                 return total_time;
             }
         }]
-    }).on( 'init.dt', function () {
     });
 
     $('#user-project-datatable').DataTable({
@@ -161,7 +160,18 @@ if(document.getElementById('user-id') != null)
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/user_project_table',
             type: "POST",
-            "data": {"type":"user_project", 'user_id': user_id}
+            "data": {"type":"user_project", 'user_id': user_id},
+             "dataSrc": function ( json ) {
+                //Make your callback here.
+                if(json["status"] ==  false)
+                {
+                document.getElementById('user-project-error').innerHTML = "No results found";
+                }
+                else{
+                   document.getElementById('user-project-error').innerHTML = " "; 
+                }
+                return json.data;
+            } 
         },
         "order": [[ 0, "asc" ]],
         "columnDefs": [{

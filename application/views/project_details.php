@@ -92,6 +92,7 @@ $profile = $this->session->userdata('user_profile');
                     </tr>
                 </thead>
             </table>
+            <p id="project-datatabel-error" class="text-center"></p>
         </div>
     </div>
 
@@ -107,6 +108,7 @@ $profile = $this->session->userdata('user_profile');
                     </tr>
                 </thead>
             </table>
+            <p id="task-datatabel-error" class="text-center"></p>
         </div>
     </div>
     

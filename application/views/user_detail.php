@@ -35,7 +35,7 @@ $profile = $this->session->userdata('user_profile');
             <div class="card user-card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-3 ">
+                        <div class="col-3">
                             <div class="mx-auto d-block">
                                 <?php
                                 if($data['profile'] != ''){
@@ -92,7 +92,9 @@ $profile = $this->session->userdata('user_profile');
                 <th>Time spent</th>
             </tr>
         </thead>
-    </table><hr>
+    </table>
+    <p class="text-center" id="search-error"></p>
+    <hr>
     <p class="efficiency text-center mt-5">Project table</p>
     <table id="user-project-datatable" class="table table-striped table-bordered ">
         <thead>
@@ -103,6 +105,7 @@ $profile = $this->session->userdata('user_profile');
             </tr>
         </thead>
     </table>
+    <p class="text-center" id="user-project-error"></p>
 </div>
 <footer class="">
     <hr>

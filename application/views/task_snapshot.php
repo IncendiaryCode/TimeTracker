@@ -54,6 +54,7 @@ $profile = $this->session->userdata('user_profile');
                     </tr>
                 </thead>
             </table>
+            <p id="task-tabel-error" class="text-center"></p>
         </div>
     </div>
 </div>

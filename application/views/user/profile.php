@@ -28,6 +28,29 @@ $this->load->helper('url_helper');
                 </div>
             </div>
             <div class="row">
+                <div class="col-6 col-md-4 offset-md-2">
+                    <div class="card user-card">
+                        <div class="card-body">
+                           <h6 class="text-center">Total working hours for this month</h6>
+                           <p class="display-heading text-center mt-4">hrs</p>
+                        </div>
+                            
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 ">
+                    <div class="card user-card">
+                        <div class="card-body">
+                           <h6 class="text-center">Total working hours</h6>
+                           <p class="display-heading text-center mt-4">hrs</p>
+                        </div>
+                            
+                    </div>
+                </div>
+                <div class="col-12">
+                    <canvas id="user_prof_chart" height="80px;"></canvas>
+                </div>
+            </div>
+            <div class="row">
                 <div class="offset-md-4 col-md-4">
                     <table class="table mt-5">
                         <tbody id="table-body">

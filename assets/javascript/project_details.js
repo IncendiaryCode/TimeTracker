@@ -94,7 +94,18 @@ $(document).ready(function() {
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/user_project_table',
             type: "POST",
-            "data": { "type": "project_user" , 'project_id': project_id }
+            "data": { "type": "project_user" , 'project_id': project_id },
+             "dataSrc": function ( json ) {
+                //Make your callback here.
+                if(json["status"] ==  false)
+                {
+                document.getElementById('project-datatabel-error').innerHTML = "No results found";
+                }
+                else{
+                   document.getElementById('project-datatabel-error').innerHTML = " "; 
+                }
+                return json.data;
+            }
         },
         "order": [[ 0, "asc" ]],
         "columnDefs": [{
@@ -126,7 +137,18 @@ $(document).ready(function() {
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/user_task_table',
             type: "POST",
-            "data": { "type": "project_task" , 'project_id': project_id }
+            "data": { "type": "project_task" , 'project_id': project_id },
+             "dataSrc": function ( json ) {
+                //Make your callback here.
+                if(json["status"] ==  false)
+                {
+                document.getElementById('task-datatabel-error').innerHTML = "No results found";
+                }
+                else{
+                   document.getElementById('task-datatabel-error').innerHTML = " "; 
+                }
+                return json.data;
+            }
         },
         "order": [[ 0, "asc" ]],
         "columnDefs": [{
