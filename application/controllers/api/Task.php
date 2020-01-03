@@ -216,7 +216,7 @@ class Task extends REST_Controller {
                     $input['userid'] = $post['userid'];
                     $input['end_time'] = $post['time'];
                     $input['date'] = $post['date'];
-                    //$input['task_desc'] = '';
+                    $input['task_desc'] = '';
                     $input['flag'] = 0;
                     $input['task_id'] = $post['task_id'];
                     $resp = $this->user_model->stop_timer($input);
