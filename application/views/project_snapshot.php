@@ -65,7 +65,7 @@ $profile = $this->session->userdata('user_profile');
                     </a>
                 </div>
                 <div class="col-5">
-                    <p>Total users: <?=$proj['total_users'];?></p>
+                    <p>total users: <?=$proj['total_users'];?></p>
                      <?php foreach($proj['user_details'] as $user){  ?>     <!-- redirect to user detail page -->
                          <a href="<?=base_url();?>index.php/admin/load_userdetails_page?user_id=<?= $user['user_id']; ?>" class="pt-2 mr-3 mt-2">
                             <?= $user['user_name']; ?>

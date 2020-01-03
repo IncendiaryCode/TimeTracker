@@ -7,6 +7,12 @@ gradient = user_chart.createLinearGradient(0, 0, 0, 600);
 gradient.addColorStop(0, '#4b5bf0');
 gradient.addColorStop(1, '#ea4776');
 
+console.log(res)
+if(res['status'] == false)
+{
+    document.getElementById('profile-chart-error').innerHTML = "No work is done in this period";
+    user_profile_chart.destroy();
+}
 var data = JSON.parse(res);
 
 var configs = {
@@ -87,7 +93,12 @@ function load_year_chart()
 }
 $(document).ready(function()
 {	
-    
+
+
+    $('#view-profile-chart').on('click', function (e) {
+        e.preventDefault();
+        load_year_chart();
+    });
     load_year_chart();
 	if(document.getElementById('dark-mode-checkbox'))
 	{

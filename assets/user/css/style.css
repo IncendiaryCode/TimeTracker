@@ -125,13 +125,13 @@ header.main-header h1 {
     text-align: center;
     height: 100px;
     width: 100px;
-    margin-left: 45%;
+    margin-left: 65%;
     border-radius: 50%;
-    top: -10%;
+    top: -38%;
     z-index: 1;
     color: white;
     background-image: linear-gradient(to bottom right, #6f79fd, #df88fb, #ffdffd);
-    margin-top: 0%;
+    margin-top: -100px;
 }
 
 @media (min-width: 1024px) {
@@ -549,15 +549,13 @@ opacity: 0.5;
     left: 40%;
 }
 
-@media (min-width: 768px) {
-    .vl
-    {
-      border-left: 2px solid #ccc;
-      height: 120px;
-      margin-top: 10px;
-    }
-    
+.vl
+{
+  border-left: 2px solid #ccc;
+  height: 120px;
+  margin-top: 10px;
 }
+    
 
 
 .change_psw-footer

@@ -27,7 +27,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
-                            <?php echo unix_to_human($time_login); ?>
+                            Loged in at: <?php echo unix_to_human($time_login); ?>
                         </p>
                         <div class="font-weight-light text-center primary-timer" id="primary-timer">
                             00:00:00
@@ -53,7 +53,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                         <input type="hidden" id="<?php echo $taskinfo['task_id'] ?>" value="<?php echo $timer_start?>">
                         <input type="hidden" id="id<?=$id?>" value="<?php echo $taskinfo['task_id']?>">
                         <p class="font-weight-light time-font text-center login-time" id="start-time<?=$id?>">
-                            <?php echo unix_to_human($task_start);?>
+                            Started at: <?php  echo unix_to_human($task_start);?>
                         </p>
                         <div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer<?=$taskinfo['task_id']?>" data-type="" data-time="">
                             00:00:00

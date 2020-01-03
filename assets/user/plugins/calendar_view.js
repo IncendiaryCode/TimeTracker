@@ -5,6 +5,18 @@ Date.prototype.getWeek = function() {
     return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 }
 
+function minutesToTime(mins) {
+    var total_mins = Number(mins * 60);
+    var h = Math.floor(total_mins / 3600);
+    var m = Math.floor(total_mins % 3600 / 60);
+
+
+    var hDisplay = h > 0 ? h + (h == 1 ? "h. " : "h:") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? "m. " : "m.") : "";
+    return hDisplay + mDisplay;
+}
+
+
 var daily_chart;
 
 function loadTask(type, date) {
@@ -32,11 +44,7 @@ function loadTask(type, date) {
                             var stopCol = $('<div class="col-6 text-right" />');
                             var timeUsed = minutesToTime(data[x][y].t_minutes);
 
-                            var task_time_dec = data[x][y].t_minutes/60 - Math.floor(data[x][y].t_minutes/60);
-                            task_time_dec = task_time_dec.toString().slice(0,4);
-                            var total_time = Math.floor(data[x][y].t_minutes/60) + parseFloat(task_time_dec);
-
-                            stopCol.append('<i class="far fa-clock"></i> ' + total_time);
+                            stopCol.append('<i class="far fa-clock"></i> ' + timeUsed);
                             cardHeaderRow.append(stopCol);
                             cardHeader.append(cardHeaderRow);
 

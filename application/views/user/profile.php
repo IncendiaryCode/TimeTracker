@@ -7,15 +7,7 @@ $this->load->helper('url_helper');
     <div class="main-container container">
         <div class="main-container-inner">
             <div class="row mt-5">
-                <div class="col-md-6 offset-md-3">
-                    <div class="text-center">
-                        <img src="<?=base_url();?>assets/user/images/user_profiles/<?=$res['profile'];?>" width="30%;" class="rounded-circle figure mt-4 text-center">
-                        <h4 class="text-center employee-name mt-3">
-                            <?php echo $res['name'];?>
-                        </h4>
-                    </div>
-                </div>
-                <div class="col-12">
+                <div class="col-12 mt-5">
                     <form method="post" action="<?=base_url();?>index.php/user/dark" id="dark-mode">
                         <div class="dropdown text-right" id="dropdown-recent-acts">
                             <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
@@ -25,37 +17,16 @@ $this->load->helper('url_helper');
                         </div>
                     </form>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-6 col-md-4 offset-md-2">
-                    <div class="card user-card ">
-                        <div class="card-body">
-                            <h6 class="text-center">Total working hours for this month</h6>
-                            <p class="display-heading text-center mt-4"><?php echo $res['t_minutes'];?> hrs</p>
-                        </div>
-                    </div>
-                </div>
-                <p class="vl"></p>
-                <div class="col-6 col-md-4">
-                    <div class="card user-card ">
-                        <div class="card-body">
-                            <h6 class="text-center">Total working hours</h6>
-                            <p class="display-heading text-center mt-4"><?php echo $res['total_time'];?> hrs</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
 
-                    <div class="input-group">
-                        <!-- chart that shows monthly activities -->
-                        <input type="number" class="form-control" id="year-chart">
-                        <button class="btn btn-primary" onclick="load_year_chart()">view chart</button>
+                <div class="col-md-4 offset-md-2 text-center">
+                    <div>
+                        <img src="<?=base_url();?>assets/user/images/user_profiles/<?=$res['profile'];?>" width="30%;" class="rounded-circle figure mt-4 text-center">
+                        <h4 class="employee-name mt-3">
+                            <?php echo $res['name'];?>
+                        </h4>
                     </div>
-                    <canvas id="user_prof_chart" height="80px;"></canvas>
                 </div>
-            </div>
-            <div class="row">
-                <div class="offset-md-4 col-md-4">
+                <div class="col-md-4">
                     <table class="table mt-5">
                         <tbody id="table-body">
                             <table>
@@ -72,14 +43,46 @@ $this->load->helper('url_helper');
                                             <?php echo ($res['phone'] != 0)?$res['phone']:'';?>
                                         </td>
                                     </tr>
-                                    
                                 </tbody>
                             </table>
                         </tbody>
                     </table>
                 </div>
+                
+            </div><hr>
+            <div class="row shadow-lg">
+                <div class="col-6 col-md-4 offset-md-2">
+                    <div class="card user-card ">
+                        <div class="card-body">
+                            <h6 class="text-center">Total working hours for this month</h6>
+                            <p class="display-heading text-center mt-4"><?php echo $res['t_minutes'];?> hrs</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="vl"></p>
+                <div class="col-5 col-md-4 ">
+                    <div class="card user-card ">
+                        <div class="card-body">
+                            <h6 class="text-center">Total working hours</h6>
+                            <p class="display-heading text-center mt-4"><?php echo $res['total_time'];?> hrs</p>
+                        </div>
+                    </div>
+                </div>
+            </div><hr>
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                    <div class="input-group col-6 offset-6 pt-4">
+                        <!-- chart that shows monthly activities -->
+                        <input type="number" class="form-control" id="year-chart">
+                        <button class="btn btn-primary" id="view-profile-chart" >view chart</button>
+                    </div></div>
+                </div>
+                    <canvas id="user_prof_chart" height="80px;"></canvas>
+                    <p class="text-center" id="profile-chart-error"></p>
+                </div>
             </div>
-        </div>
+        
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <?php
         if(!empty($GLOBALS['dark_mode'])){
@@ -92,7 +95,7 @@ $this->load->helper('url_helper');
         $('#dark-mode-checkbox').removeAttr("checked");
         </script>
         <?php }} ?>
-        <footer class="">
+        <footer >
             <hr>
             <p class="text-center">Copyright © 2019 Printgreener.com</p>
         </footer>
