@@ -166,11 +166,12 @@ class Task extends REST_Controller {
                         $data['msg']    = "Something went wrong.";
                     }
                 }
-                $this->response($data, REST_Controller::HTTP_OK);
+                
             }else{
                 $data['success'] = 0;
                 $data['msg'] = 'Parameters error!';
             }
+            $this->response($data, REST_Controller::HTTP_OK);
         }else{
             $this->response($verify_data, REST_Controller::HTTP_OK);
         }
@@ -201,6 +202,52 @@ class Task extends REST_Controller {
             $this->response($verify_data, REST_Controller::HTTP_OK);
         }
         
+    }
+
+    public function update_time_post(){
+        $headers = $this->input->request_headers();
+        $verify_data = $this->verify->verify_request($headers);
+        if(isset($verify_data->username))
+        {
+            $post = $this->input->post();
+            if(!empty($post['type']) && !empty($post['userid']) && (($post['type'] =='task' && !empty($post['task_id'])) || $post['type'] == 'login') && !empty($post['date']) && !empty($post['time'])){
+                if($post['type'] == 'task')
+                {
+                    $input['userid'] = $post['userid'];
+                    $input['end_time'] = $post['time'];
+                    $input['date'] = $post['date'];
+                    //$input['task_desc'] = '';
+                    $input['flag'] = 0;
+                    $input['task_id'] = $post['task_id'];
+                    $resp = $this->user_model->stop_timer($input);
+                    if ($resp) {
+                        $data['success'] = 1;
+                        $data['msg']    = "Timer stopped Successfully.";
+                    } //$data
+                    else {
+                        $data['success'] = 0;
+                        $data['msg']    = "Something went wrong.";
+                    }
+                }else if($post['type'] == 'login'){
+                    $result = $this->user_model->update_logout_time_device($post);
+                    if ($result) {
+                        $data['success'] = 1;
+                        $data['msg']    = "Timer stopped Successfully.";
+                    } //$data
+                    else {
+                        $data['success'] = 0;
+                        $data['msg']    = "Something went wrong.";
+                    }
+                }
+
+            }else{
+                $data['success'] = 0;
+                $data['msg'] = 'Parameters error!';
+            }
+            $this->response($data, REST_Controller::HTTP_OK);
+        }else{
+            $this->response($verify_data, REST_Controller::HTTP_OK);
+        }
     }
     	
 }

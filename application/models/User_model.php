@@ -191,7 +191,11 @@ class User_model extends CI_Model {
         if($query->num_rows() > 0){
             $data = $query->row_array(); 
             if($req_data['end_time'] != ''){
-                $update_time = date('Y-m-d H:i:s',strtotime($req_data['end_time'])); 
+                if(isset($req_data['date'])){
+                    $update_time = $req_data['date']." ".date("H:i:s",strtotime($req_data['end_time']));
+                }else{
+                    $update_time = date('Y-m-d H:i:s',strtotime($req_data['end_time']));  
+                }
             }else{
                 $update_time = date('Y-m-d H:i:s'); 
             }
@@ -761,6 +765,27 @@ class User_model extends CI_Model {
             return false;
         }
 
+    }
+
+    public function update_logout_time_device($req_data){ //print_r($req_data);
+        //check for entry with the same login date
+        $this->db->where(array('task_date'=>$req_data['date'],'user_id'=>$req_data['userid'],'end_time IS NULL'));
+        $this->db->order_by("id", "desc");
+        $query_check = $this->db->get('login_details');
+        if($query_check->num_rows()>0){
+            $data = $query_check->row_array();
+            $array = array('end_time'=>$req_data['date']." ".date("H:i:s",strtotime($req_data['time'])),'modified_on'=>date('Y:m:d H:i:s'));
+            $this->db->where('id',$data['id']);
+            $query = $this->db->update('login_details',$array);
+            if($this->db->affected_rows() == 1){
+                //print_r($this->db->last_query());die;
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
     }
 }
 ?>
