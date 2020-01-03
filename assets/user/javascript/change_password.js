@@ -20,6 +20,7 @@ if (validate) {
 
             return false;
         } else {
+            $('#alertMsg').attr('class', "text-success");
             document.getElementById('alertMsg').innerHTML = "Password changed successfully!!!";
             return true; /**/
         }

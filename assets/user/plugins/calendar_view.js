@@ -16,7 +16,6 @@ function minutesToTime(mins) {
     return hDisplay + mDisplay;
 }
 
-
 var daily_chart;
 
 function loadTask(type, date) {
@@ -362,7 +361,6 @@ function printChart(start, width, top, color, task_name) {
     {
         graph_id++;
     }
-    
     same_task=0;
     last_task_name.push(task_name);
 }
@@ -473,7 +471,7 @@ function drawMonthlyChart(res) {
         var year = parseInt(res['data'][k][0].slice(0, 4).toString());
         var month = parseInt(res['data'][k][0].slice(5, 7)) - 1;
         var day = parseInt(res['data'][k][0].slice(8, 10));
-        var value = parseInt(res['data'][k][1]);
+        var value = res['data'][k][1];
         dataTable.addRows([
             [new Date(year, month, day), value],
         ]);
@@ -500,7 +498,7 @@ function drawMonthlyChart(res) {
 
     function selectHandler() {
         var selectedItem = chart.getSelection();
-        if (selectedItem[0]['row']) {
+        if (selectedItem[0]['row'] != undefined) {
             var topping = dataTable.getValue(selectedItem[0].row, 0);
             var day_from_year = (topping.toString().slice(11, 15)) + '-' + getMonth(topping.toString().slice(4, 7)) + '-' + topping.toString().slice(8, 10);
             document.getElementById('daily-chart').value = day_from_year;
