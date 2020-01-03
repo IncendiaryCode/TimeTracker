@@ -53,7 +53,16 @@ $profile = $this->session->userdata('user_profile');
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 text-center">
-                            <div><span class="display-heading"><strong><?=$details['project_name'] ?></strong></span></div>
+                            <div><span class="display-heading">
+                                <?php
+                            if($details['image_name'] != ''){
+                                ?>
+                                <img src="<?=base_url();?>assets/images/<?=$details['image_name'];?>" width="40px;">
+                                <input type="hidden" id="project-id" name="" value="<?=$details['project_id'] ?>">
+                                <?php
+                            } ?>
+                            <strong><?=$details['project_name']; ?></strong>
+                            </div>
                             <div><span class="display-heading "><?=$details['tasks_count'] ?></span></div>
                             <p class="text-center">Total tasks</p>
                         </div>
@@ -118,7 +127,7 @@ $profile = $this->session->userdata('user_profile');
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>Adding users</h4>
+                <h4>Adding user</h4>
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">

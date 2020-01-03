@@ -546,8 +546,20 @@ opacity: 0.5;
 {
     position: absolute;
     bottom: 0px;
-    left: 35%;
+    left: 40%;
 }
+
+@media (min-width: 768px) {
+    .vl
+    {
+      border-left: 2px solid #ccc;
+      height: 120px;
+      margin-top: 10px;
+    }
+    
+}
+
+
 .change_psw-footer
 {
     margin-top: 130px;
@@ -560,9 +572,15 @@ opacity: 0.5;
 @media (max-width: 700px)
 {
     .cust_daily_chart
-{
-    padding-top: 10px;
-}
+        {
+            padding-top: 10px;
+        }
+        .profile-footer
+        {
+            position: absolute;
+            bottom: 0px;
+            left: 17%;
+        }
 }
 #daily
 {

@@ -11,7 +11,7 @@ $this->load->helper('url_helper');
                     <div class="text-center">
                         <img src="<?=base_url();?>assets/user/images/user_profiles/<?=$res['profile'];?>" width="30%;" class="rounded-circle figure mt-4 text-center">
                         <h4 class="text-center employee-name mt-3">
-                            <?php echo $res['name'];?>
+                            <?php echo $res[0]['name'];?>
                         </h4>
                     </div>
                 </div>
@@ -20,8 +20,7 @@ $this->load->helper('url_helper');
                         <div class="dropdown text-right" id="dropdown-recent-acts">
                             <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
-
-                                <div class="dropdown-item checkbox"><input type="hidden" name="status" id="hidden-status"><input type="checkbox"  id="dark-mode-checkbox" name="dark-mode"> Dark mode</div>
+                                <div class="dropdown-item checkbox"><input type="hidden" name="status" id="hidden-status"><input type="checkbox" id="dark-mode-checkbox" name="dark-mode"> Dark mode</div>
                             </div>
                         </div>
                     </form>
@@ -29,24 +28,29 @@ $this->load->helper('url_helper');
             </div>
             <div class="row">
                 <div class="col-6 col-md-4 offset-md-2">
-                    <div class="card user-card">
+                    <div class="card user-card ">
                         <div class="card-body">
-                           <h6 class="text-center">Total working hours for this month</h6>
-                           <p class="display-heading text-center mt-4">hrs</p>
+                            <h6 class="text-center">Total working hours for this month</h6>
+                            <p class="display-heading text-center mt-4">hrs</p>
                         </div>
-                            
                     </div>
                 </div>
-                <div class="col-6 col-md-4 ">
-                    <div class="card user-card">
+                <p class="vl"></p>
+                <div class="col-6 col-md-4">
+                    <div class="card user-card ">
                         <div class="card-body">
-                           <h6 class="text-center">Total working hours</h6>
-                           <p class="display-heading text-center mt-4">hrs</p>
+                            <h6 class="text-center">Total working hours</h6>
+                            <p class="display-heading text-center mt-4">hrs</p>
                         </div>
-                            
                     </div>
                 </div>
                 <div class="col-12">
+
+                    <div class="input-group">
+                        <!-- chart that shows monthly activities -->
+                        <input type="number" class="form-control" id="year-chart">
+                        <button class="btn btn-primary" onclick="load_year_chart()">view chart</button>
+                    </div>
                     <canvas id="user_prof_chart" height="80px;"></canvas>
                 </div>
             </div>
@@ -59,19 +63,19 @@ $this->load->helper('url_helper');
                                     <tr>
                                         <th width="50%">Email :</th>
                                         <td width="50%">
-                                            <?php echo $res['email'];?>
+                                            <?php echo $res[0]['email'];?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th width="50%">Phone number :</th>
                                         <td width="50%">
-                                            <?=$res['phone'];?>
+                                            <?=$res[0]['phone'];?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Type :</th>
                                         <td>
-                                            <?=$res['type'];?>
+                                            <?=$res[0]['type'];?>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -85,16 +89,16 @@ $this->load->helper('url_helper');
         <?php
         if(!empty($GLOBALS['dark_mode'])){
     if ($GLOBALS['dark_mode'] == 1) { ?>
-        <script type="text/javascript">        
-                $('#dark-mode-checkbox').attr("checked","checked"); 
+        <script type="text/javascript">
+        $('#dark-mode-checkbox').attr("checked", "checked");
         </script>
         <?php }  else { ?>
         <script type="text/javascript">
-                $('#dark-mode-checkbox').removeAttr("checked");
+        $('#dark-mode-checkbox').removeAttr("checked");
         </script>
-      <?php }} ?> 
-        <footer  class="profile-footer">
-        <hr>
+        <?php }} ?>
+        <footer class="">
+            <hr>
             <p class="text-center">Copyright © 2019 Printgreener.com</p>
         </footer>
     </div>

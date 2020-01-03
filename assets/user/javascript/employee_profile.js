@@ -1,48 +1,23 @@
 var user_profile_chart;
-function __draw_chart(res)
+function __draw_profile_chart(res)
 {
 var user_chart = document.getElementById('user_prof_chart').getContext('2d');
-var color = Chart.helpers.color;
 gradient = user_chart.createLinearGradient(0, 0, 0, 600);
 
 gradient.addColorStop(0, '#4b5bf0');
 gradient.addColorStop(1, '#ea4776');
 
-    var user_data = [];
-
-    var task_labels = [];
-    var user_labels = [];
-
-    var task_time_value = [];
-    var user_time_value = [];
-
-    var chart_color = "000000";
-
 var data = JSON.parse(res);
-data  = data['data'];
-for(var i=0; i<data.length; i++)
-{
-task_labels[i] = data[i]['task_date'];
-task_time_value[i] = data[i]['t_minutes']/60;
-}
 
-for(var ind=0; ind<task_time_value.length; ind++)
-{
-    var task_time_dec = task_time_value[ind] - Math.floor(task_time_value[ind]);
-    task_time_dec = task_time_dec.toString().slice(0,4);
-    var total_time = Math.floor(task_time_value[ind]) + parseFloat(task_time_dec);
-    task_time_value[ind] = total_time;
-}
 var configs = {
     type: 'bar',
     data: {
-        labels: task_labels,
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct','Nov','Dec'],
         datasets : [{
         label:"time spent in hrs",
         backgroundColor: gradient,
         borderColor:window.chartColors.green,
-        fill: false,
-        data: task_time_value
+        data: data['res']
     }],
     },
     options: {
@@ -92,18 +67,28 @@ if (user_profile_chart) user_profile_chart.destroy();
  user_profile_chart = new Chart(user_chart, configs);
 }
 
-$(document).ready(function()
-{	
+function load_year_chart()
+{
+  var year = document.getElementById('year-chart').value;
+    if (year == "" || year == " " || year == null) {
+        var cur_year = parseInt(new Date().toString().slice(10, 15));
+        document.getElementById('year-chart').value = cur_year;
+        year = cur_year;
+        document.getElementById("year-chart").setAttribute("max", cur_year);
+    }
     $.ajax({
         type: 'POST',
         url: timeTrackerBaseURL + 'index.php/user/user_chart',
+        data:{ "date":year},
         success: function(res) {
-        	console.log(res);
-            __draw_chart(res);
+            __draw_profile_chart(res);
         }    
-    });
-
-
+    });  
+}
+$(document).ready(function()
+{	
+    
+    load_year_chart();
 	if(document.getElementById('dark-mode-checkbox'))
 	{
 	    $("input:checkbox").change(
