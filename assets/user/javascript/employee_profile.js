@@ -99,7 +99,11 @@ $(document).ready(function()
         e.preventDefault();
         load_year_chart();
     });
-    load_year_chart();
+
+    if(document.getElementById('year-chart')){
+        load_year_chart();
+    }
+    
 	if(document.getElementById('dark-mode-checkbox'))
 	{
 	    $("input:checkbox").change(

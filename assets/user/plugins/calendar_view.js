@@ -517,8 +517,9 @@ $(document).ready(function() {
     //Tab Change
     var win_width = $('.cust_daily_chart').width();
     var p_l = parseInt(win_width) / 23;
-    $('.cust_chart').css("padding-left", p_l);
-    var daily_value = document.getElementById('daily-chart').value;
+    $('.cust_chart').css("padding-left", p_l); 
+
+    // var daily_value = document.getElementById('daily-chart').value;
 
     $("#daily-chart").change(function() {
         loadDailyChart();

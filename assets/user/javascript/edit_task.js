@@ -51,7 +51,7 @@ var timerStopModal = function () {
 
 $(document).ready(function()
 {
-var taskid = document.getElementById('curr-taskid').value;
+// var taskid = document.getElementById('curr-taskid').value;
 var timerModal = timerStopModal();
 $('#stop-or-complete').on('click', function () {
     timerModal.modal('show');

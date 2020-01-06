@@ -1,12 +1,12 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 class User extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
         //$GLOBALS['dark_mode'] = 0;
-            /*if($GLOBALS['dark_mode'] == 0){
+        /*if($GLOBALS['dark_mode'] == 0){
                 $GLOBALS['dark_mode'] = 0;
             }else{
                 $GLOBALS['dark_mode'] = 1;
@@ -35,71 +35,76 @@ class User extends CI_Controller
             $task_details['task_info'] = $this->user_model->task_status();
             $this->load->view('user/user_dashboard', $task_details);
             $this->load->view('user/footer');
-        }else{
+        } else {
             redirect('login/index', 'refresh');
         }
     }
-    public function dark(){
+    public function dark()
+    {
         $GLOBALS['dark_mode'] = 0;
         $this->form_validation->set_rules('dark-mode', 'Check box', 'required');
-        if($this->input->post('status') == TRUE){
-                $GLOBALS['dark_mode'] = 1;
-            }else{
-                $GLOBALS['dark_mode'] = 0;
-            }
-            /*$GLOBALS['page_title'] = 'My profile';
+        if ($this->input->post('status') == TRUE) {
+            $GLOBALS['dark_mode'] = 1;
+        } else {
+            $GLOBALS['dark_mode'] = 0;
+        }
+        /*$GLOBALS['page_title'] = 'My profile';
             $userid = $this->session->userdata('userid');
             $data['res']           = $this->user_model->my_profile($userid);
             $data['mode'] = $GLOBALS['dark-mode'];
             $this->load->view('user/header');
             $this->load->view('user/profile', $data);
             $this->load->view('user/footer');*/
-            redirect('user/load_my_profile');
+        redirect('user/load_my_profile');
     }
     public function load_task_data() //Load task data to user dashboard
     {
-        if ($this->input->get('type',TRUE)) {
+        if ($this->input->get('type', TRUE)) {
             $type                 = $this->input->get('type', TRUE);
             $date                 = '';
-        }else if(!empty($this->input->get('chart_type'))){
+        } else if (!empty($this->input->get('chart_type'))) {
             $date = $this->input->get('date');
-            if($this->input->get('chart_type') == 'daily_chart'){
-                $type = 'daily_chart'; 
-            }else if($this->input->get('chart_type') == 'weekly_chart'){
+            if ($this->input->get('chart_type') == 'daily_chart') {
+                $type = 'daily_chart';
+            } else if ($this->input->get('chart_type') == 'weekly_chart') {
                 $type = 'weekly_chart';
-            }else{
+            } else {
                 $type = 'monthly_chart';
             }
         }
-        $task_details['data'] = $this->user_model->get_task_details($type,$date);
-        if($task_details['data'] == NULL){
+        $task_details['data'] = $this->user_model->get_task_details($type, $date);
+        if ($task_details['data'] == NULL) {
             $task_details['status'] = FALSE;
             $task_details['data'] = NULL;
             $task_details['msg'] = "No activity in this date.";
-        }else{
+        } else {
             $task_details['status'] = TRUE;
         }
         echo json_encode($task_details);
     }
+
     //Start timer function
     public function start_timer()
     {
-        $task_type   = $this->input->post('id');
+        // $task_type   = $this->input->post('id');
         $data['userid'] = $this->session->userdata('userid');
         $data['task_type'] = $this->input->post('action', TRUE);
-        if($data['task_type']  == 'task')
-            $data['task_id'] = $this->input->post('id'); 
+        if ($data['task_type']  == 'task')
+            $data['task_id'] = $this->input->post('id');
         $result = $this->user_model->start_timer($data);
         if (!$result) {
             $output_result['status'] = FALSE;
-            $output_result['msg']    = "Timer did not start.";
-        }
-        else {
+            $output_result['msg']    = "Timer not initiated.";
+        } else {
             $output_result['status'] = TRUE;
+            $output_result['id'] = $this->input->post('id');
+            $output_result['name'] = "dummy task name";
+            $output_result['time'] = "2020-01-06 10:03 AM";
             $output_result['msg']    = "Timer started.";
         }
         echo json_encode($output_result);
     }
+
     //Stop Timer function
     public function stop_timer()
     {
@@ -107,9 +112,9 @@ class User extends CI_Controller
         $end_time = isset($post_data['end_time']) ? $post_data['end_time'] : '';
         $data['userid'] = $this->session->userdata('userid');
         $data['end_time'] = $end_time;
-        $data['task_desc'] = isset($post_data['task-description'])?$post_data['task-description']:'';
-        $data['flag'] = isset($post_data['flag'])?$post_data['flag']:'';
-        
+        $data['task_desc'] = isset($post_data['task-description']) ? $post_data['task-description'] : '';
+        $data['flag'] = isset($post_data['flag']) ? $post_data['flag'] : '';
+
         if ($this->input->post('id')) {
             $task_id = $this->input->post('id', TRUE);
             //$end_time = !empty($this->input->post('end_time')) ? $this->input->post('end_time') : '';
@@ -118,15 +123,13 @@ class User extends CI_Controller
             if ($result == FALSE) {
                 $output_result['status'] = FALSE;
                 $output_result['msg']    = "Something went wrong.";
-            }
-            else {
+            } else {
                 $output_result['flag']   = $result;
                 $output_result['status'] = TRUE;
                 $output_result['msg']    = "Timer stop.";
             }
             echo json_encode($output_result);
-        }
-        else {
+        } else {
             $task_id = $this->input->get('id', TRUE);
             $data['task_id'] = $task_id;
             if ($task_id == '') {
@@ -136,9 +139,8 @@ class User extends CI_Controller
                 $output_result['task_info'] = $this->user_model->task_status();
                 $this->load->view('user/user_dashboard', $output_result);
                 $this->load->view('user/footer');
+            } else {
 
-            }else{
-                
                 $result = $this->user_model->stop_timer($data);
                 if ($result == FALSE) {
                     $output_result['status'] = $result;
@@ -147,8 +149,7 @@ class User extends CI_Controller
                     $output_result['task_info'] = $this->user_model->task_status();
                     $this->load->view('user/user_dashboard', $output_result);
                     $this->load->view('user/footer');
-                }
-                else if ($result == TRUE) {
+                } else if ($result == TRUE) {
                     $output_result['flag']   = $result;
                     $output_result['status'] = TRUE;
                     $output_result['msg']    = "Task stopped and end time is updated.";
@@ -158,7 +159,7 @@ class User extends CI_Controller
                     $this->load->view('user/footer');
                 }
             }
-        } 
+        }
     }
     //Load employee activities page
     public function load_employee_activities()
@@ -196,11 +197,9 @@ class User extends CI_Controller
     public function task_exists()
     {
         if ($this->user_model->task_exists() == TRUE) {
-            $this->form_validation->set_message('task_exists','Task name exists.');
+            $this->form_validation->set_message('task_exists', 'Task name exists.');
             return false;
-            
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -219,8 +218,7 @@ class User extends CI_Controller
             if (!$result) {
                 $output_result['status'] = FALSE;
                 $output_result['msg']    = "Something went wrong.";
-            }
-            else {
+            } else {
                 $timer['userid'] = $this->session->userdata('userid');
                 $timer['task_type'] = 'task';
                 $timer['task_id'] = $result;
@@ -235,8 +233,7 @@ class User extends CI_Controller
                 }
                 echo json_encode($output_result);
             }
-        }
-        else {
+        } else {
             $data['action'] = 'add_task';
             $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|callback_task_exists|xss_clean');
             //$this->form_validation->set_rules('task_desc', 'Task Description', 'trim|required');
@@ -249,8 +246,7 @@ class User extends CI_Controller
                 $data['result'] = $this->user_model->get_project_name();
                 $this->load->view('user/add_task', $data);
                 $this->load->view('user/footer');
-            }
-            else {
+            } else {
                 $data['userid'] = $this->session->userdata('userid');
                 $data['project_module'] = $this->input->post('project_module');
                 $data['project_id'] = $this->input->post('project_name');
@@ -264,8 +260,7 @@ class User extends CI_Controller
                     $data['failure'] = "Something went wrong.";
                     $this->load->view('user/add_task', $data);
                     $this->load->view('user/footer');
-                }
-                else {
+                } else {
                     $this->load->view('user/header');
                     $data['result']  = $this->user_model->get_project_name();
                     $data['success'] = "Successfully added.";
@@ -281,11 +276,9 @@ class User extends CI_Controller
         $GLOBALS['page_title'] = 'Edit task';
         if (isset($_GET['t_id'])) {
             $t_id = $this->input->get('t_id', TRUE);
-        }
-        else if (isset($_POST['t_id'])) {
+        } else if (isset($_POST['t_id'])) {
             $t_id = $this->input->post('t_id', TRUE);
-        }
-        else {
+        } else {
             $t_id = $this->input->post('task_id', TRUE);
         }
         $taskid['task_data'] = $this->user_model->get_task_info($t_id);
@@ -299,16 +292,15 @@ class User extends CI_Controller
         $GLOBALS['page_title'] = 'Edit task';
         $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|xss_clean');
         $this->form_validation->set_rules('task_desc', 'Task Description', 'trim|required');
-       // $this->form_validation->set_rules('start_time','Task Start Date','required');
-       // $this->form_validation->set_rules('end_time','Task End Date','required');
+        // $this->form_validation->set_rules('start_time','Task Start Date','required');
+        // $this->form_validation->set_rules('end_time','Task End Date','required');
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('user/header');
             $t_id              = $this->input->post('task_id', TRUE);
             $data['task_data'] = $this->user_model->get_task_info($t_id);
             $this->load->view('user/edit_task', $data);
             $this->load->view('user/footer');
-        }
-        else {
+        } else {
             $data['action'] = 'edit';
             $data['userid'] = $this->session->userdata('userid');
             $data['project_module'] = $this->input->post('project_module');
@@ -325,8 +317,7 @@ class User extends CI_Controller
                 $data['failure']   = "Something went wrong.";
                 $this->load->view('user/edit_task', $data);
                 $this->load->view('user/footer');
-            }
-            else {
+            } else {
                 $this->load->view('user/header');
                 $t_id              = $this->input->post('task_id', TRUE);
                 $data['task_data'] = $this->user_model->get_task_info($t_id);
@@ -343,7 +334,7 @@ class User extends CI_Controller
             $config['upload_path']   = IMAGE_PREVIEW_PATH;
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
             $config['overwrite']     = FALSE;
-           // $config['encrypt_name']  = TRUE;
+            // $config['encrypt_name']  = TRUE;
             $config['remove_spaces'] = TRUE;
             $config['file_name']     = $_FILES['change_img']['name'];
             $this->load->library('upload', $config);
@@ -353,14 +344,12 @@ class User extends CI_Controller
                 $picture    = array(
                     'profile' => $uploadData['file_name']
                 ); //to update profile in db(profile column)
-            }
-            else {
-                
+            } else {
+
                 echo $this->upload->display_errors();
                 $picture = '';
             }
-        }
-        else {
+        } else {
             $picture = '';
         }
         $this->user_model->submit_profile($picture);
@@ -374,11 +363,11 @@ class User extends CI_Controller
         $GLOBALS['page_title'] = 'My profile';
         $userid = $this->session->userdata('userid');
         $data['res']           = $this->user_model->my_profile($userid);
-        if($data['res'] != NULL){
+        if ($data['res'] != NULL) {
             $this->load->view('user/header');
             $this->load->view('user/profile', $data);
             $this->load->view('user/footer');
-        }else{
+        } else {
             $data['res'] = 'No profile Data present.';
             $this->load->view('user/header');
             $this->load->view('user/profile', $data);
@@ -386,13 +375,14 @@ class User extends CI_Controller
         }
     }
 
-    public function user_chart(){
+    public function user_chart()
+    {
         $year = $this->input->post('date');
         $data['res'] = $this->user_model->user_chart_data($year);
-        if($data['res'] == NULL){
+        if ($data['res'] == NULL) {
             $data['status'] = FALSE;
             $data['msg'] = "No chart Data.";
-        }else{
+        } else {
             $data['status'] = TRUE;
         }
         echo json_encode($data);
@@ -402,8 +392,7 @@ class User extends CI_Controller
     {
         if ($this->user_model->password_exists() == TRUE) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -417,16 +406,14 @@ class User extends CI_Controller
             $this->load->view('user/header');
             $this->load->view('user/change_password');
             $this->load->view('user/footer');
-        }
-        else {
+        } else {
             $result = $this->user_model->change_password();
             if (!$result) {
                 $this->session->set_flashdata('err_msg', 'Passwords do not match..');
                 $this->load->view('user/header');
                 $this->load->view('user/change_password');
                 $this->load->view('user/footer');
-            }
-            else {
+            } else {
                 $this->session->set_flashdata('success', 'Successfully Changed.');
                 redirect('/login/index', 'refresh');
             }
@@ -443,8 +430,7 @@ class User extends CI_Controller
             $task_details['msg']       = "Logout time updated.";
             $this->load->view('user/user_dashboard', $task_details);
             $this->load->view('user/footer');
-        }
-        else {
+        } else {
             $this->load->view('user/header');
             $task_details['task_info'] = $this->user_model->task_status();
             $task_details['msg']       = "Logout time not updated.";
@@ -453,4 +439,3 @@ class User extends CI_Controller
         }
     }
 }
-?>
