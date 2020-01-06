@@ -12,12 +12,12 @@ $GLOBALS['page_title'] = 'Add Task';
                         if(validation_errors()) { ?>
                     <div class="alert alert-danger">
                         <?php echo validation_errors();
-                        echo isset($failure)?$failure:"";
+                        echo (!empty($this->session->flashdata('failure')))?$this->session->flashdata('failure'):'';
                          ?>
                     </div>
                     <?php } ?>
                     <div class="alert-success">
-                        <?php echo isset($success)?$success:""; ?>
+                        <?php echo (!empty($this->session->flashdata('success')))?$this->session->flashdata('success'):''; ?>
                             <p id="alartmsg" class="text-center"></p>
                     </div>
                     <form action="<?=base_url();?>index.php/user/add_tasks" method="post" id="addTask" class="mt-5 ">

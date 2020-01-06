@@ -11,16 +11,16 @@ $GLOBALS['page_title'] = 'Edit task';
                         if(validation_errors()) { ?>
                     <div class="alert alert-danger">
                         <?php echo validation_errors();
-                        echo isset($failure)?$failure:"";
+                        echo (!empty($this->session->flashdata('failure')))?$this->session->flashdata('failure'):'';
                          ?>
                     </div>
                     <?php } ?>
                     <div class="alert-success">
-                        <?php echo isset($success)?$success:""; ?>
-                    </div>
+                        <?php echo (!empty($this->session->flashdata('success')))?$this->session->flashdata('success'):''; ?>
+                         </div>
                     <form action="<?=base_url();?>index.php/user/edit_task?type=edit" method="post" id="editTask" class="mt-5 ">
-                        <input type="hidden" name="task_id" id="curr-taskid" value="<?=$task_data[0]['task_id'];?>">
-                        <?php if($task_data[0]['running_task'] == 1)
+                        <input type="hidden" name="task_id" id="curr-taskid" value="<?=$task_data[0][0]['task_id'];?>">
+                        <?php if($task_data[1]['running_task'] == 1)
                         { ?>
                         <button type="button" id="stop-or-complete" class="text-center shadow-lg icon-width stop-or-complete">
                             <div data-tasktype="Task" data-id="80">
@@ -30,17 +30,17 @@ $GLOBALS['page_title'] = 'Edit task';
                         <?php } ?>
                         <div class="form-group">
                             <label for="task-name ">Write the task name</label>
-                            <input type="text" class="form-control" name="task_name" id="Taskname" value="<?=$task_data[0]['task_name'];?>">
+                            <input type="text" class="form-control" name="task_name" id="Taskname" value="<?=$task_data[0][0]['task_name'];?>">
                         </div>
                         <div class="form-group">
                             <label for="description">Write a small description</label>
-                            <textarea class="form-control" id="description" name="task_desc" rows="4"><?=$task_data[0]['description'];?></textarea>
+                            <textarea class="form-control" id="description" name="task_desc" rows="4"><?=$task_data[0][0]['description'];?></textarea>
                         </div>
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
-                            <select readonly="" type="number" class="form-control" id="choose-project" name="project_name">
-                                <option selected value=<?php echo $task_data[0]['project_id']?>>
-                                    <?=$task_data[0]['name'];?>
+                            <select readonly="" type="number" class="form-control" id="choose-project" name="project">
+                                <option selected value=<?php echo $task_data[0][0]['project_id']?>>
+                                    <?=$task_data[0][0]['name'];?>
                                 </option>
                             </select>
                         </div>
@@ -53,7 +53,7 @@ $GLOBALS['page_title'] = 'Edit task';
                         </div>
                         <div class="row" id="total-row">
                             <?php $num = 0;
-                          foreach($task_data as $task){
+                          foreach($task_data[0] as $task){
                             ?>
                                 <div class="col-1 col-md-1  mt-3">
                                 <input type="hidden" name="time[<?=$num?>][table_id]" value="<?php echo $task['id']?>" >

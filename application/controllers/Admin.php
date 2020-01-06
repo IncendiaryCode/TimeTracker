@@ -39,48 +39,44 @@
 
 		//Load user analytics page
 		public function load_snapshot(){
-if(($this->session->userdata('logged_in'))==TRUE){
-			$result = array();
-			$get_data = $this->input->get();
-
-			// echo '<pre>'; print_r($get_data); exit;
-
-			if($this->input->get('type')){
-				$type = $this->input->get('type',TRUE);
-			}else{
-				$type = $this->input->post('type',TRUE);
-			}
-			
-			if($type == 'user'){
-				$this->load->view('header');
-				$result['data'] = $this->dashboard_model->get_task_details($type);
-		        $this->load->view('user_snapshot',$result);
-		        $this->load->view('footer');
-			}
-			else if($type == 'project'){
-				$this->load->view('header');
-				$result['data'] = $this->dashboard_model->get_task_details($type);
-		        $this->load->view('project_snapshot',$result);
-		        $this->load->view('footer');
-			}
-			else if($type == 'task'){
-				$draw = intval($this->input->post("draw"));
-				//$list = $this->dashboard_model->get_datatables();
-				$result['data'] = $this->dashboard_model->get_task_details($type);
-				if($result['data'] == NULL){
-					$result['status'] = FALSE;
-					$result['msg'] = "No results Found.";
+			if(($this->session->userdata('logged_in'))==TRUE){
+				$result = array();
+				$get_data = $this->input->get();
+				if($this->input->get('type')){
+					$type = $this->input->get('type',TRUE);
 				}else{
-					$result['status'] = TRUE;
-					$result = array(
-					            "draw" => $draw,
-					            "recordsTotal" => count($result['data']),
-					            "recordsFiltered" => count($result['data']),
-					            "data" => $result['data']
-					        );
+					$type = $this->input->post('type',TRUE);
 				}
-		        echo json_encode($result);
-			}
+				
+				if($type == 'user'){
+					$this->load->view('header');
+					$result['data'] = $this->dashboard_model->get_task_details($type);
+			        $this->load->view('user_snapshot',$result);
+			        $this->load->view('footer');
+				}
+				else if($type == 'project'){
+					$this->load->view('header');
+					$result['data'] = $this->dashboard_model->get_task_details($type);
+			        $this->load->view('project_snapshot',$result);
+			        $this->load->view('footer');
+				}
+				else if($type == 'task'){
+					$draw = intval($this->input->post("draw"));
+					$result['data'] = $this->dashboard_model->get_task_details($type);
+					if($result['data'] == NULL){
+						$result['status'] = FALSE;
+						$result['msg'] = "No results Found.";
+					}else{
+						$result['status'] = TRUE;
+						$result = array(
+						            "draw" => $draw,
+						            "recordsTotal" => count($result['data']),
+						            "recordsFiltered" => count($result['data']),
+						            "data" => $result['data']
+						        );
+					}
+			        echo json_encode($result);
+				}
 			}else{
 				redirect('login/index','refresh');
 			}	
@@ -94,10 +90,8 @@ if(($this->session->userdata('logged_in'))==TRUE){
 				$this->session->set_flashdata('success','User Assigned Successfully.');
 				redirect('admin/load_project_detail','refresh');
 			}else{
-				$this->session->set_flashdata('error','Could not assign the user!');
-				print_r("nope");exit;
+				$this->session->set_flashdata('error','Unable to assign the user!');
 				redirect('admin/load_project_detail','refresh');
-				//return false;
 			}
 			}else{
 				redirect('login/index','refresh');
@@ -495,31 +489,31 @@ if(($this->session->userdata('logged_in'))==TRUE){
 		
 		//delete user
 		public function delete_data(){
-if(($this->session->userdata('logged_in'))==TRUE){
-			if($this->input->post('user_id')){
-				$data['result'] = $this->dashboard_model->delete_user($this->input->post('user_id'));
-				if(($data['result']) == FALSE){
-					$data['status'] = FALSE;
-					$data['msg'] = "User not removed.";
-				}else{
-					$data['status'] = TRUE;
-					$data['msg'] = "User removed successfully.";
+			if(($this->session->userdata('logged_in'))==TRUE){
+				if($this->input->post('user_id')){
+					$data['result'] = $this->dashboard_model->delete_user($this->input->post('user_id'));
+					if(($data['result']) == FALSE){
+						$data['status'] = FALSE;
+						$data['msg'] = "User not removed.";
+					}else{
+						$data['status'] = TRUE;
+						$data['msg'] = "User removed successfully.";
+					}
+				}else if($this->input->post('task_id')){
+					$data['result'] = $this->dashboard_model->delete_project($this->input->post('task_id'));
+					if(($data['result']) == FALSE){
+						$data['status'] = FALSE;
+						$data['msg'] = "Task not removed.";
+					}else{
+						$data['status'] = TRUE;
+						$data['msg'] = "Task removed successfully.";
+					}
 				}
-			}else if($this->input->post('task_id')){
-				$data['result'] = $this->dashboard_model->delete_project($this->input->post('task_id'));
-				if(($data['result']) == FALSE){
-					$data['status'] = FALSE;
-					$data['msg'] = "Task not removed.";
-				}else{
-					$data['status'] = TRUE;
-					$data['msg'] = "Task removed successfully.";
+				else{
+					$data['status'] = FALSE; 
+					$data['msg'] = "Something went wrong.";
 				}
-			}
-			else{
-				$data['status'] = FALSE; 
-				$data['msg'] = "Something went wrong.";
-			}
-			echo json_encode($data);
+				echo json_encode($data);
 			}else{
 				redirect('login/index','refresh');
 			}
