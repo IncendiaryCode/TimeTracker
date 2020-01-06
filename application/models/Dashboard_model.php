@@ -5,6 +5,7 @@ class Dashboard_model extends CI_Model
     {
         
         $this->load->database();
+        $this->load->helper('url');
     }
     //Dashboard model
     public function get_users()
@@ -1074,7 +1075,7 @@ class Dashboard_model extends CI_Model
                 $data['type']  = $row->type;
                 $data['email'] = $row->email;
                 $data['username'] = $row->name;
-                $data['profile_pic'] = $row->profile;
+                $data['profile_pic'] = base_url().USER_UPLOAD_PATH.$row->profile;
                 $data['login_time'] = date('Y:m:d H:i:s');
                 return $data;
             }

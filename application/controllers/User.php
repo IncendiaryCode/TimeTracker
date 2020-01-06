@@ -91,7 +91,7 @@ class User extends CI_Controller
         $data['task_type'] = $this->input->post('action', TRUE);
         if ($data['task_type']  == 'task')
             $data['task_id'] = $this->input->post('id');
-        $result = $this->user_model->start_timer($data);
+        $result['details'] = $this->user_model->start_timer($data);
         if (!$result) {
             $output_result['status'] = FALSE;
             $output_result['msg']    = "Timer not initiated.";
@@ -101,6 +101,7 @@ class User extends CI_Controller
             $output_result['name'] = "dummy task name";
             $output_result['time'] = "2020-01-06 10:03 AM";
             $output_result['msg']    = "Timer started.";
+            $output_result['data'] = $result;
         }
         echo json_encode($output_result);
     }
@@ -203,6 +204,15 @@ class User extends CI_Controller
             return true;
         }
     }
+    //load add task page
+    public function load_add_task()
+    {
+        $GLOBALS['page_title'] = 'Add task';
+        $this->load->view('user/header');
+        $data['result'] = $this->user_model->get_project_name();
+        $this->load->view('user/add_task', $data);
+        $this->load->view('user/footer');
+    }
     //Add tasks
     public function add_tasks()
     {
@@ -249,23 +259,17 @@ class User extends CI_Controller
             } else {
                 $data['userid'] = $this->session->userdata('userid');
                 $data['project_module'] = $this->input->post('project_module');
-                $data['project_id'] = $this->input->post('project_name');
+                $data['project_id'] = $this->input->post('project');
                 $data['task_name'] = $this->input->post('task_name');
                 $data['task_desc'] = $this->input->post('task_desc');
                 $data['time_range'] = $this->input->post('daterange');
                 $result = $this->user_model->add_tasks($data);
                 if (!$result) {
-                    $this->load->view('user/header');
-                    $data['result']  = $this->user_model->get_project_name();
-                    $data['failure'] = "Something went wrong.";
-                    $this->load->view('user/add_task', $data);
-                    $this->load->view('user/footer');
+                    $this->session->set_flashdata('failure', 'Unable to add the Task.');
+                    redirect('user/load_add_task');
                 } else {
-                    $this->load->view('user/header');
-                    $data['result']  = $this->user_model->get_project_name();
-                    $data['success'] = "Successfully added.";
-                    $this->load->view('user/add_task', $data);
-                    $this->load->view('user/footer');
+                    $this->session->set_flashdata('success', 'Successfully added.');
+                    redirect('user/load_add_task', 'refresh');
                 }
             }
         }
@@ -282,6 +286,7 @@ class User extends CI_Controller
             $t_id = $this->input->post('task_id', TRUE);
         }
         $taskid['task_data'] = $this->user_model->get_task_info($t_id);
+
         $this->load->view('user/header');
         $this->load->view('user/edit_task', $taskid);
         $this->load->view('user/footer');
@@ -304,26 +309,20 @@ class User extends CI_Controller
             $data['action'] = 'edit';
             $data['userid'] = $this->session->userdata('userid');
             $data['project_module'] = $this->input->post('project_module');
-            $data['project_id'] = $this->input->post('project_name');
+            $data['project_id'] = $this->input->post('project');
             $data['task_name'] = $this->input->post('task_name');
             $data['task_id'] = $this->input->post('task_id');
             $data['task_desc'] = $this->input->post('task_desc');
             $data['time_range'] = $this->input->post('time');
             $result = $this->user_model->add_tasks($data);
             if (!$result) {
-                $this->load->view('user/header');
-                $t_id              = $this->input->post('task_id', TRUE);
-                $data['task_data'] = $this->user_model->get_task_info($t_id);
-                $data['failure']   = "Something went wrong.";
-                $this->load->view('user/edit_task', $data);
-                $this->load->view('user/footer');
+                $t_id = $this->input->post('task_id', TRUE);
+                $this->session->set_flashdata('failure', 'Unable to edit.');
+                redirect('user/load_edit_task?t_id=' . $t_id);
             } else {
-                $this->load->view('user/header');
-                $t_id              = $this->input->post('task_id', TRUE);
-                $data['task_data'] = $this->user_model->get_task_info($t_id);
-                $data['success']   = "Edit successful.";
-                $this->load->view('user/edit_task', $data);
-                $this->load->view('user/footer');
+                $t_id = $this->input->post('task_id', TRUE);
+                $this->session->set_flashdata('success', 'Edit successful.');
+                redirect('user/load_edit_task?t_id=' . $t_id, 'refresh');
             }
         }
     }
