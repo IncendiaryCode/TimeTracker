@@ -44,7 +44,9 @@ class User_model extends CI_Model {
         }else{
             if($sort_type == 'daily_chart'){
                 $this->db->select_sum('d.total_minutes','t_minutes');   //get total minutes for a particular task
-                $this->db->where(array('d.task_date'=>$date,'d.end_time IS NOT NULL','d.user_id'=>$userid));
+                $this->db->where('d.task_date',$date);
+                $this->db->where('d.end_time IS NOT NULL');
+                $this->db->where('d.user_id',$userid);
             }
             else if($sort_type == 'weekly_chart'){
                 $year_value = explode('-',$date);  //format: 2019-W23
@@ -137,7 +139,7 @@ class User_model extends CI_Model {
         $userid = $this->session->userdata('userid');
         $taskid = $id;
         $this->db->select('*,d.id');
-        $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task",FALSE);
+        $this->db->select("IF(d.total_minutes=0,1,0) AS running_task",FALSE);
         $this->db->from('task AS t');
         $this->db->join('task_assignee AS ta','t.id = ta.task_id');
         $this->db->join('time_details AS d','t.id = d.task_id','left');
@@ -145,6 +147,7 @@ class User_model extends CI_Model {
         $this->db->where(array('t.id'=>$taskid,'d.user_id'=>$userid));
         $query = $this->db->get();
         $data = $query->result_array();
+        //print_r($data);exit();
         return $data;
     }
     //Function to Start Timer...
@@ -218,7 +221,8 @@ class User_model extends CI_Model {
                         return false;
                     }
                 }else if($req_data['flag'] == 0){ //if flag is 0, request is to stop the task
-                    return true;
+                    $details = $this->db->get_where('time_details',array('id'=>$data['id']));
+                    return $details->row_array();
                 }
             }else{
                 return false;
@@ -240,7 +244,7 @@ class User_model extends CI_Model {
             $this->db->join('task AS t','t.id = d.task_id');
             $this->db->where('d.end_time IS NOT NULL');       //tasks that are not running
             $this->db->where(array('d.user_id' => $userid,'d.task_date' => $taskdate));
-            $this->db->group_by('d.start_time');
+            $this->db->group_by('d.task_id');
             $query = $this->db->get();
             $data = $query->result_array();
             if($query->num_rows() > 0){
@@ -280,7 +284,7 @@ class User_model extends CI_Model {
             $week = explode('W',$week_value);  //format: W23
             $getdate = $this->get_start_and_end_date($week[1], $year_value[0]);  //start and end date for 23rd week and year 2019
             $this->db->select('*');
-            $this->db->select_sum('total_hours','hours');
+            $this->db->select_sum('total_minutes','minutes');
             $this->db->from('time_details');
             $this->db->where(array('user_id'=>$userid));
             $this->db->where('end_time IS NOT NULL');
@@ -292,8 +296,8 @@ class User_model extends CI_Model {
                 $data = $query->result_array();
                 foreach($data as $d){
                     $day = date('D', strtotime($d['task_date']));
-                    $minutes = $d['total_minutes'];
-                    $to_hours[] = $minutes/60;   //get total_minutes interms of hour;
+                    $minutes = $d['minutes'];
+                    $to_hours[] = round(($minutes/60),2);   //get total_minutes interms of hour;
                     $week_days[] = $day;            
                 }
                 $week = array('Mon','Tue','Wed','Thu','Fri','Sat','Sun');

@@ -8,7 +8,7 @@ $profile = $this->session->userdata('user_profile');
             <?php $myPhpLink='document.referrer';?> 
         </script>
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a href="#" class="text-white previous"><img src="<?=base_url();?>assets/images/logo-white.png" height="40px;" onclick="window.location.href=<?=$myPhpLink ?>"></a>
+            <a href="#" class="text-white previous"><img src="<?=base_url().UPLOAD_PATH?>logo-white.png" height="40px;" onclick="window.location.href=<?=$myPhpLink ?>"></a>
             <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon "></span>
             </button>
@@ -16,7 +16,7 @@ $profile = $this->session->userdata('user_profile');
                 <div class="navbar-nav ml-auto flex-column-reverse flex-lg-row">
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <a href="#" class="text-white"><img src="<?=base_url();?>assets/images/<?=$profile;?>" height="40px" class="rounded-circle"></a>
+                            <a href="#" class="text-white"><img src="<?=base_url().UPLOAD_PATH.$profile;?>" height="40px" class="rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div>
                                     <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display"> Profile</a></p>
@@ -57,7 +57,7 @@ $profile = $this->session->userdata('user_profile');
                                 <?php
                             if($details['image_name'] != ''){
                                 ?>
-                                <img src="<?=base_url();?>assets/images/<?=$details['image_name'];?>" width="40px;">
+                                <img src="<?=base_url().UPLOAD_PATH.$details['image_name'];?>" width="40px;">
                                 <input type="hidden" id="project-id" name="" value="<?=$details['project_id'] ?>">
                                 <?php
                             } ?>

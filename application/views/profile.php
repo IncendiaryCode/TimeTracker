@@ -6,7 +6,7 @@
      <header class="container-fluid">
         <div class="row">
             <div class="col-6 m-3">
-                <img src="<?=base_url();?>assets/images/logo-white.png" height="40px" onclick="window.location.href='<?=base_url();?>index.php/admin'">
+                <img src="<?=base_url().UPLOAD_PATH?>logo-white.png" height="40px" onclick="window.location.href='<?=base_url();?>index.php/admin'">
             </div>
         </div>
     </header> 

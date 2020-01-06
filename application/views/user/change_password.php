@@ -9,7 +9,7 @@
             <div class="row mt-5">
                 <div class="col-6 offset-3">
                     <div class="text-center mt-4">
-                        <img src="<?=base_url();?>assets/user/images/user_profiles/<?=$profile?>" width="30%;" class="rounded-circle figure mt-4 text-center">
+                        <img src="<?=base_url().USER_UPLOAD_PATH.$profile;?>" width="30%;" class="rounded-circle figure mt-4 text-center">
                     </div>
                     <?php 
                             $this->load->library('form_validation');

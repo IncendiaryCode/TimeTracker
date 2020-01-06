@@ -9,7 +9,7 @@
             <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times  main-modal-close"></i></button>
         </div>
         <div class="modal-content text-center">
-            <img id="new_img" src="<?=base_url();?>assets/user/images/user_profiles/<?=$profile?>" class="rounded-circle img-fluid" >
+            <img id="new_img" src="<?=base_url().USER_UPLOAD_PATH.$profile;?>" class="rounded-circle img-fluid" >
 
             <div class="edit">
                 <a href="#" class="text-white"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#changeimage"></i></a>

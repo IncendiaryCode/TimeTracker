@@ -20,7 +20,7 @@ $this->load->helper('url_helper');
 
                 <div class="col-md-4 offset-md-2 text-center">
                     <div>
-                        <img src="<?=base_url();?>assets/user/images/user_profiles/<?=$res['profile'];?>" width="30%;" class="rounded-circle figure mt-4 text-center">
+                        <img src="<?=base_url().USER_UPLOAD_PATH.$res['profile'];?>" width="30%;" class="rounded-circle figure mt-4 text-center">
                         <h4 class="employee-name mt-3">
                             <?php echo $res['name'];?>
                         </h4>

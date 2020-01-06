@@ -114,12 +114,12 @@ class User extends CI_Controller
             $task_id = $this->input->post('id', TRUE);
             //$end_time = !empty($this->input->post('end_time')) ? $this->input->post('end_time') : '';
             $data['task_id'] = $task_id;
-            $result = $this->user_model->stop_timer($data);
+            $result['details'] = $this->user_model->stop_timer($data);
             if ($result == FALSE) {
                 $output_result['status'] = FALSE;
                 $output_result['msg']    = "Something went wrong.";
             }
-            else if ($result == TRUE) {
+            else {
                 $output_result['flag']   = $result;
                 $output_result['status'] = TRUE;
                 $output_result['msg']    = "Timer stop.";
@@ -211,7 +211,7 @@ class User extends CI_Controller
         if ($this->input->post('action') == 'save_and_start') {
             $data['userid'] = $this->session->userdata('userid');
             $data['project_module'] = $this->input->post('project_module');
-            $data['project_id'] = $this->input->post('project_name');
+            $data['project_id'] = $this->input->post('project');
             $data['action'] = $this->input->post('action');
             $data['task_name'] = $this->input->post('task_name');
             $data['task_desc'] = $this->input->post('task_desc');
@@ -240,7 +240,7 @@ class User extends CI_Controller
             $data['action'] = 'add_task';
             $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|callback_task_exists|xss_clean');
             //$this->form_validation->set_rules('task_desc', 'Task Description', 'trim|required');
-            $this->form_validation->set_rules('project_name', 'Project name', 'required');
+            $this->form_validation->set_rules('project', 'Project name', 'required');
             //$this->form_validation->set_rules('project_module', 'Module name', 'required');
             $this->form_validation->set_rules('task_type', 'Radio button', 'required');
             if ($this->form_validation->run() == FALSE) {
@@ -340,7 +340,7 @@ class User extends CI_Controller
     public function upload_profile()
     {
         if (!empty($_FILES['change_img']['name'])) {
-            $config['upload_path']   = USER_UPLOAD_PATH;
+            $config['upload_path']   = IMAGE_PREVIEW_PATH;
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
             $config['overwrite']     = FALSE;
            // $config['encrypt_name']  = TRUE;

@@ -1,7 +1,5 @@
 <?php
 $GLOBALS['page_title'] = 'Edit task';
-$this->load->library('session');
-$profile = $this->session->userdata('user_profile');
 ?>
 <main class="container-fluid-main">
     <div class="main-container container">
