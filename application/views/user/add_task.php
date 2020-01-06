@@ -77,6 +77,9 @@ $GLOBALS['page_title'] = 'Add Task';
                                     <div class="col-3">
                                         <p><b>End time</b></p>
                                     </div>
+                                    <div class="col-3">
+                                        <p><b>Description</b></p>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Add time  -->
@@ -103,11 +106,16 @@ $GLOBALS['page_title'] = 'Add Task';
                                                 <input id="end-time-0" class="form-control timepicker1" name="daterange[0][end]" />
                                             </div>
                                         </div>
-                                        <div class="col-3 text-center">
+                                        <div class="col-2 text-center">
+                                            <input id="description-0" class="form-control" name="daterange[0][description]" />
+                                        </div>
+
+                                        <div class="col-1 text-center">
                                             <a href="javascript:void(0);" id="add-new-time" title="Add">
                                                 <i class="fas fa-plus icon-plus text-success"></i>
                                             </a>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>

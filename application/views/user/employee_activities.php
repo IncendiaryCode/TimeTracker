@@ -26,7 +26,7 @@
                                     <div class="input-group">
                                         <!-- chart that shows daily activities -->
                                         <input type="text" class="form-control edit-date" id="daily-chart" data-date-format="YYYY-mm-DD ">
-                                        <button class="btn btn-primary" onclick="loadDailyChart()">view chart</button>
+                                        <!-- <button class="btn btn-primary" onclick="loadDailyChart()">view chart</button> -->
                                     </div>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                                     <label for="end-date">Select week</label>
                                     <div class="input-group">
                                         <input type="week" class="form-control " id="weekly-chart">
-                                        <button class="btn btn-primary" onclick="loadWeeklyChart()">view chart</button>
+                                        <!-- <button class="btn btn-primary" onclick="loadWeeklyChart()">view chart</button> -->
                                     </div>
                                 </div>
                                 <p id="week-error"class="text-center"></p>
@@ -70,7 +70,7 @@
                                     <div class="input-group">
                                         <!-- chart that shows monthly activities -->
                                         <input type="number" class="form-control" id="monthly-chart">
-                                        <button class="btn btn-primary" onclick="loadMonthlyChart()">view chart</button>
+                                        <!-- <button class="btn btn-primary" onclick="loadMonthlyChart()">view chart</button> -->
                                     </div>
                                 </div>
                             </div>

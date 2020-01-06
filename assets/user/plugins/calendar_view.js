@@ -332,7 +332,8 @@ var last_index;
 var last_task_name=[];
 var same_task=0;
 function printChart(start, width, top, color, task_name) {
-    var row = $("<span class='print-chart-row1'  data-toggle='tooltip' data-placement='top' title="+task_name+" id='new-daily-chart" + graph_id + "'>.<input type = 'hidden' value = " + graph_id + "></span>");
+
+    var row = $("<span class='print-chart-row"+task_name+"'  data-toggle='tooltip' data-placement='top' title="+task_name+" id='new-daily-chart" + graph_id + "'>.<input type = 'hidden' value = " + graph_id + "></span>");
     $(row).css("margin-left", start);
     $(row).css("top", top);
     $(row).css("width", width);
@@ -517,6 +518,21 @@ $(document).ready(function() {
     var win_width = $('.cust_daily_chart').width();
     var p_l = parseInt(win_width) / 23;
     $('.cust_chart').css("padding-left", p_l);
+    var daily_value = document.getElementById('daily-chart').value;
+
+    $("#daily-chart").change(function() {
+        loadDailyChart();
+    });
+    $("#weekly-chart").change(function() {
+        loadWeeklyChart();
+    });
+    $("#monthly-chart").change(function() {
+        loadMonthlyChart();
+    });
+
+
+
+    /*daily_value.*/
     if(win_width < 400)
     {
         console.log(document.getElementById('cust_daily_chart').remove());

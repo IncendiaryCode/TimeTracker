@@ -46,26 +46,6 @@ if (changeImage) {
             return true;
     }
 }
-
-function updateTimer(flag) {
-    $.ajax({
-        type: "POST",
-        url: timeTrackerBaseURL + 'index.php/user/stop_timer',
-        data: { 'action': 'task', 'id': localStorage.getItem('task_id'), 'flag': flag },
-        //call to stop the task timer.
-        dataType: 'json',
-        success: function (res) {
-            //handle timer
-            document.getElementById("alarmmsg").innerHTML = res['msg'];
-            setTimeout(function(){
-                document.getElementById("alarmmsg").innerHTML = '';
-            }, 5000);
-            window.location.reload();
-        }
-    });
-}
-
-
 function minutesToTime(mins) {
     var total_mins = Number(mins * 60);
     var h = Math.floor(total_mins / 3600);
@@ -76,6 +56,58 @@ function minutesToTime(mins) {
     var mDisplay = m > 0 ? m + (m == 1 ? " m. " : "m.") : "";
     return hDisplay + mDisplay;
 }
+
+function updateTimer(flag, id) {
+    $.ajax({
+        type: "POST",
+        url: timeTrackerBaseURL + 'index.php/user/stop_timer',
+        data: { 'action': 'task', 'id': id, 'flag': flag },
+        //call to stop the task timer.
+        dataType: 'json',
+        success: function (res) {
+            //handle timer
+            var time_details  = res['flag']["details"];
+            var total_time = minutesToTime(time_details['total_minutes'])
+
+            //window.location.reload();
+            document.getElementById('slider'+id).remove();
+            document.getElementsByClassName('bx-pager-item')[1].remove();
+            //update total time of the card...
+
+            document.getElementById('btn-stop'+id).childNodes[0].remove();
+            $('#btn-stop'+id).append(total_time);
+            var actionPlay = $('<a href="#" class="card-action action-delete text-white" id="action-play'+id+'"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + id + '></i></div></a>');
+            $("#footerRight"+id).append(actionPlay);
+            var stop_btn;
+            actionPlay.on('click', function (e) {
+                e.preventDefault();
+                var t_id = this.getElementsByTagName('input').item(0).value;
+                $.ajax({
+                    type: 'POST',
+                    url: timeTrackerBaseURL + 'index.php/user/start_timer',
+                    data: { 'action': 'task', 'id': t_id },
+                    success: function (res) {       //TODO..
+                        var row = $('<div id="slider'+t_id+'"><div class="section-slider task-slider" id="login-timer-details'+t_id+'" > '+
+                            +'<input type="hidden" id="id'+t_id+'" value="'+t_id+'"> <input type="hidden" id="id'+t_id+'" value="'+t_id+'"> ' +
+                            + '<p class="font-weight-light time-font text-center login-time" id="start-time'+t_id+'"> Started at:  djhdsgfuhskjf </p>' +
+                            +' <div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer'+t_id+'" data-type="" data-time="">00:00:00</div>'+
+                            + '<p class="font-weight-light text-center taskName" id="task-name'+t_id+'">task name</p>' +
+                            + '</div></div></div>');
+                        $('#timer-slider').append(row);
+                        stop_btn = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>');
+                        var list = document.getElementById('btn-stop'+t_id)
+                        list.removeChild(list.childNodes[0]);
+                        $('#btn-stop'+t_id).append(stop_btn).data('taskid', t_id);
+                        /*list.removeChild(list.childNodes[0]);*/
+                        $('#action-play'+t_id).css("display","none");
+
+                    }
+                });
+            });
+        }
+    });
+}
+
 
 
 function getTime() {
@@ -114,18 +146,19 @@ function loadTaskActivities(formData) {
                     {
                     cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
                     }
-                    var stopCol = $('<div class="col-6 text-right" />');
+                    var stopCol = $('<div class="col-6 text-right"  id="btn-stop'+ data[x][y].id +'" />');
                     if (data[x][y].running_task == 0)  /*check whether task is ended or not*/ {
                         var timeUsed = minutesToTime(data[x][y].t_minutes);
                         stopCol.append('<i class="far fa-clock"></i> ' + timeUsed);
                     }else {
+                        var id = data[x][y].id;
                         if (data[x][y].start_time != null) {
                             var stopButton = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>').data('taskid', data[x][y].id);
                             stopButton.on('click', function (e) {
                                 localStorage.setItem('task_id', $(this).data('taskid'));
                                 //timerModal.modal('show');
                                 e.preventDefault();
-                                updateTimer(0);
+                                updateTimer(0, $(this).data('taskid'));
                             });
                         }
                         stopCol.append(stopButton);
@@ -143,7 +176,7 @@ function loadTaskActivities(formData) {
                     var footerRow = $('<div class="row" />');
                     footerRow.append("<div class='col-6'> <img src=" + data[x][y].image_name + " width='20px;' alt=''> " + data[x][y].project + "</div>");
 
-                    var footerRight = $("<div class='col-6 text-right card-actions'>");
+                    var footerRight = $("<div class='col-6 text-right card-actions' id='footerRight"+data[x][y].id+"'>");
                     //action Edit
                     var actionEdit = $('<a href="#" class="card-action action-edit text-white" id="action-edit"><i class="far fa-edit position_edit_icon" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
                     actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_edit_task?t_id=' + data[x][y].id);
@@ -154,7 +187,7 @@ function loadTaskActivities(formData) {
                     var mode = localStorage.getItem('dark_mode');
                     footerRight.append(actionEdit);
 
-                    var actionPlay = $('<a href="#" class="card-action action-delete text-white" id="action-play"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
+                    var actionPlay = $('<a href="#" class="card-action action-delete text-white" id="action-play' + data[x][y].id+'"><div class="text-center shadow-lg" data-tasktype="login"><i class="fas action-icon position_play_icon fa-play" data-toggle="tooltip" data-placement="top" title="Resume"><input type="hidden" value =' + data[x][y].id + '></i></div></a>');
 
                     if (data[x][y].running_task == 0 || data[x][y].start_time == null) {
                         if (data[x][y].completed == 0) {
@@ -163,18 +196,28 @@ function loadTaskActivities(formData) {
                     }
 
                     actionPlay.on('click', function (e) {
+                        e.preventDefault();
                         var t_id = this.getElementsByTagName('input').item(0).value;
                         $.ajax({
                             type: 'POST',
                             url: timeTrackerBaseURL + 'index.php/user/start_timer',
                             data: { 'action': 'task', 'id': t_id },
                             success: function (res) {
-                                var msg = res;
-                                document.getElementById("alarmmsg").innerHTML = msg['msg'];
-                                setTimeout(function(){
-                                    document.getElementById("alarmmsg").innerHTML = '';
-                                }, 5000);
-                                window.location.reload();
+
+                                var row = $('<div id="slider'+t_id+'"><div class="section-slider task-slider" id="login-timer-details'+t_id+'" > '+
+                                    +'<input type="hidden" id="id'+t_id+'" value="'+t_id+'"> <input type="hidden" id="id'+t_id+'" value="'+t_id+'"> ' +
+                                    + '<p class="font-weight-light time-font text-center login-time" id="start-time'+t_id+'"> Started at:  djhdsgfuhskjf </p>' +
+                                    +' <div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer'+t_id+'" data-type="" data-time="">00:00:00</div>'+
+                                    + '<p class="font-weight-light text-center taskName" id="task-name'+t_id+'">task name</p>' +
+                                    + '</div></div></div>');
+                                $('#timer-slider').append(row);
+                                //window.location.reload();
+                                var play_btn = $('<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>');
+                                var list = document.getElementById('btn-stop'+t_id)
+                                list.removeChild(list.childNodes[0]);
+                                $('#btn-stop'+t_id).append(play_btn).data('taskid', t_id);
+                                list.removeChild(list.childNodes[0]);
+                                $('#action-play'+t_id).css("display","none");
                             }
                         });
                     });

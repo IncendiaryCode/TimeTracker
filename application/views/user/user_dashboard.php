@@ -14,6 +14,7 @@ $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Login';
+
 ?>
 <script type="text/javascript">
 //this will be send to JS for timer to start
@@ -48,7 +49,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                     $task_start = strtotime($timer);
                     $task_id = $taskinfo['task_id'];
                      ?>
-                <div>
+                <div id="slider<?=$task_id?>">
                     <div class="section-slider task-slider" id="login-timer-details<?=$id?>">
                         <input type="hidden" id="<?php echo $taskinfo['task_id'] ?>" value="<?php echo $timer_start?>">
                         <input type="hidden" id="id<?=$id?>" value="<?php echo $taskinfo['task_id']?>">
