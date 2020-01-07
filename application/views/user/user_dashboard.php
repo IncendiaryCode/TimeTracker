@@ -109,8 +109,21 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                     </div>
                 </div>
             </div>
+
+
+
+
+    
+
+
+
+
             <div class='row mb-5' id="attach-card">
                 <!-- recent task details -->
+
+                
+
+
                 <div class="col text-center">
                     <div class="spinner-border" role="status" aria-hidden="true"></div> Loading...
                 </div>

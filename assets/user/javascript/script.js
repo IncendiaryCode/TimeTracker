@@ -104,7 +104,9 @@ forgotPsw.onsubmit = function(e) {
         $('#enter-email').hide();
 
         var valid = validateOtp();
-        /*formPsw.onsubmit = function(e) {
+        if(valid)
+        {
+        formPsw.onsubmit = function(e) {
 
             document.getElementById('user-email').value = user_email;
 
@@ -132,7 +134,8 @@ forgotPsw.onsubmit = function(e) {
                 document.getElementById('cnfrmPsw').innerHTML = "Enter correct Password!!!";
                 return false; 
             }
-        }*/
+        }
+    }
         return false;
 
     }
@@ -184,7 +187,6 @@ function sendOTP() {
             data: { email: email },
             success: function(data) {
                 alert(data);
-                console.log("fjhcgdjfd");
             }
         });
     }

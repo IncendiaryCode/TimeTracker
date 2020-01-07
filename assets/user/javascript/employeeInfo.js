@@ -95,58 +95,7 @@ function updateTimer(flag, id) {
             var stop_btn;
             
             //TODO:: Remove this..attach click event only once while loading task initially
-			actionPlay.on("click", function(e) {				
-				e.preventDefault();
-				var t_id = this.getElementsByTagName("input").item(0).value;
-				$.ajax({
-					type: "POST",
-					url: timeTrackerBaseURL + "index.php/user/start_timer",
-					data: { action: "task", id: t_id },
-					dataType: "json",
-					success: function(res) {
-						//TODO..
-
-						var row = $(
-							'<div id="slider' +
-								t_id +
-								'"><div class="section-slider task-slider" id="login-timer-details' +
-								t_id +
-								'" > ' +
-								+'<input type="hidden" id="id' +
-								t_id +
-								'" value="' +
-								t_id +
-								'"> <input type="hidden" id="id' +
-								t_id +
-								'" value="' +
-								t_id +
-								'"> ' +
-								+'<p class="font-weight-light time-font text-center login-time" id="start-time' +
-								t_id +
-								'"> Started at:  djhdsgfuhskjf </p>' +
-								+' <div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer' +
-								t_id +
-								'" data-type="" data-time="">00:00:00</div>' +
-								+'<p class="font-weight-light text-center taskName" id="task-name' +
-								t_id +
-								'">task name</p>' +
-								+"</div></div></div>"
-						);
-						$("#timer-slider").append(row);
-						stop_btn = $(
-							'<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>'
-						);
-						var list = document.getElementById("btn-stop" + t_id);
-						list.removeChild(list.childNodes[0]);
-						$("#btn-stop" + t_id)
-							.append(stop_btn)
-							.data("taskid", t_id);
-
-						/*list.removeChild(list.childNodes[0]);*/
-						$("#action-play" + t_id).css("display", "none");
-					}
-				});
-			});
+			
 		}
 	});
 }
@@ -217,22 +166,21 @@ function loadTaskActivities(formData) {
 					);
 
 					if (data[x][y].running_task == 0) {
-						/*check whether task is ended or not*/ var timeUsed = minutesToTime(
-							data[x][y].t_minutes
-						);
+						/*check whether task is ended or not*/ 
+						var timeUsed = minutesToTime(data[x][y].t_minutes);
 						stopCol.append('<i class="far fa-clock"></i> ' + timeUsed);
 					} else {
 						var id = data[x][y].id;
 						if (data[x][y].start_time != null) {
 							var stopButton = $(
-								'<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>'
+								'<span class="fa fa-hourglass-1"><i class=""></i> Running</span>'
 							).data("taskid", data[x][y].id);
-							stopButton.on("click", function(e) {
+							/*stopButton.on("click", function(e) {
 								localStorage.setItem("task_id", $(this).data("taskid"));
 								//timerModal.modal('show');
 								e.preventDefault();
 								updateTimer(0, $(this).data("taskid"));
-							});
+							});*/
 						}
 						stopCol.append(stopButton);
 					}
@@ -241,7 +189,7 @@ function loadTaskActivities(formData) {
 					cardHeader.append(cardHeaderRow);
 
 					var cardInner = $(
-						"<div class='card card-style-1 animated fadeInUp'  />"
+						"<div class='card card-style-1 animated fadeInUp content-overlay'  />"
 					);
 					cardInner.append(cardHeader);
 
@@ -269,18 +217,32 @@ function loadTaskActivities(formData) {
 							timeTrackerBaseURL +
 							"user/start_timer?id=" +
 							data[x][y].id +
-							'" class="card-action action-delete" data-id="' +
+							'" class="card-action action-delete content-details" data-id="' +
 							data[x][y].id +
 							'" data-toggle="tooltip" data-placement="top" title="Play"></a>'
 					);
 					actionPlay.append(
 						'<i class="fas action-icon position_play_icon fa-play"></i>'
 					);
+					var actionStop = $(
+						'<a href="' +
+							timeTrackerBaseURL +
+							"user/stop_timer?id=" +
+							data[x][y].id +
+							'" class="card-action action-delete content-details" data-id="' +
+							data[x][y].id +
+							'" data-toggle="tooltip" data-placement="top" title="Stop"></a>'
+					);
 
-					if (data[x][y].running_task == 0 || data[x][y].start_time == null) {
-						if (data[x][y].completed == 0) {
-							footerRight.append(actionPlay);
-						}
+					actionStop.append(
+						'<i class="fas action-icon position_play_icon fa-stop"></i>'
+					);
+					console.log(data[x][y].running_task, data[x][y].task_name);
+					if (data[x][y].running_task == 0) {
+						footerRight.append(actionPlay);
+					}
+					else{
+						footerRight.append(actionStop);
 					}
 
 					actionPlay.on("click", function(e) {
@@ -326,24 +288,42 @@ function loadTaskActivities(formData) {
 								$("#timer-slider").append(row);
 								timerSlider.reload();
 
-								var play_btn = $(
-									'<a href="#" class="text-danger" id="stop"><i class="fas fa-stop"></i> Stop</a>'
-								);
 
 								var list = document.getElementById("btn-stop" + t_id);
 								list.removeChild(list.childNodes[0]);
-								$("#btn-stop" + t_id)
-									.append(play_btn)
-									.data("taskid", t_id);
+								
 								list.removeChild(list.childNodes[0]);
-								$("#action-play" + t_id).css("display", "none");
+								footerRight.append(actionStop);
 							}
 						});
 					});
 
+
+
+					actionStop.on("click", function(e) {
+						e.preventDefault();
+						var task_id = $(this).data("id");
+						$.ajax({
+							type: "POST",
+							url: timeTrackerBaseURL + "index.php/user/stop_timer",
+							data: { action: "task", id: id, flag: '0' },
+							dataType: "json",
+							success: function(res) {
+								//TODO:: show stop icon
+
+								console.log(res)
+
+								$("#action-play" + task_id).css("display", "block");
+							}
+						});
+					});
+
+
+
+
 					//action Edit
 					var actionEdit = $(
-						'<a href="#" class="card-action action-edit text-white" id="action-edit"><i class="far fa-edit position_edit_icon" data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
+						'<a href="#" class="card-action pl-2 action-edit text-white content-details " id="action-edit"><i class="far fa-edit position_edit_icon" data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
 					);
 					actionEdit.attr(
 						"href",
@@ -361,7 +341,7 @@ function loadTaskActivities(formData) {
 					footerRow.append(footerRight);
 					cardFooter.append(footerRow);
 					cardInner.append(cardFooter);
-					var cardCol = $("<div class='col-lg-6 mb-4 cardCol' />");
+					var cardCol = $("<div class='col-lg-6 mb-4 cardCol content' />");
 					cardCol.append(cardInner);
 					$("#attach-card").append(cardCol);
 					if (data[x][y].running_task == 1 && data[x][y].start_time != null) {
