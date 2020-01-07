@@ -1,12 +1,12 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 class User extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
         //$GLOBALS['dark_mode'] = 0;
-        /*if($GLOBALS['dark_mode'] == 0){
+            /*if($GLOBALS['dark_mode'] == 0){
                 $GLOBALS['dark_mode'] = 0;
             }else{
                 $GLOBALS['dark_mode'] = 1;
@@ -35,49 +35,48 @@ class User extends CI_Controller
             $task_details['task_info'] = $this->user_model->task_status();
             $this->load->view('user/user_dashboard', $task_details);
             $this->load->view('user/footer');
-        } else {
+        }else{
             redirect('login/index', 'refresh');
         }
     }
-    public function dark()
-    {
+    public function dark(){
         $GLOBALS['dark_mode'] = 0;
         $this->form_validation->set_rules('dark-mode', 'Check box', 'required');
-        if ($this->input->post('status') == TRUE) {
-            $GLOBALS['dark_mode'] = 1;
-        } else {
-            $GLOBALS['dark_mode'] = 0;
-        }
-        /*$GLOBALS['page_title'] = 'My profile';
+        if($this->input->post('status') == TRUE){
+                $GLOBALS['dark_mode'] = 1;
+            }else{
+                $GLOBALS['dark_mode'] = 0;
+            }
+            /*$GLOBALS['page_title'] = 'My profile';
             $userid = $this->session->userdata('userid');
             $data['res']           = $this->user_model->my_profile($userid);
             $data['mode'] = $GLOBALS['dark-mode'];
             $this->load->view('user/header');
             $this->load->view('user/profile', $data);
             $this->load->view('user/footer');*/
-        redirect('user/load_my_profile');
+            redirect('user/load_my_profile');
     }
     public function load_task_data() //Load task data to user dashboard
     {
-        if ($this->input->get('type', TRUE)) {
+        if ($this->input->get('type',TRUE)) {
             $type                 = $this->input->get('type', TRUE);
             $date                 = '';
-        } else if (!empty($this->input->get('chart_type'))) {
+        }else if(!empty($this->input->get('chart_type'))){
             $date = $this->input->get('date');
-            if ($this->input->get('chart_type') == 'daily_chart') {
-                $type = 'daily_chart';
-            } else if ($this->input->get('chart_type') == 'weekly_chart') {
+            if($this->input->get('chart_type') == 'daily_chart'){
+                $type = 'daily_chart'; 
+            }else if($this->input->get('chart_type') == 'weekly_chart'){
                 $type = 'weekly_chart';
-            } else {
+            }else{
                 $type = 'monthly_chart';
             }
         }
-        $task_details['data'] = $this->user_model->get_task_details($type, $date);
-        if ($task_details['data'] == NULL) {
+        $task_details['data'] = $this->user_model->get_task_details($type,$date);
+        if($task_details['data'] == NULL){
             $task_details['status'] = FALSE;
             $task_details['data'] = NULL;
             $task_details['msg'] = "No activity in this date.";
-        } else {
+        }else{
             $task_details['status'] = TRUE;
         }
         echo json_encode($task_details);
@@ -89,19 +88,21 @@ class User extends CI_Controller
         // $task_type   = $this->input->post('id');
         $data['userid'] = $this->session->userdata('userid');
         $data['task_type'] = $this->input->post('action', TRUE);
-        if ($data['task_type']  == 'task')
+        if($data['task_type']  == 'task')
             $data['task_id'] = $this->input->post('id');
-        $result['details'] = $this->user_model->start_timer($data);
-        if (!$result) {
+        if($data['task_id'] == 'undefined'){
             $output_result['status'] = FALSE;
-            $output_result['msg']    = "Timer not initiated.";
-        } else {
-            $output_result['status'] = TRUE;
-            $output_result['id'] = $this->input->post('id');
-            $output_result['name'] = "dummy task name";
-            $output_result['time'] = "2020-01-06 10:03 AM";
-            $output_result['msg']    = "Timer started.";
-            $output_result['data'] = $result;
+            $output_result['msg']    = "task-id not sent.";
+        }else{
+            $result['details'] = $this->user_model->start_timer($data);
+            if (!$result) {
+                $output_result['status'] = FALSE;
+                $output_result['msg']    = "Timer not initiated.";
+            } else {
+                $output_result['status'] = TRUE;
+                $output_result['msg']    = "Timer started.";
+                $output_result['data'] = $result;
+            }
         }
         echo json_encode($output_result);
     }
@@ -330,7 +331,7 @@ class User extends CI_Controller
     public function upload_profile()
     {
         if (!empty($_FILES['change_img']['name'])) {
-            $config['upload_path']   = IMAGE_PREVIEW_PATH;
+            $config['upload_path']   = USER_UPLOAD_PATH;
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
             $config['overwrite']     = FALSE;
             // $config['encrypt_name']  = TRUE;
@@ -438,3 +439,4 @@ class User extends CI_Controller
         }
     }
 }
+?>

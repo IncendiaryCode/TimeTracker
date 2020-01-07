@@ -71,9 +71,8 @@ $profile = $this->session->userdata('user_profile');
                     <a href="<?=base_url();?>index.php/admin/load_project_detail?project_id=<?=$d['project_id'] ?>" class=""><div class="mr-2">
                         <?php
                         if($d['image_name'] != ''){
-                            $image = substr($d['image_name'],29);
                             ?>
-                            <img src="<?=base_url().$image?>" height="15px;" width="18px;">
+                            <img src="<?=base_url().UPLOAD_PATH.$d['image_name']?>" height="15px;" width="18px;">
                             <?php
                         } echo $d['project_name']; ?></div>
                         

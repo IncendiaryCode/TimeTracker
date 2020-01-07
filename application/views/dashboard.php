@@ -145,7 +145,7 @@ $profile = $this->session->userdata('user_profile');
                                     if($project['image_name'] != ''){
                                         
                                         ?>
-                                    <img src="<?=base_url()?>assets/images/<?=$project['image_name'];?>" width="30px;">
+                                    <img src="<?=base_url().UPLOAD_PATH.$project['image_name'];?>" width="30px;">
                                     <?php
                                     } ?>
                                     <?php echo $project["project_name"]; ?>

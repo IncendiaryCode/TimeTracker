@@ -40,7 +40,7 @@ $profile = $this->session->userdata('user_profile');
                                 <?php
                                 if($data['profile'] != ''){
                                     ?>
-                                    <img src="<?=base_url().IMAGE_PREVIEW_PATH.$data['profile'];?>" class="rounded-circle" width="50px;" height="50px;">
+                                    <img src="<?=base_url().UPLOAD_PATH.$data['profile'];?>" class="rounded-circle" width="50px;" height="50px;">
                                 <?php } ?>
                             </div>
                         </div>
