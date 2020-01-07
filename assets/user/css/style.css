@@ -14,7 +14,6 @@
   position: relative;
   width: 90%;
   margin: auto;
-  overflow: hidden;
 }
 
 
@@ -556,7 +555,7 @@ a:hover {
      min-height: 150px;
      margin-bottom: 100px;
 }
-.bx-wrapper .bx-pager.bx-default-pager a.active
+/*.bx-wrapper .bx-pager.bx-default-pager a.active
 {
   background: white;
   border-radius: 100%;
@@ -569,7 +568,7 @@ a:hover {
   background: white;
   border-radius: 100%;
   padding: 7px;
-}
+}*/
 .bx-wrapper .bx-pager.bx-default-pager a:focus
 {
   color: white;
