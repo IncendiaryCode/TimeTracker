@@ -24,17 +24,17 @@
                     <?php }?> -->
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="hidden" class="form-control-file logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light"  id="user-email" name="mail" placeholder="username" value="<?php echo (isset($result))?$result:"";?>">
+                        <input type="hidden" class="form-control logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light"  id="user-email" name="mail" placeholder="username" value="<?php echo (isset($result))?$result:"";?>">
                     </div>
                 </div>
                 <div class="form-group">
                       <div class="input-group mb-3 top-space">
-                        <input type="password" class="form-control-file font-weight-light border-top-0 border-left-0 border-right-0" id="psw1" name="psw11" placeholder="Enter new password">
+                        <input type="password" class="form-control font-weight-light border-top-0 border-left-0 border-right-0" id="psw1" name="psw11" placeholder="Enter new password">
                       </div>
                 </div>
                 <div class="form-group otp">
                       <div class="input-group mb-3  top-space">
-                        <input type="password" class="form-control-file top-space font-weight-light border-top-0 border-left-0 border-right-0" id="psw2" name="psw22" placeholder="Confirm password">
+                        <input type="password" class="form-control top-space font-weight-light border-top-0 border-left-0 border-right-0" id="psw2" name="psw22" placeholder="Confirm password">
                     </div>
                 </div>
                 <p class="error" id="cnfrmPsw"></p>

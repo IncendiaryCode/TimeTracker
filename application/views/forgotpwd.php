@@ -25,22 +25,29 @@ if($this->session->flashdata('err_msg'))
     { ?>
         <div class="alert alert-danger"><?php echo $this->session->flashdata('err_msg');?></div>
 <?php }  ?>
-<div class="form-group">
-     <div class="input-group mb-3 top-space">
-        	<input type="email" class="form-control-file  has-email-validation has-empty-validation font-weight-light border-top-0 border-left-0 border-right-0" id="Uname" name="email" value="<?php set_value('email');?>" placeholder="Enter email">
-        	
+<div class="form-group" id="enter-email">
+     <div class="input-group top-space">
+        	<input type="email" class="form-control  has-email-validation has-empty-validation font-weight-light border-top-0 border-left-0 border-right-0" id="Uname" name="email" value="<?php set_value('email');?>" placeholder="Enter email">
     </div>
-         	<a onclick="sendOTP()" id="getOTP" href="#" class="text-left btn btn-link forgot-color p-0">Send OTP</a>   
-</div>
-<div class="form-group otp">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control-file font-weight-light border-top-0 border-left-0 border-right-0" id="otp1" name="otp" placeholder="Enter OTP">
+    <div class="row top-space"> 
+    <div class="col-6">     
+          <a href="<?=base_url();?>index.php/login" class=" text-left forgot-color"><i class="fas fa-arrow-left"> back to login</i></a>
       </div>
-      
-</div>
-  <div class="row top-space" style="width: 100%;">
-    <a href="<?=base_url();?>index.php/login" class="col-6 text-left forgot-color"><i class="fas fa-arrow-left"> back to login</i></a>
-    <button onclick="window.location.href='<?=base_url();?>index.php/login/check_otp'" class="btn btn-primary col-3 offset-3 login-color" id="count" type="submit" name="submit">  Submit  </button>
-</div>              
+      <div  class="col-6 text-right">   
+          <button onclick="sendOTP()" id="getOTP" href="#" class="btn btn-primary  login-color">Send OTP</button> 
+      </div>
+    </div>
+  </div>
+
+
+    <div class="form-group otp" id="enter-otp">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control font-weight-light border-top-0 border-left-0 border-right-0" id="otp1" name="otp" placeholder="Enter OTP">
+          </div>
+      <div class="row top-space" style="width: 100%;">
+        <a href="<?=base_url();?>index.php/login" class="col-6 text-left forgot-color"><i class="fas fa-arrow-left"> back to login</i></a>
+        <button onclick="window.location.href='<?=base_url();?>index.php/login/check_otp'" class="btn btn-primary col-3 offset-3 login-color" id="count" type="submit" name="submit">  Submit  </button>
+    </div>
+    </div>
 </form> 
 </div>

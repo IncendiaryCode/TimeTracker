@@ -21,19 +21,21 @@
              <div class="alert-success"><?php echo $this->session->flashdata('success');?></div>
          <?php } ?>
                 <form id="loginForm" class="login-form"  method="post" action="<?=base_url();?>index.php/login/login_process" novalidate>
+                    <p class="error" id="password-error" ></p>
+                    <p class="error" id="username-error"></p>
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="email" class="form-control-file logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light" id="username" name="username" placeholder="User name">
+                        <input type="email" class="form-control logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light" id="username" name="username" placeholder="User name">
                     </div>
-                    <p class="error" id="username-error"></p>
+                    
                 </div>
                 <div class="form-group">
                     <div class="input-group ">
-                        <input type="password" class="form-control-file top-space has-empty-validation border-top-0 border-left-0 border-right-0 font-weight-light" id="password" name="password" placeholder="Password" >
+                        <input type="password" class="form-control top-space has-empty-validation border-top-0 border-left-0 border-right-0 font-weight-light" id="password" name="password" placeholder="Password" >
                     </div>
-                    <p class="error" id="Password-error" ></p>
+                    
                 </div>
-                <div class="row top-space" style="width: 100%;">
+                <div class="row top-space" style="width: 100%; padding-top: 30px">
                     <a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/load_forgot_pwd"' class="col-6 forgot-color" id="forgot">Forgot password?</a>
 
                     <button type="submit" class=" col-3 offset-3 login-color" id="submit">Login</button>

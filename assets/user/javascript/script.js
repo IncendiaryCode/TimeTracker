@@ -43,7 +43,6 @@ Validation.prototype.event = function(ele) {
         }
     }
     if (ele.type == 'email' && ele.classList.contains('has-email-validation')) {
-
         return this.isValidateEmail(ele);
     }
     if (ele.type == 'password') {
@@ -77,6 +76,7 @@ if(loginForm)
 loginForm.onsubmit = function(e) {
     var validateForm = new Validation(e.currentTarget);
     var finalValue = validateForm.correctCheck();
+    console.log(finalValue)
     if (finalValue.isValid == true) {
 
 
@@ -92,15 +92,20 @@ loginForm.onsubmit = function(e) {
 
 var forgotPsw = document.getElementById('forgotPassword');
 forgotPsw.onsubmit = function(e) {
-
     user_email = document.getElementById('Uname').value;
     var validateForm = new Validation(e.currentTarget);
     var finalValue = validateForm.correctCheck();
+    console.log(finalValue)
     if (finalValue.isValid == true) {
 
-        var valid = validateOtp();
+        
         var formPsw = document.getElementById('reEnterPsw');
-        formPsw.onsubmit = function(e) {
+        $('#enter-otp').show();
+        $('#enter-email').hide();
+
+        var valid = validateOtp();
+        /*formPsw.onsubmit = function(e) {
+
             document.getElementById('user-email').value = user_email;
 
             var psw1 = document.getElementById('psw1').value;
@@ -125,10 +130,9 @@ forgotPsw.onsubmit = function(e) {
                 return true;
             } else {
                 document.getElementById('cnfrmPsw').innerHTML = "Enter correct Password!!!";
-                return false; /**/
+                return false; 
             }
-
-        }
+        }*/
         return false;
 
     }
@@ -180,6 +184,7 @@ function sendOTP() {
             data: { email: email },
             success: function(data) {
                 alert(data);
+                console.log("fjhcgdjfd");
             }
         });
     }
