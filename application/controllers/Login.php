@@ -23,7 +23,12 @@ class Login extends CI_Controller
     // Show login page
     public function index()
     {
-        $this->load->view('header');
+        $this->load->helper('url_helper');
+        $this->load->library('form_validation');
+        $this->load->helper('form');
+        $header_data = array();
+        $header_data["title"] = "Login";
+        $this->load->view('header', $header_data);
         $this->load->view('login');
         $this->load->view('footer');
     }
@@ -55,20 +60,22 @@ class Login extends CI_Controller
         $this->session->sess_destroy();
         redirect('/login/index', 'refresh');
     }
+
     //load forgot password page
-    public function load_forgot_pwd()
+    public function forgot_pwd()
     {
         $this->load->view('header');
         $this->load->view('forgotpwd');
         $this->load->view('footer');
     }
+
     //To store OTP into database
     public function send_otp()
     {
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('err_msg', 'Enter valid email.');
-            redirect('/login/load_forgot_pwd', 'refresh');
+            redirect('/login/forgot_pwd', 'refresh');
         } else {
             $send = $this->dashboard_model->send_otp();
             if ($send == true) {
@@ -81,13 +88,14 @@ class Login extends CI_Controller
             echo json_encode($result);
         }
     }
+
     //function to validate OTP
     public function check_otp()
     {
         $this->form_validation->set_rules('otp', 'OTP', 'trim|required');
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error_msg', 'Please enter OTP.');
-            redirect('/login/load_forgot_pwd', 'refresh');
+            redirect('/login/forgot_pwd', 'refresh');
         } else {
             $check['result'] = $this->dashboard_model->check_otp();
             if (!empty($check['result'])) {
@@ -96,7 +104,7 @@ class Login extends CI_Controller
                 $this->load->view('footer');
             } else {
                 $this->session->set_flashdata('error_msg', 'Enter correct OTP...');
-                redirect('/login/load_forgot_pwd', 'refresh');
+                redirect('/login/forgot_pwd', 'refresh');
             }
         }
     }
@@ -120,4 +128,3 @@ class Login extends CI_Controller
         }
     }
 }
-?>

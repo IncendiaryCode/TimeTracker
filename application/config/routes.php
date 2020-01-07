@@ -55,7 +55,7 @@ $route['add_project'] = 'add_project';
 $route['add_task'] = 'add_task';
 $route['add_user'] = 'add_user';
 $route['admin'] = 'admin';
-$route['default_controller'] = 'welcome';
+$route['default_controller'] = 'user';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 

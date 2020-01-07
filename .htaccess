@@ -1,7 +1,6 @@
 
 <IfModule mod_rewrite.c>
 RewriteEngine on
-#RewriteBase /
 
 ## Remove index.php from url
 RewriteEngine on
