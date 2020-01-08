@@ -3,29 +3,29 @@
     $profile = $this->session->userdata('user_profile');
     $name = $this->session->userdata('username');
 ?>
-<div class="modal modal-transparent fade" id="change-profile" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-header">
-            <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times  main-modal-close"></i></button>
-        </div>
-        <div class="modal-content text-center">
-            <img id="new_img" src="<?=base_url().USER_UPLOAD_PATH.$profile;?>" class="rounded-circle img-fluid" >
+    <div class="modal modal-transparent fade" id="change-profile" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-header">
+                <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times  main-modal-close"></i></button>
+            </div>
+            <div class="modal-content text-center">
+                <img id="new_img" src="<?=base_url().USER_UPLOAD_PATH.$profile;?>" class="rounded-circle img-fluid" >
 
-            <div class="edit">
-                <a href="#" class="text-white"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#changeimage"></i></a>
-            </div> 
+                <div class="edit">
+                    <a href="#" class="text-white"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#changeimage"></i></a>
+                </div> 
 
-            <h5 class="text-center mt-4 font-weight-light"><?php echo $name;?></h5>
-            <ul class="text-center">
-                <!-- profile options -->
-                <li id="empplyee-profile"><a href="<?=base_url();?>index.php/user/load_my_profile">My profile</a></li>
-                <li><a href="<?=base_url();?>index.php/user/change_password">Change password</a></li>
-                <li><a href="<?=base_url();?>index.php/user/load_employee_activities">My activities</a></li>
-                <li><a href="<?=base_url();?>index.php/login/logout" data-toggle="modal" data-target="#logout-modal">Logout</a></li>
-            </ul>
+                <h5 class="text-center mt-4 font-weight-light"><?php echo $name;?></h5>
+                <ul class="text-center">
+                    <!-- profile options -->
+                    <li id="empplyee-profile"><a href="<?=base_url();?>index.php/user/load_my_profile">My profile</a></li>
+                    <li><a href="<?=base_url();?>index.php/user/change_password">Change password</a></li>
+                    <li><a href="<?=base_url();?>index.php/user/load_employee_activities">My activities</a></li>
+                    <li><a href="<?=base_url();?>index.php/login/logout" data-toggle="modal" data-target="#logout-modal">Logout</a></li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 <div class="modal" id="changeimage" data-backdrop="false">
     <!-- to change the profile picture of user-->
     <div class="modal-dialog animated">

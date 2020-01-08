@@ -16,31 +16,31 @@
                         <h4 class="text-center">Change Password</h4>
                     </div>
                 </div>
-               <!--  <?php 
+                <?php 
                     
                     if($this->session->flashdata('err_msg'))
                     { ?>
                         <div class="alert alert-danger"><?php echo $this->session->flashdata('err_msg');?></div>
-                    <?php }?> -->
+                    <?php }?>
                 <div class="form-group">
                     <div class="input-group">
                         <input type="hidden" class="form-control logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light"  id="user-email" name="mail" placeholder="username" value="<?php echo (isset($result))?$result:"";?>">
                     </div>
                 </div>
                 <div class="form-group">
-                      <div class="input-group mb-3 top-space">
+                      <div class="input-group  email-input">
                         <input type="password" class="form-control font-weight-light border-top-0 border-left-0 border-right-0" id="psw1" name="psw11" placeholder="Enter new password">
                       </div>
                 </div>
                 <div class="form-group otp">
-                      <div class="input-group mb-3  top-space">
-                        <input type="password" class="form-control top-space font-weight-light border-top-0 border-left-0 border-right-0" id="psw2" name="psw22" placeholder="Confirm password">
+                      <div class="input-group email-input">
+                        <input type="password" class="form-control  font-weight-light border-top-0 border-left-0 border-right-0" id="psw2" name="psw22" placeholder="Confirm password">
                     </div>
                 </div>
                 <p class="error" id="cnfrmPsw"></p>
             
-                <div class="row top-space" style="width: 100%;">
-                    <a href="<?=base_url();?>index.php/login" class="col-6 forgot-color"><i class="fas fa-arrow-left"> back to login</i></a>
+                <div class="row email-input" style="width: 100%;">
+                    <a href="<?=base_url();?>index.php/login" class="col-6 forgot-color"><i class="fas fa-arrow-left"> </i>back to login</a>
                     <button type="submit" class="col-3 offset-3 btn btn-primary login-color" id="count">Submit</button>
                 </div>
             </form>

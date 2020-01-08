@@ -27,6 +27,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </div>
         </div>
         <div class="row top-space" style="width: 100%; padding-top: 30px">
+            
             <a href="<?= base_url(); ?>login/forgot_pwd" class="col-6 forgot-color" id="forgot-pwd">Forgot password?</a>
             <button type="submit" class=" col-3 offset-3 login-color" id="submit">Login</button>
             <div class="error"><?php echo isset($error) ? $error : '' ?></div>

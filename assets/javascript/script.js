@@ -75,7 +75,6 @@ if (loginForm) {
 	loginForm.onsubmit = function(e) {
 		var validateForm = new Validation(e.currentTarget);
 		var finalValue = validateForm.correctCheck();
-		console.log(finalValue);
 		if (finalValue.isValid == true) {
 			var id = document.getElementById("Username").value;
 			localStorage.setItem("id", id);
@@ -91,16 +90,68 @@ if (forgotPsw) {
 	forgotPsw.onsubmit = function(e) {
 		user_email = document.getElementById("Uname").value;
 		var validateForm = new Validation(e.currentTarget);
-		var finalValue = validateForm.correctCheck();
-		console.log(finalValue);
-		if (finalValue.isValid == true) {
-			var formPsw = document.getElementById("reEnterPsw");
-			$("#enter-otp").show();
-			$("#enter-email").hide();
+		var finalValue = validateForm.correctCheck();		
+	};
+}
 
-			var valid = validateOtp();
-			if (valid) {
-				formPsw.onsubmit = function(e) {
+function validateOtp() {
+	document.getElementById("email-error").innerHTML = " ";
+		$("#getOTP").click(function() {
+			$(".alert-user").show();
+		});	
+
+	var otpp = document.getElementById("otp1").value;
+	if (otpp === "" || otpp === " ") {
+		document.getElementById("email-error").innerHTML = " Enter OTP ";
+		return false;
+	} else {
+		/*validate OTP*/
+		$.ajax({
+			type: "POST",
+			url: timeTrackerBaseURL + "login/check_otp",
+			data: { otp: otpp },
+			success: function(data) {
+				console.log(data)
+				if (data == null || data == "") {
+					$(document).ready(function() {
+						$("#formPsw").show();
+						$("#form2").hide();
+					});
+					return true;
+				} else {
+					document.getElementById("email-error").innerHTML = "Wrong OTP.";
+					return false;
+				}
+			}
+		});
+	}
+}
+
+function sendOTP() {
+	var email = document.getElementById("Uname").value;
+	if (email == "" || email == " ") {
+		document.getElementById("email-error").innerHTML = "Enter email.";
+	} else {
+		$('#send-otp-spinner').css("display","block");
+		$.ajax({
+			type: "POST",
+			url: timeTrackerBaseURL + "login/send_otp",
+			data: { email: email },
+			success: function(data) {
+				document.getElementById("email-error").innerHTML = " ";
+					$("#enter-otp").show();
+					$("#enter-email").hide();
+				$('#fill-otp').click(function()
+				{
+				var validate = validateOtp();
+				console.log(validate);
+				if(validate)
+				{
+					forgotPsw.onsubmit = function(e) {
+						return true;
+					}
+					var formPsw = document.getElementById("reEnterPsw");
+					formPsw.onsubmit = function(e) {
 					document.getElementById("user-email").value = user_email;
 
 					var psw1 = document.getElementById("psw1").value;
@@ -129,58 +180,10 @@ if (forgotPsw) {
 						return false;
 					}
 				};
-			}
-		} else {
-			return false;
-		}
-	};
-}
 
-function validateOtp() {
-	$(document).ready(function() {
-		$("#getOTP").click(function() {
-			$(".alert-user").show();
-		});
-	});
 
-	var otpp = document.getElementById("otp1").value;
-	if (otpp === "" || otpp === " ") {
-		document.getElementById("alert-user").innerHTML = " Enter OTP ";
-		return false;
-	} else {
-		document.getElementById("rotate-text").innerHTML = " ";
-		/*validate OTP*/
-		$.ajax({
-			type: "POST",
-			url: timeTrackerBaseURL + "login/check_otp",
-			data: { otp: otpp },
-			success: function(data) {
-				if (data == null || data == "") {
-					$(document).ready(function() {
-						$("#formPsw").show();
-						$("#form2").hide();
-					});
-					return true;
-				} else {
-					document.getElementById("alert-user").innerHTML = "Wrong OTP.";
-					return false;
 				}
-			}
-		});
-	}
-}
-
-function sendOTP() {
-	var email = document.getElementById("Uname").value;
-	if (email == "" || email == " ") {
-		document.getElementById("Uname-error").innerHTML = "Enter email.";
-	} else {
-		$.ajax({
-			type: "POST",
-			url: timeTrackerBaseURL + "login/send_otp",
-			data: { email: email },
-			success: function(data) {
-				alert(data);
+				});
 			}
 		});
 	}

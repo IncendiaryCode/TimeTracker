@@ -22,24 +22,25 @@ $this->load->helper('url_helper');
         <?php }  ?>
         <div class="form-group" id="enter-email">
             <div class="input-group top-space">
-                <input type="email" class="form-control  has-email-validation has-empty-validation font-weight-light border-top-0 border-left-0 border-right-0" id="Uname" name="email" value="<?php set_value('email'); ?>" placeholder="Enter email">
+                <input type="email" class="form-control  has-email-validation has-empty-validation font-weight-light border-top-0 border-left-0 border-right-0" id="Uname" name="email" value="<?php set_value('email'); ?>" placeholder="Enter email"><div class="spinner-border" id="send-otp-spinner"></div>
             </div>
-            <div class="row top-space">
+            <div class="row email-input">
                 <div class="col-6">
                     <a href="<?= base_url(); ?>login" class="text-left forgot-color"><i class="fas fa-arrow-left"></i> Back to login</a>
                 </div>
                 <div class="col-6 text-right">
                     <button class="btn btn-primary login-color" onclick="sendOTP()" type="button" id="getOTP">Send OTP</button>
+                    <button class="btn btn-primary login-color" onclick="sendOTP()" type="button" id="getOTP1">Resend OTP</button>
                 </div>
             </div>
         </div>
-        <div class="form-group otp" id="enter-otp">
+        <div class="form-group otp email-input" id="enter-otp">
             <div class="input-group mb-3">
                 <input type="text" class="form-control font-weight-light border-top-0 border-left-0 border-right-0" id="otp1" name="otp" placeholder="Enter OTP">
             </div>
-            <div class="row top-space" style="width: 100%;">
+            <div class="row email-input" style="width: 100%;">
                 <a href="<?= base_url(); ?>login" class="col-6 text-left forgot-color"><i class="fas fa-arrow-left"></i> Back to login</a>
-                <button class="btn btn-primary col-3 offset-3 login-color" id="count" type="submit" name="submit"> Submit </button>
+                <button class="btn btn-primary col-3 offset-3 login-color" id="fill-otp" type="submit" name="submit"> Submit </button>
             </div>
         </div>
     </form>

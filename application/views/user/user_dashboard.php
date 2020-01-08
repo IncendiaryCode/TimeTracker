@@ -14,7 +14,6 @@ $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Login';
-
 ?>
 <script type="text/javascript">
 //this will be send to JS for timer to start
@@ -75,8 +74,65 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
         <div class="text-center shadow-lg topWidth stop-time" id="stop-time" data-tasktype="<?=$task_type?>" data-id="<?=$task_id?>">
             <h3><i id="icon-for-task" class="fas action-icon <?=$timerClass?>"></i></h3>
         </div>
+
+
+
+
+
+
+
+
+
+        <!-- <div class="modal modal-transparent fade" id="stop-now" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-header">
+                    <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times  main-modal-close"></i></button>
+                </div>
+                <div class="modal-content text-center">
+                    
+                </div>
+            </div>
+        </div> -->
+
+
+        <div class="modal modal-transparent fade" id="stop-now" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
+            <div class="modal-dialog  modal-xl" role="document">
+                <div class="modal-content">
+                    <form action="<?=base_url();?>index.php/user/stop_timer?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-stop-now" method="post">
+                        <div class="modal-header text-center">
+                            <h5 class="modal-title">Stop now!</h5>
+                        </div>
+                        <div class="modal-body ">
+                            <div class="input-group">
+                                <p>Task name: <strong>
+                                        <?php echo $task_info['task_status'][0]['task_name'] ?></strong></p>
+                            </div>
+                            <div class="input-group">
+                                <p>Started at: <strong id="old-start-date">
+                                <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
+                            </div>
+                            <div>
+                                <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control  timepicker"  name="stop_end_time">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                            <div class="pt-3">
+                                <label for="task-description">Enter description: </label>
+                                <input type="text" class="form-control "  name="stop_task-description">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" >Next</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <div class="container">
-            <?php if(!empty($task_info['task_status'])){ 
+            <?php if(!empty($task_info['task_status'])){
                 $first_dislpay = 0;
                foreach($task_info['task_status'] as $taskinfo){ 
                 $today_date = date("Y-m-d");
@@ -85,14 +141,35 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                     if($first_dislpay != 1 ) {
                     $first_dislpay = 1;
                 ?>
-            <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4 alert-box">
+                    
+          <!--   <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4 alert-box">
                 <i class="text-danger  fas fa-exclamation-triangle"></i>
                 As task "<?php echo $taskinfo['task_name'] ?>" has not been ended.
                 <a href="#" class="forgot-color" id="stop-now" data-toggle="modal" data-target="#end-time-update"> Stop now!</a>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-            </div> <?php } } } } ?>
+            </div>  -->
+
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+            <script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+            <script type="text/javascript">
+                $.ajax({
+                    type: "POST",
+                    url: timeTrackerBaseURL + "index.php/user/get_running_task",
+                    dataType: "json",
+                    success: function(res) {
+                    }
+                });
+                    $("#stop-now").modal("show");
+            </script>
+
+        <?php } } } } ?>
+
+
+            
+
             <div class="row mb-3 pt-4">
                 <p id="alarmmsg" class="text-center"></p>
                 <div class="col-6">
@@ -110,18 +187,30 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 </div>
             </div>
 
-
-
-
-    
-
-
-
-
+            <!-- <div class="row empty-card ">
+                <div class="col-6 ">
+            <div class = 'card card-style background content-overlay' >
+                <div class='card-body' >
+                    
+                   <div class="row" >
+                    <div class='col-6'>
+                    <div class="card-body">
+                        <i class="fas action-play fa-play animated fadeInRight" data-toggle="tooltip" data-placement="top" title="Resume"></i>
+                        <i class="fas action-edit fa-edit animated fadeInRight" data-toggle="tooltip" data-placement="top" title="Resume"></i>
+                    </div>
+                    </div>
+                    <div class='col-6 text-right card-actions' id='footer-right'>
+                    </div>
+                </div></div></div> </div></div>
+ -->
             <div class='row mb-5' id="attach-card">
                 <!-- recent task details -->
 
-                
+
+
+                     
+                   
+                    
 
 
                 <div class="col text-center">

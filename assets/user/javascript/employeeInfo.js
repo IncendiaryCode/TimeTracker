@@ -124,13 +124,11 @@ function loadTaskActivities(formData) {
 		.html(
 			'<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>'
 		);
-
 	$.ajax({
 		type: "GET",
 		url: timeTrackerBaseURL + "index.php/user/load_task_data",
 		data: formData,
 		success: function(values) {
-			console.log(values);
 			var data = JSON.parse(values);
 			$("#attach-card").empty();
 			/*var timerModal = timerStopModal();*/
@@ -139,14 +137,12 @@ function loadTaskActivities(formData) {
 					var cardHeader = $('<div class="card-header card-header" />');
 					var cardHeaderRow = $('<div class="row pt-2" />');
 					var today = getTime();
-
 					if (data[x][y].start_time != null) {
 						var task_date = data[x][y].start_time.slice(0, 10);
 						if (today != task_date) {
 							$(".alert-box").show();
 						}
 					}
-
 					if (data[x][y].start_time == null) {
 						cardHeaderRow.append(
 							'<div class="col-6 text-left"><span class="vertical-line"></span>Not yet started.</div>'
@@ -159,7 +155,6 @@ function loadTaskActivities(formData) {
 								"</div>"
 						);
 					}
-
 					var stopCol = $(
 						'<div class="col-6 text-right"  id="btn-stop' +
 							data[x][y].id +
@@ -174,9 +169,8 @@ function loadTaskActivities(formData) {
 						var id = data[x][y].id;
 						if (data[x][y].start_time != null) {
 							var stopButton = $(
-								'<span class="fa fa-hourglass-1"><i class=""></i> Running</span>'
+								'<span class=""><i class="fa fa-hourglass-1"></i> Running</span>'
 							).data("taskid", data[x][y].id);
-							
 						}
 						stopCol.append(stopButton);
 					}
@@ -185,7 +179,7 @@ function loadTaskActivities(formData) {
 					cardHeader.append(cardHeaderRow);
 
 					var cardInner = $(
-						"<div class='card card-style-1 animated fadeInUp content-overlay'  />"
+						"<div class='card card-style-1 animated fadeInUp'  /><div class='content-overlay'></div>"
 					);
 					cardInner.append(cardHeader);
 
@@ -194,16 +188,17 @@ function loadTaskActivities(formData) {
 					cardInner.append(cardBody);
 					var cardFooter = $("<div class='card-footer card-footer'>");
 					var footerRow = $('<div class="row" />');
-					footerRow.append(
-						"<div class='col-6'> <img src=" +
+					
+					footerRow.append(((data[x][y].image_name !== null)?
+							"<div class='col-6'> <img src=" +
 							data[x][y].image_name +
-							" width='20px;' alt=''> " +
+							" width='20px;'> " :'')+
 							data[x][y].project +
 							"</div>"
-					);
+						);
 
 					var footerRight = $(
-						"<div class='col-6 text-right card-actions' id='footer-right-" +
+						"<div class='col-6 text-right card-actions content-details fadeIn-right' id='footer-right-" +
 							data[x][y].id +
 							"'>"
 					);
@@ -213,25 +208,25 @@ function loadTaskActivities(formData) {
 							timeTrackerBaseURL +
 							"user/start_timer?id=" +
 							data[x][y].id +
-							'" class="card-action action-delete content-details" data-id="' +
+							'" class="card-action action-delete" data-id="' +
 							data[x][y].id +
 							'" data-toggle="tooltip" data-placement="top" title="Play"></a>'
 					);
 					actionPlay.append(
-						'<i class="fas action-icon position_play_icon fa-play"></i>'
+						'<i class="fas action-edit  fa-play"></i>'
 					);
 					var actionStop = $(
 						'<a href="' +
 							timeTrackerBaseURL +
 							"user/stop_timer?id=" +
 							data[x][y].id +
-							'" class="card-action action-delete content-details" data-id="' +
+							'" class="card-action action-delete" data-id="' +
 							data[x][y].id +
 							'" data-toggle="tooltip" data-placement="top" title="Stop"></a>'
 					);
 
 					actionStop.append(
-						'<i class="fas action-icon position_play_icon fa-stop"></i>'
+						'<i class="fas action-edit  fa-stop"></i>'
 					);
 					if (data[x][y].running_task == 0) {
 						footerRight.append(actionPlay);
@@ -249,54 +244,55 @@ function loadTaskActivities(formData) {
 							data: { action: "task", id: t_id },
 							dataType: "json",
 							success: function(res) {
-								//TODO:: show stop icon
-								//add task to slider
-								//TODO:: fetch task information from server
+								var res = res['data']['details'];
 								var row = $(
 									'<div id="slider-' +
-										res.id +
+										res['task_id'] +
 										'">' +
 										'<div class="section-slider task-slider">' +
 										'<input type="hidden" id="' +
-										res.id +
+										res['task_id'] +
 										'" value="' +
-										res.time +
+										res['t_minutes'] +
 										'">' +
 										'<input type="hidden" id="id-' +
 										res.id +
 										'" value="' +
-										res.id +
+										res['task_id'] +
 										'">' +
-										'<p class="font-weight-light time-font text-center login-time">' +
+										'<p class="font-weight-light time-font text-center login-time" id="start-time'+res['task_id']+'">' +
 										"Started at " +
-										res.time +
+										res['start_time'] +
 										" </p>" +
-										'<div class="font-weight-light text-center primary-timer start-task-timer" data-type="" data-time="">00:00:00</div>' +
+										'<div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer'+res['task_id']+'" data-type="" data-time="">00:00:00</div>' +
 										'<p class="font-weight-light text-center taskName">' +
-										res.name +
+										res['task_name'] +
 										"</p>" +
 										"</div>" +
 										"</div>"
 								);
-
 								var stopButton = $(
-								'<span class="fa fa-hourglass-1"><i class=""></i> Running</span>'
+								'<span class=""><i class="fa fa-hourglass-1"></i> Running</span>'
 							).data("taskid", t_id);
 							
+
+								var icon_tag = document.getElementById("footer-right-"+t_id).childNodes[0];
+
 								document.getElementById("btn-stop"+t_id).childNodes[0].remove();
 								document.getElementById("btn-stop"+t_id).childNodes[0].remove();
 								$('#btn-stop'+t_id).append(stopButton);
-								document.getElementById("footer-right-"+t_id).childNodes[0].remove();
-								$("#footer-right-"+t_id).append(actionStop);
+								//document.getElementById("footer-right-"+t_id).childNodes[0].remove();
+								//$("#footer-right-"+t_id).append(actionStop);
 
+								icon_tag.childNodes[0].classList.add("fa-stop");
+								icon_tag.childNodes[0].classList.remove("fa-play")
+								console.log(icon_tag.childNodes[0]);
 								$("#timer-slider").append(row);
 								timerSlider.reload();
-
+								start_task_timer(0, t_id);
 							}
 						});
 					});
-
-
 
 					actionStop.on("click", function(e) {
 						e.preventDefault();
@@ -308,25 +304,26 @@ function loadTaskActivities(formData) {
 							dataType: "json",
 							success: function(res) {
 								//TODO:: show stop icon
-
+								var data = res['flag'];
 								document.getElementById("footer-right-"+task_id).childNodes[0].remove();
 								$("#footer-right-"+task_id).append(actionPlay);
 								
-								console.log(res)
 								/*var timeUsed = minutesToTime(data[x][y].t_minutes);*/
 
+
 								document.getElementById("btn-stop"+task_id).childNodes[0].remove();
-								$('#btn-stop'+task_id).append('<i class="far fa-clock"></i> ' +"12h:50m");
+								$('#btn-stop'+task_id).append('<i class="far fa-clock"></i> ' +minutesToTime(data['details']['t_minutes']));
 								$("#action-play" + task_id).css("display", "block");
 								document.getElementById("slider" + task_id).remove();
 								document.getElementsByClassName("bx-pager-item")[1].remove();
+								
 							}
 						});
 					});
 
 					//action Edit
 					var actionEdit = $(
-						'<a href="#" class="card-action pl-2 action-edit text-white content-details " id="action-edit"><i class="far fa-edit position_edit_icon" data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
+						'<a href="#" class=" pl-2  text-white " id="action-edit"><i class="far fa-edit action-play " data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
 					);
 					actionEdit.attr(
 						"href",
@@ -341,7 +338,7 @@ function loadTaskActivities(formData) {
 					footerRow.append(footerRight);
 					cardFooter.append(footerRow);
 					cardInner.append(cardFooter);
-					var cardCol = $("<div class='col-lg-6 mb-4 cardCol content' />");
+					var cardCol = $("<div class='col-lg-6 mb-4 cardCol animated content ' />");
 					cardCol.append(cardInner);
 					$("#attach-card").append(cardCol);
 					if (data[x][y].running_task == 1 && data[x][y].start_time != null) {
@@ -410,7 +407,7 @@ var oldEndTime = document.getElementById("update-endtime");
 if (oldEndTime) {
 	oldEndTime.onsubmit = function() {
 		var oldTime = document.getElementById("old-datepicker").value;
-		var start_date = document.getElementById("old-start-date").textContent;
+		var start_date = document.getElementById("old-start-date").tex;
 		start_date = start_date.trim().slice(0, 10);
 		var old_date = oldTime.slice(0, 10);
 
@@ -445,35 +442,24 @@ timerSlider = {
 
 $(document).ready(function() {
 	$("#stop-time").click(function() {
+		timerSlider.slider.getCurrentSlide();
+		console.log(timerSlider.slider.getCurrentSlide())
 		var t_id = 0;
-
-		var curr_element = document.getElementsByClassName("bx-pager");
-		var x = curr_element[0].childNodes;
-		for (var i = 0; i < x.length; i++) {
-			var className = x[i]["lastChild"];
-			var len = className.classList.length;
-			if (len == 2) {
-				var scroll_num = i + 1;
-				var scroll_element = document.getElementById("timer-slider");
-				if (scroll_num == 1) {
-					$("#pause-action").modal("show");
-				} else {
-					var ele = scroll_element.children[scroll_num];
-					var taskid = document.getElementById("id" + i).value;
-					t_id = taskid;
-				}
-			}
+		var t_id = timerSlider.slider.getCurrentSlideElement()[0].id
+		var matches = t_id.match(/(\d+)/); 
+		if(timerSlider.slider.getCurrentSlide() != 0)
+		{
+		task_id = matches[0];
+		timerSlider.slider.getCurrentSlideElement()[0].remove();
+		document.getElementsByClassName("bx-pager-item")[1].remove();
+		timerSlider.reload();
+		if (task_id) {
+			taskUrl = timeTrackerBaseURL + "index.php/user/stop_timer";
 		}
-
-		if ($(this).data("tasktype") == "task") {
-			var taskUrl = timeTrackerBaseURL + "index.php/user/start_timer";
-			if (t_id) {
-				taskUrl = timeTrackerBaseURL + "index.php/user/stop_timer";
-			}
-			$.ajax({
+		$.ajax({
 				type: "POST",
 				url: taskUrl,
-				data: { action: "task", id: t_id },
+				data: { action: "task", id: task_id },
 				success: function(res) {
 					document.getElementById("alarmmsg").innerHTML = res["msg"];
 					setTimeout(function() {
@@ -486,9 +472,6 @@ $(document).ready(function() {
 				$("#pause-action").modal("show");
 			} else {
 				localStorage.setItem("task_id", t_id);
-				/*                var timerModal = timerStopModal();*/
-				//timerModal.modal('show');
-				updateTimer(0);
 			}
 		}
 	});

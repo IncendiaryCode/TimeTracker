@@ -23,6 +23,10 @@ html {
 .form-control-file {
     border-style: solid;
 }
+.spinner-border
+{
+    display: none;
+}
 
 .login-color {
     background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #edbffd);
@@ -44,7 +48,10 @@ html {
     width: 100%;
     right: 0%;
 }
-
+.email-input
+{
+    padding-top: 50px;
+}
 #form1 {
     position: absolute;
     top: 0%;

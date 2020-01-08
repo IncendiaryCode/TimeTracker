@@ -21,11 +21,11 @@ $GLOBALS['page_title'] = 'Add Task';
                             <p id="alartmsg" class="text-center"></p>
                     </div>
                     <form action="<?=base_url();?>index.php/user/add_tasks" method="post" id="addTask" class="mt-5 ">
-                        <button type="submit" id="save-and-start" class="text-center shadow-lg icon-width start-time">
+                        <!-- <button type="submit" id="save-and-start" class="text-center shadow-lg icon-width start-time">
                             <div data-tasktype="Task" data-id="80">
                                 <h3> <i class=" fas action-icon fa-play"></i></h3>
                             </div>
-                        </button>
+                        </button> -->
                         <div class="form-group">
                             <label for="task-name ">Write the task name</label>
                             <input type="text" class="form-control" name="task_name" id="Taskname" value="<?=set_value('task_name')?>">

@@ -22,11 +22,11 @@ $GLOBALS['page_title'] = 'Edit task';
                         <input type="hidden" name="task_id" id="curr-taskid" value="<?=$task_data[0][0]['task_id'];?>">
                         <?php if($task_data[1]['running_task'] == 1)
                         { ?>
-                        <button type="button" id="stop-or-complete" class="text-center shadow-lg icon-width stop-or-complete">
+                        <!-- <button type="button" id="stop-or-complete" class="text-center shadow-lg icon-width stop-or-complete">
                             <div data-tasktype="Task" data-id="80">
                                 <h3> <i class=" fas action-icon fa-stop"></i></h3>
                             </div>
-                        </button>
+                        </button> -->
                         <?php } ?>
                         <div class="form-group">
                             <label for="task-name ">Write the task name</label>
