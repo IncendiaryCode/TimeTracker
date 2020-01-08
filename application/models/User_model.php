@@ -513,12 +513,17 @@ class User_model extends CI_Model {
                     }
                     //$table_id[$i] = $time_range[$i]['table_id'];
                     $start_value = date('Y-m-d H:i:s',strtotime($time_range[$i]['start']));
-                    $end_value = date('Y-m-d H:i:s',strtotime($time_range[$i]['end']));
+                    if($time_range[$i]['end'] != "")
+                        $end_value = date('Y-m-d H:i:s',strtotime($time_range[$i]['end']));
+                    else
+                        $end_value = null;
                     if(isset($time_range[$i]['task_description'])){
                         $description = $time_range[$i]['task_description'];
                     }
                     $date =  date("Y-m-d",strtotime($start_value));
-                    $diff = strtotime($end_value) - strtotime($start_value);
+                    $diff = 0;
+                    if($end_value != null)
+                        $diff = strtotime($end_value) - strtotime($start_value);
                     $minutes = round((abs($diff) /60),2);           
                     $hours = round(abs($diff / ( 60 * 60 )));
 
@@ -588,9 +593,12 @@ class User_model extends CI_Model {
                             {
                                 $start_time = strtotime($date_value[$i]['start']);
                                 $end_itme = strtotime($date_value[$i]['end']);
-                                if($start_time != '' && $end_itme != ''){
+                                if($start_time != ''){
                                     $start = $date_value[$i]['date'].' '.date('H:i:s',$start_time);
-                                    $end = $date_value[$i]['date'].' '.date('H:i:s',$end_itme);
+                                    if($end_itme != '')
+                                        $end = $date_value[$i]['date'].' '.date('H:i:s',$end_itme);
+                                    else
+                                        $end = null;
                                 }else{
                                     $start = '0000-00-00 00:00:00';
                                     $end = '0000-00-00 00:00:00';
@@ -599,8 +607,9 @@ class User_model extends CI_Model {
                                 if(isset($date_value[$i]['task_description'])){
                                     $task_description = $date_value[$i]['task_description'];
                                 }
-                                
-                                $diff = $end_itme - $start_time;
+                                $diff = 0;
+                                if($end_itme != '')
+                                    $diff = $end_itme - $start_time;
                                 $hours = $diff / ( 60 * 60 );
                                 $minutes = $diff/60; 
                                 $total_mins = ($minutes < 0 ? 0 : abs($minutes));
