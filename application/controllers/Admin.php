@@ -38,7 +38,8 @@
 		}
 
 		//Load user analytics page
-		public function load_snapshot(){
+		public function load_snapshot()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 				$result = array();
 				$get_data = $this->input->get();
@@ -81,7 +82,8 @@
 				redirect('login/index','refresh');
 			}	
 		}
-		public function assign_user_to_project(){
+		public function assign_user_to_project()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 			$user_id = $this->input->post('assigning-user-name');
 			$project_id = $this->input->post('project-id');
@@ -98,7 +100,8 @@
 			}
 		}
 		//load user details page
-		public function load_userdetails_page(){
+		public function load_userdetails_page()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 			$this->load->view('header');
 			$result['data'] = $this->dashboard_model->get_user_data();
@@ -109,7 +112,8 @@
 			}
 		}
 
-		public function load_project_detail(){
+		public function load_project_detail()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 			$this->load->view('header');
 			$result['data'] = $this->dashboard_model->get_project_data($this->input->get('project_id'));
@@ -121,7 +125,8 @@
 			}
 		}
 
-		public function load_task_snapshot(){
+		public function load_task_snapshot()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 			$this->load->view('header');
 	        $this->load->view('task_snapshot');
@@ -132,7 +137,8 @@
 		}
 
 		//get user gragh data
-		public function user_chart(){
+		public function user_chart()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 			if($this->input->post('type')){
 				$type = $this->input->post('type');
@@ -151,7 +157,8 @@
 			}
 		}
 
-		public function user_task_table(){
+		public function user_task_table()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 			$table_type = $this->input->post('type');
 			$draw = intval($this->input->post("draw"));
@@ -175,7 +182,8 @@
 			}
 		}
 
-		public function user_project_table(){
+		public function user_project_table()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 			$table_type = $this->input->post('type');
 			$draw = intval($this->input->post("draw"));
@@ -198,8 +206,10 @@
 				redirect('login/index','refresh');
 			}
 		}
+
 		//load list of projects for an ajax call
-		public function get_project_list(){
+		public function get_project_list()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 			if($this->input->post('type')){
 				if($this->input->post('type') == 'get_graph_data'){
@@ -230,7 +240,8 @@
 		}
 
 		//get graph data
-		public function get_graph_data(){
+		public function get_graph_data()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 				$data['result'] = $this->dashboard_model->user_graph_data();
 				if($data['result'] == NULL){
@@ -246,7 +257,8 @@
 		}
 		
 		//To load add user page
-	    public function load_add_user(){
+	    public function load_add_user()
+	    {
 	    	if(($this->session->userdata('logged_in'))==TRUE){
 	    	$this->load->view('header');
 			$this->load->view('adduser');
@@ -257,7 +269,8 @@
 	    }
 
 		//Function to load add project page
-		public function load_add_project(){
+		public function load_add_project()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 			$this->load->view('header');
 			$data['names'] = $this->dashboard_model->get_usernames();
@@ -269,7 +282,8 @@
 		}
 
 		//Load add task page
-	    public function load_add_task(){
+	    public function load_add_task()
+	    {
 	    	if(($this->session->userdata('logged_in'))==TRUE){
 	    	$this->load->view('header');
 		    $data['names'] = $this->dashboard_model->get_usernames();
@@ -282,7 +296,8 @@
 	    }
 
 	    //To load admin profile
-		public function load_profile(){
+		public function load_profile()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 			$this->load->view('header');
 			$data['res']           = $this->dashboard_model->my_profile();
@@ -294,7 +309,8 @@
 		}
 
 		//function to show admin notifications
-		public function load_notification(){
+		public function load_notification()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 			$this->load->view('header');
 			$this->load->view('adminNotifications');
@@ -330,7 +346,8 @@
 	        }
 	    }
 
-	    public function password_exists(){
+	    public function password_exists()
+	    {
 	        if ($this->dashboard_model->password_exists() == TRUE)
 	        { 
 	           	return true;
@@ -341,7 +358,8 @@
 		}
 
 	    //To Add Projects..
-		public function add_projects(){
+		public function add_projects()
+		{
 			if($this->session->userdata('logged_in')){
 				if($this->input->post('project_name') == ''){
 					$this->form_validation->set_rules('project-name','Project Name','required|min_length[1]|trim|callback_project_exists|xss_clean');
@@ -403,7 +421,8 @@
 	    }
 	    
 	    //To add users...
-	    public function add_users(){
+	    public function add_users()
+	    {
 	    	if($this->session->userdata('logged_in')){
 		  		$this->form_validation->set_rules('task_name','Username','required|min_length[2]|trim|callback_users_exists|xss_clean');
 		        $this->form_validation->set_rules('task_pass','Password','trim|required|min_length[6]|max_length[100]|md5|trim|xss_clean');
@@ -434,13 +453,15 @@
 		}
 		 
 	    //get user name list into add task page
-	    public function get_username_list(){
+	    public function get_username_list()
+	    {
 	    	$data['users'] = $this->dashboard_model->get_usernames();
 	    	echo json_encode($data);
 	    }
 
 	    //get project module list to add task page 
-	    public function get_project_module(){
+	    public function get_project_module()
+	    {
 	    	$projectid      = $this->input->post('project_id');
 	        $data['result'] = $this->dashboard_model->get_module_name($projectid);
 	        if($data['result'] == FALSE){
@@ -453,7 +474,8 @@
 	    }
 
 	    //Assign tasks to users
-		public function add_tasks(){
+		public function add_tasks()
+		{
 			if($this->session->userdata('logged_in')){
 		  		//$this->form_validation->set_rules('user-name','Username','required|min_length[1]|trim|xss_clean');
 		        $this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|xss_clean');
@@ -488,7 +510,8 @@
 		}
 		
 		//delete user
-		public function delete_data(){
+		public function delete_data()
+		{
 			if(($this->session->userdata('logged_in'))==TRUE){
 				if($this->input->post('user_id')){
 					$data['result'] = $this->dashboard_model->delete_user($this->input->post('user_id'));
@@ -520,7 +543,8 @@
 		}
 
 		//Profile...
-		public function upload_profile(){
+		public function upload_profile()
+		{
 			if($this->session->userdata('logged_in')){
 		    	if(!empty($_FILES['change_img']['name'])){
 			    	$config['upload_path'] = UPLOAD_PATH;
@@ -551,7 +575,8 @@
 		}
 		
 		//Change password..
-		public function change_password(){
+		public function change_password()
+		{
 			if($this->session->userdata('logged_in')){
 		  		$this->form_validation->set_rules('old-pass','Old Password','trim|required|min_length[3]|max_length[100]|md5|trim|callback_password_exists|xss_clean');
 		  		$this->form_validation->set_rules('new-pass','New Password','trim|required|min_length[3]|max_length[100]|trim|xss_clean');

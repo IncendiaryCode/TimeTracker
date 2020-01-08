@@ -1172,7 +1172,7 @@ class Dashboard_model extends CI_Model
                     'mailtype' => MAILTYPE,
                     'validation' => TRUE
                 ));
-                    $this->email->from('admin@printgreener.com');
+                    $this->email->from('admin1@printgreener.com');
                     $this->email->to($email);
                     $this->email->subject('OTP for login');
                     $this->email->message('Use this OTP:'.$token);

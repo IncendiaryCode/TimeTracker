@@ -38,18 +38,18 @@ class Login extends CI_Controller
         $this->form_validation->set_rules('username', 'Username', 'trim|required|valid_email');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[3]|max_length[100]|xss_clean');
         if ($this->form_validation->run() == FALSE) {
-            redirect('/login/index', 'refresh');
+            redirect('/login', 'refresh');
         } else {
             $result = $this->dashboard_model->login_process();
             if ($result == 'admin') {
-                redirect('/admin/index','refresh');
+                redirect('/admin','refresh');
                 $this->session->set_userdata('logged_in', TRUE);
             } else if ($result == 'user') {
                 $this->session->set_userdata('logged_in', TRUE);
-                redirect('/user/index', 'refresh');
+                redirect('/user', 'refresh');
             } else {
                 $this->session->set_flashdata('err_message', 'Wrong Email/Password');
-                redirect('/login/index', 'refresh');
+                redirect('/login', 'refresh');
             }
         }
     }
@@ -58,7 +58,7 @@ class Login extends CI_Controller
     public function logout()
     {
         $this->session->sess_destroy();
-        redirect('/login/index', 'refresh');
+        redirect('/login', 'refresh');
     }
 
     //load forgot password page
@@ -108,6 +108,7 @@ class Login extends CI_Controller
             }
         }
     }
+
     //function to change password
     public function change_pass()
     {
@@ -117,7 +118,7 @@ class Login extends CI_Controller
         $send = $this->dashboard_model->change_password();
         if ($send) {
             $this->session->set_flashdata('success', 'Successfully Changed.');
-            redirect('/login/index', 'refresh');
+            redirect('/login', 'refresh');
             return true;
         } else {
             $this->session->set_flashdata('err_msg', 'Unable to reset password.');
@@ -128,3 +129,4 @@ class Login extends CI_Controller
         }
     }
 }
+?>

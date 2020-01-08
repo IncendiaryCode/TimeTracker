@@ -27,6 +27,7 @@ class User extends CI_Controller
             redirect('login/index', 'refresh');
         }
     }
+    
     public function index()
     {
         if ($this->session->userdata('logged_in')) {
@@ -39,6 +40,7 @@ class User extends CI_Controller
             redirect('login/index', 'refresh');
         }
     }
+
     public function dark(){
         $GLOBALS['dark_mode'] = 0;
         $this->form_validation->set_rules('dark-mode', 'Check box', 'required');
@@ -82,6 +84,18 @@ class User extends CI_Controller
         echo json_encode($task_details);
     }
 
+    //stop the old task by updating end time
+    public function get_running_task()
+    {
+        $result['data'] = $this->user_model->running_task_data();
+        if($result['data'] == NULL){
+            $result['status'] = FALSE;
+            $result['msg'] = 'No running tasks found.';
+        }else{
+            $result['status'] = TRUE;
+        }
+        echo json_encode($result);
+    }
     //Start timer function
     public function start_timer()
     {
@@ -111,7 +125,8 @@ class User extends CI_Controller
     public function stop_timer()
     {
         $post_data = $this->input->post();
-        $end_time = isset($post_data['end_time']) ? $post_data['end_time'] : '';
+        
+        $end_time = isset($post_data['stop_end_time']) ? $post_data['stop_end_time'] : '';
         $data['userid'] = $this->session->userdata('userid');
         $data['end_time'] = $end_time;
         $data['task_desc'] = isset($post_data['task-description']) ? $post_data['task-description'] : '';
