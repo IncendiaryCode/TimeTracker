@@ -44,19 +44,31 @@ $this->load->helper('url_helper');
 <body>
     <header class="container main-header">
         <div class="row">
+            <?php if(empty($GLOBALS['page_title'])) { ?>
+                <div class="col-md-6 col-6 time-tracker">
+                    <img src="<?=base_url();?>assets/images/logo-white.png" height="40px" >
+                </div>
+            <?php } else { ?>
             <div class="col-md-6 col-6 time-tracker">
                 <a href="<?=site_url();?>/user" class="link-to-back">
                     <img src="<?=base_url();?>assets/images/logo-white.png" height="40px" >
                 </a>
             </div>
+        <?php } ?>
             <!-- refers to home page -->
-            <div class="col-md-6 col-6 text-right">
+            <div class=" col-6 text-right">
             <?php
              if(empty($GLOBALS['page_title'])) {
                 ?>
+                <div class="row">
+                    <div class="col-10 text-right btn-task">
                 <a href="<?=site_url();?>/user/add_tasks" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
-                <!-- to chage image -->
-                <span style="font-size: 30px;" class="ml-md-3"><a href="#" class="text-white"><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></a></span>
+            </div>
+                    <!-- to chage image -->
+                    <div class="col-2 text-right">
+                    <a href="#" class="text-white profile-icon"><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></a>
+                </div>
+            </div>
             <?php } else { ?>
            
             <!-- refers to all other pages  -->

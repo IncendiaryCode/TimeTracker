@@ -1,45 +1,4 @@
-var addTask = document.getElementById('addTask');
-if (addTask) {
-    var m = new Date();
-    var start_date = m.getUTCFullYear() + "-" + m.getUTCMonth() + "-" + m.getUTCDate() + " " + m.getHours() + ":" + m.getMinutes() + ":" + m.getSeconds();
-    addTask.onsubmit = function (e) {
 
-        var taskName = document.getElementById('Taskname').value;
-        var project = document.getElementById('choose-project').value;
-        if (taskName == "" || taskName == " ") {
-            document.getElementById('taskError').innerHTML = "Please Enter Task Name ";
-            return false;
-        }
-
-        if (project == "" || project == "Select Project") {
-            document.getElementById('taskError').innerHTML = "Please Choose Project Name ";
-            return false;
-        }
-
-        if (document.getElementById('editTask').checked) { //check radio button for multiple timings
-            var len = document.getElementById("task-add-time").childElementCount;
-
-            var date = document.getElementById('date-picker-start').value;
-            var start_time = document.getElementById('start-time-0').value;
-            var end_time = document.getElementById('end-time-0').value;
-            var flag = true;
-
-            if (date !== "" && date !== " " && start_time !== "" && start_time !== " " && end_time !== "" && end_time !== " ") {
-
-                flag = addTime.validate();
-                console.log("flag", flag);
-                if (flag == false) {
-                    return false;
-                } else {
-                    array_of_timings.push({ date, start_time, end_time });
-                }
-            }
-        } else {
-            // store data in database
-            return true;
-        }
-    }
-}
 
 var addTime = {
     id: 0,
@@ -48,12 +7,12 @@ var addTime = {
     array_of_timings: [],
     layout: function (date, start_time, end_time) {
 
-        var section = $('<div class="time-section" />');
+        var section = $('<div class="time-section pt-3 pb-5" />');
         var row = $('<div class="row" />');
         var id = this.id;
         var array_of_timings = this.array_of_timings;
 
-        var colDate = $('<div class="col-3">' +
+        var colDate = $('<div class="col-4">' +
             '<div class="input-group mb-3">' +
             '<input type="text" class="form-control" name="daterange[' + id + '][date]" data-date-format="yyyy-mm-dd" id="date-picker-' + id + '" value=' + date + ' >' +
             '<div class="input-group-append">' +
@@ -65,25 +24,32 @@ var addTime = {
             '</div>');
         colDate.appendTo(row);
 
-        var colStartTime = $('<div class="col-3">' +
+        var colStartTime = $('<div class="col-4">' +
             '<div class="input-group">' +
             '<input id="start-time-' + id + '" class="form-control timepicker" data-date-format="hh:mm:ss" name="daterange[' + id + '][start]" value=' + start_time + ' />' +
             '</div>' +
             '</div>');
         colStartTime.appendTo(row);
 
-        var colEndTime = $('<div class="col-3">' +
+        var colEndTime = $('<div class="col-4">' +
             '<div class="input-group">' +
             '<input id="end-time-' + id + '"  class="form-control timepicker1" data-date-format="hh:mm:ss" name="daterange[' + id + '][end]" value=' + end_time + ' />' +
             '</div>' +
             '</div>');
         colEndTime.appendTo(row);
 
-        var removeBtn = $('<div class="col-3 text-center">' +
+        var colDescri = $('<div class="col-11">' +
+            '<div class="input-group">' +
+            '<input id="description' + id + '"  class="form-control timepicker1" data-date-format="hh:mm:ss" name="daterange[' + id + '][description]" " />' +
+            '</div>' +
+            '</div>');
+        colDescri.appendTo(row);
+
+        var removeBtn = $('<div class="col-1 text-center">' +
             '<a href="javascript:void(0);" title="Remove" id="remove-time-' + id + '">' +
             '<i class="fas fa-minus text-danger"></i>' +
             '</a>' +
-            '</div>');
+            '</div><hr>');
 
         removeBtn.on('click', function () {
             //remove the row
@@ -110,7 +76,7 @@ var addTime = {
             todayHighlight: true,
         });
     },
-    validate: function () {
+    validate_info: function () {
 
         var __this = this;
         var date = document.getElementById('date-picker-start').value;
@@ -130,14 +96,55 @@ var addTime = {
         if (date == "" || date == " " || start_time == "" || start_time == " " || end_time == "" || end_time == " ") {
 
             document.getElementById('datetime-error').innerHTML = "Please enter valid details...";
+            return false;
 
         } else if (!validate_greater_time) {
             document.getElementById('datetime-error').innerHTML = "date/time of start/end connot be greater than currnet date/time";
+            return false;
         } else if (__start_seconds >= __end_seconds) {
 
             document.getElementById('datetime-error').innerHTML = "Start time cannot be greater or equal to end time.";
+            return false;
         } else if (!validate_interval) {
             document.getElementById('datetime-error').innerHTML = "Already same task is done in this interval.";
+            return false;
+        } else {
+            document.getElementById('datetime-error').innerHTML = " ";
+            return true;
+        }
+    },
+    validate: function () {
+
+        var __this = this;
+        var date = document.getElementById('date-picker-start').value;
+        var start_time = document.getElementById('start-time-0').value;
+        var end_time = document.getElementById('end-time-0').value;
+
+        var __start_seconds = (parseInt(start_time.slice(0, 2)) * 60) + parseInt(start_time.slice(3, 5));
+
+        var __end_seconds = (parseInt(end_time.slice(0, 2)) * 60) + (parseInt(end_time.slice(3, 5)));
+
+        // fetch timings form database
+        var validate_interval = __this.check_for_timeintervals(__start_seconds, __end_seconds, date);
+
+        var validate_greater_time = __this.check_for_greatertime(date, start_time, end_time);
+
+
+        if (date == "" || date == " " || start_time == "" || start_time == " ") {
+
+            document.getElementById('datetime-error').innerHTML = "Please enter valid details...";
+            return false;
+
+        } else if (!validate_greater_time) {
+            document.getElementById('datetime-error').innerHTML = "date/time of start/end connot be greater than currnet date/time";
+            return false;
+        } else if (__start_seconds >= __end_seconds) {
+
+            document.getElementById('datetime-error').innerHTML = "Start time cannot be greater or equal to end time.";
+            return false;
+        } else if (!validate_interval) {
+            document.getElementById('datetime-error').innerHTML = "Already same task is done in this interval.";
+            return false;
         } else {
             document.getElementById('datetime-error').innerHTML = " ";
             return true;
@@ -147,7 +154,7 @@ var addTime = {
         var _this = this;
         this.addBtn.on('click', function (e) {
             e.preventDefault();
-            if (_this.validate()) { // validate the timing details
+            if (_this.validate_info()) { // validate the timing details
                 _this.id++;
                 var date = document.getElementById('date-picker-start').value;
                 var start_time = document.getElementById('start-time-0').value;
@@ -252,18 +259,42 @@ var addTime = {
 };
 
 $(document).ready(function () {
-    //add multiple time to form
 
-    $('#editTask').click(function () {
-        $('#task-times').show();
-        $('#save-and-start').hide();
+var addTask = document.getElementById('addTask');
+if (addTask) {
+    var m = new Date();
+    addTask.onsubmit = function (e) {
 
-    });
+        var taskName = document.getElementById('Taskname').value;
+        var project = document.getElementById('choose-project').value;
+        if (taskName == "" || taskName == " ") {
+            document.getElementById('taskError').innerHTML = "Please Enter Task Name ";
+            return false;
+        }
+
+        if (project == "" || project == "Select Project") {
+            document.getElementById('taskError').innerHTML = "Please Choose Project Name ";
+            return false;
+        }
+            document.getElementById('taskError').innerHTML = " ";
+            var date = document.getElementById('date-picker-start').value;
+            var start_time = document.getElementById('start-time-0').value;
+            var end_time = document.getElementById('end-time-0').value;
+            var flag = false;
+
+                flag = addTime.validate();
+                if (flag == false) {
+                    return false;
+                } else {
+                    array_of_timings.push({ date, start_time, end_time });
+                }
+           // }
+        
+    }
+}
+
+
     addTime.init("#task-add-time");
-    $('#newTask').click(function () {
-        $('#task-times').hide();
-        $('#save-and-start').show();
-    });
 
     $('.datepicker').datepicker({
         weekStart: 1,
@@ -298,64 +329,5 @@ $(document).ready(function () {
 
             }
         });
-    });
-    $('#save-and-start').click(function () {
-        var addTask = document.getElementById('addTask');
-        if (addTask) {
-            var m = new Date();
-            var start_date = m.getUTCFullYear() + "-" + m.getUTCMonth() + "-" + m.getUTCDate() + " " + m.getHours() + ":" + m.getMinutes() + ":" + m.getSeconds();
-            addTask.onsubmit = function (e) {
-
-                var taskName = document.getElementById('Taskname').value;
-                var description = document.getElementById('description').value
-                var project = document.getElementById('choose-project').value;
-                var project_module = document.getElementById('choose-module').value;
-                if (taskName == "" || taskName == " ") {
-                    document.getElementById('taskError').innerHTML = "Please Enter Task Name ";
-                    return false;
-                }
-
-                if (project == "" || project == "Select Project") {
-                    document.getElementById('taskError').innerHTML = "Please Choose Project Name ";
-                    return false;
-                }
-
-                if (document.getElementById('editTask').checked) { //check radio button for multiple timings
-                    var date = document.getElementById('date-picker-start').value;
-                    var start_time = document.getElementById('start-time-0').value;
-                    var end_time = document.getElementById('end-time-0').value;
-                    var flag = true;
-
-                    if (date !== "" && date !== " " && start_time !== "" && start_time !== " " && end_time !== "" && end_time !== " ") {
-                        document.getElementById('taskError').innerHTML = "You can not start completed task";
-                        return false;
-                    }
-                } else {
-
-                    $.ajax({
-                        type: "POST",
-                        url: timeTrackerBaseURL + 'index.php/user/add_tasks',
-                        data: {
-                            'action': 'save_and_start',
-                            'task_name': taskName,
-                            'description': description,
-                            'project': project,
-                            'project_module': project_module,
-                        },    /*call to start the task timer.*/
-                        dataType: 'json',
-                        success: function (res) {
-                            //  if (res.status) {
-                            console.log(res)
-                            document.getElementById("alartmsg").innerHTML = res['msg'];
-                            setTimeout(function () {
-                                document.getElementById("alarmmsg").innerHTML = '';
-                            }, 5000);
-                        }
-                    });
-                    return false;
-                }
-            }
-        }
-
     });
 });

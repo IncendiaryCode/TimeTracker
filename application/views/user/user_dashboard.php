@@ -76,61 +76,6 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
         </div>
 
 
-
-
-
-
-
-
-
-        <!-- <div class="modal modal-transparent fade" id="stop-now" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-header">
-                    <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times  main-modal-close"></i></button>
-                </div>
-                <div class="modal-content text-center">
-                    
-                </div>
-            </div>
-        </div> -->
-
-
-        <div class="modal modal-transparent fade" id="stop-now" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
-            <div class="modal-dialog  modal-xl" role="document">
-                <div class="modal-content">
-                    <form action="<?=base_url();?>index.php/user/stop_timer?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-stop-now" method="post">
-                        <div class="modal-header text-center">
-                            <h5 class="modal-title">Stop now!</h5>
-                        </div>
-                        <div class="modal-body ">
-                            <div class="input-group">
-                                <p>Task name: <strong>
-                                        <?php echo $task_info['task_status'][0]['task_name'] ?></strong></p>
-                            </div>
-                            <div class="input-group">
-                                <p>Started at: <strong id="old-start-date">
-                                <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
-                            </div>
-                            <div>
-                                <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control  timepicker"  name="stop_end_time">
-                                <div class="input-group-addon">
-                                    <span class="glyphicon glyphicon-th"></span>
-                                </div>
-                            </div>
-                            <div class="pt-3">
-                                <label for="task-description">Enter description: </label>
-                                <input type="text" class="form-control "  name="stop_task-description">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" >Next</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
         <div class="container">
             <?php if(!empty($task_info['task_status'])){
                 $first_dislpay = 0;
@@ -160,20 +105,17 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                     url: timeTrackerBaseURL + "index.php/user/get_running_task",
                     dataType: "json",
                     success: function(res) {
+                    $("#stop-now").modal("show");
                     }
                 });
-                    $("#stop-now").modal("show");
             </script>
 
         <?php } } } } ?>
 
-
-            
-
             <div class="row mb-3 pt-4">
-                <p id="alarmmsg" class="text-center"></p>
                 <div class="col-6">
                     <h4 class="font-weight-light text-left ">Recent Activites</h4>
+                <p id="alarmmsg" class="text-center"></p>
                 </div>
                 <div class="col-6">
                     <div class="dropdown text-right" id="dropdown-recent-acts">
@@ -187,31 +129,8 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 </div>
             </div>
 
-            <!-- <div class="row empty-card ">
-                <div class="col-6 ">
-            <div class = 'card card-style background content-overlay' >
-                <div class='card-body' >
-                    
-                   <div class="row" >
-                    <div class='col-6'>
-                    <div class="card-body">
-                        <i class="fas action-play fa-play animated fadeInRight" data-toggle="tooltip" data-placement="top" title="Resume"></i>
-                        <i class="fas action-edit fa-edit animated fadeInRight" data-toggle="tooltip" data-placement="top" title="Resume"></i>
-                    </div>
-                    </div>
-                    <div class='col-6 text-right card-actions' id='footer-right'>
-                    </div>
-                </div></div></div> </div></div>
- -->
             <div class='row mb-5' id="attach-card">
                 <!-- recent task details -->
-
-
-
-                     
-                   
-                    
-
 
                 <div class="col text-center">
                     <div class="spinner-border" role="status" aria-hidden="true"></div> Loading...
@@ -222,5 +141,45 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
         <footer>
             <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</p>
         </footer>
+
+
+        <div class="modal modal-transparent fade" id="stop-now" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
+            <div class="modal-dialog  modal-xl" role="document">
+                <div class="modal-content">
+                    <form action="<?=base_url();?>index.php/user/stop_timer?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-stop-now" method="post">
+                        <div class="modal-header text-center">
+                            <h5 class="modal-title">Stop now!</h5>
+                        </div>
+                        <div class="modal-body ">
+                            <div class="input-group">
+                                <p>Task name: <strong>
+                                        <?php echo $task_info['task_status'][0]['task_name'] ?></strong></p>
+                            </div>
+                            <div class="input-group">
+                                <p>Started at: <strong id="old-start-date">
+                                <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
+                            </div>
+                            <div>
+                                <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control  timepicker"  name="stop-end-time" id="stop-end-time">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                            <div class="pt-3">
+                                <label for="task-description">Enter description: </label>
+                                <input type="text" class="form-control "  name="stop_task-description">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <p class="text-dangert text-center" id="stop-now-error"></p>
+                            <button type="submit" class="btn btn-primary">Next</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </main>

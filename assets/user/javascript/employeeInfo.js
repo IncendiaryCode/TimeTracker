@@ -202,7 +202,6 @@ function loadTaskActivities(formData) {
 							data[x][y].id +
 							"'>"
 					);
-
 					var actionPlay = $(
 						'<a href="' +
 							timeTrackerBaseURL +
@@ -443,7 +442,6 @@ timerSlider = {
 $(document).ready(function() {
 	$("#stop-time").click(function() {
 		timerSlider.slider.getCurrentSlide();
-		console.log(timerSlider.slider.getCurrentSlide())
 		var t_id = 0;
 		var t_id = timerSlider.slider.getCurrentSlideElement()[0].id
 		var matches = t_id.match(/(\d+)/); 
@@ -461,10 +459,9 @@ $(document).ready(function() {
 				url: taskUrl,
 				data: { action: "task", id: task_id },
 				success: function(res) {
-					document.getElementById("alarmmsg").innerHTML = res["msg"];
-					setTimeout(function() {
-						document.getElementById("alarmmsg").innerHTML = "";
-					}, 5000);
+					/*setTimeout(function() {
+						document.getElementById('alarmmsg').innerHTML = "task has been stoped.";
+					}, 50);*/
 				}
 			});
 		} else {
@@ -477,10 +474,13 @@ $(document).ready(function() {
 	});
 
 	var curr_timeStamp = Math.floor(Date.now() / 1000);
-	login_timer = parseInt(curr_timeStamp) - parseInt(__timeTrackerLoginTime);
-	if (typeof login_timer != "undefined") {
-		if (login_timer == parseInt(login_timer)) {
-			startTimer(login_timer);
+	if(__timeTrackerLoginTime)
+	{
+		login_timer = parseInt(curr_timeStamp) - parseInt(__timeTrackerLoginTime);
+		if (typeof login_timer != "undefined") {
+			if (login_timer == parseInt(login_timer)) {
+				startTimer(login_timer);
+			}
 		}
 	}
 	var x = document.getElementsByClassName("task-slider");
@@ -512,4 +512,23 @@ $(document).ready(function() {
 	});
 
 	timerSlider.init();
+
+	if(document.getElementById('update-stop-now'))
+	{
+		console.log("nfdjhfg djfvd");
+		var stop_now = document.getElementById('update-stop-now');
+		stop_now.onsubmit = function()
+		{
+		var stop_now = document.getElementById('stop-end-time').value;
+		if(stop_now == ' ' || stop_now == "")
+			{
+				document.getElementById('stop-now-error').innerHTML = "enter valid end time. "
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+	}
 });

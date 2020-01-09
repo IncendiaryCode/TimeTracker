@@ -53,8 +53,7 @@ $GLOBALS['page_title'] = 'Add Task';
 
                             </select>
                         </div>
-                        <div class="form-group pl-4">
-                            <!-- new or completed tasks..-->
+                        <!-- <div class="form-group pl-4">
                             <div class="radio">
                                 <label for="radio1" class="form-check-label">
                                     <input type="radio" id="newTask" name="task_type" class="form-check-input" checked>New task
@@ -63,30 +62,29 @@ $GLOBALS['page_title'] = 'Add Task';
                                     <input type="radio" id="editTask" name="task_type" class="form-check-input">Completed task
                                 </label>
                             </div>
-                        </div>
+                        </div> -->
+                        <p class="display-5"><u>Time line</u></p>
                         <!-- if task is completed -->
-                        <div id="task-times" class="display-none">
+                        <div id="task-times">
                             <div id="show_list">
                                 <div class="row">
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <p><b>Date</b></p>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <p><b>Start time</b></p>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <p><b>End time</b></p>
                                     </div>
-                                    <div class="col-3">
-                                        <p><b>Description</b></p>
-                                    </div>
+                                    
                                 </div>
                             </div>
                             <!-- Add time  -->
                             <div id="task-add-time">
                                 <div class="primary-wrap">
                                     <div class="row">
-                                        <div class="col-3">
+                                        <div class="col-4">
                                             <div class="input-group mb-3">
                                                 <input type="text" class="form-control datepicker-0" name="daterange[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start">
                                                 <div class="input-group-append">
@@ -96,26 +94,25 @@ $GLOBALS['page_title'] = 'Add Task';
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-4">
                                             <div class="input-group date">
                                                 <input id="start-time-0" class="form-control timepicker" name="daterange[0][start]" />
                                             </div>
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-4">
                                             <div class="input-group date">
                                                 <input id="end-time-0" class="form-control timepicker1" name="daterange[0][end]" />
                                             </div>
                                         </div>
-                                        <div class="col-2 text-center">
-                                            <input id="description-0" class="form-control" name="daterange[0][description]" />
+                                        <div class="col-11 text-center">
+                                            <input id="description-0" class="form-control" name="daterange[0][description]" placeholder="description" />
                                         </div>
 
                                         <div class="col-1 text-center">
                                             <a href="javascript:void(0);" id="add-new-time" title="Add">
-                                                <i class="fas fa-plus icon-plus text-success"></i>
+                                                <i class="fas fa-plus pt-2 icon-plus text-success"></i>
                                             </a>
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +124,9 @@ $GLOBALS['page_title'] = 'Add Task';
                         <p id="taskError" class=" text-danger"></p>
                         <p>&nbsp;</p>
                         <hr />
+                        <div class="text-right">
                         <button type="submit" class="btn btn-primary">Save Task</button><!-- to store the task entry. -->
+                    </div>
                     </form>
                 </div>
             </div>

@@ -19,43 +19,9 @@ function stop_or_complete(flag) {
     });
 }
 
-//checking for stop or complete the task.
-var timerStopModal = function () {
-    var timerModal = $('#timestopmodal').modal({
-        'show': false,
-        'backdrop': 'static',
-    });
-
-    timerModal.on('shown.bs.modal', function (e) {
-    });
-
-    timerModal.on('hidden.bs.modal', function (e) {
-        startTimer(localStorage.getItem('timeStamp'));
-    });
-
-    var flag = 0;
-    var completeBtn = timerModal.find('button#timestopmodal-complete-task');
-
-    completeBtn.unbind().on('click', function () {
-        flag = 1;
-        stop_or_complete(flag);
-    });
-
-    var stopBtn = timerModal.find('button#timestopmodal-stop-task');
-    flag = 0;
-    stopBtn.unbind().on('click', function () {
-        stop_or_complete(flag);
-    });
-    return timerModal;
-};
-
 $(document).ready(function()
 {
 // var taskid = document.getElementById('curr-taskid').value;
-var timerModal = timerStopModal();
-$('#stop-or-complete').on('click', function () {
-    timerModal.modal('show');
-});
 
 	var form_edit = document.getElementById('editTask');
 	if(form_edit)

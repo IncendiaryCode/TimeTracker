@@ -46,26 +46,32 @@ $GLOBALS['page_title'] = 'Edit task';
                         </div>
                         <h4 class="mt-4 text-center">Task activities</h4>
                         <div class="row">
-                            <div class="col-1 col-md-1"><b>#</b></div>
-                            <div class="col-4 col-md-4"><b>Start time</b></div>
-                            <div class="col-3 col-md-4"><b>End time</b></div>
-                            <div class="col-4 col-md-3"><b>Description</b></div>
+                            <div class="col-4 col-md-4"><b>Date</b></div>
+                            <div class="col-3 col-md-4"><b>Start time</b></div>
+                            <div class="col-4 col-md-4"><b>End time</b></div>
                         </div>
                         <div class="row" id="total-row">
                             <?php $num = 0;
                           foreach($task_data[0] as $task){
                             ?>
-                                <div class="col-1 col-md-1  mt-3">
-                                <input type="hidden" name="time[<?=$num?>][table_id]" value="<?php echo $task['id']?>" >
-                                    <?=$num;?>
+                                <div class="col-4">
+                                    <div class="input-group mt-3">
+                                        <input type="text" class="form-control datepicker-0" name="daterange[0][date]" data-date-format="yyyy-mm-dd" >
+                                        <div class="input-group-append">
+                                            <span class="input-group-text datepicker ">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-4 col-md-4 mt-3">
+                                    <input class="form-control timepicker" type="text" id="start<?=$num?>"  name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>" placeholder="<?=$task['start_time'];?>">
                                 </div>
                                 <div class="col-4 col-md-4 mt-3">
-                                    <input class="form-control edit-date-time" type="text" id="start<?=$num?>"  name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>" placeholder="<?=$task['start_time'];?>">
+                                    <input class="form-control timepicker" type="text" id="end<?=$num?>"  name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>" placeholder="<?=$task['end_time'];?>">
                                 </div>
-                                <div class="col-3 col-md-4 mt-3">
-                                    <input class="form-control edit-date-time" type="text" id="end<?=$num?>"  name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>" placeholder="<?=$task['end_time'];?>">
-                                </div>
-                                <div class="col-4 col-md-3 mt-3">
+                                <div class="col-4 col-md-12 mt-3 mb-5">
                                     <input type="text" class="form-control" name="time[<?=$num?>][task_description]" value="<?=$task['task_description'];?>">
                                 </div>
                             <?php $num=$num+1;
@@ -75,7 +81,9 @@ $GLOBALS['page_title'] = 'Edit task';
                             <p id="user-alerting" class=" text-danger mt-3"></p>
                             <p>&nbsp;</p>
                             <hr />
-                            <button type="submit" class="btn btn-primary">Save Task</button>
+                            <div class="text-right">
+                            <button type="submit" class="btn btn-primary text-right">Save Task</button>
+                        </div>
                     </form>
                 </div>
             </div>

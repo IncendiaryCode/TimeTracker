@@ -49,6 +49,16 @@ header.main-header h1 {
     background-image: linear-gradient(rgba(255, 255, 255, 0) 20%, #ffffff 45%)
 }
 
+.profile-icon
+{
+    font-size: 30px; 
+    align-content: center;
+}
+.btn-task
+{
+   align-content: center;
+   padding-top: 5px; 
+}
 .main-container {
     background: #fff;
     border-radius: 50px 50px 0 0;
@@ -85,6 +95,7 @@ header.main-header h1 {
     color: white;
     font-size: 18px;
     margin-bottom: 5%;
+    margin-top: 50px;
 }
 .task
 {
@@ -341,12 +352,7 @@ a:hover {
 
 }
 
-/*.card-style-1:hover .card-footer .card-actions .card-action {
-    display: block;
-    color: white;
-    border-color: #ccc;
-    font-size: 35px;
-}*/
+
 
 .modal-transparent {
     background-image: linear-gradient(to bottom right, rgb(111, 121, 253, 0.95), rgb(215, 136, 251, 0.95), rgb(250, 223, 253, 0.95));
@@ -411,10 +417,6 @@ a:hover {
     opacity: .89;
 }
 
-#task-times {
-    display: none;
-}
-
 .footer {
     margin-top: 80px;
 }
@@ -422,7 +424,6 @@ a:hover {
 {
     font-size: 36px;
 }
-
 
 
 .gj-picker-bootstrap
@@ -448,11 +449,10 @@ a:hover {
      min-height: 150px;
      margin-bottom: 100px;
 }
-/*.bx-wrapper .bx-pager.bx-default-pager a.active
+.bx-wrapper .bx-pager.bx-default-pager a.active
 {
   background: white;
   border-radius: 100%;
-  padding: 7px;
   opacity: 1;
 }
 
@@ -460,8 +460,7 @@ a:hover {
 {
   background: white;
   border-radius: 100%;
-  padding: 7px;
-}*/
+}
 .bx-wrapper .bx-pager.bx-default-pager a:focus
 {
   color: white;
@@ -563,8 +562,8 @@ opacity: 0.5;
 @media (min-width: 700px ) {
     .display-heading
     {
-        font-size: 32px;
-        font-weight: 300;
+        font-size: 54px;
+        font-weight: 400;
         line-height: 1.2;
     }
 }
@@ -593,6 +592,11 @@ opacity: 0.5;
 {
     min-width: 120px;
 }
+.bx-pager-item
+{
+    color: #ccc;
+}
+
 
 @import url(https://fonts.googleapis.com/css?family=Raleway);
 
@@ -614,9 +618,6 @@ opacity: 0.5;
   bottom: 0;
   right: 0;
   opacity: 0;
-/*  -webkit-transition: all 0.4s ease-in-out 0s;
-  -moz-transition: all 0.4s ease-in-out 0s;
-  transition: all 0.4s ease-in-out 0s;*/
 }
 
 .content:hover .content-overlay{
@@ -636,18 +637,13 @@ opacity: 0.5;
   top: 50%;
   left: 50%;
   opacity: 0;
-/*  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  -webkit-transition: all 0.3s ease-in-out 0s;
-  -moz-transition: all 0.3s ease-in-out 0s;
-  transition: all 0.3s ease-in-out 0s;*/
 }
 
 .content:hover .content-details{
   top: 50%;
   left: 50%;
   opacity: 1;
+
   padding: 0px 15px 0px 15px;
 }
 
