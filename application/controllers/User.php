@@ -126,7 +126,7 @@ class User extends CI_Controller
     {
         $post_data = $this->input->post();
         
-        $end_time = isset($post_data['stop_end_time']) ? $post_data['stop_end_time'] : '';
+        $end_time = (!empty($post_data['stop_end_time'])) ? $post_data['stop_end_time'] : '';
         $data['userid'] = $this->session->userdata('userid');
         $data['end_time'] = $end_time;
         $data['task_desc'] = isset($post_data['stop_task-description']) ? $post_data['stop_task-description'] : '';
@@ -293,59 +293,64 @@ class User extends CI_Controller
                     }
                     if (sizeof($date_value) >= 1)
                     {
-
-                        for ($i = sizeof($date_value)-1;$i >= 0;$i--)
-                        {
-                            
-                            if(($date_value[$i]['start']) =='' || ($date_value[$i]['start'] == null))
-                                $start_time = '';
-                            else
-                                $start_time = strtotime($date_value[$i]['start']);
-                            if(($date_value[$i]['end']) =='' || ($date_value[$i]['end'] == null))
-                                $end_time = strtotime($date_value[$i]['end']);
-                            else
-                                $end_time = '';
-                            if($start_time != ''){
-                                $start = $date_value[$i]['date'] . ' ' . date('H:i:s', $start_time);
-                                if($end_time != '')
-                                    $end = $date_value[$i]['date'].' '.date('H:i:s',$end_time);
-                                else
-                                    $end = null;
-                            } else {
+                        for ($i = (sizeof($date_value)-1);$i >= 0;$i--)
+                        {       
+                            if(($date_value[$i]['start']) == '' || ($date_value[$i]['start'] == null))
                                 $start = '0000-00-00 00:00:00';
-                                $end = '0000-00-00 00:00:00';
+                            else{
+                                $start_time = strtotime($date_value[$i]['start']);
+                                $start = $date_value[$i]['date'] . ' ' . date('H:i:s', $start_time);
                             }
-                            print_r($start);
+                            if($date_value[$i]['end'] == '' || ($date_value[$i]['end'] == null) || ($date_value[$i]['end'] == ' ') || (!isset($date_value[$i]['end'])))
+                                $end = '0000-00-00 00:00:00';
+                            else{
+                                $end_time = strtotime($date_value[$i]['end']);
+                                $end = $date_value[$i]['date'].' '.date('H:i:s',$end_time);
+                            }
                             $task_description = "";
                             if (isset($date_value[$i]['description'])) {
                                 $task_description = $date_value[$i]['description'];
                             }
                             $diff = 0;
-                            if($end_time != '')
+                            $hours = 0;
+                            $total_mins = 0;
+                            if($end != '0000-00-00 00:00:00')
+                            {
                                 $diff = $end_time - $start_time;
-                            $hours = $diff / (60 * 60);
-                            $minutes = $diff / 60;
-                            $total_mins = ($minutes < 0 ? 0 : abs($minutes));
-                            if($end_time == ''){
+                                $hours = $diff / (60 * 60);
+                                $minutes = $diff / 60;
+                                $total_mins = ($minutes < 0 ? 0 : abs($minutes));
+
+                                $details['start'] = $start;
+                                $details['end'] = $end;
+                                $details['task_id'] = $result;
+                                $details['userid'] = $this->session->userdata('userid');
+                                $details['action'] = 'timings';
+                                $details['description'] = $task_description;
+                                $details['hours'] = $hours;
+                                $details['mins'] = $total_mins;
+                                $details['task_date'] = $date_value[$i]['date'];
+                                $add_result = $this->user_model->add_tasks($details);
+                            }
+                            else
+                            {
                                 $timer['userid'] = $this->session->userdata('userid');
                                 $timer['task_type'] = 'task';
                                 $timer['task_id'] = $result;
                                 $timer['start_time'] = $start;
-                                $result['data'] = $this->user_model->start_timer($timer);
-                                if ($result) {
+                                $res['data'] = $this->user_model->start_timer($timer);
+                                if ($res) {
                                     $output_result['status'] = TRUE;
                                     $output_result['msg']    = "Task Saved and Timer started.";
-                                    $output_result['data'] = $result;
+                                    $output_result['data'] = $res;
                                 } //$data
                                 else {
                                     $output_result['status'] = FALSE;
                                     $output_result['msg']    = "Something went wrong.";
                                 }
                                 echo json_encode($output_result);
-                            }else{
-                                print_r('kk'.$end_time);print_r(' hh');
-                            }     
-                        }exit; 
+                            }    
+                        }
                     }
                     $this->session->set_flashdata('success', 'Successfully added.');
                     redirect('user/load_add_task', 'refresh');
