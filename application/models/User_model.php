@@ -197,7 +197,8 @@ class User_model extends CI_Model {
             }
         } else if ($data['task_type'] == 'task') //check if the timer-start request is for task
         {
-            $array2 = array('task_id' => $data['task_id'], 'user_id' => $data['userid'], 'task_date' => date('Y:m:d'), 'start_time' => date('Y:m:d H:i:s'), 'total_hours' => '0', 'total_minutes' => '0', 'created_on' => date('Y:m:d H:i:s'));
+            $start = ($data['start_time'])?$data['start_time']:date('Y:m:d H:i:s');
+            $array2 = array('task_id' => $data['task_id'], 'user_id' => $data['userid'], 'task_date' => date('Y:m:d'), 'start_time' => $start, 'total_hours' => '0', 'total_minutes' => '0', 'created_on' => date('Y:m:d H:i:s'));
             $this->db->set($array2);
             $query2 = $this->db->insert('time_details', $array2);
             if ($query2) {
@@ -272,7 +273,7 @@ class User_model extends CI_Model {
         $userid = $this->session->userdata('userid');
         $taskdate = $date;
         if ($chart_type == "daily_chart") {
-            $this->db->select('*');
+            $this->db->select('*,d.id AS table_id');
             //$this->db->select('*,count(t.task_name) as tasks');
             $this->db->from('time_details AS d');
             $this->db->join('task AS t', 't.id = d.task_id');
@@ -284,37 +285,31 @@ class User_model extends CI_Model {
             if ($query->num_rows() > 0) {
                 $data = $query->result_array();
                 foreach ($data as $d) {
+                    $table_id[] = $d['table_id'];
                     $task_id[] = $d['task_id'];
                     $task_name[] = $d['task_name'];
                 }
 
-                $tasks = array_count_values($task_id);
+                /*$tasks = array_count_values($task_id);
                 foreach ($tasks as $key => $count) {
                     if ($count >= 1) {
                         $task_ids[] = $key;
                     }
-                }
-
-                $task_names = array_count_values($task_name);
-                foreach ($task_names as $name => $c) {
-                    if ($c >= 1) {
-                        $names[] = $name;
-                    }
-                }
-                $k = 0;
-                foreach ($task_ids as $t) {
+                }*/
+                
+                foreach ($data as $t) {
                     $this->db->select('d.start_time,d.end_time,d.total_minutes');
                     $this->db->from('time_details AS d');
                     $this->db->join('task AS t', 't.id = d.task_id');
                     $this->db->where('d.end_time IS NOT NULL'); //tasks that are not running
-                    $this->db->where(array('d.user_id' => $userid, 'd.task_id' => $t, 'd.task_date' => $taskdate));
+                    $this->db->where(array('d.user_id' => $userid, 'd.id' => $t['table_id'], 'd.task_date' => $taskdate));
                     $query = $this->db->get();
-                    $timing[$k] = $query->result_array();
-                    $k = $k + 1;
+                    $timing[] = $query->row_array();
                 }
                 $chart_data = array('daily_chart', "status" => TRUE,
                 //"labels"=> $week_days,
-                "data" => array($task_ids, $timing, $names));
+                "data" => array($task_id, $timing, $task_name));
+            
             } else {
                 $chart_data = array('daily_chart', 'status' => FALSE, 'data' => "No activity in this date.");
             }
@@ -572,7 +567,7 @@ class User_model extends CI_Model {
                         return false;
                     } else {
                         //Add timings into time_details table
-                        $date_value = $data['time_range'];
+                        /*$date_value = $data['time_range'];
                         if (!is_array($date_value)) {
                             $date_value = json_decode($date_value, true);
                         }
@@ -603,13 +598,8 @@ class User_model extends CI_Model {
                                 $array = array('user_id' => $userid, 'task_id' => $last_insert_id, 'task_date' => $date_value[$i]['date'], 'start_time' => $start, 'end_time' => $end, 'task_description' => $task_description, 'total_hours' => $hours, 'total_minutes' => $total_mins, 'created_on' => date('Y:m:d H:i:s'));
                                 $this->db->set($array);
                                 $query = $this->db->insert('time_details', $array);
-                                /*if($query){
-                                return $last_insert_id;
-                                }else{
-                                return false;
-                                }*/
                             }
-                        }
+                        }*/
                         return $last_insert_id;
                     }
                 }
