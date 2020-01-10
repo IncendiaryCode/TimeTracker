@@ -56,7 +56,7 @@ class User_model extends CI_Model {
                 $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
                 $this->db->where(array('d.end_time IS NOT NULL', 'd.user_id' => $userid));
                 $this->db->where('d.task_date BETWEEN "' . date('Y-m-d', strtotime($getdate[0])) . '" and "' . date('Y-m-d', strtotime($getdate[1])) . '"');
-                $this->db->group_by('d.id');
+                $this->db->group_by('d.task_date');
                 $this->db->order_by('d.start_time');
             } else {
                 //for monthly chart
@@ -65,7 +65,7 @@ class User_model extends CI_Model {
                 $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
                 $this->db->where(array('d.end_time IS NOT NULL', 'd.user_id' => $userid));
                 $this->db->where('d.task_date BETWEEN "' . $year_start . '" and "' . $year_end . '"');
-                $this->db->group_by('d.id');
+                $this->db->group_by('d.task_date');
                 $this->db->order_by('d.start_time');
             }
         }
@@ -154,13 +154,17 @@ class User_model extends CI_Model {
         $this->db->order_by('d.id');
         $query = $this->db->get();
         $data = $query->result_array();
+        foreach($data as $d){
+
+            $details[] = array('table_id'=>$d['id'],'task_name'=>$d['task_name'],'name'=>$d['name'],'project_id'=>$d['project_id'],'task_date'=>$d['task_date'],'description'=>$d['description'],'task_id'=>$d['task_id'],'start_time'=>date('H:i:s',strtotime($d['start_time'])),'end_time'=>date('H:i:s',strtotime($d['end_time'])),'task_description'=>$d['task_description']);
+        }
         $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task", FALSE);
         $this->db->from('time_details AS d');
         $this->db->where(array('d.task_id' => $taskid, 'd.user_id' => $userid));
         $task_status = $this->db->get();
         $status = $task_status->row_array();
-        $data = array($data, $status);
-        return $data;
+        $task_data = array($details, $status);
+        return $task_data;
     }
     //running task data to stop.
     public function running_task_data() {

@@ -380,7 +380,7 @@ class User extends CI_Controller
     {
         $GLOBALS['page_title'] = 'Edit task';
         $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|xss_clean');
-        $this->form_validation->set_rules('task_desc', 'Task Description', 'trim|required');
+        //$this->form_validation->set_rules('task_desc', 'Task Description', 'trim|required');
         // $this->form_validation->set_rules('start_time','Task Start Date','required');
         // $this->form_validation->set_rules('end_time','Task End Date','required');
         if ($this->form_validation->run() == FALSE) {

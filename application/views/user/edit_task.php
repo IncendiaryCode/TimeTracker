@@ -57,7 +57,7 @@ print_r($task_data);
                             ?>
                                 <div class="col-4">
                                     <div class="input-group mt-3">
-                                        <input type="text" class="form-control datepicker-0" name="daterange[0][date]" data-date-format="yyyy-mm-dd" value="<?=$task['task_date'];?>">
+                                        <input type="text" class="form-control datepicker" id="date<?=$num?>" name="time[<?=$num?>][date]" data-date-format="yyyy-mm-dd" value="<?=$task['task_date'];?>">
                                         <div class="input-group-append">
                                             <span class="input-group-text datepicker ">
                                                 <span class="fa fa-calendar"></span>
@@ -67,14 +67,15 @@ print_r($task_data);
                                 </div>
 
                                 <div class="col-4 col-md-4 mt-3">
-                                    <input class="form-control timepicker" type="text" id="start<?=$num?>" data-date-format="yyyy-mm-dd HH:mm" name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>" placeholder="<?=$task['start_time'];?>">
+                                    <input class="form-control timepicker" type="text" id="start<?=$num?>" name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>">
                                 </div>
                                 <div class="col-4 col-md-4 mt-3">
-                                    <input class="form-control timepicker" type="text" id="end<?=$num?>" data-date-format="yyyy-mm-dd HH:mm" name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>" placeholder="<?=$task['end_time'];?>">
+                                    <input class="form-control timepicker" type="text" id="end<?=$num?>" name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>">
                                 </div>
                                 <div class="col-4 col-md-12 mt-3 mb-5">
                                     <input type="text" class="form-control" name="time[<?=$num?>][task_description]" value="<?=$task['task_description'];?>">
                                 </div>
+                                <input type="hidden" value="<?=$task['table_id'];?>" name="time[<?=$num?>][table_id]" id="table_id<?=$num?>">
                             <?php $num=$num+1;
                         } ?>
                         </div>
