@@ -353,6 +353,10 @@ header.main-header h1 {
         line-height: 1.2;
     }
 }
+.project-details
+{
+    font-size: 28px; 
+}
 .efficiency
 {
     font-size: 30px;

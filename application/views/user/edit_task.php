@@ -1,6 +1,5 @@
 <?php
 $GLOBALS['page_title'] = 'Edit task';
-print_r($task_data);
 ?>
 <main class="container-fluid-main">
     <div class="main-container container">
@@ -57,7 +56,7 @@ print_r($task_data);
                                         <input type="text" class="form-control datepicker" id="date<?=$num?>" name="time[<?=$num?>][date]" data-date-format="yyyy-mm-dd" value="<?=$task['task_date'];?>">
                                         <div class="input-group-append">
                                             <span class="input-group-text">
-                                                <button class="btn p-2 fa fa-calendar" type="button"></button>
+                                                <button class="btn p-0 fa fa-calendar " type="button"></button>
                                             </span>
                                         </div>
                                     </div>

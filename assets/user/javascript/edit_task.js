@@ -22,7 +22,8 @@ $(document).ready(function () {
 	}
 	if (document.getElementById('task-len')) {
 		var len = document.getElementById('task-len').value;
-		for (var i = 0; i < len; i++) {
+		console.log(len)
+		for (var i = 0; i < (len*2); i++) {
 			$('.timepicker' + i).timepicker({
 				uiLibrary: 'bootstrap4'
 			});

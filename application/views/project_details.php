@@ -39,7 +39,7 @@ $profile = $this->session->userdata('user_profile');
                 <div class="card user-card">
                     <div class="card-body">
                         <div class="mx-auto d-block">
-                           <div class="text-center" ><span class="display-heading"><?=$details['users_count'] ?></span><p class="display-5">Total users</p><input type="hidden" id="project_id" value="<?=$details['project_id'] ?>">
+                           <div class="text-center" ><span class="project-details"><?=$details['users_count'] ?></span><p class="display-5">Total users</p><input type="hidden" id="project_id" value="<?=$details['project_id'] ?>">
                            </div>
                            <div class="text-center "><i class="fas fa-plus icon-plus text-success" data-target="#add-user" data-toggle='modal'></i>
                            </div>
@@ -53,7 +53,7 @@ $profile = $this->session->userdata('user_profile');
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 text-center">
-                            <div><span class="display-heading">
+                            <div><span class="project-details">
                                 <?php
                             if($details['image_name'] != ''){
                                 ?>
@@ -63,7 +63,7 @@ $profile = $this->session->userdata('user_profile');
                             } ?>
                             <strong><?=$details['project_name']; ?></strong>
                             </div>
-                            <div><span class="display-heading "><?=$details['tasks_count'] ?></span></div>
+                            <div><span class="project-details "><?=$details['tasks_count'] ?></span></div>
                             <p class="text-center">Total tasks</p>
                         </div>
                     </div>
@@ -75,7 +75,7 @@ $profile = $this->session->userdata('user_profile');
             <div class="card user-card">
                 <div class="card-body">
                     <div class="mx-auto d-block">
-                        <div class="text-center"><span class="display-heading"><?=round($details['t_minutes']/60,2) ?></span>h
+                        <div class="text-center"><span class="project-details"><?=round($details['t_minutes']/60,2) ?></span>h
                             <p class="text-center">Total time spent</p></div>
                     </div>
                 </div>

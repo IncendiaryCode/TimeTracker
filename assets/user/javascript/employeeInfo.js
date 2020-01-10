@@ -423,6 +423,15 @@ $(document).ready(function () {
 					/*setTimeout(function() {
 						document.getElementById('alarmmsg').innerHTML = "task has been stoped.";
 					}, 50);*/
+					/*console.log(document.getElementById("footer-right-" + t_id));
+					var icon_tag = document.getElementById("footer-right-" + t_id).childNodes[0];
+
+					document.getElementById("btn-stop" + t_id).childNodes[0].remove();
+					document.getElementById("btn-stop" + t_id).childNodes[0].remove();
+					$('#btn-stop' + t_id).append(stopButton);
+
+					icon_tag.childNodes[0].classList.add("fa-stop");
+					icon_tag.childNodes[0].classList.remove("fa-play");*/
 				}
 			});
 		} else {
@@ -489,4 +498,6 @@ $(document).ready(function () {
 			}
 		}
 	}
+
+
 });
