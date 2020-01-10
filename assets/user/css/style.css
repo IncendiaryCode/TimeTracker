@@ -316,6 +316,7 @@ a:hover {
     border-width: 1px;
     border-style: solid;
     border-color: #ededed;
+    overflow: hidden;
 }
 
 .card-style-1 .card-header .vertical-line {
@@ -351,6 +352,65 @@ a:hover {
     margin-right: 10px;
 
 }
+
+.card-col .card-overlay,
+.card-col .card-action-overlay {  
+  position: absolute;  
+  opacity: 0;
+  width: 100%;
+  border-radius: 15px;
+  -webkit-transition: all 0.4s ease-in-out 0s;
+  -moz-transition: all 0.4s ease-in-out 0s;
+  transition: all 0.4s ease-in-out 0s;
+}
+
+.card-col .card-overlay {
+  background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #fadffd);
+  left: 0;
+  top: 0;
+  z-index: 0;
+  height: 100%;  
+}
+
+.card-col .card-action-overlay {
+    z-index: 1;
+    right: -100%;
+    top: 35%;
+}
+
+.card-col:hover .card-overlay {
+  opacity: 0.8;
+}
+
+.card-col:hover .card-action-overlay {
+  opacity: 1;
+  right: -65%;
+}
+
+.card-col:hover .content-overlay{
+  opacity: 0.8;
+  background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #fadffd);
+  padding: 0px 15px 0px 15px;
+}
+
+/*.card-col .card-actions {
+  position: absolute;
+  text-align: center;
+  padding-left: 1em;
+  padding-right: 1em;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+}*/
+
+/*.card-col:hover .card-actions{
+  top: 50%;
+  left: 50%;
+  opacity: 1;
+
+  padding: 0px 15px 0px 15px;
+}*/
 
 
 
@@ -599,54 +659,6 @@ opacity: 0.5;
 
 
 @import url(https://fonts.googleapis.com/css?family=Raleway);
-
-
-.content {
-  position: relative;
-  max-width: 100%;
-  margin: auto;
-  overflow: hidden;
-  border-radius: 10px;
-
-}
-
-.content .content-overlay {
-  background: rgba(0,0,0,0.7);
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  opacity: 0;
-}
-
-.content:hover .content-overlay{
-  opacity: 0.8;
-  background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #fadffd);
-  padding: 0px 15px 0px 15px;
-}
-
-
-
-.content-details {
-  position: absolute;
-  text-align: center;
-  padding-left: 1em;
-  padding-right: 1em;
-  width: 100%;
-  top: 50%;
-  left: 50%;
-  opacity: 0;
-}
-
-.content:hover .content-details{
-  top: 50%;
-  left: 50%;
-  opacity: 1;
-
-  padding: 0px 15px 0px 15px;
-}
-
 
 .fadeIn-bottom{
   top: 80%;

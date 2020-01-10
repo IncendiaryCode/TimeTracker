@@ -32,16 +32,19 @@ $this->load->helper('url_helper');
                             <table>
                                 <tbody>
                                     <tr>
-                                        <th width="50%">Email :</th>
-                                        <td width="50%">
+                                        <th width="50%" height="40px;">Email :</th>
+                                        <td width="50%" height="40px;">
                                             <?=$res['email'];?>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th width="50%">Phone number:</th>
-                                        <td width="50%">
+                                        <th width="50%" height="40px;">Phone number:</th>
+                                        <td width="50%" height="40px;">
                                             <?php echo ($res['phone'] != 0)?$res['phone']:'';?>
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="<?=base_url();?>index.php/user/change_password">Change password</a></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -55,7 +58,7 @@ $this->load->helper('url_helper');
                     <div class="card user-card ">
                         <div class="card-body">
                             <h6 class="text-center">Total working hours for this month</h6>
-                            <p class="display-heading text-center mt-4"><?php echo $res['t_minutes'];?> hrs</p>
+                            <p class="text-center mt-4"><?php echo $res['t_minutes'];?> hrs</p>
                         </div>
                     </div>
                 </div>
@@ -64,7 +67,7 @@ $this->load->helper('url_helper');
                     <div class="card user-card ">
                         <div class="card-body">
                             <h6 class="text-center">Total working hours</h6>
-                            <p class="display-heading text-center mt-4"><?php echo $res['total_time'];?> hrs</p>
+                            <p class="text-center mt-4"><?php echo $res['total_time'];?> hrs</p>
                         </div>
                     </div>
                 </div>
@@ -72,11 +75,11 @@ $this->load->helper('url_helper');
             <div class="row">
                 <div class="col-12">
                     <div class="row">
-                    <div class="input-group col-6 offset-6 pt-4">
+                    <div class="input-group col-md-3 offset-md-9 pt-4 text-right">
                         <!-- chart that shows monthly activities -->
-                        <input type="number" class="form-control" id="year-chart">
-                        <button class="btn btn-primary" id="view-profile-chart" >view chart</button>
-                    </div></div>
+                        <input type="number" class="" id="year-chart">
+                    </div>
+                </div>
                 </div>
                     <canvas id="user_prof_chart" height="80px;"></canvas>
                     <p class="text-center" id="profile-chart-error"></p>

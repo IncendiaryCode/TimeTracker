@@ -19,7 +19,7 @@
                 <ul class="text-center">
                     <!-- profile options -->
                     <li id="empplyee-profile"><a href="<?=base_url();?>index.php/user/load_my_profile">My profile</a></li>
-                    <li><a href="<?=base_url();?>index.php/user/change_password">Change password</a></li>
+                    <!-- <li><a href="<?=base_url();?>index.php/user/change_password">Change password</a></li> -->
                     <li><a href="<?=base_url();?>index.php/user/load_employee_activities">My activities</a></li>
                     <li><a href="<?=base_url();?>index.php/login/logout" data-toggle="modal" data-target="#logout-modal">Logout</a></li>
                 </ul>

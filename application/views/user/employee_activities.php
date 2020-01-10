@@ -32,7 +32,8 @@
                             </div>
                             <p id="daily-error"class="text-center"></p>
                             <div id="daily">
-                                <p class="cust_daily_chart" id="cust_daily_chart">
+                                <p id="print-chart"></p>
+                                <p class="cust_daily_chart" id="cust_daily_chart"><hr>
                                     <span class="">8AM</span>
                                     <span class="cust_chart">9AM</span>
                                     <span class="cust_chart">10AM</span>
@@ -47,7 +48,6 @@
                                     <span class="cust_chart">7PM</span>
                                     <span class="cust_chart">8PM</span>
                                 </p>
-                                <p id="print-chart"></p>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="weekly-view" role="tabpanel" aria-labelledby="weekly-view-tab">

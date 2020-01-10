@@ -94,9 +94,7 @@ function load_year_chart()
 $(document).ready(function()
 {	
 
-
-    $('#view-profile-chart').on('click', function (e) {
-        e.preventDefault();
+    $("#year-chart").change(function() {
         load_year_chart();
     });
 

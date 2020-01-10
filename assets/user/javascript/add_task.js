@@ -14,7 +14,7 @@ var addTime = {
 
         var colDate = $('<div class="col-4">' +
             '<div class="input-group mb-3">' +
-            '<input type="text" class="form-control" name="daterange[' + id + '][date]" data-date-format="yyyy-mm-dd" id="date-picker-' + id + '" value=' + date + ' >' +
+            '<input type="text" class="form-control" name="daterange[' + id + '][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-' + id + '" value=' + date + ' >' +
             '<div class="input-group-append">' +
             '<span class="input-group-text" id="basic-addon-' + id + '">' +
             '<span class="fa fa-calendar datepicker"></span>' +
@@ -40,7 +40,7 @@ var addTime = {
 
         var colDescri = $('<div class="col-11">' +
             '<div class="input-group">' +
-            '<input id="description' + id + '"  class="form-control timepicker1" data-date-format="hh:mm:ss" name="daterange[' + id + '][description]" " />' +
+            '<input id="description' + id + '"  class="form-control"  name="daterange[' + id + '][description]" " />' +
             '</div>' +
             '</div>');
         colDescri.appendTo(row);
@@ -79,7 +79,7 @@ var addTime = {
     validate_info: function () {
 
         var __this = this;
-        var date = document.getElementById('date-picker-start').value;
+        var date = document.getElementById('date-picker-start-0').value;
         var start_time = document.getElementById('start-time-0').value;
         var end_time = document.getElementById('end-time-0').value;
 
@@ -87,21 +87,27 @@ var addTime = {
 
         var __end_seconds = (parseInt(end_time.slice(0, 2)) * 60) + (parseInt(end_time.slice(3, 5)));
 
+
         // fetch timings form database
         var validate_interval = __this.check_for_timeintervals(__start_seconds, __end_seconds, date);
 
-        var validate_greater_time = __this.check_for_greatertime(date, start_time, end_time);
-
-
+        var check_for_date = __this.check_date(date);
+        validate_greater_time = __this.check_for_greatertime(date, start_time, end_time);
         if (date == "" || date == " " || start_time == "" || start_time == " " || end_time == "" || end_time == " ") {
 
             document.getElementById('datetime-error').innerHTML = "Please enter valid details...";
             return false;
 
-        } else if (!validate_greater_time) {
+        } 
+        else if (__this.check_date(date)) {
             document.getElementById('datetime-error').innerHTML = "date/time of start/end connot be greater than currnet date/time";
             return false;
-        } else if (__start_seconds >= __end_seconds) {
+        }
+        else if (validate_greater_time) {
+            document.getElementById('datetime-error').innerHTML = "date/time of start/end connot be greater than currnet date/time";
+            return false;
+        }
+         else if (__start_seconds >= __end_seconds) {
 
             document.getElementById('datetime-error').innerHTML = "Start time cannot be greater or equal to end time.";
             return false;
@@ -116,10 +122,11 @@ var addTime = {
     validate: function () {
 
         var __this = this;
-        var date = document.getElementById('date-picker-start').value;
+        var date = document.getElementById('date-picker-start-0').value;
         var start_time = document.getElementById('start-time-0').value;
         var end_time = document.getElementById('end-time-0').value;
 
+       
         var __start_seconds = (parseInt(start_time.slice(0, 2)) * 60) + parseInt(start_time.slice(3, 5));
 
         var __end_seconds = (parseInt(end_time.slice(0, 2)) * 60) + (parseInt(end_time.slice(3, 5)));
@@ -135,10 +142,15 @@ var addTime = {
             document.getElementById('datetime-error').innerHTML = "Please enter valid details...";
             return false;
 
-        } else if (!validate_greater_time) {
+        } else if (validate_greater_time) {
             document.getElementById('datetime-error').innerHTML = "date/time of start/end connot be greater than currnet date/time";
             return false;
-        } else if (__start_seconds >= __end_seconds) {
+        }
+        else if (__this.check_date(date)) {
+            document.getElementById('datetime-error').innerHTML = "date/time of start/end connot be greater than currnet date/time";
+            return false;
+        }
+         else if (__start_seconds >= __end_seconds) {
 
             document.getElementById('datetime-error').innerHTML = "Start time cannot be greater or equal to end time.";
             return false;
@@ -156,12 +168,13 @@ var addTime = {
             e.preventDefault();
             if (_this.validate_info()) { // validate the timing details
                 _this.id++;
-                var date = document.getElementById('date-picker-start').value;
+                var date = document.getElementById('date-picker-start-0').value;
                 var start_time = document.getElementById('start-time-0').value;
                 var end_time = document.getElementById('end-time-0').value;
 
+                console.log(date)
                 _this.layout(date, start_time, end_time); //display multiple timings
-                document.getElementById('date-picker-start').value = " ";
+                document.getElementById('date-picker-start-0').value = " ";
                 document.getElementById('start-time-0').value = " ";
                 document.getElementById('end-time-0').value = " ";
 
@@ -177,11 +190,12 @@ var addTime = {
     },
     check_for_timeintervals: function (__start_seconds, __end_seconds, date) { // check current task is already entered.
         var _this = this;
-        var element = document.getElementById("task-add-time");
+       // var element = document.getElementById("task-add-time");
         var input_values = this.array_of_timings;
 
-        if (input_values.length > 1) {
-            for (var i = 1; i < input_values.length; i++) {
+        console.log(__start_seconds, __end_seconds, date, input_values.length, input_values)
+        if (input_values.length > 0) {
+            for (var i = 0; i < input_values.length; i++) {
 
                 var old_date = input_values[i]["date"];
                 var start_old_time_sec = (parseInt(input_values[i]["start_time"].slice(0, 2)) * 60 + parseInt(input_values[i]["start_time"].slice(3, 5)));
@@ -199,61 +213,55 @@ var addTime = {
         }
         return true;
     },
-    get_inputvalues: function () { // to get entered input values.
-        /*input_array = this.input_array;*/
-        var input_array = [{}];
-        var k = 0;
-        var element = document.getElementById("task-add-time");
-        var value = element.getElementsByTagName("input");
-        for (var i = 0; i < value.length / 3; i++) {
-            var old_date = value[k++].value;
-            var old_start_time = value[k++].value;
-            var old_end_time = value[k++].value;
-            input_array.push({ old_date, old_start_time, old_end_time });
-        }
-        return input_array;
-    },
+    
     check_for_greatertime: function (date, start_time, end_time) { // to check whether entered timings is greater than current time or not.
         var __this = this;
+
         var cur_date = new Date();
-        var cur_date1 = cur_date.getDate() + '/' + (cur_date.getMonth() + 1) + '/' + cur_date.getFullYear();
+        var day;
+        var month;
+        var cur_date1 = cur_date.getFullYear() + '-' + (cur_date.getMonth() + 1)  + '-' +  cur_date.getDate();
 
-        var flag = __this.check_date(date);
-        if (flag == false) {
-            return false;
-        }
         var cur_time = cur_date.getHours() + ':' + cur_date.getMinutes();
+            if ((parseInt(end_time.slice(0,2)) > parseInt(cur_time.slice(0,2)))) {
 
-        if (start_time > cur_time && (date == cur_date1)) {
-            return false;
+                if(((parseInt(date.slice(0,4))) == cur_date.getFullYear()) && ((parseInt(date.slice(5,7))) == cur_date.getMonth() + 1) && ((parseInt(date.slice(9,11))) == cur_date.getDate()))
+                {
+                    return true;
+                }
+            }
+        else
+            {
+            if ((parseInt(end_time.slice(3,5)) > parseInt(cur_time.slice(3,5)))) {
+                if(((parseInt(date.slice(0,4))) == cur_date.getFullYear()) && ((parseInt(date.slice(5,7))) == cur_date.getMonth() + 1) && ((parseInt(date.slice(9,11))) == cur_date.getDate()))
+                {
+                    return true;
+                }
+            }
         }
-        if (end_time > cur_time && (date == cur_date1)) {
-            return false;
-        }
-        return true;
+        return false;
     },
     check_date: function (date) { // check entered date with current date.
         var cur_date = new Date();
-        if ((parseInt(cur_date.getFullYear()) > parseInt(date.slice(6, 10)))) {
+        if ((parseInt(cur_date.getFullYear()) < parseInt(date.slice(6, 10)))) {
             return true;
         }
-        if ((parseInt(cur_date.getFullYear()) < parseInt(date.slice(6, 10)))) {
-            return false;
-        }
-        if ((parseInt(cur_date.getFullYear()) == parseInt(date.slice(6, 10)))) {
-            if ((parseInt(cur_date.getMonth() + 1)) > parseInt(date.slice(3, 5))) {
-                return true;
-            }
-            if ((parseInt(cur_date.getMonth() + 1)) < parseInt(date.slice(3, 5))) {
+        if ((parseInt(cur_date.getFullYear()) == parseInt(date.slice(0, 4)))) {
+            if ((parseInt(cur_date.getMonth() + 1)) > parseInt(date.slice(5, 7))) {
                 return false;
             }
-            if ((parseInt(cur_date.getMonth() + 1)) == parseInt(date.slice(3, 5))) {
-                if ((parseInt(cur_date.getDate()) >= (parseInt(date.slice(0, 2))))) {
+            if ((parseInt(cur_date.getMonth()+1)) < parseInt(date.slice(5, 7))) {
+                return true;
+            }
+            if ((parseInt(cur_date.getMonth() + 1)) == parseInt(date.slice(5, 7))) {
+                if ((parseInt(cur_date.getDate()) < (parseInt(date.slice(8, 11))))) {
                     return true;
-                } else { return false; }
+                } else {
+                 return false; 
+             }
             }
         }
-        return true;
+        return false;
 
     }
 };
@@ -302,7 +310,7 @@ if (addTask) {
         autoclose: true,
         todayHighlight: true,
     });
-    $('#date-picker-start').datepicker("setDate", new Date());
+    $('.datepicker-0').datepicker("setDate", new Date());
 
     $('.timepicker').timepicker({
         uiLibrary: 'bootstrap4'

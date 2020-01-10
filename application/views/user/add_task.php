@@ -86,7 +86,7 @@ $GLOBALS['page_title'] = 'Add Task';
                                     <div class="row">
                                         <div class="col-4">
                                             <div class="input-group mb-3">
-                                                <input type="text" class="form-control datepicker-0" name="daterange[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start">
+                                                <input type="text" class="form-control datepicker-0" name="daterange[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text datepicker ">
                                                         <span class="fa fa-calendar"></span>

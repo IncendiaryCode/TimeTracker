@@ -179,7 +179,7 @@ function loadTaskActivities(formData) {
 					cardHeader.append(cardHeaderRow);
 
 					var cardInner = $(
-						"<div class='card card-style-1 animated fadeInUp'  /><div class='content-overlay'></div>"
+						"<div class='card card-style-1 animated fadeIn' />"
 					);
 					cardInner.append(cardHeader);
 
@@ -190,7 +190,7 @@ function loadTaskActivities(formData) {
 					var footerRow = $('<div class="row" />');
 					
 					footerRow.append(((data[x][y].image_name !== null)?
-							"<div class='col-6'> <img src=" +
+							"<div class='col-12'> <img src=" +
 							data[x][y].image_name +
 							" width='20px;'> " :'')+
 							data[x][y].project +
@@ -198,7 +198,7 @@ function loadTaskActivities(formData) {
 						);
 
 					var footerRight = $(
-						"<div class='col-6 text-right card-actions content-details fadeIn-right' id='footer-right-" +
+						"<div class='card-actions' id='footer-right-" +
 							data[x][y].id +
 							"'>"
 					);
@@ -334,11 +334,23 @@ function loadTaskActivities(formData) {
 					
 					footerRight.append(actionEdit);
 
-					footerRow.append(footerRight);
+					// footerRow.append(footerRight);
+
 					cardFooter.append(footerRow);
 					cardInner.append(cardFooter);
-					var cardCol = $("<div class='col-lg-6 mb-4 cardCol animated content ' />");
+
+                    //add a overlay layer
+                    var cardOverlay = $("<div class='card-overlay' />");
+                    cardInner.append(cardOverlay);
+
+                    //add action overlay
+                    var cardActions = $("<div class='card-action-overlay' />");
+                    cardActions.append(footerRight);
+                    cardInner.append(cardActions);
+
+					var cardCol = $("<div class='col-lg-6 mb-4 card-col' />");
 					cardCol.append(cardInner);
+
 					$("#attach-card").append(cardCol);
 					if (data[x][y].running_task == 1 && data[x][y].start_time != null) {
 						//change background of current running task entries.

@@ -13,7 +13,7 @@ $task_type = 'login';
 $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
-$task_name = 'Login';
+$task_name = 'Punch In/Out';
 ?>
 <script type="text/javascript">
 //this will be send to JS for timer to start
@@ -27,13 +27,13 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
-                            Loged in at: <?php echo unix_to_human($time_login); ?>
+                            Loged in at <?php echo unix_to_human($time_login); ?>
                         </p>
                         <div class="font-weight-light text-center primary-timer" id="primary-timer">
                             00:00:00
                         </div>
                         <p class="font-weight-light text-center taskName" id="taskName">
-                            <?php echo "Login"; ?>
+                            <?php echo "Punch In/Out"; ?>
                         </p>
                     </div>
                 </div>
@@ -53,7 +53,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                         <input type="hidden" id="<?php echo $taskinfo['task_id'] ?>" value="<?php echo $timer_start?>">
                         <input type="hidden" id="id<?=$id?>" value="<?php echo $taskinfo['task_id']?>">
                         <p class="font-weight-light time-font text-center login-time" id="start-time<?=$id?>">
-                            Started at: <?php  echo unix_to_human($task_start);?>
+                            Started at <?php  echo unix_to_human($task_start);?>
                         </p>
                         <div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer<?=$taskinfo['task_id']?>" data-type="" data-time="">
                             00:00:00
@@ -86,16 +86,6 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                     if($first_dislpay != 1 ) {
                     $first_dislpay = 1;
                 ?>
-                    
-          <!--   <div class="sufee-alert font-weight-light alert with-close alert-dark fade show p-4 alert-box">
-                <i class="text-danger  fas fa-exclamation-triangle"></i>
-                As task "<?php echo $taskinfo['task_name'] ?>" has not been ended.
-                <a href="#" class="forgot-color" id="stop-now" data-toggle="modal" data-target="#end-time-update"> Stop now!</a>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>  -->
-
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
             <script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -171,8 +161,8 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                                 <input type="text" class="form-control "  name="stop_task-description">
                             </div>
                         </div>
+                            <p class="text-danger text-center" id="stop-now-error"></p>
                         <div class="modal-footer">
-                            <p class="text-dangert text-center" id="stop-now-error"></p>
                             <button type="submit" class="btn btn-primary">Next</button>
                         </div>
                     </form>

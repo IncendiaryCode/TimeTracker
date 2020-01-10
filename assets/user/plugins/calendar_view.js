@@ -25,18 +25,16 @@ function loadTask(type, date) {
         url: timeTrackerBaseURL + 'index.php/user/load_task_data',
         data: { 'chart_type': type, 'date': date },
         success: function(values) {
-
             if (values == "No activity in this date.") {
                 $("#attachPanels").empty();
                 $("#attachPanels").empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
             } else {
                 var data = JSON.parse(values);
                 $("#attachPanels").empty();
-                var timerModal = timerStopModal();
                 for (x in data) {
                     for (var y = 0; y < data[x].length; y++) {
                         if (data[x][y].running_task == 0) {
-                            var cardHeader = $('<div class="card-header panel' + panel_id + '"' + ' />');
+                            var cardHeader = $('<div class="card-header panel' + data[x][y].id + '"' + ' />');
                             var cardHeaderRow = $('<div class="row pt-2" />');
                             var today = getTime();
                             cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
@@ -74,6 +72,13 @@ function loadTask(type, date) {
                             var cardCol = $("<div class='col-lg-6 mb-4 cardCol' id='panel" + panel_id + "'></div>");
                             cardCol.append(cardInner);
                             $("#attachPanels").append(cardCol);
+                            cardCol.on("click", function(e)
+                            {  
+                             var str = this.id; 
+                                matches = str.match(/\d+/g);
+                            $('.print-chart-row'+matches).addClass('animated fadeInLeft');
+                            /*$('.print-chart-row'+matches).removeClass('animated fadeInRight');*/
+                            });
                             if (type == "daily_chart") {
                                 panel_id++;
                             }
@@ -175,7 +180,7 @@ function drawChart(type, res) {
         gradient.addColorStop(0.5, '#e58dfb');
         gradient.addColorStop(1, '#ffffff');
 
-        var const_lable = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        var const_lable = ['Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
         var labels = [];
         var data = [];
         for (var i = 0, j = 0; i < const_lable.length; i++) {
@@ -264,22 +269,22 @@ function draw_customized_chart(res) {
     var window_width = $('.cust_daily_chart').width();
     var p_left = parseInt(window_width) / 12;
     if (res['data'] != "No activity in this date.") {
-        var color = "000000";
-        for (var i = 0; i < res['data'][1][0].length; i++) {
-            color = parseInt(color) + 123456;
+        
+        for (var i = 0; i < res['data'][1].length; i++) {
+            //color = parseInt(color) + 123456;
 
-            var start_time = res['data'][1][0][i].slice(10, 16);
-            var end_time = res['data'][1][1][i].slice(10, 16);
+            var start_time = res['data'][1][i]["start_time"].slice(10, 16);
+            var end_time = res['data'][1][i]["end_time"].slice(10, 16);
 
             var start_time_min = (start_time.slice(0, 3) * 60) + parseInt(start_time.slice(4, 6));
             var end_time_min = (end_time.slice(0, 3) * 60) + parseInt(end_time.slice(4, 6));
-
             //calculate width for the graph.
-            var interval = res['data'][1][2][i];
-            var task_name = res['data'][0][i];
+
+            var interval = res['data'][1][i]['total_minutes'];
+            var task_name = res['data'][2][i];
 
             var width = ((interval / 60) * p_left);
-            if (start_time_min < (8 * 60)) // graph leess than 8 am is not shown
+            if (start_time_min < 480) // graph leess than 8 am is not shown
             {
                 start_time_min = 480;
             }
@@ -299,10 +304,10 @@ function draw_customized_chart(res) {
                         }
                         if (((start_time_pixel >= pixel1[e][0]) && (start_time_pixel < pixel1[e][1]))) {
                             v = v + 25;
-                            printChart(start_time_pixel, width, (300 - v), color, task_name);
+                            printChart(start_time_pixel, width, ((332) -v), task_name, res['data'][0][i]);
                             break;
                         } else {
-                            printChart(start_time_pixel, width, (300 - v), color, task_name);
+                            printChart(start_time_pixel, width, ((332)  - v), task_name, res['data'][0][i]);
                             break;
                         }
                     }
@@ -313,14 +318,14 @@ function draw_customized_chart(res) {
                     if ((start_time_pixel + width) >= window_width) {
                         width = window_width - (start_time_pixel);
                     }
-                    printChart(start_time_pixel, width, 300, color, task_name);
+                    printChart(start_time_pixel, width, (332) , task_name, res['data'][0][i]);
                 }
             }
             if (pixel.length == 0) {
                 if ((start_time_pixel + width) >= window_width) {
                     width = window_width - (start_time_pixel);
                 }
-                printChart(start_time_pixel, width, 300, color, task_name);
+                printChart(start_time_pixel, width, (332) , task_name, res['data'][0][i]);
             }
             pixel.push([start_time_pixel, end_time_pixel]);
         }
@@ -331,39 +336,43 @@ function draw_customized_chart(res) {
 var last_index;
 var last_task_name=[];
 var same_task=0;
-function printChart(start, width, top, color, task_name) {
+var color = "000000";
+function printChart(start, width, top, task_name, id) {
 
-    var row = $("<span class='print-chart-row"+task_name+"'  data-toggle='tooltip' data-placement='top' title="+task_name+" id='new-daily-chart" + graph_id + "'>.<input type = 'hidden' value = " + graph_id + "></span>");
+    for(var i=0; i<last_task_name.length; i++)
+    {
+        if(task_name == last_task_name[i]['task_name'])
+        {
+
+            color = last_task_name[i]['color'];
+            break;
+        }
+        else
+        {
+            color = parseInt(color) + 123456;
+        }   
+    }
+    var row = $("<span class='positon-chart print-chart-row"+id+"'  data-toggle='tooltip' data-placement='top' title="+task_name+" id='new-daily-chart" + graph_id + "'>.<input type = 'hidden' value = " + graph_id + "></span>");
     $(row).css("margin-left", start);
     $(row).css("top", top);
-    $(row).css("width", width);
+    $(row).css("padding-left", width);
     $(row).css("backgroundColor", '#' + color);
     $(row).css("color", '#' + color);
     $("#print-chart").append(row);
-    $('.print-chart-row1').unbind().click(function() {
+    $('.print-chart-row'+id).unbind().click(function() {
         var ele = document.getElementById(this.id);
         var index = ele.childNodes[1].value;
         if (last_index) {
-            $('.panel' + last_index).css("backgroundColor", "#ffffff");
+            //$('.panel' + last_index).css("backgroundColor", "#ffffff");
         }
-        last_index = index;
-        $('.panel' + index).css("backgroundColor", "#f5d0fe");
+        last_index = id;
+        //$('.panel' + id).css("backgroundColor", "#f5d0fe");
         var elmnt = document.getElementById('panel' + index);
         elmnt.scrollIntoView();
     });
-    for(var j=0; j<last_task_name.length; j++)
-    {
-        if (task_name == last_task_name[j]) {
-            same_task = 1;
-            break;
-        }
-    }
-   if(!same_task) 
-    {
+    
         graph_id++;
-    }
-    same_task=0;
-    last_task_name.push(task_name);
+    last_task_name.push({task_name, color});
 }
 last_index = undefined;
 
@@ -465,17 +474,20 @@ function loadMonthlyChart() {
 }
 
 function drawMonthlyChart(res) {
-    var dataTable = new google.visualization.DataTable();
-    dataTable.addColumn({ type: 'date', id: 'Date' });
-    dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
-    for (var k = 0; k < res["data"].length; k++) {
-        var year = parseInt(res['data'][k][0].slice(0, 4).toString());
-        var month = parseInt(res['data'][k][0].slice(5, 7)) - 1;
-        var day = parseInt(res['data'][k][0].slice(8, 10));
-        var value = res['data'][k][1];
-        dataTable.addRows([
-            [new Date(year, month, day), value],
-        ]);
+    if(document.getElementById('calendar_basic'))
+    {
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn({ type: 'date', id: 'Date' });
+        dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
+        for (var k = 0; k < res["data"].length; k++) {
+            var year = parseInt(res['data'][k][0].slice(0, 4).toString());
+            var month = parseInt(res['data'][k][0].slice(5, 7)) - 1;
+            var day = parseInt(res['data'][k][0].slice(8, 10));
+            var value = res['data'][k][1];
+            dataTable.addRows([
+                [new Date(year, month, day), value],
+            ]);
+        }
     }
     var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
 
