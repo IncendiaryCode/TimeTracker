@@ -109,10 +109,14 @@ class User extends CI_Controller
             $output_result['msg']    = "task-id not sent.";
         }else{
             $result['details'] = $this->user_model->start_timer($data);
-            if (!$result) {
+            if ($result == FALSE) {
                 $output_result['status'] = FALSE;
                 $output_result['msg']    = "Timer not initiated.";
-            } else {
+            } else if($result == 'Already started'){
+                $output_result['status'] = FALSE;
+                $output_result['data'] = $result;
+            }
+            else {
                 $output_result['status'] = TRUE;
                 $output_result['msg']    = "Timer started.";
                 $output_result['data'] = $result;
@@ -182,6 +186,7 @@ class User extends CI_Controller
     //Load employee activities page
     public function load_employee_activities()
     {
+        $GLOBALS['page_title'] = 'My activities';
         $this->load->view('user/header');
         $this->load->view('user/employee_activities');
         $this->load->view('user/footer');
@@ -319,7 +324,7 @@ class User extends CI_Controller
                                 $diff = $end_time - $start_time;
                                 $hours = $diff / (60 * 60);
                                 $minutes = $diff / 60;
-                                $total_mins = ($minutes < 0 ? 0 : abs($minutes));
+                                $total_mins = ($minutes < 1) ? ceil(abs($minutes)) : abs($minutes);
 
                                 $details['start'] = $start;
                                 $details['end'] = $end;
@@ -482,6 +487,7 @@ class User extends CI_Controller
     //Change password..
     public function change_password()
     {
+        $GLOBALS['page_title'] = 'Change password';
         $this->form_validation->set_rules('psw1', 'Old Password', 'trim|required|min_length[3]|max_length[100]|md5|trim|callback_password_exists|xss_clean');
         $this->form_validation->set_rules('psw11', 'New Password', 'trim|required|min_length[3]|max_length[100]|trim|xss_clean');
         $this->form_validation->set_rules('psw22', 'Confirm Password', 'trim|required|matches[psw11]|min_length[3]|max_length[100]|trim|xss_clean');

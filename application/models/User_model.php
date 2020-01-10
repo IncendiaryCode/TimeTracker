@@ -201,21 +201,32 @@ class User_model extends CI_Model {
             }
         } else if ($data['task_type'] == 'task') //check if the timer-start request is for task
         {
-            $start = (isset($data['start_time']))?$data['start_time']:date('Y:m:d H:i:s');
-            $array2 = array('task_id' => $data['task_id'], 'user_id' => $data['userid'], 'task_date' => date('Y:m:d'), 'start_time' => $start, 'total_hours' => '0', 'total_minutes' => '0', 'created_on' => date('Y:m:d H:i:s'));
-            $this->db->set($array2);
-            $query2 = $this->db->insert('time_details', $array2);
-            if ($query2) {
-                $this->db->select('t.task_name,d.user_id,d.task_id,d.start_time,t.description');
-                $this->db->select_sum('d.total_minutes', 't_minutes');
-                $this->db->from('time_details AS d');
-                $this->db->join('task AS t', 't.id = d.task_id');
-                $this->db->where('d.task_id', $data['task_id']);
-                //$this->db->where('d.end_time IS NULL');
-                $details = $this->db->get();
-                return $details->row_array();
-            } else {
-                return false;
+            $this->db->select('*');
+            $this->db->from('time_details');
+            $this->db->where('task_id',$data['task_id']);
+            $this->db->where('end_time IS NULL');
+            $this->db->or_where('total_minutes','0');
+            $started = $this->db->get();
+            if($started->num_rows() > 0){
+                $error = 'Already started';
+                return $error;
+            }else{
+                $start = (isset($data['start_time']))?$data['start_time']:date('Y:m:d H:i:s');
+                $array2 = array('task_id' => $data['task_id'], 'user_id' => $data['userid'], 'task_date' => date('Y:m:d'), 'start_time' => $start, 'total_hours' => '0', 'total_minutes' => '0', 'created_on' => date('Y:m:d H:i:s'));
+                $this->db->set($array2);
+                $query2 = $this->db->insert('time_details', $array2);
+                if ($query2) {
+                    $this->db->select('t.task_name,d.user_id,d.task_id,d.start_time,t.description');
+                    $this->db->select_sum('d.total_minutes', 't_minutes');
+                    $this->db->from('time_details AS d');
+                    $this->db->join('task AS t', 't.id = d.task_id');
+                    $this->db->where('d.task_id', $data['task_id']);
+                    //$this->db->where('d.end_time IS NULL');
+                    $details = $this->db->get();
+                    return $details->row_array();
+                } else {
+                    return false;
+                }
             }
         }
     }
@@ -239,7 +250,7 @@ class User_model extends CI_Model {
                 $update_time = $data['task_date'] . " " . date('H:i:s');
             }
             $diff = (strtotime($update_time) - strtotime($data['start_time']));
-            $t_minutes = round((abs($diff) / 60), 2);
+            $t_minutes = (($diff / 60) < 1) ? ceil(abs($diff / 60)) : abs($diff / 60);
             $hours = round(abs($diff / (60 * 60)));
             $this->db->where(array('id' => $data['id']));
             $query2 = $this->db->update('time_details', array('task_description' => $req_data['task_desc'], 'end_time' => $update_time, 'total_hours' => $hours, 'total_minutes' => $t_minutes, 'modified_on' => date('Y:m:d H:i:s')));
@@ -284,7 +295,7 @@ class User_model extends CI_Model {
             $this->db->join('task AS t', 't.id = d.task_id');
             $this->db->where('d.end_time IS NOT NULL'); //tasks that are not running
             $this->db->where(array('d.user_id' => $userid, 'd.task_date' => $taskdate));
-            //$this->db->group_by('d.task_id');
+            $this->db->group_by('d.task_id');
             $query = $this->db->get();
             $data = $query->result_array();
             if ($query->num_rows() > 0) {
