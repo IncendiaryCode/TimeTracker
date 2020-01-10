@@ -1,7 +1,7 @@
 var add_module = {
     username: [],
     i: 1,
-    last_row : 0,
+    last_row: 0,
     layout: function (i) {
         var _this = this;
         var last_row = _this.last_row;
@@ -17,24 +17,22 @@ var add_module = {
         addBtn.append(icon);
         row1.append(addBtn);
         row1.appendTo(main_row);
-        
+
         $('#add-new-module').removeClass('fa-plus');
-        if(_this.last_row != 0)
-        {
+        if (_this.last_row != 0) {
             _this.last_row.removeClass('fas fa-plus');
             _this.last_row.addClass('fas fa-minus icon-plus text-danger');
 
         }
         $('#adding-module').removeClass('fas fa-plus');
-            $('#adding-module').addClass('fas fa-minus icon-plus text-danger');
-        $(".fa-minus").click(function()
-        {
+        $('#adding-module').addClass('fas fa-minus icon-plus text-danger');
+        $(".fa-minus").click(function () {
             this.parentNode.parentNode.parentNode.remove();
         });
         _this.last_row = icon;
-        
+
         addBtn.on('click', function () {
-        _this.validate();
+            _this.validate();
         });
         $('#append-new-module').append(main_row);
         /*$('#append-new-module').append(row1);*/
@@ -175,14 +173,13 @@ var assign = {
 }
 
 $(document).ready(function () {
-    if(document.getElementById("new-project"))
-    {
+    if (document.getElementById("new-project")) {
         /*var new_project = document.getElementById("new-project").checked;
         var old_project = document.getElementById("old-project").checked;*/
         if (old_project == true) {
             document.getElementById("new-project").checked = false;
             $('#new-project-input').hide();
-            
+
             $.ajax({
                 type: 'POST',
                 url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
@@ -198,10 +195,9 @@ $(document).ready(function () {
             });
         }
     }
-    
-    if(document.getElementById('old-project-input'))
-    {
-    $('#old-project-input').show();
+
+    if (document.getElementById('old-project-input')) {
+        $('#old-project-input').show();
         $('#new-project-input').hide();
         document.getElementById("new-project").checked = false;
         $.ajax({
@@ -213,16 +209,15 @@ $(document).ready(function () {
                 usernames = result['result'];
                 $('.project-list').empty();
                 for (var j = 0; j < usernames.length; j++) {
-                    if(usernames[j]["project_name"] != null)
-                    {
-                    var option = $('<option>' + usernames[j]["project_name"] + '</option>');
-                    $('.project-list').append(option);
+                    if (usernames[j]["project_name"] != null) {
+                        var option = $('<option>' + usernames[j]["project_name"] + '</option>');
+                        $('.project-list').append(option);
                     }
                 }
             }
         });
     }
-        
+
     add_module.init("#append-new-module");
     assign.init("#assign-new-user");
     var addProject = document.getElementById('add-project');
@@ -233,15 +228,15 @@ $(document).ready(function () {
                 document.getElementById('module-error').innerHTML = "Enter Project name";
                 return false;
             }
-                    var project_name = document.getElementById('old-project-input').value;
-                    var user_name = document.getElementById('assign-name0').value;
-                    if (project_name == "" || project_name == " ") {
-                        document.getElementById('module-error').innerHTML = "Enter Project name";
-                        return false;
-                    } else if (user_name == "Select User") {
-                        document.getElementById('module-error').innerHTML = "Enter user name";
-                        return false;
-                    }
+            var project_name = document.getElementById('old-project-input').value;
+            var user_name = document.getElementById('assign-name0').value;
+            if (project_name == "" || project_name == " ") {
+                document.getElementById('module-error').innerHTML = "Enter Project name";
+                return false;
+            } else if (user_name == "Select User") {
+                document.getElementById('module-error').innerHTML = "Enter user name";
+                return false;
+            }
         }
     }
 

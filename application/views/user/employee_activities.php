@@ -1,8 +1,8 @@
 <?php
-    $GLOBALS['page_title'] = 'Login Activities';
+    $GLOBALS['page_title'] = 'My activities';
     defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-<main class="container-fluid-main"><p class="display-heading text-white  text-center">My activities</p>
+<main class="container-fluid-main">
     <div class="main-container container">
         <div class="main-container-inner mt-3">
             <div class="au-card au-card--no-shadow au-card--no-pad mb-2">
@@ -34,7 +34,7 @@
                             <div id="daily">
                                 <p id="print-chart"></p>
                                 <p class="cust_daily_chart" id="cust_daily_chart"><hr>
-                                    <span class="">8AM</span>
+                                    <span id="chart-labels"><span class="">8AM</span>
                                     <span class="cust_chart">9AM</span>
                                     <span class="cust_chart">10AM</span>
                                     <span class="cust_chart">11AM</span>            
@@ -46,7 +46,7 @@
                                     <span class="cust_chart">5PM</span>
                                     <span class="cust_chart">6PM</span>
                                     <span class="cust_chart">7PM</span>
-                                    <span class="cust_chart">8PM</span>
+                                    <span class="cust_chart">8PM</span></span>
                                 </p>
                             </div>
                         </div>
@@ -91,8 +91,8 @@
         </div>
         <hr>
         <div>
-        <footer class="text-center">
-            <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</p>
+        <footer class="footer">
+            <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
         </footer>
     </div>
 </main>

@@ -32,7 +32,7 @@ $profile = $this->session->userdata('user_profile');
 <div class="container">
     <div class="form-group">
         <div class="text-right form">
-            <input type="month" class="border p-1" id="curr-month" name="cur_month"><span><button class="btn btn-primary" id="view-chart"> view chart</button></span>
+            <input type="month" class="border p-1" id="curr-month" name="cur_month">
         </div>
     </div>
     <div class="row mt-5">

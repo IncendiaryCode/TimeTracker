@@ -112,7 +112,7 @@ $profile = $this->session->userdata('user_profile');
             <p class="text-center text-primary pt-3 display-heading">Project chart</p><!-- TODO.. -->
             <div class="form-group">
                 <div class="text-right form">
-                    <input type="month" class="border p-1" id="cur-month" name="cur_month"><span><button class="btn btn-primary" id="view-dashboard-chart"> view chart</button></span>
+                    <input type="month" class="border p-1" id="cur-month" name="cur_month">
                 </div>
             </div>
             <canvas id="main-chart" height="80px;"></canvas>

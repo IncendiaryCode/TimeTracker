@@ -53,18 +53,7 @@ $GLOBALS['page_title'] = 'Add Task';
 
                             </select>
                         </div>
-                        <!-- <div class="form-group pl-4">
-                            <div class="radio">
-                                <label for="radio1" class="form-check-label">
-                                    <input type="radio" id="newTask" name="task_type" class="form-check-input" checked>New task
-                                </label>
-                                <label for="radio1" class="form-check-label ml-5">
-                                    <input type="radio" id="editTask" name="task_type" class="form-check-input">Completed task
-                                </label>
-                            </div>
-                        </div> -->
-                        <p class="display-5"><u>Time line</u></p>
-                        <!-- if task is completed -->
+                        <p class="display-5">Time line</p>
                         <div id="task-times">
                             <div id="show_list">
                                 <div class="row">
@@ -89,7 +78,7 @@ $GLOBALS['page_title'] = 'Add Task';
                                                 <input type="text" class="form-control datepicker-0" name="daterange[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text datepicker ">
-                                                        <span class="fa fa-calendar"></span>
+                                                        <button class="btn p-2 fa fa-calendar"></button>
                                                     </span>
                                                 </div>
                                             </div>
@@ -104,11 +93,11 @@ $GLOBALS['page_title'] = 'Add Task';
                                                 <input id="end-time-0" class="form-control timepicker1" name="daterange[0][end]" />
                                             </div>
                                         </div>
-                                        <div class="col-11 text-center">
+                                        <div class="col-10 text-center">
                                             <input id="description-0" class="form-control" name="daterange[0][description]" placeholder="description" />
                                         </div>
 
-                                        <div class="col-1 text-center">
+                                        <div class="col-2 text-center">
                                             <a href="javascript:void(0);" id="add-new-time" title="Add">
                                                 <i class="fas fa-plus pt-2 icon-plus text-success"></i>
                                             </a>
@@ -123,7 +112,6 @@ $GLOBALS['page_title'] = 'Add Task';
                         </div>
                         <p id="taskError" class=" text-danger"></p>
                         <p>&nbsp;</p>
-                        <hr />
                         <div class="text-right">
                         <button type="submit" class="btn btn-primary">Save Task</button><!-- to store the task entry. -->
                     </div>
@@ -131,7 +119,6 @@ $GLOBALS['page_title'] = 'Add Task';
                 </div>
             </div>
         </div>
-            <hr class="mt-4">
         <footer class="footer">
             <p class="text-center ">Copyright © 2019 Printgreener.com</p>
         </footer>

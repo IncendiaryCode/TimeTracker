@@ -3,7 +3,7 @@
     defined('BASEPATH') OR exit('No direct script access allowed');
     $profile = $this->session->userdata('user_profile');
 ?>
-<main class="container-fluid-main"><p class="display-heading text-white  text-center">Change password</p>
+<main class="container-fluid-main">
     <div class="main-container container">
         <div class="main-container-inner">
             <div class="row mt-5">
@@ -47,8 +47,7 @@
                 </div>
             </div>
         </div>
-        <footer class="profile-footer ">
-        <hr>
+        <footer class="footer">
             <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
         </footer>
     </div>

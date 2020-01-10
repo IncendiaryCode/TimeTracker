@@ -1,6 +1,6 @@
 var validate = document.getElementById('myProfile');
 if (validate) {
-    validate.onsubmit = function() {
+    validate.onsubmit = function () {
         var oldPsw = document.getElementById('oldPsw').value;
         if (oldPsw == "" || oldPsw == " ") {
             document.getElementById('alertMsg').innerHTML = "Enter your current passowrd";

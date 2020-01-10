@@ -86,7 +86,7 @@ $(document).ready(function() {
             });
         }
     }
-    $('#view-dashboard-chart').click(function() {
+    $('#cur-month').change(function() {
         $.ajax({
             type: 'POST',
             url: timeTrackerBaseURL + 'index.php/admin/get_project_list',

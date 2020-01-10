@@ -98,9 +98,8 @@ $this->load->helper('url_helper');
         $('#dark-mode-checkbox').removeAttr("checked");
         </script>
         <?php }} ?>
-        <footer >
-            <hr>
-            <p class="text-center">Copyright © 2019 Printgreener.com</p>
+        <footer class="footer">
+            <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
         </footer>
     </div>
 </main>

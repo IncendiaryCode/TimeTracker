@@ -54,6 +54,14 @@ header.main-header h1 {
     font-size: 30px; 
     align-content: center;
 }
+.img-icon
+{
+    position: absolute;
+    top: 120px;
+    left: 53%;
+}
+.user-card
+{border: none;}
 .btn-task
 {
    align-content: center;
@@ -236,9 +244,6 @@ header.main-header h1 {
 
 /*timer*/
 
-
-
-
 #success {
     display: none;
     padding-left: 50px;
@@ -384,34 +389,28 @@ a:hover {
 
 .card-col:hover .card-action-overlay {
   opacity: 1;
-  right: -65%;
+  right: -60%;
 }
-
+@media(max-width: 400px)
+{
+    .card-col:hover .card-action-overlay {
+      opacity: 1;
+      right: -50%;
+}
+}
 .card-col:hover .content-overlay{
   opacity: 0.8;
   background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #fadffd);
   padding: 0px 15px 0px 15px;
 }
 
-/*.card-col .card-actions {
-  position: absolute;
-  text-align: center;
-  padding-left: 1em;
-  padding-right: 1em;
-  width: 100%;
-  top: 50%;
-  left: 50%;
-  opacity: 0;
-}*/
-
-/*.card-col:hover .card-actions{
-  top: 50%;
-  left: 50%;
-  opacity: 1;
-
-  padding: 0px 15px 0px 15px;
-}*/
-
+.icon-plus 
+{
+    padding: 10px;
+    background-color: #dde;
+    border :1px;
+    border-radius: 100%;
+}
 
 
 .modal-transparent {
@@ -478,7 +477,9 @@ a:hover {
 }
 
 .footer {
-    margin-top: 80px;
+    padding-top:  50px;
+    margin-top: 20px;
+    border-top: 2px solid;
 }
 .main-modal-close
 {
@@ -635,14 +636,25 @@ opacity: 0.5;
         line-height: 1.2;
     }
 }
+.nav-tabs
+{
+    border:0px; 
+}
 .nav-item
 {
    max-width: 33%;
    min-width: 33%;
+   text-align: center;
+
 }
-.nav-item .active 
+.nav-item .nav-link:hover
 {
-    border: 13px solid;
+    border:0px;
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active
+{
+    border-color: #fff;
+    border-bottom: 3px solid #000;
 }
 .sorting-icon
 {
@@ -681,7 +693,7 @@ opacity: 0.5;
     top: 10px;
     left: 20px;
     color: #fff;
-    font-size: 32px;
+    font-size: 28px;
 }
 .action-edit
 {
@@ -689,5 +701,5 @@ opacity: 0.5;
     top: 10px;
     left: 100px;
     color: #fff;
-    font-size: 32px;
+    font-size: 28px;
 }

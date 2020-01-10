@@ -36,12 +36,12 @@ $this->load->helper('url_helper');
                           
                         <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
                         <div class="text-center">
-                            <span>
                                 <img id="profile-pic" src="<?=base_url().UPLOAD_PATH.$res['profile'];?>" class="rounded-circle img-fluid" width="200px;" height="200px;">
                                  <div class="edit">
-                                    <a href="#" class="text-white"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#change-profile-pic"></i></a>
+                                    <div class="img-icon">
+                                    <a href="#" class="text-white "><i class="change-image fas fa-camera" data-toggle="modal" data-target="#change-profile-pic"></i></a>
+                                    </div>
                                 </div> 
-                            </span>
                         </div>
                         <div class="col-md-4 offset-md-4">   
                             <form action="<?=base_url();?>index.php/admin/change_password" id="changePsw" method="post">
@@ -56,16 +56,18 @@ $this->load->helper('url_helper');
                                 </div>
                             <?php } ?>
                                 <div class="form-group mt-4">
-                                    <input type="password" class="form-control-file border-top-0 border-left-0 border-right-0" name="old-pass" id="old-pass" placeholder="Enter old password">
+                                    <input type="password" class="form-control border-top-0 border-left-0 border-right-0" name="old-pass" id="old-pass" placeholder="Enter old password">
                                 </div>
                                 <div class="form-group mt-5">
-                                    <input type="password" class="form-control-file border-top-0 border-left-0 border-right-0" name="new-pass" id="new-pass" placeholder="Enter new password">
+                                    <input type="password" class="form-control border-top-0 border-left-0 border-right-0" name="new-pass" id="new-pass" placeholder="Enter new password">
                                 </div>
                                 <div class="form-group mt-5">
-                                    <input type="password" class="form-control-file border-top-0 border-left-0 border-right-0" name="confirm-pass" id="confirm-pass" placeholder="Confirm password">
+                                    <input type="password" class="form-control border-top-0 border-left-0 border-right-0" name="confirm-pass" id="confirm-pass" placeholder="Confirm password">
                                 </div>
                                 <p class="text-danger pt-3" id="psw-error"></p>
-                                <button class="btn btn-primary" type="submit">Submit</button>
+                                <div class="text-right">
+                                    <button class="btn btn-primary " type="submit">Submit</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -82,7 +84,7 @@ $this->load->helper('url_helper');
             </div>
             <div class="modal-body">
                 <form id="uploadImage" method="post" action="<?=base_url();?>index.php/admin/upload_profile" enctype="multipart/form-data">
-                    <p><input type="file" name="change_img" placeholder="Upload image" id="profile-image"></p>
+                    <p class=""><input type="file" name="change_img" placeholder="Upload image" id="profile-image"></p>
                     <p class="text-danger pt-3" id="imageerror"></p>
                     <button type="submit" class="btn btn-primary" id="submit-profile">Upload</button>
                 </form>

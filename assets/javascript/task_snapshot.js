@@ -182,7 +182,7 @@ $(document).ready(function() {
             }
         });
     
-    $('#view-chart').click(function() {
+    $('#curr-month').change(function() {
         if (document.getElementById('curr-month').value != '') {
             $.ajax({
                 type: 'POST',

@@ -23,11 +23,7 @@ print_r($task_data);
                         <input type="hidden" name="task_id" id="curr-taskid" value="<?=$task_data[0][0]['task_id'];?>">
                         <?php if($task_data[1]['running_task'] == 1)
                         { ?>
-                        <!-- <button type="button" id="stop-or-complete" class="text-center shadow-lg icon-width stop-or-complete">
-                            <div data-tasktype="Task" data-id="80">
-                                <h3> <i class=" fas action-icon fa-stop"></i></h3>
-                            </div>
-                        </button> -->
+                       
                         <?php } ?>
                         <div class="form-group">
                             <label for="task-name ">Write the task name</label>
@@ -45,13 +41,14 @@ print_r($task_data);
                                 </option>
                             </select>
                         </div>
-                        <h4 class="mt-4 text-center">Task activities</h4>
+                        <P class="pt-3">Time line</P>
                         <div class="row">
                             <div class="col-4 col-md-4"><b>Date</b></div>
                             <div class="col-3 col-md-4"><b>Start time</b></div>
                             <div class="col-4 col-md-4"><b>End time</b></div>
                         </div>
                         <div class="row" id="total-row">
+                            <input type="hidden" id="task-len" value="<?=sizeof($task_data[0])?>">
                             <?php $num = 0;
                           foreach($task_data[0] as $task){
                             ?>
@@ -59,24 +56,28 @@ print_r($task_data);
                                     <div class="input-group mt-3">
                                         <input type="text" class="form-control datepicker" id="date<?=$num?>" name="time[<?=$num?>][date]" data-date-format="yyyy-mm-dd" value="<?=$task['task_date'];?>">
                                         <div class="input-group-append">
-                                            <span class="input-group-text datepicker ">
-                                                <span class="fa fa-calendar"></span>
+                                            <span class="input-group-text">
+                                                <button class="btn p-2 fa fa-calendar" type="button"></button>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-4 col-md-4 mt-3">
-                                    <input class="form-control timepicker" type="text" id="start<?=$num?>" name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>">
+                                <div class="col-4  mt-3 edit-timings">
+                                    <input class="edit<?=$num?> timepicker<?=$num?> form-control " type="text" id="start<?=$num?>" name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>">
+                                    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+                                    <script type="text/javascript">
+                                        
+                                    </script>
                                 </div>
-                                <div class="col-4 col-md-4 mt-3">
-                                    <input class="form-control timepicker" type="text" id="end<?=$num?>" name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>">
+                                <div class="col-4 mt-3">
+                                    <input class="form-control timepicker<?=$num+1?>" type="text" id="end<?=$num?>" name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>">
                                 </div>
-                                <div class="col-4 col-md-12 mt-3 mb-5">
+                                <div class="col-12 mt-3 mb-5">
                                     <input type="text" class="form-control" name="time[<?=$num?>][task_description]" value="<?=$task['task_description'];?>">
                                 </div>
                                 <input type="hidden" value="<?=$task['table_id'];?>" name="time[<?=$num?>][table_id]" id="table_id<?=$num?>">
-                            <?php $num=$num+1;
+                            <?php $num=$num+2;
                         } ?>
                         </div>
                             <p id="taskError" class=" text-danger mt-3"></p>
@@ -90,9 +91,8 @@ print_r($task_data);
                 </div>
             </div>
         </div>
-        <footer class="footer">
-            <hr>
-            <p class="text-center ">Copyright © 2019 Printgreener.com</p>
+       <footer class="footer">
+            <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
         </footer>
     </div>
 </main>

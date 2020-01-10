@@ -8,7 +8,6 @@ $logintime = $login->getTimestamp();
 $time_login = strtotime($login_time);
 $timer = '';
 $timerClass = 'fa-stop';
-//print_r($task_info['login_status']['start_time']);exit;
 $task_type = 'login';
 $task_id = 0;
 $start_text = 'Start punch in/out';
@@ -23,11 +22,11 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
 <div class="container timer-slider">
     <div class="row">
         <div class="col-md-12">
-            <div id="timer-slider">
+            <div id="timer-slider">     <!-- slider for login activity -->
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
-                            Loged in at <?php echo unix_to_human($time_login); ?>
+                            Logged in at <?php echo unix_to_human($time_login); ?>
                         </p>
                         <div class="font-weight-light text-center primary-timer" id="primary-timer">
                             00:00:00
@@ -48,7 +47,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                     $task_start = strtotime($timer);
                     $task_id = $taskinfo['task_id'];
                      ?>
-                <div id="slider<?=$task_id?>">
+                <div id="slider<?=$task_id?>">  <!-- slider for all task -->
                     <div class="section-slider task-slider" id="login-timer-details<?=$id?>">
                         <input type="hidden" id="<?php echo $taskinfo['task_id'] ?>" value="<?php echo $timer_start?>">
                         <input type="hidden" id="id<?=$id?>" value="<?php echo $taskinfo['task_id']?>">
@@ -88,7 +87,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 ?>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-            <script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+            <script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script><!-- check for running tasks of previous date -->
             <script type="text/javascript">
                 $.ajax({
                     type: "POST",
@@ -120,19 +119,18 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
             </div>
 
             <div class='row mb-5' id="attach-card">
-                <!-- recent task details -->
+                <!-- all task details -->
 
                 <div class="col text-center">
                     <div class="spinner-border" role="status" aria-hidden="true"></div> Loading...
                 </div>
             </div>
         </div>
-        <hr>
-        <footer>
-            <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</p>
+        <footer class="footer">
+            <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
         </footer>
 
-
+        <!-- modal form for tasks that started onprevious date -->
         <div class="modal modal-transparent fade" id="stop-now" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
             <div class="modal-dialog  modal-xl" role="document">
                 <div class="modal-content">

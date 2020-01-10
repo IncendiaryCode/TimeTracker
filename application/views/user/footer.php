@@ -12,14 +12,15 @@
                 <img id="new_img" src="<?=base_url().USER_UPLOAD_PATH.$profile;?>" class="rounded-circle img-fluid" >
 
                 <div class="edit">
-                    <a href="#" class="text-white"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#changeimage"></i></a>
+                    <div class="img-icon">
+                        <a href="#" class="text-white"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#changeimage"></i></a>
+                    </div>
                 </div> 
 
                 <h5 class="text-center mt-4 font-weight-light"><?php echo $name;?></h5>
                 <ul class="text-center">
                     <!-- profile options -->
                     <li id="empplyee-profile"><a href="<?=base_url();?>index.php/user/load_my_profile">My profile</a></li>
-                    <!-- <li><a href="<?=base_url();?>index.php/user/change_password">Change password</a></li> -->
                     <li><a href="<?=base_url();?>index.php/user/load_employee_activities">My activities</a></li>
                     <li><a href="<?=base_url();?>index.php/login/logout" data-toggle="modal" data-target="#logout-modal">Logout</a></li>
                 </ul>
@@ -155,9 +156,11 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
+<script  src="//www.gstatic.com/charts/loader.js" type="text/javascript"></script>
 <script src="//momentjs.com/downloads/moment.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="//unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+
 <script src="//unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 <script src="<?=base_url();?>assets/user/plugins/calendar_view.js?v=<?=VERSION?>"></script>
@@ -181,6 +184,12 @@
           useCurrent: false, format: 'yyyy-mm-dd',
      });
  });
+$(function() {
+$('.edit-time').timepicker({
+      useCurrent: false, format: 'hh:mm:ss',
+ });
+});
+
 
 </script>
 </body>

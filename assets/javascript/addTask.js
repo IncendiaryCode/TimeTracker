@@ -1,15 +1,15 @@
 
-$(document).ready(function() {
+$(document).ready(function () {
 
- /*   addUser.init("#append-new-user");*/
+    /*   addUser.init("#append-new-user");*/
 
-    $("#chooseProject").change(function() {
+    $("#chooseProject").change(function () {
         var project_id = $(this).children("option:selected").val();
         $.ajax({
             type: 'POST',
             url: timeTrackerBaseURL + 'index.php/admin/get_project_module',
             data: { 'project_id': project_id },
-            success: function(res) {
+            success: function (res) {
                 var result = JSON.parse(res);
                 var array = result['result'];
                 $("#module").empty();
@@ -23,7 +23,7 @@ $(document).ready(function() {
 
     var addTask = document.getElementById('addTask');
     if (addTask) {
-        addTask.onsubmit = function(e) {
+        addTask.onsubmit = function (e) {
             var taskName = document.getElementById('task_name').value;
             var project = document.getElementById('chooseProject').value;
             if ((taskName == "" || taskName == " ")) {
@@ -34,7 +34,7 @@ $(document).ready(function() {
                 document.getElementById('taskError').innerHTML = "Please select project name";
                 return false;
             }
-            else if ((document.getElementById('select-users').value == " ")||((document.getElementById('select-users').value == ""))) {
+            else if ((document.getElementById('select-users').value == " ") || ((document.getElementById('select-users').value == ""))) {
                 document.getElementById('taskError').innerHTML = "Please select user";
                 return false;
             } else

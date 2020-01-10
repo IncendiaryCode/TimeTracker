@@ -47,7 +47,7 @@ var addTime = {
 
         var removeBtn = $('<div class="col-1 text-center">' +
             '<a href="javascript:void(0);" title="Remove" id="remove-time-' + id + '">' +
-            '<i class="fas fa-minus text-danger"></i>' +
+            '<i class="fas fa-minus icon-plus text-danger"></i>' +
             '</a>' +
             '</div><hr>');
 
@@ -171,8 +171,6 @@ var addTime = {
                 var date = document.getElementById('date-picker-start-0').value;
                 var start_time = document.getElementById('start-time-0').value;
                 var end_time = document.getElementById('end-time-0').value;
-
-                console.log(date)
                 _this.layout(date, start_time, end_time); //display multiple timings
                 document.getElementById('date-picker-start-0').value = " ";
                 document.getElementById('start-time-0').value = " ";
@@ -192,8 +190,6 @@ var addTime = {
         var _this = this;
        // var element = document.getElementById("task-add-time");
         var input_values = this.array_of_timings;
-
-        console.log(__start_seconds, __end_seconds, date, input_values.length, input_values)
         if (input_values.length > 0) {
             for (var i = 0; i < input_values.length; i++) {
 
@@ -296,7 +292,6 @@ if (addTask) {
                 } else {
                     array_of_timings.push({ date, start_time, end_time });
                 }
-           // }
         
     }
 }

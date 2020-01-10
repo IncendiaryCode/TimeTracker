@@ -45,13 +45,13 @@
                     <h5 class="text-center mt-4">Change Password</h5>
                     <div class="form-group">
                         <div class="input-group mb-3 ">
-                            <input type="password" class="mb-4 form-control-file font-weight-light border-top-0 border-left-0 border-right-0" id="oldPsw" name="psw1" placeholder="Enter Old Password">
+                            <input type="password" class="mb-4 form-control font-weight-light border-top-0 border-left-0 border-right-0" id="oldPsw" name="psw1" placeholder="Enter Old Password">
                         </div>
                         <div class="input-group mb-3 ">
-                            <input type="password" class="mb-4 form-control-file font-weight-light border-top-0 border-left-0 border-right-0" id="psw1" name="psw11" placeholder="Enter New Password">
+                            <input type="password" class="mb-4 form-control font-weight-light border-top-0 border-left-0 border-right-0" id="psw1" name="psw11" placeholder="Enter New Password">
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" class="mb-4 form-control-file font-weight-light border-top-0 border-left-0 border-right-0" id="psw2" name="psw22" placeholder="Confirm Password">
+                            <input type="password" class="mb-4 form-control font-weight-light border-top-0 border-left-0 border-right-0" id="psw2" name="psw22" placeholder="Confirm Password">
                         </div>
                         <div class="text-right">
                             <button type="submit" class="btn save-task  text-white">Submit</button>

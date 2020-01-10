@@ -1,6 +1,6 @@
 var user_email;
-$(document).ready(function() {
-    $('#forgot').click(function() {
+$(document).ready(function () {
+    $('#forgot').click(function () {
         $('#form2').show();
         $('#loginForm').hide();
         $('#form2').css("background-color", "white");
@@ -9,21 +9,21 @@ $(document).ready(function() {
 });
 
 
-var Validation = function(e) {
+var Validation = function (e) {
     this.isValid = false;
     this.errorCount = 0;
     this.blurAttached = false;
     this.formElement = e;
 };
 
-Validation.prototype.correctCheck = function(e) {
+Validation.prototype.correctCheck = function (e) {
     var current = this;
     var inputTags = this.formElement.getElementsByTagName('input');
     for (var i = 0; i < inputTags.length; i++) {
         var input = inputTags[i];
         this.isValid = this.event(input);
         if (!this.isBlurAttached) {
-            input.addEventListener('blur', function(e) {
+            input.addEventListener('blur', function (e) {
                 current.isBlurAttached = true;
                 return current.correctCheck(this.formElement);
             });
@@ -32,7 +32,7 @@ Validation.prototype.correctCheck = function(e) {
     return this;
 };
 
-Validation.prototype.event = function(ele) {
+Validation.prototype.event = function (ele) {
     if (ele.classList.contains('has-empty-validation')) {
         if (ele.value == "" || ele.value == " ") {
             document.getElementById(ele.id + "-error").innerHTML = ele.name + " is required.";
@@ -52,7 +52,7 @@ Validation.prototype.event = function(ele) {
     return this.isValid;
 }
 
-Validation.prototype.isValidateEmail = function(e) {
+Validation.prototype.isValidateEmail = function (e) {
     if (e.type == 'email') {
         var emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!emailRegEx.test(e.value)) {
@@ -71,71 +71,69 @@ Validation.prototype.isValidateEmail = function(e) {
 };
 
 var loginForm = document.getElementById('loginForm');
-if(loginForm)
-{
-loginForm.onsubmit = function(e) {
-    var validateForm = new Validation(e.currentTarget);
-    var finalValue = validateForm.correctCheck();
-    console.log(finalValue)
-    if (finalValue.isValid == true) {
+if (loginForm) {
+    loginForm.onsubmit = function (e) {
+        var validateForm = new Validation(e.currentTarget);
+        var finalValue = validateForm.correctCheck();
+        console.log(finalValue)
+        if (finalValue.isValid == true) {
 
 
-        var id = document.getElementById('Username').value;
-        localStorage.setItem('id', id);
+            var id = document.getElementById('Username').value;
+            localStorage.setItem('id', id);
 
-        document.getElementById('Username-error').value = " ";
-        return true;
-    } else
-        return false;
-}
+            document.getElementById('Username-error').value = " ";
+            return true;
+        } else
+            return false;
+    }
 }
 
 var forgotPsw = document.getElementById('forgotPassword');
-forgotPsw.onsubmit = function(e) {
+forgotPsw.onsubmit = function (e) {
     user_email = document.getElementById('Uname').value;
     var validateForm = new Validation(e.currentTarget);
     var finalValue = validateForm.correctCheck();
     console.log(finalValue)
     if (finalValue.isValid == true) {
 
-        
+
         var formPsw = document.getElementById('reEnterPsw');
         $('#enter-otp').show();
         $('#enter-email').hide();
 
         var valid = validateOtp();
-        if(valid)
-        {
-        formPsw.onsubmit = function(e) {
+        if (valid) {
+            formPsw.onsubmit = function (e) {
 
-            document.getElementById('user-email').value = user_email;
+                document.getElementById('user-email').value = user_email;
 
-            var psw1 = document.getElementById('psw1').value;
-            var psw2 = document.getElementById('psw2').value;
-            if (psw1 == "" || psw1 == " ") {
-                document.getElementById('cnfrmPsw').innerHTML = "Empty Password";
-                return false;
-            } else if (email == "" || email == " ") {
-                document.getElementById('Username-errorr').innerHTML = "Empty Email";
-                return false;
-            }
-            if (psw1 === psw2) {
+                var psw1 = document.getElementById('psw1').value;
+                var psw2 = document.getElementById('psw2').value;
+                if (psw1 == "" || psw1 == " ") {
+                    document.getElementById('cnfrmPsw').innerHTML = "Empty Password";
+                    return false;
+                } else if (email == "" || email == " ") {
+                    document.getElementById('Username-errorr').innerHTML = "Empty Email";
+                    return false;
+                }
+                if (psw1 === psw2) {
 
-                $.ajax({
-                    type: "POST",
-                    url: '../php/change_pwd.php',
-                    data: { Username: email, psw11: psw1, psw22: psw2 },
-                    success: function(data) {}
-                });
-                alert('password changed successfully!!!');
+                    $.ajax({
+                        type: "POST",
+                        url: '../php/change_pwd.php',
+                        data: { Username: email, psw11: psw1, psw22: psw2 },
+                        success: function (data) { }
+                    });
+                    alert('password changed successfully!!!');
 
-                return true;
-            } else {
-                document.getElementById('cnfrmPsw').innerHTML = "Enter correct Password!!!";
-                return false; 
+                    return true;
+                } else {
+                    document.getElementById('cnfrmPsw').innerHTML = "Enter correct Password!!!";
+                    return false;
+                }
             }
         }
-    }
         return false;
 
     }
@@ -143,8 +141,8 @@ forgotPsw.onsubmit = function(e) {
 }
 
 function validateOtp() {
-    $(document).ready(function() {
-        $('#getOTP').click(function() {
+    $(document).ready(function () {
+        $('#getOTP').click(function () {
             $('.alert-user').show();
         });
     });
@@ -160,9 +158,9 @@ function validateOtp() {
             type: "POST",
             url: 'php/check_otp.php',
             data: { otp: otpp },
-            success: function(data) {
+            success: function (data) {
                 if (data == null || data == "") {
-                    $(document).ready(function() {
+                    $(document).ready(function () {
                         $('#formPsw').show();
                         $('#form2').hide();
                     });
@@ -185,7 +183,7 @@ function sendOTP() {
             type: "POST",
             url: 'php/forgot_pwd.php',
             data: { email: email },
-            success: function(data) {
+            success: function (data) {
                 alert(data);
             }
         });
