@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-$GLOBALS['page_title'] = 'Add Task';
+$GLOBALS['page_title'] = 'Add task';
+if($this->input->get()){
+ print_r($task_data);   
+}
+
 ?>
 <main class="container-fluid-main">
     <div class="main-container container">

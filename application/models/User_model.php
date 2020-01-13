@@ -201,32 +201,22 @@ class User_model extends CI_Model {
             }
         } else if ($data['task_type'] == 'task') //check if the timer-start request is for task
         {
-            $this->db->select('*');
-            $this->db->from('time_details');
-            $this->db->where('task_id',$data['task_id']);
-            $this->db->where('end_time IS NULL');
-            $this->db->or_where('total_minutes','0');
-            $started = $this->db->get();
-            if($started->num_rows() > 0){
-                $error = 'Already started';
-                return $error;
-            }else{
-                $start = (isset($data['start_time']))?$data['start_time']:date('Y:m:d H:i:s');
-                $array2 = array('task_id' => $data['task_id'], 'user_id' => $data['userid'], 'task_date' => date('Y:m:d'), 'start_time' => $start, 'total_hours' => '0', 'total_minutes' => '0', 'created_on' => date('Y:m:d H:i:s'));
-                $this->db->set($array2);
-                $query2 = $this->db->insert('time_details', $array2);
-                if ($query2) {
-                    $this->db->select('t.task_name,d.user_id,d.task_id,d.start_time,t.description');
-                    $this->db->select_sum('d.total_minutes', 't_minutes');
-                    $this->db->from('time_details AS d');
-                    $this->db->join('task AS t', 't.id = d.task_id');
-                    $this->db->where('d.task_id', $data['task_id']);
-                    //$this->db->where('d.end_time IS NULL');
-                    $details = $this->db->get();
-                    return $details->row_array();
-                } else {
-                    return false;
-                }
+            
+            $start = (isset($data['start_time']))?$data['start_time']:date('Y:m:d H:i:s');
+            $array2 = array('task_id' => $data['task_id'], 'user_id' => $data['userid'], 'task_date' => date('Y:m:d'), 'start_time' => $start, 'total_hours' => '0', 'total_minutes' => '0', 'created_on' => date('Y:m:d H:i:s'));
+            $this->db->set($array2);
+            $query2 = $this->db->insert('time_details', $array2);
+            if ($query2) {
+                $this->db->select('t.task_name,d.user_id,d.task_id,d.start_time,t.description');
+                $this->db->select_sum('d.total_minutes', 't_minutes');
+                $this->db->from('time_details AS d');
+                $this->db->join('task AS t', 't.id = d.task_id');
+                $this->db->where('d.task_id', $data['task_id']);
+                //$this->db->where('d.end_time IS NULL');
+                $details = $this->db->get();
+                return $details->row_array();
+            } else {
+                return false;
             }
         }
     }
@@ -508,20 +498,20 @@ class User_model extends CI_Model {
                 $time_range = json_decode($time_range, true);
             }
             if (sizeof($time_range) > 0) {
-                for ($i = 0;$i < sizeof($time_range);$i++) {
+                foreach($time_range as $t) {
                     $task_description = "";
-                    $table_id[$i] = null;
-                    if (isset($time_range[$i]['table_id'])) {
-                        $table_id[$i] = $time_range[$i]['table_id'];
+                    $table_id = null;
+                    if (isset($t['table_id'])) {
+                        $table_id = $t['table_id'];
                     }
                     //$table_id[$i] = $time_range[$i]['table_id'];
-                    $start_value = date('Y-m-d H:i:s', strtotime($time_range[$i]['start']));
-                    if($time_range[$i]['end'] != "")
-                        $end_value = date('Y-m-d H:i:s',strtotime($time_range[$i]['end']));
+                    $start_value = date('Y-m-d H:i:s', strtotime($t['start']));
+                    if($t['end'] != "")
+                        $end_value = date('Y-m-d H:i:s',strtotime($t['end']));
                     else
                         $end_value = null;
-                    if (isset($time_range[$i]['task_description'])) {
-                        $description = $time_range[$i]['task_description'];
+                    if (isset($t['task_description'])) {
+                        $description = $t['task_description'];
                     }
                     $date = date("Y-m-d", strtotime($start_value));
                     $diff = 0;
@@ -530,16 +520,14 @@ class User_model extends CI_Model {
                     $minutes = round((abs($diff) / 60), 2);
                     $hours = round(abs($diff / (60 * 60)));
                     $array = array('start_time' => $start_value, 'end_time' => $end_value, 'task_description' => $description, 'user_id' => $userid, 'task_id' => $data['task_id'], 'total_hours' => $hours, 'total_minutes' => $minutes, 'task_date' => $date);
-                    if ($table_id[$i] != null) {
-                        $this->db->where(array('user_id' => $userid, 'task_id' => $data['task_id'], 'id' => $table_id[$i]));
+                    if ($table_id != null) {
+                        $this->db->where(array('user_id' => $userid, 'task_id' => $data['task_id'], 'id' => $table_id));
                         $query = $this->db->update('time_details', $array);
                     } else {
                         $array = array('user_id' => $userid, 'start_time' => $start_value, 'end_time' => $end_value, 'task_description' => $description, 'user_id' => $userid, 'task_id' => $data['task_id'], 'total_hours' => $hours, 'total_minutes' => $minutes, 'task_date' => $date);
                         $this->db->set($array);
                         $query = $this->db->insert('time_details', $array);
-                    }
-                    
-                    
+                    }      
                 }
             }
             if (isset($data['deleted_time_range'])) {
