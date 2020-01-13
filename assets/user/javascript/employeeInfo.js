@@ -16,7 +16,7 @@ function startTimer(startTime) {
 }
 
 function setTime(startTime) {
-	//update local storage
+
 	localStorage.setItem("timeStamp", startTime);
 
 	var date = new Date(startTime * 1000);
@@ -101,7 +101,6 @@ function drawCards(data) {
 				data[x][y].id +
 				'" />'
 			);
-
 			if (data[x][y].running_task == 0) {
 				/*check whether task is ended or not*/
 				var timeUsed = minutesToTime(data[x][y].t_minutes);
@@ -211,6 +210,7 @@ function drawCards(data) {
 							"</div>" +
 							"</div>"
 						);
+
 						var stopButton = $(
 							'<span class=""><i class="fa fa-hourglass-1"></i> Running</span>'
 						).data("taskid", t_id);
@@ -221,9 +221,24 @@ function drawCards(data) {
 						document.getElementById("btn-stop" + t_id).childNodes[0].remove();
 						document.getElementById("btn-stop" + t_id).childNodes[0].remove();
 						$('#btn-stop' + t_id).append(stopButton);
+						
+						document.getElementById('footer-right-'+t_id).childNodes[0].remove();
 
-						icon_tag.childNodes[0].classList.add("fa-stop");
-						icon_tag.childNodes[0].classList.remove("fa-play")
+						var action_stop = $(
+								'<a href="' +
+								timeTrackerBaseURL +
+								"user/stop_timer?id=" +
+								t_id +
+								'" class="card-action action-delete" data-id="' +
+								t_id +
+								'" data-toggle="tooltip" data-placement="top" title="Stop"></a>'
+							);
+
+							action_stop.append(
+								'<i class="fas action-edit fa-stop"></i>'
+							);
+						$('#footer-right-'+t_id).append(action_stop)
+						
 						$("#timer-slider").append(row);
 						timerSlider.reload();
 						start_task_timer(0, t_id);
@@ -241,16 +256,28 @@ function drawCards(data) {
 					dataType: "json",
 					success: function (res) {
 						var data = res['flag'];
-						console.log(data)
 						document.getElementById("footer-right-" + task_id).childNodes[0].remove();
-						$("#footer-right-" + task_id).append(actionPlay);
-
+						
+						var action_play = $(
+							'<a href="' +
+							timeTrackerBaseURL +
+							"user/start_timer?id=" +
+							task_id +
+							'" class="card-action action-delete" data-id="' +
+							task_id +
+							'" data-toggle="tooltip" data-placement="top" title="Play"></a>'
+						);
+						action_play.append(
+							'<i class="fas action-edit  fa-play"></i>'
+						);
+						$('#footer-right-'+task_id).append(action_play)
 						document.getElementById("btn-stop" + task_id).childNodes[0].remove();
 						$('#btn-stop' + task_id).append('<i class="far fa-clock"></i> ' + minutesToTime(data['details']['t_minutes']));
 						$("#action-play" + task_id).css("display", "block");
+
 						document.getElementById("slider" + task_id).remove();
 						timerSlider.reload();
-						document.getElementsByClassName("bx-pager-item")[1].remove();
+						/*document.getElementsByClassName("bx-pager-item")[1].remove();*/
 
 					}
 				});

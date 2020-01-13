@@ -8,7 +8,7 @@ $profile = $this->session->userdata('user_profile');
             <?php $myPhpLink='document.referrer';?> 
     </script>
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a href="#" class="text-white previous"><img src="<?=base_url().UPLOAD_PATH?>logo-white.png" height="40px;" onclick="window.location.href=<?=$myPhpLink ?>"></a>
+            <a href="#" class="text-white previous"><img src="<?=base_url().UPLOAD_PATH?>logo-white.png" height="40px;" onclick="window.location.href='<?=base_url();?>index.php/admin'"></a>
             <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon "></span>
             </button>

@@ -8,7 +8,7 @@ $profile = $this->session->userdata('user_profile');
             <?php $myPhpLink='document.referrer';?> 
         </script>
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a href="#" class="text-white previous"><img src="<?=base_url().UPLOAD_PATH?>logo-white.png" height="40px;" onclick="window.location.href=<?=$myPhpLink ?>"></a>
+            <a href="#" class="text-white previous"><img src="<?=base_url().UPLOAD_PATH?>logo-white.png" height="40px;" onclick="window.location.href='<?=base_url();?>index.php/admin'"></a>
             <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon "></span>
             </button>
@@ -32,8 +32,7 @@ $profile = $this->session->userdata('user_profile');
 <div class="container">
     <div class="row mt-5 shadow-sm">
         <?php
-        if($data)
-        {
+        
             foreach($data as $details) { ?>
             <div class="col-md-4 ">
                 <div class="card user-card">
@@ -81,9 +80,7 @@ $profile = $this->session->userdata('user_profile');
                 </div>
             </div>
         </div>
-    <?php } } else{ ?>
-        <div class="col-4 offset-4"><p class="text-center">Not yet started</p></div>
-    <?php }  ?>
+    <?php } ?>
     </div><hr>
     <div class="row mt-5">
         <canvas id="project_time_chart" height="80px;"></canvas>

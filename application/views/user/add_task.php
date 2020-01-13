@@ -40,7 +40,7 @@ $GLOBALS['page_title'] = 'Add Task';
                                 <option>Select Project</option>
                                 <?php
                                  foreach($result as $p){ ?>
-                                <option value=<?php echo $p['id']?> label= <?php echo $p['name']; ?> >
+                                <option value=<?php echo $p['id']?> >
                                     <?php echo $p['name']; ?>
                                 </option>
                                 <?php }?>
@@ -78,19 +78,19 @@ $GLOBALS['page_title'] = 'Add Task';
                                                 <input type="text" class="form-control datepicker-0" name="daterange[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text datepicker ">
-                                                        <button class="btn p-2 fa fa-calendar"></button>
+                                                        <button type="button" class="btn p-2 fa fa-calendar"></button>
                                                     </span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-4">
                                             <div class="input-group date">
-                                                <input id="start-time-0" class="form-control timepicker" name="daterange[0][start]" />
+                                                <input id="start-time-0" class="form-control timepicker" name="daterange[0][start]" placeholder="hh:mm" />
                                             </div>
                                         </div>
                                         <div class="col-4">
                                             <div class="input-group date">
-                                                <input id="end-time-0" class="form-control timepicker1" name="daterange[0][end]" />
+                                                <input id="end-time-0" class="form-control timepicker1" name="daterange[0][end]"  placeholder="hh:mm" />
                                             </div>
                                         </div>
                                         <div class="col-10 text-center">

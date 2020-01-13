@@ -1,5 +1,3 @@
-
-
 var addTime = {
     id: 0,
     ele: null,
@@ -26,14 +24,14 @@ var addTime = {
 
         var colStartTime = $('<div class="col-4">' +
             '<div class="input-group">' +
-            '<input id="start-time-' + id + '" class="form-control timepicker" data-date-format="hh:mm:ss" name="daterange[' + id + '][start]" value=' + start_time + ' />' +
+            '<input id="start-time-' + id + '" class="form-control timepicker" data-date-format="hh:mm:ss" name="daterange[' + id + '][start]" value=' + start_time + ' placeholder="hh:mm" />' +
             '</div>' +
             '</div>');
         colStartTime.appendTo(row);
 
         var colEndTime = $('<div class="col-4">' +
             '<div class="input-group">' +
-            '<input id="end-time-' + id + '"  class="form-control timepicker1" data-date-format="hh:mm:ss" name="daterange[' + id + '][end]" value=' + end_time + ' />' +
+            '<input id="end-time-' + id + '"  class="form-control timepicker1" data-date-format="hh:mm:ss" name="daterange[' + id + '][end]" value=' + end_time + ' placeholder="hh:mm" />' +
             '</div>' +
             '</div>');
         colEndTime.appendTo(row);
@@ -292,7 +290,6 @@ if (addTask) {
                 } else {
                     array_of_timings.push({ date, start_time, end_time });
                 }
-        
     }
 }
 
@@ -316,6 +313,9 @@ if (addTask) {
     $('#choose-project').click(function () {
         $('#choose-module').empty().html('<option>Select module</option>');
     })
+
+    var current_time = new Date().getHours().toString()+':'+ new Date().getMinutes();
+    document.getElementById('start-time-0').value = current_time
     $("select.project_name").change(function () {
         var project_id = $(this).children("option:selected").val();
         $.ajax({
