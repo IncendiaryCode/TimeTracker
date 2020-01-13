@@ -97,7 +97,7 @@ function draw_chart_ards(data) {
             actionEdit.attr(
                 "href",
                 timeTrackerBaseURL +
-                "index.php/user/load_edit_task?t_id=" +
+                "index.php/user/load_add_task?t_id=" +
                 data[x][y].id
             );
             footerRight.append(actionEdit);

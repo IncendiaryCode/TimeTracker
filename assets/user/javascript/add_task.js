@@ -3,7 +3,7 @@ var addTime = {
     ele: null,
     addBtn: null,
     array_of_timings: [],
-    layout: function (date, start_time, end_time) {
+    layout: function (date, start_time, end_time, descri) {
 
         var section = $('<div class="time-section pt-3 pb-5" />');
         var row = $('<div class="row" />');
@@ -38,7 +38,7 @@ var addTime = {
 
         var colDescri = $('<div class="col-11">' +
             '<div class="input-group">' +
-            '<input id="description' + id + '"  class="form-control"  name="daterange[' + id + '][description]" " />' +
+            '<input id="description-' + id + '"  class="form-control"  name="daterange[' + id + '][description]" value=' + descri + ' placeholder="description" />' +
             '</div>' +
             '</div>');
         colDescri.appendTo(row);
@@ -56,8 +56,10 @@ var addTime = {
         array_of_timings.push({ date, start_time, end_time });
         removeBtn.appendTo(row);
 
+
         section.append(row);
         this.ele.prepend(section);
+
 
         section.find(".timepicker").timepicker({
             uiLibrary: 'bootstrap4'
@@ -65,7 +67,6 @@ var addTime = {
         section.find(".timepicker1").timepicker({
             uiLibrary: 'bootstrap4'
         });
-
         section.find(".datepicker").datepicker({
             //startDate: new Date(),
             weekStart: 1,
@@ -169,10 +170,21 @@ var addTime = {
                 var date = document.getElementById('date-picker-start-0').value;
                 var start_time = document.getElementById('start-time-0').value;
                 var end_time = document.getElementById('end-time-0').value;
-                _this.layout(date, start_time, end_time); //display multiple timings
-                document.getElementById('date-picker-start-0').value = " ";
-                document.getElementById('start-time-0').value = " ";
-                document.getElementById('end-time-0').value = " ";
+                var descri;
+                if(document.getElementById('description-0').value == "" || document.getElementById('description-0').value == " ")
+                {
+                descri = "description";
+                }else{
+                descri = document.getElementById('description-0').value;
+                }
+                _this.layout(date, start_time, end_time, descri); //display multiple timings
+
+
+                var current_time = new Date().getHours().toString()+':'+ new Date().getMinutes();
+                document.getElementById('start-time-0').value = current_time;
+                $('.datepicker-0').datepicker("setDate", new Date());
+                document.getElementById('end-time-0').value = "";
+                document.getElementById('description-0').value = "";
 
             }
         });
@@ -313,9 +325,9 @@ if (addTask) {
     $('#choose-project').click(function () {
         $('#choose-module').empty().html('<option>Select module</option>');
     })
-
     var current_time = new Date().getHours().toString()+':'+ new Date().getMinutes();
-    document.getElementById('start-time-0').value = current_time
+    document.getElementById('start-time-0').value = current_time;
+
     $("select.project_name").change(function () {
         var project_id = $(this).children("option:selected").val();
         $.ajax({

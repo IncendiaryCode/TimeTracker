@@ -277,8 +277,6 @@ function drawCards(data) {
 
 						document.getElementById("slider" + task_id).remove();
 						timerSlider.reload();
-						/*document.getElementsByClassName("bx-pager-item")[1].remove();*/
-
 					}
 				});
 			});
@@ -290,13 +288,10 @@ function drawCards(data) {
 			actionEdit.attr(
 				"href",
 				timeTrackerBaseURL +
-				"index.php/user/load_edit_task?t_id=" +
+				"index.php/user/load_add_task?t_id=" +
 				data[x][y].id
 			);
-
-
 			footerRight.append(actionEdit);
-
 			// footerRow.append(footerRight);
 
 			cardFooter.append(footerRow);
@@ -447,28 +442,37 @@ $(document).ready(function () {
 				url: taskUrl,
 				data: { action: "task", id: task_id },
 				success: function (res) {
-					/*setTimeout(function() {
-						document.getElementById('alarmmsg').innerHTML = "task has been stoped.";
-					}, 50);*/
-					/*console.log(document.getElementById("footer-right-" + t_id));
-					var icon_tag = document.getElementById("footer-right-" + t_id).childNodes[0];
+					var data = JSON.parse(res);
+					var task_id_no = t_id.match(/(\d+)/);
+					var action_play = $(
+							'<a href="' +
+							timeTrackerBaseURL +
+							"user/start_timer?id=" +
+							task_id_no[0] +
+							'" class="card-action action-delete" data-id="' +
+							task_id_no[0] +
+							'" data-toggle="tooltip" data-placement="top" title="Play"></a>'
+						);
+						action_play.append(
+							'<i class="fas action-edit  fa-play"></i>'
+						);
+						document.getElementById('footer-right-'+task_id_no[0]).childNodes[0].remove();
+						$('#footer-right-'+task_id_no[0]).append(action_play)
+						document.getElementById("btn-stop" + task_id_no[0]).childNodes[0].remove();
+						$('#btn-stop' + task_id_no[0]).append('<i class="far fa-clock"></i> ' + minutesToTime(data['flag']['details']['t_minutes']));
+						$("#action-play" + task_id_no[0]).css("display", "block");
+						timerSlider.reload();
 
-					document.getElementById("btn-stop" + t_id).childNodes[0].remove();
-					document.getElementById("btn-stop" + t_id).childNodes[0].remove();
-					$('#btn-stop' + t_id).append(stopButton);
-
-					icon_tag.childNodes[0].classList.add("fa-stop");
-					icon_tag.childNodes[0].classList.remove("fa-play");*/
-				}
-			});
-		} else {
-			if (t_id == "" || t_id == " ") {
-				$("#pause-action").modal("show");
+					}
+				});
 			} else {
-				localStorage.setItem("task_id", t_id);
+				if (t_id == "" || t_id == " ") {
+					$("#pause-action").modal("show");
+				} else {
+					localStorage.setItem("task_id", t_id);
+				}
 			}
-		}
-	});
+		});
 
 	var curr_timeStamp = Math.floor(Date.now() / 1000);
 	if (__timeTrackerLoginTime) {
