@@ -189,8 +189,8 @@ class User_model extends CI_Model {
             $query_check = $this->db->get('login_details');
             if ($query_check->num_rows() > 0) {
                 return true;
-            } else {
-                $array1 = array('user_id' => $data['userid'], 'task_date' => date('Y:m:d'), 'start_time' => date('Y:m:d H:i:s'), 'created_on' => date('Y:m:d H:i:s'));
+            }else{
+                 $array1 = array('user_id'=>$data['userid'],'task_date'=>date('Y:m:d'),'start_time'=>$data['start_time'],'created_on'=>date('Y:m:d H:i:s'));
                 $this->db->set($array1);
                 $query1 = $this->db->insert('login_details', $array1);
                 if ($query1) {

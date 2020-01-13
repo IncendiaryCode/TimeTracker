@@ -113,6 +113,7 @@ class Task extends REST_Controller {
                 $input['userid'] = $post['userid'];
                 $input['task_type'] = $post['type'];//task or login
                 $input['task_id'] = isset($post['task_id'])?$post['task_id']:null;
+                $input['start_time'] = isset($post['start_time'])?$post['start_time']:date('Y:m:d H:i:s');
                 $resp = $this->user_model->start_timer($input);
                 if ($resp) {
                     $data['success'] = 1;
