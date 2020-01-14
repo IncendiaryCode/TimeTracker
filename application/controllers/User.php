@@ -40,7 +40,22 @@ class User extends CI_Controller
             redirect('login/index', 'refresh');
         }
     }
-
+    public function save_login_time(){
+        $result = $this->user_model->start_login_timer();
+        if($result == TRUE){
+            $result['flag'] = 1;
+            $result['msg'] = 'Login timer started.';
+            $this->load->view('user/header');
+            $this->load->view('user/user_dashboard', $result);
+            $this->load->view('user/footer');
+        }else{
+            $result['flag'] = 0;
+            $result['msg'] = 'Failed to start login timer.';
+            $this->load->view('user/header');
+            $this->load->view('user/user_dashboard', $result);
+            $this->load->view('user/footer');
+        }
+    }
     public function dark(){
         $GLOBALS['dark_mode'] = 0;
         $this->form_validation->set_rules('dark-mode', 'Check box', 'required');

@@ -90,10 +90,10 @@
 			$result = $this->dashboard_model->assign_user($user_id,$project_id);
 			if($result == TRUE){
 				$this->session->set_flashdata('success','User Assigned Successfully.');
-				redirect('admin/load_project_detail','refresh');
+				redirect('admin/load_project_detail?project_id='.$project_id,'refresh');
 			}else{
 				$this->session->set_flashdata('error','Unable to assign the user!');
-				redirect('admin/load_project_detail','refresh');
+				redirect('admin/load_project_detail?project_id='.$project_id,'refresh');
 			}
 			}else{
 				redirect('login/index','refresh');

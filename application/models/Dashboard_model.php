@@ -650,45 +650,64 @@ class Dashboard_model extends CI_Model
             {
                 $this->db->like('u.name',$search);
             }
-            $this->db->select('u.name AS user_name');
-            $this->db->select('count(distinct d.task_id) AS tasks_count');
-            $this->db->select_sum('d.total_minutes','t_minutes');
-            $this->db->from('project AS p');
-            $this->db->join('task AS t','t.project_id = p.id');
-            $this->db->join('time_details AS d','d.task_id = t.id');
-            $this->db->join('users AS u','u.id = d.user_id');
-            $this->db->where(array('u.type'=>'user','p.id'=>$project_id));
-            $this->db->group_by('d.user_id');
-            $this->db->limit($length,$start);
-            $employees = $this->db->get();
-            
+
+            $this->db->select('a.user_id,u.name AS user_name');
+            $this->db->from('project_assignee AS a');
+            $this->db->join('users AS u','u.id = a.user_id');
+            $this->db->where('a.project_id',$project_id);
+            $users = $this->db->get()->result_array();
             $data = array();
-            foreach($employees->result() as $rows)
-            {
-                $data[]= array(
-                    $rows->user_name,
-                    $rows->tasks_count,
-                    $rows->t_minutes
-                );     
-            }  
-        }
+
+            foreach($users AS $u){
+                $data[] = $u['user_id'];
+                $this->db->select('u.id,u.name AS user_name');
+                $this->db->select('count(distinct d.task_id) AS tasks_count');
+                $this->db->select_sum('d.total_minutes','t_minutes');
+                $this->db->from('task AS t');
+                $this->db->join('time_details AS d','d.task_id = t.id');
+                $this->db->join('users AS u','u.id = d.user_id');
+                $this->db->where(array('u.type'=>'user','t.project_id'=>$project_id,'u.id'=>$u['user_id']));
+                $this->db->group_by('d.user_id');
+                $this->db->limit($length,$start);
+                $details = $this->db->get();
+                $task[] = $details->row_array();
+          
+                
+                foreach($task as $t){
+                     $data[] = array_push($data,$t['tasks_count'],$t['t_minutes']);
+
+                  
+                }  
+            }
+        }       
         return $data;
     }
 
-    public function get_project_data($proj_id){
-        $this->db->select('p.name AS project_name,p.image_name,p.id AS project_id');
-        $this->db->select('count(distinct u.id) AS users_count');
-        $this->db->select('count(distinct t.id) AS tasks_count');   
+    public function get_project_data($proj_id)
+    {
         $this->db->select_sum('d.total_minutes','t_minutes');
-        $this->db->from('users AS u');
-        $this->db->join('time_details AS d','d.user_id = u.id');
+        $this->db->from('time_details AS d');
         $this->db->join('task AS t','t.id = d.task_id');
-        $this->db->join('project AS p','p.id = t.project_id');
-        $this->db->where('p.id',$proj_id);
-        $this->db->group_by('p.id');
+        $this->db->where('t.project_id',$proj_id);
         $result = $this->db->get();
         if($result->num_rows() > 0){
-            $data = $result->result_array();
+            $total_time = $result->row_array()['t_minutes'];
+            $this->db->select('count(distinct a.user_id) AS users_count');
+            $this->db->select('count(distinct t.id) AS tasks_count');
+            $this->db->select('p.name AS project_name,p.image_name,p.id AS project_id');
+            $this->db->from('project_assignee AS a');
+            $this->db->join('task AS t','t.project_id = a.project_id');
+            $this->db->join('project AS p','p.id = t.project_id');
+            $this->db->where('p.id',$proj_id);
+            $res = $this->db->get();
+            if($res->num_rows() > 0){
+                $count = $res->result_array();
+                foreach($count as $c){
+                    $data = array('project_name'=>$c['project_name'],'project_id'=>$c['project_id'],'users'=>$c['users_count'],'tasks'=>$c['tasks_count'],'image_name'=>$c['image_name'],'total_minutes'=>$total_time);
+                }
+            }else{
+                $data = '';
+            } 
         }else{
             $data = '';
         }
@@ -1079,46 +1098,43 @@ class Dashboard_model extends CI_Model
         ));
         if ($query->num_rows() == 1) {
             $row    = $query->row();
-                //check for entry with the same login date
-                $this->db->where(array(
-                    'task_date' => date('Y:m:d'),
-                    'user_id' => $row->id
-                ));
-                $query_check = $this->db->get('login_details');
-                if ($query_check->num_rows() > 0) { //multiple logins on the same date
-                    $login_data = $query_check->row_array();
-                    $data       = array(
-                        'userid' => $row->id,
-                        'email' => $row->email,
-                        'logged_in' => TRUE,
-                        'user_profile' => $row->profile,
-                        'username' => $row->name,
-                        'login_time' => $login_data['end_time']
-                    );
-                    $this->session->set_userdata($data);
-                } //$query_check->num_rows() > 0
-                else { //first login for the day
-                    $array = array(
+
+            //check for entry with the same login date
+            $this->db->where(array('task_date' => date('Y:m:d'),'user_id' => $row->id));
+            $query_check = $this->db->get('login_details');
+            if ($query_check->num_rows() > 0) { //multiple logins on the same date
+                $data = array(
+                    'userid' => $row->id,
+                    'email' => $row->email,
+                    'logged_in' => TRUE,
+                    'user_profile' => $row->profile,
+                    'username' => $row->name
+                );
+                $this->session->set_userdata($data);
+            } else { 
+                //first login for the day
+                //check for the type
+                if($row->type == 'admin'){ 
+                    $array = array(         //if type = admin, insert login details
                         'user_id' => $row->id,
-                        'task_date' => date('Y:m:d'),
-                        'start_time' => date("Y:m:d H:i:s"),
-                        'created_on' => date('Y:m:d H:i:s')
+                        'created_on' => date('Y:m:d H:i:s'),
+                        'task_date' =>date('Y:m:d'),
+                        'start_time' =>date('Y:m:d H:i:s')
                     );
                     $this->db->set($array);
                     $query = $this->db->insert('login_details', $array);
-                    $data  = array(
-                        'userid' => $row->id,
-                        'email' => $row->email,
-                        'logged_in' => TRUE,
-                        'user_profile' => $row->profile,
-                        'username' => $row->name,
-                        'login_time' => date('Y:m:d H:i:s')
-                    );
-                    $this->session->set_userdata($data);
                 }
-                return $row->type;
+                $data = array(
+                    'userid' => $row->id,
+                    'email' => $row->email,
+                    'logged_in' => TRUE,
+                    'user_profile' => $row->profile,
+                    'username' => $row->name
+                );
+                $this->session->set_userdata($data);
             }
-        else {
+            return $row->type;
+        } else {
             $this->form_validation->set_message('Wrong inputs.');
             return false;
         }

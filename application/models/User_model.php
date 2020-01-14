@@ -6,6 +6,22 @@ class User_model extends CI_Model {
         $this->load->library('session');
         $userid = $this->session->userdata('userid');
     }
+
+    //To start login timer
+    public function start_login_timer(){
+        $array = array('user_id'=>$this->session->userdata('userid'),
+                        'task_date'=>date('Y-m-d'),
+                        'start_time'=>date('Y-m-d H:i:s'),
+                        'created_on'=>date('Y-m-d H:i:s')
+                    );
+        $this->db->set($array);
+        $query = $this->db->insert('login_details', $array);
+        if($query){
+            return true;
+        } else {
+            return false;
+        }
+    }
     //fetch running tasks into user dashboard page
     public function task_status() {
         $userid = $this->session->userdata('userid');

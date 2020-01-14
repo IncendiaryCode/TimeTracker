@@ -32,13 +32,12 @@ $profile = $this->session->userdata('user_profile');
 <div class="container">
     <div class="row mt-5 shadow-sm">
         <?php
-        
-            foreach($data as $details) { ?>
+            ?>
             <div class="col-md-4 ">
                 <div class="card user-card">
                     <div class="card-body">
                         <div class="mx-auto d-block">
-                           <div class="text-center" ><span class="project-details"><?=$details['users_count'] ?></span><p class="display-5">Total users</p><input type="hidden" id="project_id" value="<?=$details['project_id'] ?>">
+                           <div class="text-center" ><span class="project-details"><?=$data['users'] ?></span><p class="display-5">Total users</p><input type="hidden" id="project_id" value="<?=$data['project_id'] ?>">
                            </div>
                            <div class="text-center "><i class="fas fa-plus icon-plus text-success" data-target="#add-user" data-toggle='modal'></i>
                            </div>
@@ -54,15 +53,15 @@ $profile = $this->session->userdata('user_profile');
                         <div class="col-12 text-center">
                             <div><span class="project-details">
                                 <?php
-                            if($details['image_name'] != ''){
+                            if($data['image_name'] != ''){
                                 ?>
-                                <img src="<?=base_url().UPLOAD_PATH.$details['image_name'];?>" width="40px;">
-                                <input type="hidden" id="project-id" name="" value="<?=$details['project_id'] ?>">
+                                <img src="<?=base_url().UPLOAD_PATH.$data['image_name'];?>" width="40px;">
+                                <input type="hidden" id="project-id" name="" value="<?=$data['project_id'] ?>">
                                 <?php
                             } ?>
-                            <strong><?=$details['project_name']; ?></strong>
+                            <strong><?=$data['project_name']; ?></strong>
                             </div>
-                            <div><span class="project-details "><?=$details['tasks_count'] ?></span></div>
+                            <div><span class="project-details "><?=$data['tasks'] ?></span></div>
                             <p class="text-center">Total tasks</p>
                         </div>
                     </div>
@@ -74,13 +73,12 @@ $profile = $this->session->userdata('user_profile');
             <div class="card user-card">
                 <div class="card-body">
                     <div class="mx-auto d-block">
-                        <div class="text-center"><span class="project-details"><?=round($details['t_minutes']/60,2) ?></span>h
+                        <div class="text-center"><span class="project-details"><?=round(($data['total_minutes']/60),2); ?></span>h
                             <p class="text-center">Total time spent</p></div>
                     </div>
                 </div>
             </div>
         </div>
-    <?php } ?>
     </div><hr>
     <div class="row mt-5">
         <canvas id="project_time_chart" height="80px;"></canvas>
@@ -128,7 +126,7 @@ $profile = $this->session->userdata('user_profile');
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
-                <form method="post" action="<?=base_url();?>index.php/admin/assign_user_to_project?project_id=<?=$data[0]['project_id']?>" id="adding-user">
+                <form method="post" action="<?=base_url();?>index.php/admin/assign_user_to_project?project_id=<?=$data['project_id']?>" id="adding-user">
                     <?php
                     if($this->session->flashdata('error')){ ?>
                     <div class="alert alert-danger"><?php echo $this->session->flashdata('error');?></div>
@@ -145,7 +143,7 @@ $profile = $this->session->userdata('user_profile');
                     
                 <?php } ?>
                 </select>
-                <input type="hidden" name="project-id" id="project-existing-id" value="<?=$data[0]['project_id']?>">
+                <input type="hidden" name="project-id" id="project-existing-id" value="<?=$data['project_id']?>">
                 <button type="submit" class="btn btn-primary mt-2">Add user</button>
                 <p class="text-danger" id="adding-user-error"></p>
                 </form>

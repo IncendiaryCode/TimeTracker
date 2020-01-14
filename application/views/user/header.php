@@ -51,7 +51,7 @@ $this->load->helper('url_helper');
                 </div>
             <?php } else { ?>
             <div class="col-md-6 col-6 time-tracker">
-                <a href="<?=site_url();?>/user" class="link-to-back">
+                <a href="<?=site_url();?>user" class="link-to-back">
                     <img src="<?=base_url();?>assets/images/logo-white.png" height="40px" >
                 </a>
             </div>
@@ -63,7 +63,7 @@ $this->load->helper('url_helper');
                 ?>
                 <div class="row">
                     <div class="col-10 text-right btn-task">
-                <a href="<?=site_url();?>/user/add_tasks" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
+                <a href="<?=site_url();?>user/add_tasks" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
             </div>
                     <!-- to chage image -->
                     <div class="col-2 text-right">

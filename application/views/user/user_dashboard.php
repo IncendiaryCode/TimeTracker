@@ -2,7 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Login timer
 $this->load->helper('date');
-$login_time = date('H:i:s A',strtotime($task_info['login_status']['start_time']));
+$login_time = $task_info['login_status']['start_time'];
+$login_time_display = date('H:i:s A',strtotime($task_info['login_status']['start_time']));
 $login = new DateTime($login_time,new DateTimeZone('UTC'));
 $logintime = $login->getTimestamp();
 $time_login = strtotime($login_time);
@@ -26,7 +27,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
-                            Logged in at <?php echo $login_time; ?>
+                            Logged in at <?php echo $login_time_display; ?>
                         </p>
                         <div class="font-weight-light text-center primary-timer" id="primary-timer">
                             00:00:00
