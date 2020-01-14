@@ -136,7 +136,7 @@ if($this->input->get()){ ?>
                                     <div class="row">
                                         <div class="col-4">
                                             <div class="input-group mb-3">
-                                                <input type="text" class="form-control datepicker-0" name="daterange[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0">
+                                                <input type="text" class="form-control datepicker-0" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text datepicker ">
                                                         <button type="button" class="btn p-2 fa fa-calendar"></button>
@@ -146,16 +146,16 @@ if($this->input->get()){ ?>
                                         </div>
                                         <div class="col-4">
                                             <div class="input-group date">
-                                                <input id="start-time-0" class="form-control timepicker-a" name="daterange[0][start]" placeholder="hh:mm" />
+                                                <input id="start-time-0" class="form-control timepicker-a" name="time[0][start]" placeholder="hh:mm" />
                                             </div>
                                         </div>
                                         <div class="col-4">
                                             <div class="input-group date">
-                                                <input id="end-time-0" class="form-control timepicker-b" name="daterange[0][end]"  placeholder="hh:mm" />
+                                                <input id="end-time-0" class="form-control timepicker-b" name="time[0][end]"  placeholder="hh:mm" />
                                             </div>
                                         </div>
                                         <div class="col-10 text-center">
-                                            <input id="description-0" class="form-control" name="daterange[0][description]" placeholder="description" />
+                                            <input id="description-0" class="form-control" name="time[0][description]" placeholder="description" />
                                         </div>
 
                                         <div class="col-2 text-center">

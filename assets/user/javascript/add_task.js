@@ -12,7 +12,7 @@ var addTime = {
 
         var colDate = $('<div class="col-4">' +
             '<div class="input-group mb-3">' +
-            '<input type="text" class="form-control" name="daterange[' + id + '][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-' + id + '" value=' + date + ' >' +
+            '<input type="text" class="form-control" name="time[' + id + '][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-' + id + '" value=' + date + ' >' +
             '<div class="input-group-append">' +
             '<span class="input-group-text" id="basic-addon-' + id + '">' +
             '<span class="fa fa-calendar datepicker"></span>' +
@@ -24,21 +24,21 @@ var addTime = {
 
         var colStartTime = $('<div class="col-4">' +
             '<div class="input-group">' +
-            '<input id="start-time-' + id + '" class="form-control timepicker" data-date-format="hh:mm:ss" name="daterange[' + id + '][start]" value=' + start_time + ' placeholder="hh:mm" />' +
+            '<input id="start-time-' + id + '" class="form-control timepicker" data-date-format="hh:mm:ss" name="time[' + id + '][start]" value=' + start_time + ' placeholder="hh:mm" />' +
             '</div>' +
             '</div>');
         colStartTime.appendTo(row);
 
         var colEndTime = $('<div class="col-4">' +
             '<div class="input-group">' +
-            '<input id="end-time-' + id + '"  class="form-control timepicker1" data-date-format="hh:mm:ss" name="daterange[' + id + '][end]" value=' + end_time + ' placeholder="hh:mm" />' +
+            '<input id="end-time-' + id + '"  class="form-control timepicker1" data-date-format="hh:mm:ss" name="time[' + id + '][end]" value=' + end_time + ' placeholder="hh:mm" />' +
             '</div>' +
             '</div>');
         colEndTime.appendTo(row);
 
         var colDescri = $('<div class="col-11">' +
             '<div class="input-group">' +
-            '<input id="description-' + id + '"  class="form-control"  name="daterange[' + id + '][description]" value=' + descri + ' placeholder="description" />' +
+            '<input id="description-' + id + '"  class="form-control"  name="time[' + id + '][description]" value=' + descri + ' placeholder="description" />' +
             '</div>' +
             '</div>');
         colDescri.appendTo(row);

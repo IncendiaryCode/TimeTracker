@@ -124,7 +124,6 @@ class User extends CI_Controller
         if($this->input->post('id')){
             $data['task_id'] = $this->input->post('id');
         }else if($this->input->get('id')){
-
             $data['task_id'] = $this->input->get('id');
         }
         if($data['task_id'] == 'undefined'){
@@ -132,7 +131,7 @@ class User extends CI_Controller
             $output_result['msg']    = "task-id not sent.";
         }else{
             $result['details'] = $this->user_model->start_timer($data);
-            if ($result == FALSE) {
+            if ($result['details'] == FALSE) {
                 $output_result['status'] = FALSE;
                 $output_result['msg']    = "Timer not initiated.";
             } else {
@@ -140,8 +139,13 @@ class User extends CI_Controller
                 $output_result['msg']    = "Timer started.";
                 $output_result['data'] = $result;
             }
+            if($this->input->get('id')){
+                redirect('user/index');
+            }else{
+                echo json_encode($output_result);
+            }
         }
-        echo json_encode($output_result);
+
     }
 
     //Stop Timer function
@@ -325,7 +329,7 @@ class User extends CI_Controller
             $data['task_name'] = $this->input->post('task_name');
             $data['task_id'] = $this->input->post('task_id');
             $data['task_desc'] = $this->input->post('task_desc');
-            $data['time_range'] = $this->input->post('daterange');
+            $data['time_range'] = $this->input->post('time');
             $result = $this->user_model->add_tasks($data);
             if (!$result) {
                 $t_id = $this->input->post('task_id', TRUE);

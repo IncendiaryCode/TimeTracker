@@ -509,32 +509,49 @@ class User_model extends CI_Model {
             }
             if (sizeof($time_range) > 0) {
                 foreach($time_range as $t) {
-                    $task_description = "";
+                    
                     $table_id = null;
                     if (isset($t['table_id'])) {
                         $table_id = $t['table_id'];
                     }
                     //$table_id[$i] = $time_range[$i]['table_id'];
-                    $start_value = date('Y-m-d H:i:s', strtotime($t['start']));
+                    /*$start_value = date('Y-m-d H:i:s', strtotime($t['start']));
                     if($t['end'] != "")
                         $end_value = date('Y-m-d H:i:s',strtotime($t['end']));
                     else
-                        $end_value = null;
+                        $end_value = null;*/
+                        if(($t['start']) == '' || $t['start'] == null)
+                            $start = $t['date'] . ' ' . '00:00:00';
+                        else{
+                            $start_time = strtotime($t['start']);
+                            $start = $t['date'] . ' ' . date('H:i:s', $start_time);
+                            if($t['end'] == '' || ($t['end'] == null) || ($t['end'] == ' ') || empty($t['end'])){
+                                $end = null;
+                            }
+                            else{
+                                $end_time = strtotime($t['end']);
+                                $end = $t['date'].' '.date('H:i:s',$end_time);
+                            }
+                        }
+                    $description = "";
                     if (isset($t['task_description'])) {
                         $description = $t['task_description'];
                     }
-                    $date = date("Y-m-d", strtotime($start_value));
                     $diff = 0;
-                    if($end_value != null)
-                        $diff = strtotime($end_value) - strtotime($start_value);
-                    $minutes = round((abs($diff) / 60), 2);
-                    $hours = round(abs($diff / (60 * 60)));
-                    $array = array('start_time' => $start_value, 'end_time' => $end_value, 'task_description' => $description, 'user_id' => $userid, 'task_id' => $data['task_id'], 'total_hours' => $hours, 'total_minutes' => $minutes, 'task_date' => $date);
+                    $hours = 0;
+                    $total_mins = 0;
+                    if($end != null){
+                        $diff = $end_time - $start_time;
+                        $hours = $diff / (60 * 60);
+                        $minutes = $diff / 60;
+                        $total_mins = ($minutes < 1) ? ceil(abs($minutes)) : abs($minutes);
+                    }
+                    $array = array('start_time' => $start, 'end_time' => $end, 'task_description' => $description, 'user_id' => $userid, 'task_id' => $data['task_id'], 'total_hours' => $hours, 'total_minutes' => $total_mins, 'task_date' => $t['date']);
                     if ($table_id != null) {
                         $this->db->where(array('user_id' => $userid, 'task_id' => $data['task_id'], 'id' => $table_id));
                         $query = $this->db->update('time_details', $array);
                     } else {
-                        $array = array('user_id' => $userid, 'start_time' => $start_value, 'end_time' => $end_value, 'task_description' => $description, 'user_id' => $userid, 'task_id' => $data['task_id'], 'total_hours' => $hours, 'total_minutes' => $minutes, 'task_date' => $date);
+                        $array = array('user_id' => $userid, 'start_time' => $start, 'end_time' => $end, 'task_description' => $description, 'task_id' => $data['task_id'], 'total_hours' => $hours, 'total_minutes' => $minutes, 'task_date' => $date);
                         $this->db->set($array);
                         $query = $this->db->insert('time_details', $array);
                     }      
