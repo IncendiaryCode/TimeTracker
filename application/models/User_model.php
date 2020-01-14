@@ -213,41 +213,21 @@ class User_model extends CI_Model {
     }
     //Function to Start Timer...
     public function start_timer($data) {
-        if ($data['task_type'] == 'login') //check if the timer-start request is for login
-        {
-            $this->db->where(array('task_date' => date('Y:m:d'), 'user_id' => $data['userid']));
-            $query_check = $this->db->get('login_details');
-            if ($query_check->num_rows() > 0) {
-                return true;
-            }else{
-                 $array1 = array('user_id'=>$data['userid'],'task_date'=>date('Y:m:d'),'start_time'=>$data['start_time'],'created_on'=>date('Y:m:d H:i:s'));
-                $this->db->set($array1);
-                $query1 = $this->db->insert('login_details', $array1);
-                if ($query1) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        } else if ($data['task_type'] == 'task') //check if the timer-start request is for task
-        {
-            
-            $start = (isset($data['start_time']))?$data['start_time']:date('Y:m:d H:i:s');
-            $array2 = array('task_id' => $data['task_id'], 'user_id' => $data['userid'], 'task_date' => date('Y:m:d'), 'start_time' => $start, 'total_hours' => '0', 'total_minutes' => '0', 'created_on' => date('Y:m:d H:i:s'));
-            $this->db->set($array2);
-            $query2 = $this->db->insert('time_details', $array2);
-            if ($query2) {
-                $this->db->select('t.task_name,d.user_id,d.task_id,d.start_time,t.description');
-                $this->db->select_sum('d.total_minutes', 't_minutes');
-                $this->db->from('time_details AS d');
-                $this->db->join('task AS t', 't.id = d.task_id');
-                $this->db->where('d.task_id', $data['task_id']);
-                //$this->db->where('d.end_time IS NULL');
-                $details = $this->db->get();
-                return $details->row_array();
-            } else {
-                return false;
-            }
+        $start = (isset($data['start_time']))?$data['start_time']:date('Y:m:d H:i:s');
+        $array2 = array('task_id' => $data['task_id'], 'user_id' => $data['userid'], 'task_date' => date('Y:m:d'), 'start_time' => $start, 'total_hours' => '0', 'total_minutes' => '0', 'created_on' => date('Y:m:d H:i:s'));
+        $this->db->set($array2);
+        $query2 = $this->db->insert('time_details', $array2);
+        if ($query2) {
+            $this->db->select('t.task_name,d.user_id,d.task_id,d.start_time,t.description');
+            $this->db->select_sum('d.total_minutes', 't_minutes');
+            $this->db->from('time_details AS d');
+            $this->db->join('task AS t', 't.id = d.task_id');
+            $this->db->where('d.task_id', $data['task_id']);
+            //$this->db->where('d.end_time IS NULL');
+            $details = $this->db->get();
+            return $details->row_array();
+        } else {
+            return false;
         }
     }
     //Function to Stop Timer
@@ -315,7 +295,7 @@ class User_model extends CI_Model {
             $this->db->join('task AS t', 't.id = d.task_id');
             $this->db->where('d.end_time IS NOT NULL'); //tasks that are not running
             $this->db->where(array('d.user_id' => $userid, 'd.task_date' => $taskdate));
-            $this->db->group_by('d.task_id');
+            $this->db->group_by('d.id');
             $query = $this->db->get();
             $data = $query->result_array();
             if ($query->num_rows() > 0) {
@@ -711,6 +691,19 @@ class User_model extends CI_Model {
     //get chart data for user profile
     public function user_chart_data($year) {
         $userid = $this->session->userdata('userid');
+        $year_start = date('Y-1-1',strtotime(date($year.'-01-01')));
+        $year_end = date('Y-12-t',strtotime($year.'-12-31'));
+        $this->db->select('*');
+        $this->db->select_sum('total_minutes', 't_minutes');
+        $this->db->from('time_details');
+        $this->db->where(array('user_id' => $userid));
+        $this->db->where('end_time IS NOT NULL');
+        $this->db->where('task_date BETWEEN "' . $year_start . '" and "' . $year_end . '"');
+        $check_year = $this->db->get();
+        $check = $check_year->row_array();
+        if($check['id'] == ''){
+            return false;
+        }
         for ($i = 1;$i <= 12;$i++) {
             $months[$i] = date($year . "-" . $i . '');
         }
@@ -724,16 +717,13 @@ class User_model extends CI_Model {
             $this->db->where('end_time IS NOT NULL');
             $this->db->where('task_date BETWEEN "' . $start . '" and "' . $end . '"');
             $query = $this->db->get();
-            if ($query->num_rows() > 0) {
-                $data = $query->result_array();
-                foreach ($data as $d) {
-                    $values[] = round(($d['t_minutes'] / 60), 2);
-                }
-            } else {
-                $values = '';
+            $data = $query->result_array();
+            foreach ($data as $d) {
+                $values[] = round(($d['t_minutes'] / 60), 2);
             }
         }
         return $values;
+          
     }
     public function update_logout_time($userid) {
         //check for entry with the same login date

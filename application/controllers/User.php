@@ -120,10 +120,11 @@ class User extends CI_Controller
     {
         // $task_type   = $this->input->post('id');
         $data['userid'] = $this->session->userdata('userid');
-        $data['task_type'] = $this->input->post('action', TRUE);
+
         if($this->input->post('id')){
             $data['task_id'] = $this->input->post('id');
         }else if($this->input->get('id')){
+
             $data['task_id'] = $this->input->get('id');
         }
         if($data['task_id'] == 'undefined'){
@@ -389,13 +390,15 @@ class User extends CI_Controller
     {
         $year = $this->input->post('date');
         $data['res'] = $this->user_model->user_chart_data($year);
-        if ($data['res'] == NULL) {
-            $data['status'] = FALSE;
-            $data['msg'] = "No chart Data.";
+        if ($data['res'] == FALSE) {
+            $final_data['status'] = FALSE;
+            $final_data['msg'] = "No chart Data.";
+            $final_data['res'] = NULL;
         } else {
-            $data['status'] = TRUE;
+            $final_data['status'] = TRUE;
+            $final_data['res'] = $data['res'];
         }
-        echo json_encode($data);
+        echo json_encode($final_data);
     }
 
     public function password_exists()
