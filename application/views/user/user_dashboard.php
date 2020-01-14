@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Login timer
 $this->load->helper('date');
 $login_time = $task_info['login_status']['start_time'];
-$login_time_display = date('H:i:s A',strtotime($task_info['login_status']['start_time']));
+$login_time_display = date('g:i:s A',strtotime($task_info['login_status']['start_time']));
 $login = new DateTime($login_time,new DateTimeZone('UTC'));
 $logintime = $login->getTimestamp();
 $time_login = strtotime($login_time);
