@@ -70,11 +70,10 @@
                                     <div class="input-group">
                                         <!-- chart that shows monthly activities -->
                                         <input type="number" class="form-control" id="monthly-chart">
-                                        <!-- <button class="btn btn-primary" onclick="loadMonthlyChart()">view chart</button> -->
                                     </div>
                                 </div>
                             </div>
-                            <div class="pl-2" id="calendar_basic"></div>
+                            <div class="pl-2" id="calendar_basic"></div><p class="text-center" id="monthly-chart-error"></p>
                         </div>
                     </div>
                 </div>
@@ -89,7 +88,6 @@
                 </div>
             </div>
         </div>
-        <hr>
         <div>
         <footer class="footer">
             <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>

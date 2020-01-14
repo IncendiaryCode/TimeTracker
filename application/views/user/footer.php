@@ -165,7 +165,6 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 <script src="<?=base_url();?>assets/user/plugins/calendar_view.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/add_task.js?v=<?=VERSION?>"></script>
-<script src="<?=base_url();?>assets/user/javascript/edit_task.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/utils.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/change_password.js?v=<?=VERSION?>"></script>

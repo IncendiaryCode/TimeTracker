@@ -5,8 +5,6 @@ function __draw_profile_chart(res) {
 
     gradient.addColorStop(0, '#4b5bf0');
     gradient.addColorStop(1, '#ea4776');
-
-    console.log(res)
     if (res['status'] == false) {
         document.getElementById('profile-chart-error').innerHTML = "No work is done in this period";
         user_profile_chart.destroy();

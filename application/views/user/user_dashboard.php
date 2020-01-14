@@ -111,7 +111,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
 
             <div class="row mb-3 pt-4">
                 <div class="col-6">
-                    <h5 class="font-weight-light text-left ">Recent Activites</h5>
+                    <h5 class="font-weight-light text-left recent-activites">Recent Activites</h5>
                 <p id="alarmmsg" class="text-center"></p>
                 </div>
                 <div class="col-6">
@@ -185,7 +185,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                         <div class="modal-body ">
                             <div>
                                 <label for="old-datepicker">Enter start time: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control  timerpicker-c"  name="start-login-time" id="start-login-time">
+                                <input type="text" class="form-control  timerpicker-c"  name="start-login-time" id="start-login-time" placeholder="hh:mm">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>

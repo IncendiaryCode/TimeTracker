@@ -56,12 +56,6 @@ $profile = $this->session->userdata('user_profile');
                             <?php } ?> 
                             <p class="text-center display-heading text-primary">Add project</p>
                         <form action="<?php echo base_url();?>index.php/admin/add_projects" id="add-project" method="post" enctype="multipart/form-data">
-                            <!-- <div class="form-group mt-3">
-                            <p><input type="radio" name="type" id="old-project" checked>Existing project
-                            <input type="radio" name="type" id="new-project" class="ml-5" >New project</p>
-                            <select class="project-list form-control mt-3" id="old-project-input" name="project_name">
-                            <option>Select project</option></select>
-                            </div> -->
                             <div class="form-group mt-3" id="new-project-input">
                                 <label for="task-name ">Project name:<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control " name="project-name" id="project-name" placeholder="">  
@@ -75,7 +69,7 @@ $profile = $this->session->userdata('user_profile');
                                     </div>
                                     <div class="col-2 assign-module0">
                                         <a href="#" id="add-new-module" >
-                                            <i class="fas fa-plus icon-plus text-success" id="adding-module" ></i>
+                                            <i class="fas fa-plus icon-plus" id="adding-module" ></i>
                                         </a>
                                     </div>
                                 </div>
@@ -111,7 +105,7 @@ $profile = $this->session->userdata('user_profile');
                                 <input type="text" class="form-control edit-date" name="end-date" id="end-date">
                             </div>
                             <p id="module-error" class="text-danger"></p>
-                            <button type="submit" class="btn btn-primary">Add Project</button>
+                            <div class="text-right"><button type="submit" class="btn btn-primary text-right">Add Project</button></div>
                         </form>
                     </div>
                 </div>

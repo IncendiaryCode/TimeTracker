@@ -75,14 +75,16 @@ $this->load->helper('url_helper');
             <div class="row">
                 <div class="col-12">
                     <div class="row">
-                    <div class="input-group col-md-3 offset-md-9 pt-4 text-right">
+                    <div class="text-right input-group col-md-3 offset-md-9 pt-4 ">
                         <!-- chart that shows monthly activities -->
                         <input type="number" class="" id="year-chart">
                     </div>
                 </div>
                 </div>
-                    <canvas id="user_prof_chart" height="80px;"></canvas>
-                    <p class="text-center" id="profile-chart-error"></p>
+                    <div class="col-md-11 offset-md-1">
+                        <canvas id="user_prof_chart" height="100px;" class="mb-5"></canvas>
+                        <p class="text-center" id="profile-chart-error"></p>
+                    </div>
                 </div>
             </div>
         

@@ -72,7 +72,7 @@ $profile = $this->session->userdata('user_profile');
                                 <input type="tel" minlength="10" maxlength="10" class="form-control" name="contact" id="contact" value="">
                             </div>
                             <p id="user-error" class="text-danger"></p>
-                            <button type="submit" class="btn btn-primary" value="submit">Add User</button>
+                            <div class="text-right"><button type="submit" class="btn btn-primary" value="submit">Add User</button></div>
                         </form>
                     </div>
                 </div>

@@ -103,12 +103,9 @@ $profile = $this->session->userdata('user_profile');
                                         
                                     </select>
                                 </div>
-                                
-                                
-                                
                                 <p id="user-name-error" class="text-danger"></p>
                                 <p id="taskError" class="text-danger"></p>
-                                <button type="submit" class="btn btn-primary">Assign Task</button>
+                                <div class="text-right"><button type="submit" class="btn btn-primary">Assign Task</button></div>
                         </form>
                     </div>
                     </div>

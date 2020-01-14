@@ -41,7 +41,7 @@
                         </div>
                         <div class="text-right">
                             <p class="text-danger" id="alertMsg"></p>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary mb-5">Submit</button>
                         </div>
                     </form>
                 </div>

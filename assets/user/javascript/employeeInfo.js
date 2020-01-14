@@ -190,6 +190,7 @@ function drawCards(data) {
 					dataType: "json",
 					success: function (res) {
 						var res = res['data']['details'];
+						var startDateTime = new Date().getHours()+':'+ new Date().getMinutes()+':'+new Date().getSeconds();
 						var row = $(
 							'<div id="slider-' +
 							res['task_id'] +
@@ -207,7 +208,7 @@ function drawCards(data) {
 							'">' +
 							'<p class="font-weight-light time-font text-center login-time" id="start-time' + res['task_id'] + '">' +
 							"Started at " +
-							res['start_time'] +
+							startDateTime +
 							" </p>" +
 							'<div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer' + res['task_id'] + '" data-type="" data-time="">00:00:00</div>' +
 							'<p class="font-weight-light text-center taskName">' +
@@ -216,7 +217,6 @@ function drawCards(data) {
 							"</div>" +
 							"</div>"
 						);
-
 						var stopButton = $(
 							'<span class=""><i class="fa fa-hourglass-1"></i> Running</span>'
 						).data("taskid", t_id);
@@ -247,6 +247,7 @@ function drawCards(data) {
 						
 						$("#timer-slider").append(row);
 						timerSlider.reload();
+						document.getElementsByClassName("title").innerText +=
 						start_task_timer(-19800, t_id);
 					}
 				});
@@ -289,6 +290,9 @@ function drawCards(data) {
 						$("#action-play" + task_id).css("display", "block");
 
 						document.getElementById("slider" + task_id).remove();
+						if (timerSlider.slider.getSlideCount() == 1) {
+							$('.bx-pager-item').css('display', "none");
+						}
 						timerSlider.reload();
 					}
 				});
@@ -296,7 +300,7 @@ function drawCards(data) {
 			});
 			//action Edit
 			var actionEdit = $(
-				'<a href="#" class=" pl-2  text-white " id="action-edit"><i class="far fa-edit action-play " data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
+				'<a href="#" class=" pl-2  text-white " id="action-edit"><i class="far fa-edit action-play" data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
 			);
 			actionEdit.attr(
 				"href",
@@ -321,6 +325,9 @@ function drawCards(data) {
 			$("#attach-card").append(cardCol);
 			if (data[x][y].running_task == 1 && data[x][y].start_time != null) {
 				//change background of current running task entries.
+				cardInner.css('background-image','linear-gradient(to right, #fff, #f4f4f8, #f0f1f6)');
+				cardHeader.css('background-image','linear-gradient(to right, #fff, #f4f4f8, #f0f1f6)');
+				cardFooter.css('background-image','linear-gradient(to right, #fff, #f4f4f8, #f0f1f6)');
 				document.getElementsByClassName("title").innerText +=
 					data[x][y].task_name;
 			}
@@ -472,6 +479,9 @@ $(document).ready(function () {
 							document.getElementById("btn-stop" + task_id_no[0]).childNodes[0].remove();
 							$('#btn-stop' + task_id_no[0]).append('<i class="far fa-clock"></i> ' + minutesToTime(data['flag']['details']['t_minutes']));
 							$("#action-play" + task_id_no[0]).css("display", "block");
+							if (timerSlider.slider.getSlideCount() == 1) {
+								$('.bx-pager-item').css('display', "none");
+							}
 							timerSlider.reload();
 						}
 					});
@@ -489,7 +499,6 @@ $(document).ready(function () {
 				if (typeof login_timer != "undefined") {
 					if (login_timer == parseInt(login_timer)) {
 						$("#play-timer").modal("show");
-						startTimer(login_timer);
 					}
 				}
 			$('#icon-for-task').removeClass("fa-play");
@@ -555,5 +564,34 @@ $(document).ready(function () {
 		}
 	}
 
+	if(document.getElementById('starting-timer'))
+	{
+		var startingTimer = document.getElementById('starting-timer');
+		startingTimer.onsubmit = function()
+		{
+			var startTime = document.getElementById('start-login-time').value;
+			if(startTime == "" || startTime == " ")
+			{
+				document.getElementById('stop-timer-error').innerHTML = "Please enter login time";
+				return false;
+			}
+			else
+			{
+				document.getElementById('stop-timer-error').innerHTML = " ";
+				var currentTime = (new Date().getHours())*60 + (new Date().getMinutes());
+				var enteredTime = parseInt(startTime.toString().slice(0,2)*60) + parseInt(startTime.toString().slice(3,5));
+				if(currentTime < enteredTime)
+				{
+					document.getElementById('stop-timer-error').innerHTML = "Login time cannot be greater than current time";
+					return false;
+				}
+				else
+				{
+					startTimer(login_timer);
+					return true;
+				}
+			}return false;
+		}
+	}
 
 });

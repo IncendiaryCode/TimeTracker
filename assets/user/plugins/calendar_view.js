@@ -525,9 +525,18 @@ function loadMonthlyChart() {
         data: { 'chart_type': "monthly_chart", 'date': year },
         dataType: 'json',
         success: function (res) {
+            if(res['data'][0] == 0)
+            {
+                document.getElementById('monthly-chart-error').innerHTML = "No works in this year."
+                $('#calendar_basic').hide();
+            }
+            else
+            {
+            document.getElementById('monthly-chart-error').innerHTML = " ";
             google.charts.load("current", { packages: ["calendar"] });
             google.setOnLoadCallback(drawMonthlyChart(res));
             loadTask("monthly_chart", year);
+            }
         }
     });
 }

@@ -73,7 +73,7 @@ $this->load->helper('url_helper');
             <?php } else { ?>
            
             <!-- refers to all other pages  -->
-                <h2><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-placement="top" title="User Profile"></i></h2>
+                <a href="#" class="text-white profile-icon"><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-placement="top" title="User Profile"></i></a>
             </div>
             <div class="col-12">
                 <p class="display-heading pt-3 text-center">

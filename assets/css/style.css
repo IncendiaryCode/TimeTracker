@@ -309,8 +309,10 @@ header.main-header h1 {
 .icon-plus
 {   
     padding: 10px;
+    background-color: #e484fb;
+    color: #fff;
+    border :1px;
     border-radius: 100%;
-    background-color: #dee2e6;
 }
 .change-image {
     background-color: #dee2e6;

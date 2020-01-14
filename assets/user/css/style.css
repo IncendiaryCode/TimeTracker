@@ -69,9 +69,17 @@ header.main-header h1 {
 {
    align-content: center;
 }
+.btn-primary
+{
+background-color: #e485fb;
+}
+.btn-primary:active
+{
+    background-image: linear-gradient(rgba(255, 255, 255, 0) 20%, #ffffff 45%);
+}
 .btn-primary:focus
 {
-    background-image: linear-gradient(rgba(255, 255, 255, 0) 20%, #ffffff 45%)
+    border: 0px; 
 }
 #new-task
 {
@@ -137,7 +145,7 @@ header.main-header h1 {
     top: -50px;
     z-index: 1;
     color: white;
-    background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #fadffd);
+    background-image: linear-gradient(to bottom right, #9263f4, #b981fa, #d798fe);
     margin-top: 15%;
 }
 .start-time {
@@ -305,10 +313,10 @@ header.main-header h1 {
 }
 
 .login-time {
+    font-weight: 200 !important;
     padding-top: 50px;
     opacity: 0.5;
     color: #fff;
-    font-weight: 200;
 }
 
 a {
