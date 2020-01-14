@@ -6,10 +6,6 @@ if (validate) {
             document.getElementById('alertMsg').innerHTML = "Enter your current passowrd";
             return false;
         }
-
-        /*else if () {}*/
-        /*validate old password */
-
         var psw1 = document.getElementById('psw1').value;
         var psw2 = document.getElementById('psw2').value;
         if (psw1 == "" || psw1 == " ") {

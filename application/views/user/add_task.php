@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-$GLOBALS['page_title'] = 'Add task';
 if($this->input->get()){ ?>
     <script type="text/javascript">
         var edit = 1;
@@ -28,7 +27,12 @@ if($this->input->get()){ ?>
                         <?php echo (!empty($this->session->flashdata('success')))?$this->session->flashdata('success'):''; ?>
                             <p id="alartmsg" class="text-center"></p>
                     </div>
-                    <form action="<?=base_url();?>index.php/user/add_tasks" method="post" id="addTask" class="mt-5 add-task">
+                    <?php if($GLOBALS['page_title'] == 'Edit task'){ ?>
+                    <form action="<?=base_url();?>index.php/user/edit_task?type=edit" method="post" id="editTask" class="mt-5 add-task">
+                        <input type="hidden" name="task_id" id="curr-taskid" value="<?=$task_data[0][0]['task_id'];?>">
+                    <?php } else { ?>
+                        <form action="<?=base_url();?>user/add_tasks" method="post" id="addTask" class="mt-5 add-task">
+                        <?php } ?>
                         <div class="form-group">
                             <label for="task-name ">Write the task name</label>
                             <?php if($this->input->get()){ ?>

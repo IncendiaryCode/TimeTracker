@@ -49,7 +49,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 //task timer
                 foreach($task_info['task_status'] as $taskinfo){
                     $timer = $taskinfo['start_time'];
-                    $timer_display = date('H:i:s A', strtotime($taskinfo['start_time']));
+                    $timer_display = date('g:i:s A', strtotime($taskinfo['start_time']));
                     $datetime2 = new DateTime($timer,new DateTimeZone('UTC'));
                     $timer_start = $datetime2->getTimestamp();
                     $task_start = strtotime($timer);

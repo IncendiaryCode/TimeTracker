@@ -35,16 +35,7 @@ function setTime(startTime) {
 function addZeroBefore(n) {
 	return (n < 10 ? "0" : "") + n;
 }
-var changeImage = document.getElementById("uploadImage");
-if (changeImage) {
-	changeImage.onsubmit = function (e) {
-		var image = document.getElementById("image").value;
-		if (image == "" || image == " ") {
-			document.getElementById("imageerror").innerHTML = "Choose an image";
-			return false;
-		} else return true;
-	};
-}
+
 function minutesToTime(mins) {
 	var total_mins = Number(mins * 60);
 	var h = Math.floor(total_mins / 3600);
@@ -72,6 +63,16 @@ function getTime() {
 	return date;
 }
 
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
+}
 function drawCards(data) {
 	for (x in data) {
 		for (var y = 0; y < data[x].length; y++) {
@@ -173,7 +174,6 @@ function drawCards(data) {
 			else {
 				footerRight.append(actionStop);
 			}
-
 			actionPlay.on("click", function (e) {
 				e.preventDefault();
 				var t_id = $(this).data("id");
@@ -190,7 +190,7 @@ function drawCards(data) {
 					dataType: "json",
 					success: function (res) {
 						var res = res['data']['details'];
-						var startDateTime = new Date().getHours()+':'+ new Date().getMinutes()+':'+new Date().getSeconds();
+						var startDateTime = formatAMPM(new Date());
 						var row = $(
 							'<div id="slider-' +
 							res['task_id'] +
@@ -266,7 +266,7 @@ function drawCards(data) {
 				$.ajax({
 					type: "POST",
 					url: timeTrackerBaseURL + "index.php/user/stop_timer",
-					data: { action: "task", id: id, flag: '0' },
+					data: { action: "task", id: task_id, flag: '0' },
 					dataType: "json",
 					success: function (res) {
 						var data = res['flag'];
@@ -592,6 +592,17 @@ $(document).ready(function () {
 				}
 			}return false;
 		}
+	}
+
+	var changeImage = document.getElementById("upload-image");
+	if (changeImage) {
+	    changeImage.onsubmit = function (e) {
+	        var image = document.getElementById("image").value;
+	        if (image == "" || image == " ") {
+	            document.getElementById("imageerror").innerHTML = "Choose an image";
+	            return false;
+	        } else return true;
+	    };
 	}
 
 });

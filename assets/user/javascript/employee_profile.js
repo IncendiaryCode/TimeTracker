@@ -5,12 +5,12 @@ function __draw_profile_chart(res) {
 
     gradient.addColorStop(0, '#4b5bf0');
     gradient.addColorStop(1, '#ea4776');
-    if (res['status'] == false) {
-        document.getElementById('profile-chart-error').innerHTML = "No work is done in this period";
-        user_profile_chart.destroy();
-    }
     var data = JSON.parse(res);
-
+    console.log(data)
+    if (data['status'] == false) {
+        document.getElementById('profile-chart-error').innerHTML = "No work is done in this period";
+        $('#user_prof_chart').css('display', 'none');
+    }
     var configs = {
         type: 'bar',
         data: {
