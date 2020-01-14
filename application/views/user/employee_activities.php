@@ -9,13 +9,13 @@
                 <div class="au-card-title pt-5">
                     <ul class="nav nav-tabs" id="chart-navigation" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="daily-view-tab" data-toggle="tab" href="#daily-view" role="tab" aria-controls="daily-view" aria-selected="true">Daily activities</a>
+                            <a class="nav-link active" id="daily-view-tab" data-toggle="tab" href="#daily-view" role="tab" aria-controls="daily-view" aria-selected="true">Daily</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="weekly-view-tab" data-toggle="tab" href="#weekly-view" role="tab" aria-controls="weekly-view" aria-selected="false">Weekly activities</a>
+                            <a class="nav-link" id="weekly-view-tab" data-toggle="tab" href="#weekly-view" role="tab" aria-controls="weekly-view" aria-selected="false">Weekly</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="monthly-view-tab" data-toggle="tab" href="#monthly-view" role="tab" aria-controls="monthly-view" aria-selected="false">Monthly activities</a>
+                            <a class="nav-link" id="monthly-view-tab" data-toggle="tab" href="#monthly-view" role="tab" aria-controls="monthly-view" aria-selected="false">Monthly</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
@@ -32,7 +32,7 @@
                             </div>
                             <p id="daily-error"class="text-center"></p>
                             <div id="daily">
-                                <p id="print-chart"></p>
+                                <div><p id="print-chart"></p></div>
                                 <p class="cust_daily_chart" id="cust_daily_chart"><hr>
                                     <span id="chart-labels"><span class="">8AM</span>
                                     <span class="cust_chart">9AM</span>

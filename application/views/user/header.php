@@ -51,7 +51,7 @@ $this->load->helper('url_helper');
                 </div>
             <?php } else { ?>
             <div class="col-md-6 col-6 time-tracker">
-                <a href="<?=site_url();?>user" class="link-to-back">
+                <a href="<?=site_url();?>/user" class="link-to-back">
                     <img src="<?=base_url();?>assets/images/logo-white.png" height="40px" >
                 </a>
             </div>
@@ -62,11 +62,11 @@ $this->load->helper('url_helper');
              if(empty($GLOBALS['page_title'])) {
                 ?>
                 <div class="row">
-                    <div class="col-10 text-right btn-task">
-                <a href="<?=site_url();?>user/add_tasks" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
+                    <div class="col-9 col-md-11 text-right btn-task">
+                <a href="<?=site_url();?>/user/add_tasks" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
             </div>
                     <!-- to chage image -->
-                    <div class="col-2 text-right">
+                    <div class="col-3 col-md-1 text-right">
                     <a href="#" class="text-white profile-icon"><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></a>
                 </div>
             </div>

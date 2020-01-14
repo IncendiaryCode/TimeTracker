@@ -177,6 +177,12 @@ function drawCards(data) {
 			actionPlay.on("click", function (e) {
 				e.preventDefault();
 				var t_id = $(this).data("id");
+				if(document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play')
+				{
+					$('#play-timer').modal("show");
+				}
+				else
+				{
 				$.ajax({
 					type: "POST",
 					url: timeTrackerBaseURL + "index.php/user/start_timer",
@@ -244,6 +250,7 @@ function drawCards(data) {
 						start_task_timer(0, t_id);
 					}
 				});
+				}
 			});
 
 			actionStop.on("click", function (e) {
@@ -280,7 +287,6 @@ function drawCards(data) {
 					}
 				});
 			});
-
 			//action Edit
 			var actionEdit = $(
 				'<a href="#" class=" pl-2  text-white " id="action-edit"><i class="far fa-edit action-play " data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
@@ -292,8 +298,6 @@ function drawCards(data) {
 				data[x][y].id
 			);
 			footerRight.append(actionEdit);
-			// footerRow.append(footerRight);
-
 			cardFooter.append(footerRow);
 			cardInner.append(cardFooter);
 
@@ -425,57 +429,71 @@ timerSlider = {
 
 $(document).ready(function () {
 	$("#stop-time").click(function () {
-		timerSlider.slider.getCurrentSlide();
-		var t_id = 0;
-		var t_id = timerSlider.slider.getCurrentSlideElement()[0].id
-		var matches = t_id.match(/(\d+)/);
-		if (timerSlider.slider.getCurrentSlide() != 0) {
-			task_id = matches[0];
-			timerSlider.slider.getCurrentSlideElement()[0].remove();
-			document.getElementsByClassName("bx-pager-item")[1].remove();
-			timerSlider.reload();
-			if (task_id) {
-				taskUrl = timeTrackerBaseURL + "index.php/user/stop_timer";
-			}
-			$.ajax({
-				type: "POST",
-				url: taskUrl,
-				data: { action: "task", id: task_id },
-				success: function (res) {
-					var data = JSON.parse(res);
-					var task_id_no = t_id.match(/(\d+)/);
-					var action_play = $(
-							'<a href="' +
-							timeTrackerBaseURL +
-							"user/start_timer?id=" +
-							task_id_no[0] +
-							'" class="card-action action-delete" data-id="' +
-							task_id_no[0] +
-							'" data-toggle="tooltip" data-placement="top" title="Play"></a>'
-						);
-						action_play.append(
-							'<i class="fas action-edit  fa-play"></i>'
-						);
-						document.getElementById('footer-right-'+task_id_no[0]).childNodes[0].remove();
-						$('#footer-right-'+task_id_no[0]).append(action_play)
-						document.getElementById("btn-stop" + task_id_no[0]).childNodes[0].remove();
-						$('#btn-stop' + task_id_no[0]).append('<i class="far fa-clock"></i> ' + minutesToTime(data['flag']['details']['t_minutes']));
-						$("#action-play" + task_id_no[0]).css("display", "block");
-						timerSlider.reload();
-
-					}
-				});
-			} else {
-				if (t_id == "" || t_id == " ") {
-					$("#pause-action").modal("show");
-				} else {
-					localStorage.setItem("task_id", t_id);
+		if(document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-stop')
+		{
+			timerSlider.slider.getCurrentSlide();
+			var t_id = 0;
+			var t_id = timerSlider.slider.getCurrentSlideElement()[0].id
+			var matches = t_id.match(/(\d+)/);
+			if (timerSlider.slider.getCurrentSlide() != 0) {
+				task_id = matches[0];
+				timerSlider.slider.getCurrentSlideElement()[0].remove();
+				document.getElementsByClassName("bx-pager-item")[1].remove();
+				timerSlider.reload();
+				if (task_id) {
+					taskUrl = timeTrackerBaseURL + "index.php/user/stop_timer";
 				}
+				$.ajax({
+					type: "POST",
+					url: taskUrl,
+					data: { action: "task", id: task_id },
+					success: function (res) {
+						var data = JSON.parse(res);
+						var task_id_no = t_id.match(/(\d+)/);
+						var action_play = $(
+								'<a href="' +
+								timeTrackerBaseURL +
+								"user/start_timer?id=" +
+								task_id_no[0] +
+								'" class="card-action action-delete" data-id="' +
+								task_id_no[0] +
+								'" data-toggle="tooltip" data-placement="top" title="Play"></a>'
+							);
+							action_play.append(
+								'<i class="fas action-edit  fa-play"></i>'
+							);
+							document.getElementById('footer-right-'+task_id_no[0]).childNodes[0].remove();
+							$('#footer-right-'+task_id_no[0]).append(action_play)
+							document.getElementById("btn-stop" + task_id_no[0]).childNodes[0].remove();
+							$('#btn-stop' + task_id_no[0]).append('<i class="far fa-clock"></i> ' + minutesToTime(data['flag']['details']['t_minutes']));
+							$("#action-play" + task_id_no[0]).css("display", "block");
+							timerSlider.reload();
+						}
+					});
+				} else {
+					if (t_id == "" || t_id == " ") {
+						$("#pause-action").modal("show");
+					} else {
+						localStorage.setItem("task_id", t_id);
+					}
+				}
+			}else
+			{
+			var curr_timeStamp = Math.floor(Date.now() / 1000);
+				login_timer = parseInt(curr_timeStamp) - parseInt(__timeTrackerLoginTime);
+				if (typeof login_timer != "undefined") {
+					if (login_timer == parseInt(login_timer)) {
+						$("#play-timer").modal("show");
+						startTimer(login_timer);
+					}
+				}
+			$('#icon-for-task').removeClass("fa-play");
+			$('#icon-for-task').addClass("fa-stop");
 			}
 		});
 
 	var curr_timeStamp = Math.floor(Date.now() / 1000);
-	if (__timeTrackerLoginTime) {
+	if (__timeTrackerLoginTime && (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-stop')) {
 		login_timer = parseInt(curr_timeStamp) - parseInt(__timeTrackerLoginTime);
 		if (typeof login_timer != "undefined") {
 			if (login_timer == parseInt(login_timer)) {
@@ -516,6 +534,9 @@ $(document).ready(function () {
 	if (timerSlider.slider.getSlideCount() == 1) {
 		$('.bx-pager-item').css('display', "none");
 	}
+	$('.timerpicker-c').timepicker({
+        uiLibrary: 'bootstrap4'
+    });
 	if (document.getElementById('update-stop-now')) {
 		var stop_now = document.getElementById('update-stop-now');
 		stop_now.onsubmit = function () {

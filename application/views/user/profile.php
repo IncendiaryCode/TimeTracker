@@ -8,19 +8,19 @@ $this->load->helper('url_helper');
         <div class="main-container-inner">
             <div class="row mt-5">
                 <div class="col-12 mt-5">
-                    <form method="post" action="<?=base_url();?>index.php/user/dark" id="dark-mode">
+                    <!-- <form method="post" action="<?=base_url();?>index.php/user/dark" id="dark-mode">
                         <div class="dropdown text-right" id="dropdown-recent-acts">
                             <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
                                 <div class="dropdown-item checkbox"><input type="hidden" name="status" id="hidden-status"><input type="checkbox" id="dark-mode-checkbox" name="dark-mode"> Dark mode</div>
                             </div>
                         </div>
-                    </form>
+                    </form> -->
                 </div>
 
                 <div class="col-md-4 offset-md-2 text-center">
                     <div>
-                        <img src="<?=base_url().USER_UPLOAD_PATH.$res['profile'];?>" width="30%;" class="rounded-circle figure mt-4 text-center">
+                        <img src="<?=base_url().USER_UPLOAD_PATH.$res['profile'];?>" width="50%;" height="140px" class="rounded-circle figure mt-4 text-center">
                         <h4 class="employee-name mt-3">
                             <?php echo $res['name'];?>
                         </h4>
@@ -44,7 +44,7 @@ $this->load->helper('url_helper');
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><a href="<?=base_url();?>index.php/user/change_password">Change password</a></td>
+                                        <td colspan="2"><a href="<?=base_url();?>index.php/user/change_password">Change password</a></td>
                                     </tr>
                                 </tbody>
                             </table>

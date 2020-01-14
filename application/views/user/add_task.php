@@ -1,11 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 $GLOBALS['page_title'] = 'Add task';
-if($this->input->get()){
- print_r($task_data);   
-}
-
-?>
+if($this->input->get()){ ?>
+    <script type="text/javascript">
+        var edit = 1;
+    </script>
+<?php } else {?>
+    <script type="text/javascript">
+        var edit = 0;
+    </script>
+<?php } ?>
 <main class="container-fluid-main">
     <div class="main-container container">
         <div class="main-container-inner">
@@ -24,23 +28,32 @@ if($this->input->get()){
                         <?php echo (!empty($this->session->flashdata('success')))?$this->session->flashdata('success'):''; ?>
                             <p id="alartmsg" class="text-center"></p>
                     </div>
-                    <form action="<?=base_url();?>index.php/user/add_tasks" method="post" id="addTask" class="mt-5 ">
-                        <!-- <button type="submit" id="save-and-start" class="text-center shadow-lg icon-width start-time">
-                            <div data-tasktype="Task" data-id="80">
-                                <h3> <i class=" fas action-icon fa-play"></i></h3>
-                            </div>
-                        </button> -->
+                    <form action="<?=base_url();?>index.php/user/add_tasks" method="post" id="addTask" class="mt-5 add-task">
                         <div class="form-group">
                             <label for="task-name ">Write the task name</label>
-                            <input type="text" class="form-control" name="task_name" id="Taskname" value="<?=set_value('task_name')?>">
+                            <?php if($this->input->get()){ ?>
+                            <input type="text" class="form-control" name="task_name" id="Taskname" value="<?=$task_data[0][0]['task_name']?>">
+                            <?php } else { ?>
+                                <input type="text" class="form-control" name="task_name" id="Taskname">
+                            <?php } ?>
                         </div>
                         <div class="form-group">
                             <label for="description">Write a small description</label>
-                            <textarea class="form-control" id="description" name="task_desc" rows="4" value="<?=set_value('task_desc')?>"></textarea>
+                            <?php if($this->input->get()){ ?>
+                            <textarea class="form-control" id="description" name="task_desc" rows="4" value="<?=$task_data[0][0]['description']?>"></textarea>
+                        <?php } else { ?>
+                            <textarea class="form-control" id="description" name="task_desc" rows="4"></textarea> <?php } ?>
                         </div>
                         <div class="form-group">
                             <label for="choose-project">Choose a project</label>
-                            <select type="number" class="form-control project_name" id="choose-project" name="project" value="<?=set_value('project_name')?>">
+                            <?php if($this->input->get()){ ?>
+                                <select readonly="" type="number" class="form-control" id="choose-project" name="project">
+                                <option selected value=<?php echo $task_data[0][0]['project_id']?>>
+                                    <?=$task_data[0][0]['name'];?>
+                                </option>
+                            </select>
+                            <?php } else { ?>
+                            <select type="number" class="form-control project_name" id="choose-project" name="project" value="<?=$task_data[0][0]['name']?>">
                                 <option>Select Project</option>
                                 <?php
                                  foreach($result as $p){ ?>
@@ -49,31 +62,71 @@ if($this->input->get()){
                                 </option>
                                 <?php }?>
                             </select>
+                            <?php }?>
                         </div>
                         <div class="form-group">
                             <label for="choose-module">Choose project module</label>
-                            <select type="number" class="form-control project_name" id="choose-module" name="project_module" value="<?=set_value('project_module')?>">
+                            <select type="number" class="form-control project_name" id="choose-module" name="project_module" value="<?=$task_data[0][0]['module_name']?>">
                                 <option>Select module</option>
 
                             </select>
                         </div>
-                        <p class="display-5">Time line</p>
+                        <strong><p class="display-5 pt-4">Timeline</p></strong>
                         <div id="task-times">
                             <div id="show_list">
                                 <div class="row">
                                     <div class="col-4">
-                                        <p><b>Date</b></p>
+                                        <p>Date</p>
                                     </div>
                                     <div class="col-4">
-                                        <p><b>Start time</b></p>
+                                        <p>Start time</p>
                                     </div>
                                     <div class="col-4">
-                                        <p><b>End time</b></p>
+                                        <p>End time</p>
                                     </div>
-                                    
                                 </div>
                             </div>
+                        <?php if($this->input->get()){ ?>
+
+                            <div class="row" id="total-row">
+                                <input type="hidden" id="task-len" value="<?=sizeof($task_data[0])?>">
+                                <?php $num = 0;
+                              foreach($task_data[0] as $task){
+                                ?>
+                                <div class="col-4">
+                                    <div class="input-group mt-3">
+                                        <input type="text" class="form-control datepicker" id="date<?=$num?>" name="time[<?=$num?>][date]" data-date-format="yyyy-mm-dd" value="<?=$task['task_date'];?>">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <button class="btn p-0 fa fa-calendar " type="button"></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4 mt-3 edit-timings">
+                                    <input class="timepicker<?=$num?> form-control " type="text" id="start<?=$num?>" name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>">
+                                </div>
+                                <div class="col-4 mt-3">
+                                    <input class="form-control timepicker<?=$num+1?>" type="text" id="end<?=$num?>" name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>">
+                                </div>
+                                <div class="col-12 mt-3 mb-5">
+                                    <input type="text" class="form-control" name="time[<?=$num?>][task_description]" value="<?=$task['task_description'];?>">
+                                </div>
+                                <input type="hidden" value="<?=$task['table_id'];?>" name="time[<?=$num?>][table_id]" id="table_id<?=$num?>">
+                                <?php $num=$num+2;
+                                } ?>
+                                <div class="col-12 text-left mb-4">
+                                    <div id="add-time">
+                                        <a href="javascript:void(0);" >
+                                            <i class="fas fa-plus pt-2 icon-plus"></i>
+                                        </a>Add time
+                                    </div>
+                                </div>
+                            </div>
+
+                        <?php } ?>
                             <!-- Add time  -->
+
                             <div id="task-add-time">
                                 <div class="primary-wrap">
                                     <div class="row">
@@ -89,12 +142,12 @@ if($this->input->get()){
                                         </div>
                                         <div class="col-4">
                                             <div class="input-group date">
-                                                <input id="start-time-0" class="form-control timepicker" name="daterange[0][start]" placeholder="hh:mm" />
+                                                <input id="start-time-0" class="form-control timepicker-a" name="daterange[0][start]" placeholder="hh:mm" />
                                             </div>
                                         </div>
                                         <div class="col-4">
                                             <div class="input-group date">
-                                                <input id="end-time-0" class="form-control timepicker1" name="daterange[0][end]"  placeholder="hh:mm" />
+                                                <input id="end-time-0" class="form-control timepicker-b" name="daterange[0][end]"  placeholder="hh:mm" />
                                             </div>
                                         </div>
                                         <div class="col-10 text-center">
@@ -103,7 +156,7 @@ if($this->input->get()){
 
                                         <div class="col-2 text-center">
                                             <a href="javascript:void(0);" id="add-new-time" title="Add">
-                                                <i class="fas fa-plus pt-2 icon-plus text-success"></i>
+                                                <i class="fas fa-plus pt-2 icon-plus"></i>
                                             </a>
                                         </div>
                                     </div>
@@ -117,7 +170,7 @@ if($this->input->get()){
                         <p id="taskError" class=" text-danger"></p>
                         <p>&nbsp;</p>
                         <div class="text-right">
-                        <button type="submit" class="btn btn-primary">Save Task</button><!-- to store the task entry. -->
+                        <button type="submit" class="btn btn-primary save-task">Save Task</button><!-- to store the task entry. -->
                     </div>
                     </form>
                 </div>

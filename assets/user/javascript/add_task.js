@@ -273,7 +273,14 @@ var addTime = {
 };
 
 $(document).ready(function () {
-
+if(edit)
+{
+    $('#task-add-time').hide();
+}
+$('#add-time').click(function()
+{
+    $('#task-add-time').show();   
+});
 var addTask = document.getElementById('addTask');
 if (addTask) {
     var m = new Date();
@@ -291,7 +298,7 @@ if (addTask) {
             return false;
         }
             document.getElementById('taskError').innerHTML = " ";
-            var date = document.getElementById('date-picker-start').value;
+            var date = document.getElementById('date-picker-start-0').value;
             var start_time = document.getElementById('start-time-0').value;
             var end_time = document.getElementById('end-time-0').value;
             var flag = false;
@@ -302,11 +309,17 @@ if (addTask) {
                 } else {
                     array_of_timings.push({ date, start_time, end_time });
                 }
-    }
-}
+            }
+        }
 
-
+    if(document.getElementById('task-add-time'))
+    {
     addTime.init("#task-add-time");
+    }
+    if(document.getElementById('total-row'))
+    {
+    addTime.init("#total-row");
+    }
 
     $('.datepicker').datepicker({
         weekStart: 1,
@@ -316,10 +329,10 @@ if (addTask) {
     });
     $('.datepicker-0').datepicker("setDate", new Date());
 
-    $('.timepicker').timepicker({
+    $('.timepicker-a').timepicker({
         uiLibrary: 'bootstrap4'
     });
-    $('.timepicker1').timepicker({
+    $('.timepicker-b').timepicker({
         uiLibrary: 'bootstrap4'
     });
     $('#choose-project').click(function () {
@@ -345,4 +358,13 @@ if (addTask) {
             }
         });
     });
+    if(document.getElementById('task-len'))
+    {
+    var len = document.getElementById('task-len').value;
+    for (var i = 0; i < (len*2); i++) {
+        $('.timepicker'+i).timepicker({
+            uiLibrary: 'bootstrap4'
+        });
+        }     
+    }
 });

@@ -322,9 +322,13 @@ function draw_customized_chart(res) {
     var element = document.getElementById('daily');
     var pixel = [];
     var top = 25;
+    var margin_top = 298;
     var top1 = top;
-    console.log(res)
     var window_width = $('.cust_daily_chart').width();
+    if(window_width > 700)
+    {
+        margin_top = 367;
+    }
     var p_left = parseInt(window_width) / 12;
     if (res['data'] != "No activity in this date.") {
 
@@ -362,10 +366,10 @@ function draw_customized_chart(res) {
                         }
                         if (((start_time_pixel >= pixel1[e][0]) && (start_time_pixel < pixel1[e][1]))) {
                             v = v + 25;
-                            printChart(start_time_pixel, width, ((332) - v), task_name, res['data'][0][i]);
+                            printChart(start_time_pixel, width, ((margin_top) - v), task_name, res['data'][0][i]);
                             break;
                         } else {
-                            printChart(start_time_pixel, width, ((332) - v), task_name, res['data'][0][i]);
+                            printChart(start_time_pixel, width, ((margin_top) - v), task_name, res['data'][0][i]);
                             break;
                         }
                     }
@@ -376,14 +380,14 @@ function draw_customized_chart(res) {
                     if ((start_time_pixel + width) >= window_width) {
                         width = window_width - (start_time_pixel);
                     }
-                    printChart(start_time_pixel, width, (332), task_name, res['data'][0][i]);
+                    printChart(start_time_pixel, width, (margin_top), task_name, res['data'][0][i]);
                 }
             }
             if (pixel.length == 0) {
                 if ((start_time_pixel + width) >= window_width) {
                     width = window_width - (start_time_pixel);
                 }
-                printChart(start_time_pixel, width, (332), task_name, res['data'][0][i]);
+                printChart(start_time_pixel, width, (margin_top), task_name, res['data'][0][i]);
             }
             pixel.push([start_time_pixel, end_time_pixel]);
         }
@@ -408,10 +412,10 @@ function printChart(start, width, top, task_name, id) {
         }
     }
     var row = $("<span class='positon-chart print-chart-row" + id + "'  data-toggle='tooltip' data-placement='top' title=" + task_name + " id='new-daily-chart" + graph_id + "'>.<input type = 'hidden' value = " + graph_id + "></span>");
-    $(row).css("padding-left", start);
+    $(row).css("margin-left", start);
     $(row).css("position", "absolute");
     $(row).css("top", top);
-    $(row).css("left", width);
+    $(row).css("width", width);
     $(row).css("backgroundColor", '#' + color);
     $(row).css("color", '#' + color);
     $("#print-chart").append(row);
