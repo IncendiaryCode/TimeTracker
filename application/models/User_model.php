@@ -11,15 +11,29 @@ class User_model extends CI_Model {
     public function start_login_timer(){
         $array = array('user_id'=>$this->session->userdata('userid'),
                         'task_date'=>date('Y-m-d'),
-                        'start_time'=>date('Y-m-d H:i:s'),
+                        'start_time'=>date('Y-m-d H:i:s',strtotime($this->input->post('start-login-time'))),
                         'created_on'=>date('Y-m-d H:i:s')
                     );
-        $this->db->set($array);
-        $query = $this->db->insert('login_details', $array);
-        if($query){
-            return true;
-        } else {
-            return false;
+
+        $this->db->where(array('task_date' => date('Y:m:d'),'user_id' => $this->session->userdata('userid')));
+        $query_check = $this->db->get('login_details');
+        if ($query_check->num_rows() > 0) {
+            $result = $query_check->row_array();
+            $this->db->where(array('user_id'=>$result['user_id'],'task_date'=>$result['task_date']));
+            $query = $this->db->update('login_details', $array);
+            if($query){
+                return true;
+            } else {
+                return false;
+            }
+        }else{
+            $this->db->set($array);
+            $query = $this->db->insert('login_details', $array);
+            if($query){
+                return true;
+            }else{
+                return false;
+            }
         }
     }
     //fetch running tasks into user dashboard page

@@ -614,6 +614,7 @@ class Dashboard_model extends CI_Model
             $search = $search['value'];
             $col = 0;
             $dir = "";
+
             if(!empty($order))
             {
                 foreach($order as $o)
@@ -623,10 +624,10 @@ class Dashboard_model extends CI_Model
                 }
             }
 
-            /*if($dir != "asc" && $dir != "desc")
+            if($dir != "asc" && $dir != "desc")
             {
                 $dir = "desc";
-            }*/
+            }
             $valid_columns = array(
                 0=>'u.name',
                 1=>'tasks_count',
@@ -656,11 +657,10 @@ class Dashboard_model extends CI_Model
             $this->db->join('users AS u','u.id = a.user_id');
             $this->db->where('a.project_id',$project_id);
             $users = $this->db->get()->result_array();
+            
             $data = array();
-
             foreach($users AS $u){
-                $data[] = $u['user_id'];
-                $this->db->select('u.id,u.name AS user_name');
+                $this->db->select('u.id,u.name');
                 $this->db->select('count(distinct d.task_id) AS tasks_count');
                 $this->db->select_sum('d.total_minutes','t_minutes');
                 $this->db->from('task AS t');
@@ -670,14 +670,8 @@ class Dashboard_model extends CI_Model
                 $this->db->group_by('d.user_id');
                 $this->db->limit($length,$start);
                 $details = $this->db->get();
-                $task[] = $details->row_array();
-          
-                
-                foreach($task as $t){
-                     $data[] = array_push($data,$t['tasks_count'],$t['t_minutes']);
-
-                  
-                }  
+                $task = $details->row_array();
+                $data[] = array($u['user_name'],($task['tasks_count'])?($task['tasks_count']):'0',$task['t_minutes']);  
             }
         }       
         return $data;

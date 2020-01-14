@@ -42,17 +42,21 @@ class User extends CI_Controller
     }
     public function save_login_time(){
         $result = $this->user_model->start_login_timer();
+        $res = array();
         if($result == TRUE){
-            $result['flag'] = 1;
-            $result['msg'] = 'Login timer started.';
+            $res['flag'] = 1;
+            $this->session->set_userdata($res);
+            $res['msg'] = 'Login timer started.';
             $this->load->view('user/header');
-            $this->load->view('user/user_dashboard', $result);
+            $res['task_info'] = $this->user_model->task_status();
+            $this->load->view('user/user_dashboard', $res);
             $this->load->view('user/footer');
         }else{
-            $result['flag'] = 0;
-            $result['msg'] = 'Failed to start login timer.';
+            $res['flag'] = 0;
+            $res['msg'] = 'Failed to start login timer.';
             $this->load->view('user/header');
-            $this->load->view('user/user_dashboard', $result);
+            $res['task_info'] = $this->user_model->task_status();
+            $this->load->view('user/user_dashboard', $res);
             $this->load->view('user/footer');
         }
     }
