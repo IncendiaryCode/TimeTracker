@@ -14,6 +14,11 @@ $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Punch In/Out';
+$flag = (($this->session->userdata('flag')))?$this->session->userdata('flag'):"";
+if($flag)
+{
+    $timerClass = 'fa-stop';
+}
 ?>
 
 <script type="text/javascript">
@@ -123,7 +128,6 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
 
             <div class='row mb-5' id="attach-card">
                 <!-- all task details -->
-
                 <div class="col text-center">
                     <div class="spinner-border" role="status" aria-hidden="true"></div> Loading...
                 </div>
@@ -132,7 +136,6 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
         <footer class="footer">
             <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
         </footer>
-
         <!-- modal form for tasks that started onprevious date -->
         <div class="modal modal-transparent fade" id="stop-now" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
             <div class="modal-dialog  modal-xl" role="document">
@@ -182,7 +185,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                         <div class="modal-body ">
                             <div>
                                 <label for="old-datepicker">Enter start time: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control  timerpicker-c"  name="stop-end-time" id="start-login-time">
+                                <input type="text" class="form-control  timerpicker-c"  name="start-login-time" id="start-login-time">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>

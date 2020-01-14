@@ -247,7 +247,7 @@ function drawCards(data) {
 						
 						$("#timer-slider").append(row);
 						timerSlider.reload();
-						start_task_timer(0, t_id);
+						start_task_timer(-19800, t_id);
 					}
 				});
 				}
@@ -256,6 +256,12 @@ function drawCards(data) {
 			actionStop.on("click", function (e) {
 				e.preventDefault();
 				var task_id = $(this).data("id");
+				if(document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play')
+				{
+					$('#play-timer').modal("show");
+				}
+				else
+				{
 				$.ajax({
 					type: "POST",
 					url: timeTrackerBaseURL + "index.php/user/stop_timer",
@@ -286,6 +292,7 @@ function drawCards(data) {
 						timerSlider.reload();
 					}
 				});
+				}
 			});
 			//action Edit
 			var actionEdit = $(
@@ -300,11 +307,9 @@ function drawCards(data) {
 			footerRight.append(actionEdit);
 			cardFooter.append(footerRow);
 			cardInner.append(cardFooter);
-
 			//add a overlay layer
 			var cardOverlay = $("<div class='card-overlay' />");
 			cardInner.append(cardOverlay);
-
 			//add action overlay
 			var cardActions = $("<div class='card-action-overlay' />");
 			cardActions.append(footerRight);
@@ -359,13 +364,13 @@ function timeTo12HrFormat(time) {
 var mainTaskInterval;
 
 function start_task_timer(startTime, id) {
+
 	if (startTime === "stop") {
 		//clear the existing interval
 		clearInterval(mainTaskInterval);
 	} else {
-		//set in local storage
 		localStorage.setItem("timeStamp", startTime);
-		mainTaskInterval = setInterval(function () {
+			mainTaskInterval = setInterval(function () {
 			startTime++;
 			setTaskTime(startTime, id);
 		}, 1000);
@@ -433,7 +438,7 @@ $(document).ready(function () {
 		{
 			timerSlider.slider.getCurrentSlide();
 			var t_id = 0;
-			var t_id = timerSlider.slider.getCurrentSlideElement()[0].id
+			var t_id = timerSlider.slider.getCurrentSlideElement()[0].id;
 			var matches = t_id.match(/(\d+)/);
 			if (timerSlider.slider.getCurrentSlide() != 0) {
 				task_id = matches[0];
@@ -491,7 +496,6 @@ $(document).ready(function () {
 			$('#icon-for-task').addClass("fa-stop");
 			}
 		});
-
 	var curr_timeStamp = Math.floor(Date.now() / 1000);
 	if (__timeTrackerLoginTime && (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-stop')) {
 		login_timer = parseInt(curr_timeStamp) - parseInt(__timeTrackerLoginTime);
@@ -511,7 +515,7 @@ $(document).ready(function () {
 			typeof __timeTrackerTaskTimeNew != "undefined" &&
 			__timeTrackerTaskTimeNew !== 0
 		) {
-			if (__timeTrackerTaskTimeNew == parseInt(__timeTrackerTaskTimeNew)) {
+			if (__timeTrackerTaskTimeNew == parseInt(__timeTrackerTaskTimeNew) &&  (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-stop')) {
 				start_task_timer(__timeTrackerTaskTimeNew, x[i].childNodes[1].id);
 			}
 		}
