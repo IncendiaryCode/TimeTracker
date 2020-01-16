@@ -38,7 +38,7 @@ var addTime = {
 
         var colDescri = $('<div class="col-11">' +
             '<div class="input-group">' +
-            '<input id="description-' + id + '"  class="form-control"  name="time[' + id + '][description]" value=' + descri + ' placeholder="description" />' +
+            '<input id="description-' + id + '"  class="form-control"  name="time[' + id + '][task_description]" value=' + descri + ' placeholder="description" />' +
             '</div>' +
             '</div>');
         colDescri.appendTo(row);

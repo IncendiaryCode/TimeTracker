@@ -262,7 +262,6 @@ class User extends CI_Controller
                 $t_id = $this->input->post('task_id', TRUE);
             }
             $taskid['task_data'] = $this->user_model->get_task_info($t_id);
-
             $this->load->view('user/header');
             $this->load->view('user/add_task', $taskid);
             $this->load->view('user/footer');
@@ -296,7 +295,7 @@ class User extends CI_Controller
             $data['project_id'] = $this->input->post('project');
             $data['task_name'] = $this->input->post('task_name');
             $data['task_desc'] = $this->input->post('task_desc');
-            $data['time_range'] = $this->input->post('daterange');
+            $data['time_range'] = $this->input->post('time');
             $result = $this->user_model->add_tasks($data);
             if (!$result) {
                 $this->session->set_flashdata('failure', 'Unable to add the Task.');
@@ -312,9 +311,6 @@ class User extends CI_Controller
     public function edit_task()
     {
         $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|xss_clean');
-        //$this->form_validation->set_rules('task_desc', 'Task Description', 'trim|required');
-        // $this->form_validation->set_rules('start_time','Task Start Date','required');
-        // $this->form_validation->set_rules('end_time','Task End Date','required');
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('user/header');
             $t_id              = $this->input->post('task_id', TRUE);
@@ -329,7 +325,9 @@ class User extends CI_Controller
             $data['task_name'] = $this->input->post('task_name');
             $data['task_id'] = $this->input->post('task_id');
             $data['task_desc'] = $this->input->post('task_desc');
-            $data['time_range'] = $this->input->post('time');
+            $data['timings'] = $this->input->post('timing');
+            if(!empty($this->input->post('time')))
+            $data['add_timings'] = $this->input->post('time');
             $result = $this->user_model->add_tasks($data);
             if (!$result) {
                 $t_id = $this->input->post('task_id', TRUE);

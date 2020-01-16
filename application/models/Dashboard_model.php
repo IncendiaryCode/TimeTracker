@@ -540,16 +540,26 @@ class Dashboard_model extends CI_Model
             }
             if($order !=null)
             {
-                if($col == 1 || $col == 2){
+                if($col == 1){
                     if($dir == 'asc')
-                        asort($data);
+                        array_multisort(array_column($data, 1), SORT_ASC, $data);
                     else
-                        arsort($data);
+                        array_multisort(array_column($data, 1), SORT_DESC, $data);
                     foreach($data as $key=>$value){
                         $sorted[] = $value;
                     }
                     return $sorted;
-                }else{
+                }else if($col == 2){
+                    if($dir == 'asc')
+                        array_multisort(array_column($data, 2), SORT_ASC, $data);
+                    else
+                        array_multisort(array_column($data, 2), SORT_DESC, $data);
+                    foreach($data as $key=>$value){
+                        $sorted[] = $value;
+                    }
+                    return $sorted;
+                }
+                else{
                     return $data;
                 }
             }else{

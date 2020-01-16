@@ -28,7 +28,7 @@ if($this->input->get()){ ?>
                             <p id="alartmsg" class="text-center"></p>
                     </div>
                     <?php if($GLOBALS['page_title'] == 'Edit task'){ ?>
-                    <form action="<?=base_url();?>index.php/user/edit_task?type=edit" method="post" id="editTask" class="mt-5 add-task">
+                    <form action="<?=base_url();?>index.php/user/edit_task?type=edit" method="post" id="editTask" class="mt-5 ">
                         <input type="hidden" name="task_id" id="curr-taskid" value="<?=$task_data[0][0]['task_id'];?>">
                     <?php } else { ?>
                         <form action="<?=base_url();?>user/add_tasks" method="post" id="addTask" class="mt-5 add-task">
@@ -99,7 +99,7 @@ if($this->input->get()){ ?>
                                 ?>
                                 <div class="col-4">
                                     <div class="input-group mt-3">
-                                        <input type="text" class="form-control datepicker" id="date<?=$num?>" name="time[<?=$num?>][date]" data-date-format="yyyy-mm-dd" value="<?=$task['task_date'];?>">
+                                        <input type="text" class="form-control datepicker" id="date<?=$num?>" name="timing[<?=$num?>][date]" data-date-format="yyyy-mm-dd" value="<?=$task['task_date'];?>">
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <button class="btn p-0 fa fa-calendar " type="button"></button>
@@ -108,15 +108,15 @@ if($this->input->get()){ ?>
                                     </div>
                                 </div>
                                 <div class="col-4 mt-3 edit-timings">
-                                    <input class="timepicker<?=$num?> form-control " type="text" id="start<?=$num?>" name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>">
+                                    <input class="timepicker<?=$num?> form-control " type="text" id="start<?=$num?>" name="timing[<?=$num?>][start]" value="<?=$task['start_time'];?>">
                                 </div>
                                 <div class="col-4 mt-3">
-                                    <input class="form-control timepicker<?=$num+1?>" type="text" id="end<?=$num?>" name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>">
+                                    <input class="form-control timepicker<?=$num+1?>" type="text" id="end<?=$num?>" name="timing[<?=$num?>][end]" value="<?=$task['end_time'];?>">
                                 </div>
                                 <div class="col-12 mt-3 mb-5">
-                                    <input type="text" class="form-control" name="time[<?=$num?>][task_description]" value="<?=$task['task_description'];?>">
+                                    <input type="text" class="form-control" name="timing[<?=$num?>][task_description]" value="<?=$task['task_description'];?>">
                                 </div>
-                                <input type="hidden" value="<?=$task['table_id'];?>" name="time[<?=$num?>][table_id]" id="table_id<?=$num?>">
+                                <input type="hidden" value="<?=$task['table_id'];?>" name="timing[<?=$num?>][table_id]" id="table_id<?=$num?>">
                                 <?php $num=$num+2;
                                 } ?>
                                 <div class="col-12 text-left mb-4">
@@ -136,7 +136,11 @@ if($this->input->get()){ ?>
                                     <div class="row">
                                         <div class="col-4">
                                             <div class="input-group mb-3">
-                                                <input type="text" class="form-control datepicker-0" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0">
+                                                <?php if($GLOBALS['page_title'] == 'Edit task'){ ?>
+                                                <input type="text" class="form-control datepicker-0" name="time[<?=$num?>][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0">
+                                                <?php } else {?>
+                                                    <input type="text" class="form-control datepicker-0" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0">
+                                                    <?php } ?>
                                                 <div class="input-group-append">
                                                     <span class="input-group-text datepicker ">
                                                         <button type="button" class="btn p-2 fa fa-calendar"></button>
@@ -146,16 +150,28 @@ if($this->input->get()){ ?>
                                         </div>
                                         <div class="col-4">
                                             <div class="input-group date">
-                                                <input id="start-time-0" class="form-control timepicker-a" name="time[0][start]" placeholder="hh:mm" />
+                                                <?php if($GLOBALS['page_title'] == 'Edit task'){ ?>
+                                                <input id="start-time-0" class="form-control timepicker-a" name="time[<?=$num?>][start]" placeholder="hh:mm" />
+                                                <?php } else {?>
+                                                  <input id="start-time-0" class="form-control timepicker-a" name="time[0][start]" placeholder="hh:mm" />
+                                                <?php } ?> 
                                             </div>
                                         </div>
                                         <div class="col-4">
                                             <div class="input-group date">
-                                                <input id="end-time-0" class="form-control timepicker-b" name="time[0][end]"  placeholder="hh:mm" />
+                                                <?php if($GLOBALS['page_title'] == 'Edit task'){ ?>
+                                                <input id="end-time-0" class="form-control timepicker-b" name="time[<?=$num?>][end]"  placeholder="hh:mm" />
+                                                <?php } else {?>
+                                                    <input id="end-time-0" class="form-control timepicker-b" name="time[0][end]"  placeholder="hh:mm" />
+                                                <?php } ?>
                                             </div>
                                         </div>
                                         <div class="col-10 text-center">
-                                            <input id="description-0" class="form-control" name="time[0][description]" placeholder="description" />
+                                            <?php if($GLOBALS['page_title'] == 'Edit task'){ ?>
+                                            <input id="description-0" class="form-control" name="time[<?=$num?>][task_description]" placeholder="description" />
+                                            <?php } else {?>
+                                                <input id="description-0" class="form-control" name="time[0][task_description]" placeholder="description" />
+                                            <?php } ?>
                                         </div>
 
                                         <div class="col-2 text-center">

@@ -58,8 +58,8 @@
                         </ul>
                     </div>
                     <div class="modal-footer text-center">
-                        <button type="submit" class="btn btn-secondary" onclick="window.location.href='<?=base_url();?>index.php/login/logout'"data-dismiss="modal">No</button>
-                        <button type="button" class="btn btn-primary" onclick="window.location.href='<?=base_url();?>index.php/user/update_end_time'">Yes</button>
+                        <!-- <button type="submit" class="btn btn-secondary" onclick="window.location.href='<?=base_url();?>index.php/login/logout'"data-dismiss="modal">No</button> -->
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='<?=base_url();?>login/logout'">Yes</button>
                     </div>
             </div>
         </div>
@@ -71,7 +71,7 @@
             <div class="modal-header ">Leave for the day!!!
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
-                <form method="post" action="<?=base_url();?>index.php/user/update_end_time">
+                <form method="post" action="<?=base_url();?>login/logout">
                     <div class="modal-body text-left">
                         <p class="mt-4 mb-1"><u>Note:</u></p>
                         <ul class="text-muted"><li>Do you want to leave for the day?</li>
