@@ -1,13 +1,30 @@
 <?php
 class Dashboard_model extends CI_Model
 {
+    /**
+     * To load the database.
+     *
+     * @param void
+     *
+     * @return void
+     *
+     * @access public
+     */
     public function __construct()
     {
         
         $this->load->database();
         $this->load->helper('url');
     }
-    //Dashboard model
+
+    /**
+     * Function to fetch total number of users into admin dashboard page
+     * 
+     * @param void
+     * 
+     * @returns $result
+     * 
+     */
     public function get_users()
     {
         $this->db->where('type','user');
@@ -15,12 +32,30 @@ class Dashboard_model extends CI_Model
         $row         = $get_users_q->num_rows();
         return $row;
     }
+
+    /**
+     * Function to fetch total number of tasks into admin dashboard page
+     * 
+     * @param void
+     * 
+     * @returns $result
+     * 
+     */
     public function get_tasks()
     {
         $get_task_q = $this->db->query("SELECT * FROM task");
         $row_task   = $get_task_q->num_rows();
         return $row_task;
     }
+
+    /**
+     * Function to fetch total number of projects into admin dashboard page
+     * 
+     * @param void
+     * 
+     * @returns $result
+     * 
+     */
     public function get_projects()
     {
         $get_proj_q = $this->db->query("SELECT * FROM project");
@@ -28,6 +63,14 @@ class Dashboard_model extends CI_Model
         return $row_proj;
     }
 
+    /**
+     * Function to fetch top users data into admin dashboard page
+     * 
+     * @param void
+     * 
+     * @returns array(count of top users,user details)
+     * 
+     */
     public function get_top_users(){
         $this->db->select('u.id AS user_id,u.name AS user_name');
         $this->db->select_sum('d.total_minutes','t_minutes');
@@ -51,6 +94,14 @@ class Dashboard_model extends CI_Model
         return array($query->num_rows(),$users);
     }
 
+    /**
+     * Function to fetch top project data into admin dashboard page
+     * 
+     * @param void
+     * 
+     * @returns array(count of top projects,project details)
+     * 
+     */
     public function get_top_projects(){
         $this->db->select('p.id AS project_id,p.name AS project_name,p.image_name');
         $this->db->select_sum('d.total_minutes','t_minutes');
@@ -75,6 +126,14 @@ class Dashboard_model extends CI_Model
         return array($query->num_rows(),$users);
     }
 
+    /**
+     * Function to fetch graph data into admin dashboard page
+     * 
+     * @param void
+     * 
+     * @returns array(days as labels,project details)
+     * 
+     */
     public function dashboard_graph(){
         $month = date('Y-m-d',strtotime($this->input->post('month')));
         $end = date('Y-m-t',strtotime($month));
@@ -127,10 +186,17 @@ class Dashboard_model extends CI_Model
         return $final;
     }
 
+    /**
+     * Function to fetch task/project/user data
+     * 
+     * @param $type
+     * 
+     * @returns $details
+     * 
+     */
     public function get_task_details($type){
 
-        if($type == 'user'){
-
+        if($type == 'user'){ //load user information into user_snapshot page
             $this->db->select('u.name AS user_name,u.id AS user_id');
             $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->from('users AS u');
@@ -139,7 +205,7 @@ class Dashboard_model extends CI_Model
             $this->db->group_by('d.user_id');
             $user_names = $this->db->get()->result_array();
 
-            foreach ($user_names as $u) {
+            foreach ($user_names as $u) { 
                 $this->db->select('count(distinct t.id) AS tasks_count');
                 $this->db->from('task AS t');
                 $this->db->join('time_details AS d','d.task_id = t.id');
@@ -161,8 +227,7 @@ class Dashboard_model extends CI_Model
             return $details;
         }
 
-        else if($type == 'project'){
-
+        else if($type == 'project'){ //load projectdetails into project_snapshot page
             $this->db->select('id AS project_id,name AS project_name,image_name,color_code');
             $this->db->from('project');
             $projects = $this->db->get()->result_array();
@@ -192,7 +257,7 @@ class Dashboard_model extends CI_Model
 
             return $final_result;
                
-        } else if($type == 'task') {
+        } else if($type == 'task') { //load task details into datatable in task_snapshot page
             $get_data = $this->input->post();
            // print_r($get_data);
             $draw = intval($this->input->post("draw"));
@@ -283,7 +348,14 @@ class Dashboard_model extends CI_Model
         }
     }
 
-    //get task details for user snapshot graph
+    /**
+     * Function to get task details for user snapshot graph
+     * 
+     * @param void
+     * 
+     * @returns $data
+     * 
+     */
     public function user_graph_data(){
         if($this->input->post('month')){
             if(!empty($this->input->post('month'))){
@@ -360,10 +432,17 @@ class Dashboard_model extends CI_Model
         return $data;
     }
 
-    //get user chart data (onclick Username)
+    /**
+     * Function to get user chart data (onclick Username/Project name)
+     * 
+     * @param $type
+     * 
+     * @returns $data
+     * 
+     */
     public function get_user_chart($type){
         
-        if($type == 'user-chart'){
+        if($type == 'user-chart'){ //load user chart data into user details page
             $user_id = $this->input->post('user_id');
             $date = $this->input->post('date');
             $start = date('Y-m-d',strtotime($date.'-30 days'));
@@ -376,7 +455,7 @@ class Dashboard_model extends CI_Model
             $this->db->group_by('d.task_date');
             $this->db->where('d.user_id',$user_id);
 
-        }else if($type == 'project_chart'){
+        }else if($type == 'project_chart'){ //load project chart data into project details page
             $project_id = $this->input->post('project_id');
             $project_start_date = $this->db->get_where('project',array('id'=>$project_id));
             $start_date = $project_start_date->row_array()['created_on'];
@@ -401,8 +480,16 @@ class Dashboard_model extends CI_Model
         return $data;
     }
 
+    /**
+     * Function to get task datatable data
+     * 
+     * @param $table_type
+     * 
+     * @returns $data
+     * 
+     */
     public function user_task_data($table_type){
-        if($table_type == 'user_task'){
+        if($table_type == 'user_task'){ //load datatable data into userdetails page
             $user_id = $this->input->post('user_id');
             $draw = intval($this->input->post("draw"));
             $start = intval($this->input->post("start"));
@@ -469,7 +556,7 @@ class Dashboard_model extends CI_Model
                 );     
             }
             return $data;
-        }else if($table_type == 'project_task'){
+        }else if($table_type == 'project_task'){ //load datatable data into projectdetails page
             $project_id = $this->input->post('project_id');
             $draw = intval($this->input->post("draw"));
             $start = intval($this->input->post("start"));
@@ -568,8 +655,16 @@ class Dashboard_model extends CI_Model
         } 
     }
 
+    /**
+     * Function to get project datatable data
+     * 
+     * @param $table_type
+     * 
+     * @returns $data
+     * 
+     */
     public function user_project_data($table_type){
-        if($table_type == 'user_project'){
+        if($table_type == 'user_project'){ //load datatable data into user details page
 
             $user_id = $this->input->post('user_id');
             $draw = intval($this->input->post("draw"));
@@ -637,7 +732,7 @@ class Dashboard_model extends CI_Model
                 );     
             }
             return $data;
-        }else if($table_type == 'project_user'){
+        }else if($table_type == 'project_user'){ //load datatable data into project details page
             $project_id = $this->input->post('project_id');
             $draw = intval($this->input->post("draw"));
             $start = intval($this->input->post("start"));
@@ -724,6 +819,14 @@ class Dashboard_model extends CI_Model
         }
     }
 
+    /**
+     * Function to get project data into project details page
+     * 
+     * @param $project_id
+     * 
+     * @returns $data
+     * 
+     */
     public function get_project_data($proj_id)
     {
         $this->db->select_sum('d.total_minutes','t_minutes');
@@ -755,6 +858,14 @@ class Dashboard_model extends CI_Model
         return $data;
     }
 
+    /**
+     * Function to assign user to the project (in project details page)
+     * 
+     * @params $project_id and $user_id
+     * 
+     * @returns TRUE/FALSE
+     * 
+     */
     public function assign_user($user_id,$project_id){
         $this->db->where(array('user_id'=>$user_id,'project_id'=>$project_id));
         $proj_assigned = $this->db->get('project_assignee');
@@ -764,14 +875,53 @@ class Dashboard_model extends CI_Model
             $array = array('project_id'=>$project_id,'user_id'=>$user_id,'created_on'=>date('Y-m-d H:i:s'));
             $this->db->set($array);
             $assign = $this->db->insert('project_assignee',$array);
-            if($assign){
-                return true;
+            if($assign){ //send email to the user after assigning project
+                $project = $this->db->get_where('project',array('id'=>$project_id));
+                $project_name = $project->row_array()['name'];
+
+                $user = $this->db->get_where('users',array('id'=>$user_id));
+                $user_email = $user->row_array()['email'];
+                $user_name = $user->row_array()['name'];
+                $this->load->library('email');
+                //send mail to the user
+                $to = $user_email;
+                $this->email->initialize(array(
+                'protocol' => PROTOCOL,
+                'smtp_host' => SMTP_HOST,
+                'smtp_user' => SMTP_USER,
+                'smtp_pass' => SMTP_PASS,
+                'smtp_port' => SMTP_PORT,
+                'charset' => CHARSET,
+                'crlf' => CRLF,
+                'newline' => NEWLINE,
+                'mailtype' => MAILTYPE,
+                'validation' => TRUE
+            ));
+                $this->email->from('admin@printgreener.com');
+                $this->email->to($user_email);
+                $this->email->subject('Notification: New project');
+                $this->email->message('Hi '.$user_name.', you are assigned to the project: '.$project_name);
+                //$this->email->send();
+                if(!$this->email->send()){
+                    print_r($this->email->print_debugger());
+                    return false;
+                }else{
+                    return true;
+                }
             }else{
                 return false;
             }
         }
     }
-    //get user info
+
+    /**
+     * Function to get user details (in user details page)
+     * 
+     * @param void
+     * 
+     * @returns $user_data
+     * 
+     */
     public function get_user_data(){
         $user_id = $this->input->get('user_id');
         $this->db->select('u.id,u.name AS user_name,u.email,u.profile,u.phone');
@@ -786,7 +936,15 @@ class Dashboard_model extends CI_Model
         $user_data = $this->db->get()->row_array();
         return $user_data;
     }
-    //add user model
+
+    /**
+     * Function to add new users
+     * 
+     * @param void
+     * 
+     * @returns TRUE/FALSE
+     * 
+     */
     public function add_users()
     {
         $array1 = array(
@@ -795,6 +953,7 @@ class Dashboard_model extends CI_Model
             'password' => $this->input->post('task_pass'),
             'phone' => $this->input->post('contact'),
             'type' => 'user',
+            'profile' => 'images.png',
             'created_on' => date('Y:m:d H:i:s')
         );
         $this->db->set($array1);
@@ -806,6 +965,14 @@ class Dashboard_model extends CI_Model
         }
     }
 
+    /**
+     * Function to check whether user exists while adding a new user
+     * 
+     * @param void
+     * 
+     * @returns TRUE/FALSE
+     * 
+     */
     public function users_exists()
     {
         $this->db->where('email', $this->input->post('user_email'));
@@ -819,6 +986,14 @@ class Dashboard_model extends CI_Model
         }
     }
 
+    /**
+     * Function to add project module
+     * 
+     * @param void
+     * 
+     * @returns TRUE/FALSE
+     * 
+     */
     public function add_project_module(){
         
         $array = array('project_id'=>$this->input->post(''),'name'=>$this->input->post(''),'meta_data'=>$this->input->post(''),'created_on'=>date('Y-m-d H:i:s'));
@@ -831,6 +1006,14 @@ class Dashboard_model extends CI_Model
         }
     }
 
+    /**
+     * Function to get list of all project details
+     * 
+     * @param void
+     * 
+     * @returns $project_data
+     * 
+     */
     public function get_project_name()
     {
         $query  = $this->db->query("SELECT id FROM project");
@@ -855,6 +1038,14 @@ class Dashboard_model extends CI_Model
         return $project_data;
     }
 
+    /**
+     * Function to get project module
+     * 
+     * @param $project_id
+     * 
+     * @returns $result
+     * 
+     */
     public function get_module_name($project_id){
         $p_id = $project_id;
         $query = $this->db->query("SELECT * FROM project_module WHERE project_id = {$p_id} OR project_id = 0");
@@ -862,6 +1053,14 @@ class Dashboard_model extends CI_Model
         return $result;
     }
 
+    /**
+     * Function to get list of users into add task and/or add project page
+     * 
+     * @param void
+     * 
+     * @returns $names
+     * 
+     */
     public function get_usernames(){
         $this->db->select('name,id');
         $this->db->from('users');
@@ -870,7 +1069,15 @@ class Dashboard_model extends CI_Model
         $names = $query->result_array();
         return $names;
     }
-    //add task model
+
+    /**
+     * Function to assign tasks
+     * 
+     * @param void
+     * 
+     * @returns $project_id
+     * 
+     */
     public function assign_tasks()
     {
         $select = $this->input->post('user-name');
@@ -908,7 +1115,14 @@ class Dashboard_model extends CI_Model
         return $project_id;
     }
 
-    //add project model
+    /**
+     * Function to check whether project exists while adding new project
+     * 
+     * @param void
+     * 
+     * @returns TRUE/FALSE
+     * 
+     */
     public function project_exists()
     {
         $this->db->where('name', $this->input->post('project-name'));
@@ -922,6 +1136,14 @@ class Dashboard_model extends CI_Model
         }
     }
 
+    /**
+     * Function to add project
+     * 
+     * @param project_icon
+     * 
+     * @returns TRUE/FALSE
+     * 
+     */
     public function add_projects($project_icon)
     {
         $userid = $this->session->userdata('userid');
@@ -982,6 +1204,14 @@ class Dashboard_model extends CI_Model
         return true;
     }
 
+    /**
+     * Function to delete user
+     * 
+     * @param $userid
+     * 
+     * @returns TRUE/FALSE
+     * 
+     */
     public function delete_user($userid){
         $array = array('time_details','login_details','project_assignee','task_assignee');
         $delete = $this->db->delete($array,array('user_id'=>$usetid));
@@ -996,7 +1226,15 @@ class Dashboard_model extends CI_Model
         }  
     }
 
-    public function delete_project($task_id){
+    /**
+     * Function to delete task
+     * 
+     * @param $task_id
+     * 
+     * @returns TRUE/FALSE
+     * 
+     */
+    public function delete_task($task_id){
         $array = array('task_assignee','time_details');
         $delete = $this->db->delete($array,array('task_id'=>$task_id));
         $this->db->where('id',$task_id);
@@ -1008,6 +1246,14 @@ class Dashboard_model extends CI_Model
         }
     }
 
+    /**
+     * Function to load admin profile
+     * 
+     * @param void
+     * 
+     * @returns TRUE/FALSE
+     * 
+     */
     public function my_profile(){
         $userid = $this->session->userdata('userid');
         $this->db->where('id',$userid);
@@ -1017,8 +1263,13 @@ class Dashboard_model extends CI_Model
         }
     }
 
-    
-    //update profile model
+    /**
+     * Function to update profile picture
+     * 
+     * @param $picture
+     * 
+     * returns TRUE/FALSE
+     */
     public function submit_profile($picture)
     {
         $useremail = $this->session->userdata('email');
@@ -1041,6 +1292,13 @@ class Dashboard_model extends CI_Model
         }
     }
 
+    /**
+     * Function to Check for the Old Password
+     * 
+     * @param void
+     * 
+     * returns TRUE/FALSE
+     */
     public function password_exists()
     {
         $email = $this->session->userdata('email');
@@ -1056,7 +1314,14 @@ class Dashboard_model extends CI_Model
             return false;
         }
     }
-    //function to change password
+    
+    /**
+     * Function to change password
+     * 
+     * @param void
+     * 
+     * returns TRUE/FALSE
+     */
     public function change_password()
     {
         $new_pwd     = $this->input->post('new-pass');
@@ -1084,6 +1349,14 @@ class Dashboard_model extends CI_Model
         }
     }
 
+    /**
+     * (API)Login function
+     * 
+     * @param $post
+     * 
+     * returns FALSE, if not an user
+     * return user data
+     */
     public function login_device($post)
     {
         $username = $post['username'];//$this->input->post('username');
@@ -1128,7 +1401,14 @@ class Dashboard_model extends CI_Model
             }
         }
         
-    //To login
+    /**
+     * Login function
+     * 
+     * @param void
+     * 
+     * returns FALSE, if not an user
+     * return user type
+     */
     public function login_process()
     {
         $username = $this->input->post('username');
@@ -1181,6 +1461,13 @@ class Dashboard_model extends CI_Model
         }
     }
 
+    /**
+     * Send OTP function
+     * 
+     * @param void
+     * 
+     * returns TRUE/FALSE
+     */
     public function send_otp()
     {
         $email = $this->security->xss_clean($this->input->post('email'));
@@ -1223,7 +1510,7 @@ class Dashboard_model extends CI_Model
                     }else{
                         return true;
                     }
-                    return true;
+                    //return true;
                 } //$query
                 else {
                     return false;
@@ -1235,6 +1522,14 @@ class Dashboard_model extends CI_Model
         }
     }
 
+    /**
+     * Check OTP function
+     * 
+     * @param void
+     * 
+     * returns FALSE, if OTP is not there or is not matching the entered OTP 
+     * returns $email
+     */
     public function check_otp()
     {
         $email = $this->security->xss_clean($this->input->post('email'));

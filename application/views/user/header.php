@@ -63,7 +63,7 @@ $this->load->helper('url_helper');
                 ?>
                 <div class="row">
                     <div class="col-9 col-md-11 text-right btn-task">
-                <a href="<?=base_url();?>user/add_tasks" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
+                <a href="<?=base_url();?>user/load_add_task" class="btn btn-primary" id="new-task"><i class="fas fa-plus icon-White "></i> Task</a>
             </div>
                     <!-- to chage image -->
                     <div class="col-3 col-md-1 text-right">

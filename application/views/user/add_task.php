@@ -136,11 +136,7 @@ if($this->input->get()){ ?>
                                     <div class="row">
                                         <div class="col-4">
                                             <div class="input-group mb-3">
-                                                <?php if($GLOBALS['page_title'] == 'Edit task'){ ?>
-                                                <input type="text" class="form-control datepicker-0" name="time[<?=$num?>][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0">
-                                                <?php } else {?>
-                                                    <input type="text" class="form-control datepicker-0" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0">
-                                                    <?php } ?>
+                                                <input type="text" class="form-control datepicker-0" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text datepicker ">
                                                         <button type="button" class="btn p-2 fa fa-calendar"></button>
@@ -150,30 +146,17 @@ if($this->input->get()){ ?>
                                         </div>
                                         <div class="col-4">
                                             <div class="input-group date">
-                                                <?php if($GLOBALS['page_title'] == 'Edit task'){ ?>
-                                                <input id="start-time-0" class="form-control timepicker-a" name="time[<?=$num?>][start]" placeholder="hh:mm" />
-                                                <?php } else {?>
-                                                  <input id="start-time-0" class="form-control timepicker-a" name="time[0][start]" placeholder="hh:mm" />
-                                                <?php } ?> 
+                                                <input id="start-time-0" class="form-control timepicker-a" name="time[0][start]" placeholder="hh:mm" />
                                             </div>
                                         </div>
                                         <div class="col-4">
                                             <div class="input-group date">
-                                                <?php if($GLOBALS['page_title'] == 'Edit task'){ ?>
-                                                <input id="end-time-0" class="form-control timepicker-b" name="time[<?=$num?>][end]"  placeholder="hh:mm" />
-                                                <?php } else {?>
-                                                    <input id="end-time-0" class="form-control timepicker-b" name="time[0][end]"  placeholder="hh:mm" />
-                                                <?php } ?>
+                                                <input id="end-time-0" class="form-control timepicker-b" name="time[0][end]"  placeholder="hh:mm" />
                                             </div>
                                         </div>
                                         <div class="col-10 text-center">
-                                            <?php if($GLOBALS['page_title'] == 'Edit task'){ ?>
-                                            <input id="description-0" class="form-control" name="time[<?=$num?>][task_description]" placeholder="description" />
-                                            <?php } else {?>
-                                                <input id="description-0" class="form-control" name="time[0][task_description]" placeholder="description" />
-                                            <?php } ?>
+                                            <input id="description-0" class="form-control" name="time[0][task_description]" placeholder="description" />
                                         </div>
-
                                         <div class="col-2 text-center">
                                             <a href="javascript:void(0);" id="add-new-time" title="Add">
                                                 <i class="fas fa-plus pt-2 icon-plus"></i>

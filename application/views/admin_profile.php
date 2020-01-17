@@ -33,8 +33,12 @@ $this->load->helper('url_helper');
             <div class="main-container-inner">
                 <div class="row pt-5">
                     <div class="container">
-                          
-                        <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
+                        <div class="alert-success">
+                        <?php echo (!empty($this->session->flashdata('success')))?$this->session->flashdata('success'):''; ?>
+                        </div>
+                        <div class="alert-danger">
+                        <?php echo (!empty($this->session->flashdata('failure')))?$this->session->flashdata('failure'):''; ?>
+                        </div>
                         <div class="text-center">
                                 <img id="profile-pic" src="<?=base_url().UPLOAD_PATH.$res['profile'];?>" class="rounded-circle img-fluid" width="200px;" height="200px;">
                                  <div class="edit">
@@ -46,6 +50,7 @@ $this->load->helper('url_helper');
                         <div class="col-md-4 offset-md-4">   
                             <form action="<?=base_url();?>index.php/admin/change_password" id="changePsw" method="post">
                                 <p class="text-center display-5 mt-4">Change password</p>
+                                <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
                                 <?php 
                         if(validation_errors()) { ?>
                             <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
