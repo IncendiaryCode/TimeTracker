@@ -615,6 +615,10 @@ opacity: 0.5;
 {
     color: #999;
 }
+#show-plus
+{
+    display: none;
+}
 .save-task
 {
     margin-bottom: 30px;

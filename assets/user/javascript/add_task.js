@@ -58,7 +58,7 @@ var addTime = {
 
 
         section.append(row);
-        this.ele.prepend(section);
+        $('#add-here').prepend(section);
 
 
         section.find(".timepicker").timepicker({
@@ -275,13 +275,84 @@ var addTime = {
 $(document).ready(function () {
 $('#add-time').click(function()
 {
-    $('.datepicker-0').datepicker("setDate", new Date());
+    
+    //$('#task-add-time').show();
+    var section = $('<div class="time-sections pt-3 pb-5" />');
+        var row = $('<div class="row" />');
+        var id = this.id;
+        var array_of_timings = this.array_of_timings;
+
+        var colDate = $('<div class="col-4 col-md-6">' +
+            '<div class="input-group mb-3">' +
+            '<input type="text" class="form-control datepicker-0" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0" value=' + "date" + ' >' +
+            '<div class="input-group-append">' +
+            '<span class="input-group-text" id="basic-addon-' + id + '">' +
+            '<span class="fa fa-calendar datepicker"></span>' +
+            '</span>' +
+            '</div>' +
+            '</div>' +
+            '</div>');
+        colDate.appendTo(row);
+
+        var colStartTime = $('<div class="col-4 col-md-3">' +
+            '<div class="input-group">' +
+            '<input id="start-time-0" class="form-control timepicker-a" data-date-format="hh:mm:ss" name="time[0][start]"  placeholder="hh:mm" />' +
+            '</div>' +
+            '</div>');
+        colStartTime.appendTo(row);
+
+        var colEndTime = $('<div class="col-4 col-md-3">' +
+            '<div class="input-group">' +
+            '<input id="end-time-0"  class="form-control timepicker1" data-date-format="hh:mm:ss" name="time[0][end]"  placeholder="hh:mm" />' +
+            '</div>' +
+            '</div>');
+        colEndTime.appendTo(row);
+
+        var colDescri = $('<div class="col-11">' +
+            '<div class="input-group">' +
+            '<input id="description-0"  class="form-control"  name="time[0][task_description]" placeholder="description" />' +
+            '</div>' +
+            '</div>');
+        colDescri.appendTo(row);
+
+        var removeBtn = $('<div class="col-1 text-center">' +
+            '<a href="javascript:void(0);" title="Remove" id="add-new-time">' +
+            '<i class="fas fa-minus icon-plus text-danger"></i>' +
+            '</a>' +
+            '</div><hr>');
+
+        removeBtn.on('click', function () {
+            //remove the row
+            $(this).closest(".time-sections").remove();
+        });
+        
+        removeBtn.appendTo(row);
+
+
+        section.append(row);
+        $('#add-here').append(section);
+
+
+        section.find(".timepicker-a").timepicker({
+            uiLibrary: 'bootstrap4'
+        });
+        section.find(".timepicker1").timepicker({
+            uiLibrary: 'bootstrap4'
+        });
+        section.find(".datepicker").datepicker({
+            //startDate: new Date(),
+            weekStart: 1,
+            daysOfWeekHighlighted: "6,0",
+            autoclose: true,
+            todayHighlight: true,
+        });
+$('.datepicker-0').datepicker("setDate", new Date());
     $('.timepicker-a').timepicker({
         uiLibrary: 'bootstrap4'
     });
     var current_time = new Date().getHours().toString()+':'+ new Date().getMinutes();
     document.getElementById('start-time-0').value = current_time;
-    $('#task-add-time').show();
+    $('#show-plus').show();
 });
 var addTask = document.getElementById('addTask');
 if (addTask) {
@@ -375,14 +446,24 @@ if (addTask) {
         }     
     }
 
-    if(edit)  {
-        document.getElementById('date-picker-start-0').value = ' ';
-        document.getElementById('start-time-0').value = ' ';
-        $('#task-add-time').hide();
+        if(edit)  {
+            $('#task-add-time').hide();
         }
 
     $('#delete-task').click(function()
     {
-        console.log(this.parentNode.parentNode.parentNode);
+        $.ajax({
+            type: 'POST',
+            url: timeTrackerBaseURL + 'index.php/user/get_project_module',
+            data: { 'id': document.getElementById('curr-taskid').value },
+            success: function (res) {
+                this.parentNode.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.remove();
+                this.parentNode.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.remove();
+                this.parentNode.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.remove();
+                this.parentNode.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.remove();
+                this.parentNode.parentNode.previousElementSibling.previousElementSibling.remove();
+                this.parentNode.remove();
+                }
+        });
     })
 });

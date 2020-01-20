@@ -15,7 +15,7 @@ $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Punch In/Out';
 $flag = (($this->session->userdata('flag')))?$this->session->userdata('flag'):"";
-if($flag)
+if(isset($task_info['login_status']['start_time']))
 {
     $timerClass = 'fa-stop';
 }

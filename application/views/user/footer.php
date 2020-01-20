@@ -51,15 +51,15 @@
             <div class="modal-header ">Leave for the day!!!
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
-                    <div class="modal-body text-left">
-                        <p class="mt-4 mb-1"><u>Note:</u></p>
-                        <ul class="text-muted"><li>Do you want to leave for the day?</li>
-                            <li>You can not start task for the day once you punchn out.</li>
-                        </ul>
-                    </div>
-                    <div class="modal-footer text-center">
-                        <button type="button" class="btn btn-primary" >Yes</button>
-                    </div>
+                <div class="modal-body text-left">
+                    <p class="mt-4 mb-1"><u>Note:</u></p>
+                    <ul class="text-muted"><li>Do you want to leave for the day?</li>
+                        <li>You can not start task for the day once you punchn out.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-primary" >Yes</button>
+                </div>
             </div>
         </div>
     </div> -->
@@ -70,7 +70,7 @@
             <div class="modal-header ">Leave for the day!!!
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
-                <form method="post" action="<?=base_url();?>login/logout">
+                <form method="post" action="window.location.href='<?=base_url();?>user/update_end_time'">
                     <div class="modal-body text-left">
                         <p class="mt-4 mb-1"><u>Note:</u></p>
                         <ul class="text-muted"><li>Do you want to leave for the day?</li>
@@ -79,7 +79,7 @@
                     </div>
                     <div class="modal-footer text-center">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                        <button type="submit" class="btn btn-primary" id="punch-out" onclick="window.location.href='<?=base_url();?>user/update_end_time'">Yes</button>
+                        <button type="submit" class="btn btn-primary" id="punch-out">Yes</button>
                     </div>
                 </form>
             </div>
