@@ -19,7 +19,7 @@ function drawProjectChart() {
 	    var x=10;
 	    var y=10;
 	    var data = google.visualization.arrayToDataTable([
-          ['ID', 'Time spent in hrs', 'Persentage of time spent','radius','Time spent'],
+          ['ID', 'Time spent in hrs', 'Percentage of time spent','radius','Time spent'],
           ['', 0, 0,0, 0],]);
 	    for(var i=0; i<result.length; i++)
 	    {
