@@ -96,7 +96,7 @@ var addTime = {
 		removeBtn.appendTo(row);
 
 		section.append(row);
-		$("#add-here").prepend(section);
+		this.ele.find(".primary-wrap").prepend(section);
 
 		section.find(".timepicker").timepicker({
 			uiLibrary: "bootstrap4"
@@ -112,9 +112,9 @@ var addTime = {
 			todayHighlight: true
 		});
 	},
-	validate_info: function() {
+	validate: function(endtimeValidation) {
 		var __this = this;
-		var date = document.getElementById("date-picker-start-0").value;
+		var date = document.getElementById("date-picker-0").value;
 		var start_time = document.getElementById("start-time-0").value;
 		var end_time = document.getElementById("end-time-0").value;
 
@@ -132,77 +132,37 @@ var addTime = {
 		);
 
 		var check_for_date = __this.check_date(date);
-		validate_greater_time = __this.check_for_greatertime(
-			date,
-			start_time,
-			end_time
-		);
-		if (
-			date == "" ||
-			date == " " ||
-			start_time == "" ||
-			start_time == " " ||
-			end_time == "" ||
-			end_time == " "
-		) {
-			document.getElementById("datetime-error").innerHTML =
-				"Please enter valid details...";
-			return false;
-		} else if (__this.check_date(date)) {
-			document.getElementById("datetime-error").innerHTML =
-				"date/time of start/end connot be greater than currnet date/time";
-			return false;
-		} else if (validate_greater_time) {
-			document.getElementById("datetime-error").innerHTML =
-				"date/time of start/end connot be greater than currnet date/time";
-			return false;
-		} else if (__start_seconds >= __end_seconds) {
-			document.getElementById("datetime-error").innerHTML =
-				"Start time cannot be greater or equal to end time.";
-			return false;
-		} else if (!validate_interval) {
-			document.getElementById("datetime-error").innerHTML =
-				"Already same task is done in this interval.";
-			return false;
-		} else {
-			document.getElementById("datetime-error").innerHTML = " ";
-			return true;
-		}
-	},
-	validate: function() {
-		var __this = this;
-		var date = document.getElementById("date-picker-start-0").value;
-		var start_time = document.getElementById("start-time-0").value;
-		var end_time = document.getElementById("end-time-0").value;
-
-		var __start_seconds =
-			parseInt(start_time.slice(0, 2)) * 60 + parseInt(start_time.slice(3, 5));
-
-		var __end_seconds =
-			parseInt(end_time.slice(0, 2)) * 60 + parseInt(end_time.slice(3, 5));
-
-		// fetch timings form database
-		var validate_interval = __this.check_for_timeintervals(
-			__start_seconds,
-			__end_seconds,
-			date
-		);
-
 		var validate_greater_time = __this.check_for_greatertime(
 			date,
 			start_time,
 			end_time
 		);
 
-		if (date == "" || date == " " || start_time == "" || start_time == " ") {
+		if (endtimeValidation) {
+			if (
+				date == "" ||
+				date == " " ||
+				start_time == "" ||
+				start_time == " " ||
+				end_time == "" ||
+				end_time == " "
+			) {
+				document.getElementById("datetime-error").innerHTML =
+					"Please enter valid details...";
+				return false;
+			}
+		}
+
+		if (
+			date == "" ||
+			date == " " ||
+			start_time == "" ||
+			start_time == " "
+		) {
 			document.getElementById("datetime-error").innerHTML =
 				"Please enter valid details...";
 			return false;
-		} else if (validate_greater_time) {
-			document.getElementById("datetime-error").innerHTML =
-				"date/time of start/end connot be greater than currnet date/time";
-			return false;
-		} else if (__this.check_date(date)) {
+		} else if (__this.check_date(date) || validate_greater_time) {
 			document.getElementById("datetime-error").innerHTML =
 				"date/time of start/end connot be greater than currnet date/time";
 			return false;
@@ -218,42 +178,6 @@ var addTime = {
 			document.getElementById("datetime-error").innerHTML = " ";
 			return true;
 		}
-	},
-	attachEvents: function() {
-		var _this = this;
-		this.addBtn.on("click", function(e) {
-			e.preventDefault();
-			if (_this.validate_info()) {
-				// validate the timing details
-				_this.id++;
-				var date = document.getElementById("date-picker-start-0").value;
-				var start_time = document.getElementById("start-time-0").value;
-				var end_time = document.getElementById("end-time-0").value;
-				var descri;
-				if (
-					document.getElementById("description-0").value == "" ||
-					document.getElementById("description-0").value == " "
-				) {
-					descri = "description";
-				} else {
-					descri = document.getElementById("description-0").value;
-				}
-				_this.layout(date, start_time, end_time, descri); //display multiple timings
-
-				var current_time =
-					new Date().getHours().toString() + ":" + new Date().getMinutes();
-				document.getElementById("start-time-0").value = current_time;
-				$(".datepicker-0").datepicker("setDate", new Date());
-				document.getElementById("end-time-0").value = "";
-				document.getElementById("description-0").value = "";
-			}
-		});
-	},
-	init: function(eleID) {
-		//initial settings
-		this.ele = $(eleID);
-		this.addBtn = this.ele.find("#add-new-time");
-		this.attachEvents();
 	},
 	check_for_timeintervals: function(__start_seconds, __end_seconds, date) {
 		// check current task is already entered.
@@ -290,7 +214,6 @@ var addTime = {
 		}
 		return true;
 	},
-
 	check_for_greatertime: function(date, start_time, end_time) {
 		// to check whether entered timings is greater than current time or not.
 		var __this = this;
@@ -327,6 +250,56 @@ var addTime = {
 		}
 		return false;
 	},
+	attachEvents: function() {
+		var _this = this;
+		this.addBtn.on("click", function(e) {
+			e.preventDefault();
+			if (_this.validate(true)) {
+				// validate the timing details
+				_this.id++;
+				var date = document.getElementById("date-picker-0").value;
+				var start_time = document.getElementById("start-time-0").value;
+				var end_time = document.getElementById("end-time-0").value;
+				var descri;
+				if (
+					document.getElementById("description-0").value == "" ||
+					document.getElementById("description-0").value == " "
+				) {
+					descri = "description";
+				} else {
+					descri = document.getElementById("description-0").value;
+				}
+				_this.layout(date, start_time, end_time, descri); //display multiple timings
+
+				var current_time =
+					new Date().getHours().toString() + ":" + new Date().getMinutes();
+				document.getElementById("start-time-0").value = current_time;
+				$(".datepicker-0").datepicker("setDate", new Date());
+				document.getElementById("end-time-0").value = "";
+				document.getElementById("description-0").value = "";
+			}
+		});
+
+		//first time while rendered on UI
+		_this.ele.find("a.delete-task").click(function() {
+			var table_id = $(this)
+				.find("input:hidden")
+				.val();
+			var _that = $(this);
+			$.ajax({
+				type: "POST",
+				url: timeTrackerBaseURL + "user/delete_task_data",
+				data: { type: "delete", id: table_id },
+				dataType: "json",
+				success: function(res) {
+					//remove the row
+					if (res.status) {
+						_that.closest(".time-section").remove();
+					}
+				}
+			});
+		});
+	},
 	check_date: function(date) {
 		// check entered date with current date.
 		var cur_date = new Date();
@@ -349,113 +322,24 @@ var addTime = {
 			}
 		}
 		return false;
+	},
+	init: function(eleID) {
+		//initial settings
+		this.ele = $(eleID);
+		this.addBtn = this.ele.find("#add-new-time");
+		this.attachEvents();
 	}
 };
 
 $(document).ready(function() {
-	$("#add-time").click(function() {
-		//$('#task-add-time').show();
-		var section = $('<div class="time-sections pt-3 pb-5" />');
-		var row = $('<div class="row" />');
-		var id = this.id;
-		var array_of_timings = this.array_of_timings;
-
-		var colDate = $(
-			'<div class="col-4 col-md-6">' +
-				'<div class="input-group mb-3">' +
-				'<input type="text" class="form-control datepicker-0" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0" value=' +
-				"date" +
-				" >" +
-				'<div class="input-group-append">' +
-				'<span class="input-group-text" id="basic-addon-' +
-				id +
-				'">' +
-				'<span class="fa fa-calendar datepicker"></span>' +
-				"</span>" +
-				"</div>" +
-				"</div>" +
-				"</div>"
-		);
-		colDate.appendTo(row);
-
-		var colStartTime = $(
-			'<div class="col-4 col-md-3">' +
-				'<div class="input-group">' +
-				'<input id="start-time-0" class="form-control timepicker-a" data-date-format="hh:mm:ss" name="time[0][start]"  placeholder="hh:mm" />' +
-				"</div>" +
-				"</div>"
-		);
-		colStartTime.appendTo(row);
-
-		var colEndTime = $(
-			'<div class="col-4 col-md-3">' +
-				'<div class="input-group">' +
-				'<input id="end-time-0"  class="form-control timepicker1" data-date-format="hh:mm:ss" name="time[0][end]"  placeholder="hh:mm" />' +
-				"</div>" +
-				"</div>"
-		);
-		colEndTime.appendTo(row);
-
-		var colDescri = $(
-			'<div class="col-11">' +
-				'<div class="input-group">' +
-				'<input id="description-0"  class="form-control"  name="time[0][task_description]" placeholder="description" />' +
-				"</div>" +
-				"</div>"
-		);
-		colDescri.appendTo(row);
-
-		var removeBtn = $(
-			'<div class="col-1 text-center">' +
-				'<a href="javascript:void(0);" title="Remove" id="add-new-time">' +
-				'<i class="fas fa-minus icon-plus text-danger"></i>' +
-				"</a>" +
-				"</div><hr>"
-		);
-
-		removeBtn.on("click", function() {
-			//remove the row
-			$(this)
-				.closest(".time-sections")
-				.remove();
-		});
-
-		removeBtn.appendTo(row);
-
-		section.append(row);
-		$("#add-here").append(section);
-
-		section.find(".timepicker-a").timepicker({
-			uiLibrary: "bootstrap4"
-		});
-		section.find(".timepicker1").timepicker({
-			uiLibrary: "bootstrap4"
-		});
-		section.find(".datepicker").datepicker({
-			//startDate: new Date(),
-			weekStart: 1,
-			daysOfWeekHighlighted: "6,0",
-			autoclose: true,
-			todayHighlight: true
-		});
-		$(".datepicker-0").datepicker("setDate", new Date());
-		$(".timepicker-a").timepicker({
-			uiLibrary: "bootstrap4"
-		});
-		var current_time =
-			new Date().getHours().toString() + ":" + new Date().getMinutes();
-		document.getElementById("start-time-0").value = current_time;
-		$("#show-plus").show();
-	});
-
-	var editTask = document.getElementById("editTask");
-	if (editTask) {
-		editTask.onsubmit = function() {
-			if (document.getElementById("total-row")) {
-				addTime.init("#total-row");
-			}
-		};
-	}
+	// var editTask = document.getElementById("editTask");
+	// if (editTask) {
+	// 	editTask.onsubmit = function() {
+	// 		if (document.getElementById("total-row")) {
+	// 			addTime.init("#total-row");
+	// 		}
+	// 	};
+	// }
 
 	var addTask = document.getElementById("addTask");
 	if (addTask) {
@@ -484,7 +368,7 @@ $(document).ready(function() {
 				var start_time = document.getElementById("0").value;
 				var end_time = document.getElementById("end-time-0").value;
 				var flag = false;
-				flag = addTime.validate();
+				flag = addTime.validate(false);
 				if (flag == false) {
 					return false;
 				} else {
@@ -554,21 +438,4 @@ $(document).ready(function() {
 			});
 		}
 	}
-
-	$(".delete-task").click(function() {
-		var delete_element = this.parentNode;
-		var table_id = this.childNodes[1].value;
-		$.ajax({
-			type: "POST",
-			url: timeTrackerBaseURL + "user/edit_task",
-			data: { type: "delete", id: table_id },
-			success: function(res) {
-				delete_element.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.remove();
-				delete_element.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.remove();
-				delete_element.parentNode.previousElementSibling.previousElementSibling.remove();
-				delete_element.parentNode.previousElementSibling.remove();
-				delete_element.parentNode.remove();
-			}
-		});
-	});
 });

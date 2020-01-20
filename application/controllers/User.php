@@ -319,7 +319,7 @@ class User extends CI_Controller
             $this->load->view('user/add_task', $data);
             $this->load->view('user/footer');
         } else { //if inputs are valid, update and/or insert task information into db
-            $data['action'] = 'edit';
+            $data['action'] = 'edit';            
             $data['userid'] = $this->session->userdata('userid');
             $data['project_module'] = $this->input->post('project_module');
             $data['project_id'] = $this->input->post('project');

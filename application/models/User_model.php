@@ -630,9 +630,9 @@ class User_model extends CI_Model {
      * returns status if delete option is selected
      */
     public function add_tasks($data) {
-        $userid = $data['userid'];
-        
-        if ($data['action'] == 'edit') {
+        $userid = $data['userid'];        
+        if (isset($data['task_id'])) {
+
             if (($data['project_module'] == 'Select module') || ($data['project_module'] == '')) {
                 $module_id = 1;
             } else {
@@ -676,8 +676,8 @@ class User_model extends CI_Model {
                             $minutes = $diff / 60;
                             $total_mins = ($minutes < 1) ? ceil(abs($minutes)) : abs($minutes);
                         }
-                        if (isset($data['table_id'])) {
-                            $table_id = $data['table_id'];
+                        if (isset($time['table_id'])) {
+                            $table_id = $time['table_id'];
                             $array = array('start_time' => $start, 'end_time' => $end, 'task_description' => $description, 'user_id' => $userid, 'task_id' => $data['task_id'], 'total_hours' => $hours, 'total_minutes' => $total_mins, 'task_date' => $time['date'], 'modified_on' => date('Y:m:d H:i:s'));
                             $this->db->where(array('user_id' => $userid, 'task_id' => $data['task_id'], 'id' => $table_id));
                             $query = $this->db->update('time_details', $array);

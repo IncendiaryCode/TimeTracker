@@ -12,26 +12,26 @@ if ($this->input->get()) { ?>
 <main class="container-fluid-main">
     <div class="main-container container">
         <div class="main-container-inner">
-            <div class="row ">
-                <div class="col-sm-8 offset-sm-2">
+            <div class="row">
+                <div class="col-sm-10 offset-sm-1 mt-5">
                     <?php
-                    $this->load->library('form_validation');
                     if (validation_errors()) { ?>
                         <div class="alert alert-danger">
                             <?php echo validation_errors();
                             echo (!empty($this->session->flashdata('failure'))) ? $this->session->flashdata('failure') : '';
                             ?>
                         </div>
-                    <?php } ?>
-                    <div class="alert-success">
-                        <?php echo (!empty($this->session->flashdata('success'))) ? $this->session->flashdata('success') : ''; ?>
-                        <p id="alartmsg" class="text-center"></p>
+                    <?php }?>
+                    <?php if(!empty($this->session->flashdata('success'))) { ?>
+                    <div class="alert alert-success mb-5">
+                        <?php echo (!empty($this->session->flashdata('success'))) ? $this->session->flashdata('success') : ''; ?>                        
                     </div>
+                    <?php } ?>
                     <?php if ($GLOBALS['page_title'] == 'Edit task') { ?>
-                        <form action="<?= base_url(); ?>index.php/user/edit_task?id=edit" method="post" id="editTask" class="mt-5 add-task">
+                        <form action="<?= base_url(); ?>index.php/user/edit_task?id=edit" method="post" id="editTask" class="add-task">
                             <input type="hidden" name="task_id" id="curr-taskid" value="<?= $task_data[0][0]['task_id']; ?>">
                         <?php } else { ?>
-                            <form action="<?= base_url(); ?>user/add_tasks" method="post" id="addTask" class="mt-5 add-task">
+                            <form action="<?= base_url(); ?>user/add_tasks" method="post" id="addTask" class="add-task">
                             <?php } ?>
                             <div class="form-group">
                                 <label for="task-name ">Write the task name</label>
@@ -74,10 +74,8 @@ if ($this->input->get()) { ?>
                                     <option>Select module</option>
 
                                 </select>
-                            </div>
-                            <strong>
-                                <p class="display-5 pt-4">Timeline</p>
-                            </strong>
+                            </div>                            
+                            <p class="display-5 pt-4"><strong>Timeline</strong></p>                            
                             <div id="task-times">
                                 <div id="show_list">
                                     <div class="row">
@@ -96,41 +94,43 @@ if ($this->input->get()) { ?>
 
                                     <!-- Add time: EDIT case  -->
                                     <div id="task-add-time">
-                                        <div class="primary-wrap-">
+                                        <div class="primary-wrap">
                                             <input type="hidden" id="task-len" value="<?= sizeof($task_data[0]) ?>">
                                             <?php $tnum = 0;
                                             foreach ($task_data[0] as $key => $task) {
                                             ?>
-                                                <div class="row">
-                                                    <div class="col-4 col-md-6">
-                                                        <div class="input-group mb-3">
-                                                            <input type="text" class="form-control datepicker" id="date<?= $key ?>" name="time[<?= $key ?>][date]" data-date-format="yyyy-mm-dd" value="<?= $task['task_date']; ?>">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text datepicker ">
-                                                                    <button type="button" class="btn fa fa-calendar"></button>
-                                                                </span>
+                                                <div class="time-section pt-3 pb-4">
+                                                    <div class="row">
+                                                        <div class="col-4 col-md-6">
+                                                            <div class="input-group mb-3">
+                                                                <input type="text" class="form-control datepicker" id="date-picker-<?= $key ?>" name="time[<?= $key ?>][date]" data-date-format="yyyy-mm-dd" value="<?= $task['task_date']; ?>">
+                                                                <div class="input-group-append">
+                                                                    <span class="input-group-text datepicker ">
+                                                                        <button type="button" class="btn fa fa-calendar"></button>
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-4 col-md-3 mb-3">
-                                                        <div class="input-group date">
-                                                            <input type="text" class="timepicker-<?= $tnum ?> form-control" id="start-time-<?= $key ?>" name="time[<?= $key ?>][start]" value="<?= $task['start_time']; ?>" placeholder="hh:mm">
+                                                        <div class="col-4 col-md-3 mb-3">
+                                                            <div class="input-group date">
+                                                                <input type="text" class="timepicker-<?= $tnum ?> form-control" id="start-time-<?= $key ?>" name="time[<?= $key ?>][start]" value="<?= $task['start_time']; ?>" placeholder="hh:mm">
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-4 col-md-3 mb-3">
-                                                        <div class="input-group date">
-                                                            <input type="text" class="form-control timepicker-<?= $tnum + 1 ?>" id="end-time-<?= $key ?>" name="time[<?= $key ?>][end]" value="<?= $task['end_time']; ?>" placeholder="hh:mm">
+                                                        <div class="col-4 col-md-3 mb-3">
+                                                            <div class="input-group date">
+                                                                <input type="text" class="form-control timepicker-<?= $tnum + 1 ?>" id="end-time-<?= $key ?>" name="time[<?= $key ?>][end]" value="<?= $task['end_time']; ?>" placeholder="hh:mm">
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-10 text-center mb-3">
-                                                        <input type="text" class="form-control" name="time[<?= $key ?>][task_description]" value="<?= $task['task_description']; ?>" placeholder="Description">
-                                                    </div>
-                                                    <div class="col-2 text-right mb-3">
-                                                        <a href="javascript:void(0);" id="delete-task-<?= $key ?>">
-                                                            <i class="fas fa-trash text-danger delete-task pt-2 icon-plus" name="time[<?= $key ?>][deleted_time_range]">
-                                                                <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= $key ?>][table_id]" id="table_id<?= $key ?>">
-                                                            </i>
-                                                        </a>
+                                                        <div class="col-10 text-center mb-3">
+                                                            <input type="text" class="form-control" id="description-<?= $key ?>" name="time[<?= $key ?>][task_description]" value="<?= $task['task_description']; ?>" placeholder="Description">
+                                                        </div>
+                                                        <div class="col-2 text-right mb-3">
+                                                            <a href="javascript:void(0);" id="delete-task-<?= $key ?>" class="delete-task">
+                                                                <i class="fas fa-trash text-danger pt-2 icon-plus" name="time[<?= $key ?>][deleted_time_range]">
+                                                                    <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= $key ?>][table_id]" id="table_id<?= $key ?>">
+                                                                </i>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <?php if ($key == sizeof($task_data[0]) - 1) { ?>
