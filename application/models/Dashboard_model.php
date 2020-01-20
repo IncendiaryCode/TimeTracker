@@ -1419,7 +1419,7 @@ class Dashboard_model extends CI_Model
         ));
         if ($query->num_rows() == 1) {
             $row    = $query->row();
-
+            /*
             //check for entry with the same login date
             $this->db->where(array('task_date' => date('Y:m:d'),'user_id' => $row->id));
             $query_check = $this->db->get('login_details');
@@ -1453,7 +1453,16 @@ class Dashboard_model extends CI_Model
                     'username' => $row->name
                 );
                 $this->session->set_userdata($data);
-            }
+            }*/
+            $data = array(
+                'userid' => $row->id,
+                'email' => $row->email,
+                'logged_in' => TRUE,
+                'user_profile' => $row->profile,
+                'username' => $row->name
+            );
+            $this->session->set_userdata($data);
+
             return $row->type;
         } else {
             $this->form_validation->set_message('Wrong inputs.');

@@ -67,14 +67,10 @@
 <div class="modal" id="pause-action" data-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content text-center">
-            <div class="modal-header ">Leave for the day!!!
-                <button type="button" class="close text-danger" data-dismiss="modal">×</button>
-            </div>
                 <form method="post" id="punch-out-action">
-                    <div class="modal-body text-left">
-                        <p class="mt-4 mb-1"><u>Note:</u></p>
-                        <ul class="text-muted"><li>Do you want to leave for the day?</li>
-                            <li>You can not start task for the day once you punchn out.</li>
+                    <div class="modal-body text-left">                        
+                        <ul class="text-muted"><li>Hope all your task are done for today...!</li>
+                            <li>Do you want to punch out?</li>
                         </ul>
                     </div>
                     <div class="modal-footer text-center">

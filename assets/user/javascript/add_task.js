@@ -470,8 +470,8 @@ if (addTask) {
         var table_id = this.childNodes[1].value;
         $.ajax({
             type: 'POST',
-            url: timeTrackerBaseURL + 'user/edit_task',
-            data: { 'type': "delete", "id" : table_id },
+            url: timeTrackerBaseURL + 'user/delete_task_data',
+            data: {"id" : table_id },
             success: function (res) {
                 delete_element.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.remove();
                 delete_element.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.remove();

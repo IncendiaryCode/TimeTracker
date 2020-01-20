@@ -45,9 +45,9 @@ class Login extends CI_Controller
             $result = $this->dashboard_model->login_process();
             if ($result == 'admin') { //if the user type is 'admin', goto admin home page
                 redirect('/admin','refresh');
-                $this->session->set_userdata('logged_in', TRUE);
+                //$this->session->set_userdata('logged_in', TRUE);
             } else if ($result == 'user') { //if the user type is 'user', goto user homepage
-                $this->session->set_userdata('logged_in', TRUE);
+                //$this->session->set_userdata('logged_in', TRUE);
                 redirect('/user', 'refresh');
             } else {
                 $this->session->set_flashdata('err_message', 'Wrong Email/Password');
