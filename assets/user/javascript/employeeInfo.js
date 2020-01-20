@@ -544,7 +544,7 @@ $(document).ready(function () {
 
 	timerSlider.init();
 
-	if (timerSlider.slider.getSlideCount() == 1) {
+	if (typeof timerSlider.slider.getSlideCount !== 'undefined' && timerSlider.slider.getSlideCount() == 1) {
 		$('.bx-pager-item').css('display', "none");
 	}
 	$('.timerpicker-c').timepicker({
