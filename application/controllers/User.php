@@ -139,6 +139,7 @@ class User extends CI_Controller
             $output_result['status'] = FALSE;
             $output_result['msg']    = "task-id not sent.";
         }else{
+            $data['task_type'] = 'task';
             $result['details'] = $this->user_model->start_timer($data); //start the timer for the requested task id 
             if ($result['details'] == FALSE) {
                 $output_result['status'] = FALSE;
