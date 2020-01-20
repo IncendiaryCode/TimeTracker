@@ -604,5 +604,4 @@ $(document).ready(function () {
 	        } else return true;
 	    };
 	}
-
 });

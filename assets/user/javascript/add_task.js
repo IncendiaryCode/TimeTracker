@@ -10,7 +10,7 @@ var addTime = {
         var id = this.id;
         var array_of_timings = this.array_of_timings;
 
-        var colDate = $('<div class="col-4">' +
+        var colDate = $('<div class="col-4 col-md-6">' +
             '<div class="input-group mb-3">' +
             '<input type="text" class="form-control" name="time[' + id + '][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-' + id + '" value=' + date + ' >' +
             '<div class="input-group-append">' +
@@ -22,14 +22,14 @@ var addTime = {
             '</div>');
         colDate.appendTo(row);
 
-        var colStartTime = $('<div class="col-4">' +
+        var colStartTime = $('<div class="col-4 col-md-3">' +
             '<div class="input-group">' +
             '<input id="start-time-' + id + '" class="form-control timepicker" data-date-format="hh:mm:ss" name="time[' + id + '][start]" value=' + start_time + ' placeholder="hh:mm" />' +
             '</div>' +
             '</div>');
         colStartTime.appendTo(row);
 
-        var colEndTime = $('<div class="col-4">' +
+        var colEndTime = $('<div class="col-4 col-md-3">' +
             '<div class="input-group">' +
             '<input id="end-time-' + id + '"  class="form-control timepicker1" data-date-format="hh:mm:ss" name="time[' + id + '][end]" value=' + end_time + ' placeholder="hh:mm" />' +
             '</div>' +
@@ -38,7 +38,7 @@ var addTime = {
 
         var colDescri = $('<div class="col-11">' +
             '<div class="input-group">' +
-            '<input id="description-' + id + '"  class="form-control"  name="time[' + id + '][description]" value=' + descri + ' placeholder="description" />' +
+            '<input id="description-' + id + '"  class="form-control"  name="time[' + id + '][task_description]" value=' + descri + ' placeholder="description" />' +
             '</div>' +
             '</div>');
         colDescri.appendTo(row);
@@ -287,6 +287,13 @@ var addTask = document.getElementById('addTask');
 if (addTask) {
     var m = new Date();
     addTask.onsubmit = function (e) {
+
+        if(document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play')
+            {
+                $('#play-timer').modal("show");
+            }
+        else
+        {
         var taskName = document.getElementById('Taskname').value;
         var project = document.getElementById('choose-project').value;
         if (taskName == "" || taskName == " ") {
@@ -302,7 +309,6 @@ if (addTask) {
             var start_time = document.getElementById('0').value;
             var end_time = document.getElementById('end-time-0').value;
             var flag = false;
-
                 flag = addTime.validate();
                 if (flag == false) {
                     return false;
@@ -310,6 +316,7 @@ if (addTask) {
                     array_of_timings.push({ date, start_time, end_time });
                 }
             }
+        }
         }
 
     if(document.getElementById('task-add-time'))
@@ -369,9 +376,13 @@ if (addTask) {
     }
 
     if(edit)  {
-        console.log("here");
         document.getElementById('date-picker-start-0').value = ' ';
         document.getElementById('start-time-0').value = ' ';
         $('#task-add-time').hide();
         }
+
+    $('#delete-task').click(function()
+    {
+        console.log(this.parentNode.parentNode.parentNode);
+    })
 });

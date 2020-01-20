@@ -411,7 +411,7 @@ function printChart(start, width, top, task_name, id) {
             color = parseInt(color) + 123456;
         }
     }
-    var row = $("<span class='positon-chart print-chart-row" + id + "'  data-toggle='tooltip' data-placement='top' title=" + task_name + " id='new-daily-chart" + graph_id + "'>.<input type = 'hidden' value = " + graph_id + "></span>");
+    var row = $("<span class='positon-chart animated zoomIn print-chart-row " + id + "'  data-toggle='tooltip' data-placement='top' title=" + task_name + " id='new-daily-chart" + graph_id + "'>.<input type = 'hidden' value = " + graph_id + "></span>");
     $(row).css("margin-left", start);
     $(row).css("position", "absolute");
     $(row).css("top", top);

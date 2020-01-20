@@ -21,8 +21,8 @@
                 <ul class="text-center">
                     <!-- profile options -->
                     <li id="empplyee-profile"><a href="<?=base_url();?>index.php/user/load_my_profile">My profile</a></li>
-                    <li><a href="<?=base_url();?>index.php/user/load_employee_activities">My activities</a></li>
-                    <li><a href="<?=base_url();?>index.php/login/logout" data-toggle="modal" data-target="#logout-modal">Logout</a></li>
+                    <li><a href="<?=base_url();?>user/load_employee_activities">My activities</a></li>
+                    <li><a href="<?=base_url();?>login/logout" >Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -45,7 +45,7 @@
     </div>
 </div>
 
-<div class="modal" id="logout-modal" data-backdrop="false">
+<!-- <div class="modal" id="logout-modal" data-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content text-center">
             <div class="modal-header ">Leave for the day!!!
@@ -54,16 +54,15 @@
                     <div class="modal-body text-left">
                         <p class="mt-4 mb-1"><u>Note:</u></p>
                         <ul class="text-muted"><li>Do you want to leave for the day?</li>
-                            <li>You can not login for the day once you logout.</li>
+                            <li>You can not start task for the day once you punchn out.</li>
                         </ul>
                     </div>
                     <div class="modal-footer text-center">
-                        <!-- <button type="submit" class="btn btn-secondary" onclick="window.location.href='<?=base_url();?>index.php/login/logout'"data-dismiss="modal">No</button> -->
-                        <button type="button" class="btn btn-primary" onclick="window.location.href='<?=base_url();?>login/logout'">Yes</button>
+                        <button type="button" class="btn btn-primary" >Yes</button>
                     </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 <div class="modal" id="pause-action" data-backdrop="false">
     <div class="modal-dialog">
@@ -75,12 +74,12 @@
                     <div class="modal-body text-left">
                         <p class="mt-4 mb-1"><u>Note:</u></p>
                         <ul class="text-muted"><li>Do you want to leave for the day?</li>
-                            <li>You can not login for the day once you logout.</li>
+                            <li>You can not start task for the day once you punchn out.</li>
                         </ul>
                     </div>
                     <div class="modal-footer text-center">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                        <button type="submit" class="btn btn-primary">Yes</button>
+                        <button type="submit" class="btn btn-primary" id="punch-out" onclick="window.location.href='<?=base_url();?>user/update_end_time'">Yes</button>
                     </div>
                 </form>
             </div>

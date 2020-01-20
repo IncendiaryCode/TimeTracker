@@ -20,7 +20,6 @@ if($flag)
     $timerClass = 'fa-stop';
 }
 ?>
-
 <script type="text/javascript">
 //this will be send to JS for timer to start
 var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the task.*/

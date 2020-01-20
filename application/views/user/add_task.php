@@ -79,13 +79,13 @@ if($this->input->get()){ ?>
                         <div id="task-times">
                             <div id="show_list">
                                 <div class="row">
-                                    <div class="col-4">
+                                    <div class="col-4 col-md-6">
                                         <p>Date</p>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-4 col-md-3">
                                         <p>Start time</p>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-4 col-md-3">
                                         <p>End time</p>
                                     </div>
                                 </div>
@@ -93,11 +93,11 @@ if($this->input->get()){ ?>
                         <?php if($this->input->get()){ ?>
 
                             <div class="row" id="total-row">
-                                <input type="hidden" id="task-len" value="<?=sizeof($task_data[0])?>">
-                                <?php $num = 0;
-                              foreach($task_data[0] as $task){
+                            <input type="hidden" id="task-len" value="<?=sizeof($task_data[0])?>">
+                            <?php $num = 0;
+                            foreach($task_data[0] as $task){
                                 ?>
-                                <div class="col-4">
+                                <p class="new-task-entry"><div class="col-4 col-md-6">
                                     <div class="input-group mt-3">
                                         <input type="text" class="form-control datepicker" id="date<?=$num?>" name="time[<?=$num?>][date]" data-date-format="yyyy-mm-dd" value="<?=$task['task_date'];?>">
                                         <div class="input-group-append">
@@ -107,16 +107,21 @@ if($this->input->get()){ ?>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-4 mt-3 edit-timings">
+                                <div class="col-4 col-md-3 mt-3 edit-timings">
                                     <input class="timepicker<?=$num?> form-control " type="text" id="start<?=$num?>" name="time[<?=$num?>][start]" value="<?=$task['start_time'];?>">
                                 </div>
-                                <div class="col-4 mt-3">
+                                <div class="col-4 col-md-3 mt-3">
                                     <input class="form-control timepicker<?=$num+1?>" type="text" id="end<?=$num?>" name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>">
                                 </div>
-                                <div class="col-12 mt-3 mb-5">
-                                    <input type="text" class="form-control" name="time[<?=$num?>][task_description]" value="<?=$task['task_description'];?>">
+                                <div class="col-10 mt-3 mb-5">
+                                    <input type="text" class="form-control" name="time[0][task_description]" value="<?=$task['task_description'];?>">
                                 </div>
                                 <input type="hidden" value="<?=$task['table_id'];?>" name="time[<?=$num?>][table_id]" id="table_id<?=$num?>">
+                                <div class="col-2 mt-3 mb-5">
+                                    <a href="javascript:void(0);">
+                                        <i class="fas fa-minus text-danger pt-2 icon-plus" name="time[<?=$num?>][deleted_time_range]" id="delete-task"></i>
+                                    </a>
+                                </div>
                                 <?php $num=$num+2;
                                 } ?>
                                 <div class="col-12 text-left mb-4">
@@ -126,15 +131,16 @@ if($this->input->get()){ ?>
                                         </a>Add time
                                     </div>
                                 </div>
+                            </p>
                             </div>
 
-                        <?php } ?>
+                            <?php } ?>
                             <!-- Add time  -->
 
                             <div id="task-add-time">
                                 <div class="primary-wrap">
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-4 col-md-6">
                                             <div class="input-group mb-3">
                                                 <input type="text" class="form-control datepicker-0" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0">
                                                 <div class="input-group-append">
@@ -144,18 +150,18 @@ if($this->input->get()){ ?>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-4 col-md-3">
                                             <div class="input-group date">
                                                 <input id="start-time-0" class="form-control timepicker-a" name="time[0][start]" placeholder="hh:mm" />
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-4 col-md-3">
                                             <div class="input-group date">
                                                 <input id="end-time-0" class="form-control timepicker-b" name="time[0][end]"  placeholder="hh:mm" />
                                             </div>
                                         </div>
                                         <div class="col-10 text-center">
-                                            <input id="description-0" class="form-control" name="time[0][description]" placeholder="description" />
+                                            <input id="description-0" class="form-control" name="time[0][task_description]" placeholder="description" />
                                         </div>
 
                                         <div class="col-2 text-center">
