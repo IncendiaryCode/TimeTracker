@@ -116,10 +116,10 @@ if($this->input->get()){ ?>
                                 <div class="col-10 mt-3 mb-5">
                                     <input type="text" class="form-control" name="time[0][task_description]" value="<?=$task['task_description'];?>">
                                 </div>
-                                <input type="hidden" value="<?=$task['table_id'];?>" name="time[<?=$num?>][table_id]" id="table_id<?=$num?>">
                                 <div class="col-2 mt-3 mb-5">
-                                    <a href="javascript:void(0);">
-                                        <i class="fas fa-trash text-danger pt-2 icon-plus" name="time[<?=$num?>][deleted_time_range]" id="delete-task"></i>
+                                    <a href="javascript:void(0);" id="delete-task">
+                                    
+                                        <i class="fas fa-trash text-danger pt-2 icon-plus" name="time[<?=$num?>][deleted_time_range]" ><input type="hidden" value="<?=$task['table_id'];?>" name="time[<?=$num?>][table_id]" id="table_id<?=$num?>"></i>
                                     </a>
                                 </div>
                                 <?php $num=$num+2;

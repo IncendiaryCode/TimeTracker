@@ -453,7 +453,7 @@ $(document).ready(function () {
 				document.getElementsByClassName("bx-pager-item")[1].remove();
 				timerSlider.reload();
 				if (task_id) {
-					taskUrl = timeTrackerBaseURL + "index.php/user/stop_timer";
+					taskUrl = timeTrackerBaseURL + "user/stop_timer";
 				}
 				$.ajax({
 					type: "POST",
@@ -603,5 +603,23 @@ $(document).ready(function () {
 	            return false;
 	        } else return true;
 	    };
+	}
+
+	var punchOutAction = document.getElementById('punch-out-action');
+	if(punchOutAction)
+	{
+
+		punchOutAction.onsubmit = function(e)
+		{
+			$.ajax({
+				type: "POST",
+				url: timeTrackerBaseURL + "user/update_end_time",
+				success: function (res) {
+				document.getElementById('stop-time').childNodes[1].childNodes[0].classList.remove('fa-stop');
+				document.getElementById('stop-time').childNodes[1].childNodes[0].classList.add('fa-play');
+					}
+				});
+			return true;
+		}
 	}
 });

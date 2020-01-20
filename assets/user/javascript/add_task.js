@@ -450,12 +450,13 @@ if (addTask) {
             $('#task-add-time').hide();
         }
 
-    $('#delete-task').click(function()
+    $('#delete-task').unbind().click(function()
     {
+        var table_id = this.childNodes[1].childNodes[0].attributes[1]['value'];
         $.ajax({
             type: 'POST',
-            url: timeTrackerBaseURL + 'index.php/user/get_project_module',
-            data: { 'id': document.getElementById('curr-taskid').value },
+            url: timeTrackerBaseURL + 'user/edit_task',
+            data: { 'type': "delete", "id" : table_id },
             success: function (res) {
                 this.parentNode.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.remove();
                 this.parentNode.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.remove();

@@ -70,7 +70,7 @@
             <div class="modal-header ">Leave for the day!!!
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
-                <form method="post" action="window.location.href='<?=base_url();?>user/update_end_time'">
+                <form method="post" id="punch-out-action">
                     <div class="modal-body text-left">
                         <p class="mt-4 mb-1"><u>Note:</u></p>
                         <ul class="text-muted"><li>Do you want to leave for the day?</li>
@@ -99,7 +99,7 @@
                 <div class="modal-body">
                     <div class="input-group">
                         <p>Task name: <strong>
-                                <?php echo $task_info['task_status'][0]['task_name'] ?></strong></p>
+                            <?php echo $task_info['task_status'][0]['task_name'] ?></strong></p>
                     </div>
                     <div class="input-group">
                         <p>Started at: <strong id="old-start-date">
