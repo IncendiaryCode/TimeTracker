@@ -506,7 +506,7 @@ $(document).ready(function () {
 			}
 		});
 	var curr_timeStamp = Math.floor(Date.now() / 1000);
-	if (__timeTrackerLoginTime && (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-stop')) {
+	if (typeof __timeTrackerLoginTime !== 'undefined' && (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-stop')) {
 		login_timer = parseInt(curr_timeStamp) - parseInt(__timeTrackerLoginTime);
 		if (typeof login_timer != "undefined") {
 			if (login_timer == parseInt(login_timer)) {
