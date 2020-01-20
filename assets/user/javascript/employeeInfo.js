@@ -608,7 +608,6 @@ $(document).ready(function () {
 	var punchOutAction = document.getElementById('punch-out-action');
 	if(punchOutAction)
 	{
-
 		punchOutAction.onsubmit = function(e)
 		{
 			$.ajax({
@@ -617,6 +616,7 @@ $(document).ready(function () {
 				success: function (res) {
 				document.getElementById('stop-time').childNodes[1].childNodes[0].classList.remove('fa-stop');
 				document.getElementById('stop-time').childNodes[1].childNodes[0].classList.add('fa-play');
+				document.getElementById("stop-time").removeEventListener('click');
 					}
 				});
 			return true;

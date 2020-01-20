@@ -354,6 +354,20 @@ $('.datepicker-0').datepicker("setDate", new Date());
     document.getElementById('start-time-0').value = current_time;
     $('#show-plus').show();
 });
+
+
+var editTask = document.getElementById('editTask');
+if(editTask)
+{
+editTask.onsubmit = function()
+{
+    if(document.getElementById('total-row'))
+    {
+    addTime.init("#total-row");
+    }
+}
+}
+
 var addTask = document.getElementById('addTask');
 if (addTask) {
     var m = new Date();
@@ -450,20 +464,20 @@ if (addTask) {
             $('#task-add-time').hide();
         }
 
-    $('#delete-task').unbind().click(function()
+    $('.delete-task').click(function()
     {
-        var table_id = this.childNodes[1].childNodes[0].attributes[1]['value'];
+        var delete_element = this.parentNode;
+        var table_id = this.childNodes[1].value;
         $.ajax({
             type: 'POST',
             url: timeTrackerBaseURL + 'user/edit_task',
             data: { 'type': "delete", "id" : table_id },
             success: function (res) {
-                this.parentNode.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.remove();
-                this.parentNode.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.remove();
-                this.parentNode.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.remove();
-                this.parentNode.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.remove();
-                this.parentNode.parentNode.previousElementSibling.previousElementSibling.remove();
-                this.parentNode.remove();
+                delete_element.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.remove();
+                delete_element.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.remove();
+                delete_element.parentNode.previousElementSibling.previousElementSibling.remove();
+                delete_element.parentNode.previousElementSibling.remove();
+                delete_element.parentNode.remove();
                 }
         });
     })

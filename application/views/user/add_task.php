@@ -114,12 +114,14 @@ if($this->input->get()){ ?>
                                     <input class="form-control timepicker<?=$num+1?>" type="text" id="end<?=$num?>" name="time[<?=$num?>][end]" value="<?=$task['end_time'];?>">
                                 </div>
                                 <div class="col-10 mt-3 mb-5">
-                                    <input type="text" class="form-control" name="time[0][task_description]" value="<?=$task['task_description'];?>">
+                                    <input type="text" class="form-control" name="time[<?=$num+1?>][task_description]" value="<?=$task['task_description'];?>">
                                 </div>
                                 <div class="col-2 mt-3 mb-5">
-                                    <a href="javascript:void(0);" id="delete-task">
+                                    <a href="javascript:void(0);" id="delete-task" >
                                     
-                                        <i class="fas fa-trash text-danger pt-2 icon-plus" name="time[<?=$num?>][deleted_time_range]" ><input type="hidden" value="<?=$task['table_id'];?>" name="time[<?=$num?>][table_id]" id="table_id<?=$num?>"></i>
+                                        <i class="fas fa-trash text-danger delete-task pt-2 icon-plus" name="time[<?=$num?>][deleted_time_range]" >
+                                            <input type="hidden" value="<?=$task['table_id'];?>" name="time[<?=$num?>][table_id]" id="table_id<?=$num?>">
+                                        </i>
                                     </a>
                                 </div>
                                 <?php $num=$num+2;
