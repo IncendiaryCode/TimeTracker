@@ -96,7 +96,7 @@ if ($this->input->get()) { ?>
 
                                     <!-- Add time: EDIT case  -->
                                     <div id="task-add-time">
-                                        <div class="primary-wrap">
+                                        <div class="primary-wrap-">
                                             <input type="hidden" id="task-len" value="<?= sizeof($task_data[0]) ?>">
                                             <?php $tnum = 0;
                                             foreach ($task_data[0] as $key => $task) {
@@ -143,11 +143,11 @@ if ($this->input->get()) { ?>
                                                         </div>
                                                     </div>
                                                 <?php } ?>
-                                            <?php } ?>
+                                            <?php $tnum = $tnum + 2; } ?>
                                         </div>
                                     </div>
                                     <!-- END: Add time  -->
-                                <?php $tnum = $tnum + 2;
+                                <?php
                                 } else { ?>
                                     <!-- Add time: New Case -->
                                     <div id="task-add-time">
