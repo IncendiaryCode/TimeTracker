@@ -21,11 +21,11 @@ if ($this->input->get()) { ?>
                             echo (!empty($this->session->flashdata('failure'))) ? $this->session->flashdata('failure') : '';
                             ?>
                         </div>
-                    <?php }?>
-                    <?php if(!empty($this->session->flashdata('success'))) { ?>
-                    <div class="alert alert-success mb-5">
-                        <?php echo (!empty($this->session->flashdata('success'))) ? $this->session->flashdata('success') : ''; ?>                        
-                    </div>
+                    <?php } ?>
+                    <?php if (!empty($this->session->flashdata('success'))) { ?>
+                        <div class="alert alert-success mb-5">
+                            <?php echo (!empty($this->session->flashdata('success'))) ? $this->session->flashdata('success') : ''; ?>
+                        </div>
                     <?php } ?>
                     <?php if ($GLOBALS['page_title'] == 'Edit task') { ?>
                         <form action="<?= base_url(); ?>index.php/user/edit_task?id=edit" method="post" id="editTask" class="add-task">
@@ -74,8 +74,8 @@ if ($this->input->get()) { ?>
                                     <option>Select module</option>
 
                                 </select>
-                            </div>                            
-                            <p class="display-5 pt-4"><strong>Timeline</strong></p>                            
+                            </div>
+                            <p class="display-5 pt-4"><strong>Timeline</strong></p>
                             <div id="task-times">
                                 <div id="show_list">
                                     <div class="row">
@@ -92,10 +92,10 @@ if ($this->input->get()) { ?>
                                 </div>
                                 <?php if ($this->input->get()) { ?>
 
+                                    <input type="hidden" id="task-len" value="<?= sizeof($task_data[0]) ?>">
                                     <!-- Add time: EDIT case  -->
                                     <div id="task-add-time">
                                         <div class="primary-wrap">
-                                            <input type="hidden" id="task-len" value="<?= sizeof($task_data[0]) ?>">
                                             <?php $tnum = 0;
                                             foreach ($task_data[0] as $key => $task) {
                                             ?>
@@ -105,7 +105,7 @@ if ($this->input->get()) { ?>
                                                             <div class="input-group mb-3">
                                                                 <input type="text" class="form-control datepicker" id="date-picker-<?= $key ?>" name="time[<?= $key ?>][date]" data-date-format="yyyy-mm-dd" value="<?= $task['task_date']; ?>">
                                                                 <div class="input-group-append">
-                                                                    <span class="input-group-text datepicker ">
+                                                                    <span class="input-group-text">
                                                                         <button type="button" class="btn fa fa-calendar"></button>
                                                                     </span>
                                                                 </div>
@@ -136,14 +136,15 @@ if ($this->input->get()) { ?>
                                                 <?php if ($key == sizeof($task_data[0]) - 1) { ?>
                                                     <div class="row">
                                                         <div class="col-12 text-right">
-                                                            <hr/>
+                                                            <hr />
                                                             <a href="javascript:void(0);" id="add-new-time" title="Add">
                                                                 <i class="fas fa-plus pt-2 icon-plus"></i>
                                                             </a>
                                                         </div>
                                                     </div>
                                                 <?php } ?>
-                                            <?php $tnum = $tnum + 2; } ?>
+                                            <?php $tnum = $tnum + 2;
+                                            } ?>
                                         </div>
                                     </div>
                                     <!-- END: Add time  -->
@@ -155,9 +156,9 @@ if ($this->input->get()) { ?>
                                             <div class="row">
                                                 <div class="col-4 col-md-6">
                                                     <div class="input-group mb-3">
-                                                        <input type="text" class="form-control datepicker-0" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-0">
+                                                        <input type="text" class="form-control datepicker" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-0">
                                                         <div class="input-group-append">
-                                                            <span class="input-group-text datepicker ">
+                                                            <span class="input-group-text">
                                                                 <button type="button" class="btn fa fa-calendar"></button>
                                                             </span>
                                                         </div>

@@ -12,13 +12,13 @@ var addTime = {
 		var colDate = $(
 			'<div class="col-4 col-md-6">' +
 				'<div class="input-group mb-3">' +
-				'<input type="text" class="form-control" name="time[' +
+				'<input type="text" class="form-control datepicker" name="time[' +
 				id +
-				'][date]" data-date-format="yyyy-mm-dd" id="date-picker-start-' +
+				'][date]" data-date-format="yyyy-mm-dd" id="date-picker-' +
 				id +
-				'" value=' +
+				'" value="' +
 				date +
-				" >" +
+				'" >' +
 				'<div class="input-group-append">' +
 				'<span class="input-group-text" id="basic-addon-' +
 				id +
@@ -38,9 +38,9 @@ var addTime = {
 				id +
 				'" class="form-control timepicker" data-date-format="hh:mm:ss" name="time[' +
 				id +
-				'][start]" value=' +
+				'][start]" value="' +
 				start_time +
-				' placeholder="hh:mm" />' +
+				'" placeholder="hh:mm" />' +
 				"</div>" +
 				"</div>"
 		);
@@ -53,9 +53,9 @@ var addTime = {
 				id +
 				'"  class="form-control timepicker1" data-date-format="hh:mm:ss" name="time[' +
 				id +
-				'][end]" value=' +
+				'][end]" value="' +
 				end_time +
-				' placeholder="hh:mm" />' +
+				'" placeholder="hh:mm" />' +
 				"</div>" +
 				"</div>"
 		);
@@ -68,9 +68,9 @@ var addTime = {
 				id +
 				'"  class="form-control"  name="time[' +
 				id +
-				'][task_description]" value=' +
+				'][task_description]" value="' +
 				descri +
-				' placeholder="description" />' +
+				'" placeholder="description" />' +
 				"</div>" +
 				"</div>"
 		);
@@ -153,12 +153,7 @@ var addTime = {
 			}
 		}
 
-		if (
-			date == "" ||
-			date == " " ||
-			start_time == "" ||
-			start_time == " "
-		) {
+		if (date == "" || date == " " || start_time == "" || start_time == " ") {
 			document.getElementById("datetime-error").innerHTML =
 				"Please enter valid details...";
 			return false;
@@ -257,26 +252,20 @@ var addTime = {
 			if (_this.validate(true)) {
 				// validate the timing details
 				_this.id++;
-				var date = document.getElementById("date-picker-0").value;
-				var start_time = document.getElementById("start-time-0").value;
-				var end_time = document.getElementById("end-time-0").value;
-				var descri;
-				if (
-					document.getElementById("description-0").value == "" ||
-					document.getElementById("description-0").value == " "
-				) {
-					descri = "description";
-				} else {
-					descri = document.getElementById("description-0").value;
-				}
-				_this.layout(date, start_time, end_time, descri); //display multiple timings
 
-				var current_time =
-					new Date().getHours().toString() + ":" + new Date().getMinutes();
-				document.getElementById("start-time-0").value = current_time;
-				$(".datepicker-0").datepicker("setDate", new Date());
-				document.getElementById("end-time-0").value = "";
-				document.getElementById("description-0").value = "";
+				//prepare prefill data
+				var dateObj = new Date();
+				var date =
+					dateObj.getFullYear() +
+					"-" +
+					(dateObj.getMonth() + 1) +
+					"-" +
+					dateObj.getDate();
+				var start_time =
+					dateObj.getHours().toString() + ":" + dateObj.getMinutes();
+				var end_time = " ";
+				var descri = " ";
+				_this.layout(date, start_time, end_time, descri);
 			}
 		});
 
@@ -327,6 +316,7 @@ var addTime = {
 		//initial settings
 		this.ele = $(eleID);
 		this.addBtn = this.ele.find("#add-new-time");
+		this.id = this.ele.find(".time-section").length;
 		this.attachEvents();
 	}
 };
@@ -364,7 +354,7 @@ $(document).ready(function() {
 					return false;
 				}
 				document.getElementById("taskError").innerHTML = " ";
-				var date = document.getElementById("date-picker-start-0").value;
+				var date = document.getElementById("date-picker-0").value;
 				var start_time = document.getElementById("0").value;
 				var end_time = document.getElementById("end-time-0").value;
 				var flag = false;
@@ -388,7 +378,6 @@ $(document).ready(function() {
 		autoclose: true,
 		todayHighlight: true
 	});
-	$(".datepicker-0").datepicker("setDate", new Date());
 
 	$(".timepicker-a").timepicker({
 		uiLibrary: "bootstrap4"
