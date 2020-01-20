@@ -263,9 +263,9 @@ class User extends CI_Controller
         if (isset($_GET['t_id'])) {//if task id is sent, load edit task page
             $GLOBALS['page_title'] = 'Edit task';
             $t_id = $this->input->get('t_id', TRUE);
-            $taskid['task_data'] = $this->user_model->get_task_info($t_id); //get task details for the requested task id
+            $task_data = $this->user_model->get_task_info($t_id); //get task details for the requested task id
             $this->load->view('user/header');
-            $this->load->view('user/add_task', $taskid);
+            $this->load->view('user/add_task', $task_data);
             $this->load->view('user/footer');
         } else {//if task id is not sent, load add task page
             $GLOBALS['page_title'] = 'Add task';
@@ -315,8 +315,8 @@ class User extends CI_Controller
         if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to edit task page
             $this->load->view('user/header');
             $t_id = $this->input->post('task_id', TRUE);
-            $data['task_data'] = $this->user_model->get_task_info($t_id);
-            $this->load->view('user/add_task', $data);
+            $task_data = $this->user_model->get_task_info($t_id);
+            $this->load->view('user/add_task', $task_data);
             $this->load->view('user/footer');
         } else { //if inputs are valid, update and/or insert task information into db
             $data['action'] = 'edit';            

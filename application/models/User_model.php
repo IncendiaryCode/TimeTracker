@@ -85,17 +85,18 @@ class User_model extends CI_Model {
      */
     public function get_task_details($sort_type, $date) {
         $userid = $this->session->userdata('userid');
-        $this->db->select('p.name,d.start_time,p.image_name,t.task_name,d.task_id');
+        $this->db->select('p.name,d.start_time,p.image_name,t.task_name,t.id AS task_id');
         $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task", FALSE); //get running tasks of the user
         $this->db->select('IF(t.complete_task=1,1,0) AS completed', FALSE); //get completed tasks of the user
         $this->db->from('task AS t');
         $this->db->join('time_details AS d', 'd.task_id = t.id', 'LEFT');
         $this->db->join('project AS p', 'p.id = t.project_id');
         $this->db->join('project_module AS m', 'm.id = t.module_id');
+        $this->db->join('task_assignee AS ta', 'ta.task_id = t.id');
         if ($date == '') {
             $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
-            $this->db->where('d.user_id', $userid);
-            $this->db->group_by('d.task_id');
+            $this->db->where('ta.user_id', $userid);
+            $this->db->group_by('t.id');
         } else {
             if ($sort_type == 'daily_chart') {
                 $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
@@ -138,7 +139,7 @@ class User_model extends CI_Model {
         if ($query->num_rows() > 0) {
             $dataa = $query->result_array();
             foreach ($dataa as $d) {
-                $data[] = array('image_name' => ($d['image_name'] != NULL) ? (base_url() . UPLOAD_PATH . $d['image_name']) : NULL, 'project' => $d['name'], 'task_name' => $d['task_name'], 'running_task' => $d['running_task'], 'completed' => $d['completed'], 'start_time' => $d['start_time'], 't_minutes' => $d['t_minutes'], 'id' => $d['task_id']);
+                $data[] = array('image_name' => ($d['image_name'] != NULL) ? (base_url() . UPLOAD_PATH . $d['image_name']) : NULL, 'project' => $d['name'], 'task_name' => $d['task_name'], 'running_task' => $d['running_task'], 'completed' => $d['completed'], 'start_time' => ($d['start_time'] != NULL) ? $d['start_time']: '--', 't_minutes' => ($d['t_minutes'] !=NULL) ? $d['t_minutes']:'--', 'id' => $d['task_id']);
             }
         } else {
             $data = NULL;
@@ -219,29 +220,25 @@ class User_model extends CI_Model {
      * 
      * returns $task_data
      */
-    public function get_task_info($id) {
+    public function get_task_info($task_id) {
         $userid = $this->session->userdata('userid');
-        $taskid = $id;
-        $this->db->select('d.id,p.name,p.id AS project_id,d.task_date,t.task_name,d.task_description,d.start_time,d.end_time,t.description,d.task_id');
+        $details = array();
+        $this->db->select('d.id,p.name,p.id AS project_id,d.task_date,t.task_name,d.task_description,d.start_time,d.end_time,t.description,t.id AS task_id');
         $this->db->from('task AS t');
         $this->db->join('task_assignee AS ta', 't.id = ta.task_id');
         $this->db->join('time_details AS d', 't.id = d.task_id', 'left');
         $this->db->join('project AS p', 'p.id = t.project_id');
-        $this->db->where(array('t.id' => $taskid, 'd.user_id' => $userid));
+        $this->db->where(array('t.id' => $task_id, 'ta.user_id' => $userid));
         $this->db->order_by('d.id');
         $query = $this->db->get();
         $data = $query->result_array();
         foreach($data as $d){
-
-            $details[] = array('table_id'=>$d['id'],'task_name'=>$d['task_name'],'name'=>$d['name'],'project_id'=>$d['project_id'],'task_date'=>$d['task_date'],'description'=>$d['description'],'task_id'=>$d['task_id'],'start_time'=>date('H:i:s',strtotime($d['start_time'])),'end_time'=>($d['end_time'])?date('H:i:s',strtotime($d['end_time'])):'','task_description'=>$d['task_description']);
+            if (!isset($details['task_data'])) {
+                $details['task_data'] = array('task_name'=>$d['task_name'],'project_name'=>$d['name'],'project_id'=>$d['project_id'],'description'=>$d['description'],'task_id'=>$d['task_id']);
+            }
+            $details['timeline_data'][] = array('table_id'=>$d['id'],'task_date'=>($d['task_date'])?$d['task_date']:date('Y-m-d'),'start_time'=>($d['start_time'])?date('H:i',strtotime($d['start_time'])):date('H:i'),'end_time'=>($d['end_time'])?date('H:i',strtotime($d['end_time'])):'','task_description'=>($d['task_description'])?$d['task_description']:null);
         }
-        $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task", FALSE);
-        $this->db->from('time_details AS d');
-        $this->db->where(array('d.task_id' => $taskid, 'd.user_id' => $userid));
-        $task_status = $this->db->get();
-        $status = $task_status->row_array();
-        $task_data = array($details, $status);
-        return $task_data;
+        return $details;
     }
 
     
@@ -676,7 +673,7 @@ class User_model extends CI_Model {
                             $minutes = $diff / 60;
                             $total_mins = ($minutes < 1) ? ceil(abs($minutes)) : abs($minutes);
                         }
-                        if (isset($time['table_id'])) {
+                        if (isset($time['table_id']) && !empty($time['table_id']) ) {
                             $table_id = $time['table_id'];
                             $array = array('start_time' => $start, 'end_time' => $end, 'task_description' => $description, 'user_id' => $userid, 'task_id' => $data['task_id'], 'total_hours' => $hours, 'total_minutes' => $total_mins, 'task_date' => $time['date'], 'modified_on' => date('Y:m:d H:i:s'));
                             $this->db->where(array('user_id' => $userid, 'task_id' => $data['task_id'], 'id' => $table_id));

@@ -231,10 +231,10 @@ class Dashboard_model extends CI_Model
             $projects = $this->db->get()->result_array();
 
             foreach ($projects as $project) {
-                $this->db->select('count(distinct a.user_id) AS user_count');
+                $this->db->select('count(distinct d.user_id) AS user_count');
                 $this->db->select_sum('d.total_minutes','t_minutes');
-                $this->db->from('project_assignee AS a');
-                $this->db->join('task AS t','t.project_id = a.project_id');
+                $this->db->from('project AS p');
+                $this->db->join('task AS t','t.project_id = p.id');
                 $this->db->join('time_details AS d','d.task_id = t.id');
                 $this->db->where('t.project_id',$project['project_id']);
                 $proj_time = $this->db->get()->result_array();
@@ -244,9 +244,10 @@ class Dashboard_model extends CI_Model
                     $this->db->select('u.name AS user_name,u.id AS user_id');
                     $this->db->distinct()->select('u.id');
                     $this->db->from('task AS t');
-                    $this->db->join('project_assignee AS a','a.project_id = t.project_id');
-                    $this->db->join('users AS u','u.id = a.user_id');
-                    $this->db->where('a.project_id',$project['project_id']);
+                    $this->db->join('project AS p','p.id = t.project_id');
+                    $this->db->join('time_details AS d','d.task_id = t.id');
+                    $this->db->join('users AS u','u.id = d.user_id');
+                    $this->db->where('p.id',$project['project_id']);
                     $user_details = $this->db->get()->result_array();
 
                     $final_result[$project['project_id']] = array('project_id'=>$project['project_id'],'project_name'=>$project['project_name'],'project_icon'=>$project['image_name'],'project_color'=>$project['color_code'],'time_used'=>$p['t_minutes'], 'total_users'=>$p['user_count'], 'user_details' =>$user_details );
