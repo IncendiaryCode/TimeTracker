@@ -327,7 +327,7 @@ class User extends CI_Controller
             $data['task_name'] = $this->input->post('task_name');
             $data['task_id'] = $this->input->post('task_id');
             $data['task_desc'] = $this->input->post('task_desc');
-            $data['timings'] = $this->input->post('timing');
+            $data['time_range'] = $this->input->post('timing');
             if(!empty($this->input->post('time')))
             $data['add_timings'] = $this->input->post('time');
             $result = $this->user_model->add_tasks($data);

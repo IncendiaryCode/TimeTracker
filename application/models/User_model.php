@@ -648,7 +648,7 @@ class User_model extends CI_Model {
             $array = array('task_name' => $data['task_name'], 'description' => $data['task_desc'], 'modified_on' => date('Y:m:d H:i:s'), 'project_id' => $data['project_id'], 'module_id' => $module_id, 'modified_on' => date('Y:m:d H:i:s'));
             $this->db->where(array('id' => $data['task_id']));
             $query = $this->db->update('task', $array);
-            $time_range = $data['timings'];
+            $time_range = $data['time_range'];
             if (!is_array($time_range)) {
                 $time_range = json_decode($time_range, true);
             }
