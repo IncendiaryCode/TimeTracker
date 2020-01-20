@@ -38,7 +38,7 @@ var addTime = {
 
         var colDescri = $('<div class="col-11">' +
             '<div class="input-group">' +
-            '<input id="description-' + id + '"  class="form-control"  name="time[' + id + '][task_description]" value=' + descri + ' placeholder="description" />' +
+            '<input id="description-' + id + '"  class="form-control"  name="time[' + id + '][description]" value=' + descri + ' placeholder="description" />' +
             '</div>' +
             '</div>');
         colDescri.appendTo(row);
@@ -273,33 +273,33 @@ var addTime = {
 };
 
 $(document).ready(function () {
-if(edit)
-{
-    $('#task-add-time').hide();
-}
 $('#add-time').click(function()
 {
-    $('#task-add-time').show();   
+    $('.datepicker-0').datepicker("setDate", new Date());
+    $('.timepicker-a').timepicker({
+        uiLibrary: 'bootstrap4'
+    });
+    var current_time = new Date().getHours().toString()+':'+ new Date().getMinutes();
+    document.getElementById('start-time-0').value = current_time;
+    $('#task-add-time').show();
 });
 var addTask = document.getElementById('addTask');
 if (addTask) {
     var m = new Date();
     addTask.onsubmit = function (e) {
-
         var taskName = document.getElementById('Taskname').value;
         var project = document.getElementById('choose-project').value;
         if (taskName == "" || taskName == " ") {
             document.getElementById('taskError').innerHTML = "Please Enter Task Name ";
             return false;
         }
-
         if (project == "" || project == "Select Project") {
             document.getElementById('taskError').innerHTML = "Please Choose Project Name ";
             return false;
         }
             document.getElementById('taskError').innerHTML = " ";
             var date = document.getElementById('date-picker-start-0').value;
-            var start_time = document.getElementById('start-time-0').value;
+            var start_time = document.getElementById('0').value;
             var end_time = document.getElementById('end-time-0').value;
             var flag = false;
 
@@ -367,4 +367,11 @@ if (addTask) {
         });
         }     
     }
+
+    if(edit)  {
+        console.log("here");
+        document.getElementById('date-picker-start-0').value = ' ';
+        document.getElementById('start-time-0').value = ' ';
+        $('#task-add-time').hide();
+        }
 });
