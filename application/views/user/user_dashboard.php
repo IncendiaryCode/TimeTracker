@@ -2,11 +2,20 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Login timer
 $this->load->helper('date');
-$login_time = $task_info['login_status']['start_time'];
-$login_time_display = date('g:i:s A',strtotime($task_info['login_status']['start_time']));
-$login = new DateTime($login_time,new DateTimeZone('UTC'));
-$logintime = $login->getTimestamp();
-$time_login = strtotime($login_time);
+
+if (isset($task_info['login_status']['start_time'])) {
+    $login_time = $task_info['login_status']['start_time'];
+    $login_time_display = date('g:i:s A',strtotime($task_info['login_status']['start_time']));
+    $login = new DateTime($login_time,new DateTimeZone('UTC'));
+    $logintime = $login->getTimestamp();
+}
+else //Disable punchin card for the day
+{
+    //Add default values;
+    $login_time_display = '--';
+    $logintime = time();
+}
+
 $timer = '';
 $timerClass = 'fa-play';
 $task_type = 'login';
@@ -14,7 +23,7 @@ $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Punch In/Out';
-$flag = (($this->session->userdata('flag')))?$this->session->userdata('flag'):"";
+//$flag = (($this->session->userdata('flag')))?$this->session->userdata('flag'):"";
 if(isset($task_info['login_status']['start_time']))
 {
     $timerClass = 'fa-stop';
@@ -32,7 +41,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                 <div>
                     <div class="section-slider" id="login-timer-details">
                         <p class="font-weight-light time-font text-center login-time" id="login-time">
-                            Logged in at <?php echo $login_time_display; ?>
+                            Punch in at <?php echo $login_time_display; ?>
                         </p>
                         <div class="font-weight-light text-center primary-timer" id="primary-timer">
                             00:00:00

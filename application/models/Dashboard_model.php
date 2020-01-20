@@ -198,15 +198,13 @@ class Dashboard_model extends CI_Model
 
         if($type == 'user'){ //load user information into user_snapshot page
             $this->db->select('u.name AS user_name,u.id AS user_id');
-            $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->from('users AS u');
-            $this->db->join('time_details AS d','d.user_id = u.id');
             $this->db->where('u.type','user');
-            $this->db->group_by('d.user_id');
             $user_names = $this->db->get()->result_array();
 
             foreach ($user_names as $u) { 
                 $this->db->select('count(distinct t.id) AS tasks_count');
+                $this->db->select_sum('d.total_minutes','t_minutes');
                 $this->db->from('task AS t');
                 $this->db->join('time_details AS d','d.task_id = t.id');
                 $this->db->where('d.user_id',$u['user_id']);
@@ -215,12 +213,12 @@ class Dashboard_model extends CI_Model
                 $this->db->from('project AS p');
                 $this->db->join('project_assignee AS a','a.project_id = p.id');
                 $this->db->where(array('a.user_id'=>$u['user_id']));
-                $query = $this->db->get()->result_array();    
+                $project_names = $this->db->get()->result_array();    
                     $details[$u['user_id']] = array(
                         'user_id'=>$u['user_id'],
                         'user_name'=> $u['user_name'],
-                        'project'=>$query,
-                        'total_minutes'=>$u['t_minutes'],
+                        'project'=>$project_names,
+                        'total_minutes'=>isset($u['t_minutes'])?$u['t_minutes']:'0',
                         'tasks_count'=>$task_count['tasks_count']
                     );
             }
@@ -1419,7 +1417,7 @@ class Dashboard_model extends CI_Model
         ));
         if ($query->num_rows() == 1) {
             $row    = $query->row();
-
+            /*
             //check for entry with the same login date
             $this->db->where(array('task_date' => date('Y:m:d'),'user_id' => $row->id));
             $query_check = $this->db->get('login_details');
@@ -1453,7 +1451,16 @@ class Dashboard_model extends CI_Model
                     'username' => $row->name
                 );
                 $this->session->set_userdata($data);
-            }
+            }*/
+            $data = array(
+                'userid' => $row->id,
+                'email' => $row->email,
+                'logged_in' => TRUE,
+                'user_profile' => $row->profile,
+                'username' => $row->name
+            );
+            $this->session->set_userdata($data);
+
             return $row->type;
         } else {
             $this->form_validation->set_message('Wrong inputs.');

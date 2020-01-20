@@ -46,17 +46,16 @@ class User extends CI_Controller
     public function save_login_time(){
         $result = $this->user_model->start_login_timer(); //to start the login timer
         $res = array();
-        if($result == TRUE){
-            $res['flag'] = 1;
-            $this->session->set_userdata($res);
-            $res['msg'] = 'Login timer started.';
+        if($result == FALSE){
+            //$res['flag'] = 0;
+            $res['msg'] = 'Failed to start login timer.';
             $this->load->view('user/header');
             $res['task_info'] = $this->user_model->task_status();
             $this->load->view('user/user_dashboard', $res);
             $this->load->view('user/footer');
         }else{
-            $res['flag'] = 0;
-            $res['msg'] = 'Failed to start login timer.';
+            //$this->session->set_userdata($res);
+            $res['msg'] = 'Login timer started.';
             $this->load->view('user/header');
             $res['task_info'] = $this->user_model->task_status();
             $this->load->view('user/user_dashboard', $res);
@@ -315,7 +314,7 @@ class User extends CI_Controller
         $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|xss_clean');
         if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to edit task page
             $this->load->view('user/header');
-            $t_id              = $this->input->post('task_id', TRUE);
+            $t_id = $this->input->post('task_id', TRUE);
             $data['task_data'] = $this->user_model->get_task_info($t_id);
             $this->load->view('user/add_task', $data);
             $this->load->view('user/footer');
@@ -327,9 +326,9 @@ class User extends CI_Controller
             $data['task_name'] = $this->input->post('task_name');
             $data['task_id'] = $this->input->post('task_id');
             $data['task_desc'] = $this->input->post('task_desc');
-            $data['time_range'] = $this->input->post('timing');
             if(!empty($this->input->post('time')))
-            $data['add_timings'] = $this->input->post('time');
+            $data['timings'] = $this->input->post('time');
+
             $result = $this->user_model->add_tasks($data);
             if (!$result) {
                 //if edit is unsuccessful, redirect to edit task page with error message
@@ -344,6 +343,7 @@ class User extends CI_Controller
             }
         }
     }
+
     //Upload profile
     public function upload_profile()
     {
@@ -456,19 +456,30 @@ class User extends CI_Controller
     {
         $userid = $this->session->userdata('userid');
         $result = $this->user_model->update_logout_time($userid);
-        if ($result == TRUE) {
-            $this->load->view('user/header');
-            $task_details['task_info'] = $this->user_model->task_status();
-            $task_details['msg']       = "Logout time updated.";
-            $this->load->view('user/user_dashboard', $task_details);
-            $this->load->view('user/footer');
-        } else {
-            $this->load->view('user/header');
-            $task_details['task_info'] = $this->user_model->task_status();
-            $task_details['msg']       = "Logout time not updated.";
-            $this->load->view('user/user_dashboard', $task_details);
-            $this->load->view('user/footer');
+        if($result == TRUE){
+            $res['status'] = TRUE;
+            $res['msg'] = 'Punchout successful.';
+        }else{
+            $res['status'] = FALSE;
+            $res['msg'] = 'Punchout unsuccessful.';
         }
+        echo json_encode($res);
+    }
+
+    public function delete_task_data()
+    {
+        //delete option
+        $user_rid = $this->session->userdata('userid');
+        $table_id = $this->input->post('id');
+        $result = $this->user_model->delete_task_data($user_rid, $table_id);
+        if($result == TRUE){
+            $res['status'] = TRUE;
+            $res['msg'] = 'Delete successful.';
+        }else{
+            $res['status'] = FALSE;
+            $res['msg'] = 'Delete unsuccessful.';
+        }
+        echo json_encode($res);
     }
 }
 ?>

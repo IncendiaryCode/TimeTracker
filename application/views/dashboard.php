@@ -171,7 +171,7 @@ $profile = $this->session->userdata('user_profile');
                     }
                  ?>
                 <h4 class="text-center">Top
-                    <?= $cnt;?> expensive projects</h4>
+                    <?= $cnt;?> expensive users</h4>
                 <ul class="list-group mt-4">
                     <?php foreach($top_users[1] as $user)
                     { ?>
