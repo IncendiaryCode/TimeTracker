@@ -81,7 +81,7 @@ var addTime = {
 				'<a href="javascript:void(0);" title="Remove" id="remove-time-' +
 				id +
 				'">' +
-				'<i class="fas fa-minus icon-plus text-danger"></i>' +
+				'<i class="fas fa-minus icon-plus text-white"></i>' +
 				"</a>" +
 				"</div><hr>"
 		);

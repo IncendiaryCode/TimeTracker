@@ -36,7 +36,7 @@ function drawProjectChart() {
     var options = {
       	colorAxis: {colors: ['yellow', 'red']},
     	hAxis: {title: 'Time spent in hrs'},
-      	vAxis: {title: 'Persentage of time spent'},
+      	vAxis: {title: 'Percentage of time spent'},
     };
 
     var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
