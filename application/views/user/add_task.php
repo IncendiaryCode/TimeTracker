@@ -71,8 +71,11 @@ if ($this->input->get()) { ?>
                             <div class="form-group">
                                 <label for="choose-module">Choose project module</label>
                                 <select type="number" class="form-control project_name" id="choose-module" name="project_module" value="<?= $task_data['module_name'] ?>">
-                                    <option>Select module</option>
-
+                                    <?php if ($this->input->get()) { ?>
+                                    <option value=<?=$task_data['module_id']?>><?= $task_data['module_name'] ?></option>
+                                    <?php } else { ?>
+                                        <option>Select module</option>
+                                    <?php } ?>
                                 </select>
                             </div>
                             <p class="display-5 pt-4"><strong>Timeline</strong></p>

@@ -57,6 +57,7 @@ class User_model extends CI_Model {
      * 
      */
     public function task_status() {
+        $details =array();
         $userid = $this->session->userdata('userid');
         $this->db->select('*');
         $this->db->from('time_details AS d');
@@ -64,17 +65,15 @@ class User_model extends CI_Model {
         $this->db->where(array('d.user_id' => $userid, 'd.total_minutes' => '0'));
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
-            $task_status = $query->result_array();
-        } else {
-            $task_status = '';
+            $details['task_status'] = $query->result_array();
         }
         $this->db->where(array('user_id' => $userid, 'task_date' => date('Y:m:d')));
-        $this->db->where('end_time IS NULL');
+        //$this->db->where('end_time IS NULL');
         $query = $this->db->get('login_details');
         if ($query->num_rows() > 0) {
-            $login_status = $query->row_array();
-            return array('task_status' => $task_status, 'login_status' => $login_status);
+            $details['login_status'] =$query->row_array(); 
         }
+        return $details;
     }
 
 
@@ -130,7 +129,7 @@ class User_model extends CI_Model {
             $this->db->order_by("t.task_name", "asc"); //sort by task name
             
         } else if ($sort_type == 'date') {
-            $this->db->order_by("d.task_date", "asc"); //sort by task date
+            $this->db->order_by("t.created_on", "desc"); //sort by task date
             
         } else if ($sort_type == 'task') {
             $this->db->order_by("t.id", "asc"); //sort by task id
@@ -140,7 +139,7 @@ class User_model extends CI_Model {
         if ($query->num_rows() > 0) {
             $dataa = $query->result_array();
             foreach ($dataa as $d) {
-                $data[] = array('image_name' => ($d['image_name'] != NULL) ? (base_url() . UPLOAD_PATH . $d['image_name']) : NULL, 'project' => $d['name'], 'task_name' => $d['task_name'], 'running_task' => $d['running_task'], 'completed' => $d['completed'], 'start_time' => ($d['start_time'] != NULL) ? $d['start_time']: '--', 't_minutes' => ($d['t_minutes'] !=NULL) ? $d['t_minutes']:'--', 'id' => $d['task_id']);
+                $data[] = array('image_name' => ($d['image_name'] != NULL) ? (base_url() . UPLOAD_PATH . $d['image_name']) : NULL, 'project' => $d['name'], 'task_name' => $d['task_name'], 'running_task' => $d['running_task'], 'completed' => $d['completed'], 'start_time' => ($d['start_time'] != NULL) ? $d['start_time']: '', 't_minutes' => ($d['t_minutes'] !=NULL) ? $d['t_minutes']:'0', 'id' => $d['task_id']);
             }
         } else {
             $data = NULL;
@@ -224,18 +223,19 @@ class User_model extends CI_Model {
     public function get_task_info($task_id) {
         $userid = $this->session->userdata('userid');
         $details = array();
-        $this->db->select('d.id,p.name,p.id AS project_id,d.task_date,t.task_name,d.task_description,d.start_time,d.end_time,t.description,t.id AS task_id');
+        $this->db->select('d.id,p.name,p.id AS project_id,m.id AS module_id,m.name AS module_name,d.task_date,t.task_name,d.task_description,d.start_time,d.end_time,t.description,t.id AS task_id');
         $this->db->from('task AS t');
         $this->db->join('task_assignee AS ta', 't.id = ta.task_id');
         $this->db->join('time_details AS d', 't.id = d.task_id', 'left');
         $this->db->join('project AS p', 'p.id = t.project_id');
+        $this->db->join('project_module AS m', 'm.id = t.module_id');
         $this->db->where(array('t.id' => $task_id, 'ta.user_id' => $userid));
         $this->db->order_by('d.id');
         $query = $this->db->get();
         $data = $query->result_array();
         foreach($data as $d){
             if (!isset($details['task_data'])) {
-                $details['task_data'] = array('task_name'=>$d['task_name'],'project_name'=>$d['name'],'project_id'=>$d['project_id'],'description'=>$d['description'],'task_id'=>$d['task_id']);
+                $details['task_data'] = array('task_name'=>$d['task_name'],'project_name'=>$d['name'],'project_id'=>$d['project_id'],'description'=>$d['description'],'task_id'=>$d['task_id'],'module_name'=>$d['module_name'],'module_id'=>$d['module_id']);
             }
             $details['timeline_data'][] = array('table_id'=>$d['id'],'task_date'=>($d['task_date'])?$d['task_date']:date('Y-m-d'),'start_time'=>($d['start_time'])?date('H:i',strtotime($d['start_time'])):date('H:i'),'end_time'=>($d['end_time'])?date('H:i',strtotime($d['end_time'])):'','task_description'=>($d['task_description'])?$d['task_description']:null);
         }
@@ -912,7 +912,6 @@ class User_model extends CI_Model {
     public function update_logout_time($userid) {
         //check for entry with the same login date
         $this->db->where(array('task_date' => date('Y:m:d'), 'user_id' => $userid, 'end_time IS NULL'));
-        $this->db->order_by("id", "desc");
         $query_check = $this->db->get('login_details');
         if ($query_check->num_rows() > 0) {
             $data = $query_check->row_array();

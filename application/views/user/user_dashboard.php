@@ -29,7 +29,7 @@ if(isset($task_info['login_status']['start_time']))
     $timerClass = 'fa-stop';
 }
 
-if(($task_info['login_status']) == NULL){
+if(isset($task_info['login_status']['end_time']) && ($task_info['login_status']['end_time']) != NULL){
 $flag =1;
 }
 else{
