@@ -12,6 +12,7 @@ class User_model extends CI_Model {
     public function __construct() {
         //$this->load->library('email');
         $this->load->database();
+        $this->load->helper('url');
         $this->load->library('session');
         $userid = $this->session->userdata('userid');
     }
@@ -950,6 +951,10 @@ class User_model extends CI_Model {
             $proj_mod = $query->result_array();
             //print_r($this->db->last_query());die;
             $data[$key]['modules'] = $proj_mod;
+            if($data[$key]['image_name'] != "")
+            {
+                $data[$key]['image_name'] = base_url().UPLOAD_PATH.$data[$key]['image_name'];
+            }
         }
         return $data;
     }
