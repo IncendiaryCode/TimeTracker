@@ -84,7 +84,7 @@
                     </div>
                     <div>
                         <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control  edit-date-time" id="old-datepicker" name="end_time">
+                        <input type="text" class="form-control " id="old-datepicker" name="end_time">
                         <div class="input-group-addon">
                             <span class="glyphicon glyphicon-th"></span>
                         </div>
@@ -161,6 +161,7 @@ $('.edit-time').timepicker({
       useCurrent: false, format: 'hh:mm:ss',
  });
 });
+
 
 
 </script>

@@ -550,6 +550,11 @@ $(document).ready(function () {
 	$('.timerpicker-c').timepicker({
         uiLibrary: 'bootstrap4'
     });
+    $(function() {
+		$('.stopnow-time').timepicker({
+	      useCurrent: false, format: 'hh:mm:ss',
+	 });
+	});
 	if (document.getElementById('update-stop-now')) {
 		var stop_now = document.getElementById('update-stop-now');
 		stop_now.onsubmit = function () {
@@ -587,7 +592,7 @@ $(document).ready(function () {
 				}
 				else if(stopped == 1)
 				{
-					alert("Already punched out..");
+					alert("You cannot punch in again...");
 					return false;
 				}
 				else
@@ -609,7 +614,10 @@ $(document).ready(function () {
 	        } else return true;
 	    };
 	}
-
+	$('.dropdown-item').click(function(e)
+	{
+		e.preventDefault();
+	})
 	var punchOutAction = document.getElementById('punch-out-action');
 	if(punchOutAction)
 	{

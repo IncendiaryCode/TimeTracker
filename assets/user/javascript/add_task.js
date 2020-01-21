@@ -322,14 +322,6 @@ var addTime = {
 };
 
 $(document).ready(function() {
-	// var editTask = document.getElementById("editTask");
-	// if (editTask) {
-	// 	editTask.onsubmit = function() {
-	// 		if (document.getElementById("total-row")) {
-	// 			addTime.init("#total-row");
-	// 		}
-	// 	};
-	// }
 
 	var addTask = document.getElementById("addTask");
 	if (addTask) {

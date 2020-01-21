@@ -445,7 +445,16 @@ a:hover {
 .modal-transparent {
     background-image: linear-gradient(to bottom right, rgb(111, 121, 253, 0.95), rgb(215, 136, 251, 0.95), rgb(250, 223, 253, 0.95));
 }
-
+.modal-stop-now {
+    background-image: linear-gradient(to bottom right, rgb(111, 121, 253, 0.95), rgb(215, 136, 251, 0.95), rgb(250, 223, 253, 0.95));
+}
+.modal-stop-now .stopnow-time
+{
+    background-color: #fff;
+    padding: 10px;
+    border : 1px solid;
+    border-color: #ccc;
+}
 .modal-transparent .modal-header,
 .modal-transparent .modal-content {
     background-color: transparent;

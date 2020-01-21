@@ -47,7 +47,7 @@ $this->load->helper('url_helper');
         <div class="row">
             <?php if(empty($GLOBALS['page_title'])) { ?>
                 <div class="col-md-6 col-6 time-tracker">
-                    <img src="<?=base_url();?>assets/images/logo-white.png" height="40px" >
+                    <a href="#" onclick="window.location.reload();"><img src="<?=base_url();?>assets/images/logo-white.png" height="40px" ></a>
                 </div>
             <?php } else { ?>
             <div class="col-md-6 col-6 time-tracker">

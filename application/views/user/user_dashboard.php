@@ -29,19 +29,17 @@ if(isset($task_info['login_status']['start_time']))
     $timerClass = 'fa-stop';
 }
 
-if(isset($task_info['login_status']['end_time'])){
+if(($task_info['login_status']) == NULL){
 $flag =1;
 }
-else
-{
+else{
     $flag = 0;
 }
 ?>
 <script type="text/javascript">
 //this will be send to JS for timer to start
 var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the task.*/
-var stopped = "<?=$flag?>"; /*start date and time of the task.*/
-console.log(stopped);
+var stopped = "<?=$flag?>"; /*to check for punch out action*/
 </script>
 <!-- new scoll for task -->
 <div class="container timer-slider">
@@ -155,7 +153,7 @@ console.log(stopped);
             <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
         </footer>
         <!-- modal form for tasks that started onprevious date -->
-        <div class="modal modal-transparent fade" id="stop-now" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
+        <div class="modal modal-stop-now fade" id="stop-now" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
             <div class="modal-dialog  modal-xl" role="document">
                 <div class="modal-content">
                     <form action="<?=base_url();?>index.php/user/stop_timer?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-stop-now" method="post">
@@ -164,8 +162,12 @@ console.log(stopped);
                         </div>
                         <div class="modal-body ">
                             <div class="input-group">
-                                <p>Task name: <strong>
-                                        <?php echo $task_info['task_status'][0]['task_name'] ?></strong></p>
+                                <!-- <p>Task name: <strong>
+                                    <?php echo $task_info['task_status'][0]['task_name'] ?></strong>
+                                </p> -->
+                                <p>Please stop the task "<strong>
+                                    <?php echo $task_info['task_status'][0]['task_name'] ?> </strong>" that is already running.
+                                </p>
                             </div>
                             <div class="input-group">
                                 <p>Started at: <strong id="old-start-date">
@@ -173,7 +175,7 @@ console.log(stopped);
                             </div>
                             <div>
                                 <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control  timepicker"  name="stop-end-time" id="stop-end-time">
+                                <input type="text" class="form-control stopnow-time"  name="stop-end-time" id="stop-end-time">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>

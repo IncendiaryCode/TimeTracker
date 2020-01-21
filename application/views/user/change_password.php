@@ -6,10 +6,10 @@
 <main class="container-fluid-main">
     <div class="main-container container">
         <div class="main-container-inner">
-            <div class="row mt-5">
+            <div class="row mt-4">
                 <div class="col-6 offset-3">
                     <div class="text-center mt-4">
-                        <img src="<?=base_url().USER_UPLOAD_PATH.$profile;?>" width="30%;" class="rounded-circle figure mt-4 text-center">
+                        <img src="<?=base_url().USER_UPLOAD_PATH.$profile;?>" class="rounded-circle text-center" width="150px;" height="150px;">
                     </div>
                     <?php 
                             $this->load->library('form_validation');
