@@ -106,7 +106,7 @@ if ($this->input->get()) { ?>
                                                                 <input type="text" class="form-control datepicker" id="date-picker-<?= $key ?>" name="time[<?= $key ?>][date]" data-date-format="yyyy-mm-dd" value="<?= $task['task_date']; ?>">
                                                                 <div class="input-group-append">
                                                                     <span class="input-group-text">
-                                                                        <button type="button" class="btn fa fa-calendar"></button>
+                                                                        <button type="button" class="btn fa fa-calendar p-0"></button>
                                                                     </span>
                                                                 </div>
                                                             </div>
@@ -126,7 +126,7 @@ if ($this->input->get()) { ?>
                                                         </div>
                                                         <div class="col-2 text-right mb-3">
                                                             <a href="javascript:void(0);" id="delete-task-<?= $key ?>" class="delete-task">
-                                                                <i class="fas fa-trash text-danger pt-2 icon-plus" name="time[<?= $key ?>][deleted_time_range]">
+                                                                <i class="fas fa-trash text-white pt-2 icon-plus" name="time[<?= $key ?>][deleted_time_range]">
                                                                     <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= $key ?>][table_id]" id="table_id<?= $key ?>">
                                                                 </i>
                                                             </a>

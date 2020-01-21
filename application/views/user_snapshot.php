@@ -84,8 +84,8 @@ $profile = $this->session->userdata('user_profile');
                 <p><?=round(($k['total_minutes']/60),2);?> hrs</p>
             </div>
         <div class="col-2">
-            <div class="row remove-user">
-                <i class="fas fa-trash-alt icon-plus icon-remove text-danger" data-toggle="modal" data-target="#delete-entry"><input type="hidden" name=""  class="user_id" value="<?=$k['user_id'];?>"></i>
+            <div class="remove-user">
+                <i class="fas fa-trash-alt icon-plus icon-remove text-white" data-toggle="modal" data-target="#delete-entry"><input type="hidden" name=""  class="user_id" value="<?=$k['user_id'];?>"></i>
             </div>
         </div>
     </div>

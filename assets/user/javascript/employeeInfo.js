@@ -585,6 +585,11 @@ $(document).ready(function () {
 					document.getElementById('stop-timer-error').innerHTML = "Login time cannot be greater than current time";
 					return false;
 				}
+				else if(stopped == 1)
+				{
+					alert("Already punched out..");
+					return false;
+				}
 				else
 				{
 					startTimer(login_timer);

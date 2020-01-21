@@ -39,7 +39,7 @@ $profile = $this->session->userdata('user_profile');
                         <div class="mx-auto d-block">
                            <div class="text-center" ><span class="project-details"><?=$data['users'] ?></span><p class="display-5">Total users</p><input type="hidden" id="project_id" value="<?=$data['project_id'] ?>">
                            </div>
-                           <div class="text-center "><i class="fas fa-plus icon-plus text-success" data-target="#add-user" data-toggle='modal'></i>
+                           <div class="text-center "><i class="fas fa-plus icon-plus text-white" data-target="#add-user" data-toggle='modal'></i>
                            </div>
                         </div>
                         </div>
@@ -144,7 +144,7 @@ $profile = $this->session->userdata('user_profile');
                 <?php } ?>
                 </select>
                 <input type="hidden" name="project-id" id="project-existing-id" value="<?=$data['project_id']?>">
-                <button type="submit" class="btn btn-primary mt-2">Add user</button>
+                <div class="text-right"><button type="submit" class="btn btn-primary mt-2">Add user</button></div>
                 <p class="text-danger" id="adding-user-error"></p>
                 </form>
             </div>
