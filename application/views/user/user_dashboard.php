@@ -142,10 +142,10 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                 </div>
             </div>
 
-            <div class='row mb-5' id="attach-card">
-                <!-- all task details -->
-                <div class="col text-center">
-                    <div class="spinner-border" role="status" aria-hidden="true"></div> Loading...
+            <div class='mb-5' id="attach-card">                
+                <div class="row" id="activites-result"></div>
+                <div class="text-center section-loader" id="section-loader">
+                    <div class="loader-inner"><i class="fas fa-circle-notch fa-spin"></i> Loading...</div>
                 </div>
             </div>
         </div>
