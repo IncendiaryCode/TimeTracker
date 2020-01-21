@@ -12,7 +12,7 @@ if (isset($task_info['login_status']['start_time'])) {
 else //Disable punchin card for the day
 {
     //Add default values;
-    $login_time_display = '--';
+    $login_time_display = '00:00:00';
     $logintime = time();
 }
 
@@ -125,7 +125,7 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
 
         <?php } } } } ?>
 
-            <div class="row mb-3 pt-4">
+            <div class="row mb-3 pt-2">
                 <div class="col-6">
                     <h5 class="font-weight-light text-left recent-activites">Recent Activites</h5>
                 <p id="alarmmsg" class="text-center"></p>

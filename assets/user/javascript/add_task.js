@@ -255,14 +255,37 @@ var addTime = {
 
 				//prepare prefill data
 				var dateObj = new Date();
+				var _month = dateObj.getMonth() + 1;
+				if(_month.toString().length == 1)
+				{
+					_month = '0'+_month.toString();
+				}
+				var _day = dateObj.getDate();
+				if(_day.toString().length == 1)
+				{
+					_day = '0'+_day.toString();
+				}
+
+				var _hour = dateObj.getHours();
+				if(_hour.toString().length == 1)
+				{
+					_hour = '0'+_hour.toString();
+				}
+
+				var _min = dateObj.getMinutes();
+				if(_min.toString().length == 1)
+				{
+					_min = '0'+_min.toString();
+				}
+				
 				var date =
 					dateObj.getFullYear() +
 					"-" +
-					(dateObj.getMonth() + 1) +
+					_month +
 					"-" +
-					dateObj.getDate();
+					_day
 				var start_time =
-					dateObj.getHours().toString() + ":" + dateObj.getMinutes();
+					_hour + ":" + _min;
 				var end_time = " ";
 				var descri = " ";
 				_this.layout(date, start_time, end_time, descri);

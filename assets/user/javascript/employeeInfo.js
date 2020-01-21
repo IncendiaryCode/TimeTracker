@@ -641,12 +641,8 @@ $(document).ready(function() {
 			} else return true;
 		};
 	}
-	$(".dropdown-item").click(function(e) {
-		e.preventDefault();
-	});
-	var punchOutAction = document.getElementById("punch-out-action");
-	if (punchOutAction) {
-		punchOutAction.onsubmit = function(e) {
+	if (document.getElementById("punch-out")) {
+		$('#punch-out').on("click", function(e) {
 			$.ajax({
 				type: "POST",
 				url: timeTrackerBaseURL + "user/update_end_time",
@@ -660,7 +656,6 @@ $(document).ready(function() {
 					document.getElementById("stop-time").removeEventListener("click");
 				}
 			});
-			return true;
-		};
+		});
 	}
 });
