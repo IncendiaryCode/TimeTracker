@@ -16,7 +16,7 @@ $profile = $this->session->userdata('user_profile');
                 <div class="navbar-nav ml-auto flex-column-reverse flex-lg-row">
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="<?=base_url().UPLOAD_PATH.$profile;?>" height="40px" class="rounded-circle">
+                            <img src="<?=base_url().UPLOAD_PATH.$profile;?>" height="50px" width="50px;" class="rounded-circle">
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div>
                                     <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display pl-2"> Profile</a></p>

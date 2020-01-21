@@ -73,7 +73,6 @@ $(document).ready(function() {
                     }
             var curr_month = new Date().getFullYear().toString() + '-' + month_no;
             document.getElementById('cur-month').value = curr_month;
-            console.log(curr_month);
             $.ajax({
                 type: 'POST',
                 url: timeTrackerBaseURL + 'index.php/admin/get_project_list',

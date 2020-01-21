@@ -15,7 +15,7 @@ $this->load->helper('url_helper');
                     
                     <div class="nav-item nav-link">
                         <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="<?=base_url().UPLOAD_PATH.$res['profile'];?>" height="40px" class="rounded-circle">
+                            <img src="<?=base_url().UPLOAD_PATH.$res['profile'];?>" height="50px" width="50px;" class="rounded-circle">
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div>
                                     <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display pl-2"> Profile</a></p>
@@ -40,14 +40,14 @@ $this->load->helper('url_helper');
                         <?php echo (!empty($this->session->flashdata('failure')))?$this->session->flashdata('failure'):''; ?>
                         </div>
                         <div class="text-center">
-                                <img id="profile-pic" src="<?=base_url().UPLOAD_PATH.$res['profile'];?>" class="rounded-circle img-fluid" width="200px;" height="200px;">
+                                <img id="profile-pic" src="<?=base_url().UPLOAD_PATH.$res['profile'];?>" class="rounded-circle" width="150px;" height="150px;">
                                  <div class="edit">
                                     <div class="img-icon">
                                     <a href="#" class="text-white "><i class="change-image fas fa-camera" data-toggle="modal" data-target="#change-profile-pic"></i></a>
                                     </div>
                                 </div> 
                         </div>
-                        <div class="col-md-4 offset-md-4">   
+                        <div class="col-md-6 offset-md-3">   
                             <form action="<?=base_url();?>index.php/admin/change_password" id="changePsw" method="post">
                                 <p class="text-center display-5 mt-4">Change password</p>
                                 <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>

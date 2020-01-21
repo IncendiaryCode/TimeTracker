@@ -394,9 +394,11 @@ $(document).ready(function() {
 		_day = '0'+_day.toString();
 	}
 	var date =dateObj.getFullYear() +"-" +_month +"-" +_day;
-	document.getElementById('date-picker-0').value = date;
-
-				if (document.getElementById("task-add-time")) {
+	if(document.getElementById('date-picker-0'))
+	{
+		document.getElementById('date-picker-0').value = date;
+	}
+	if (document.getElementById("task-add-time")) {
 		addTime.init("#task-add-time");
 	}
 

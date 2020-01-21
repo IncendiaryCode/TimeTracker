@@ -339,7 +339,6 @@ header.main-header h1 {
     
 }
 @media (min-width: 700px ) {
-@media (min-width: 700px ) {
     .display-heading
     {
         font-size: 54px;
@@ -370,8 +369,18 @@ header.main-header h1 {
 .img-icon
 {
     position: absolute;
-    top: 38%;
+    top: 31%;
     left: 52%;
     opacity: 1;
     z-index: 1;
+}
+@media (max-width: 700px ) {
+    .img-icon
+    {
+        position: absolute;
+        top: 40%;
+        left: 55%;
+        opacity: 1;
+        z-index: 1;
+    }
 }

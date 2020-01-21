@@ -74,10 +74,10 @@ function __draw_task_chart(res) {
     }
 }
 
-$(document).ready(function() {
-
-    //rendering datatable
-    var table = $('#task-lists-datatable').DataTable({
+function callTaskTableData()
+{
+    console.log(document.getElementById('curr-month').value);
+        var table = $('#task-lists-datatable').DataTable({
         "processing": true,
         "serverSide": true,
         responsive: true,
@@ -85,7 +85,7 @@ $(document).ready(function() {
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/load_snapshot',
             type: "POST",
-            "data": {'type': "task"},
+            "data": {'type': "task",  'month': document.getElementById('curr-month').value},
             "dataSrc": function ( json ) {
                 //Make your callback here.
                 if(json["status"] ==  false)
@@ -158,6 +158,10 @@ $(document).ready(function() {
         })
     });
 
+}
+$(document).ready(function() {
+
+    //rendering datatable
 
     if (document.getElementById('task-chart')) {
         if ((document.getElementById('curr-month').value == "") || (document.getElementById('curr-month').value == " ")) {
@@ -167,8 +171,6 @@ $(document).ready(function() {
                         month_no = '0'+month_no;
                     }
             var curr_month = new Date().getFullYear().toString() + '-' + month_no;
-
-            
             document.getElementById('curr-month').value = curr_month;
         }
         document.getElementById('curr-month').value;
@@ -181,7 +183,7 @@ $(document).ready(function() {
                 __draw_task_chart(result);
             }
         });
-    
+     callTaskTableData();
     $('#curr-month').change(function() {
         if (document.getElementById('curr-month').value != '') {
             $.ajax({
@@ -194,6 +196,7 @@ $(document).ready(function() {
                     __draw_task_chart(result);
                 }
             });
+            callTaskTableData();
         }
     });
 
