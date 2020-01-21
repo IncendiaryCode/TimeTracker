@@ -405,10 +405,12 @@ $(document).ready(function() {
 			.empty()
 			.html("<option>Select module</option>");
 	});
-	var current_time =
-		new Date().getHours().toString() + ":" + new Date().getMinutes();
-	document.getElementById("start-time-0").value = current_time;
-
+	if(document.getElementById("start-time-0"))
+	{
+		var current_time =
+			new Date().getHours().toString() + ":" + new Date().getMinutes();
+		document.getElementById("start-time-0").value = current_time;
+	}
 	$("select.project_name").change(function() {
 		var project_id = $(this)
 			.children("option:selected")
