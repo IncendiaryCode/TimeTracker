@@ -28,10 +28,20 @@ if(isset($task_info['login_status']['start_time']))
 {
     $timerClass = 'fa-stop';
 }
+
+if(isset($task_info['login_status']['end_time'])){
+$flag =1;
+}
+else
+{
+    $flag = 0;
+}
 ?>
 <script type="text/javascript">
 //this will be send to JS for timer to start
 var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the task.*/
+var stopped = "<?=$flag?>"; /*start date and time of the task.*/
+console.log(stopped);
 </script>
 <!-- new scoll for task -->
 <div class="container timer-slider">
@@ -201,6 +211,7 @@ var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the tas
                         </div>
                             <p class="text-danger text-center" id="stop-timer-error"></p>
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-primary">Start</button>
                         </div>
                     </form>
