@@ -77,12 +77,12 @@ class Task extends REST_Controller {
              if(!empty($post['userid']) && !empty($post['task_name']) && !empty($post['task_desc']) && (!empty($post['project_id']) || $post['project_id'] == 0) && !empty($post['project_module'])){
                 if(!empty($post['task_id'])){
                     $post['action'] = 'edit';
-                    $result = $this->user_model->add_tasks($post);
+                    $result = $this->user_model->add_tasks_device($post);
                     $data['success'] = 1;
                     $data['msg'] = 'Task Updated Successfully!';
                 }else{
                     $post['action'] = 'create';
-                    $result = $this->user_model->add_tasks($post);
+                    $result = $this->user_model->add_tasks_device($post);
                     if (!$result) {
                         $data['success'] = 0;
                         $data['msg'] = 'Failed to add task!';

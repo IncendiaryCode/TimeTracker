@@ -1102,5 +1102,132 @@ class User_model extends CI_Model {
             return false;
         }
     }
+
+    //add task model
+    public function add_tasks_device($data) {
+        //date("H:i", strtotime("1:30 PM"));
+        $userid = $data['userid'];
+        
+        if ($data['action'] == 'edit') {
+            if (($data['project_module'] == 'Select module') || ($data['project_module'] == '')) {
+                $module_id = 1;
+            } else {
+                $module_id = $data['project_module'];
+            }
+
+            $array = array('task_name' => $data['task_name'], 'description' => $data['task_desc'], 'modified_on' => date('Y:m:d H:i:s'), 'project_id' => $data['project_id'], 'module_id' => $module_id);
+            $this->db->where(array('id' => $data['task_id']));
+            $query = $this->db->update('task', $array);
+            $time_range = $data['time_range'];
+            if (!is_array($time_range)) {
+                $time_range = json_decode($time_range, true);
+            }
+            if (sizeof($time_range) > 0) {
+                foreach($time_range as $t) {
+                    $task_description = "";
+                    $table_id = null;
+                    if (isset($t['table_id'])) {
+                        $table_id = $t['table_id'];
+                    }
+                    //$table_id[$i] = $time_range[$i]['table_id'];
+                    $start_value = date('Y-m-d H:i:s', strtotime($t['start']));
+                    if($t['end'] != "")
+                        $end_value = date('Y-m-d H:i:s',strtotime($t['end']));
+                    else
+                        $end_value = null;
+                    if (isset($t['task_description'])) {
+                        $description = $t['task_description'];
+                    }
+                    $date = date("Y-m-d", strtotime($start_value));
+                    $diff = 0;
+                    if($end_value != null)
+                        $diff = strtotime($end_value) - strtotime($start_value);
+                    $minutes = round((abs($diff) / 60), 2);
+                    $hours = round(abs($diff / (60 * 60)));
+                    $array = array('start_time' => $start_value, 'end_time' => $end_value, 'task_description' => $description, 'user_id' => $userid, 'task_id' => $data['task_id'], 'total_hours' => $hours, 'total_minutes' => $minutes, 'task_date' => $date);
+                    if ($table_id != null) {
+                        $this->db->where(array('user_id' => $userid, 'task_id' => $data['task_id'], 'id' => $table_id));
+                        $query = $this->db->update('time_details', $array);
+                    } else {
+                        $array = array('user_id' => $userid, 'start_time' => $start_value, 'end_time' => $end_value, 'task_description' => $description, 'user_id' => $userid, 'task_id' => $data['task_id'], 'total_hours' => $hours, 'total_minutes' => $minutes, 'task_date' => $date);
+                        $this->db->set($array);
+                        $query = $this->db->insert('time_details', $array);
+                    }      
+                }
+            }
+            if (isset($data['deleted_time_range'])) {
+                $data['deleted_time_range'] = json_decode($data['deleted_time_range'], true);
+                foreach ($data['deleted_time_range'] as $key => $value) {
+                    $this->db->where('id', $value);
+                    $this->db->where('user_id', $userid);
+                    $this->db->where('task_id', $data['task_id']);
+                    $this->db->delete('time_details');
+                }
+            }
+            return true;
+        } else {
+                if (($data['project_module'] == 'Select module') || ($data['project_module'] == '')) {
+                    $module_id = 1;
+                } else {
+                    $module_id = $data['project_module'];
+                }
+
+                $array = array('task_name' => $data['task_name'], 'description' => $data['task_desc'], 'project_id' => $data['project_id'], 'module_id' => $module_id, 'created_on' => date('Y:m:d H:i:s'));
+                $this->db->set($array);
+                $query = $this->db->insert('task', $array);
+                if (!$query) {
+                    return false;
+                } else {
+                    $last_insert_id = $this->db->insert_id();
+                    $array = array('user_id' => $userid, 'task_id' => $last_insert_id, 'created_on' => date('Y:m:d H:i:s'));
+                    $this->db->set($array);
+                    $query = $this->db->insert('task_assignee', $array);
+                    if (!$query) {
+                        return false;
+                    } else {
+                        if(isset($data['time_range']))
+                        {
+                         //Add timings into time_details table
+                            $date_value = $data['time_range'];
+                            if(!is_array($date_value)){
+                                    $date_value = json_decode($date_value, true);
+                            }
+                            if(sizeof($date_value) >= 1){
+                                for($i=0;$i<sizeof($date_value);$i++)
+                                {
+                                        $start_time = strtotime($date_value[$i]['start']);
+                                        $end_itme = strtotime($date_value[$i]['end']);
+                                        if($start_time != ''){
+                                            $start = $date_value[$i]['date'].' '.date('H:i:s',$start_time);
+                                            if($end_itme != '')
+                                                $end = $date_value[$i]['date'].' '.date('H:i:s',$end_itme);
+                                            else
+                                                $end = null;
+                                        }else{
+                                            $start = '0000-00-00 00:00:00';
+                                            $end = '0000-00-00 00:00:00';
+                                        }
+                                        $task_description = "";
+                                        if(isset($date_value[$i]['task_description'])){
+                                            $task_description = $date_value[$i]['task_description'];
+                                        }
+                                        $diff = 0;
+                                        if($end_itme != '')
+                                            $diff = $end_itme - $start_time;
+                                        $hours = $diff / ( 60 * 60 );
+                                        $minutes = $diff/60; 
+                                        $total_mins = ($minutes < 0 ? 0 : abs($minutes));
+                                        $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'task_date'=>$date_value[$i]['date'],'start_time'=>$start,'end_time'=>$end,'task_description'=>$task_description,'total_hours'=>$hours,'total_minutes'=>$total_mins,'created_on'=>date('Y:m:d H:i:s'));
+                                        $this->db->set($array);
+                                        $query = $this->db->insert('time_details',$array);
+                                    
+                                }
+                            }
+                        }
+                        return $last_insert_id;
+                    }
+                }
+        }
+    }
 }
 ?>
