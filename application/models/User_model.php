@@ -568,7 +568,7 @@ class User_model extends CI_Model {
      */
     public function get_project_name() {
         $userid = $this->session->userdata('userid');
-        $this->db->select('*');
+        $this->db->select('p.id,p.name');
         $this->db->from('project AS p');
         $this->db->join('project_assignee AS ps', 'ps.project_id = p.id');
         $this->db->where(array('ps.user_id' => $userid));

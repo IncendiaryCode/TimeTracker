@@ -413,11 +413,11 @@
 			            } else {
 			                //if upload is not successful, print upload errors
 			                echo $this->upload->display_errors();
-			                $picture = '';
+			                $picture = 'images.png';
 			            }
 			        }
 			        else {
-			            $picture = '';
+			            $picture = 'images.png';
 			        }
 		            $result=$this->dashboard_model->add_projects($picture); //insert project into db
 		            if($result == FALSE){ //if not added, redirect to add project page with error message
