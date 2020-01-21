@@ -283,7 +283,7 @@ var addTime = {
 					"-" +
 					_month +
 					"-" +
-					_day
+					_day;
 				var start_time =
 					_hour + ":" + _min;
 				var end_time = " ";
@@ -382,8 +382,21 @@ $(document).ready(function() {
 			}
 		};
 	}
+	var dateObj = new Date();
+	var _month = dateObj.getMonth() + 1;
+	if(_month.toString().length == 1)
+	{
+		_month = '0'+_month.toString();
+	}
+	var _day = dateObj.getDate();
+	if(_day.toString().length == 1)
+	{
+		_day = '0'+_day.toString();
+	}
+	var date =dateObj.getFullYear() +"-" +_month +"-" +_day;
+	document.getElementById('date-picker-0').value = date;
 
-	if (document.getElementById("task-add-time")) {
+				if (document.getElementById("task-add-time")) {
 		addTime.init("#task-add-time");
 	}
 
