@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Login timer
 $this->load->helper('date');
 
-if (isset($task_info['login_status']['start_time'])) {
+if (isset($task_info['login_status'])) {
     $login_time = $task_info['login_status']['start_time'];
     $login_time_display = date('g:i:s A',strtotime($task_info['login_status']['start_time']));
     $login = new DateTime($login_time,new DateTimeZone('UTC'));
@@ -15,7 +15,6 @@ else //Disable punchin card for the day
     $login_time_display = '00:00:00';
     $logintime = time();
 }
-
 $timer = '';
 $timerClass = 'fa-play';
 $task_type = 'login';
@@ -24,9 +23,14 @@ $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Punch In/Out';
 //$flag = (($this->session->userdata('flag')))?$this->session->userdata('flag'):"";
-if(isset($task_info['login_status']['start_time']))
-{
+if(isset($task_info['login_status'])){
+if($task_info['login_status']['end_time'] == NULL){
     $timerClass = 'fa-stop';
+}else{
+    $timerClass = 'fa-play';
+}
+}else{
+    $timerClass = 'fa-play';
 }
 
 if(isset($task_info['login_status']['end_time']) && ($task_info['login_status']['end_time']) != NULL){

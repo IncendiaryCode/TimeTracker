@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-if ($this->input->get()) { ?>
+if ($this->input->get('t_id')) { ?>
     <script type="text/javascript">
         var edit = 1;
     </script>
@@ -35,7 +35,7 @@ if ($this->input->get()) { ?>
                             <?php } ?>
                             <div class="form-group">
                                 <label for="task-name ">Write the task name</label>
-                                <?php if ($this->input->get()) { ?>
+                                <?php if ($this->input->get('t_id')) { ?>
                                     <input type="text" class="form-control" name="task_name" id="Taskname" value="<?= $task_data['task_name'] ?>">
                                 <?php } else { ?>
                                     <input type="text" class="form-control" name="task_name" id="Taskname">
@@ -43,14 +43,14 @@ if ($this->input->get()) { ?>
                             </div>
                             <div class="form-group">
                                 <label for="description">Write a small description</label>
-                                <?php if ($this->input->get()) { ?>
+                                <?php if ($this->input->get('t_id')) { ?>
                                     <textarea class="form-control" id="description" name="task_desc" rows="4" value="<?= $task_data['description'] ?>"><?= $task_data['description'] ?></textarea>
                                 <?php } else { ?>
                                     <textarea class="form-control" id="description" name="task_desc" rows="4"></textarea> <?php } ?>
                             </div>
                             <div class="form-group">
                                 <label for="choose-project">Choose a project</label>
-                                <?php if ($this->input->get()) { ?>
+                                <?php if ($this->input->get('t_id')) { ?>
                                     <select readonly="" type="number" class="form-control" id="choose-project" name="project">
                                         <option selected value=<?php echo $task_data['project_id'] ?>>
                                             <?= $task_data['project_name']; ?>
@@ -71,7 +71,7 @@ if ($this->input->get()) { ?>
                             <div class="form-group">
                                 <label for="choose-module">Choose project module</label>
                                 <select type="number" class="form-control project_name" id="choose-module" name="project_module" value="<?= $task_data['module_name'] ?>">
-                                    <?php if ($this->input->get()) { ?>
+                                    <?php if ($this->input->get('t_id')) { ?>
                                     <option value=<?=$task_data['module_id']?>><?= $task_data['module_name'] ?></option>
                                     <?php } else { ?>
                                         <option>Select module</option>
@@ -93,7 +93,7 @@ if ($this->input->get()) { ?>
                                         </div>
                                     </div>
                                 </div>
-                                <?php if ($this->input->get()) { ?>
+                                <?php if ($this->input->get('t_id')) { ?>
 
                                     <input type="hidden" id="task-len" value="<?= sizeof($timeline_data) ?>">
                                     <!-- Add time: EDIT case  -->
