@@ -66,7 +66,7 @@
                         <div class="tab-pane fade" id="monthly-view" role="tabpanel" aria-labelledby="monthly-view-tab">
                             <div class="daily-chart">
                                 <div class="form-group m-5">
-                                    <label for="end-date">Select date</label>
+                                    <label for="end-date">Select year</label>
                                     <div class="input-group">
                                         <!-- chart that shows monthly activities -->
                                         <input type="number" class="form-control" id="monthly-chart">
