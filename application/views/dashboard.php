@@ -189,7 +189,7 @@ $profile = $this->session->userdata('user_profile');
             </div>
         </div>
     </div>
-    <footer>
-        <hr>
+    <hr>
+    <footer class="pb-5">
         <p class="text-center">Copyright © 2019 Printgreener.com</p>
     </footer>

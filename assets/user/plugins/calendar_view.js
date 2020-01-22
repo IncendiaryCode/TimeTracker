@@ -20,6 +20,7 @@ var daily_chart;
 
 
 function draw_chart_ards(data) {
+    
     for (x in data) {
         for (var y = 0; y < data[x].length; y++) {
             var cardHeader = $('<div class="card-header card-header" />');
@@ -112,13 +113,12 @@ function draw_chart_ards(data) {
             var cardActions = $("<div class='card-action-overlay' />");
             cardActions.append(footerRight);
             cardInner.append(cardActions);
-
-            var cardCol = $("<div class='col-lg-6 mb-4 card-col' />");
+            var cardCol = $("<div class='col-lg-6 mb-4 card-col card-count"+panel_id++ +"' />");
             cardCol.append(cardInner);
 
             $("#attachPanels").append(cardCol);
-
-            var id = +data[x][y].id;
+            
+            var id = data[x][y].id;
             cardCol.click(function () {
                 $('.print-chart-row' + id).addClass('animated zoomIn');
             });
@@ -400,7 +400,6 @@ var last_task_name = [];
 var same_task = 0;
 var color = "000000";
 function printChart(start, width, top, task_name, id) {
-
     for (var i = 0; i < last_task_name.length; i++) {
         if (task_name == last_task_name[i]['task_name']) {
 
@@ -419,16 +418,14 @@ function printChart(start, width, top, task_name, id) {
     $(row).css("backgroundColor", '#' + color);
     $(row).css("color", '#' + color);
     $("#print-chart").append(row);
-    $('.print-chart-row' + id).unbind().click(function () {
+    $('#new-daily-chart' + graph_id).click(function () {
         var ele = document.getElementById(this.id);
-        var index = ele.childNodes[1].value;
+        var index = parseInt(ele.childNodes[1].value)+4;
         if (last_index) {
-            //$('.panel' + last_index).css("backgroundColor", "#ffffff");
+            $('.panel' + last_index).css("backgroundColor", "#ffffff");
         }
         last_index = id;
-        //$('.panel' + id).css("backgroundColor", "#f5d0fe");
-        var elmnt = document.getElementById('panel' + index);
-        elmnt.scrollIntoView();
+        var elmnt = document.getElementsByClassName('card-count' + index);
     });
     graph_id++;
     last_task_name.push({ task_name, color });

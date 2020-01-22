@@ -24,7 +24,7 @@
                     <?php }?>
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="hidden" class="form-control logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light"  id="user-email" name="mail" placeholder="username" value="<?php echo (isset($result))?$result:"";?>">
+                        <input type="hidden"  id="user-email" name="mail" placeholder="username" value="<?php echo (isset($result))?$result:"";?>">
                     </div>
                 </div>
                 <div class="form-group">
