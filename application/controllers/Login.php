@@ -96,6 +96,7 @@ class Login extends CI_Controller
     public function check_otp()
     {
         //form inputs validation
+        $res['email'] = $this->input->post('email');
         $this->form_validation->set_rules('otp', 'OTP', 'trim|required');
         if ($this->form_validation->run() == FALSE) { //if input is invalid, redirect with form validation error
             $this->session->set_flashdata('error_msg', 'Please enter OTP.');
@@ -106,9 +107,17 @@ class Login extends CI_Controller
                 $this->load->view('header');
                 $this->load->view('changepwd', $check); //if otp is correct, get user email and goto change password page
                 $this->load->view('footer');
+                /*$result['status'] = TRUE;
+                $result['msg'] = "Valid OTP";
+                $result['data'] = $result;*/
             } else { //if otp is not correct, redirect with error message
                 $this->session->set_flashdata('error_msg', 'Enter correct OTP...');
-                redirect('/login/forgot_pwd', 'refresh');
+                $this->load->view('header');
+                $this->load->view('forgotpwd',$res);
+                $this->load->view('footer');
+                /*$result['status'] = FALSE;
+                $result['msg'] = "Invalid OTP";
+                $result['data'] = NULL;*/
             }
         }
     }
@@ -118,15 +127,15 @@ class Login extends CI_Controller
     {
         //form inputs validation
         $this->form_validation->set_rules('mail', 'Email', 'trim|required|valid_email');
-        $this->form_validation->set_rules('psw11', 'New Password', 'trim|required|min_length[3]|max_length[100]|md5|trim|xss_clean');
-        $this->form_validation->set_rules('psw22', 'Confirm Password', 'trim|required|matches[psw11]|min_length[3]|max_length[100]|md5|trim|xss_clean');
+        $this->form_validation->set_rules('psw11', 'New Password', 'trim|required|min_length[3]|max_length[100]|trim|xss_clean');
+        $this->form_validation->set_rules('psw22', 'Confirm Password', 'trim|required|matches[psw11]|min_length[3]|max_length[100]|trim|xss_clean');
         if ($this->form_validation->run() == FALSE) { //if inputs are invalid,load change password page with validation error message
             $this->load->view('header');
             $this->load->view('changepwd');
             $this->load->view('footer');
         } else { //if inputs are valid, go to change_password method
             $send = $this->dashboard_model->change_password();
-            if ($send) {
+            if ($send == true) {
                 //if change_password is successful, redirect with success message
                 $this->session->set_flashdata('success', 'Successfully Changed.');
                 redirect('/login', 'refresh');

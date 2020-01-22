@@ -98,7 +98,7 @@ function callTaskTableData()
                 return json.data;
             }
         },
-        "order": [[ 3, "desc" ]],
+        "order": [[ 0, "desc" ]],
         "columnDefs": [{
             "targets": 0,
             "render": function ( data, type, row, meta) {
@@ -117,15 +117,23 @@ function callTaskTableData()
         },{
             "targets": 3,
             "render": function ( data, type, row, meta ) {
-                return row[3];
+                if(row[9]!='--')
+                    return '<a href="../admin/load_userdetails_page?user_id='+row[9]+'">'+row[8]+'</a>';
+                else
+                    return row[8];
             }
         },{
             "targets": 4,
             "render": function ( data, type, row, meta ) {
-                return row[4];
+                return row[3];
             }
         },{
             "targets": 5,
+            "render": function ( data, type, row, meta ) {
+                return row[4];
+            }
+        },{
+            "targets": 6,
             "render": function ( data, type, row, meta ) {
                 var task_time_sec = row[5]/60 - Math.floor(row[5]/60);
                 task_time_sec = task_time_sec.toString().slice(0, 4);
@@ -133,7 +141,7 @@ function callTaskTableData()
                 return total_time;
             }
         },{
-            "targets": 6,
+            "targets": 7,
             "render": function ( data, type, row, meta ) {
                 return "<a href='#' data-id='"+ row[6] +"' class='text-danger delete-task' data-toggle='modal' data-target='#delete-task-modal'><i class='fas fa-trash-alt icon-plus del-tasks'></i></a>";
             },

@@ -47,6 +47,7 @@ $profile = $this->session->userdata('user_profile');
                         <th>Task name</th>
                         <th>Description</th>
                         <th>Project</th>
+                        <th>User</th>
                         <th>Start date</th>
                         <th>End date</th>
                         <th>Time spent</th>

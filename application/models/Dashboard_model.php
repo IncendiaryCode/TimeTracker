@@ -77,7 +77,7 @@ class Dashboard_model extends CI_Model
         $this->db->from('task AS t');
         $this->db->join('time_details AS d','d.task_id = t.id');
         $this->db->join('users AS u','u.id = d.user_id');
-        $this->db->group_by('d.user_id');
+        $this->db->group_by('u.id');
         $this->db->order_by('d.total_minutes','desc');
         $query = $this->db->get();
         if($query->num_rows() <= 5){
@@ -259,7 +259,11 @@ class Dashboard_model extends CI_Model
                
         } else if($type == 'task') { //load task details into datatable in task_snapshot page
             $get_data = $this->input->post();
-           // print_r($get_data);
+            if($get_data['month']){
+                $month = $get_data['month'];
+                $start_date = date($month.'-01');
+                $end_date = date('Y-m-t',strtotime($month));
+            }
             $draw = intval($this->input->post("draw"));
             $start = intval($this->input->post("start"));
             $length = intval($this->input->post("length"));
@@ -285,11 +289,11 @@ class Dashboard_model extends CI_Model
                 0=>'t.task_name',
                 1=>'t.description',
                 2=>'p.name',
-                3=>'d.start_time',
-                4=>'d.end_time',
-                5=>'d.total_minutes',
+                3=>'u.name',
+                4=>'d.start_time',
+                5=>'d.end_time',
+                6=>'d.total_minutes',
             );
-            //print_r($valid_columns);
             if(!isset($valid_columns[$col]))
             {
                 $order = null;
@@ -319,14 +323,18 @@ class Dashboard_model extends CI_Model
                     $x++;
                 }                 
             }
-            $this->db->select('t.id AS task_id,t.task_name,p.name AS project_name,p.id AS project_id');
+            $this->db->select('t.id AS task_id,t.task_name,p.name AS project_name,p.id AS project_id,u.id AS user_id,u.name AS user_name');
             $this->db->select('t.description,d.start_time,d.end_time,d.total_minutes,d.total_hours');
             $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->from('task AS t');
-            $this->db->join('project AS p','p.id = t.project_id');
-            $this->db->join('time_details AS d','d.task_id = t.id');
-            $this->db->where(array('d.end_time IS NOT NULL'));
-            $this->db->group_by('d.task_id');
+            $this->db->join('project AS p','p.id = t.project_id','LEFT');
+            $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
+            $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
+            $this->db->join('users AS u','u.id = ta.user_id','LEFT');
+            if($get_data['month']){
+                $this->db->where('d.task_date BETWEEN "'.$start_date.'" AND "'.$end_date.'"');
+            }
+            $this->db->group_by('t.id');
             $this->db->limit($length,$start);
             $employees = $this->db->get();
             $data = array();
@@ -335,13 +343,15 @@ class Dashboard_model extends CI_Model
 
                 $data[]= array(
                     $rows->task_name,
-                    $rows->description,
+                    ($rows->description)?$rows->description:'--',
                     $rows->project_name,
-                    $rows->start_time,
-                    $rows->end_time,
-                    $rows->t_minutes,
+                    isset($rows->start_time)?$rows->start_time:'--',
+                    isset($rows->end_time)?$rows->end_time:'--',
+                    isset($rows->t_minutes)?$rows->t_minutes:'0',
                     $rows->task_id,
-                    $rows->project_id
+                    $rows->project_id,
+                    ($rows->user_name)?$rows->user_name:'--',
+                    isset($rows->user_id)?$rows->user_id:'--'
                 );     
             }
             return $data;
@@ -539,9 +549,10 @@ class Dashboard_model extends CI_Model
             $this->db->select('t.task_name,p.name AS project_name');
             $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->from('task as t');
+            $this->db->join('task_assignee AS ta','ta.task_id = t.id');
             $this->db->join('project as p','p.id = t.project_id');
-            $this->db->join('time_details AS d','d.task_id = t.id');
-            $this->db->where('d.user_id',$user_id);
+            $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
+            $this->db->where('ta.user_id',$user_id);
             $this->db->group_by('t.id');
             $this->db->limit($length,$start);
             $employees = $this->db->get();
@@ -715,9 +726,10 @@ class Dashboard_model extends CI_Model
             $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->from('project AS p');
             $this->db->join('task AS t','t.project_id = p.id');
-            $this->db->join('time_details AS d','d.task_id = t.id');
+            $this->db->join('task_assignee AS ta','ta.task_id = t.id');
+            $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
             $this->db->group_by('p.id');
-            $this->db->where('d.user_id',$user_id);
+            $this->db->where('ta.user_id',$user_id);
             $this->db->limit($length,$start);
             $employees = $this->db->get();
             $data = array();
@@ -1324,18 +1336,18 @@ class Dashboard_model extends CI_Model
      */
     public function change_password()
     {
-        $new_pwd     = $this->input->post('new-pass');
-        $confirm_pwd = $this->input->post('confirm-pass');
+        $new_pwd     = $this->input->post('psw11');
+        $confirm_pwd = $this->input->post('psw22');
         if ($new_pwd == $confirm_pwd) {
             if ($this->session->userdata('email')) {
                 $email = $this->session->userdata('email');
             }
             else {
-                $email = $this->input->post('mail');
+                $email = $this->security->xss_clean($this->input->post('mail'));
             }
-            $this->db->set('password', md5($new_pwd));
+            $data = array('password'=>md5($new_pwd));
             $this->db->where('email', $email);
-            $query = $this->db->update('users');
+            $query = $this->db->update('users',$data);
             if ($query) {
                 return true;
             }
@@ -1413,10 +1425,14 @@ class Dashboard_model extends CI_Model
     {
         $username = $this->input->post('username');
         $password = $this->input->post('password');
-        $query    = $this->db->get_where('users', array(
+        
+        /*$query    = $this->db->get_where('users', array(
             'email' => $username,
             'password' => md5($password)
-        ));
+        ));*/
+        $this->db->where('email',$username);
+        $this->db->where('password',md5($password));
+        $query = $this->db->get('users');
         if ($query->num_rows() == 1) {
             $row    = $query->row();
             /*
@@ -1510,8 +1526,9 @@ class Dashboard_model extends CI_Model
                 ));
                     $this->email->from('admin1@printgreener.com');
                     $this->email->to($email);
-                    $this->email->subject('OTP for login');
-                    $this->email->message('Use this OTP:'.$token);
+                    $this->email->subject('TimeTracker login!');
+                    $this->email->set_newline("\r\n");
+                    $this->email->message('Use this OTP for TimeTracker login:'.$token);
                     //$this->email->send();
                     if(!$this->email->send()){
                         print_r($this->email->print_debugger());

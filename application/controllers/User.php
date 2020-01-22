@@ -373,7 +373,7 @@ class User extends CI_Controller
         if ($this->user_model->submit_profile($picture) == TRUE) {
         //if update successful, redirect to profile page with success message
             $this->session->set_flashdata('success', 'Profile picture updated successfully.');
-            redirect('admin/load_my_profile','refresh');
+            redirect('user/load_my_profile','refresh');
         }else{
             //if update is unsuccessful, redirect with error message
             $this->session->set_flashdata('failure', 'Profile picture not updated.');

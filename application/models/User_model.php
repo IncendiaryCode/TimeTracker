@@ -139,7 +139,7 @@ class User_model extends CI_Model {
         if ($query->num_rows() > 0) {
             $dataa = $query->result_array();
             foreach ($dataa as $d) {
-                $data[] = array('image_name' => ($d['image_name'] != NULL) ? (base_url() . UPLOAD_PATH . $d['image_name']) : NULL, 'project' => $d['name'], 'task_name' => $d['task_name'], 'running_task' => $d['running_task'], 'completed' => $d['completed'], 'start_time' => ($d['start_time'] != NULL) ? $d['start_time']: '', 't_minutes' => ($d['t_minutes'] !=NULL) ? $d['t_minutes']:'0', 'id' => $d['task_id']);
+                $data[] = array('image_name' => ($d['image_name'] != NULL) ? (base_url() . UPLOAD_PATH . $d['image_name']) : (base_url() . UPLOAD_PATH .'images.png', 'project' => $d['name'], 'task_name' => $d['task_name'], 'running_task' => $d['running_task'], 'completed' => $d['completed'], 'start_time' => ($d['start_time'] != NULL) ? $d['start_time']: '', 't_minutes' => ($d['t_minutes'] !=NULL) ? $d['t_minutes']:'0', 'id' => $d['task_id']);
             }
         } else {
             $data = NULL;
