@@ -4,7 +4,9 @@
     $this->load->library('form_validation');
     $this->load->helper('form');
     $this->load->library('session');
+
 ?>
+
 
 <body>
 	<div class="bg  col-md-6" id="mySlider"></div>

@@ -11,33 +11,48 @@ $(document).ready(function () {
 			user_email = document.getElementById("Uname").value;
 			var validateForm = new Validation(e.currentTarget);
 			var finalValue = validateForm.correctCheck();
+		return true;
 		};
 	}
 
+	if(email)
+	{
+		document.getElementById("Uname").value = email;
+		$("#enter-otp").show();
+		$("#enter-email").hide();
+	}
 	var formPsw = document.getElementById("reEnterPsw");
-	formPsw.onsubmit = function (e) {
-		var psw1 = document.getElementById("psw1").value;
-		var psw2 = document.getElementById("psw2").value;
-		if (psw1 == "" || psw1 == " ") {
-			document.getElementById("cnfrmPsw").innerHTML = "Empty Password";
-			return false;
-		}
-		if (psw1 === psw2) {
-			$.ajax({
-				type: "POST",
-				url: "../login/change_pass",
-				data: { Username: email, psw11: psw1, psw22: psw2 },
-				success: function (data) { }
-			});
-			alert("password changed successfully!!!");
+	if(formPsw)
+	{
+		formPsw.onsubmit = function (e) {
+			var psw1 = document.getElementById("psw1").value;
+			var psw2 = document.getElementById("psw2").value;
+			if (psw1 == "" || psw1 == " ") {
+				document.getElementById("cnfrmPsw").innerHTML = "Empty Password";
+				return false;
+			}
+			if (psw1 === psw2) {
+				$.ajax({
+					type: "POST",
+					url: "../login/change_pass",
+					data: { mail: document.getElementById("user-email").value, psw11: psw1, psw22: psw2 },
+					success: function (data) { }
+				});
+				alert("password changed successfully!!!");
 
-			return true;
-		} else {
-			document.getElementById("cnfrmPsw").innerHTML =
-				"Enter correct Password!!!";
-			return false;
-		}
-	};
+				return true;
+			} else {
+				document.getElementById("cnfrmPsw").innerHTML =
+					"Enter correct Password!!!";
+				return false;
+			}
+		};
+	}
+
+	$('#getOTP1').click(function()
+	{
+		$('.resend-otp-spinner').css("display","block");
+	})
 });
 
 var Validation = function (e) {
@@ -134,15 +149,15 @@ function validateOtp() {
 			url: timeTrackerBaseURL + "login/check_otp",
 			data: { "otp": otpp, "email": document.getElementById('Uname').value },
 			success: function (data) {
-				if (data == null || data == "") {
-					$(document).ready(function () {
-						$("#formPsw").show();
-						$("#form2").hide();
-					});
-					return true;
-				} else {
+				if(!(email == "" || email == " "))
+				{
+					$("#enter-email").hide();
+					$("#enter-otp").show();
 					document.getElementById("email-error").innerHTML = "Wrong OTP.";
 					return false;
+				}
+				 else {
+					return true;
 				}
 			}
 		});
@@ -150,19 +165,52 @@ function validateOtp() {
 }
 
 function sendOTP() {
+	
+	var email1 = document.getElementById("Uname").value;
+	if (email1 == "" || email1 == " ") {
+		document.getElementById("email-error").innerHTML = "Enter email.";
+	} else {
+		$('.send-otp-spinner').css("display", "block");
+		$.ajax({
+			type: "POST",
+			url: timeTrackerBaseURL + "login/send_otp",
+			data: { email: email1 },
+			success: function (data) {
+				document.getElementById("email-error").innerHTML = " ";
+				$("#enter-otp").show();
+				$("#enter-email").hide();
+				$('#fill-otp').click(function () {
+					var validate = validateOtp();
+					if (validate) {
+						forgotPsw.onsubmit = function (e) {
+							return true;
+						}
+
+					}
+					else
+					{
+						$("#enter-otp").show();
+						$("#enter-email").hide();
+					}
+				});
+			}
+		});
+	}
+}
+function resendOTP() {
 	var email = document.getElementById("Uname").value;
 	if (email == "" || email == " ") {
 		document.getElementById("email-error").innerHTML = "Enter email.";
 	} else {
-		$('#send-otp-spinner').css("display", "block");
+		$('.resend-otp-spinner').css("display", "block");
 		$.ajax({
 			type: "POST",
 			url: timeTrackerBaseURL + "login/send_otp",
 			data: { email: email },
 			success: function (data) {
 				document.getElementById("email-error").innerHTML = " ";
-				$("#enter-otp").show();
-				$("#enter-email").hide();
+				document.getElementById("resent-otp").innerHTML = "Otp sent successfully";
+				$('.resend-otp-spinner').css("display", "none");
 				$('#fill-otp').click(function () {
 					var validate = validateOtp();
 					if (validate) {
