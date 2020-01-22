@@ -13,7 +13,7 @@ var add_module = {
         main_row.append(element);
         var row1 = $('<div class="col-2 pt-3 assign-module' + i + '"></div>');
         var addBtn = $('<a href="javascript:void(0);" id="add-module-' + i + '">');
-        var icon = $('<i class="fas fa-plus icon-plus text-success"></i></a>');
+        var icon = $('<i class="fas fa-plus icon-plus text-white"></i></a>');
         addBtn.append(icon);
         row1.append(addBtn);
         row1.appendTo(main_row);
@@ -21,11 +21,11 @@ var add_module = {
         $('#add-new-module').removeClass('fa-plus');
         if (_this.last_row != 0) {
             _this.last_row.removeClass('fas fa-plus');
-            _this.last_row.addClass('fas fa-minus icon-plus text-danger');
+            _this.last_row.addClass('fas fa-minus icon-plus text-white');
 
         }
         $('#adding-module').removeClass('fas fa-plus');
-        $('#adding-module').addClass('fas fa-minus icon-plus text-danger');
+        $('#adding-module').addClass('fas fa-minus icon-plus text-white');
         $(".fa-minus").click(function () {
             this.parentNode.parentNode.parentNode.remove();
         });
@@ -62,7 +62,7 @@ var add_module = {
                 username.push(module_name);
             }
             else {
-                document.getElementById('module-error').innerHTML = "User name is repeated.";
+                document.getElementById('module-error').innerHTML = "Module name is repeated.";
             }
         }
     },

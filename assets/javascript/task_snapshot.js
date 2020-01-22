@@ -76,12 +76,12 @@ function __draw_task_chart(res) {
 
 function callTaskTableData()
 {
-    console.log(document.getElementById('curr-month').value);
         var table = $('#task-lists-datatable').DataTable({
         "processing": true,
         "serverSide": true,
         responsive: true,
         "scrollX": true,
+        "bDestroy": true,
         "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/load_snapshot',
             type: "POST",
@@ -162,7 +162,6 @@ function callTaskTableData()
 $(document).ready(function() {
 
     //rendering datatable
-
     if (document.getElementById('task-chart')) {
         if ((document.getElementById('curr-month').value == "") || (document.getElementById('curr-month').value == " ")) {
             var month_no = (new Date().getMonth() + 1).toString();
@@ -196,7 +195,7 @@ $(document).ready(function() {
                     __draw_task_chart(result);
                 }
             });
-            callTaskTableData();
+        callTaskTableData();
         }
     });
 

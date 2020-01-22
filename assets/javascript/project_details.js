@@ -27,7 +27,7 @@ function __draw_project_chart(res) {
 			datasets: [
 				{
 					type: "line",
-					label: "time spent on this project",
+					label: "time spent in hrs",
 					backgroundColor: gradient,
 					borderColor: window.chartColors.black,
 					data: hours

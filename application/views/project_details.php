@@ -79,7 +79,7 @@ $profile = $this->session->userdata('user_profile');
                 </div>
             </div>
         </div>
-    </div><hr>
+    </div>
     <div class="row mt-5">
         <canvas id="project_time_chart" height="80px;"></canvas>
     </div><hr>
