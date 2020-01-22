@@ -375,6 +375,26 @@ $(document).ready(function() {
 			}
 		};
 	}
+	if(document.getElementById("editTask") != undefined)
+	{
+		var editTask = document.getElementById("editTask");
+		if (editTask) {
+			editTask.onsubmit = function(e) {
+				var taskName = document.getElementById("Taskname").value;
+				var project = document.getElementById("choose-project").value;
+				if (taskName == "" || taskName == " ") {
+					document.getElementById("taskError").innerHTML =
+						"Please Enter Task Name ";
+					return false;
+				}
+				if (project == "" || project == "Select Project") {
+					document.getElementById("taskError").innerHTML =
+						"Please Choose Project Name ";
+					return false;
+				}
+			}
+		}
+	}
 	var dateObj = new Date();
 	var _month = dateObj.getMonth() + 1;
 	if(_month.toString().length == 1)

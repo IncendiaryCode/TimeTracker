@@ -37,8 +37,6 @@ $(document).ready(function () {
 					data: { mail: document.getElementById("user-email").value, psw11: psw1, psw22: psw2 },
 					success: function (data) { }
 				});
-				alert("password changed successfully!!!");
-
 				return true;
 			} else {
 				document.getElementById("cnfrmPsw").innerHTML =
@@ -124,7 +122,7 @@ if (loginForm) {
 		var finalValue = validateForm.correctCheck();
 		if (finalValue.isValid == true) {
 			
-			if(document.getElementById("Username").value)
+			if(document.getElementById("Username").value != undefined)
 			{
 			var id = document.getElementById("Username").value;
 			}

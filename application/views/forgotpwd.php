@@ -5,7 +5,6 @@ $this->load->helper('url_helper');
 
 <script type="text/javascript">
     var email = "<?=isset($email)?$email:''?>";
-    console.log(email);
 </script>
 
 
