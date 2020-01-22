@@ -54,14 +54,14 @@ $profile = $this->session->userdata('user_profile');
                                 </div>
                             <?php } ?> 
                         <p class="text-center display-heading text-primary">Add user</p>
-                        <form action="<?php echo base_url();?>index.php/admin/add_users" id="addUser" method="post">
+                        <form action="<?php echo base_url();?>index.php/admin/add_users" id="addUser" method="post" novalidate>
                             <div class="form-group mt-3">
                                 <label for="task-name ">Name:<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="task_name" id="newUser" value="">
                             </div>
                             <div class="form-group mt-3">
                                 <label for="task-name ">Email:<span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" name="user_email" id="user_email">
+                                <input type="email" class="form-control" name="user_email" id="user_email" >
                             </div>
                             <div class="form-group mt-3">
                                 <label for="task-name ">Password:<span class="text-danger">*</span></label>

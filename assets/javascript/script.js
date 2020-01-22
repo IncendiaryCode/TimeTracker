@@ -15,7 +15,7 @@ $(document).ready(function () {
 		};
 	}
 
-	if(email)
+	if(typeof email != "undefined")
 	{
 		document.getElementById("Uname").value = email;
 		$("#enter-otp").show();
