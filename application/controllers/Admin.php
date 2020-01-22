@@ -413,11 +413,11 @@
 			            } else {
 			                //if upload is not successful, print upload errors
 			                echo $this->upload->display_errors();
-			                $picture = 'images.png';
+			                $picture = '';
 			            }
 			        }
 			        else {
-			            $picture = 'images.png';
+			            $picture = '';
 			        }
 		            $result=$this->dashboard_model->add_projects($picture); //insert project into db
 		            if($result == FALSE){ //if not added, redirect to add project page with error message
@@ -577,11 +577,11 @@
 		            }else{
 		            	//if image is not uploaded, print error message
 		            	echo $this->upload->display_errors();
-		                $picture = 'images.png';
+		                $picture = '';
 		            }
 		        }else{
 		        	//if image file is not present, assign default image to $picture variable
-		            $picture = 'images.png';
+		            $picture = '';
 		        }
 				$this->dashboard_model->submit_profile($picture); //update profile photo into db
 				if($this->dashboard_model->submit_profile($picture) == TRUE){

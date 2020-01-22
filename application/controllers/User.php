@@ -363,11 +363,11 @@ class User extends CI_Controller
             } else {
                 //if image is not uploaded, print error message
                 echo $this->upload->display_errors();
-                $picture = 'images.png';
+                $picture = '';
             }
         } else {
             //if image file is not present, assign default image to $picture variable
-            $picture = 'images.png';
+            $picture = '';
         }
         $this->user_model->submit_profile($picture);
         if ($this->user_model->submit_profile($picture) == TRUE) {

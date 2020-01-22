@@ -137,7 +137,7 @@ class Login extends CI_Controller
             $send = $this->dashboard_model->change_password();
             if ($send == true) {
                 //if change_password is successful, redirect with success message
-                $this->session->set_flashdata('success', 'Successfully Changed.');
+                $this->session->set_flashdata('success', 'Reset password successful.');
                 redirect('/login', 'refresh');
                 return true;
             } else {
