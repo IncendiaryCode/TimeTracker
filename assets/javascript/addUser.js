@@ -20,15 +20,3 @@ if (addUser) {
             }
     }
 }
-function validateEmail()
-{
-    $('#user_email').onblur = function()
-    {
-        console.log("emial");
-        if (!emailRegEx.test(document.getElementById('user_email').value)) {
-                document.getElementById("user-error").innerHTML ="Email format is not correct.";
-                    $('#user_email').focus();
-                return false;
-            } 
-    }
-}

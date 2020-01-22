@@ -14,8 +14,7 @@ $(document).ready(function () {
 		return true;
 		};
 	}
-
-	if(typeof email != "undefined")
+	if(typeof email != "undefined" && (email != '' ))
 	{
 		document.getElementById("Uname").value = email;
 		$("#enter-otp").show();
@@ -124,7 +123,11 @@ if (loginForm) {
 		var validateForm = new Validation(e.currentTarget);
 		var finalValue = validateForm.correctCheck();
 		if (finalValue.isValid == true) {
+			
+			if(document.getElementById("Username").value)
+			{
 			var id = document.getElementById("Username").value;
+			}
 			localStorage.setItem("id", id);
 			document.getElementById("Username-error").value = " ";
 			return true;

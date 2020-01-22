@@ -159,10 +159,10 @@ if ($this->input->get('t_id')) { ?>
                                             <div class="row">
                                                 <div class="col-4 col-md-6">
                                                     <div class="input-group mb-3">
-                                                        <input type="text" class="form-control datepicker" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-0">
+                                                        <input type="text" class="form-control datepicker " name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-0">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">
-                                                                <button type="button" class="btn fa fa-calendar"></button>
+                                                                <button type="button" class="btn fa fa-calendar p-0"></button>
                                                             </span>
                                                         </div>
                                                     </div>

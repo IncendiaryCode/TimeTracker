@@ -139,8 +139,8 @@
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 <script src="<?=base_url();?>assets/user/plugins/calendar_view.js?v=<?=VERSION?>"></script>
-<script src="<?=base_url();?>assets/user/javascript/add_task.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/user/javascript/add_task.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/utils.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/change_password.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/plugins/bxslider/js/jquery.bxslider.min.js?v=<?=VERSION?>"></script>
@@ -162,7 +162,19 @@ $('.edit-time').timepicker({
  });
 });
 
-
+function check_for_punchIn()
+{
+if(document.getElementById("stop-time"))
+    {
+        if (document.getElementById("stop-time").childNodes[1].childNodes[0].classList[2] == "fa-play") {
+            // $("#play-timer").modal("show");
+            alert("You cannot punch in again...");
+        }
+        else{
+            window.location.href = timeTrackerBaseURL +"user/load_add_task";
+        }
+    }
+}
 
 </script>
 </body>

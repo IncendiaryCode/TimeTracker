@@ -12,7 +12,7 @@ $this->load->helper('url_helper');
 <div class="bg col-md-6" id="mySlider"></div>
 <div class="col-md-6 positioning-logo text-center"><img src="<?= base_url(); ?>assets/images/logo.png"></div>
 <div id="form2" class="animated fadeIn login-form">
-            <h4 class="text-center">Forgot Password</h4>
+            <h4 class="text-center mt-5 mt-md-0">Forgot Password</h4>
     <?php
     if ($this->session->flashdata('error_msg')) { ?>
             <div class="alert alert-danger"><?php echo $this->session->flashdata('error_msg'); ?></div>
@@ -51,8 +51,13 @@ $this->load->helper('url_helper');
                     <a href="<?= base_url(); ?>login" class="text-left forgot-color"><i class="fas fa-arrow-left"></i> Back to login</a>
                 </div>
                 <div class="col-6 text-right">
-                    <button class="btn btn-primary login-color" onclick="resendOTP()" type="button" id="getOTP1">Resend OTP</button>
-                    <button class="btn btn-primary login-color ml-3" id="fill-otp" type="submit" name="submit"> Submit </button>
+                    <div class="row">
+                        <div class="col-8">
+                            <button class="btn btn-primary login-color" onclick="resendOTP()" type="button" id="getOTP1">Resend OTP</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-primary login-color ml-4" id="fill-otp" type="submit" name="submit"> Submit </button>
+                        </div>
                 </div>
             </div>
         </div>

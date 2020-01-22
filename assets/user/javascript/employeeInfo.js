@@ -647,12 +647,8 @@ $(document).ready(function () {
 				type: "POST",
 				url: timeTrackerBaseURL + "user/update_end_time",
 				success: function (res) {
-					document
-						.getElementById("stop-time")
-						.childNodes[1].childNodes[0].classList.remove("fa-stop");
-					document
-						.getElementById("stop-time")
-						.childNodes[1].childNodes[0].classList.add("fa-play");
+					document.getElementById("stop-time").childNodes[1].childNodes[0].classList.remove("fa-stop");
+					document.getElementById("stop-time").childNodes[1].childNodes[0].classList.add("fa-play");
 					document.getElementById("stop-time").removeEventListener("click");
 				}
 			});

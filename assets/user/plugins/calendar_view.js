@@ -19,7 +19,7 @@ function minutesToTime(mins) {
 var daily_chart;
 
 
-function draw_chart_ards(data) {
+function draw_chart_cards(data) {
     
     for (x in data) {
         for (var y = 0; y < data[x].length; y++) {
@@ -143,7 +143,7 @@ function loadTask(type, date) {
             } else {
                 var data = JSON.parse(values);
                 $("#attachPanels").empty();
-                draw_chart_ards(data);
+                draw_chart_cards(data);
             }
         }
     });
@@ -224,7 +224,6 @@ function dateFromDay(year, day) {
     return new Date(date.setDate(day)); // add the number of days
 }
 function drawChart(type, res) {
-
     if (res == "No activity in this week.") {
         if (daily_chart) daily_chart.destroy();
         document.getElementById('week-error').innerHTML = "No activity in this week.";
@@ -522,6 +521,7 @@ function loadMonthlyChart() {
         data: { 'chart_type': "monthly_chart", 'date': year },
         dataType: 'json',
         success: function (res) {
+            console.log(res);
             if(res['data'][0] == 0)
             {
                 document.getElementById('monthly-chart-error').innerHTML = "No works in this year."

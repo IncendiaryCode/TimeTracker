@@ -350,35 +350,28 @@ $(document).ready(function() {
 	if (addTask) {
 		var m = new Date();
 		addTask.onsubmit = function(e) {
-			if (
-				document.getElementById("stop-time").childNodes[1].childNodes[0]
-					.classList[2] == "fa-play"
-			) {
-				$("#play-timer").modal("show");
+			var taskName = document.getElementById("Taskname").value;
+			var project = document.getElementById("choose-project").value;
+			if (taskName == "" || taskName == " ") {
+				document.getElementById("taskError").innerHTML =
+					"Please Enter Task Name ";
+				return false;
+			}
+			if (project == "" || project == "Select Project") {
+				document.getElementById("taskError").innerHTML =
+					"Please Choose Project Name ";
+				return false;
+			}
+			document.getElementById("taskError").innerHTML = " ";
+			var date = document.getElementById("date-picker-0").value;
+			var start_time = document.getElementById("0").value;
+			var end_time = document.getElementById("end-time-0").value;
+			var flag = false;
+			flag = addTime.validate(false);
+			if (flag == false) {
+				return false;
 			} else {
-				var taskName = document.getElementById("Taskname").value;
-				var project = document.getElementById("choose-project").value;
-				if (taskName == "" || taskName == " ") {
-					document.getElementById("taskError").innerHTML =
-						"Please Enter Task Name ";
-					return false;
-				}
-				if (project == "" || project == "Select Project") {
-					document.getElementById("taskError").innerHTML =
-						"Please Choose Project Name ";
-					return false;
-				}
-				document.getElementById("taskError").innerHTML = " ";
-				var date = document.getElementById("date-picker-0").value;
-				var start_time = document.getElementById("0").value;
-				var end_time = document.getElementById("end-time-0").value;
-				var flag = false;
-				flag = addTime.validate(false);
-				if (flag == false) {
-					return false;
-				} else {
-					array_of_timings.push({ date, start_time, end_time });
-				}
+				array_of_timings.push({ date, start_time, end_time });
 			}
 		};
 	}
