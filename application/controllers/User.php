@@ -313,6 +313,7 @@ class User extends CI_Controller
         //form inputs validation
         $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|xss_clean');
         if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to edit task page
+            $GLOBALS['page_title'] = 'Edit task';
             $this->load->view('user/header');
             $t_id = $this->input->post('task_id', TRUE);
             $task_data = $this->user_model->get_task_info($t_id);
@@ -363,11 +364,11 @@ class User extends CI_Controller
             } else {
                 //if image is not uploaded, print error message
                 echo $this->upload->display_errors();
-                $picture = '';
+                $picture = 'images.png';
             }
         } else {
             //if image file is not present, assign default image to $picture variable
-            $picture = '';
+            $picture = 'images.png';
         }
         $this->user_model->submit_profile($picture);
         if ($this->user_model->submit_profile($picture) == TRUE) {

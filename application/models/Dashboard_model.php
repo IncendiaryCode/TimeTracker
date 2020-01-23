@@ -1158,13 +1158,13 @@ class Dashboard_model extends CI_Model
      */
     public function add_projects($project_icon)
     {
+        print_r($project_icon);
         $userid = $this->session->userdata('userid');
         if(!empty($this->input->post('start-date'))){
             $project_started_on = $this->input->post('start-date');
         }else{
             $project_started_on = date('Y-m-d H:i:s');
         }
-        $file_name = isset($project_icon) ? $project_icon : '';
         if($this->input->post('new-module[0][module]')==''){
             $module = '';
         }else{
@@ -1179,14 +1179,9 @@ class Dashboard_model extends CI_Model
         //check if the project is assigning to the user
         if($this->input->post('project_name') == ''){
             //add project into project table
-            $array = array(                                 
-                'color_code' => $this->input->post('project-color'),
-                'image_name' => $file_name['image_name'],
-                'name' => $this->input->post('project-name'),
-                'created_on' => $project_started_on
-            );
+            $array = array('color_code' => $this->input->post('project-color'),'image_name' => $project_icon['image_name'],'name' => $this->input->post('project-name'), 'created_on' => $project_started_on);
             $this->db->set($array);
-            $query = $this->db->insert('project', $array);
+            $query = $this->db->insert('project',$array);
             $project_id = $this->db->insert_id(); //get last insert id of project table
         }
         else {
@@ -1286,7 +1281,7 @@ class Dashboard_model extends CI_Model
     {
         $useremail = $this->session->userdata('email');
         $this->db->where('email', $useremail);
-        $query = $this->db->update('users', $picture);
+        $query = $this->db->update('users', array('profile'=>$picture));
         if (!$query) {
             return false;
         } //!$query

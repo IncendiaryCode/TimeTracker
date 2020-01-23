@@ -543,7 +543,7 @@ class User_model extends CI_Model {
     public function submit_profile($picture) {
         $useremail = $this->session->userdata('email');
         $this->db->where('email', $useremail);
-        $query = $this->db->update('users', $picture);
+        $query = $this->db->update('users', array('profile'=>$picture));
         if (!$query) {
             return false;
         } else {
