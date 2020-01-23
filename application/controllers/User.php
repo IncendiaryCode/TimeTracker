@@ -301,8 +301,8 @@ class User extends CI_Controller
                 $this->session->set_flashdata('failure', 'Unable to add the Task.');
                 redirect('user/load_add_task');
             } else { //if add method is successful, redirect with success message
-                $this->session->set_flashdata('success', 'Successfully added.');
-                redirect('user/load_add_task', 'refresh');
+                $this->session->set_flashdata('success', 'A new Task is added.');
+                redirect('user/index', 'refresh');
             } 
         }
     }

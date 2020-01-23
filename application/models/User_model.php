@@ -436,7 +436,7 @@ class User_model extends CI_Model {
             $this->db->where(array('user_id' => $userid));
             $this->db->where('end_time IS NOT NULL');
             $this->db->where('task_date BETWEEN "' . date('Y-m-d', strtotime($getdate[0])) . '" and "' . date('Y-m-d', strtotime($getdate[1])) . '"');
-            $this->db->group_by('task_date');
+            $this->db->group_by('task_id');
             $query = $this->db->get();
             if ($query->num_rows() > 0) {
                 $data = $query->result_array();
@@ -463,7 +463,7 @@ class User_model extends CI_Model {
             $this->db->where(array('user_id' => $userid));
             $this->db->where('end_time IS NOT NULL');
             $this->db->where('task_date BETWEEN "' . $year_start . '" and "' . $year_end . '"');
-            $this->db->group_by('task_date');
+            $this->db->group_by('task_id');
             $query = $this->db->get();
             if ($query->num_rows() > 0) {
                 $data = $query->result_array();
@@ -543,7 +543,7 @@ class User_model extends CI_Model {
     public function submit_profile($picture) {
         $useremail = $this->session->userdata('email');
         $this->db->where('email', $useremail);
-        $query = $this->db->update('users', array('profile'=>$picture));
+        $query = $this->db->update('users', array('profile'=>$picture['profile']));
         if (!$query) {
             return false;
         } else {

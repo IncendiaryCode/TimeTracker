@@ -911,7 +911,7 @@ class Dashboard_model extends CI_Model
             ));
                 $this->email->from('admin@printgreener.com');
                 $this->email->to($user_email);
-                $this->email->subject('Notification: New project');
+                $this->email->subject('TimeTracker Notification: New project');
                 $this->email->message('Hi '.$user_name.', you are assigned to the project: '.$project_name);
                 //$this->email->send();
                 if(!$this->email->send()){
@@ -1221,7 +1221,7 @@ class Dashboard_model extends CI_Model
      */
     public function delete_user($userid){
         $array = array('time_details','login_details','project_assignee','task_assignee');
-        $delete = $this->db->delete($array,array('user_id'=>$usetid));
+        $delete = $this->db->delete($array,array('user_id'=>$userid));
         $this->db->where('id',$userid);
         $result = $this->db->delete('users');
         if($result->_error_message()){
@@ -1281,7 +1281,7 @@ class Dashboard_model extends CI_Model
     {
         $useremail = $this->session->userdata('email');
         $this->db->where('email', $useremail);
-        $query = $this->db->update('users', array('profile'=>$picture));
+        $query = $this->db->update('users', array('profile'=>$picture['profile']));
         if (!$query) {
             return false;
         } //!$query
@@ -1527,19 +1527,20 @@ class Dashboard_model extends CI_Model
                     //$this->email->send();
                     if(!$this->email->send()){
                         print_r($this->email->print_debugger());
-                        return false;
+                        $result = 'failed';
                     }else{
-                        return true;
+                        $result = 'success';   
                     }
                     //return true;
                 } //$query
                 else {
-                    return false;
+                    $result = 'failed';    
                 }
             } //$query->num_rows() == 1
             else {
-                return false;
+                $result = 'error';
             }
+            return $result;
         }
     }
 

@@ -81,12 +81,15 @@ class Login extends CI_Controller
             redirect('/login/forgot_pwd', 'refresh');
         } else {
             $send = $this->dashboard_model->send_otp(); //otp is inserted into db
-            if ($send == true) { //if otp is insertion is successful, send success message
-                $result['status'] = TRUE;
-                $result['msg'] = "OTP sent...";
-            } else { //if failed to insert otp, send failure message
+            if($send == 'error'){
                 $result['status'] = FALSE;
-                $result['msg'] = "OTP not sent...";
+                $result['msg'] = "This is not a registered email id!";
+            } else if ($send == 'success') { //if otp is insertion is successful, send success message
+                $result['status'] = TRUE;
+                $result['msg'] = "OTP sent.";
+            } else if($send == 'failed'){ //if failed to insert otp, send failure message
+                $result['status'] = FALSE;
+                $result['msg'] = "OTP not sent!";
             }
             echo json_encode($result); //send response data to the ajax call
         }
