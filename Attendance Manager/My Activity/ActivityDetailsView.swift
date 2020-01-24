@@ -109,5 +109,4 @@ class ActivityDetailsView: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func btnBackPressed(_ sender: Any) {
         self.presentingViewController?.dismiss(animated: true, completion: {self.view = nil})
     }
-    
 }

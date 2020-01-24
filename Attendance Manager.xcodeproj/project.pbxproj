@@ -7,17 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		032C7B7323BF241D008EEE8C /* ActivityDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032C7B7223BF241D008EEE8C /* ActivityDetailsView.swift */; };
-		03316DA3232B9C1A001C9119 /* StepCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03316D9F232B9C1A001C9119 /* StepCollectionViewFlowLayout.swift */; };
-		03316DA4232B9C1A001C9119 /* FullDateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03316DA0232B9C1A001C9119 /* FullDateCollectionViewCell.swift */; };
-		03316DA5232B9C1A001C9119 /* DateTimePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03316DA1232B9C1A001C9119 /* DateTimePicker.swift */; };
-		03316DA6232B9C1A001C9119 /* DateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03316DA2232B9C1A001C9119 /* DateCollectionViewCell.swift */; };
-		033FCAB3233355210043D358 /* AddProjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033FCAB2233355210043D358 /* AddProjects.swift */; };
-		033FCAB523335BA00043D358 /* TaskUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033FCAB423335BA00043D358 /* TaskUpdater.swift */; };
-		033FCAB723335F4C0043D358 /* TaskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033FCAB623335F4C0043D358 /* TaskController.swift */; };
-		0340777423472D5D0069BEEA /* ActivityChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0340777323472D5D0069BEEA /* ActivityChartViewController.swift */; };
+		033DDF8F237060F50066B7E9 /* ProjectsCDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033DDF8E237060F50066B7E9 /* ProjectsCDController.swift */; };
+		033DDF91237065F60066B7E9 /* TaskTimeCDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033DDF90237065F60066B7E9 /* TaskTimeCDController.swift */; };
+		033F535E23CD9C2A0079F8A4 /* AboutAppVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033F535D23CD9C2A0079F8A4 /* AboutAppVC.swift */; };
+		033FCAB523335BA00043D358 /* TasksCDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033FCAB423335BA00043D358 /* TasksCDController.swift */; };
+		033FCAB723335F4C0043D358 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033FCAB623335F4C0043D358 /* TaskViewController.swift */; };
 		0340F04C2317B83D001FFB29 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0340F04B2317B83D001FFB29 /* AppDelegate.swift */; };
-		0340F04E2317B83D001FFB29 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0340F04D2317B83D001FFB29 /* LoginController.swift */; };
+		0340F04E2317B83D001FFB29 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0340F04D2317B83D001FFB29 /* LoginViewController.swift */; };
 		0340F0512317B83D001FFB29 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0340F04F2317B83D001FFB29 /* Main.storyboard */; };
 		0340F0532317B848001FFB29 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0340F0522317B848001FFB29 /* Assets.xcassets */; };
 		0340F0562317B848001FFB29 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0340F0542317B848001FFB29 /* LaunchScreen.storyboard */; };
@@ -26,24 +22,45 @@
 		034349D22322310100B0A2CE /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 034349D12322310100B0A2CE /* ExternalAccessory.framework */; };
 		034349D523227CE800B0A2CE /* UserTaskInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034349D323227CE800B0A2CE /* UserTaskInfoCell.swift */; };
 		034349D623227CE800B0A2CE /* userBreakInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 034349D423227CE800B0A2CE /* userBreakInfoCell.xib */; };
+		0344960D23794CDB00B9CFB2 /* TimerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0344960B23794CDB00B9CFB2 /* TimerCell.swift */; };
+		0344960E23794CDB00B9CFB2 /* TimerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0344960C23794CDB00B9CFB2 /* TimerCell.xib */; };
+		0345C4072375477D001510E6 /* TimingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0345C4052375477D001510E6 /* TimingsCell.swift */; };
+		0345C4082375477D001510E6 /* TimingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0345C4062375477D001510E6 /* TimingsCell.xib */; };
+		034708B9235F0F9A00867132 /* CalendarFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034708B0235F0F9A00867132 /* CalendarFlowLayout.swift */; };
+		034708BA235F0F9A00867132 /* CalendarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034708B1235F0F9A00867132 /* CalendarHeaderView.swift */; };
+		034708BB235F0F9A00867132 /* CalendarView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034708B2235F0F9A00867132 /* CalendarView+Extensions.swift */; };
+		034708BC235F0F9A00867132 /* CalendarDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034708B3235F0F9A00867132 /* CalendarDayCell.swift */; };
+		034708BD235F0F9A00867132 /* CalendarView+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034708B4235F0F9A00867132 /* CalendarView+Style.swift */; };
+		034708BE235F0F9A00867132 /* CalendarView+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034708B5235F0F9A00867132 /* CalendarView+Delegate.swift */; };
+		034708BF235F0F9A00867132 /* EventsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034708B6235F0F9A00867132 /* EventsManager.swift */; };
+		034708C0235F0F9A00867132 /* CalendarView+DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034708B7235F0F9A00867132 /* CalendarView+DataSource.swift */; };
+		034708C1235F0F9A00867132 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034708B8235F0F9A00867132 /* CalendarView.swift */; };
+		03470966239F67A300F38C2F /* APIResponseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03470965239F67A300F38C2F /* APIResponseHandler.swift */; };
 		03472B57233B416D009C6591 /* FilterProjectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03472B56233B416D009C6591 /* FilterProjectCell.swift */; };
+		03495D0F23A789480076AC02 /* UserguideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03495D0E23A789480076AC02 /* UserguideView.swift */; };
 		0349F6E12330E58C00BC7E74 /* UserTaskDetails.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0349F6DF2330E58C00BC7E74 /* UserTaskDetails.xcdatamodeld */; };
-		0349F6E32331089A00BC7E74 /* UserActivityUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0349F6E22331089A00BC7E74 /* UserActivityUpdater.swift */; };
-		034B4CCD2332408300ED4624 /* RadioWaveAnimataion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034B4CCC2332408300ED4624 /* RadioWaveAnimataion.swift */; };
+		0349F6E32331089A00BC7E74 /* PunchInOutCDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0349F6E22331089A00BC7E74 /* PunchInOutCDController.swift */; };
 		034B4CCF233247D200ED4624 /* ProgressCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034B4CCE233247D200ED4624 /* ProgressCircle.swift */; };
-		03575A88231E83A400FBDA6E /* FPResetPController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03575A87231E83A400FBDA6E /* FPResetPController.swift */; };
-		035B71962328C19800869B1D /* RoundCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035B71952328C19800869B1D /* RoundCircleView.swift */; };
+		03575A88231E83A400FBDA6E /* ResetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03575A87231E83A400FBDA6E /* ResetPasswordVC.swift */; };
+		035BBC9123B0819F00891053 /* ResetPWVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BBC9023B0819F00891053 /* ResetPWVC.swift */; };
 		035C61A62326148F0097297D /* TableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035C61A52326148F0097297D /* TableHeaderView.swift */; };
-		03695367234318B100C5E321 /* MyActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03695366234318B100C5E321 /* MyActivityViewController.swift */; };
+		0360E3F023B1E8130014D027 /* InAppNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0360E3EF23B1E8130014D027 /* InAppNotificationView.swift */; };
+		0360E3F223B1ECA70014D027 /* notification.png in Resources */ = {isa = PBXBuildFile; fileRef = 0360E3F123B1ECA70014D027 /* notification.png */; };
+		0360E3F623B1FD6E0014D027 /* dismiss.png in Resources */ = {isa = PBXBuildFile; fileRef = 0360E3F523B1FD6E0014D027 /* dismiss.png */; };
 		0369536923431E7600C5E321 /* ActivityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0369536823431E7600C5E321 /* ActivityView.xib */; };
 		0369536B23431FC800C5E321 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0369536A23431FC800C5E321 /* ActivityView.swift */; };
-		0369536E2343217300C5E321 /* ActivityCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0369536C2343217300C5E321 /* ActivityCellController.swift */; };
-		0369536F2343217300C5E321 /* ActivityCellController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0369536D2343217300C5E321 /* ActivityCellController.xib */; };
-		036B42732339EA5C00F2C670 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036B42722339EA5C00F2C670 /* FilterView.swift */; };
+		036B42732339EA5C00F2C670 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036B42722339EA5C00F2C670 /* FilterViewController.swift */; };
+		036B9147239A7C3B00E056A9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036B9146239A7C3B00E056A9 /* SceneDelegate.swift */; };
+		0379438B239E795000F87291 /* ModuleCDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0379438A239E795000F87291 /* ModuleCDController.swift */; };
+		03851EAA2372A0A000C484C7 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03851EA92372A0A000C484C7 /* AccountViewController.swift */; };
+		03851EB02372AC5600C484C7 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03851EAF2372AC5600C484C7 /* TabBarController.swift */; };
 		03C30AF2233DCA260078BD85 /* RequestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C30AF1233DCA260078BD85 /* RequestController.swift */; };
-		03C693882319347E005F385B /* FPEmailOtpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C693872319347E005F385B /* FPEmailOtpController.swift */; };
-		03EAD8E2231F9AFF0008023C /* PCSuccessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EAD8E1231F9AFF0008023C /* PCSuccessController.swift */; };
-		03EAD8E5231FE6490008023C /* ActivityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EAD8E4231FE6490008023C /* ActivityController.swift */; };
+		03C693882319347E005F385B /* ForgetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C693872319347E005F385B /* ForgetPasswordVC.swift */; };
+		03CB940B23703271004E1E57 /* MyActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CB940A23703271004E1E57 /* MyActivityViewController.swift */; };
+		03DA9A4A23B4C392004F03C0 /* TimeUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA9A4923B4C392004F03C0 /* TimeUpdateView.swift */; };
+		03EAD8E5231FE6490008023C /* UserActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EAD8E4231FE6490008023C /* UserActivityVC.swift */; };
+		03FA47042366CF150032EF82 /* GlobalValuesFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FA47032366CF150032EF82 /* GlobalValuesFunctions.swift */; };
+		03FA47072366CFCB0032EF82 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FA47062366CFCB0032EF82 /* Extension.swift */; };
 		C21659F32C59FF7D57E58D19 /* Pods_Attendance_Manager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36165071F3A08093E263A512 /* Pods_Attendance_Manager.framework */; };
 /* End PBXBuildFile section */
 
@@ -65,18 +82,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		032C7B7223BF241D008EEE8C /* ActivityDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDetailsView.swift; sourceTree = "<group>"; };
-		03316D9F232B9C1A001C9119 /* StepCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
-		03316DA0232B9C1A001C9119 /* FullDateCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullDateCollectionViewCell.swift; sourceTree = "<group>"; };
-		03316DA1232B9C1A001C9119 /* DateTimePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTimePicker.swift; sourceTree = "<group>"; };
-		03316DA2232B9C1A001C9119 /* DateCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateCollectionViewCell.swift; sourceTree = "<group>"; };
-		033FCAB2233355210043D358 /* AddProjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjects.swift; sourceTree = "<group>"; };
-		033FCAB423335BA00043D358 /* TaskUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskUpdater.swift; sourceTree = "<group>"; };
-		033FCAB623335F4C0043D358 /* TaskController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskController.swift; sourceTree = "<group>"; };
-		0340777323472D5D0069BEEA /* ActivityChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityChartViewController.swift; sourceTree = "<group>"; };
+		033DDF8E237060F50066B7E9 /* ProjectsCDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsCDController.swift; sourceTree = "<group>"; };
+		033DDF90237065F60066B7E9 /* TaskTimeCDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTimeCDController.swift; sourceTree = "<group>"; };
+		033F535D23CD9C2A0079F8A4 /* AboutAppVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppVC.swift; sourceTree = "<group>"; };
+		033FCAB423335BA00043D358 /* TasksCDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksCDController.swift; sourceTree = "<group>"; };
+		033FCAB623335F4C0043D358 /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		0340F0482317B83D001FFB29 /* Attendance Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Attendance Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0340F04B2317B83D001FFB29 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		0340F04D2317B83D001FFB29 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		0340F04D2317B83D001FFB29 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		0340F0502317B83D001FFB29 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0340F0522317B848001FFB29 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0340F0552317B848001FFB29 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -91,24 +104,45 @@
 		034349D12322310100B0A2CE /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		034349D323227CE800B0A2CE /* UserTaskInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTaskInfoCell.swift; sourceTree = "<group>"; };
 		034349D423227CE800B0A2CE /* userBreakInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = userBreakInfoCell.xib; sourceTree = "<group>"; };
+		0344960B23794CDB00B9CFB2 /* TimerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerCell.swift; sourceTree = "<group>"; };
+		0344960C23794CDB00B9CFB2 /* TimerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimerCell.xib; sourceTree = "<group>"; };
+		0345C4052375477D001510E6 /* TimingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimingsCell.swift; sourceTree = "<group>"; };
+		0345C4062375477D001510E6 /* TimingsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimingsCell.xib; sourceTree = "<group>"; };
+		034708B0235F0F9A00867132 /* CalendarFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarFlowLayout.swift; sourceTree = "<group>"; };
+		034708B1235F0F9A00867132 /* CalendarHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarHeaderView.swift; sourceTree = "<group>"; };
+		034708B2235F0F9A00867132 /* CalendarView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CalendarView+Extensions.swift"; sourceTree = "<group>"; };
+		034708B3235F0F9A00867132 /* CalendarDayCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarDayCell.swift; sourceTree = "<group>"; };
+		034708B4235F0F9A00867132 /* CalendarView+Style.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CalendarView+Style.swift"; sourceTree = "<group>"; };
+		034708B5235F0F9A00867132 /* CalendarView+Delegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CalendarView+Delegate.swift"; sourceTree = "<group>"; };
+		034708B6235F0F9A00867132 /* EventsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsManager.swift; sourceTree = "<group>"; };
+		034708B7235F0F9A00867132 /* CalendarView+DataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CalendarView+DataSource.swift"; sourceTree = "<group>"; };
+		034708B8235F0F9A00867132 /* CalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		03470965239F67A300F38C2F /* APIResponseHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponseHandler.swift; sourceTree = "<group>"; };
 		03472B56233B416D009C6591 /* FilterProjectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterProjectCell.swift; sourceTree = "<group>"; };
+		03495D0E23A789480076AC02 /* UserguideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserguideView.swift; sourceTree = "<group>"; };
 		0349F6E02330E58C00BC7E74 /* UserTaskDetails.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserTaskDetails.xcdatamodel; sourceTree = "<group>"; };
-		0349F6E22331089A00BC7E74 /* UserActivityUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivityUpdater.swift; sourceTree = "<group>"; };
-		034B4CCC2332408300ED4624 /* RadioWaveAnimataion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioWaveAnimataion.swift; sourceTree = "<group>"; };
+		0349F6E22331089A00BC7E74 /* PunchInOutCDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PunchInOutCDController.swift; sourceTree = "<group>"; };
 		034B4CCE233247D200ED4624 /* ProgressCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCircle.swift; sourceTree = "<group>"; };
-		03575A87231E83A400FBDA6E /* FPResetPController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FPResetPController.swift; sourceTree = "<group>"; };
-		035B71952328C19800869B1D /* RoundCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundCircleView.swift; sourceTree = "<group>"; };
+		03575A87231E83A400FBDA6E /* ResetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordVC.swift; sourceTree = "<group>"; };
+		035BBC9023B0819F00891053 /* ResetPWVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPWVC.swift; sourceTree = "<group>"; };
 		035C61A52326148F0097297D /* TableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableHeaderView.swift; sourceTree = "<group>"; };
-		03695366234318B100C5E321 /* MyActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyActivityViewController.swift; sourceTree = "<group>"; };
+		0360E3EF23B1E8130014D027 /* InAppNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppNotificationView.swift; sourceTree = "<group>"; };
+		0360E3F123B1ECA70014D027 /* notification.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notification.png; sourceTree = "<group>"; };
+		0360E3F523B1FD6E0014D027 /* dismiss.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dismiss.png; sourceTree = "<group>"; };
 		0369536823431E7600C5E321 /* ActivityView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ActivityView.xib; sourceTree = "<group>"; };
-		0369536A23431FC800C5E321 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
-		0369536C2343217300C5E321 /* ActivityCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCellController.swift; sourceTree = "<group>"; };
-		0369536D2343217300C5E321 /* ActivityCellController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ActivityCellController.xib; sourceTree = "<group>"; };
-		036B42722339EA5C00F2C670 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
+		0369536A23431FC800C5E321 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; usesTabs = 1; };
+		036B42722339EA5C00F2C670 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		036B9146239A7C3B00E056A9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		0379438A239E795000F87291 /* ModuleCDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleCDController.swift; sourceTree = "<group>"; };
+		03851EA92372A0A000C484C7 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		03851EAF2372AC5600C484C7 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		03C30AF1233DCA260078BD85 /* RequestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestController.swift; sourceTree = "<group>"; };
-		03C693872319347E005F385B /* FPEmailOtpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FPEmailOtpController.swift; sourceTree = "<group>"; };
-		03EAD8E1231F9AFF0008023C /* PCSuccessController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCSuccessController.swift; sourceTree = "<group>"; };
-		03EAD8E4231FE6490008023C /* ActivityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityController.swift; sourceTree = "<group>"; };
+		03C693872319347E005F385B /* ForgetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgetPasswordVC.swift; sourceTree = "<group>"; };
+		03CB940A23703271004E1E57 /* MyActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyActivityViewController.swift; sourceTree = "<group>"; };
+		03DA9A4923B4C392004F03C0 /* TimeUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUpdateView.swift; sourceTree = "<group>"; };
+		03EAD8E4231FE6490008023C /* UserActivityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivityVC.swift; sourceTree = "<group>"; };
+		03FA47032366CF150032EF82 /* GlobalValuesFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalValuesFunctions.swift; sourceTree = "<group>"; };
+		03FA47062366CFCB0032EF82 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		36165071F3A08093E263A512 /* Pods_Attendance_Manager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Attendance_Manager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF5B67B34D319C7D1D5D6C0A /* Pods-Attendance Manager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Attendance Manager.debug.xcconfig"; path = "Target Support Files/Pods-Attendance Manager/Pods-Attendance Manager.debug.xcconfig"; sourceTree = "<group>"; };
 		F4C564549CC5141D1AA175D1 /* Pods-Attendance Manager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Attendance Manager.release.xcconfig"; path = "Target Support Files/Pods-Attendance Manager/Pods-Attendance Manager.release.xcconfig"; sourceTree = "<group>"; };
@@ -141,21 +175,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		03316D9E232B9C1A001C9119 /* Source */ = {
+		033F535C23CD9BEF0079F8A4 /* About App */ = {
 			isa = PBXGroup;
 			children = (
-				03316D9F232B9C1A001C9119 /* StepCollectionViewFlowLayout.swift */,
-				03316DA0232B9C1A001C9119 /* FullDateCollectionViewCell.swift */,
-				03316DA1232B9C1A001C9119 /* DateTimePicker.swift */,
-				03316DA2232B9C1A001C9119 /* DateCollectionViewCell.swift */,
+				033F535D23CD9C2A0079F8A4 /* AboutAppVC.swift */,
 			);
-			path = Source;
+			path = "About App";
 			sourceTree = "<group>";
 		};
 		0340F03F2317B83D001FFB29 = {
 			isa = PBXGroup;
 			children = (
-				03316D9E232B9C1A001C9119 /* Source */,
 				0340F04A2317B83D001FFB29 /* Attendance Manager */,
 				0340F05F2317B848001FFB29 /* Attendance ManagerTests */,
 				0340F06A2317B848001FFB29 /* Attendance ManagerUITests */,
@@ -178,19 +208,28 @@
 		0340F04A2317B83D001FFB29 /* Attendance Manager */ = {
 			isa = PBXGroup;
 			children = (
-				03F2982B23476DAE00C8484A /* CoreDataController */,
-				036953652343188600C5E321 /* My Activity */,
-				03C30AF0233DC9E80078BD85 /* Web Module */,
-				035B71942328C11800869B1D /* New Group */,
-				037384D1232B5B3A00E87B9E /* Add Task Manager */,
-				03EAD8E3231FE5F00008023C /* User Activites */,
-				03EAD8E0231F9A910008023C /* Login Controllers */,
-				0340F0792317ECBF001FFB29 /* Attendance Manager.entitlements */,
+				03DA9A4823B4C333004F03C0 /* Prev Day Details */,
+				0360E3EE23B1E7DC0014D027 /* In App Notification */,
+				03495D0D23A788E80076AC02 /* User Guide */,
 				0340F04B2317B83D001FFB29 /* AppDelegate.swift */,
+				036B9146239A7C3B00E056A9 /* SceneDelegate.swift */,
 				0340F04F2317B83D001FFB29 /* Main.storyboard */,
 				0340F0522317B848001FFB29 /* Assets.xcassets */,
-				0340F0542317B848001FFB29 /* LaunchScreen.storyboard */,
+				03FA47052366CFB10032EF82 /* Extensions */,
+				03FA47022366CED30032EF82 /* Global Values and Functions */,
+				03EAD8E0231F9A910008023C /* Login Controllers */,
+				03C30AF0233DC9E80078BD85 /* Web Module */,
+				03F2982B23476DAE00C8484A /* CoreDataController */,
+				03851EAE2372AC1300C484C7 /* Tab Bar Controller */,
+				03EAD8E3231FE5F00008023C /* User Activities */,
+				03851EA82372A03700C484C7 /* Account View */,
+				037384D1232B5B3A00E87B9E /* Add-Edit Task Manager */,
+				036953652343188600C5E321 /* My Activity */,
+				034708AF235F0F9A00867132 /* CalendarView */,
+				035B71942328C11800869B1D /* Launch Screen Animation */,
+				0340F0792317ECBF001FFB29 /* Attendance Manager.entitlements */,
 				0340F0572317B848001FFB29 /* Info.plist */,
+				0340F0542317B848001FFB29 /* LaunchScreen.storyboard */,
 			);
 			path = "Attendance Manager";
 			sourceTree = "<group>";
@@ -222,79 +261,171 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		035B71942328C11800869B1D /* New Group */ = {
+		034708AF235F0F9A00867132 /* CalendarView */ = {
 			isa = PBXGroup;
 			children = (
-				035B71952328C19800869B1D /* RoundCircleView.swift */,
-				034B4CCC2332408300ED4624 /* RadioWaveAnimataion.swift */,
+				034708B0235F0F9A00867132 /* CalendarFlowLayout.swift */,
+				034708B1235F0F9A00867132 /* CalendarHeaderView.swift */,
+				034708B2235F0F9A00867132 /* CalendarView+Extensions.swift */,
+				034708B3235F0F9A00867132 /* CalendarDayCell.swift */,
+				034708B4235F0F9A00867132 /* CalendarView+Style.swift */,
+				034708B5235F0F9A00867132 /* CalendarView+Delegate.swift */,
+				034708B6235F0F9A00867132 /* EventsManager.swift */,
+				034708B7235F0F9A00867132 /* CalendarView+DataSource.swift */,
+				034708B8235F0F9A00867132 /* CalendarView.swift */,
+			);
+			path = CalendarView;
+			sourceTree = "<group>";
+		};
+		03495D0D23A788E80076AC02 /* User Guide */ = {
+			isa = PBXGroup;
+			children = (
+				03495D0E23A789480076AC02 /* UserguideView.swift */,
+			);
+			path = "User Guide";
+			sourceTree = "<group>";
+		};
+		035B71942328C11800869B1D /* Launch Screen Animation */ = {
+			isa = PBXGroup;
+			children = (
 				034B4CCE233247D200ED4624 /* ProgressCircle.swift */,
 			);
-			path = "New Group";
+			path = "Launch Screen Animation";
+			sourceTree = "<group>";
+		};
+		035BBC8F23B0816A00891053 /* ResetPassword */ = {
+			isa = PBXGroup;
+			children = (
+				035BBC9023B0819F00891053 /* ResetPWVC.swift */,
+			);
+			path = ResetPassword;
+			sourceTree = "<group>";
+		};
+		0360E3EE23B1E7DC0014D027 /* In App Notification */ = {
+			isa = PBXGroup;
+			children = (
+				0360E3EF23B1E8130014D027 /* InAppNotificationView.swift */,
+				0360E3F523B1FD6E0014D027 /* dismiss.png */,
+				0360E3F123B1ECA70014D027 /* notification.png */,
+			);
+			path = "In App Notification";
 			sourceTree = "<group>";
 		};
 		036953652343188600C5E321 /* My Activity */ = {
 			isa = PBXGroup;
 			children = (
-				03695366234318B100C5E321 /* MyActivityViewController.swift */,
 				0369536823431E7600C5E321 /* ActivityView.xib */,
 				0369536A23431FC800C5E321 /* ActivityView.swift */,
-				0369536C2343217300C5E321 /* ActivityCellController.swift */,
-				0369536D2343217300C5E321 /* ActivityCellController.xib */,
-				032C7B7223BF241D008EEE8C /* ActivityDetailsView.swift */,
-				0340777323472D5D0069BEEA /* ActivityChartViewController.swift */,
+				03CB940A23703271004E1E57 /* MyActivityViewController.swift */,
 			);
 			path = "My Activity";
 			sourceTree = "<group>";
 		};
-		037384D1232B5B3A00E87B9E /* Add Task Manager */ = {
+		037384D1232B5B3A00E87B9E /* Add-Edit Task Manager */ = {
 			isa = PBXGroup;
 			children = (
-				033FCAB623335F4C0043D358 /* TaskController.swift */,
+				033FCAB623335F4C0043D358 /* TaskViewController.swift */,
+				0345C4052375477D001510E6 /* TimingsCell.swift */,
+				0345C4062375477D001510E6 /* TimingsCell.xib */,
 			);
-			path = "Add Task Manager";
+			path = "Add-Edit Task Manager";
+			sourceTree = "<group>";
+		};
+		03851EA82372A03700C484C7 /* Account View */ = {
+			isa = PBXGroup;
+			children = (
+				03851EA92372A0A000C484C7 /* AccountViewController.swift */,
+				033F535C23CD9BEF0079F8A4 /* About App */,
+				035BBC8F23B0816A00891053 /* ResetPassword */,
+			);
+			path = "Account View";
+			sourceTree = "<group>";
+		};
+		03851EAE2372AC1300C484C7 /* Tab Bar Controller */ = {
+			isa = PBXGroup;
+			children = (
+				03851EAF2372AC5600C484C7 /* TabBarController.swift */,
+			);
+			path = "Tab Bar Controller";
 			sourceTree = "<group>";
 		};
 		03C30AF0233DC9E80078BD85 /* Web Module */ = {
 			isa = PBXGroup;
 			children = (
 				03C30AF1233DCA260078BD85 /* RequestController.swift */,
+				03470965239F67A300F38C2F /* APIResponseHandler.swift */,
 			);
 			path = "Web Module";
+			sourceTree = "<group>";
+		};
+		03CB9409237029FD004E1E57 /* Filter View */ = {
+			isa = PBXGroup;
+			children = (
+				036B42722339EA5C00F2C670 /* FilterViewController.swift */,
+				03472B56233B416D009C6591 /* FilterProjectCell.swift */,
+			);
+			path = "Filter View";
+			sourceTree = "<group>";
+		};
+		03DA9A4823B4C333004F03C0 /* Prev Day Details */ = {
+			isa = PBXGroup;
+			children = (
+				03DA9A4923B4C392004F03C0 /* TimeUpdateView.swift */,
+			);
+			path = "Prev Day Details";
 			sourceTree = "<group>";
 		};
 		03EAD8E0231F9A910008023C /* Login Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				0340F04D2317B83D001FFB29 /* LoginController.swift */,
-				03C693872319347E005F385B /* FPEmailOtpController.swift */,
-				03575A87231E83A400FBDA6E /* FPResetPController.swift */,
-				03EAD8E1231F9AFF0008023C /* PCSuccessController.swift */,
+				0340F04D2317B83D001FFB29 /* LoginViewController.swift */,
+				03C693872319347E005F385B /* ForgetPasswordVC.swift */,
+				03575A87231E83A400FBDA6E /* ResetPasswordVC.swift */,
 			);
 			path = "Login Controllers";
 			sourceTree = "<group>";
 		};
-		03EAD8E3231FE5F00008023C /* User Activites */ = {
+		03EAD8E3231FE5F00008023C /* User Activities */ = {
 			isa = PBXGroup;
 			children = (
-				03EAD8E4231FE6490008023C /* ActivityController.swift */,
+				03EAD8E4231FE6490008023C /* UserActivityVC.swift */,
 				035C61A52326148F0097297D /* TableHeaderView.swift */,
 				034349D323227CE800B0A2CE /* UserTaskInfoCell.swift */,
 				034349D423227CE800B0A2CE /* userBreakInfoCell.xib */,
-				0349F6DF2330E58C00BC7E74 /* UserTaskDetails.xcdatamodeld */,
-				036B42722339EA5C00F2C670 /* FilterView.swift */,
-				03472B56233B416D009C6591 /* FilterProjectCell.swift */,
+				03CB9409237029FD004E1E57 /* Filter View */,
+				0344960B23794CDB00B9CFB2 /* TimerCell.swift */,
+				0344960C23794CDB00B9CFB2 /* TimerCell.xib */,
 			);
-			path = "User Activites";
+			path = "User Activities";
 			sourceTree = "<group>";
 		};
 		03F2982B23476DAE00C8484A /* CoreDataController */ = {
 			isa = PBXGroup;
 			children = (
-				0349F6E22331089A00BC7E74 /* UserActivityUpdater.swift */,
-				033FCAB423335BA00043D358 /* TaskUpdater.swift */,
-				033FCAB2233355210043D358 /* AddProjects.swift */,
+				0349F6DF2330E58C00BC7E74 /* UserTaskDetails.xcdatamodeld */,
+				0349F6E22331089A00BC7E74 /* PunchInOutCDController.swift */,
+				033DDF8E237060F50066B7E9 /* ProjectsCDController.swift */,
+				0379438A239E795000F87291 /* ModuleCDController.swift */,
+				033FCAB423335BA00043D358 /* TasksCDController.swift */,
+				033DDF90237065F60066B7E9 /* TaskTimeCDController.swift */,
 			);
 			path = CoreDataController;
+			sourceTree = "<group>";
+		};
+		03FA47022366CED30032EF82 /* Global Values and Functions */ = {
+			isa = PBXGroup;
+			children = (
+				03FA47032366CF150032EF82 /* GlobalValuesFunctions.swift */,
+			);
+			path = "Global Values and Functions";
+			sourceTree = "<group>";
+		};
+		03FA47052366CFB10032EF82 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				03FA47062366CFCB0032EF82 /* Extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		362D4700CA843A874130E6E8 /* Pods */ = {
@@ -317,7 +448,7 @@
 				0340F0442317B83D001FFB29 /* Sources */,
 				0340F0452317B83D001FFB29 /* Frameworks */,
 				0340F0462317B83D001FFB29 /* Resources */,
-				1677F544868AA2AB2907B1F5 /* [CP] Embed Pods Frameworks */,
+				894C542A9719F92005175438 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -423,11 +554,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0360E3F623B1FD6E0014D027 /* dismiss.png in Resources */,
+				0345C4082375477D001510E6 /* TimingsCell.xib in Resources */,
 				0340F0562317B848001FFB29 /* LaunchScreen.storyboard in Resources */,
 				0340F0532317B848001FFB29 /* Assets.xcassets in Resources */,
-				0369536F2343217300C5E321 /* ActivityCellController.xib in Resources */,
 				034349D623227CE800B0A2CE /* userBreakInfoCell.xib in Resources */,
+				0360E3F223B1ECA70014D027 /* notification.png in Resources */,
 				0369536923431E7600C5E321 /* ActivityView.xib in Resources */,
+				0344960E23794CDB00B9CFB2 /* TimerCell.xib in Resources */,
 				0340F0512317B83D001FFB29 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -449,7 +583,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1677F544868AA2AB2907B1F5 /* [CP] Embed Pods Frameworks */ = {
+		894C542A9719F92005175438 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -495,33 +629,47 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0349F6E32331089A00BC7E74 /* UserActivityUpdater.swift in Sources */,
-				032C7B7323BF241D008EEE8C /* ActivityDetailsView.swift in Sources */,
+				03851EAA2372A0A000C484C7 /* AccountViewController.swift in Sources */,
+				034708B9235F0F9A00867132 /* CalendarFlowLayout.swift in Sources */,
+				0349F6E32331089A00BC7E74 /* PunchInOutCDController.swift in Sources */,
 				035C61A62326148F0097297D /* TableHeaderView.swift in Sources */,
-				03EAD8E2231F9AFF0008023C /* PCSuccessController.swift in Sources */,
-				033FCAB523335BA00043D358 /* TaskUpdater.swift in Sources */,
-				034B4CCD2332408300ED4624 /* RadioWaveAnimataion.swift in Sources */,
+				0379438B239E795000F87291 /* ModuleCDController.swift in Sources */,
+				03FA47072366CFCB0032EF82 /* Extension.swift in Sources */,
+				0344960D23794CDB00B9CFB2 /* TimerCell.swift in Sources */,
+				03CB940B23703271004E1E57 /* MyActivityViewController.swift in Sources */,
+				033FCAB523335BA00043D358 /* TasksCDController.swift in Sources */,
+				03470966239F67A300F38C2F /* APIResponseHandler.swift in Sources */,
 				034B4CCF233247D200ED4624 /* ProgressCircle.swift in Sources */,
-				033FCAB3233355210043D358 /* AddProjects.swift in Sources */,
 				03C30AF2233DCA260078BD85 /* RequestController.swift in Sources */,
+				0360E3F023B1E8130014D027 /* InAppNotificationView.swift in Sources */,
+				034708BA235F0F9A00867132 /* CalendarHeaderView.swift in Sources */,
+				033F535E23CD9C2A0079F8A4 /* AboutAppVC.swift in Sources */,
 				0349F6E12330E58C00BC7E74 /* UserTaskDetails.xcdatamodeld in Sources */,
-				036B42732339EA5C00F2C670 /* FilterView.swift in Sources */,
-				03575A88231E83A400FBDA6E /* FPResetPController.swift in Sources */,
-				0340F04E2317B83D001FFB29 /* LoginController.swift in Sources */,
-				035B71962328C19800869B1D /* RoundCircleView.swift in Sources */,
-				0340777423472D5D0069BEEA /* ActivityChartViewController.swift in Sources */,
-				03316DA4232B9C1A001C9119 /* FullDateCollectionViewCell.swift in Sources */,
+				03DA9A4A23B4C392004F03C0 /* TimeUpdateView.swift in Sources */,
+				036B42732339EA5C00F2C670 /* FilterViewController.swift in Sources */,
+				03575A88231E83A400FBDA6E /* ResetPasswordVC.swift in Sources */,
+				034708BC235F0F9A00867132 /* CalendarDayCell.swift in Sources */,
+				033DDF91237065F60066B7E9 /* TaskTimeCDController.swift in Sources */,
+				034708C1235F0F9A00867132 /* CalendarView.swift in Sources */,
+				035BBC9123B0819F00891053 /* ResetPWVC.swift in Sources */,
+				034708C0235F0F9A00867132 /* CalendarView+DataSource.swift in Sources */,
+				03FA47042366CF150032EF82 /* GlobalValuesFunctions.swift in Sources */,
+				0340F04E2317B83D001FFB29 /* LoginViewController.swift in Sources */,
+				034708BE235F0F9A00867132 /* CalendarView+Delegate.swift in Sources */,
+				03851EB02372AC5600C484C7 /* TabBarController.swift in Sources */,
+				036B9147239A7C3B00E056A9 /* SceneDelegate.swift in Sources */,
+				033DDF8F237060F50066B7E9 /* ProjectsCDController.swift in Sources */,
 				0340F04C2317B83D001FFB29 /* AppDelegate.swift in Sources */,
-				03EAD8E5231FE6490008023C /* ActivityController.swift in Sources */,
+				03EAD8E5231FE6490008023C /* UserActivityVC.swift in Sources */,
+				03495D0F23A789480076AC02 /* UserguideView.swift in Sources */,
 				034349D523227CE800B0A2CE /* UserTaskInfoCell.swift in Sources */,
-				03316DA6232B9C1A001C9119 /* DateCollectionViewCell.swift in Sources */,
+				034708BB235F0F9A00867132 /* CalendarView+Extensions.swift in Sources */,
 				0369536B23431FC800C5E321 /* ActivityView.swift in Sources */,
-				03316DA5232B9C1A001C9119 /* DateTimePicker.swift in Sources */,
-				0369536E2343217300C5E321 /* ActivityCellController.swift in Sources */,
-				03695367234318B100C5E321 /* MyActivityViewController.swift in Sources */,
-				03C693882319347E005F385B /* FPEmailOtpController.swift in Sources */,
-				033FCAB723335F4C0043D358 /* TaskController.swift in Sources */,
-				03316DA3232B9C1A001C9119 /* StepCollectionViewFlowLayout.swift in Sources */,
+				0345C4072375477D001510E6 /* TimingsCell.swift in Sources */,
+				034708BF235F0F9A00867132 /* EventsManager.swift in Sources */,
+				034708BD235F0F9A00867132 /* CalendarView+Style.swift in Sources */,
+				03C693882319347E005F385B /* ForgetPasswordVC.swift in Sources */,
+				033FCAB723335F4C0043D358 /* TaskViewController.swift in Sources */,
 				03472B57233B416D009C6591 /* FilterProjectCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -628,7 +776,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -683,7 +831,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -699,17 +847,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Attendance Manager/Attendance Manager.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8PFVF7GTA9;
+				DEVELOPMENT_TEAM = JWZBAK4D4R;
 				INFOPLIST_FILE = "Attendance Manager/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "GP.Attendance-Manager";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.incendiary.timelogger;
+				PRODUCT_NAME = "Attendance Manager";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -722,17 +870,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Attendance Manager/Attendance Manager.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8PFVF7GTA9;
+				DEVELOPMENT_TEAM = JWZBAK4D4R;
 				INFOPLIST_FILE = "Attendance Manager/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "GP.Attendance-Manager";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.incendiary.timelogger;
+				PRODUCT_NAME = "Attendance Manager";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

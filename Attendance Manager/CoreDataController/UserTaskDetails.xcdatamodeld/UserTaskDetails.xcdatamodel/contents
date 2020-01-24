@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="18F132" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Modules" representedClassName="Modules" syncable="YES" codeGenerationType="class">
+        <attribute name="module_id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="project_id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="Projects" representedClassName=".Projects" syncable="YES">
+        <attribute name="percentage_finished" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="project_color" optional="YES" attributeType="String"/>
+        <attribute name="project_icon_url" optional="YES" attributeType="String"/>
+        <attribute name="project_id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="project_name" optional="YES" attributeType="String"/>
+        <attribute name="start_date" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="total_time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="Punch_in_out_time" representedClassName=".UserTimes" syncable="YES">
+        <attribute name="punch_in_time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="punch_out_time" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="Tasks" representedClassName=".Tasks" syncable="YES">
+        <attribute name="deleted_time_range" optional="YES" attributeType="String"/>
+        <attribute name="end_time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="is_synched" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="is_work_in_progress" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="module_id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="project_id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="start_time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="task_description" optional="YES" attributeType="String"/>
+        <attribute name="task_id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="task_name" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="Tasks_time" representedClassName=".Tasks_time" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="String"/>
+        <attribute name="end_time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="start_time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="task_description" optional="YES" attributeType="String"/>
+        <attribute name="task_id" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="time_id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <elements>
+        <element name="Modules" positionX="72" positionY="9" width="128" height="88"/>
+        <element name="Projects" positionX="-123.61328125" positionY="29.96484375" width="128" height="148"/>
+        <element name="Punch_in_out_time" positionX="-85.55078125" positionY="-136.72265625" width="128" height="73"/>
+        <element name="Tasks" positionX="159.6796875" positionY="76.484375" width="128" height="193"/>
+        <element name="Tasks_time" positionX="438.546875" positionY="-65.546875" width="128" height="133"/>
+    </elements>
+</model>
