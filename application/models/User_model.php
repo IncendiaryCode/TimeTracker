@@ -110,7 +110,8 @@ class User_model extends CI_Model {
                 $week = explode('W', $week_value); //format: W23
                 $getdate = $this->get_start_and_end_date($week[1], $year_value[0]); //start and end date for 23rd week and year 2019
                 $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
-                $this->db->where(array('d.end_time IS NOT NULL', 'd.user_id' => $userid));
+                $this->db->where(array('d.user_id' => $userid));
+                $this->db->where('d.end_time IS NOT NULL');
                 $this->db->where('d.task_date BETWEEN "' . date('Y-m-d', strtotime($getdate[0])) . '" and "' . date('Y-m-d', strtotime($getdate[1])) . '"');
                 $this->db->group_by('d.task_date');
                 $this->db->order_by('d.start_time');
@@ -119,7 +120,8 @@ class User_model extends CI_Model {
                 $year_start = date('Y-m-d', strtotime(date($date . '-01-01')));
                 $year_end = date('Y-m-d', strtotime(date($date . '-12-31')));
                 $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
-                $this->db->where(array('d.end_time IS NOT NULL', 'd.user_id' => $userid));
+                $this->db->where(array('d.user_id' => $userid));
+                $this->db->where('d.end_time IS NOT NULL');
                 $this->db->where('d.task_date BETWEEN "' . $year_start . '" and "' . $year_end . '"');
                 $this->db->group_by('d.task_date');
                 $this->db->order_by('d.start_time');
@@ -857,6 +859,40 @@ class User_model extends CI_Model {
         return $profile_data;
     }
 
+    /**
+     * Function to edit user name or phone number in user profile page
+     * 
+     * @param $username OR $phone
+     * 
+     * returns TRUE/FALSE
+     */
+    public function edit_profile($name,$phone){
+        if($name == ''){
+            $this->db->where('id',$this->session->userdata('userid'));
+            $update = $this->db->update('users',array('phone'=>$phone));
+            if ($this->db->affected_rows() == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if($phone == ''){
+            $this->db->where('id',$this->session->userdata('userid'));
+            $update = $this->db->update('users',array('name'=>$name));
+            if ($this->db->affected_rows() == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            $this->db->where('id',$this->session->userdata('userid'));
+            $update = $this->db->update('users',array('phone'=>$phone,'name'=>$name));
+            if ($this->db->affected_rows() == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
     /**
      * Function to get chart data for user profile
      * 

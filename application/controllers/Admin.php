@@ -15,7 +15,7 @@
 			$this->lang->load('form_validation_lang');
 			$this->load->library('form_validation');
 		  	$this->load->helper('security');
-			if(($this->session->userdata('logged_in'))==FALSE){ //login check
+			if(($this->session->userdata('logged_in')==FALSE) || $this->session->userdata('user_type') == 'user'){ //login check
 				redirect('login/index','refresh'); //if not logged in, move to login page
 			}
 		}

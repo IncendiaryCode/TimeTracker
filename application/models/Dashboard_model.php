@@ -1470,7 +1470,8 @@ class Dashboard_model extends CI_Model
                 'email' => $row->email,
                 'logged_in' => TRUE,
                 'user_profile' => $row->profile,
-                'username' => $row->name
+                'username' => $row->name,
+                'user_type' => $row->type
             );
             $this->session->set_userdata($data);
 

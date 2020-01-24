@@ -16,6 +16,9 @@ class User extends CI_Controller
         $this->load->helper('url');
         $this->load->helper('url_helper');
         $this->load->library('session');
+        if (!($this->session->userdata('logged_in')) || $this->session->userdata('user_type') == 'admin') { //check for user login
+            redirect('login/index', 'refresh'); //if not logged in, redirect to login page
+        }
         $this->load->helper(array(
             'form',
             'url'
@@ -24,14 +27,11 @@ class User extends CI_Controller
         $this->load->library('form_validation');
         $this->load->helper('security');
         $this->load->library('upload');
-        if (!$this->session->userdata('logged_in')) { //check for user login
-            redirect('login/index', 'refresh'); //if not logged in, redirect to login page
-        }
     }
     
     public function index()
     {
-        if ($this->session->userdata('logged_in')) {
+        if ($this->session->userdata('logged_in') && $this->session->userdata('user_type') == 'user') {
             //loading user dashboard
             $this->load->view('user/header');
             $task_details['task_info'] = $this->user_model->task_status(); //get details about login time, running tasks
@@ -400,6 +400,27 @@ class User extends CI_Controller
         }
     }
 
+    //Edit profile function to edit User name and phone number
+    public function edit_profile()
+    {
+        if($this->input->post('username')){
+            $username = $this->input->post('username');
+            $phone = '';
+        }else if($this->input->post('phone')){
+            $username = '';
+            $phone = $this->input->post('phone');
+        }
+        $result = $this->user_model->edit_profile($username,$phone);
+        if($result == TRUE){
+            $this->session->set_flashdata('success', 'Profile data updated.');
+            redirect('user/load_my_profile');
+        } else {
+            $this->session->set_flashdata('err_msg', 'Unable to update profile data.');
+            redirect('user/load_my_profile');
+        }
+    }
+
+    //fetch user activity graph data into user profile page
     public function user_chart()
     {
         //user activity chart (in user profile page)

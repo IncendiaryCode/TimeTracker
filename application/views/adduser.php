@@ -37,7 +37,7 @@ $profile = $this->session->userdata('user_profile');
                             if(validation_errors()) { ?>
                                 <div class="alert alert-danger">
                                     <?php 
-                                        echo validation_errors();
+                                        echo validation_errors('<span class="error close">', '</span>');
                                     ?>    
                                 </div>
                             <?php } 
