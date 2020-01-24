@@ -74,6 +74,12 @@ function formatAMPM(date) {
 	return strTime;
 }
 function drawCards(data) {
+	if(data['data'] == null)
+	{
+		document.getElementById('alarmmsg').innerHTML = "No data available";
+	}
+	else
+	{
 	for (x in data) {
 		for (var y = 0; y < data[x].length; y++) {
 			var cardHeader = $('<div class="card-header card-header" />');
@@ -181,7 +187,7 @@ function drawCards(data) {
 						dataType: "json",
 						success: function (res) {
 							var res = res["data"]["details"];
-							var startDateTime = formatAMPM(new Date());
+							var startDateTime =new Date().getHours()+':'+new Date().getMinutes();
 							var row = $(
 								'<div id="slider-' +
 								res["task_id"] +
@@ -343,6 +349,7 @@ function drawCards(data) {
 			}
 		}
 	}
+	}
 }
 
 function loadTaskActivities(formData) {
@@ -416,25 +423,16 @@ function setTaskTime(startTime, id) {
 	$(".title").html(formattedTime);
 }
 
-var oldEndTime = document.getElementById("update-endtime");
-if (oldEndTime) {
-	oldEndTime.onsubmit = function () {
-		var oldTime = document.getElementById("old-datepicker").value;
-		var start_date = document.getElementById("old-start-date").tex;
-		start_date = start_date.trim().slice(0, 10);
-		var old_date = oldTime.slice(0, 10);
+function convert_to_UTC(time)
+{
+	var system_zone_date = new Date();
+	var offset_min = system_zone_date.getTimezoneOffset();
 
-		if (oldTime == "" || oldTime == " ") {
-			document.getElementById("old-date-error").innerHTML =
-				"Please enter correct end time.";
-			return false;
-		} else if (start_date != old_date) {
-			document.getElementById("old-date-error").innerHTML =
-				"Entered date is not matching...";
-			return false;
-		}
-		return true;
-	};
+	var total_min = parseInt(time.slice(0,2)*60) + parseInt(time.slice(3,5));
+	var utc_min = total_min + offset_min;
+	
+	var utc_hr = parseInt(utc_min/60).toString() +':'+ parseInt(utc_min%60).toString();
+	return utc_hr;
 }
 
 var timerSlider = window.timerSlider || {};
@@ -454,7 +452,23 @@ timerSlider = {
 };
 
 $(document).ready(function () {
+	
 	$("#stop-time").click(function () {
+
+		var _dateObj = new Date();
+		var _hr = _dateObj.getHours();
+		if(_hr.toString().length == 1)
+		{
+			_hr = '0'+_hr.toString();
+		}
+
+		var _mins = _dateObj.getMinutes();
+		if(_mins.toString().length == 1)
+		{
+			_mins = '0'+_mins.toString();
+		}
+		document.getElementById('start-login-time').value = (_hr+':'+_mins);
+		
 		if (
 			document.getElementById("stop-time").childNodes[1].childNodes[0]
 				.classList[2] == "fa-stop"
@@ -521,8 +535,6 @@ $(document).ready(function () {
 					$("#play-timer").modal("show");
 				}
 			}
-			$("#icon-for-task").removeClass("fa-play");
-			$("#icon-for-task").addClass("fa-stop");
 		}
 	});
 	var curr_timeStamp = Math.floor(Date.now() / 1000);
@@ -589,6 +601,7 @@ $(document).ready(function () {
 	});
 	if (document.getElementById("update-stop-now")) {
 		var stop_now = document.getElementById("update-stop-now");
+		var __element = document.getElementById("update-stop-now");
 		stop_now.onsubmit = function () {
 			var stop_now = document.getElementById("stop-end-time").value;
 			if (stop_now == " " || stop_now == "") {
@@ -596,6 +609,15 @@ $(document).ready(function () {
 					"enter valid end time. ";
 				return false;
 			} else {
+				var input_element = __element.getElementsByClassName('check-for-utc');
+				for(var i=0; i<input_element.length; i++)
+				{
+					if(input_element[i].value != "" && input_element[i].value != " ")
+					{
+						var utc_time = convert_to_UTC(input_element[i].value);
+						input_element[i].value = utc_time;
+					}
+				}
 				return true;
 			}
 		};
@@ -624,6 +646,17 @@ $(document).ready(function () {
 					return false;
 				} else {
 					startTimer(login_timer);
+					$("#icon-for-task").removeClass("fa-play");
+					$("#icon-for-task").addClass("fa-stop");
+					var input_element = startingTimer.getElementsByClassName('check-for-utc');
+					for(var i=0; i<input_element.length; i++)
+					{
+						if(input_element[i].value != "" && input_element[i].value != " ")
+						{
+							var utc_time = convert_to_UTC(input_element[i].value);
+							input_element[i].value = utc_time;
+						}
+					}
 					return true;
 				}
 			}

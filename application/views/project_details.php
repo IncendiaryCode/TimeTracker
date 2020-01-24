@@ -107,7 +107,7 @@ $profile = $this->session->userdata('user_profile');
                 <thead>
                     <tr>
                         <th>Task name</th>
-                        <th>user count</th>
+                        <th>User count</th>
                         <th>Time spent</th>
                     </tr>
                 </thead>

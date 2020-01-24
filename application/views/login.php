@@ -18,7 +18,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <p class="error" id="username-error"></p>
         <div class="form-group">
             <div class="input-group">
-                <input type="email" class="form-control logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light" id="username" name="username" placeholder="User name">
+                <input type="email" class="form-control logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light" id="username" name="username" placeholder="Email">
             </div>
         </div>
         <div class="form-group">

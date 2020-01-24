@@ -167,9 +167,18 @@ function validateOtp() {
 
 function sendOTP() {
 	
+	var emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 	var email1 = document.getElementById("Uname").value;
+	document.getElementById("email-error").innerHTML = " ";
+
+	if (!emailRegEx.test(email1)) {
+            document.getElementById("email-error").innerHTML ="Email format is not correct.";
+                $('#Uname').focus();
+            return false;
+        } 
 	if (email1 == "" || email1 == " ") {
-		document.getElementById("email-error").innerHTML = "Enter email.";
+		document.getElementById("email-error").innerHTML = "Please enter valid email.";
 	} else {
 		$('.send-otp-spinner').css("display", "block");
 		$.ajax({
@@ -177,6 +186,12 @@ function sendOTP() {
 			url: timeTrackerBaseURL + "login/send_otp",
 			data: { email: email1 },
 			success: function (data) {
+				var data = JSON.parse(data);
+				if(data["status"] == false)
+				{
+					document.getElementById("email-error").innerHTML = "Entered email address is not available";
+					return false;
+				}
 				document.getElementById("email-error").innerHTML = " ";
 				$("#enter-otp").show();
 				$("#enter-email").hide();

@@ -74,13 +74,17 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                     $timer_start = $datetime2->getTimestamp();
                     $task_start = strtotime($timer);
                     $task_id = $taskinfo['task_id'];
+
+                    $offset_min = ((date('Z'))/60);
+                    $local_time_min = ((substr($taskinfo['start_time'],11,2)*60)+(substr($taskinfo['start_time'],14,2)))+$offset_min;
+                    $local_time = round(($local_time_min/60-1),0) . ':' . ($local_time_min%60);
                      ?>
                 <div id="slider<?=$task_id?>">  <!-- slider for all task -->
                     <div class="section-slider task-slider" id="login-timer-details<?=$id?>">
                         <input type="hidden" id="<?php echo $taskinfo['task_id'] ?>" value="<?php echo $timer_start?>">
                         <input type="hidden" id="id<?=$id?>" value="<?php echo $taskinfo['task_id']?>">
                         <p class="font-weight-light time-font text-center login-time" id="start-time<?=$id?>">
-                            Started at <?php  echo $timer_display;?>
+                            Started at <?php  echo $local_time; ?>
                         </p>
                         <div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer<?=$taskinfo['task_id']?>" data-type="" data-time="">
                             00:00:00
@@ -132,7 +136,6 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
             <div class="row mb-3 pt-2">
                 <div class="col-6">
                     <h5 class="font-weight-light text-left recent-activites">Recent Activites</h5>
-                <p id="alarmmsg" class="text-center"></p>
                 </div>
                 <div class="col-6">
                     <div class="dropdown text-right" id="dropdown-recent-acts">
@@ -144,6 +147,7 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                         </div>
                     </div>
                 </div>
+                <div class="col-12"><p id="alarmmsg" class="text-center"></p></div>
             </div>
 
             <div class='mb-5' id="attach-card">                
@@ -154,7 +158,7 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
             </div>
         </div>
         <footer class="footer">
-            <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
+            <p class="text-center pt-2 ">Copyright © 2020 Printgreener.com</p>
         </footer>
         <!-- modal form for tasks that started onprevious date -->
         <div class="modal modal-stop-now fade" id="stop-now" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
@@ -166,9 +170,6 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                         </div>
                         <div class="modal-body ">
                             <div class="input-group">
-                                <!-- <p>Task name: <strong>
-                                    <?php echo $task_info['task_status'][0]['task_name'] ?></strong>
-                                </p> -->
                                 <p>Please stop the task "<strong>
                                     <?php echo $task_info['task_status'][0]['task_name'] ?> </strong>" that is already running.
                                 </p>
@@ -179,7 +180,7 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                             </div>
                             <div>
                                 <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control stopnow-time"  name="stop-end-time" id="stop-end-time">
+                                <input type="text" class="check-for-utc form-control stopnow-time"  name="stop-end-time" id="stop-end-time">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>
@@ -209,7 +210,7 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                         <div class="modal-body ">
                             <div>
                                 <label for="old-datepicker">Enter start time: <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control  timerpicker-c"  name="start-login-time" id="start-login-time" placeholder="hh:mm">
+                                <input type="text" class="check-for-utc form-control  timerpicker-c"  name="start-login-time" id="start-login-time" placeholder="hh:mm">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>
@@ -218,7 +219,7 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                             <p class="text-danger text-center" id="stop-timer-error"></p>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Start</button>
+                            <button type="submit" class="btn btn-primary" id="start-punchIn">Start</button>
                         </div>
                     </form>
                 </div>

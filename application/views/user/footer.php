@@ -84,7 +84,7 @@
                     </div>
                     <div>
                         <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control " id="old-datepicker" name="end_time">
+                        <input type="text" class=" form-control " id="old-datepicker" name="end_time">
                         <div class="input-group-addon">
                             <span class="glyphicon glyphicon-th"></span>
                         </div>
@@ -168,7 +168,7 @@ if(document.getElementById("stop-time"))
     {
         if (document.getElementById("stop-time").childNodes[1].childNodes[0].classList[2] == "fa-play") {
             // $("#play-timer").modal("show");
-            alert("You cannot punch in again...");
+            alert("Please punch in before starting task");
         }
         else{
             window.location.href = timeTrackerBaseURL +"user/load_add_task";

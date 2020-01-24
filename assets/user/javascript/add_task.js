@@ -152,16 +152,16 @@ var addTime = {
 				return false;
 			}
 		}
-
 		if (date == "" || date == " " || start_time == "" || start_time == " ") {
 			document.getElementById("datetime-error").innerHTML =
 				"Please enter valid details...";
 			return false;
-		} else if (__this.check_date(date) || validate_greater_time) {
+		} /*else if (__this.check_date(date) || validate_greater_time) {
 			document.getElementById("datetime-error").innerHTML =
 				"date/time of start/end connot be greater than currnet date/time";
 			return false;
-		} else if (__start_seconds >= __end_seconds) {
+		}*/ 
+		else if (__start_seconds >= __end_seconds) {
 			document.getElementById("datetime-error").innerHTML =
 				"Start time cannot be greater or equal to end time.";
 			return false;
@@ -344,7 +344,50 @@ var addTime = {
 	}
 };
 
+function convert_to_UTC(time)
+{
+	var system_zone_date = new Date();
+	var offset_min = system_zone_date.getTimezoneOffset();
+
+	var total_min = parseInt(time.slice(0,2)*60) + parseInt(time.slice(3,5));
+	var utc_min = total_min + offset_min;
+	
+	var utc_hr = parseInt(utc_min/60).toString() +':'+ parseInt(utc_min%60).toString();
+	return utc_hr;
+}
+
+function convert_to_Local(time)
+{
+	var system_zone_date = new Date();
+	var offset_min = system_zone_date.getTimezoneOffset();
+
+	var total_min = parseInt(time.slice(0,2)*60) + parseInt(time.slice(3,5));
+	var utc_min = total_min - (offset_min);
+
+	var utc_hr = parseInt(utc_min/60).toString() +':'+ parseInt(utc_min%60).toString();
+	return utc_hr;
+}
+
 $(document).ready(function() {
+	
+	if (document.getElementById("task-add-time")) {
+		addTime.init("#task-add-time");
+	}
+
+	/*var element = document.getElementById('task-times');
+	if(element != null)
+	{
+		var input_element = element.getElementsByClassName('check-for-utc');
+		for(var i=0; i<input_element.length; i++)
+		{
+			if(input_element[i].value != "" && input_element[i].value != " ")
+			{
+				var utc_time = convert_to_Local(input_element[i].value);
+				console.log(input_element[i].value, utc_time);
+				input_element[i].value = utc_time;
+			}
+		}
+	}*/
 
 	var addTask = document.getElementById("addTask");
 	if (addTask) {
@@ -364,14 +407,26 @@ $(document).ready(function() {
 			}
 			document.getElementById("taskError").innerHTML = " ";
 			var date = document.getElementById("date-picker-0").value;
-			var start_time = document.getElementById("0").value;
+			var start_time = document.getElementById("start-time-0").value;
 			var end_time = document.getElementById("end-time-0").value;
 			var flag = false;
 			flag = addTime.validate(false);
 			if (flag == false) {
 				return false;
 			} else {
-				array_of_timings.push({ date, start_time, end_time });
+				addTime.array_of_timings.push({ date, start_time, end_time });
+				var elements = document.getElementById('task-times');
+				var input_elements = elements.getElementsByClassName('check-for-utc');
+
+				for(var i=0; i<input_elements.length; i++)
+				{
+					if(input_elements[i].value != "" && input_elements[i].value != " ")
+					{
+						var utc_time = convert_to_UTC(input_elements[i].value);
+						input_elements[i].value = utc_time;
+					}
+				}	
+				return true;
 			}
 		};
 	}
@@ -392,6 +447,33 @@ $(document).ready(function() {
 						"Please Choose Project Name ";
 					return false;
 				}
+				else
+				{
+					var elements = document.getElementById('task-times');
+					var input_elements = elements.getElementsByClassName('check-for-utc');
+					var j=0;
+					for(var i=0; i<input_elements.length/3; i++)
+					{
+						if(input_elements[j].value != "" && input_elements[j+1].value != " ")
+						{
+    					expires = moment.utc(input_elements[j].value + input_elements[j+1].value);
+    					var utcStart = new moment(input_elements[j].value + input_elements[j+1].value, "YYYY-MM-DDTHH:mm").utc();
+    					//input_elements[j+1].value = utcStart.toString().slice(16,21);
+
+    					console.log(utcStart.toString(), input_elements[j].value + input_elements[j+1].value);
+						}
+						if(input_elements[j].value != "" && input_elements[j+2].value != " ")
+						{
+    					expires = moment.utc(input_elements[j].value + input_elements[j+2].value);
+    					var utcStart = new moment(input_elements[j].value + input_elements[j+2].value, "YYYY-MM-DDTHH:mm").utc();
+    					//input_elements[j+2].value = utcStart.toString().slice(16,21);
+
+    					console.log(utcStart.toString(), input_elements[j].value + input_elements[j+2].value);
+						}
+						j=j+3;
+					}
+    					return true;
+				}
 			}
 		}
 	}
@@ -411,9 +493,7 @@ $(document).ready(function() {
 	{
 		document.getElementById('date-picker-0').value = date;
 	}
-	if (document.getElementById("task-add-time")) {
-		addTime.init("#task-add-time");
-	}
+
 
 	$(".datepicker").datepicker({
 		weekStart: 1,
@@ -435,9 +515,21 @@ $(document).ready(function() {
 	});
 	if(document.getElementById("start-time-0"))
 	{
-		var current_time =
-			new Date().getHours().toString() + ":" + new Date().getMinutes();
-		document.getElementById("start-time-0").value = current_time;
+
+		var current_time = new Date();
+		var hrs = current_time.getHours().toString();
+		if(hrs.length == 1)
+		{
+			hrs = '0'+ hrs;
+		}
+		var min = current_time.getMinutes().toString();
+		if(min.length == 1)
+		{
+			min = '0'+ min;
+		}
+			var start_time = hrs + ":" + min;
+		document.getElementById("start-time-0").value = start_time;
+
 	}
 	$("select.project_name").change(function() {
 		var project_id = $(this)

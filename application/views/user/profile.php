@@ -99,7 +99,7 @@ $this->load->helper('url_helper');
         </script>
         <?php }} ?>
         <footer class="footer">
-            <p class="text-center pt-2 ">Copyright © 2019 Printgreener.com</p>
+            <p class="text-center pt-2 ">Copyright © 2020 Printgreener.com</p>
         </footer>
     </div>
 </main>

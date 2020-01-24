@@ -8,7 +8,8 @@ if ($this->input->get('t_id')) { ?>
     <script type="text/javascript">
         var edit = 0;
     </script>
-<?php } ?>
+<?php }
+?>
 <main class="container-fluid-main">
     <div class="main-container container">
         <div class="main-container-inner">
@@ -106,7 +107,7 @@ if ($this->input->get('t_id')) { ?>
                                                     <div class="row">
                                                         <div class="col-4 col-md-6">
                                                             <div class="input-group mb-3">
-                                                                <input type="text" class="form-control datepicker" id="date-picker-<?= $key ?>" name="time[<?= $key ?>][date]" data-date-format="yyyy-mm-dd" value="<?= $task['task_date']; ?>">
+                                                                <input type="text" class="check-for-utc form-control datepicker" id="date-picker-<?= $key ?>" name="time[<?= $key ?>][date]" data-date-format="yyyy-mm-dd" value="<?= $task['task_date']; ?>">
                                                                 <div class="input-group-append">
                                                                     <span class="input-group-text">
                                                                         <button type="button" class="btn fa fa-calendar p-0"></button>
@@ -115,13 +116,58 @@ if ($this->input->get('t_id')) { ?>
                                                             </div>
                                                         </div>
                                                         <div class="col-4 col-md-3 mb-3">
-                                                            <div class="input-group date">
-                                                                <input type="text" class="timepicker-<?= $tnum ?> form-control" id="start-time-<?= $key ?>" name="time[<?= $key ?>][start]" value="<?= $task['start_time']; ?>" placeholder="hh:mm">
+                                                            <div class="input-group date">  <!-- converting utc start time to local time -->
+                                                                <?php 
+                                                                    $offset_mins = ((date('Z'))/60);
+                                                                    $local_time_mins = (substr($task['start_time'],0,2)*60)+(substr( $task['start_time'],3,2))+$offset_mins;
+                                                                    $local_time_hr;
+                                                                    $local_time_min;
+                                                                    if(strlen(round(($local_time_mins/60),0)) == 1)
+                                                                    {
+                                                                        $local_time_hr = '0'.round(($local_time_mins/60-1),0);
+                                                                    }else
+                                                                    {
+                                                                        $local_time_hr = round(($local_time_mins / 60-1));
+                                                                    }
+                                                                    if(strlen($local_time_mins%60) == 1)
+                                                                    {
+                                                                        $local_time_min = '0'.($local_time_mins%60);
+                                                                    }else
+                                                                    {
+                                                                        $local_time_min = ($local_time_mins%60);
+                                                                    }
+                                                                    $local_start_time = $local_time_hr . ':' . $local_time_min;
+                                                                ?>
+                                                                <input type="text" class=" check-for-utc timepicker-<?= $tnum ?> form-control" id="start-time-<?= $key ?>" name="time[<?= $key ?>][start]" value="<?= $task['start_time'] ?>" placeholder="hh:mm">
                                                             </div>
                                                         </div>
                                                         <div class="col-4 col-md-3 mb-3">
-                                                            <div class="input-group date">
-                                                                <input type="text" class="form-control timepicker-<?= $tnum + 1 ?>" id="end-time-<?= $key ?>" name="time[<?= $key ?>][end]" value="<?= $task['end_time']; ?>" placeholder="hh:mm">
+                                                            <div class="input-group date">  <!-- converting utc end time to local time -->
+                                                                <?php 
+                                                                if($task['end_time'] != '')
+                                                                {
+                                                                    $offset_min = ((date('Z')-30)/60);
+                                                                    $local_time_min = (substr($task['end_time'],0,2)*60)+(substr($task['end_time'],3,2))+$offset_min;
+                                                                    $local_time_hr;
+                                                                    $local_time_min;
+                                                                    if(strlen(round(($local_time_min/60),0)) == 1)
+                                                                    {
+                                                                        $local_time_hr = '0'.round(($local_time_min/60),0);
+                                                                    }else
+                                                                    {
+                                                                        $local_time_hr = round(($local_time_min / 60));
+                                                                    }
+                                                                    if(strlen($local_time_min%60) == 1)
+                                                                    {
+                                                                        $local_time_min = '0'.($local_time_min%60+1);
+                                                                    }else
+                                                                    {
+                                                                        $local_time_min = ($local_time_min%60+1);
+                                                                    }
+                                                                    $local_end_time = $local_time_hr . ':' . $local_time_min;
+                                                                    }
+                                                                ?>
+                                                                <input type="text" class=" check-for-utc form-control timepicker-<?= $tnum + 1 ?>" id="end-time-<?= $key ?>" name="time[<?= $key ?>][end]" value="<?= $task['end_time'] ?>" placeholder="hh:mm">
                                                             </div>
                                                         </div>
                                                         <div class="col-10 text-center mb-3">
@@ -169,12 +215,12 @@ if ($this->input->get('t_id')) { ?>
                                                 </div>
                                                 <div class="col-4 col-md-3">
                                                     <div class="input-group date">
-                                                        <input id="start-time-0" class="form-control timepicker-a" name="time[0][start]" placeholder="hh:mm" />
+                                                        <input id="start-time-0" class="check-for-utc form-control timepicker-a" name="time[0][start]" placeholder="hh:mm" />
                                                     </div>
                                                 </div>
                                                 <div class="col-4 col-md-3">
                                                     <div class="input-group date">
-                                                        <input id="end-time-0" class="form-control timepicker-b" name="time[0][end]" placeholder="hh:mm" />
+                                                        <input id="end-time-0" class="check-for-utc form-control timepicker-b" name="time[0][end]" placeholder="hh:mm" />
                                                     </div>
                                                 </div>
                                                 <div class="col-10 text-center">
@@ -205,7 +251,7 @@ if ($this->input->get('t_id')) { ?>
             </div>
         </div>
         <footer class="footer">
-            <p class="text-center ">Copyright © 2019 Printgreener.com</p>
+            <p class="text-center ">Copyright © 2020 Printgreener.com</p>
         </footer>
     </div>
 </main>

@@ -8,63 +8,67 @@ function __draw_profile_chart(res) {
     var data = JSON.parse(res);
     console.log(data)
     if (data['status'] == false) {
+        $('#user_prof_chart').hide();
         document.getElementById('profile-chart-error').innerHTML = "No work is done in this period";
-        $('#user_prof_chart').css('display', 'none');
     }
-    var configs = {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [{
-                label: "time spent in hrs",
-                backgroundColor: gradient,
-                borderColor: window.chartColors.green,
-                data: data['res']
-            }],
-        },
-        options: {
-            tooltips: {
-                enabled: true,
-            },
-            title: {
-                text: 'User snapshot',
-            },
-            hover: {
-                mode: "nearest"
-            },
-            scales: {
-                xAxes: [{
-                    gridLines: {
-                        display: false,
-                        beginAtZero: true,
-                    },
-                    ticks: {
-                        display: true,
-                        beginAtZero: true,
-                        stacked: true
-                    },
-                    scaleLabel: {
-                        display: true,
-                    }
+    else
+    {
+        document.getElementById('profile-chart-error').innerHTML = " ";
+        var configs = {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: "time spent in hrs",
+                    backgroundColor: gradient,
+                    borderColor: window.chartColors.green,
+                    data: data['res']
                 }],
-                yAxes: [{
-                    gridLines: {
-                        display: true,
-                        drawBorder: true
-                    },
-                    ticks: {
-                        display: true,
-                        beginAtZero: true,
-                        stacked: true
-                    },
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Time in hours',
-                    }
-                }]
             },
-        }
-    };
+            options: {
+                tooltips: {
+                    enabled: true,
+                },
+                title: {
+                    text: 'User snapshot',
+                },
+                hover: {
+                    mode: "nearest"
+                },
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                            display: false,
+                            beginAtZero: true,
+                        },
+                        ticks: {
+                            display: true,
+                            beginAtZero: true,
+                            stacked: true
+                        },
+                        scaleLabel: {
+                            display: true,
+                        }
+                    }],
+                    yAxes: [{
+                        gridLines: {
+                            display: true,
+                            drawBorder: true
+                        },
+                        ticks: {
+                            display: true,
+                            beginAtZero: true,
+                            stacked: true
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Time in hours',
+                        }
+                    }]
+                },
+            }
+        };
+    }   
     if (user_profile_chart) user_profile_chart.destroy();
     user_profile_chart = new Chart(user_chart, configs);
 }

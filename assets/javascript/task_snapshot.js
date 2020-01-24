@@ -77,12 +77,12 @@ function __draw_task_chart(res) {
 function callTaskTableData()
 {
         var table = $('#task-lists-datatable').DataTable({
-        "processing": true,
-        "serverSide": true,
+        processing: true,
+        serverSide: true,
         responsive: true,
         "scrollX": true,
         "bDestroy": true,
-        "ajax": {
+        ajax: {
             "url": timeTrackerBaseURL + 'index.php/admin/load_snapshot',
             type: "POST",
             "data": {'type': "task",  'month': document.getElementById('curr-month').value},
