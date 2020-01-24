@@ -5,8 +5,7 @@
 
 		//Admin panel contructor
 		public function __construct()
-		{
-			
+		{	
 		    parent::__construct();
 		    $this->load->model('dashboard_model');
 	        $this->load->helper('url_helper');
@@ -22,10 +21,11 @@
 
 		public function index()
 		{
-			
 			if(($this->session->userdata('logged_in'))==TRUE){ //if login
 				//loading admin dashboard page
-				$this->load->view('header');
+				$header_data = array();
+				$header_data['profile'] = $this->session->userdata('user_profile');
+				$this->load->view('header', $header_data);
 				$data['total_users'] = $this->dashboard_model->get_users();
 				$data['total_tasks'] = $this->dashboard_model->get_tasks();
 				$data['total_projects'] = $this->dashboard_model->get_projects();
@@ -41,6 +41,10 @@
 		//Load user analytics page
 		public function load_snapshot()
 		{
+			$header_data = array();
+			$header_data['profile'] = $this->session->userdata('user_profile');
+			$this->load->view('header', $header_data);
+
 			if(($this->session->userdata('logged_in'))==TRUE){
 				$result = array();
 				$get_data = $this->input->get();
@@ -51,13 +55,13 @@
 				}
 				
 				if($type == 'user'){  //load user snapshot page
-					$this->load->view('header');
+					// $this->load->view('header');
 					$result['data'] = $this->dashboard_model->get_task_details($type); //get user information
 			        $this->load->view('user_snapshot',$result);
 			        $this->load->view('footer');
 				}
 				else if($type == 'project'){ //load project snapshot page
-					$this->load->view('header');
+					// $this->load->view('header');
 					$result['data'] = $this->dashboard_model->get_task_details($type); //get project information
 			        $this->load->view('project_snapshot',$result);
 			        $this->load->view('footer');
@@ -113,10 +117,12 @@
 		public function load_userdetails_page()
 		{
 			if(($this->session->userdata('logged_in'))==TRUE){
-			$this->load->view('header');
-			$result['data'] = $this->dashboard_model->get_user_data(); //get project details of a chosen user
-	        $this->load->view('user_detail',$result);
-	        $this->load->view('footer');
+				$header_data = array();
+				$header_data['profile'] = $this->session->userdata('user_profile');
+				$this->load->view('header', $header_data);
+				$result['data'] = $this->dashboard_model->get_user_data(); //get project details of a chosen user
+				$this->load->view('user_detail',$result);
+				$this->load->view('footer');
 	        }else{
 				redirect('login/index','refresh');
 			}
@@ -133,11 +139,13 @@
 		public function load_project_detail()
 		{
 			if(($this->session->userdata('logged_in'))==TRUE){
-			$this->load->view('header');
-			$result['data'] = $this->dashboard_model->get_project_data($this->input->get('project_id')); //get project details of a chosen project
-			$result['user_names'] = $this->dashboard_model->get_usernames(); //get usernames list to assign project.
-	        $this->load->view('project_details',$result);
-	        $this->load->view('footer');
+				$header_data = array();
+				$header_data['profile'] = $this->session->userdata('user_profile');
+				$this->load->view('header', $header_data);
+				$result['data'] = $this->dashboard_model->get_project_data($this->input->get('project_id')); //get project details of a chosen project
+				$result['user_names'] = $this->dashboard_model->get_usernames(); //get usernames list to assign project.
+				$this->load->view('project_details',$result);
+				$this->load->view('footer');
 	        }else{
 				redirect('login/index','refresh');
 			}
@@ -146,9 +154,11 @@
 		public function load_task_snapshot()
 		{
 			if(($this->session->userdata('logged_in'))==TRUE){
-			$this->load->view('header');
-	        $this->load->view('task_snapshot'); //contains task information(chart,table containing dat about all tasks)
-	        $this->load->view('footer');
+				$header_data = array();
+				$header_data['profile'] = $this->session->userdata('user_profile');
+				$this->load->view('header', $header_data);
+				$this->load->view('task_snapshot'); //contains task information(chart,table containing dat about all tasks)
+				$this->load->view('footer');
 	        }else{
 				redirect('login/index','refresh');
 			}
@@ -286,9 +296,11 @@
 	    {
 	    	//Admin can add new user here..
 	    	if(($this->session->userdata('logged_in'))==TRUE){
-	    	$this->load->view('header');
-			$this->load->view('adduser');
-			$this->load->view('footer');
+				$header_data = array();
+				$header_data['profile'] = $this->session->userdata('user_profile');
+				$this->load->view('header', $header_data);	    	
+				$this->load->view('adduser');
+				$this->load->view('footer');
 			}else{
 				redirect('login/index','refresh');
 			}
@@ -299,10 +311,12 @@
 		{
 			//Admin can add new project here..
 			if(($this->session->userdata('logged_in'))==TRUE){
-			$this->load->view('header');
-			$data['names'] = $this->dashboard_model->get_usernames(); //to get the list of usernames to assign the project
-			$this->load->view('addproject',$data);
-			$this->load->view('footer');
+				$header_data = array();
+				$header_data['profile'] = $this->session->userdata('user_profile');
+				$this->load->view('header', $header_data);
+				$data['names'] = $this->dashboard_model->get_usernames(); //to get the list of usernames to assign the project
+				$this->load->view('addproject',$data);
+				$this->load->view('footer');
 			}else{
 				redirect('login/index','refresh');
 			}
@@ -313,11 +327,13 @@
 	    {
 	    	//Admin can add task in this page
 	    	if(($this->session->userdata('logged_in'))==TRUE){
-	    	$this->load->view('header');
-		    $data['names'] = $this->dashboard_model->get_usernames(); //to get the list of usernames to assign the task
-		    $data['result'] = $this->dashboard_model->get_project_name(); //to get the list of projects to add the task to it
-		   	$this->load->view('addtask',$data);
-			$this->load->view('footer');
+				$header_data = array();
+				$header_data['profile'] = $this->session->userdata('user_profile');
+				$this->load->view('header', $header_data);
+				$data['names'] = $this->dashboard_model->get_usernames(); //to get the list of usernames to assign the task
+				$data['result'] = $this->dashboard_model->get_project_name(); //to get the list of projects to add the task to it
+				$this->load->view('addtask',$data);
+				$this->load->view('footer');
 			}else{
 				redirect('login/index','refresh');
 			}
@@ -327,10 +343,12 @@
 		public function load_profile()
 		{
 			if(($this->session->userdata('logged_in'))==TRUE){
-			$this->load->view('header');
-			$data['res']           = $this->dashboard_model->my_profile(); //Contains profile information of the admin
-			$this->load->view('admin_profile',$data);
-			$this->load->view('footer');
+				$header_data = array();
+				$header_data['profile'] = $this->session->userdata('user_profile');
+				$this->load->view('header', $header_data);
+				$data['res']           = $this->dashboard_model->my_profile(); //Contains profile information of the admin
+				$this->load->view('admin_profile',$data);
+				$this->load->view('footer');
 			}else{
 				redirect('login/index','refresh');
 			}
@@ -387,7 +405,9 @@
 		  		if ($this->form_validation->run() == FALSE) //if inputs are not valid, return validation error to add project page
 				{
 					//load add project page
-					$this->load->view('header');
+					$header_data = array();
+					$header_data['profile'] = $this->session->userdata('user_profile');
+					$this->load->view('header', $header_data);
 					$data['names'] = $this->dashboard_model->get_usernames();
 					$this->load->view('addproject',$data);
 					$this->load->view('footer');
@@ -445,7 +465,9 @@
 		        $this->form_validation->set_rules('user_email','Email','trim|required|valid_email');
 		        if ($this->form_validation->run() == FALSE)//if inputs are not valid, return validation error to add users page
 				{
-					$this->load->view('header');
+					$header_data = array();
+					$header_data['profile'] = $this->session->userdata('user_profile');
+					$this->load->view('header', $header_data);
 					$this->load->view('adduser');
 					$this->load->view('footer');
 		        }
@@ -499,7 +521,9 @@
 		        if ($this->form_validation->run() == FALSE)//if inputs are not valid, return validation error to add task page
 				{
 					//redirect('admin/load_add_task');
-					$this->load->view('header');
+					$header_data = array();
+					$header_data['profile'] = $this->session->userdata('user_profile');
+					$this->load->view('header', $header_data);
 				    $data['names'] = $this->dashboard_model->get_usernames();
 				    $data['result'] = $this->dashboard_model->get_project_name();
 				   	$this->load->view('addtask',$data);
@@ -610,7 +634,9 @@
 		  		if ($this->form_validation->run() == FALSE) //if inputs are invalid
 				{
 					//load admin profile with validation error message
-					$this->load->view('header');
+					$header_data = array();
+					$header_data['profile'] = $this->session->userdata('user_profile');
+					$this->load->view('header', $header_data);
 					$this->load->view('admin_profile');
 					$this->load->view('footer');
 		        }
@@ -633,4 +659,3 @@
 			}	
 		}
 	}
-?>

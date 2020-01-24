@@ -28,11 +28,10 @@ class Login extends CI_Controller
         $this->load->library('form_validation');
         $this->load->helper('form');
         $header_data = array();
-        $header_data["title"] = "Login";
-        $this->load->view('header', $header_data);
-        $this->load->view('login');
-        $this->load->view('footer');
+        $header_data["title"] = "Login";        
+        $this->load->view('login', $header_data);
     }
+
     // Check for user login process
     public function login_process()
     {
@@ -66,9 +65,7 @@ class Login extends CI_Controller
     //load forgot password page
     public function forgot_pwd()
     {
-        $this->load->view('header');
-        $this->load->view('forgotpwd'); //view to reset password
-        $this->load->view('footer');
+        $this->load->view('forgotpwd'); //view to reset password     
     }
 
     //To store OTP into database
@@ -107,17 +104,17 @@ class Login extends CI_Controller
         } else { //if input is valid, go to check_otp function
             $check['result'] = $this->dashboard_model->check_otp();
             if (!empty($check['result'])) {
-                $this->load->view('header');
+                // $this->load->view('header');
                 $this->load->view('changepwd', $check); //if otp is correct, get user email and goto change password page
-                $this->load->view('footer');
+                // $this->load->view('footer');
                 /*$result['status'] = TRUE;
                 $result['msg'] = "Valid OTP";
                 $result['data'] = $result;*/
             } else { //if otp is not correct, redirect with error message
                 $this->session->set_flashdata('error_msg', 'Enter correct OTP...');
-                $this->load->view('header');
+                // $this->load->view('header');
                 $this->load->view('forgotpwd',$res);
-                $this->load->view('footer');
+                // $this->load->view('footer');
                 /*$result['status'] = FALSE;
                 $result['msg'] = "Invalid OTP";
                 $result['data'] = NULL;*/
