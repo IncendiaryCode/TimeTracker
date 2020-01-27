@@ -140,6 +140,7 @@ class User extends CI_Controller
             echo json_encode($output_result); //send response to the ajax call
         }else{
             $data['task_type'] = 'task';
+            $data['start_time'] = (isset($data['time']))?$data['time']:date('Y:m:d H:i:s');
             $result['details'] = $this->user_model->start_timer($data); //start the timer for the requested task id 
             if ($result['details'] == FALSE) {
                 $output_result['status'] = FALSE;
@@ -172,10 +173,10 @@ class User extends CI_Controller
     public function stop_timer()
     {
         $post_data = $this->input->post();
-        $end_time = (!empty($post_data['stop-end-time'])) ? $post_data['stop-end-time'] : '';//set end time if end time is sent
+        //$end_time = (!empty($post_data['stop-end-time'])) ? $post_data['stop-end-time'] : '';//set end time if end time is sent
         $data['userid'] = $this->session->userdata('userid');
-        $data['end_time'] = $end_time;
-        $data['task_desc'] = isset($post_data['stop_task-description']) ? $post_data['stop_task-description'] : '';//get task description if sent
+        $data['end_time'] = (isset($post_data['time']))?$post_data['time']:date('Y:m:d H:i:s');
+        $data['task_desc'] = isset($post_data['task-description']) ? $post_data['task-description'] : '';//get task description if sent
         $data['flag'] = isset($post_data['flag']) ? $post_data['flag'] : '';//set flag if flag is sent
 
         if ($this->input->post('id')) { //task id is sent through post request
