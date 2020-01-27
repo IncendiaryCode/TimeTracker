@@ -158,6 +158,7 @@ if ($this->input->get('t_id')) { ?>
                                                             <?php } else { ?>
                                                                 <a href="javascript:void(0);" id="delete-task-<?= $key ?>" class="delete-task">
                                                                     <i class="fas fa-minus text-white pt-2 icon-plus" name="time[<?= $key ?>][deleted_time_range]">
+                                                                        <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= $key ?>][table_id]" id="table_id<?= $key ?>">
                                                                     </i>
                                                                 </a>
                                                             <?php } ?>

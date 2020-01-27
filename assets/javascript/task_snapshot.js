@@ -82,7 +82,7 @@ function callTaskTableData()
         responsive: true,
         "scrollX": true,
         "bDestroy": true,
-        ajax: {
+        "ajax": {
             "url": timeTrackerBaseURL + 'index.php/admin/load_snapshot',
             type: "POST",
             data: {'type': "task",  'month': document.getElementById('curr-month').value},

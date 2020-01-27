@@ -295,6 +295,7 @@ var addTime = {
 			var table_id = $(this)
 				.find("input:hidden")
 				.val();
+				console.log(this)
 			var _that = $(this);
 			$.ajax({
 				type: "POST",
