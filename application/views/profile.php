@@ -11,7 +11,7 @@
         </div>
     </header> 
 
-    <div class="container">
+   <!--  <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="dropdown text-right" id="dropdown-recent-acts">
@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <main class="container-fluid-main">
         <div class="main-container-inner mt-3">

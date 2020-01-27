@@ -62,7 +62,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
     <div class="row">
         <div class="col-12">
-            <p class="efficiency text-center mt-5">Project table</p>
+            <p class="efficiency text-left separator-hr mt-5">Project table</p>
             <table id="project-list-datatable" class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -78,7 +78,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
     <div class="row">
         <div class="col-12">
-            <p class="efficiency text-center mt-5">Task table</p>
+            <p class="efficiency text-left separator-hr mt-5">Task table</p>
             <table id="task-list-datatable" class="table table-striped table-bordered">
                 <thead>
                     <tr>

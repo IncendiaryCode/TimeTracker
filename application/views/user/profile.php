@@ -42,7 +42,7 @@ $this->load->helper('url_helper');
                         <div class="col-md-2 offset-md-2 col-6 offset-3 text-center">
                             <img src="<?=base_url().USER_UPLOAD_PATH.$res['profile'];?>"  class="rounded-circle text-center" width="150px;" height="150px;">
                             <h4 class="employee-name mt-3">
-                                <input type="text" class="form-control" name="profile-email" id="profile-name" value = "<?php echo $res['name'];?>">
+                                <input type="text" class="form-control-file  border-top-0 border-left-0 border-right-0" name="profile-name" id="profile-name" value = "<?php echo $res['name'];?>">
                             </h4>
                         </div>
                         <div class="col-md-6 offset-md-2">
@@ -51,13 +51,13 @@ $this->load->helper('url_helper');
                                         <tr>
                                             <th>Email :</th>
                                             <td>
-                                                <input type="email" class="form-control" name="profile-email" id="profile-id" value = "<?=$res['email'];?>">
+                                                <input type="email" class="form-control-file  border-top-0 border-left-0 border-right-0" name="profile-email" id="profile-id" value = "<?=$res['email'];?>">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>Phone number:</th>
                                             <td width="100%">
-                                                <input type="number" class="form-control" name="profile-ph" value = "<?php echo ($res['phone'] != 0)?$res['phone']:'';?>">
+                                                <input type="number" class="form-control-file  border-top-0 border-left-0 border-right-0" name="profile-ph" id="profile-ph" value = "<?php echo ($res['phone'] != 0)?$res['phone']:'';?>">
                                             </td>
                                         </tr>
                                         <tr>

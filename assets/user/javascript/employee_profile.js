@@ -102,14 +102,34 @@ $(document).ready(function () {
     profile.onsubmit = function()
     {
         var profile_email = document.getElementById("profile-id").value;
+        var user_name = document.getElementById("profile-name").value;
+        var user_ph = document.getElementById("profile-ph").value;
+        if(profile_email == " " || profile_email == "")
+        {
+            document.getElementById("profile-error").innerHTML ="Empty email";
+            return false;
+        }
+        if(user_name == " " || user_name == "")
+        {
+            document.getElementById("profile-error").innerHTML ="Empty name";
+            return false;
+        }
         if (!emailRegEx.test(profile_email)) {
                 document.getElementById("profile-error").innerHTML ="Email format is not correct.";
                 $('#profile-id').focus();
                 return false;
-            }document.getElementById("profile-error").innerHTML = " ";
+            }
+        if(user_ph != " " || user_ph != "")
+        {
+            if(user_ph.length < 10)
+            {
+                document.getElementById("profile-error").innerHTML ="Wrong phone number";
+                return false;
+            }
+        }
+        document.getElementById("profile-error").innerHTML = " ";
             return true;
     }
-
     if (document.getElementById('year-chart')) {
         load_year_chart();
     }
