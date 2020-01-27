@@ -608,6 +608,7 @@ UIGestureRecognizerDelegate {
     }
     
     func removeAddSelected(indexPath: IndexPath) {
+        lblError.isHidden = true
         // Remove selected task time
         let cell = tblviewTimings.cellForRow(at: indexPath) as! TimingsCell
         selectedCell = cell
@@ -942,7 +943,7 @@ UIGestureRecognizerDelegate {
                         arrTaskTimeDetails[selectedCell.indexPath.row].nStartTime = endTime
                     }
                 }
-                else {
+                else if arrTaskTimeDetails.count > selectedCell.indexPath.row {
                     arrTaskTimeDetails[selectedCell.indexPath.row].description =
                         selectedCell.txtFDescription.text
                 }

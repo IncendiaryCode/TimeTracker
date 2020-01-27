@@ -132,7 +132,8 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         self.updateViewsAndColor()
         
         // Setup label for updating information.
-        lblUpdater = UILabel()
+        lblUpdater = UILabel(frame: CGRect(x: 0, y: tblUserDetails.frame.midY
+            , width: UIScreen.main.bounds.width, height: 30))
         lblUpdater.textAlignment = .center
         lblUpdater.textColor = .gray
         lblUpdater.text = "We are gettting your task list"
@@ -150,6 +151,12 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             
             // Check previous day's punch out time.()
             if punchInOutCDTrlr.isPreviousDayUpdated() {
+                // If view initialise from login credentials.
+                if nil == g_arrCTaskDetails || 0 == g_arrCTaskDetails.count {
+                    lblEmpty.isHidden = true
+                    lblUpdater.isHidden = false
+                    actIndicator.startAnimating()
+                }
                 updateProject()
                 // If puched out.
                 if punchInOutCDTrlr.isTodayPunchedOut() {

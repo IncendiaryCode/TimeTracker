@@ -15,6 +15,7 @@
 import UIKit
 
 class MyActivityViewController: UIViewController, TableviewTap, BarChartViewDelegate {
+    
     @IBOutlet weak var nsLBtnWidth: NSLayoutConstraint!
     @IBOutlet weak var btnDaily: UIButton!
     @IBOutlet weak var btnWeekly: UIButton!
@@ -155,6 +156,12 @@ class MyActivityViewController: UIViewController, TableviewTap, BarChartViewDele
     
     @IBAction func btnMonthlyPressed(_ sender: Any) {
         updateCoredataTimings()
+        arrActView[2].nSelectedIndexMonth = 0 // display current month.
+        arrActView[2].calendarView.setDisplayDate(Date())
+        arrActView[2].dateCurrentMonth = arrActView[2].calendarView.displayDate
+        let strMonth = arrActView[2].calendarView.dateOnHeader(arrActView[2].dateCurrentMonth)
+        arrActView[2].lblDate.text = strMonth
+
         view.bringSubviewToFront(arrActView[2])
         let cgPoint = CGPoint(x: btnMonthly.frame.minX+btnDaily.frame.maxX/4,
                               y: btnMonthly.frame.maxY-4)
@@ -180,6 +187,17 @@ class MyActivityViewController: UIViewController, TableviewTap, BarChartViewDele
                 self.viewSelection.frame.origin = cgPoint
             }
         }
+    }
+    
+    func noData() {
+        //Alert while puch in.
+        let alert = UIAlertController(title: "Message", message: "There is no data on this date",
+                                      preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default,
+                                      handler: {(_: UIAlertAction!) in
+        }
+        ))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func alertCellSwipe() {

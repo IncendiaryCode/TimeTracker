@@ -21,6 +21,7 @@ protocol TableviewTap {
 protocol BarChartViewDelegate {
 	/// Delegate sends timesince1970 object.
 	func chartPressed(intDate: Int64)
+	func noData()
 }
 
 import UIKit
@@ -71,6 +72,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	var cgPBtnDayGraphWidth: CGRect!
 	/// selected day in day view.
 	var indexSelDate = 0
+	/// Label to show no data.
+	var lblNoData: UILabel!
 	
 	@IBOutlet weak var nsLBarViewHeight: NSLayoutConstraint!
 	@IBOutlet weak var btnLeftMove: UIButton!
@@ -133,11 +136,11 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
     
 	func startDate() -> Date {
 		var dateComponents = DateComponents()
-		// Calendar starts from 36 month back.
-		dateComponents.month = -36
+		// Calendar starts from 20 years back.
+		dateComponents.month = -240
 		let today = Date()
-		let threeMonthsAgo = self.calendarView.calendar.date(byAdding: dateComponents, to: today)
-		return threeMonthsAgo!
+		let years20 = self.calendarView.calendar.date(byAdding: dateComponents, to: today)
+		return years20!
 	}
 	
 	func endDate() -> Date {
@@ -212,12 +215,12 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 							dictDrawnPoint: dictDrawnPoint)
 				}
 				// If start and end time inside any timings.
-				else if start < points[0] && end > points[1] {
+				else if start <= points[0] && end >= points[1] {
 					cgFMinY = findMinYforDayBtnGraph(start: start, end: end, minY: minY-20,
 							dictDrawnPoint: dictDrawnPoint)
 				}
 				// If start and end time between any other end time.
-				else if start < points[1] && end > points[1] {
+				else if start <= points[1] && end >= points[1] {
 					cgFMinY = findMinYforDayBtnGraph(start: start, end: end, minY: minY-20,
 							dictDrawnPoint: dictDrawnPoint)
 				}
@@ -231,7 +234,25 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		var dictDrawnPoints = Dictionary<Int, Array<Array<Int>>>()
 		var i = 0
 		
-		for cTaskDetails in arrCTaskTimeDetails {
+		var arrReverseSort: Array<TaskTimeDetails> = arrCTaskTimeDetails
+		
+		// Sort based on end time.
+		arrReverseSort.sort { (task1, task2) -> Bool in
+			return task1.nEndTime < task2.nEndTime
+		}
+
+		// Sort based on start time.
+		arrReverseSort.sort { (task1, task2) -> Bool in
+			return task1.nStartTime < task2.nStartTime
+		}
+
+		// Sort array details based on date.
+		arrReverseSort.sort { (task1, task2) -> Bool in
+			return getDateFromString(strDate: task1.strDate) > getDateFromString(strDate:
+				task2.strDate)
+		}
+		
+		for cTaskDetails in arrReverseSort {
 			let startTime = cTaskDetails.nStartTime!
 			let endTime = cTaskDetails.nEndTime!
 			let taskId = cTaskDetails.taskId
@@ -259,7 +280,9 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			}
 			// Setup button for graph
 			let btnTaskGraph = ButtonDayGraph(frame: cgRect)
-			btnTaskGraph.tag = i // Tag used to identify each button.
+	
+			// Negative beacause its sorted in reverse.
+			btnTaskGraph.tag = arrReverseSort.count - i - 1 // Tag used to identify each button.
 			
 			let tapGesture = UITapGestureRecognizer(target: self, action:
 				#selector(self.btnDayChartPressed))
@@ -324,7 +347,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			if let cell = tblActivities.cellForRow(at: indexPath) {
 //				cell?.contentView.backgroundColor = g_colorMode.defaultColor()
 				(cell as! UserTaskInfoCell).gradientLayer.colors =
-					[g_colorMode.defaultColor().cgColor, g_colorMode.defaultColor().cgColor]
+					[]
 			}
 			cgPBtnDayGraphWidth = nil
 		}
@@ -460,6 +483,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	
 	/// Setup week activity view.
 	func setupWeekView() {
+		arrWeekDetails = tasksCDCtrlr.getWeekWiseDetails() // Get week information.
 		arrIntDate = tasksTimeCDCtrlr.getAllDates() // get all dates task timings.
 		if arrWeekDetails.count > 0 {
 			// Setup tableview.
@@ -560,6 +584,17 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			calendarView.isHidden = true
 		}
 		else {
+			// Setup label no data indicator
+			let cgRect = CGRect(x: 0, y: tblActivities.frame.minY + 40
+				, width: UIScreen.main.bounds.width, height: 30)
+			lblNoData = UILabel(frame: cgRect)
+//			lblNoData.center = tblActivities.center
+			lblNoData.text = "No task available."
+			lblNoData.textAlignment = .center
+			lblNoData.textColor = g_colorMode.textColor()
+			lblNoData.isHidden = true
+			self.addSubview(lblNoData)
+			
 			calendarView.dataSource = self
 			calendarView.delegate = self
 			calendarView.setDisplayDate(Date()) // Initially display current month.
@@ -631,7 +666,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	/// To remove previously highlighted button.
 	func removeHighlightDayGraphButton(index: Int) {
 		if let cgFrame = cgPBtnDayGraphWidth {
-			let btnDayGraph = arrBtnsDayTask[index]
+			// Negative value because its in reverse order.
+			let btnDayGraph = arrBtnsDayTask[arrCTaskTimeDetails.count - index - 1]
 			let color = btnDayGraph.backgroundColor
 			UIView.animate(withDuration: 0.2) {
 				btnDayGraph.frame = cgFrame
@@ -641,7 +677,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	}
 	
 	func highlightDayGraphButton(index: Int) {
-		let btnDayGraph = arrBtnsDayTask[index]
+		// Negative value because its in reverse order.
+		let btnDayGraph = arrBtnsDayTask[arrCTaskTimeDetails.count - index - 1]
 
 		// To avoid multiple click on same cell.
 		if btnDayGraph.frame.height != 44 {
@@ -657,6 +694,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			let cgFrame = CGRect(x: minX, y: minY, width: maxWidth, height: 44)
 			let color = btnDayGraph.backgroundColor
 			
+			bringSubviewToFront(btnDayGraph)
 			UIView.animate(withDuration: 0.2, animations: {
 				btnDayGraph.frame = cgFrame
 				btnDayGraph.backgroundColor = color?.withAlphaComponent(1.0)
@@ -698,7 +736,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			let taskInfo = getTaskDetails(taskId: taskId)
 			if true == taskInfo?.bIsRunning {
 				delegate?.alertCellSwipe()
-				return nil
+				return []
 			}
 			
 			let editAction = UITableViewRowAction(style: .default, title: "Edit" , handler: {
@@ -712,6 +750,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		if nSliderView == 0 {
+			// Beacause sorting different for table view and grapgh.
 			highlightDayGraphButton(index: indexPath.row)
 		}
 		else {
@@ -737,6 +776,14 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		// To show and hide data availability in month view.
+		if nSliderView == 2 && nCell == 0 {
+			lblNoData.isHidden = false
+		}
+		else if nSliderView == 2 {
+			lblNoData.isHidden = true
+		}
+		
         return nCell
     }
     

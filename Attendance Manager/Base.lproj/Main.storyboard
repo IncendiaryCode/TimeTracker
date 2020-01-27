@@ -604,6 +604,21 @@
             </objects>
             <point key="canvasLocation" x="2718.840579710145" y="32.8125"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="Sru-bL-AHM">
+            <objects>
+                <viewController id="suZ-Mg-J1W" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dUU-u9-05d">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="GGk-K2-s7b"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JqK-9z-6JH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="679" y="-651"/>
+        </scene>
         <!--About AppVC-->
         <scene sceneID="35G-85-jfF">
             <objects>
@@ -678,7 +693,7 @@
                                                     <constraint firstAttribute="height" constant="100" id="fG4-bX-lGo"/>
                                                 </constraints>
                                             </imageView>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="A tool for track developers work and task time." textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SR6-vp-Tvk">
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="A tool to track developers work and task time." textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SR6-vp-Tvk">
                                                 <rect key="frame" x="8" y="170" width="359" height="366"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>

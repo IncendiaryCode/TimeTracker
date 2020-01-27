@@ -53,6 +53,9 @@ extension CalendarView: UICollectionViewDelegateFlowLayout {
             
             delegateChart?.chartPressed(intDate: nDate)
         }
+        else {
+            delegateChart?.noData()
+        }
         if arrDates.contains(strDate) && !selectedDates.contains(date) {
             
             if let index = selectedIndexPaths.firstIndex(of: indexPath) {

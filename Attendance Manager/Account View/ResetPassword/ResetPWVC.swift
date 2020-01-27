@@ -51,7 +51,7 @@ class ResetPWVC: UIViewController {
     @IBAction func btnChangePWPressed(_ sender: Any) {
         self.view.endEditing(true)
         guard txFNewPW.text != "" && txFReNewPW.text != "" && txFCurrentPW.text != "" else {
-            lblError.text = "Enter all the fields..!"
+            lblError.text = "Enter all the fields"
             lblError.isHidden = false
             return
         }

@@ -793,6 +793,11 @@ class TasksCDController {
         let strDate = Date(milliseconds: intDate).getStrDate()
         arrDetails = taskTimeUpdater.getTaskTimes(strDate: strDate)
         
+        // Sort based on end time.
+        arrDetails.sort { (task1, task2) -> Bool in
+            return task1.nEndTime > task2.nEndTime
+        }
+        
         // Sort based on start time.
         arrDetails.sort { (task1, task2) -> Bool in
             return task1.nStartTime > task2.nStartTime
