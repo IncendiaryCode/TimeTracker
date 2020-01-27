@@ -25,6 +25,7 @@ $this->load->helper('url_helper');
                         </button>
                     </div>
                 <?php } ?>
+            </div>
 
                 <!-- <div class="col-12 mt-5">
                     <form method="post" action="<?=base_url();?>index.php/user/dark" id="dark-mode">
@@ -36,39 +37,41 @@ $this->load->helper('url_helper');
                         </div>
                     </form>
                 </div> -->
-                <div class="col-md-2 offset-md-2 col-6 offset-3 text-center">
-                    <img src="<?=base_url().USER_UPLOAD_PATH.$res['profile'];?>"  class="rounded-circle text-center" width="150px;" height="150px;">
-                    <h4 class="employee-name mt-3">
-                        <?php echo $res['name'];?>
-                    </h4>
-                </div>
-                <div class="col-md-6 offset-md-2">
-                    <form method="post" action="<?= base_url(); ?>user/edit_profile" id="edit-profile">
-                        <table class="table">
-                            <tbody id="table-body">
-                                <tr>
-                                    <th>Email :</th>
-                                    <td>
-                                        <input type="email" class="form-control" name="profile-email" id="profile-id" value = "<?=$res['email'];?>">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Phone number:</th>
-                                    <td width="100%">
-                                        <input type="number" class="form-control" name="profile-ph" value = "<?php echo ($res['phone'] != 0)?$res['phone']:'';?>">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="35%"><a href="<?=base_url();?>index.php/user/change_password">Change password</a></td>
-                                    <td><p id="profile-error" class="text-danger"></p></td>
-                                    <td><button type="submit" class="btn btn-primary login-color" id="save-profile">Save</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-                
-            </div><hr>
+                <form method="post" action="<?= base_url(); ?>user/edit_profile" id="edit-profile">
+                    <div class="row">
+                        <div class="col-md-2 offset-md-2 col-6 offset-3 text-center">
+                            <img src="<?=base_url().USER_UPLOAD_PATH.$res['profile'];?>"  class="rounded-circle text-center" width="150px;" height="150px;">
+                            <h4 class="employee-name mt-3">
+                                <input type="text" class="form-control" name="profile-email" id="profile-name" value = "<?php echo $res['name'];?>">
+                            </h4>
+                        </div>
+                        <div class="col-md-6 offset-md-2">
+                                <table class="table">
+                                    <tbody id="table-body">
+                                        <tr>
+                                            <th>Email :</th>
+                                            <td>
+                                                <input type="email" class="form-control" name="profile-email" id="profile-id" value = "<?=$res['email'];?>">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Phone number:</th>
+                                            <td width="100%">
+                                                <input type="number" class="form-control" name="profile-ph" value = "<?php echo ($res['phone'] != 0)?$res['phone']:'';?>">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="35%"><a href="<?=base_url();?>index.php/user/change_password">Change password</a></td>
+                                            <td><p id="profile-error" class="text-danger"></p></td>
+                                            <td><button type="submit" class="btn btn-primary login-color" id="save-profile">Save</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                    </div>
+                </form>
+            </div>
+            <hr>
             <div class="row shadow-lg">
                 <div class="col-6 col-md-4 offset-md-2">
                     <div class="card user-card ">
