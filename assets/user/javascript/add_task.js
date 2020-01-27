@@ -1,4 +1,3 @@
-
 var addTime = {
 	id: 0,
 	ele: null,
@@ -13,7 +12,7 @@ var addTime = {
 		var colDate = $(
 			'<div class="col-4 col-md-6">' +
 				'<div class="input-group mb-3">' +
-				'<input type="text" class="form-control datepicker" name="time[' +
+				'<input type="text" class="form-control date-utc datepicker" name="time[' +
 				id +
 				'][date]" data-date-format="yyyy-mm-dd" id="date-picker-' +
 				id +
@@ -24,7 +23,7 @@ var addTime = {
 				'<span class="input-group-text" id="basic-addon-' +
 				id +
 				'">' +
-				'<span class="fa fa-calendar datepicker"></span>' +
+				'<span class="fa fa-calendar"></span>' +
 				"</span>" +
 				"</div>" +
 				"</div>" +
@@ -37,7 +36,7 @@ var addTime = {
 				'<div class="input-group">' +
 				'<input id="start-time-' +
 				id +
-				'" class="form-control timepicker" data-date-format="hh:mm:ss" name="time[' +
+				'" class="form-control date-utc timepicker" data-date-format="hh:mm:ss" name="time[' +
 				id +
 				'][start]" value="' +
 				start_time +
@@ -52,7 +51,7 @@ var addTime = {
 				'<div class="input-group">' +
 				'<input id="end-time-' +
 				id +
-				'"  class="form-control timepicker1" data-date-format="hh:mm:ss" name="time[' +
+				'"  class="form-control date-utc timepicker1" data-date-format="hh:mm:ss" name="time[' +
 				id +
 				'][end]" value="' +
 				end_time +
@@ -92,14 +91,14 @@ var addTime = {
 			$(this)
 				.closest(".time-section")
 				.remove();
-				array_of_timings.pop()
-				console.log(array_of_timings);
+			array_of_timings.pop();
+			console.log(array_of_timings);
 		});
 		array_of_timings.push({ date, start_time, end_time });
 		removeBtn.appendTo(row);
 
 		section.append(row);
-		this.ele.find(".primary-wrap").prepend(section);
+		this.ele.find(".primary-wrap").append(section);
 
 		section.find(".timepicker").timepicker({
 			uiLibrary: "bootstrap4"
@@ -164,8 +163,9 @@ var addTime = {
 			document.getElementById("datetime-error").innerHTML =
 				"date/time of start/end connot be greater than currnet date/time";
 			return false;
-		}*/ 
-		else if (__start_seconds >= __end_seconds) {
+		}*/ else if (
+			__start_seconds >= __end_seconds
+		) {
 			document.getElementById("datetime-error").innerHTML =
 				"Start time cannot be greater or equal to end time.";
 			return false;
@@ -260,36 +260,26 @@ var addTime = {
 				//prepare prefill data
 				var dateObj = new Date();
 				var _month = dateObj.getMonth() + 1;
-				if(_month.toString().length == 1)
-				{
-					_month = '0'+_month.toString();
+				if (_month.toString().length == 1) {
+					_month = "0" + _month.toString();
 				}
 				var _day = dateObj.getDate();
-				if(_day.toString().length == 1)
-				{
-					_day = '0'+_day.toString();
+				if (_day.toString().length == 1) {
+					_day = "0" + _day.toString();
 				}
 
 				var _hour = dateObj.getHours();
-				if(_hour.toString().length == 1)
-				{
-					_hour = '0'+_hour.toString();
+				if (_hour.toString().length == 1) {
+					_hour = "0" + _hour.toString();
 				}
 
 				var _min = dateObj.getMinutes();
-				if(_min.toString().length == 1)
-				{
-					_min = '0'+_min.toString();
+				if (_min.toString().length == 1) {
+					_min = "0" + _min.toString();
 				}
-				
-				var date =
-					dateObj.getFullYear() +
-					"-" +
-					_month +
-					"-" +
-					_day;
-				var start_time =
-					_hour + ":" + _min;
+
+				var date = dateObj.getFullYear() + "-" + _month + "-" + _day;
+				var start_time = _hour + ":" + _min;
 				var end_time = " ";
 				var descri = " ";
 				_this.layout(date, start_time, end_time, descri);
@@ -348,70 +338,72 @@ var addTime = {
 	}
 };
 
-function convert_to_UTC(time)
-{
+function convert_to_UTC(time) {
 	var system_zone_date = new Date();
 	var offset_min = system_zone_date.getTimezoneOffset();
 
-	var total_min = parseInt(time.slice(0,2)*60) + parseInt(time.slice(3,5));
+	var total_min = parseInt(time.slice(0, 2) * 60) + parseInt(time.slice(3, 5));
 	var utc_min = total_min + offset_min;
-	
-	var utc_hr = parseInt(utc_min/60).toString() +':'+ parseInt(utc_min%60).toString();
+
+	var utc_hr =
+		parseInt(utc_min / 60).toString() + ":" + parseInt(utc_min % 60).toString();
 	return utc_hr;
 }
 
-function convert_to_Local(time)
-{
+function convert_to_Local(time) {
 	var system_zone_date = new Date();
 	var offset_min = system_zone_date.getTimezoneOffset();
 
-	var total_min = parseInt(time.slice(0,2)*60) + parseInt(time.slice(3,5));
-	var utc_min = total_min - (offset_min);
+	var total_min = parseInt(time.slice(0, 2) * 60) + parseInt(time.slice(3, 5));
+	var utc_min = total_min - offset_min;
 
-	var utc_hr = parseInt(utc_min/60).toString() +':'+ parseInt(utc_min%60).toString();
-						
+	var utc_hr =
+		parseInt(utc_min / 60).toString() + ":" + parseInt(utc_min % 60).toString();
+
 	return utc_hr;
 }
 
 $(document).ready(function() {
-	
-	$('#delete-task-0').hide();
+	// $("#delete-task-0").hide();
 	if (document.getElementById("task-add-time")) {
 		addTime.init("#task-add-time");
 	}
-	var element = document.getElementById('task-times');
-	if(element != null)
-	{
-		var input_element = element.getElementsByClassName('check-for-utc');
-		for(var i=0; i<input_element.length; i++)
-		{
-			if(input_element[i].value != "" && input_element[i].value != " ")
-			{
-				var timeZone = moment.tz.guess();
-				var date = input_element[i].value;
-				if(input_element[i+1])
-				{
-					var start_time = input_element[i+1].value;
-					var serverDate = moment(date +' '+ start_time).tz(timeZone).format('Y-MM-DD h:mm:ss');
-				if(serverDate != "Invalid date")
-					{
-					input_element[i].value = serverDate.slice(0,10)
-					input_element[i+1].value = serverDate.slice(11,15);
-					}
-				}
-				if(input_element[i+2])
-				{
-				var end_time = input_element[i+2].value;
-				var serverDateEnd = moment(date +' '+ end_time).tz(timeZone).format('Y-MM-DD h:mm:ss');
-					if(serverDateEnd != "Invalid date" && (end_time != '' || end_time != ' '))
-					{
-					input_element[i+2].value = serverDateEnd.slice(11,15);
-					}
-				}
-			}
-			i=i+3;
-		}
-	}
+
+	// var element = document.getElementById("task-times");
+	// if (element != null) {
+	// 	var input_element = element.getElementsByClassName("date-utc");
+	// 	for (var i = 0; i < input_element.length; i++) {
+	// 		if (input_element[i].value != "" && input_element[i].value != " ") {
+	// 			var timeZone = moment.tz.guess();
+	// 			var date = input_element[i].value;
+	// 			if (input_element[i + 1]) {
+	// 				var start_time = input_element[i + 1].value;
+	// 				var serverDate = moment(date + " " + start_time)
+	// 					.tz(timeZone)
+	// 					.format("Y-MM-DD h:mm:ss");
+	// 				if (serverDate != "Invalid date") {
+	// 					// input_element[i].value = serverDate.slice(0, 10);
+	// 					// input_element[i + 1].value = serverDate.slice(11, 15);
+	// 					input_element[i].value = moment(serverDate).format("Y-MM-DD");
+	// 					input_element[i + 1].value = moment(serverDate).format("hh:mm");
+	// 				}
+	// 			}
+	// 			if (input_element[i + 2]) {
+	// 				var end_time = input_element[i + 2].value;
+	// 				var serverDateEnd = moment(date + " " + end_time)
+	// 					.tz(timeZone)
+	// 					.format("Y-MM-DD h:mm:ss");
+	// 				if (
+	// 					serverDateEnd != "Invalid date" &&
+	// 					(end_time != "" || end_time != " ")
+	// 				) {
+	// 					input_element[i + 2].value = moment(serverDateEnd).format("hh:mm");
+	// 				}
+	// 			}
+	// 		}
+	// 		i = i + 3;
+	// 	}
+	// }
 
 	var addTask = document.getElementById("addTask");
 	if (addTask) {
@@ -434,52 +426,50 @@ $(document).ready(function() {
 			var start_time = document.getElementById("start-time-0").value;
 			var end_time = document.getElementById("end-time-0").value;
 
-
 			var flag = false;
 			flag = addTime.validate(false);
 			if (flag == false) {
 				return false;
 			} else {
 				addTime.array_of_timings.push({ date, start_time, end_time });
-				var elements = document.getElementById('task-times');
-				if(elements != null)
-					{
-						var input_element = elements.getElementsByClassName('check-for-utc');
-						for(var i=0; i<input_element.length; i++)
-						{
-							if(input_element[i].value != "" && input_element[i].value != " ")
-							{
-								var timeZone = moment.tz.guess();
-								var date = input_element[i].value;
-								if(input_element[i+1])
-								{
-									var start_time = input_element[i+1].value;
-									var serverDate = moment(date +' '+ start_time).tz('utc').format('Y-MM-DD h:mm:ss');
+				var elements = document.getElementById("task-times");
+				if (elements != null) {
+					var input_element = elements.getElementsByClassName("date-utc");
+					for (var i = 0; i < input_element.length; i++) {
+						if (input_element[i].value != "" && input_element[i].value != " ") {
+							var timeZone = moment.tz.guess();
+							var date = input_element[i].value;
+							if (input_element[i + 1]) {
+								var start_time = input_element[i + 1].value;
+								var serverDate = moment(date + " " + start_time)
+									.tz("utc")
+									.format("Y-MM-DD h:mm:ss");
 
-								if(serverDate != "Invalid date")
-									{
-									input_element[i+1].value = serverDate;
-									}
-								}
-								if(input_element[i+2].value)
-								{
-								var end_time = input_element[i+2].value;
-								var serverDateEnd = moment(date +' '+ end_time).tz('utc').format('Y-MM-DD h:mm:ss');
-									if(serverDateEnd != "Invalid date" && (end_time != '' || end_time != ' '))
-									{
-									input_element[i+2].value = serverDateEnd;
-									}
+								if (serverDate != "Invalid date") {
+									input_element[i + 1].value = serverDate;
 								}
 							}
-							i=i+3;
+							if (input_element[i + 2].value) {
+								var end_time = input_element[i + 2].value;
+								var serverDateEnd = moment(date + " " + end_time)
+									.tz("utc")
+									.format("Y-MM-DD h:mm:ss");
+								if (
+									serverDateEnd != "Invalid date" &&
+									(end_time != "" || end_time != " ")
+								) {
+									input_element[i + 2].value = serverDateEnd;
+								}
+							}
 						}
+						i = i + 3;
 					}
+				}
 				return true;
 			}
 		};
 	}
-	if(document.getElementById("editTask") != undefined)
-	{
+	if (document.getElementById("editTask") != undefined) {
 		var editTask = document.getElementById("editTask");
 		if (editTask) {
 			editTask.onsubmit = function(e) {
@@ -494,53 +484,55 @@ $(document).ready(function() {
 					document.getElementById("taskError").innerHTML =
 						"Please Choose Project Name ";
 					return false;
-				}
-				else
-				{
-					var elements = document.getElementById('task-times');
-					var input_elements = elements.getElementsByClassName('check-for-utc');
-					var j=0;
-					for(var i=0; i<input_elements.length/3; i++)
-					{
-						if(input_elements[j].value != "" && input_elements[j+1].value != " ")
-						{
-						
-						var timeZone = moment.tz.guess();
-						var serverStartDate = moment(input_elements[j].value +' '+ input_elements[j+1].value).tz('utc').format('Y-MM-DD h:mm:ss');
-						input_elements[j].value = serverStartDate.slice(0,10);
-						input_elements[j+1].value = serverStartDate;
-
+				} else {
+					var elements = document.getElementById("task-times");
+					var input_elements = elements.getElementsByClassName("date-utc");
+					var j = 0;
+					for (var i = 0; i < input_elements.length / 3; i++) {
+						if (
+							input_elements[j].value != "" &&
+							input_elements[j + 1].value != " "
+						) {
+							var timeZone = moment.tz.guess();
+							var serverStartDate = moment(
+								input_elements[j].value + " " + input_elements[j + 1].value
+							)
+								.tz("utc")
+								.format("Y-MM-DD h:mm:ss");
+							input_elements[j].value = serverStartDate.slice(0, 10);
+							input_elements[j + 1].value = serverStartDate;
 						}
-						if(input_elements[j].value != "" && input_elements[j+2].value != " ")
-						{
-
-						var serverEndDate = moment(input_elements[j].value +' '+ input_elements[j+2].value).tz('utc').format('Y-MM-DD h:mm:ss');
-						input_elements[j+2].value = serverEndDate;
+						if (
+							input_elements[j].value != "" &&
+							input_elements[j + 2].value != " "
+						) {
+							var serverEndDate = moment(
+								input_elements[j].value + " " + input_elements[j + 2].value
+							)
+								.tz("utc")
+								.format("Y-MM-DD h:mm:ss");
+							input_elements[j + 2].value = serverEndDate;
 						}
-						j=j+3;
+						j = j + 3;
 					}
-    					return true;
+					return true;
 				}
-			}
+			};
 		}
 	}
 	var dateObj = new Date();
 	var _month = dateObj.getMonth() + 1;
-	if(_month.toString().length == 1)
-	{
-		_month = '0'+_month.toString();
+	if (_month.toString().length == 1) {
+		_month = "0" + _month.toString();
 	}
 	var _day = dateObj.getDate();
-	if(_day.toString().length == 1)
-	{
-		_day = '0'+_day.toString();
+	if (_day.toString().length == 1) {
+		_day = "0" + _day.toString();
 	}
-	var date =dateObj.getFullYear() +"-" +_month +"-" +_day;
-	if(document.getElementById('date-picker-0'))
-	{
-		document.getElementById('date-picker-0').value = date;
+	var date = dateObj.getFullYear() + "-" + _month + "-" + _day;
+	if (document.getElementById("date-picker-0")) {
+		document.getElementById("date-picker-0").value = date;
 	}
-
 
 	$(".datepicker").datepicker({
 		weekStart: 1,
@@ -560,24 +552,20 @@ $(document).ready(function() {
 			.empty()
 			.html("<option>Select module</option>");
 	});
-	if(document.getElementById("start-time-0"))
-	{
-
+	if (document.getElementById("start-time-0")) {
 		var current_time = new Date();
 		var hrs = current_time.getHours().toString();
-		if(hrs.length == 1)
-		{
-			hrs = '0'+ hrs;
+		if (hrs.length == 1) {
+			hrs = "0" + hrs;
 		}
 		var min = current_time.getMinutes().toString();
-		if(min.length == 1)
-		{
-			min = '0'+ min;
+		if (min.length == 1) {
+			min = "0" + min;
 		}
-			var start_time = hrs + ":" + min;
+		var start_time = hrs + ":" + min;
 		document.getElementById("start-time-0").value = start_time;
-
 	}
+
 	$("select.project_name").change(function() {
 		var project_id = $(this)
 			.children("option:selected")

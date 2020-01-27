@@ -74,7 +74,7 @@ if ($this->input->get('t_id')) { ?>
                                 <label for="choose-module">Choose project module</label>
                                 <select type="number" class="form-control project_name" id="choose-module" name="project_module" value="<?= $task_data['module_name'] ?>">
                                     <?php if ($this->input->get('t_id')) { ?>
-                                    <option value=<?=$task_data['module_id']?>><?= $task_data['module_name'] ?></option>
+                                        <option value=<?= $task_data['module_id'] ?>><?= $task_data['module_name'] ?></option>
                                     <?php } else { ?>
                                         <option>Select module</option>
                                     <?php } ?>
@@ -108,7 +108,7 @@ if ($this->input->get('t_id')) { ?>
                                                     <div class="row">
                                                         <div class="col-4 col-md-6">
                                                             <div class="input-group mb-3">
-                                                                <input type="text" class="check-for-utc form-control datepicker" id="date-picker-<?= $key ?>" name="time[<?= $key ?>][date]" data-date-format="yyyy-mm-dd" value="<?= $task['task_date']; ?>">
+                                                                <input type="text" class="date-utc form-control datepicker" id="date-picker-<?= $key ?>" name="time[<?= $key ?>][date]" data-date-format="yyyy-mm-dd" value="<?= $task['task_date']; ?>">
                                                                 <div class="input-group-append">
                                                                     <span class="input-group-text">
                                                                         <button type="button" class="btn fa fa-calendar p-0"></button>
@@ -117,53 +117,36 @@ if ($this->input->get('t_id')) { ?>
                                                             </div>
                                                         </div>
                                                         <div class="col-4 col-md-3 mb-3">
-                                                            <div class="input-group date">  <!-- converting utc start time to local time -->
-                                                                <script src="//momentjs.com/downloads/moment.js"></script> 
-                                                                <script src="//momentjs.com/downloads/moment-timezone.js"></script>
-                                                                <script src="<?=base_url();?>assets/user/javascript/momet_copy.js?v=<?=VERSION?>"></script>
-                                                                <script src="<?=base_url();?>assets/user/javascript/moment_zone.js?v=<?=VERSION?>"></script>
-
-                                                                <script type="text/javascript">
-                                                                    var timeZone = moment.tz.guess();
-                                                                    var date = "<?=$task['task_date']?>";
-                                                                    var start_time = "<?=$task['start_time']?>";
-                                                                    var serverDate = moment(date +' '+ start_time).tz(timeZone).format('Y-MM-DD h:mm:ss');
-                                                                    console.log(serverDate.slice(11,16));
-                                                                </script>
+                                                            <div class="input-group date">
+                                                                <!-- converting utc start time to local time -->
+                                                                <input type="text" class="date-utc timepicker-<?= $tnum ?> form-control" id="start-time-<?= $key ?>" name="time[<?= $key ?>][start]" placeholder="hh:mm" value="<?= $task['start_time'] ?>">
                                                             </div>
-                                                                <input type="text" class=" check-for-utc timepicker-<?= $tnum ?> form-control" id="start-time-<?= $key ?>" name="time[<?= $key ?>][start]"  placeholder="hh:mm" value = "<?=$task['start_time']?>">
-                                                                <script type="text/javascript">
-                                                                    console.log(serverDate.slice(11,16), document.getElementById("start-time-0"));
-                                                                </script>
                                                         </div>
                                                         <div class="col-4 col-md-3 mb-3">
-                                                            <div class="input-group date">  <!-- converting utc end time to local time -->
-                                                                
-                                                                <input type="text" class=" check-for-utc form-control timepicker-<?= $tnum + 1 ?>" id="end-time-<?= $key ?>" name="time[<?= $key ?>][end]" value="<?= $task['end_time'] ?>" placeholder="hh:mm">
+                                                            <div class="input-group date">
+                                                                <!-- converting utc end time to local time -->
+
+                                                                <input type="text" class="date-utc form-control timepicker-<?= $tnum + 1 ?>" id="end-time-<?= $key ?>" name="time[<?= $key ?>][end]" value="<?= $task['end_time'] ?>" placeholder="hh:mm">
                                                             </div>
                                                         </div>
                                                         <div class="col-10 text-center mb-3">
                                                             <input type="text" class="form-control" id="description-<?= $key ?>" name="time[<?= $key ?>][task_description]" value="<?= $task['task_description']; ?>" placeholder="Description">
                                                         </div>
                                                         <div class="col-2 text-right mb-3">
-                                                            <a href="javascript:void(0);" id="delete-task-<?= $key ?>" class="delete-task">
-                                                                <i class="fas fa-minus text-white pt-2 icon-plus" name="time[<?= $key ?>][deleted_time_range]">
-                                                                    <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= $key ?>][table_id]" id="table_id<?= $key ?>">
-                                                                </i>
-                                                            </a>
+                                                            <?php if ($key == sizeof($timeline_data) - 1) { ?>
+                                                                <a href="javascript:void(0);" id="add-new-time" title="Add">
+                                                                    <i class="fas fa-plus pt-2 icon-plus"></i>
+                                                                </a>
+                                                            <?php } else { ?>
+                                                                <a href="javascript:void(0);" id="delete-task-<?= $key ?>" class="delete-task">
+                                                                    <i class="fas fa-minus text-white pt-2 icon-plus" name="time[<?= $key ?>][deleted_time_range]">
+                                                                        <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= $key ?>][table_id]" id="table_id<?= $key ?>">
+                                                                    </i>
+                                                                </a>
+                                                            <?php } ?>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <?php if ($key == sizeof($timeline_data) - 1) { ?>
-                                                    <div class="row">
-                                                        <div class="col-12 text-right">
-                                                            <hr />
-                                                            <a href="javascript:void(0);" id="add-new-time" title="Add">
-                                                                <i class="fas fa-plus pt-2 icon-plus"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                <?php } ?>
                                             <?php $tnum = $tnum + 2;
                                             } ?>
                                         </div>
@@ -177,7 +160,7 @@ if ($this->input->get('t_id')) { ?>
                                             <div class="row">
                                                 <div class="col-4 col-md-6">
                                                     <div class="input-group mb-3">
-                                                        <input type="text" class="check-for-utc form-control datepicker " name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-0">
+                                                        <input type="text" class="date-utc form-control datepicker " name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-0">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">
                                                                 <button type="button" class="btn fa fa-calendar p-0"></button>
@@ -187,12 +170,12 @@ if ($this->input->get('t_id')) { ?>
                                                 </div>
                                                 <div class="col-4 col-md-3">
                                                     <div class="input-group date">
-                                                        <input id="start-time-0" class="check-for-utc form-control timepicker-a" name="time[0][start]" placeholder="hh:mm" />
+                                                        <input id="start-time-0" class="date-utc form-control timepicker-a" name="time[0][start]" placeholder="hh:mm" />
                                                     </div>
                                                 </div>
                                                 <div class="col-4 col-md-3">
                                                     <div class="input-group date">
-                                                        <input id="end-time-0" class="check-for-utc form-control timepicker-b" name="time[0][end]" placeholder="hh:mm" />
+                                                        <input id="end-time-0" class="date-utc form-control timepicker-b" name="time[0][end]" placeholder="hh:mm" />
                                                     </div>
                                                 </div>
                                                 <div class="col-10 text-center">
