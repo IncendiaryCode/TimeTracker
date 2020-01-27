@@ -42,6 +42,20 @@ extension UITextField {
         self.layer.addSublayer(border)
         self.layer.masksToBounds = false
     }
+    
+    /// Shake text field.
+    func shakeTextField()
+    {
+        let animation = CABasicAnimation(keyPath: "position")
+        animation.duration = 0.07
+        animation.repeatCount = 3
+        animation.autoreverses = true
+        animation.fromValue = NSValue(cgPoint: CGPoint(x: self.center.x - 10, y:
+            self.center.y))
+        animation.toValue = NSValue(cgPoint: CGPoint(x: self.center.x + 10, y:
+            self.center.y))
+        self.layer.add(animation, forKey: "position")
+    }
 }
 
 extension UITextView {
@@ -76,6 +90,12 @@ extension UIScrollView {
     func scrollToTop() {
         let desiredOffset = CGPoint(x: 0, y: -contentInset.top)
         setContentOffset(desiredOffset, animated: true)
+    }
+    
+    func scrollToBottom() {
+        if self.contentSize.height < self.bounds.size.height { return }
+        let bottomOffset = CGPoint(x: 0, y: self.contentSize.height - self.bounds.size.height)
+        self.setContentOffset(bottomOffset, animated: true)
     }
 }
 
@@ -646,3 +666,4 @@ extension UIApplication {
         return controller
     }
 }
+

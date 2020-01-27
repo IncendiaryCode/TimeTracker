@@ -36,7 +36,7 @@ class TimingsCell: UITableViewCell {
     var indexPath: IndexPath!
     var timeId: Int?
     var delegate: DateTimeCellDelegate?
-    
+    var viewSeparator: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -59,6 +59,11 @@ class TimingsCell: UITableViewCell {
         lblStartTime.addRightSideLine()
 //        btnRemoveConfirm.addGradient()
         btnRemoveConfirm.setTitleColor(g_colorMode.textColor(), for: .normal)
+        
+        viewSeparator = UIView(frame: CGRect(x: 0, y: self.lblDate.frame.minY-10
+            , width: self.bounds.width, height: 0.5))
+        viewSeparator.backgroundColor = g_colorMode.lineColor().withAlphaComponent(0.5)
+        self.addSubview(viewSeparator)
     }
 
     @objc func lblDatePressed(sender: UITapGestureRecognizer) {

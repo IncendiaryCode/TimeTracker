@@ -1148,7 +1148,7 @@ class ButtonWeekGraph: UIButton
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool
     {
         let relativeFrame = self.bounds
-        let hitTestEdgeInsets = UIEdgeInsets( top: 0, left: -7, bottom: 0, right: -7 )
+        let hitTestEdgeInsets = UIEdgeInsets( top: -7, left: -7, bottom: -7, right: -7 )
         let hitFrame = relativeFrame.inset(by: hitTestEdgeInsets)
         return hitFrame.contains(point)
     }

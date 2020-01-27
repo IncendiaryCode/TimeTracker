@@ -40,8 +40,9 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
             tasksCDController.updateUserTaskTime()
         }
         else if selectedIndex == 1 {
-            let userActVC = tabBarController.viewControllers?[1] as! UserActivityVC
-            userActVC.tasksCDController.updateUserTaskTime()
+//            let userActVC = tabBarController.viewControllers?[1] as! UserActivityVC
+            let tasksCDController = TasksCDController()
+            tasksCDController.updateUserTaskTime()
             //userActVC.sortAndRefreshData()
         }
     }

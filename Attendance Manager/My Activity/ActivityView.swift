@@ -433,7 +433,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		arrBtnsDayTask.removeAll()
 		arrIntDate = tasksTimeCDCtrlr.getAllDates() // get all dates task timings.
 		
-		if arrIntDate.count > 0 {
+		if arrIntDate.count > 0 && arrIntDate.count > indexSelDate {
 			arrCTaskTimeDetails = tasksCDCtrlr.getEachTaskTimeDataFromDate(intDate:
 				arrIntDate[indexSelDate])
 			nCell = arrCTaskTimeDetails.count

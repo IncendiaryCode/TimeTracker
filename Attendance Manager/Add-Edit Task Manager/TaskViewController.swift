@@ -87,7 +87,7 @@ UIGestureRecognizerDelegate {
     var selectedRow: Int!
     var nEmptyRow: Int!
     var selectedType: SelectionType!
-    /// Date Picker Height.
+    /// tableview, Date Picker Height.
     var cgFHeightForPopup: CGFloat!
     /// While adding new timings, timeId should incremented by one.
     var timeId: Int!
@@ -450,10 +450,12 @@ UIGestureRecognizerDelegate {
                 if 0 != indexPath.row && cTaskTimeDetails.strDate ==
                 arrTaskTimeDetails[indexPath.row-1].strDate {
                     cell.lblDate.isHidden = true
+                    cell.viewSeparator.isHidden = true
                 }
                 else {
                     cell.lblDate.isHidden = false
                     cell.lblDate.text = cTaskTimeDetails.strDate
+                    cell.viewSeparator.isHidden = false
                 }
                 let nStartTime = cTaskTimeDetails.nStartTime!
                 let nEndTime = cTaskTimeDetails.nEndTime!
@@ -491,7 +493,8 @@ UIGestureRecognizerDelegate {
                 // If add time cell.
                 cell.lblDate.isUserInteractionEnabled = true
                 cell.lblDate.isHidden = false
-                cell.lblDate.text = "Add Time"
+                cell.lblDate.text = "Add Timeline"
+                cell.viewSeparator.isHidden = false
                 cell.lblStartTime.isHidden = true
                 cell.lblEndTime.isHidden = true
                 cell.txtFDescription.isHidden = true
@@ -625,7 +628,10 @@ UIGestureRecognizerDelegate {
             let index = IndexPath(row: arrTaskTimeDetails.count+1, section: 0)
             nEmptyRow = 1
             setupRemoveEmptyButton(cell: cell)
+            CATransaction.begin()
             tblviewTimings.insertRows(at: [index], with: .fade)
+            CATransaction.setCompletionBlock({self.scrollView.scrollToBottom()})
+            CATransaction.commit()
         }
         else {
             errorMessage(msg: "Please complete previous time")
@@ -645,6 +651,7 @@ UIGestureRecognizerDelegate {
         cell.lblEndTime.text = ""
         cell.txtFDescription.text = ""
         cell.lblDate.isHidden = false
+        cell.viewSeparator.isHidden = false
         cell.lblStartTime.isHidden = false
         cell.lblEndTime.isHidden = false
         cell.txtFDescription.isHidden = false
@@ -764,7 +771,7 @@ UIGestureRecognizerDelegate {
         setCellToConstantPosition()
         
         let cell = tblviewTimings.cellForRow(at: indexPath) as! TimingsCell
-        if cell.lblDate.text != "Add Time" {
+        if cell.lblDate.text != "Add Timeline" {
             // Change date selected index.
             dateTimePicker.datePickerMode = .date
             let minDate = NSCalendar.current.date(byAdding: .weekOfYear, value: -1, to: NSDate() as
@@ -909,14 +916,35 @@ UIGestureRecognizerDelegate {
                 if selectedRow == 0 {
                     let strDate = date.getStrDate()
                     selectedCell.lblDate.text = strDate
+                    
+                    // If selected time line is from existing times.
+                    if let timeId = selectedCell.timeId, timeId > 0 {
+                        arrTaskTimeDetails[selectedCell.indexPath.row].strDate = strDate
+                    }
                 }
                 else if selectedRow == 1 {
                     let strStartTime = date.getStrTime()
                     selectedCell.lblStartTime.text = strStartTime
+                    
+                    // If selected time line is from existing times.
+                    if let timeId = selectedCell.timeId, timeId > 0 {
+                        let startTime = getSecondCount(strTime: strStartTime)
+                        arrTaskTimeDetails[selectedCell.indexPath.row].nStartTime = startTime
+                    }
+                }
+                else if selectedRow == 2 {
+                    let strEndTime = date.getStrTime()
+                    selectedCell.lblEndTime.text = strEndTime
+                    
+                    // If selected time line is from existing times.
+                    if let timeId = selectedCell.timeId, timeId > 0 {
+                        let endTime = getSecondCount(strTime: strEndTime)
+                        arrTaskTimeDetails[selectedCell.indexPath.row].nStartTime = endTime
+                    }
                 }
                 else {
-                    let strStartTime = date.getStrTime()
-                    selectedCell.lblEndTime.text = strStartTime
+                    arrTaskTimeDetails[selectedCell.indexPath.row].description =
+                        selectedCell.txtFDescription.text
                 }
                 hideDateTimePicker()
                 return
@@ -928,14 +956,35 @@ UIGestureRecognizerDelegate {
             if selectedRow == 0 {
                 let strDate = date.getStrDate()
                 selectedCell.lblDate.text = strDate
+                
+                // If selected time line is from existing times.
+                if let timeId = selectedCell.timeId, timeId > 0 {
+                    arrTaskTimeDetails[selectedCell.indexPath.row].strDate = strDate
+                }
             }
             else if selectedRow == 1 {
                 let strStartTime = date.getStrTime()
                 selectedCell.lblStartTime.text = strStartTime
+                
+                // If selected time line is from existing times.
+                if let timeId = selectedCell.timeId, timeId > 0 {
+                    let startTime = getSecondCount(strTime: strStartTime)
+                    arrTaskTimeDetails[selectedCell.indexPath.row].nStartTime = startTime
+                }
             }
             else if selectedRow == 2 {
-                let strStartTime = date.getStrTime()
-                selectedCell.lblEndTime.text = strStartTime
+                let strEndTime = date.getStrTime()
+                selectedCell.lblEndTime.text = strEndTime
+                
+                // If selected time line is from existing times.
+                if let timeId = selectedCell.timeId, timeId > 0 {
+                    let endTime = getSecondCount(strTime: strEndTime)
+                    arrTaskTimeDetails[selectedCell.indexPath.row].nEndTime = endTime
+                }
+            }
+            else {
+                arrTaskTimeDetails[selectedCell.indexPath.row].description =
+                    selectedCell.txtFDescription.text
             }
             // Edit Action.
             if selectedCell.indexPath.row < arrTaskTimeDetails.count {
@@ -980,6 +1029,7 @@ UIGestureRecognizerDelegate {
                 break
             }
         }
+        sortArrayTimings()
         tblviewTimings.reloadData()
     }
 
@@ -1143,6 +1193,15 @@ UIGestureRecognizerDelegate {
         // If keyboard displayed end eding.
         self.view.endEditing(true)
         setCellToConstantPosition()
+        updateTextDescription()
+    }
+    
+    /// View pressed if any cell description chnaged update it.
+    func updateTextDescription() {
+        if nil != selectedCell && arrTaskTimeDetails.count > selectedCell.indexPath.row {
+            arrTaskTimeDetails[selectedCell.indexPath.row].description =
+                selectedCell.txtFDescription.text
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -1191,14 +1250,22 @@ UIGestureRecognizerDelegate {
                     viewActivity.arrRunningTask = viewActivity.getRunningTaskId()
                     // If no task running draw play icon or stop icon.
                     viewActivity.drawTaskState()
-                    viewActivity.splitMergeStateAndFinishBtn()
+//                    viewActivity.splitMergeStateAndFinishBtn()
                     viewActivity.collectionTimer.reloadData()
                     self.navigationController?.popToRootViewController(animated: true)
                 }
             }
             else {
                 // Iniialise from task history VC.
-                self.dismiss(animated: true, completion: nil)
+                APIResponseHandler.loadTaskDetails(pageNo: g_taskPageNo, completion: {
+                    status in
+                    if status {
+                        self.dismiss(animated: true, completion: nil)
+                    }
+                    else {
+                        self.errorMessage(msg: "Error while updation")
+                    }
+                })
             }
         }
     }
@@ -1382,6 +1449,12 @@ UIGestureRecognizerDelegate {
     }
     
     @IBAction func btnBackPressed(_ sender: Any) {
+        // If navigated from task history vc.
+        if (self.presentingViewController as! UINavigationController).viewControllers[0]
+            is UITabBarController {
+            self.dismiss(animated: true, completion: nil)
+            return
+        }
         updateActivityView()
     }
     
@@ -1408,11 +1481,12 @@ UIGestureRecognizerDelegate {
     }
     
     @IBAction func btnSavePressed(_ sender: Any) {
-        guard !(txtTaskName.text == "") && txtVTaskDescr.text != "Task description"
-                &&  nil != selectedProjId && nil != selectedModId && checkAllTimingsFilled() else {
+        guard !(txtTaskName.text == "") && nil != selectedProjId && nil != selectedModId && checkAllTimingsFilled() else {
                     errorMessage(msg: "Fill all the fields")
                     return
         }
+        
+        updateTextDescription()
         
         // Check for empty cell is filled with date and start time.
         let lastIndex = nEmptyRow == 1 ? arrTaskTimeDetails.count : arrTaskTimeDetails.count - 1
@@ -1424,7 +1498,7 @@ UIGestureRecognizerDelegate {
             }
             
             // Check for punched out and punched in.
-            if !g_isPunchedOut || !(g_isPunchedIn ?? false) {
+            if !g_isPunchedOut && (g_isPunchedIn ?? false) {
                 // Check for end time not containing.
                 if cell.lblEndTime.text == "" {
                     if nEmptyRow == 0 {
@@ -1445,8 +1519,8 @@ UIGestureRecognizerDelegate {
                     }
                 }
             }
-            else {
-                if !g_isPunchedOut {
+            else if cell.lblEndTime.text == "" {
+                if g_isPunchedOut {
                     alertUnableToChangeDate(type: .punchedout)
                 }
                 else {
@@ -1483,8 +1557,7 @@ UIGestureRecognizerDelegate {
     }
     
     @IBAction func btnStartPressed(_ sender: Any) {
-        guard !(txtTaskName.text == "") && txtVTaskDescr.text != "Task description"
-                && nil != selectedProjId && nil != selectedModId else {
+        guard !(txtTaskName.text == "") && nil != selectedProjId && nil != selectedModId else {
             lblError.text = "Fill all the fields..!"
             lblError.isHidden = false
             scrollView.scrollToTop()

@@ -130,9 +130,9 @@ class LoginViewController: UIViewController {
             self.txtFEmail.useUnderline()
             self.txtFPassword.useUnderline()
             
-            if let email = UserDefaults.standard.value(forKey: "userEmail") {
-                txtFEmail.text = (email as! String)
-            }
+//            if let email = UserDefaults.standard.value(forKey: "userEmail") {
+//                txtFEmail.text = (email as! String)
+//            }
         }
         imgVSplashLogo.isHidden = true
     }
@@ -173,18 +173,18 @@ class LoginViewController: UIViewController {
         if txtFEmail.text == "" && txtFPassword.text == "" {
             lblErrorValidator.text = "Fill all the Fields"
             lblErrorValidator.isHidden = false
-            shakeTextField(textField: txtFEmail)
-            shakeTextField(textField: txtFPassword)
+            txtFEmail.shakeTextField()
+            txtFPassword.shakeTextField()
         }
         else if !isValidEmail(strEmail: txtFEmail.text!) {
-            shakeTextField(textField: txtFEmail)
-            lblErrorValidator.text = "Email valid email"
+            txtFEmail.shakeTextField()
+            lblErrorValidator.text = "Enter valid email"
             lblErrorValidator.isHidden = false
         }
         else if isValidEmail(strEmail: txtFEmail.text!) && txtFPassword.text == "" {
             lblErrorValidator.text = "Enter password"
             lblErrorValidator.isHidden = false
-            shakeTextField(textField: txtFPassword)
+            txtFPassword.shakeTextField()
         }
         else {
             //API validation.
@@ -244,20 +244,6 @@ class LoginViewController: UIViewController {
             }
         }
         return strMAC
-    }
-    
-    /// Shake text field.
-    func shakeTextField(textField: UITextField)
-    {
-        let animation = CABasicAnimation(keyPath: "position")
-        animation.duration = 0.07
-        animation.repeatCount = 3
-        animation.autoreverses = true
-        animation.fromValue = NSValue(cgPoint: CGPoint(x: textField.center.x - 10, y:
-            textField.center.y))
-        animation.toValue = NSValue(cgPoint: CGPoint(x: textField.center.x + 10, y:
-            textField.center.y))
-        textField.layer.add(animation, forKey: "position")
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

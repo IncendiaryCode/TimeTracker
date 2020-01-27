@@ -29,6 +29,10 @@ class ResetPasswordVC: UIViewController {
         
         self.view.addGradient()
         
+        // Tap getsure to view
+        let tapView = UITapGestureRecognizer(target: self, action: #selector(viewClickToDismiss(_:)))
+        view.addGestureRecognizer(tapView)
+        
         let cgPStart = CGPoint(x: 0, y: 0.25)
         let cgPEnd = CGPoint(x: 1, y: 0.75)
         self.btnCancel.addGradient(cgPStart: cgPStart, cgPEnd: cgPEnd, cgFRadius: 15)
@@ -54,8 +58,17 @@ class ResetPasswordVC: UIViewController {
     
     /// Send new password to the server.
     @IBAction func btnResetPswdPressed(_ sender: Any) {
-        if txtResetPswd.text!.count >= 6 && txtResetPswd.text != txtResetRePswd.text {
+        if txtResetPswd.text!.count >= 6 && txtResetPswd.text!.count >= 6{
+            lblErrPswd.text = "Please enter both the fields"
             lblErrPswd.isHidden = false
+            self.txtResetPswd.shakeTextField()
+            self.txtResetRePswd.shakeTextField()
+        }
+        else if txtResetPswd.text != txtResetRePswd.text {
+            lblErrPswd.text = "Passwords should match"
+            lblErrPswd.isHidden = false
+            self.txtResetPswd.shakeTextField()
+            self.txtResetRePswd.shakeTextField()
         }
         else {
             lblErrPswd.isHidden = true
@@ -79,11 +92,26 @@ class ResetPasswordVC: UIViewController {
                 else {
                     self.lblErrPswd.text = msg
                     self.lblErrPswd.isHidden = true
+                    self.txtResetPswd.shakeTextField()
+                    self.txtResetRePswd.shakeTextField()
                 }
                 self.actResetPassword.stopAnimating()
             })
             
         }
+    }
+    
+    @IBAction func txtPWPrimaryAction(_ sender: Any) {
+        txtResetRePswd.becomeFirstResponder()
+    }
+    
+    @IBAction func txtRePWPrimaryAction(_ sender: Any) {
+        txtResetRePswd.endEditing(true)
+    }
+    
+    /// Method will called when user clicks on this view anywhere.
+    @objc func viewClickToDismiss(_ sender: Any) {
+        self.view.endEditing(true)
     }
     
     @IBAction func btnCancelPressed(_ sender: Any) {

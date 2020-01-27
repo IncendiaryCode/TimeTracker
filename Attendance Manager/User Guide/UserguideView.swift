@@ -271,8 +271,8 @@ class UserguideView: UIView {
         path.move(to: start)
         path.addCurve(to: end, controlPoint1: point(start.x, end.y)
             , controlPoint2: point(end.x, start.y))
-        // If hintpoint below highlight area.
-        if txtVHint.frame.minY > viewHighlight.frame.minY {
+        // If hintpoint above highlight area.
+        if txtVHint.frame.minY < viewHighlight.frame.minY {
             path.move(to: start)
             path.addLine(to: point(start.x-10,start.y-10))
             path.addLine(to: start)

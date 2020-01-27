@@ -36,6 +36,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var viewAccount: UIView!
     @IBOutlet weak var viewApp: UIView!
     @IBOutlet weak var viewBG: UIView!
+    @IBOutlet weak var lblEmailPhone: UILabel!
     var cgFTableDisHeight: CGFloat!
     
     var punchInOutCDController: PunchInOutCDController!
@@ -69,6 +70,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         viewButtons.addGestureRecognizer(tap)
         
         viewBG.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        lblEmailPhone.textColor = g_colorMode.defaultColor().withAlphaComponent(0.5)
         
         // Tap gesture to BG view.
         tap = UITapGestureRecognizer(target: self, action: #selector
@@ -86,7 +88,16 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             lblUsername.text = strName
         }
         else {
-            lblUsername.text = "Unknown"
+            lblUsername.text = ""
+        }
+        if let strEmail = UserDefaults.standard.string(forKey: "userEmail") {
+            lblEmailPhone.text = strEmail
+        }
+        else {
+            lblEmailPhone.text = ""
+        }
+        if let strPhone = UserDefaults.standard.string(forKey: "phoneNo") {
+            lblEmailPhone.text = "\(lblEmailPhone.text!)  |  \(strPhone)"
         }
         
         // Update image
@@ -453,8 +464,11 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         UserDefaults.standard.removeObject(forKey: "userAuthKey")
         UserDefaults.standard.removeObject(forKey: "userId")
         UserDefaults.standard.removeObject(forKey: "userEmail")
+        UserDefaults.standard.removeObject(forKey: "profileUrl")
+        UserDefaults.standard.removeObject(forKey: "phoneNo")
         g_dictProjectDetails = nil
         g_arrCTaskDetails = nil
+        g_userProfile = nil
         g_taskPageNo = 1
         g_loginPageNo = 1
         g_isPunchedIn = false

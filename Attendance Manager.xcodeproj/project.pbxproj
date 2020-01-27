@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0330C4BB23DEA98F0081AA1C /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0330C4BA23DEA98F0081AA1C /* AccountViewController.swift */; };
 		033DDF8F237060F50066B7E9 /* ProjectsCDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033DDF8E237060F50066B7E9 /* ProjectsCDController.swift */; };
 		033DDF91237065F60066B7E9 /* TaskTimeCDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033DDF90237065F60066B7E9 /* TaskTimeCDController.swift */; };
 		033F535E23CD9C2A0079F8A4 /* AboutAppVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033F535D23CD9C2A0079F8A4 /* AboutAppVC.swift */; };
@@ -52,7 +53,6 @@
 		036B42732339EA5C00F2C670 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036B42722339EA5C00F2C670 /* FilterViewController.swift */; };
 		036B9147239A7C3B00E056A9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036B9146239A7C3B00E056A9 /* SceneDelegate.swift */; };
 		0379438B239E795000F87291 /* ModuleCDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0379438A239E795000F87291 /* ModuleCDController.swift */; };
-		03851EAA2372A0A000C484C7 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03851EA92372A0A000C484C7 /* AccountViewController.swift */; };
 		03851EB02372AC5600C484C7 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03851EAF2372AC5600C484C7 /* TabBarController.swift */; };
 		03C30AF2233DCA260078BD85 /* RequestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C30AF1233DCA260078BD85 /* RequestController.swift */; };
 		03C693882319347E005F385B /* ForgetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C693872319347E005F385B /* ForgetPasswordVC.swift */; };
@@ -82,6 +82,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0330C4BA23DEA98F0081AA1C /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		033DDF8E237060F50066B7E9 /* ProjectsCDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsCDController.swift; sourceTree = "<group>"; };
 		033DDF90237065F60066B7E9 /* TaskTimeCDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTimeCDController.swift; sourceTree = "<group>"; };
 		033F535D23CD9C2A0079F8A4 /* AboutAppVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppVC.swift; sourceTree = "<group>"; };
@@ -134,7 +135,6 @@
 		036B42722339EA5C00F2C670 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		036B9146239A7C3B00E056A9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		0379438A239E795000F87291 /* ModuleCDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleCDController.swift; sourceTree = "<group>"; };
-		03851EA92372A0A000C484C7 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		03851EAF2372AC5600C484C7 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		03C30AF1233DCA260078BD85 /* RequestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestController.swift; sourceTree = "<group>"; };
 		03C693872319347E005F385B /* ForgetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgetPasswordVC.swift; sourceTree = "<group>"; };
@@ -334,7 +334,7 @@
 		03851EA82372A03700C484C7 /* Account View */ = {
 			isa = PBXGroup;
 			children = (
-				03851EA92372A0A000C484C7 /* AccountViewController.swift */,
+				0330C4BA23DEA98F0081AA1C /* AccountViewController.swift */,
 				033F535C23CD9BEF0079F8A4 /* About App */,
 				035BBC8F23B0816A00891053 /* ResetPassword */,
 			);
@@ -629,9 +629,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03851EAA2372A0A000C484C7 /* AccountViewController.swift in Sources */,
 				034708B9235F0F9A00867132 /* CalendarFlowLayout.swift in Sources */,
 				0349F6E32331089A00BC7E74 /* PunchInOutCDController.swift in Sources */,
+				0330C4BB23DEA98F0081AA1C /* AccountViewController.swift in Sources */,
 				035C61A62326148F0097297D /* TableHeaderView.swift in Sources */,
 				0379438B239E795000F87291 /* ModuleCDController.swift in Sources */,
 				03FA47072366CFCB0032EF82 /* Extension.swift in Sources */,

@@ -47,27 +47,6 @@
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YDg-pX-2oT">
-                        <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="44" id="MoG-bG-I3q"/>
-                            <constraint firstAttribute="width" constant="44" id="kb8-Ab-kWY"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" weight="black" pointSize="18"/>
-                        <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="3"/>
-                        <inset key="imageEdgeInsets" minX="11" minY="11" maxX="11" maxY="11"/>
-                        <state key="normal">
-                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </state>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="11"/>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
-                        </userDefinedRuntimeAttributes>
-                        <connections>
-                            <action selector="btnRemoveAddPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="aFq-Wg-OzP"/>
-                        </connections>
-                    </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vv9-Ht-bUv">
                         <rect key="frame" x="309" y="0.0" width="70" height="186"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -100,22 +79,43 @@
                             <constraint firstAttribute="height" constant="30" id="4aS-0S-zbr"/>
                         </constraints>
                     </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YDg-pX-2oT">
+                        <rect key="frame" x="0.0" y="71" width="44" height="44"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="MoG-bG-I3q"/>
+                            <constraint firstAttribute="width" constant="44" id="kb8-Ab-kWY"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" weight="black" pointSize="18"/>
+                        <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="3"/>
+                        <inset key="imageEdgeInsets" minX="11" minY="11" maxX="11" maxY="11"/>
+                        <state key="normal">
+                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </state>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="11"/>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <action selector="btnRemoveAddPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="aFq-Wg-OzP"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="GLi-8t-sLy" firstAttribute="top" secondItem="9H9-5a-cwA" secondAttribute="top" id="0Zi-lu-stG"/>
-                    <constraint firstItem="YDg-pX-2oT" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="1qV-7o-R1m"/>
                     <constraint firstItem="YDg-pX-2oT" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="1sO-pW-CA4"/>
                     <constraint firstAttribute="bottom" secondItem="vv9-Ht-bUv" secondAttribute="bottom" id="3Vg-CY-6FW"/>
                     <constraint firstItem="9H9-5a-cwA" firstAttribute="leading" secondItem="YDg-pX-2oT" secondAttribute="trailing" id="3pp-D3-Bv7"/>
                     <constraint firstItem="Djz-ax-Ma4" firstAttribute="centerX" secondItem="vv9-Ht-bUv" secondAttribute="centerX" id="6lB-rA-Uux"/>
                     <constraint firstItem="vv9-Ht-bUv" firstAttribute="leading" secondItem="njr-KW-iHQ" secondAttribute="trailing" constant="20" id="88B-X6-usn"/>
+                    <constraint firstItem="9H9-5a-cwA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11.5" id="9Tw-PY-8aG"/>
                     <constraint firstItem="vv9-Ht-bUv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="9XI-sN-i5a"/>
+                    <constraint firstItem="YDg-pX-2oT" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="IXG-Yh-QT4"/>
                     <constraint firstItem="GLi-8t-sLy" firstAttribute="leading" secondItem="9H9-5a-cwA" secondAttribute="trailing" id="LCz-d1-adJ"/>
                     <constraint firstItem="njr-KW-iHQ" firstAttribute="leading" secondItem="GLi-8t-sLy" secondAttribute="trailing" id="LZp-wb-1hU"/>
                     <constraint firstItem="njr-KW-iHQ" firstAttribute="top" secondItem="GLi-8t-sLy" secondAttribute="top" id="XLW-tc-bmV"/>
                     <constraint firstItem="go9-pT-IY3" firstAttribute="trailing" secondItem="njr-KW-iHQ" secondAttribute="trailing" id="aYN-Il-E51"/>
                     <constraint firstItem="go9-pT-IY3" firstAttribute="top" secondItem="9H9-5a-cwA" secondAttribute="bottom" constant="10" id="eEK-uq-i6X"/>
-                    <constraint firstItem="9H9-5a-cwA" firstAttribute="centerY" secondItem="YDg-pX-2oT" secondAttribute="centerY" id="fx4-iq-DeO"/>
                     <constraint firstItem="Djz-ax-Ma4" firstAttribute="top" secondItem="vv9-Ht-bUv" secondAttribute="top" constant="15" id="tGa-Z4-v1J"/>
                     <constraint firstItem="go9-pT-IY3" firstAttribute="leading" secondItem="9H9-5a-cwA" secondAttribute="leading" id="tQZ-mb-s48"/>
                 </constraints>

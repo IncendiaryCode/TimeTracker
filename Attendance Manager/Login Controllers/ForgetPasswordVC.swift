@@ -36,6 +36,10 @@ class ForgetPasswordVC: UIViewController {
         txtOTP.useUnderline()
         initialViewSetup()
         
+        // Tap getsure to view
+        let tapView = UITapGestureRecognizer(target: self, action: #selector(viewClickToDismiss(_:)))
+        view.addGestureRecognizer(tapView)
+        
         let cgSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         self.view.frame.size = cgSize
         
@@ -97,25 +101,50 @@ class ForgetPasswordVC: UIViewController {
                     self.initialViewSetup()
                     self.lblEmailError.isHidden = false
                     self.lblEmailError.text = msg
+                    self.txtEmail.shakeTextField()
                 }
                 self.actLoading.stopAnimating()
             })
         }
         else {
             lblEmailError.isHidden = false
-            lblEmailError.text = "Enter valid email...!"
+            lblEmailError.text = "Enter valid email"
+            txtEmail.shakeTextField()
         }
+    }
+    
+    @IBAction func txtEmailPrimaryAction(_ sender: Any) {
+        txtEmail.endEditing(true)
+    }
+    
+    @IBAction func txtOTPPrimaryAction(_ sender: Any) {
+        txtOTP.endEditing(true)
+    }
+    
+    /// Reset if invalid otp.
+    func reSetupOTPView() {
+        btnOtpSubmit.isEnabled = true
+        txtOTP.text = ""
+        btnOtpSubmit.setTitle("Submit", for: .normal)
     }
     
     /// Submits OTP to the server.
     @IBAction func btnOtpPressed(_ sender: Any) {
-        self.actLoading.center = btnOtpSubmit.center
         self.view.endEditing(true)
+        self.actLoading.center = btnOtpSubmit.center
+//        viewResetPswd.bringSubviewToFront(actLoading)
         btnOtpSubmit.setTitle("", for: .normal)
+        btnOtpSubmit.isEnabled = false
         lblEmailError.isHidden = true
         guard txtOTP.text!.count == 6 else {
+            txtOTP.shakeTextField()
             lblEmailError.isHidden = false
             lblEmailError.text = "Invalid OTP"
+            if txtOTP.text!.count == 0 {
+                lblEmailError.text = "Enter OTP"
+            }
+            btnOtpSubmit.isEnabled = true
+            txtOTP.text = ""
             btnOtpSubmit.setTitle("Submit", for: .normal)
             return
         }
@@ -131,12 +160,18 @@ class ForgetPasswordVC: UIViewController {
                 self.performSegue(withIdentifier: "ResetPassword", sender: nil)
             }
             else {
-                self.initialViewSetup()
+                self.reSetupOTPView()
                 self.lblEmailError.text = msg
-                self.txtOTP.text = ""
+                self.lblEmailError.isHidden = false
+                self.txtOTP.shakeTextField()
             }
             self.actLoading.stopAnimating()
         })
+    }
+    
+    /// Method will called when user clicks on this view anywhere.
+    @objc func viewClickToDismiss(_ sender: Any) {
+        self.view.endEditing(true)
     }
     
     @IBAction func viewClicked(_ sender: Any) {

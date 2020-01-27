@@ -60,6 +60,8 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     /// Containing running task id.
     var arrRunningTask: Array<Int> = []
     var nSelectedRunTask: Int!
+    /// Index path sets in tableview didSelect if punch in not performed.(To run selected task.)
+    var indexPathToRun: IndexPath?
     
     // Coredata controller objects.
     var punchInOutCDController: PunchInOutCDController!
@@ -602,6 +604,15 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        /// When scrolled to bottom.
+        if scrollView.contentSize.height >= self.tblUserDetails.frame.size.height &&
+            scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame
+                .size.height {
+            // Disable bounce comes to bottom. (Because, it effects animation if less tasks exist)
+            scrollView.bounces = false
+            return
+        }
+        scrollView.bounces = true
         if tblUserDetails.contentOffset.y >= 0 {
             hideHeaderView() // Compress header.
         }
@@ -626,7 +637,8 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         guard let tblUserDetails = tblUserDetails else {
             return
         }
-        if (tblUserDetails.contentOffset.y + minHeaderHeight) < maxHeaderHeight {
+        if (tblUserDetails.contentOffset.y + minHeaderHeight) <= maxHeaderHeight {
+//            if (nsLCollectionHeight.constant + minHeaderHeight) <= maxHeaderHeight {
             // While scrolling.
             nsLCollectionHeight.constant = maxHeaderHeight - tblUserDetails.contentOffset.y
             let progress = (nsLCollectionHeight.constant - minHeaderHeight)
@@ -1024,6 +1036,12 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 msg: "Sorry, your already punched out. Please login tommorow to start a task.")
             return
         }
+        
+        // If not punched in.
+        if !(g_isPunchedIn ?? false)  {
+            indexPathToRun = indexPath
+        }
+        
         // Check for multi task disabled.
         if false == UserDefaults.standard.object(forKey: "multi_task") as? Bool {
             let taskId = g_arrCTaskDetails[indexPath.row].taskId
@@ -1113,6 +1131,10 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 msg: "Sorry, your already punched out. Please login tommorow for update punchin.")
             return
         }
+        // If not punched in.
+        if !(g_isPunchedIn ?? false)  {
+            indexPathToRun = nil
+        }
         startOrStopTask(indexPath: nil)
     }
     
@@ -1127,6 +1149,10 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             g_isPunchedIn = true
             self.btnAddTask.isHidden = false
             self.collectionTimer.reloadData()
+            
+            if let indexPath = self.indexPathToRun {
+                self.startOrStopTask(indexPath: indexPath)
+            }
         }
         tabBarController?.view.addSubview(viewTimeAdder)
     }
