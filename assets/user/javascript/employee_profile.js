@@ -6,7 +6,6 @@ function __draw_profile_chart(res) {
     gradient.addColorStop(0, '#4b5bf0');
     gradient.addColorStop(1, '#ea4776');
     var data = JSON.parse(res);
-    console.log(data)
     if (data['status'] == false) {
         $('#user_prof_chart').hide();
         document.getElementById('profile-chart-error').innerHTML = "No work is done in this period";
@@ -95,6 +94,21 @@ $(document).ready(function () {
     $("#year-chart").change(function () {
         load_year_chart();
     });
+    var emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    document.getElementById("profile-error").innerHTML = " ";
+
+    var profile = document.getElementById('edit-profile');
+    profile.onsubmit = function()
+    {
+        var profile_email = document.getElementById("profile-id").value;
+        if (!emailRegEx.test(profile_email)) {
+                document.getElementById("profile-error").innerHTML ="Email format is not correct.";
+                $('#profile-id').focus();
+                return false;
+            }document.getElementById("profile-error").innerHTML = " ";
+            return true;
+    }
 
     if (document.getElementById('year-chart')) {
         load_year_chart();

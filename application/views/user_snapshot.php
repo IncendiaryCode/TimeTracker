@@ -61,7 +61,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </a>
                     <?php }  ?>
                 </div>
-
                 <div class="col-2">
                     <p><?= round(($k['total_minutes'] / 60), 2); ?> hrs</p>
                 </div>

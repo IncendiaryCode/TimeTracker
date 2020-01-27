@@ -142,19 +142,23 @@ var addTime = {
 		);
 
 		if (endtimeValidation) {
-			if (
-				date == "" ||
-				date == " " ||
-				start_time == "" ||
-				start_time == " " ||
-				end_time == "" ||
-				end_time == " "
-			) {
-				document.getElementById("datetime-error").innerHTML =
-					"Please enter valid details...";
+			if (date == "" || date == " " )
+			{
+				document.getElementById("datetime-error").innerHTML ="Add date field for the same task.";
+				return false;
+			}
+			if (start_time == "" || start_time == " " )
+			{
+				document.getElementById("datetime-error").innerHTML ="Add first timeline for the same task.";
+				return false;
+			}
+			if (end_time == "" || end_time == " " )
+			{
+				document.getElementById("datetime-error").innerHTML ="Add second timeline for the same task.";
 				return false;
 			}
 		}
+		
 		if (date == "" || date == " " || start_time == "" || start_time == " ") {
 			document.getElementById("datetime-error").innerHTML =
 				"Please enter valid details...";
@@ -338,31 +342,6 @@ var addTime = {
 	}
 };
 
-function convert_to_UTC(time) {
-	var system_zone_date = new Date();
-	var offset_min = system_zone_date.getTimezoneOffset();
-
-	var total_min = parseInt(time.slice(0, 2) * 60) + parseInt(time.slice(3, 5));
-	var utc_min = total_min + offset_min;
-
-	var utc_hr =
-		parseInt(utc_min / 60).toString() + ":" + parseInt(utc_min % 60).toString();
-	return utc_hr;
-}
-
-function convert_to_Local(time) {
-	var system_zone_date = new Date();
-	var offset_min = system_zone_date.getTimezoneOffset();
-
-	var total_min = parseInt(time.slice(0, 2) * 60) + parseInt(time.slice(3, 5));
-	var utc_min = total_min - offset_min;
-
-	var utc_hr =
-		parseInt(utc_min / 60).toString() + ":" + parseInt(utc_min % 60).toString();
-
-	return utc_hr;
-}
-
 $(document).ready(function() {
 	// $("#delete-task-0").hide();
 	if (document.getElementById("task-add-time")) {
@@ -443,7 +422,7 @@ $(document).ready(function() {
 								var start_time = input_element[i + 1].value;
 								var serverDate = moment(date + " " + start_time)
 									.tz("utc")
-									.format("Y-MM-DD h:mm:ss");
+									.format("Y-MM-DD H:mm:ss");
 
 								if (serverDate != "Invalid date") {
 									input_element[i + 1].value = serverDate;
@@ -453,7 +432,7 @@ $(document).ready(function() {
 								var end_time = input_element[i + 2].value;
 								var serverDateEnd = moment(date + " " + end_time)
 									.tz("utc")
-									.format("Y-MM-DD h:mm:ss");
+									.format("Y-MM-DD H:mm:ss");
 								if (
 									serverDateEnd != "Invalid date" &&
 									(end_time != "" || end_time != " ")
@@ -498,7 +477,7 @@ $(document).ready(function() {
 								input_elements[j].value + " " + input_elements[j + 1].value
 							)
 								.tz("utc")
-								.format("Y-MM-DD h:mm:ss");
+								.format("Y-MM-DD H:mm:ss");
 							input_elements[j].value = serverStartDate.slice(0, 10);
 							input_elements[j + 1].value = serverStartDate;
 						}
@@ -510,7 +489,7 @@ $(document).ready(function() {
 								input_elements[j].value + " " + input_elements[j + 2].value
 							)
 								.tz("utc")
-								.format("Y-MM-DD h:mm:ss");
+								.format("Y-MM-DD H:mm:ss");
 							input_elements[j + 2].value = serverEndDate;
 						}
 						j = j + 3;
@@ -529,9 +508,15 @@ $(document).ready(function() {
 	if (_day.toString().length == 1) {
 		_day = "0" + _day.toString();
 	}
-	var date = dateObj.getFullYear() + "-" + _month + "-" + _day;
-	if (document.getElementById("date-picker-0")) {
-		document.getElementById("date-picker-0").value = date;
+	if(edit != undefined)
+	{
+		if(edit == 0)
+		{
+			var date = dateObj.getFullYear() + "-" + _month + "-" + _day;
+			if (document.getElementById("date-picker-0")) {
+				document.getElementById("date-picker-0").value = date;
+			}
+		}
 	}
 
 	$(".datepicker").datepicker({

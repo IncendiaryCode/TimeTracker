@@ -18,11 +18,14 @@ if ($this->input->get('t_id')) { ?>
                 <div class="col-sm-10 offset-sm-1 mt-5">
                     <?php
                     if (validation_errors()) { ?>
-                        <div class="alert alert-danger">
-                            <?php echo validation_errors();
-                            echo (!empty($this->session->flashdata('failure'))) ? $this->session->flashdata('failure') : '';
-                            ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                             <?php echo validation_errors();
+                             echo (!empty($this->session->flashdata('failure'))) ? $this->session->flashdata('failure') : ''; ?>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
+
                     <?php } ?>
                     <?php if (!empty($this->session->flashdata('success'))) { ?>
                         <div class="alert alert-success mb-5">
@@ -119,14 +122,28 @@ if ($this->input->get('t_id')) { ?>
                                                         <div class="col-4 col-md-3 mb-3">
                                                             <div class="input-group date">
                                                                 <!-- converting utc start time to local time -->
-                                                                <input type="text" class="date-utc timepicker-<?= $tnum ?> form-control" id="start-time-<?= $key ?>" name="time[<?= $key ?>][start]" placeholder="hh:mm" value="<?= $task['start_time'] ?>">
+
+                                                                <?php
+                                                                    if($task['start_time'])
+                                                                        $start = date('H:i:s',strtotime($task['start_time']));
+                                                                    else
+                                                                        $start = '';
+                                                                ?>
+                                                                <input type="text" class="date-utc timepicker-<?= $tnum ?> form-control" id="start-time-<?= $key ?>" name="time[<?= $key ?>][start]" placeholder="hh:mm" value="<?= $start ?>">
+
                                                             </div>
                                                         </div>
                                                         <div class="col-4 col-md-3 mb-3">
                                                             <div class="input-group date">
                                                                 <!-- converting utc end time to local time -->
 
-                                                                <input type="text" class="date-utc form-control timepicker-<?= $tnum + 1 ?>" id="end-time-<?= $key ?>" name="time[<?= $key ?>][end]" value="<?= $task['end_time'] ?>" placeholder="hh:mm">
+                                                                <?php
+                                                                    if($task['end_time'])
+                                                                        $end = date('H:i:s',strtotime($task['end_time']));
+                                                                    else
+                                                                        $end = '';
+                                                                ?>
+                                                                <input type="text" class="date-utc form-control timepicker-<?= $tnum + 1 ?>" id="end-time-<?= $key ?>" name="time[<?= $key ?>][end]" value="<?= $end ?>" placeholder="hh:mm">
                                                             </div>
                                                         </div>
                                                         <div class="col-10 text-center mb-3">

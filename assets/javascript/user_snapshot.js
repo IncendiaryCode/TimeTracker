@@ -157,9 +157,8 @@ $(document).ready(function() {
      $('.icon-remove').click(function()
     {
         var user_id = this.childNodes[0].value;
-        $("#delete-user").click(function()
+        $("#delete-user").unbind().click(function() // delete call
         {
-        // delete call
         $.ajax({
             type: 'POST',
             data: { 'user_id': user_id },

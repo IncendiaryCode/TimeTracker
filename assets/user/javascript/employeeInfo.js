@@ -370,11 +370,6 @@ function drawCards(data) {
 }
 
 function loadTaskActivities(formData) {
-	// $("#attach-card")
-	// 	.empty()
-	// 	.html(
-	// 		'<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>'
-	// 	);
 	$("#attach-card #section-loader").show();
 	$.ajax({
 		type: "GET",
@@ -440,17 +435,6 @@ function setTaskTime(startTime, id) {
 	$(".title").html(formattedTime);
 }
 
-function convert_to_UTC(time)
-{
-	var system_zone_date = new Date();
-	var offset_min = system_zone_date.getTimezoneOffset();
-
-	var total_min = parseInt(time.slice(0,2)*60) + parseInt(time.slice(3,5));
-	var utc_min = total_min + offset_min;
-	
-	var utc_hr = parseInt(utc_min/60).toString() +':'+ parseInt(utc_min%60).toString();
-	return utc_hr;
-}
 
 var timerSlider = window.timerSlider || {};
 timerSlider = {
@@ -610,6 +594,9 @@ $(document).ready(function () {
 	$(".timerpicker-c").timepicker({
 		uiLibrary: "bootstrap4"
 	});
+	$(".timerpicker-stop-now").timepicker({
+		uiLibrary: "bootstrap4"
+	});
 	$(function () {
 		$(".stopnow-time").timepicker({
 			useCurrent: false,
@@ -625,14 +612,20 @@ $(document).ready(function () {
 				document.getElementById("stop-now-error").innerHTML =
 					"enter valid end time. ";
 				return false;
-			} else {
+			}
+			else {
 				var input_element = __element.getElementsByClassName('check-for-utc');
 				for(var i=0; i<input_element.length; i++)
 				{
 					if(input_element[i].value != "" && input_element[i].value != " ")
 					{
-						var serverDate = moment((new Date().getFullYear()+'-'+new Date().getMonth()+1+'-'+new Date().getDate()) +' '+ input_element[i].value).tz('utc').format('Y-MM-DD h:mm:ss');
+						var serverDate = moment((new Date().getFullYear()+'-'+new Date().getMonth()+1+'-'+new Date().getDate()) +' '+ input_element[i].value).tz('utc').format('Y-MM-DD H:mm:ss');
 						input_element[i].value = serverDate;
+					if(typeof(parseInt(serverDate.slice(0,2))) == 'string')
+						{
+							document.getElementById("stop-now-error").innerHTML = "enter valid end time. ";
+							return false;	
+						}
 					}
 				}
 				return true;
@@ -670,8 +663,8 @@ $(document).ready(function () {
 					{
 						if(input_element[i].value != "" && input_element[i].value != " ")
 						{
-							var serverDate = moment((new Date().getFullYear()+'-'+new Date().getMonth()+1+'-'+new Date().getDate()) +' '+ input_element[i].value).tz('utc').format('Y-MM-DD h:mm:ss');
-							input_element[i].value = serverDate.slice(11,15);
+							var server_start_time = moment((new Date().getFullYear()+'-'+new Date().getMonth()+1+'-'+new Date().getDate()) +' '+ input_element[i].value).tz('utc').format('Y-MM-DD H:mm:ss');
+							input_element[i].value = server_start_time;
 						}
 					}
 					return true;

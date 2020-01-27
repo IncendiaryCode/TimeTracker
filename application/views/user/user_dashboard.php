@@ -76,7 +76,7 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
 
                     $offset_min = ((date('Z'))/60);
                     $local_time_min = ((substr($taskinfo['start_time'],11,2)*60)+(substr($taskinfo['start_time'],14,2)))+$offset_min;
-                    $local_time = round(($local_time_min/60-1),0) . ':' . ($local_time_min%60);
+                    $local_time = round(($local_time_min/60),0) . ':' . ($local_time_min%60);
                      ?>
                 <div id="slider<?=$task_id?>">  <!-- slider for all task -->
                     <div class="section-slider task-slider" id="login-timer-details<?=$id?>">
@@ -179,8 +179,14 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                                 <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
                             </div>
                             <div>
+                                <?php if (validation_errors()) { ?>
+                                    <div class="alert alert-danger">
+                                        <?php echo validation_errors(); ?>
+                                        </div>
+                              <?php  } ?>
+
                                 <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
-                                <input  class="check-for-utc form-control timepicker-b" type="text" name="stop-end-time" id="stop-end-time" placeholder="End time" >
+                                <input  class="check-for-utc form-control timerpicker-stop-now" type="text" name="stop-end-time" id="stop-end-time" placeholder="End time" >
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>
