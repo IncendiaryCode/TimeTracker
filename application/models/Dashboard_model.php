@@ -1398,6 +1398,7 @@ class Dashboard_model extends CI_Model
                 $data['type']  = $row->type;
                 $data['email'] = $row->email;
                 $data['username'] = $row->name;
+                $data['phone'] = $row->phone;
                 $data['profile_pic'] = base_url().USER_UPLOAD_PATH.$row->profile;
                 $data['login_time'] = date('Y:m:d H:i:s');
                 return $data;
