@@ -161,7 +161,7 @@ class User extends CI_Controller
 
     //Validate input time format(OR type of input time)
     public function validate_time(){
-        if($this->user_model->validate_time($this->input->post('stop-end-time')) == TRUE){
+        if($this->user_model->validate_time($this->input->post('time')) == TRUE){
             return TRUE;
         }else{
             $this->form_validation->set_message('validate_time', 'Invalid time input.');
@@ -204,7 +204,7 @@ class User extends CI_Controller
                 $this->load->view('user/user_dashboard', $output_result);
                 $this->load->view('user/footer');
             } else { //if id is sent through get request, go to stop timer function
-                $this->form_validation->set_rules('stop-end-time','Time','required|trim|min_length[8]|max_length[8]|callback_validate_time');
+                $this->form_validation->set_rules('time','Time','required|trim|min_length[8]|max_length[8]|callback_validate_time');
                 if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to the form
                     $this->load->view('user/header');
                     $output_result['task_info'] = $this->user_model->task_status();
