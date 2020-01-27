@@ -94,10 +94,7 @@ forgotPsw.onsubmit = function (e) {
     user_email = document.getElementById('Uname').value;
     var validateForm = new Validation(e.currentTarget);
     var finalValue = validateForm.correctCheck();
-    console.log(finalValue)
     if (finalValue.isValid == true) {
-
-
         var formPsw = document.getElementById('reEnterPsw');
         $('#enter-otp').show();
         $('#enter-email').hide();
@@ -153,7 +150,7 @@ function validateOtp() {
         return false;
     } else {
         document.getElementById('rotate-text').innerHTML = " ";
-        /*validate OTP*/
+        // validate OTP
         $.ajax({
             type: "POST",
             url: 'php/check_otp.php',

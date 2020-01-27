@@ -70,7 +70,7 @@ $(document).ready(function() {
 	var loadDashProjectChart = function(dateStr) {
 		var dateObj = dateStr;
 		if (typeof dateStr === "undefined") {
-			dateObj = moment().format("Y-MM");
+			dateObj = moment().format("YYYY-MM");
 		}
 
 		$.ajax({
@@ -97,44 +97,4 @@ $(document).ready(function() {
 	dashPrjDtPicker.datepicker().on("changeMonth", function(e) {
 		loadDashProjectChart(moment(e.date).format("Y-MM"));
 	});
-
-	// if (document.getElementById("main-chart")) {
-	// 	if (
-	// 		document.getElementById("cur-month").value == "" ||
-	// 		document.getElementById("cur-month").value == " "
-	// 	) {
-	// 		var month_no = (new Date().getMonth() + 1).toString();
-	// 		if (month_no == 1) {
-	// 			month_no = "0" + month_no;
-	// 		}
-	// 		var curr_month = new Date().getFullYear().toString() + "-" + month_no;
-	// 		document.getElementById("cur-month").value = curr_month;
-	// 		$.ajax({
-	// 			type: "POST",
-	// 			url: timeTrackerBaseURL + "index.php/admin/get_project_list",
-	// 			data: { type: "get_graph_data", month: curr_month },
-	// 			success: function(res) {
-	// 				var result = JSON.parse(res);
-	// 				usernames = result["result"];
-	// 				__project_details(usernames);
-	// 			}
-	// 		});
-	// 	}
-	// }
-
-	// $("#cur-month").change(function() {
-	// 	$.ajax({
-	// 		type: "POST",
-	// 		url: timeTrackerBaseURL + "index.php/admin/get_project_list",
-	// 		data: {
-	// 			type: "get_graph_data",
-	// 			month: document.getElementById("cur-month").value
-	// 		},
-	// 		success: function(res) {
-	// 			var result = JSON.parse(res);
-	// 			usernames = result["result"];
-	// 			__project_details(usernames);
-	// 		}
-	// 	});
-	// });
 });

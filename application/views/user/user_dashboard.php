@@ -22,7 +22,6 @@ $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Punch In/Out';
-//$flag = (($this->session->userdata('flag')))?$this->session->userdata('flag'):"";
 if(isset($task_info['login_status'])){
 if($task_info['login_status']['end_time'] == NULL){
     $timerClass = 'fa-stop';
@@ -126,9 +125,11 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                     url: timeTrackerBaseURL + "index.php/user/get_running_task",
                     dataType: "json",
                     success: function(res) {
+                        
                     $("#stop-now").modal("show");
                     }
                 });
+
             </script>
 
         <?php } } } } ?>
@@ -180,7 +181,7 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                             </div>
                             <div>
                                 <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
-                                <input type="text" class="check-for-utc form-control stopnow-time"  name="stop-end-time" id="stop-end-time">
+                                <input  class="check-for-utc form-control timepicker-b" type="time" name="stop-end-time" id="stop-end-time" placeholder="End time" >
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>

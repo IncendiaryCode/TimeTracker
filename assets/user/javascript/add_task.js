@@ -1,3 +1,4 @@
+
 var addTime = {
 	id: 0,
 	ele: null,
@@ -91,6 +92,8 @@ var addTime = {
 			$(this)
 				.closest(".time-section")
 				.remove();
+				array_of_timings.pop()
+				console.log(array_of_timings);
 		});
 		array_of_timings.push({ date, start_time, end_time });
 		removeBtn.appendTo(row);
@@ -114,6 +117,7 @@ var addTime = {
 	},
 	validate: function(endtimeValidation) {
 		var __this = this;
+
 		var date = document.getElementById("date-picker-0").value;
 		var start_time = document.getElementById("start-time-0").value;
 		var end_time = document.getElementById("end-time-0").value;
@@ -365,16 +369,17 @@ function convert_to_Local(time)
 	var utc_min = total_min - (offset_min);
 
 	var utc_hr = parseInt(utc_min/60).toString() +':'+ parseInt(utc_min%60).toString();
+						
 	return utc_hr;
 }
 
 $(document).ready(function() {
 	
+	$('#delete-task-0').hide();
 	if (document.getElementById("task-add-time")) {
 		addTime.init("#task-add-time");
 	}
-
-	/*var element = document.getElementById('task-times');
+	var element = document.getElementById('task-times');
 	if(element != null)
 	{
 		var input_element = element.getElementsByClassName('check-for-utc');
@@ -382,12 +387,31 @@ $(document).ready(function() {
 		{
 			if(input_element[i].value != "" && input_element[i].value != " ")
 			{
-				var utc_time = convert_to_Local(input_element[i].value);
-				console.log(input_element[i].value, utc_time);
-				input_element[i].value = utc_time;
+				var timeZone = moment.tz.guess();
+				var date = input_element[i].value;
+				if(input_element[i+1])
+				{
+					var start_time = input_element[i+1].value;
+					var serverDate = moment(date +' '+ start_time).tz(timeZone).format('Y-MM-DD h:mm:ss');
+				if(serverDate != "Invalid date")
+					{
+					input_element[i].value = serverDate.slice(0,10)
+					input_element[i+1].value = serverDate.slice(11,15);
+					}
+				}
+				if(input_element[i+2])
+				{
+				var end_time = input_element[i+2].value;
+				var serverDateEnd = moment(date +' '+ end_time).tz(timeZone).format('Y-MM-DD h:mm:ss');
+					if(serverDateEnd != "Invalid date" && (end_time != '' || end_time != ' '))
+					{
+					input_element[i+2].value = serverDateEnd.slice(11,15);
+					}
+				}
 			}
+			i=i+3;
 		}
-	}*/
+	}
 
 	var addTask = document.getElementById("addTask");
 	if (addTask) {
@@ -409,6 +433,8 @@ $(document).ready(function() {
 			var date = document.getElementById("date-picker-0").value;
 			var start_time = document.getElementById("start-time-0").value;
 			var end_time = document.getElementById("end-time-0").value;
+
+
 			var flag = false;
 			flag = addTime.validate(false);
 			if (flag == false) {
@@ -416,16 +442,38 @@ $(document).ready(function() {
 			} else {
 				addTime.array_of_timings.push({ date, start_time, end_time });
 				var elements = document.getElementById('task-times');
-				var input_elements = elements.getElementsByClassName('check-for-utc');
-
-				for(var i=0; i<input_elements.length; i++)
-				{
-					if(input_elements[i].value != "" && input_elements[i].value != " ")
+				if(elements != null)
 					{
-						var utc_time = convert_to_UTC(input_elements[i].value);
-						input_elements[i].value = utc_time;
+						var input_element = elements.getElementsByClassName('check-for-utc');
+						for(var i=0; i<input_element.length; i++)
+						{
+							if(input_element[i].value != "" && input_element[i].value != " ")
+							{
+								var timeZone = moment.tz.guess();
+								var date = input_element[i].value;
+								if(input_element[i+1])
+								{
+									var start_time = input_element[i+1].value;
+									var serverDate = moment(date +' '+ start_time).tz('utc').format('Y-MM-DD h:mm:ss');
+
+								if(serverDate != "Invalid date")
+									{
+									input_element[i+1].value = serverDate;
+									}
+								}
+								if(input_element[i+2].value)
+								{
+								var end_time = input_element[i+2].value;
+								var serverDateEnd = moment(date +' '+ end_time).tz('utc').format('Y-MM-DD h:mm:ss');
+									if(serverDateEnd != "Invalid date" && (end_time != '' || end_time != ' '))
+									{
+									input_element[i+2].value = serverDateEnd;
+									}
+								}
+							}
+							i=i+3;
+						}
 					}
-				}	
 				return true;
 			}
 		};
@@ -456,19 +504,18 @@ $(document).ready(function() {
 					{
 						if(input_elements[j].value != "" && input_elements[j+1].value != " ")
 						{
-    					expires = moment.utc(input_elements[j].value + input_elements[j+1].value);
-    					var utcStart = new moment(input_elements[j].value + input_elements[j+1].value, "YYYY-MM-DDTHH:mm").utc();
-    					//input_elements[j+1].value = utcStart.toString().slice(16,21);
+						
+						var timeZone = moment.tz.guess();
+						var serverStartDate = moment(input_elements[j].value +' '+ input_elements[j+1].value).tz('utc').format('Y-MM-DD h:mm:ss');
+						input_elements[j].value = serverStartDate.slice(0,10);
+						input_elements[j+1].value = serverStartDate;
 
-    					console.log(utcStart.toString(), input_elements[j].value + input_elements[j+1].value);
 						}
 						if(input_elements[j].value != "" && input_elements[j+2].value != " ")
 						{
-    					expires = moment.utc(input_elements[j].value + input_elements[j+2].value);
-    					var utcStart = new moment(input_elements[j].value + input_elements[j+2].value, "YYYY-MM-DDTHH:mm").utc();
-    					//input_elements[j+2].value = utcStart.toString().slice(16,21);
 
-    					console.log(utcStart.toString(), input_elements[j].value + input_elements[j+2].value);
+						var serverEndDate = moment(input_elements[j].value +' '+ input_elements[j+2].value).tz('utc').format('Y-MM-DD h:mm:ss');
+						input_elements[j+2].value = serverEndDate;
 						}
 						j=j+3;
 					}

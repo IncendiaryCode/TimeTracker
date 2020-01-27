@@ -133,12 +133,25 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script  src="//www.gstatic.com/charts/loader.js" type="text/javascript"></script>
-<script src="//momentjs.com/downloads/moment.js"></script>
+
+
+<script src="//momentjs.com/downloads/moment.js"></script> 
+<script src="//momentjs.com/downloads/moment-timezone.js"></script>
+
+
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="//unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 <script src="<?=base_url();?>assets/user/plugins/calendar_view.js?v=<?=VERSION?>"></script>
+
+
+<script src="<?=base_url();?>assets/user/javascript/momet_copy.js?v=<?=VERSION?>"></script>
+<script src="<?=base_url();?>assets/user/javascript/moment_zone.js?v=<?=VERSION?>"></script>
+
+
 <script src="<?=base_url();?>assets/user/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/add_task.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/utils.js?v=<?=VERSION?>"></script>
@@ -146,6 +159,7 @@
 <script src="<?=base_url();?>assets/plugins/bxslider/js/jquery.bxslider.min.js?v=<?=VERSION?>"></script>
 <script src="<?=base_url();?>assets/user/javascript/employee_profile.js?v=<?=VERSION?>"></script>
 <script type="text/javascript">
+
  $(function() {
  $('.edit-date-time').datetimepicker({
           useCurrent: false, format: 'YYYY-MM-DD hh:mm A',

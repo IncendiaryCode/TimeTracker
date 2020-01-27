@@ -3,31 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->helper('url_helper');
 $profile = $this->session->userdata('user_profile');
 ?>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <a href="#"><img src="<?=base_url().UPLOAD_PATH?>logo-white.png" height="40px;" onclick="window.location.href='<?=base_url();?>index.php/admin'"></a>
-            <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon "></span>
-            </button>
-            <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
-                <div class="navbar-nav ml-auto flex-column-reverse flex-lg-row">
-                    
-                    <div class="nav-item nav-link">
-                        <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="<?=base_url().UPLOAD_PATH.$profile;?>" height="50px" width="50px;" class="rounded-circle">
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div>
-                                    <p class="items"> <a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display pl-3"> Profile</a></p>
-                                    <p class="items" ><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display pl-3"> <i class="fas fa-power-off"></i> Logout</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
     <main class="container-fluid container-fluid-main">
         <div class="container main-container">
             <div class="main-container-inner">
@@ -53,7 +28,7 @@ $profile = $this->session->userdata('user_profile');
                                     <?php echo $this->session->flashdata('err'); ?>
                                 </div>
                             <?php } ?> 
-                        <p class="text-center display-heading text-primary">Add user</p>
+                        <h1 class="text-center display-heading">Add user</h1>
                         <form action="<?php echo base_url();?>index.php/admin/add_users" id="addUser" method="post" novalidate>
                             <div class="form-group mt-3">
                                 <label for="task-name ">Name:<span class="text-danger">*</span></label>

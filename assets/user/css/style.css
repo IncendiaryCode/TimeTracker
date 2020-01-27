@@ -49,6 +49,13 @@ header.main-header h1 {
     background-image: linear-gradient(rgba(255, 255, 255, 0) 20%, #ffffff 45%)
 }
 
+.gj-timepicker-md [role=right-icon] {
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 11px;
+    font-size: 24px;
+}
 .profile-icon
 {
     font-size: 25px; 

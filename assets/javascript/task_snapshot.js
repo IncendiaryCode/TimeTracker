@@ -170,6 +170,13 @@ function callTaskTableData()
 $(document).ready(function() {
 
     //rendering datatable
+
+        //initialize date picker
+    var dashPrjDtPicker1 = $("#curr-month").datepicker({
+        minViewMode: 1
+    });
+
+
     if (document.getElementById('task-chart')) {
         if ((document.getElementById('curr-month').value == "") || (document.getElementById('curr-month').value == " ")) {
             var month_no = (new Date().getMonth() + 1).toString();

@@ -330,22 +330,6 @@ header.main-header h1 {
 		height: 200px;
 	}
 }
-
-/* @media (min-width: 700px) {
-	.display-heading {
-		font-size: 54px;
-		font-weight: 400;
-		line-height: 1.2;
-	}
-}
-@media (max-width: 700px) {
-	.display-heading {
-		font-size: 24px;
-		font-weight: 300;
-		line-height: 1.2;
-	}
-} */
-
 .display-heading {
 	/* font-size: 54px; */
 	font-weight: 500;

@@ -614,8 +614,8 @@ $(document).ready(function () {
 				{
 					if(input_element[i].value != "" && input_element[i].value != " ")
 					{
-						var utc_time = convert_to_UTC(input_element[i].value);
-						input_element[i].value = utc_time;
+						var serverDate = moment((new Date().getFullYear()+'-'+new Date().getMonth()+1+'-'+new Date().getDate()) +' '+ input_element[i].value).tz('utc').format('Y-MM-DD h:mm:ss');
+						input_element[i].value = serverDate.slice(11,15);
 					}
 				}
 				return true;
@@ -653,8 +653,8 @@ $(document).ready(function () {
 					{
 						if(input_element[i].value != "" && input_element[i].value != " ")
 						{
-							var utc_time = convert_to_UTC(input_element[i].value);
-							input_element[i].value = utc_time;
+							var serverDate = moment((new Date().getFullYear()+'-'+new Date().getMonth()+1+'-'+new Date().getDate()) +' '+ input_element[i].value).tz('utc').format('Y-MM-DD h:mm:ss');
+							input_element[i].value = serverDate.slice(11,15);
 						}
 					}
 					return true;
