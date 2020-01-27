@@ -20,7 +20,6 @@ var daily_chart;
 
 
 function draw_chart_cards(data) {
-    
     for (x in data) {
         for (var y = 0; y < data[x].length; y++) {
             var cardHeader = $('<div class="card-header card-header" />');
@@ -37,12 +36,27 @@ function draw_chart_cards(data) {
                     '<div class="col-6 text-left"><span class="vertical-line"></span>Not yet started.</div>'
                 );
             } else {
-                cardHeaderRow.append(
-                    '<div class="col-6 text-left"><span class="vertical-line"></span>' +
-                    " " +
-                    data[x][y].start_time +
-                    "</div>"
-                );
+                var timeZone = moment.tz.guess();
+                var date = data[x][y].start_time.slice(0, 10);
+                var start_time = data[x][y].start_time;
+                var serverDate = moment(start_time).tz(timeZone).format('Y-MM-DD h:mm:ss a');
+                if(serverDate != 'Invalid date')
+                {
+                    cardHeaderRow.append(
+                        '<div class="col-6 text-left"><span class="vertical-line"></span>' +
+                        " " +
+                        serverDate +
+                        "</div>"
+                    );
+                }
+                else{
+                    cardHeaderRow.append(
+                        '<div class="col-6 text-left"><span class="vertical-line"></span>' +
+                        " " +
+                        data[x][y].start_time +
+                        "</div>"
+                    );
+                }
             }
             var stopCol = $(
                 '<div class="col-6 text-right"  id="btn-stop' +
@@ -92,6 +106,7 @@ function draw_chart_cards(data) {
                 "'>"
             );
             //action Edit
+            var timeZone = moment.tz.guess();
             var actionEdit = $(
                 '<a href="#" class=" pl-2  text-white " id="action-edit"><i class="far fa-edit action-play " data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
             );
@@ -99,7 +114,7 @@ function draw_chart_cards(data) {
                 "href",
                 timeTrackerBaseURL +
                 "index.php/user/load_add_task?t_id=" +
-                data[x][y].id
+                data[x][y].id+"timeZone="+timeZone
             );
             footerRight.append(actionEdit);
             cardFooter.append(footerRow);

@@ -96,12 +96,27 @@ function drawCards(data) {
 					'<div class="col-6 text-left"><span class="vertical-line"></span>Not yet started.</div>'
 				);
 			} else {
-				cardHeaderRow.append(
-					'<div class="col-6 text-left"><span class="vertical-line"></span>' +
-					" " +
-					data[x][y].start_time +
-					"</div>"
-				);
+				var timeZone = moment.tz.guess();
+                var date = data[x][y].start_time.slice(0, 10);
+                var start_time = data[x][y].start_time;
+                var serverDate = moment(start_time).tz(timeZone).format('Y-MM-DD h:mm:ss a');
+                if(serverDate != 'Invalid date')
+                {
+					cardHeaderRow.append(
+						'<div class="col-6 text-left"><span class="vertical-line"></span>' +
+						" " +
+						serverDate +
+						"</div>"
+					);
+				}
+				else{
+					cardHeaderRow.append(
+						'<div class="col-6 text-left"><span class="vertical-line"></span>' +
+						" " +
+						data[x][y].start_time +
+						"</div>"
+					);
+				}
 			}
 			var stopCol = $(
 				'<div class="col-6 text-right"  id="btn-stop' + data[x][y].id + '" />'
@@ -309,11 +324,13 @@ function drawCards(data) {
 			var actionEdit = $(
 				'<a href="#" class=" pl-2  text-white " id="action-edit"><i class="far fa-edit action-play" data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
 			);
+
+			var timeZone = moment.tz.guess();
 			actionEdit.attr(
 				"href",
 				timeTrackerBaseURL +
 				"index.php/user/load_add_task?t_id=" +
-				data[x][y].id
+				data[x][y].id+"timeZone="+timeZone
 			);
 			footerRight.append(actionEdit);
 			cardFooter.append(footerRow);
@@ -615,7 +632,7 @@ $(document).ready(function () {
 					if(input_element[i].value != "" && input_element[i].value != " ")
 					{
 						var serverDate = moment((new Date().getFullYear()+'-'+new Date().getMonth()+1+'-'+new Date().getDate()) +' '+ input_element[i].value).tz('utc').format('Y-MM-DD h:mm:ss');
-						input_element[i].value = serverDate.slice(11,15);
+						input_element[i].value = serverDate;
 					}
 				}
 				return true;

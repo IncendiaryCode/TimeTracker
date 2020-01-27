@@ -59,7 +59,7 @@ if ($this->input->get('t_id')) { ?>
                                         </option>
                                     </select>
                                 <?php } else { ?>
-                                    <select type="number" class="form-control project_name" id="choose-project" name="project" value="<?= $task_data['project_name'] ?>">
+                                    <select type="text" class="form-control project_name" id="choose-project" name="project" value="<?= $task_data['project_name'] ?>">
                                         <option>Select Project</option>
                                         <?php
                                         foreach ($result as $p) { ?>
@@ -72,7 +72,7 @@ if ($this->input->get('t_id')) { ?>
                             </div>
                             <div class="form-group">
                                 <label for="choose-module">Choose project module</label>
-                                <select type="number" class="form-control project_name" id="choose-module" name="project_module" value="<?= $task_data['module_name'] ?>">
+                                <select type="text" readonly="" class="form-control project_name" id="choose-module" name="project_module" value="<?= $task_data['module_name'] ?>">
                                     <?php if ($this->input->get('t_id')) { ?>
                                         <option value=<?= $task_data['module_id'] ?>><?= $task_data['module_name'] ?></option>
                                     <?php } else { ?>

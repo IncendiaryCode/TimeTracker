@@ -125,7 +125,6 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                     url: timeTrackerBaseURL + "index.php/user/get_running_task",
                     dataType: "json",
                     success: function(res) {
-                        
                     $("#stop-now").modal("show");
                     }
                 });
@@ -136,7 +135,7 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
 
             <div class="row mb-3 pt-2">
                 <div class="col-6">
-                    <h5 class="font-weight-light text-left recent-activites">Recent Activites</h5>
+                    <h5 class="font-weight-light text-left recent-activites">Recent Activities</h5>
                 </div>
                 <div class="col-6">
                     <div class="dropdown text-right" id="dropdown-recent-acts">
@@ -181,7 +180,7 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                             </div>
                             <div>
                                 <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
-                                <input  class="check-for-utc form-control timepicker-b" type="time" name="stop-end-time" id="stop-end-time" placeholder="End time" >
+                                <input  class="check-for-utc form-control timepicker-b" type="text" name="stop-end-time" id="stop-end-time" placeholder="End time" >
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>

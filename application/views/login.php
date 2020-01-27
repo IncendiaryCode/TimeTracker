@@ -53,7 +53,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </button>
                         </div>
                     <?php } ?>
-                    <form id="loginForm" class="login-form" method="post" action="<?= base_url(); ?>login/login_process" novalidate>
+                        
+                    <form id="loginForm" class="login-form" method="post" action="<?= base_url(); ?>login/login_process?" novalidate>
                         <div class="form-group">
                             <div class="input-group">
                                 <input type="email" class="form-control logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light" id="username" name="username" placeholder="Email">
@@ -63,8 +64,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="form-group">
                             <div class="input-group ">
                                 <input type="password" class="form-control top-space has-empty-validation border-top-0 border-left-0 border-right-0 font-weight-light" id="password" name="password" placeholder="Password">
+                                <input type="hidden" id="time-zone" name="time-zone">
                             </div>
                         </div>
+                        <script src="<?=base_url();?>assets/user/javascript/momet_copy.js?v=<?=VERSION?>"></script>
+                        <script src="<?=base_url();?>assets/user/javascript/moment_zone.js?v=<?=VERSION?>"></script>
+
+                        <script type="text/javascript">
+                            var timeZone = moment.tz.guess();
+                            document.getElementById('time-zone').value = timeZone;
+                        </script>
                         <p class="error" id="password-error"></p>
                         <div class="row top-space" style="width: 100%; padding-top: 30px">
                             <a href="<?= base_url(); ?>login/forgot_pwd" class="col-6 forgot-color" id="forgot-pwd">Forgot password?</a>

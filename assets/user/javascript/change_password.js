@@ -3,7 +3,7 @@ if (validate) {
     validate.onsubmit = function () {
         var oldPsw = document.getElementById('oldPsw').value;
         if (oldPsw == "" || oldPsw == " ") {
-            document.getElementById('alertMsg').innerHTML = "Enter your current passowrd";
+            document.getElementById('alertMsg').innerHTML = "Enter your current password";
             return false;
         }
         var psw1 = document.getElementById('psw1').value;

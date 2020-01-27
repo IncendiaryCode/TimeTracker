@@ -161,7 +161,8 @@ class User extends CI_Controller
     public function stop_timer()
     {
         $post_data = $this->input->post();
-        $end_time = (!empty($post_data['stop_end_time'])) ? $post_data['stop_end_time'] : '';//set end time if end time is sent
+/*        print_r($post_data); exit();
+*/        $end_time = (!empty($post_data['stop_end_time'])) ? $post_data['stop_end_time'] : '';//set end time if end time is sent
         $data['userid'] = $this->session->userdata('userid');
         $data['end_time'] = $end_time;
         $data['task_desc'] = isset($post_data['stop_task-description']) ? $post_data['stop_task-description'] : '';//get task description if sent
@@ -180,6 +181,7 @@ class User extends CI_Controller
                 $output_result['status'] = TRUE;
                 $output_result['msg']    = "Timer stop.";
             }
+
             echo json_encode($output_result);
         } else {
             $task_id = $this->input->get('id', TRUE);
