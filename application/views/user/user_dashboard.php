@@ -158,7 +158,7 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
             </div>
         </div>
         <footer class="footer">
-            <p class="text-center pt-2 ">Copyright © 2020 Printgreener.com</p>
+            <p class="text-center pt-2 ">Copyright © <?=Date('Y')?> Printgreener.com</p>
         </footer>
         <!-- modal form for tasks that started onprevious date -->
         <div class="modal modal-stop-now fade" id="stop-now" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
@@ -210,12 +210,12 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <form action="<?=base_url();?>index.php/user/save_login_time" id="starting-timer" method="post">
-                        <div class="modal-header text-center">
-                            <h5 class="modal-title">Start timer</h5>
+                        <div class="modal-header ">
+                            <button type="button" class="close text-danger" data-dismiss="modal">×</button>
                         </div>
                         <div class="modal-body ">
-                            <div>
-                                <label for="old-datepicker">Enter start time: <span class="text-danger">*</span></label>
+                            <div><p>You have not punched in for the day.</p>
+                                <label for="old-datepicker">Please enter start time: <span class="text-danger">*</span></label>
                                 <input type="text" class="check-for-utc form-control  timerpicker-c"  name="start-login-time" id="start-login-time" placeholder="hh:mm">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
@@ -224,8 +224,7 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                         </div>
                             <p class="text-danger text-center" id="stop-timer-error"></p>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary" id="start-punchIn">Start</button>
+                            <button type="submit" class="btn btn-primary" id="start-punchIn">Punch In</button>
                         </div>
                     </form>
                 </div>

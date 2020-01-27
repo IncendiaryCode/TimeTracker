@@ -62,7 +62,7 @@
         </div>
             <hr>
             <footer>
-                <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</ p>
+                <p class="text-center p-3 ">Copyright © <?=Date("Y"); ?> Printgreener.com</ p>
             </footer>
         </div>
     </main>

@@ -3,31 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->helper('url_helper');
 
 ?>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <a href="#"><img src="<?=base_url();?>assets/images/logo-white.png" height="40px;" onclick="window.location.href='<?=base_url();?>index.php/admin'"></a>
-            <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon "></span>
-            </button>
-            <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
-                <div class="navbar-nav ml-auto flex-column-reverse flex-lg-row">
-                    
-                    <div class="nav-item nav-link">
-                        <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
-                            <img src="<?=base_url().UPLOAD_PATH.$res['profile'];?>" height="50px" width="50px;" class="rounded-circle">
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div>
-                                    <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/admin/load_profile"' class="text-display pl-2"> Profile</a></p>
-                                    <p class="items"><a href="#" onclick='window.location.href="<?=base_url();?>index.php/login/logout"' class="text-display pl-2"> <i class="fas fa-power-off"></i> Logout</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
     <main class="container-fluid container-fluid-main">
         <div class="container main-container">
             <div class="main-container-inner">
@@ -97,8 +72,3 @@ $this->load->helper('url_helper');
         </div>
     </div>
 </div>
-
-    <footer class="text-center admin-footer">
-    <hr>
-        <p class="text-center p-3 ">Copyright © 2019 Printgreener.com </p>
-    </footer>

@@ -156,6 +156,8 @@ function drawCards(data) {
 				data[x][y].project +
 				"</div>"
 			);
+			var date = new moment().format("Y-MM-DD H:mm:ss");
+			var serverDate = moment(date).tz('utc').format("Y-MM-DD H:mm:ss");
 
 			var footerRight = $(
 				"<div class='card-actions' id='footer-right-" + data[x][y].id + "'>"
@@ -164,17 +166,18 @@ function drawCards(data) {
 				'<a href="' +
 				timeTrackerBaseURL +
 				"user/start_timer?id=" +
-				data[x][y].id +
+				data[x][y].id +"&time="+serverDate+
 				'" class="card-action action-delete" data-id="' +
 				data[x][y].id +
 				'" data-toggle="tooltip" data-placement="top" title="Play"></a>'
 			);
 			actionPlay.append('<i class="fas action-edit  fa-play"></i>');
+				
 			var actionStop = $(
 				'<a href="' +
 				timeTrackerBaseURL +
 				"user/stop_timer?id=" +
-				data[x][y].id +
+				data[x][y].id +"&time="+serverDate+
 				'" class="card-action action-delete" data-id="' +
 				data[x][y].id +
 				'" data-toggle="tooltip" data-placement="top" title="Stop"></a>'
@@ -198,7 +201,7 @@ function drawCards(data) {
 					$.ajax({
 						type: "POST",
 						url: timeTrackerBaseURL + "index.php/user/start_timer",
-						data: { action: "task", id: t_id },
+						data: { action: "task", id: t_id, time: serverDate },
 						dataType: "json",
 						success: function (res) {
 							var res = res["data"]["details"];
@@ -207,7 +210,7 @@ function drawCards(data) {
 								'<div id="slider-' +
 								res["task_id"] +
 								'">' +
-								'<div class="section-slider task-slider">' +
+								'<div class="section-slider task-slider">' + 
 								'<input type="hidden" id="' +
 								res["task_id"] +
 								'" value="' +
@@ -252,7 +255,7 @@ function drawCards(data) {
 								'<a href="' +
 								timeTrackerBaseURL +
 								"user/stop_timer?id=" +
-								t_id +
+								t_id +"&time="+serverDate+
 								'" class="card-action action-delete" data-id="' +
 								t_id +
 								'" data-toggle="tooltip" data-placement="top" title="Stop"></a>'
@@ -283,7 +286,7 @@ function drawCards(data) {
 					$.ajax({
 						type: "POST",
 						url: timeTrackerBaseURL + "index.php/user/stop_timer",
-						data: { action: "task", id: task_id, flag: "0" },
+						data: { action: "task", id: task_id, flag: "0", time: serverDate },
 						dataType: "json",
 						success: function (res) {
 							var data = res["flag"];
@@ -486,10 +489,12 @@ $(document).ready(function () {
 				if (task_id) {
 					taskUrl = timeTrackerBaseURL + "user/stop_timer";
 				}
+				var date = new moment().format("Y-MM-DD H:mm:ss");
+				var server_stop_time = moment(date).tz('utc').format("Y-MM-DD H:mm:ss");
 				$.ajax({
 					type: "POST",
 					url: taskUrl,
-					data: { action: "task", id: task_id },
+					data: { action: "task", id: task_id, time: server_stop_time },
 					success: function (res) {
 						var data = JSON.parse(res);
 						var task_id_no = t_id.match(/(\d+)/);
