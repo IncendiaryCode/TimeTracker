@@ -178,15 +178,18 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                                 <p>Started at: <strong id="old-start-date">
                                 <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
                             </div>
+                            <input type="hidden" id="previous-date" name="" value="<?=$task_info['task_status'][0]['start_time'] ?>">
                             <div>
+                                
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <?php if (validation_errors()) { ?>
-                                    <div class="alert alert-danger">
-                                        <?php echo validation_errors(); ?>
+                                       <?php echo validation_errors(); ?>
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
-                                        </div>
                               <?php  } ?>
+                            </div>
+
 
                                 <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
                                 <input  class="check-for-utc form-control timerpicker-stop-now" type="text" name="time" id="stop-end-time" placeholder="End time" >
