@@ -66,12 +66,18 @@ class User_model extends CI_Model {
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             $details['task_status'] = $query->result_array();
+            foreach($details['task_status'] AS &$d){
+                $c_sdate = $this->convert_date($d['start_time']);
+                $d['start_time'] =  ($c_sdate) ? $c_sdate : $d['start_time'];                
+            }
         }
         $this->db->where(array('user_id' => $userid, 'task_date' => date('Y:m:d')));
         //$this->db->where('end_time IS NULL');
         $query = $this->db->get('login_details');
         if ($query->num_rows() > 0) {
-            $details['login_status'] =$query->row_array(); 
+            $details['login_status'] =$query->row_array();
+            $start = $this->convert_date($details['login_status']['start_time']);
+            $details['login_status']['start_time'] = ($start) ? $start : $details['login_status']['start_time'];
         }
         return $details;
     }
@@ -239,7 +245,16 @@ class User_model extends CI_Model {
             if (!isset($details['task_data'])) {
                 $details['task_data'] = array('task_name'=>$d['task_name'],'project_name'=>$d['name'],'project_id'=>$d['project_id'],'description'=>$d['description'],'task_id'=>$d['task_id'],'module_name'=>$d['module_name'],'module_id'=>$d['module_id']);
             }
-            $details['timeline_data'][] = array('table_id'=>$d['id'],'task_date'=>($d['task_date'])?$d['task_date']:date('Y-m-d'),'start_time'=>($d['start_time'])?date('H:i',strtotime($d['start_time'])):date('H:i'),'end_time'=>($d['end_time'])?date('H:i',strtotime($d['end_time'])):'','task_description'=>($d['task_description'])?$d['task_description']:null);
+            if($d['start_time']){
+                $start = $this->convert_date($d['start_time']);
+            }
+            else
+                $start = '';
+            if($d['end_time'])
+                $end = $this->convert_date($d['end_time']);
+            else
+                $end = '';
+            $details['timeline_data'][] = array('table_id'=>$d['id'],'task_date'=>($d['task_date'])?$d['task_date']:date('Y-m-d'),'start_time'=>$start,'end_time'=>$end,'task_description'=>($d['task_description'])?$d['task_description']:null);
         }
         return $details;
     }
@@ -258,6 +273,7 @@ class User_model extends CI_Model {
         $this->db->from('time_details AS d');
         $this->db->join('task AS t', 't.id = d.task_id');
         $this->db->where('d.total_minutes','0');
+        $this->db->where('d.task_date !=',date('Y-m-d'));
         $data = $this->db->get();
         if($data->num_rows() > 0){
             $tasks = $data->result_array();
@@ -336,6 +352,7 @@ class User_model extends CI_Model {
                 } else {
                     $update_time = $data['task_date'] . " " . date('H:i:s', strtotime($req_data['end_time']));
                 }
+                //$update_time = $req_data['end_time'];
             } else {
                 $update_time = $data['task_date'] . " " . date('H:i:s');
             }
@@ -545,7 +562,7 @@ class User_model extends CI_Model {
     public function submit_profile($picture) {
         $useremail = $this->session->userdata('email');
         $this->db->where('email', $useremail);
-        $query = $this->db->update('users', array('profile'=>$picture['profile']));
+        $query = $this->db->update('users', array('profile'=>$picture));
         if (!$query) {
             return false;
         } else {
@@ -574,7 +591,6 @@ class User_model extends CI_Model {
         $this->db->from('project AS p');
         $this->db->join('project_assignee AS ps', 'ps.project_id = p.id');
         $this->db->where(array('ps.user_id' => $userid));
-        //$query = $this->db->query("SELECT p.* FROM project AS p JOIN project_assignee AS ps ON p.id=ps.project_id WHERE ps.user_id =".$userid);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             $result = $query->result_array();
@@ -651,16 +667,18 @@ class User_model extends CI_Model {
                         if(($time['start']) == '' || $time['start'] == null)
                             $start = $time['date'] . ' ' . '00:00:00'; // break Return with error
                         else{
-                            $start_time = strtotime($time['date'].' '.$time['start']);
-                            $start = date('Y-m-d H:i:s',$start_time);
+                            $start_time = strtotime($time['start']);
+                            //$start = date('Y-m-d H:i:s',$start_time);
+                            $start = $time['start'];
                         }
 
                         if(trim($time['end']) == '' || ($time['end'] == null)){
                             $end = null;
                         }
                         else{
-                            $end_time = strtotime($time['date'].' '.$time['end']);
-                            $end = date('Y-m-d H:i:s',$end_time);
+                            $end_time = strtotime($time['end']);
+                            //$end = date('Y-m-d H:i:s',$end_time);
+                            $end = $time['end'];
                         }
 
                         $description = "";
@@ -676,7 +694,7 @@ class User_model extends CI_Model {
                             $minutes = $diff / 60;
                             $total_mins = ($minutes < 1) ? ceil(abs($minutes)) : abs($minutes);
                         }
-                        if (isset($time['table_id']) && !empty($time['table_id']) ) {
+                        if (isset($time['table_id']) && !empty($time['table_id'])) {
                             $table_id = $time['table_id'];
                             $array = array('start_time' => $start, 'end_time' => $end, 'task_description' => $description, 'user_id' => $userid, 'task_id' => $data['task_id'], 'total_hours' => $hours, 'total_minutes' => $total_mins, 'task_date' => $time['date'], 'modified_on' => date('Y:m:d H:i:s'));
                             $this->db->where(array('user_id' => $userid, 'task_id' => $data['task_id'], 'id' => $table_id));
@@ -735,27 +753,17 @@ class User_model extends CI_Model {
                                     $start = $date_value[$i]['date'] . ' ' . '00:00:00';
                                 else{
                                     $start_time = strtotime($date_value[$i]['start']);
-                                    $start = $date_value[$i]['date'] . ' ' . date('H:i:s', $start_time);
+                                    //$start = $date_value[$i]['date'] . ' ' . date('H:i:s', $start_time);
+                                    $start = $date_value[$i]['start'];
                                     if($date_value[$i]['end'] == '' || ($date_value[$i]['end'] == null) || ($date_value[$i]['end'] == ' ') || empty($date_value[$i]['end'])){
                                         $end = null;
                                     }
                                     else{
                                         $end_time = strtotime($date_value[$i]['end']);
-                                        $end = $date_value[$i]['date'].' '.date('H:i:s',$end_time);
+                                        //$end = $date_value[$i]['date'].' '.date('H:i:s',$end_time);
+                                        $end = $date_value[$i]['end'];
                                     }
                                 }
-                                /*$start_time = strtotime($date_value[$i]['start']);
-                                $end_itme = strtotime($date_value[$i]['end']);
-                                if($start_time != ''){
-                                    $start = $date_value[$i]['date'].' '.date('H:i:s',$start_time);
-                                    if($end_itme != '')
-                                        $end = $date_value[$i]['date'].' '.date('H:i:s',$end_itme);
-                                    else
-                                        $end = null;
-                                }else{
-                                    $start = '0000-00-00 00:00:00';
-                                    $end = '0000-00-00 00:00:00';
-                                }*/
                                 $task_description = "";
                                 if (isset($date_value[$i]['task_description'])) {
                                     $task_description = $date_value[$i]['task_description'];
@@ -866,33 +874,16 @@ class User_model extends CI_Model {
      * 
      * returns TRUE/FALSE
      */
-    public function edit_profile($name,$phone){
-        if($name == ''){
-            $this->db->where('id',$this->session->userdata('userid'));
-            $update = $this->db->update('users',array('phone'=>$phone));
-            if ($this->db->affected_rows() == 1) {
-                return true;
-            } else {
-                return false;
-            }
-        } else if($phone == ''){
-            $this->db->where('id',$this->session->userdata('userid'));
-            $update = $this->db->update('users',array('name'=>$name));
-            if ($this->db->affected_rows() == 1) {
-                return true;
-            } else {
-                return false;
-            }
+    public function edit_profile($data){
+        $this->db->where('id',$this->session->userdata('userid'));
+        $update = $this->db->update('users',array('phone'=>$data['phone'],'name'=>$data['username'],'email'=>$data['email']));
+        if ($this->db->affected_rows() == 1) {
+            return true;
         } else {
-            $this->db->where('id',$this->session->userdata('userid'));
-            $update = $this->db->update('users',array('phone'=>$phone,'name'=>$name));
-            if ($this->db->affected_rows() == 1) {
-                return true;
-            } else {
-                return false;
-            }
+            return false;
         }
     }
+
     /**
      * Function to get chart data for user profile
      * 
@@ -1263,6 +1254,45 @@ class User_model extends CI_Model {
                     }
                 }
         }
+    }
+
+    public function convert_date($date)
+    {
+        if (($this->session->userdata('user_tz') != NULL)) {
+            $tz = $this->session->userdata('user_tz'); 
+        }
+        else
+        {
+            $tz = 'Asia/Kolkata';
+        }
+        if ($date && $tz) {
+            date_default_timezone_set('UTC'); //set current sytsem to default utc
+            $datetime = new DateTime($date);
+            $la_time = new DateTimeZone($tz);
+            $datetime->setTimezone($la_time);
+            return $datetime->format('Y-m-d H:i:s');
+        }
+        return FALSE;
+    }
+
+    //validate time format
+    public function validate_time($str){
+        if($str == 'Invalid date'){
+            return FALSE;
+        }
+        if (strrchr($str,":")) {
+            list($hh, $mm, $ss) = explode(':', $str);
+            if (!is_numeric($hh) || !is_numeric($mm) || !is_numeric($ss)){
+                return FALSE;
+            }elseif ((int) $hh > 24 || (int) $mm > 59 || (int) $ss > 59){
+                return FALSE;
+            }elseif (mktime((int) $hh, (int) $mm, (int) $ss) === FALSE){
+                return FALSE;
+            }
+            return TRUE;
+        }else{
+            return FALSE;
+        }   
     }
 }
 ?>

@@ -137,6 +137,7 @@ class User extends CI_Controller
         if($data['task_id'] == 'undefined'){ //if task id is not sent properly, send failure message
             $output_result['status'] = FALSE;
             $output_result['msg']    = "task-id not sent.";
+            echo json_encode($output_result); //send response to the ajax call
         }else{
             $data['task_type'] = 'task';
             $result['details'] = $this->user_model->start_timer($data); //start the timer for the requested task id 
@@ -157,12 +158,21 @@ class User extends CI_Controller
 
     }
 
+    //Validate input time format(OR type of input time)
+    public function validate_time(){
+        if($this->user_model->validate_time($this->input->post('stop-end-time')) == TRUE){
+            return TRUE;
+        }else{
+            $this->form_validation->set_message('validate_time', 'Invalid time input.');
+            return FALSE;
+        }   
+    }
+
     //Stop Timer function
     public function stop_timer()
     {
         $post_data = $this->input->post();
-/*        print_r($post_data); exit();
-*/        $end_time = (!empty($post_data['stop_end_time'])) ? $post_data['stop_end_time'] : '';//set end time if end time is sent
+        $end_time = (!empty($post_data['stop-end-time'])) ? $post_data['stop-end-time'] : '';//set end time if end time is sent
         $data['userid'] = $this->session->userdata('userid');
         $data['end_time'] = $end_time;
         $data['task_desc'] = isset($post_data['stop_task-description']) ? $post_data['stop_task-description'] : '';//get task description if sent
@@ -181,7 +191,6 @@ class User extends CI_Controller
                 $output_result['status'] = TRUE;
                 $output_result['msg']    = "Timer stop.";
             }
-
             echo json_encode($output_result);
         } else {
             $task_id = $this->input->get('id', TRUE);
@@ -193,18 +202,25 @@ class User extends CI_Controller
                 $output_result['task_info'] = $this->user_model->task_status();
                 $this->load->view('user/user_dashboard', $output_result);
                 $this->load->view('user/footer');
-            } else {
-                //if id is sent through get request, go to stop timer function
-                $result = $this->user_model->stop_timer($data);
-                if ($result == FALSE) {
-                    $output_result['status'] = $result;
-                    $output_result['msg']    = "Something went wrong.";
+            } else { //if id is sent through get request, go to stop timer function
+                $this->form_validation->set_rules('stop-end-time','Time','required|trim|min_length[8]|max_length[8]|callback_validate_time');
+                if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to the form
                     $this->load->view('user/header');
                     $output_result['task_info'] = $this->user_model->task_status();
                     $this->load->view('user/user_dashboard', $output_result);
                     $this->load->view('user/footer');
-                } else if ($result == TRUE) {
-                    redirect('user/index','refresh');
+                }else{
+                    $result = $this->user_model->stop_timer($data);
+                    if ($result == FALSE) {
+                        $output_result['status'] = $result;
+                        $output_result['msg']    = "Something went wrong.";
+                        $this->load->view('user/header');
+                        $output_result['task_info'] = $this->user_model->task_status();
+                        $this->load->view('user/user_dashboard', $output_result);
+                        $this->load->view('user/footer');
+                    } else if ($result == TRUE) {
+                        redirect('user/index','refresh');
+                    }
                 }
             }
         }
@@ -341,7 +357,7 @@ class User extends CI_Controller
             } else {
                 //if edit method is successful, redirect with success message
                 $t_id = $this->input->post('task_id', TRUE);
-                $this->session->set_flashdata('success', 'Edit successful.');
+                $this->session->set_flashdata('success', 'Edit task successful.');
                 redirect('user/load_add_task?t_id=' . $t_id, 'refresh');
             }
         }
@@ -361,8 +377,7 @@ class User extends CI_Controller
             $this->upload->initialize($config);
             if ($this->upload->do_upload('change_img')) {
                 $uploadData = $this->upload->data();
-                $picture    = array(
-                    'profile' => $uploadData['file_name']); //to update profile in db
+                $picture    = $uploadData['file_name']; //to update profile in db
             } else {
                 //if image is not uploaded, print error message
                 echo $this->upload->display_errors();
@@ -405,21 +420,42 @@ class User extends CI_Controller
     //Edit profile function to edit User name and phone number
     public function edit_profile()
     {
-        if($this->input->post('username')){
-            $username = $this->input->post('username');
-            $phone = '';
-        }else if($this->input->post('phone')){
-            $username = '';
-            $phone = $this->input->post('phone');
+        $this->form_validation->set_rules('profile-name', 'User Name', 'trim|required|max_length[100]|xss_clean');
+        $this->form_validation->set_rules('profile-email', 'User Email', 'trim|required|valid_email');
+        $this->form_validation->set_rules('profile-ph', 'Contact number', 'trim|required|min_length[10]|max_length[10]|xss_clean');
+        if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to profile page
+            $GLOBALS['page_title'] = 'My profile';
+            $userid = $this->session->userdata('userid');
+            $data['res'] = $this->user_model->my_profile($userid); //get user profile details
+            $this->load->view('user/header');
+            $this->load->view('user/profile', $data);
+            $this->load->view('user/footer');
         }
-        $result = $this->user_model->edit_profile($username,$phone);
-        if($result == TRUE){
-            $this->session->set_flashdata('success', 'Profile data updated.');
-            redirect('user/load_my_profile');
-        } else {
-            $this->session->set_flashdata('err_msg', 'Unable to update profile data.');
-            redirect('user/load_my_profile');
-        }
+        else{
+            if($this->input->post('username')){
+                $user_data['username'] = $this->input->post('username');
+            }else{
+                $user_data['username'] ='';
+            }
+            if($this->input->post('profile-ph')){
+                $user_data['phone'] = $this->input->post('profile-ph');
+            }else{
+                $user_data['phone'] = '';
+            }
+            if($this->input->post('profile-email')){
+                $user_data['email'] = $this->input->post('profile-email');
+            }else{
+                $user_data['email'] = '';
+            }
+            $result = $this->user_model->edit_profile($user_data);
+            if($result == TRUE){
+                $this->session->set_flashdata('success', 'Profile data updated.');
+                redirect('user/load_my_profile');
+            } else {
+                $this->session->set_flashdata('err_msg', 'Unable to update profile data.');
+                redirect('user/load_my_profile');
+            }
+        } 
     }
 
     //fetch user activity graph data into user profile page

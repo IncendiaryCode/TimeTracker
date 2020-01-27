@@ -70,18 +70,19 @@
 					$draw = intval($this->input->post("draw"));
 					$result['data'] = $this->dashboard_model->get_task_details($type); //get task information
 					if($result['data'] == NULL){ //if no data, return failure message
-						$result['status'] = FALSE;
-						$result['msg'] = "No results Found.";
+						$final_result['status'] = FALSE;
+						$final_result['msg'] = "No results Found.";
+						$final_result['data'] == NULL;
 					}else{ //if data present, send the data
-						$result['status'] = TRUE;
-						$result = array(
+						$final_result['status'] = TRUE;
+						$final_result = array(
 						            "draw" => $draw,
 						            "recordsTotal" => count($result['data']),
 						            "recordsFiltered" => count($result['data']),
 						            "data" => $result['data']
 						        );
 					}
-			        echo json_encode($result); //send response data to ajax call
+			        echo json_encode($final_result); //send response data to ajax call
 				}
 			}else{
 				redirect('login/index','refresh');
@@ -427,9 +428,7 @@
 			            $this->upload->initialize($config);
 			            if ($this->upload->do_upload('project-logo')) { //upload project logo
 			                $uploadData = $this->upload->data();
-			                $picture    = array(
-			                    'image_name' => $uploadData['file_name']
-			                ); //to insert project logo into db
+			                $picture    = $uploadData['file_name']; //to insert project logo into db
 			            } else {
 			                //if upload is not successful, print upload errors
 			                echo $this->upload->display_errors();
@@ -596,8 +595,7 @@
 					if($this->upload->do_upload('change_img')){
 		                $uploadData = $this->upload->data();
 		               // $picture = $uploadData['file_name'];
-		                $picture = array(
-		                'profile' => $uploadData['file_name']);//to update profile in db
+		                $picture = $uploadData['file_name'];//to update profile in db
 		            }else{
 		            	//if image is not uploaded, print error message
 		            	echo $this->upload->display_errors();
