@@ -85,7 +85,7 @@ function callTaskTableData()
         ajax: {
             "url": timeTrackerBaseURL + 'index.php/admin/load_snapshot',
             type: "POST",
-            "data": {'type': "task",  'month': document.getElementById('curr-month').value},
+            data: {'type': "task",  'month': document.getElementById('curr-month').value},
             "dataSrc": function ( json ) {
                 //Make your callback here.
                 if(json["status"] ==  false)

@@ -182,18 +182,21 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                                 <?php if (validation_errors()) { ?>
                                     <div class="alert alert-danger">
                                         <?php echo validation_errors(); ?>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                         </div>
                               <?php  } ?>
 
                                 <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
-                                <input  class="check-for-utc form-control timerpicker-stop-now" type="text" name="stop-end-time" id="stop-end-time" placeholder="End time" >
+                                <input  class="check-for-utc form-control timerpicker-stop-now" type="text" name="time" id="stop-end-time" placeholder="End time" >
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>
                             </div>
                             <div class="pt-3">
                                 <label for="task-description">Enter description: </label>
-                                <input type="text" class="form-control "  name="stop_task-description">
+                                <input type="text" class="form-control "  name="task-description">
                             </div>
                         </div>
                             <p class="text-danger text-center" id="stop-now-error"></p>
