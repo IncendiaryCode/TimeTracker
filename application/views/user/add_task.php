@@ -148,6 +148,7 @@ if ($this->input->get('t_id')) { ?>
                                                         </div>
                                                         <div class="col-10 text-center mb-3">
                                                             <input type="text" class="form-control" id="description-<?= $key ?>" name="time[<?= $key ?>][task_description]" value="<?= $task['task_description']; ?>" placeholder="Description">
+                                                            <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= $key ?>][table_id]" id="table_id<?= $key ?>">
                                                         </div>
                                                         <div class="col-2 text-right mb-3">
                                                             <?php if ($key == sizeof($timeline_data) - 1) { ?>
@@ -157,7 +158,6 @@ if ($this->input->get('t_id')) { ?>
                                                             <?php } else { ?>
                                                                 <a href="javascript:void(0);" id="delete-task-<?= $key ?>" class="delete-task">
                                                                     <i class="fas fa-minus text-white pt-2 icon-plus" name="time[<?= $key ?>][deleted_time_range]">
-                                                                        <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= $key ?>][table_id]" id="table_id<?= $key ?>">
                                                                     </i>
                                                                 </a>
                                                             <?php } ?>

@@ -64,8 +64,25 @@ header.main-header h1 {
 .img-icon
 {
     position: absolute;
-    top: 95px;
-    left: 58%;
+    top: 145px;
+    left: 85%;
+    border: 1px solid;
+    border-radius: 100%;
+    opacity: 1;
+}
+
+.profile-entry
+{
+    font-weight: 500;
+}
+#edit-profile .form-control-file
+{
+    border: 1px solid;
+    border-color: #ccc;
+}
+#edit-profile .row
+{
+    color: #000;
 }
 .user-card
 {
@@ -705,7 +722,7 @@ opacity: 0.5;
     .display-heading
     {
         font-size: 54px;
-        margin-bottom: 75px;
+        margin-bottom: 40px;
         font-weight: 400;
         line-height: 1.2;
     }
@@ -714,7 +731,7 @@ opacity: 0.5;
     .display-heading
     {
         font-size: 24px;
-        margin-bottom: 75px;
+        margin-bottom: 40px;
         font-weight: 300;
         line-height: 1.2;
     }
