@@ -559,7 +559,6 @@ $(document).ready(function () {
 	var x = document.getElementsByClassName("task-slider");
 	for (var i = 0; i < x.length; i++) {
 		var __timeTrackerTaskTime = x[i].childNodes[1].value;
-
 		__timeTrackerTaskTimeNew =
 			parseInt(curr_timeStamp) - parseInt(__timeTrackerTaskTime);
 		if (
@@ -624,7 +623,10 @@ $(document).ready(function () {
 				{
 					if(input_element[i].value != "" && input_element[i].value != " ")
 					{
-						var serverDate = moment((new Date().getFullYear()+'-'+new Date().getMonth()+1+'-'+new Date().getDate()) +' '+ input_element[i].value).tz('utc').format('Y-MM-DD H:mm:ss');
+
+						console.log(document.getElementById('old-start-date').value.slice(0,10));
+
+						var serverDate = moment(document.getElementById('old-start-date').value.slice(0,10) +' '+ input_element[i].value).tz('utc').format('Y-MM-DD H:mm:ss');
 						input_element[i].value = serverDate;
 					if(typeof(parseInt(serverDate.slice(0,2))) == 'string')
 						{

@@ -295,7 +295,6 @@ var addTime = {
 			var table_id = $(this)
 				.find("input:hidden")
 				.val();
-				console.log(this)
 			var _that = $(this);
 			$.ajax({
 				type: "POST",
@@ -434,9 +433,7 @@ $(document).ready(function() {
 								var serverDateEnd = moment(date + " " + end_time)
 									.tz("utc")
 									.format("Y-MM-DD H:mm:ss");
-								if (
-									serverDateEnd != "Invalid date" &&
-									(end_time != "" || end_time != " ")
+								if (serverDateEnd != "Invalid date" && (end_time.length > 2)
 								) {
 									input_element[i + 2].value = serverDateEnd;
 								}
@@ -480,6 +477,7 @@ $(document).ready(function() {
 								.tz("utc")
 								.format("Y-MM-DD H:mm:ss");
 							input_elements[j].value = serverStartDate.slice(0, 10);
+							if(serverStartDate != "Invalid date")
 							input_elements[j + 1].value = serverStartDate;
 						}
 						if (
@@ -491,7 +489,10 @@ $(document).ready(function() {
 							)
 								.tz("utc")
 								.format("Y-MM-DD H:mm:ss");
-							input_elements[j + 2].value = serverEndDate;
+								if(input_elements[j + 2].value.length > 2)
+								{
+									input_elements[j + 2].value = serverEndDate;
+								}
 						}
 						j = j + 3;
 					}
