@@ -187,7 +187,6 @@ if (!empty($task_info['login_run'])) { ?>
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        
                                     <?php  } ?>
                                 
                                 <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>

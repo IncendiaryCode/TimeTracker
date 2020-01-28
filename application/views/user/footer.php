@@ -176,7 +176,7 @@ if(document.getElementById("stop-time"))
     {
         if (document.getElementById("stop-time").childNodes[1].childNodes[0].classList[2] == "fa-play") {
             // $("#play-timer").modal("show");
-            alert("Please punch in before starting task");
+            $('#alert-punchin').modal('show');
         }
         else{
             window.location.href = timeTrackerBaseURL +"user/load_add_task";

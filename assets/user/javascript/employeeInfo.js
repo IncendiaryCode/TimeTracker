@@ -484,7 +484,7 @@ $(document).ready(function() {
 
 	$("#stop-time").click(function() {
 		if (stopped == 1) {
-			
+			$('#alert-punchin').modal('show');
 			return false;
 		}
 		var _dateObj = new Date();
