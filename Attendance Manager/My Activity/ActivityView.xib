@@ -25,14 +25,14 @@
                             <rect key="frame" x="-20" y="0.0" width="414" height="64"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1UU-lA-VtS">
-                                    <rect key="frame" x="207" y="32" width="0.0" height="0.0"/>
+                                    <rect key="frame" x="207" y="37" width="0.0" height="0.0"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sjG-sV-OxR">
                                     <rect key="frame" x="207" y="42" width="0.0" height="0.0"/>
-                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -70,7 +70,7 @@
                                 <constraint firstAttribute="trailing" secondItem="rMB-yU-3t2" secondAttribute="trailing" constant="20" id="K90-IU-cQu"/>
                                 <constraint firstItem="hq3-kG-kJ9" firstAttribute="leading" secondItem="gsb-cX-Tqc" secondAttribute="leading" constant="20" id="aBy-1g-1j6"/>
                                 <constraint firstItem="sjG-sV-OxR" firstAttribute="centerX" secondItem="1UU-lA-VtS" secondAttribute="centerX" id="cGQ-1E-Xjw"/>
-                                <constraint firstItem="sjG-sV-OxR" firstAttribute="top" secondItem="1UU-lA-VtS" secondAttribute="bottom" constant="10" id="jOV-bC-nI5"/>
+                                <constraint firstItem="sjG-sV-OxR" firstAttribute="top" secondItem="1UU-lA-VtS" secondAttribute="bottom" constant="5" id="jOV-bC-nI5"/>
                                 <constraint firstItem="1UU-lA-VtS" firstAttribute="centerX" secondItem="gsb-cX-Tqc" secondAttribute="centerX" id="lxu-Xd-faD"/>
                                 <constraint firstItem="rMB-yU-3t2" firstAttribute="centerY" secondItem="gsb-cX-Tqc" secondAttribute="centerY" id="sZW-RB-ynO"/>
                                 <constraint firstItem="sjG-sV-OxR" firstAttribute="centerY" secondItem="gsb-cX-Tqc" secondAttribute="centerY" constant="10" id="tzh-Xx-MfP"/>

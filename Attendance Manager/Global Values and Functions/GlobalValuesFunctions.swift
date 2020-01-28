@@ -1153,3 +1153,31 @@ class ButtonWeekGraph: UIButton
         return hitFrame.contains(point)
     }
 }
+
+
+@IBDesignable
+
+class StateButton: UIButton {
+    var isHighlightedCustom = false
+    override var isHighlighted: Bool {
+        didSet {
+            // Custom highlight on touch.
+            if isHighlighted && !isHighlightedCustom {
+                let shadowLayer = CAShapeLayer()
+                shadowLayer.path = UIBezierPath(roundedRect: bounds
+                    , cornerRadius: self.bounds.height / 2).cgPath
+                shadowLayer.fillColor = UIColor.white.withAlphaComponent(0.1).cgColor
+                shadowLayer.shadowPath = shadowLayer.path
+                    layer.addSublayer(shadowLayer)
+                    isHighlightedCustom = true
+                
+            }
+            else if isHighlightedCustom && !isHighlighted {
+                UIView.animate(withDuration: 0.5) {
+                    self.layer.sublayers?.removeLast()
+                }
+                isHighlightedCustom = false
+            }
+        }
+    }
+}

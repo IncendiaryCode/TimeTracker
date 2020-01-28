@@ -356,7 +356,7 @@ UIGestureRecognizerDelegate {
     @objc func lblSelectModulePressed(sender:UITextField) -> Void {
         // If before selection of project, module selected
         guard nil != selectedProjId else {
-            lblError.text = "Please select project..!"
+            lblError.text = "Please select project"
             lblError.isHidden = false
             scrollView.scrollToTop()
             return
@@ -1114,7 +1114,7 @@ UIGestureRecognizerDelegate {
     /// If edit or add time already exist show alert .
     func alertUnableToUpdate() {
         let alert = UIAlertController(title: "Alert", message:
-            "Enter valid time. Updation failed..!", preferredStyle:
+            "Enter valid time. Updation failed", preferredStyle:
             UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil
         ))
@@ -1138,7 +1138,7 @@ UIGestureRecognizerDelegate {
                 strError =
             "Since your not punched in not able start a task, please enter end time if you want to update timings"
             default:
-                strError = "Enter valid time..!!"
+                strError = "Enter valid time"
         }
         let alert = UIAlertController(title: "Alert", message:
             strError, preferredStyle:
@@ -1246,13 +1246,18 @@ UIGestureRecognizerDelegate {
             if let tabBarController = self.navigationController?.viewControllers[0]
                 as? TabBarController {
                 if let viewActivity = tabBarController.selectedViewController as? UserActivityVC {
-                    viewActivity.updateProject()
-                    viewActivity.sortAndRefreshData()
-                    viewActivity.arrRunningTask = viewActivity.getRunningTaskId()
-                    // If no task running draw play icon or stop icon.
-                    viewActivity.drawTaskState()
-//                    viewActivity.splitMergeStateAndFinishBtn()
-                    viewActivity.collectionTimer.reloadData()
+//                    if !(RequestController.shared.reachabilityManager?.isReachable)! {
+//                        viewActivity.updateView()
+//                    }
+//                    else {
+                        viewActivity.updateProject()
+                        viewActivity.sortAndRefreshData()
+                        viewActivity.arrRunningTask = viewActivity.getRunningTaskId()
+                        // If no task running draw play icon or stop icon.
+                        viewActivity.drawTaskState()
+                        //                    viewActivity.splitMergeStateAndFinishBtn()
+                        viewActivity.collectionTimer.reloadData()
+//                    }
                     self.navigationController?.popToRootViewController(animated: true)
                 }
             }
@@ -1304,7 +1309,7 @@ UIGestureRecognizerDelegate {
                     }
                 }
                 else {
-                    print("Error while updating...!")
+                    print("Error while updating")
                     self.lblError.text = msg
                     completion(false)
                 }
@@ -1460,6 +1465,7 @@ UIGestureRecognizerDelegate {
     }
     
     func errorMessage(msg: String) {
+        lblError.shakeLabel()
         lblError.text = msg
         lblError.isHidden = false
         scrollView.scrollToTop()
@@ -1495,6 +1501,13 @@ UIGestureRecognizerDelegate {
             let cell = tblviewTimings.cellForRow(at: [0, lastIndex]) as! TimingsCell
             if cell.lblDate.text == "" || cell.lblStartTime.text == "" {
                 errorMessage(msg: "Fill date and start time")
+                return
+            }
+            
+            // Check for future time entered with end time blank.
+            if cell.lblEndTime.text == "" && cell.lblDate.text == getCurrentDate()
+                && getTimeInSec() < getSecondCount(strTime: cell.lblStartTime.text!) {
+                errorMessage(msg: "Start time cannot be future time")
                 return
             }
             
@@ -1559,7 +1572,7 @@ UIGestureRecognizerDelegate {
     
     @IBAction func btnStartPressed(_ sender: Any) {
         guard !(txtTaskName.text == "") && nil != selectedProjId && nil != selectedModId else {
-            lblError.text = "Fill all the fields..!"
+            lblError.text = "Fill all the fields"
             lblError.isHidden = false
             scrollView.scrollToTop()
             return

@@ -138,6 +138,27 @@ class TasksTimeCDController {
         }
     }
     
+    /// Returns true if current or future time exist in the core data.
+    func isCurrentOrFutureTimeExist(taskId: Int) -> Bool {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
+        fetchRequest.predicate = NSPredicate(format: "task_id = %d && date = %@", taskId
+            , getCurrentDate())
+        do {
+            let results = try nsManagedContext.fetch(fetchRequest)
+            for result in results {
+                let end = (result as! NSManagedObject).value(forKey: "end_time") as! Int
+                let currentTime = getTimeInSec()
+                if currentTime <= end {
+                    return true
+                }
+            }
+            return false
+        } catch {
+            print("Failed")
+            return false
+        }
+    }
+    
     /// get todays tasks time.
     func getTasksTime() -> Dictionary<Int, [Int]> {
         var dictArrValues: [Int: [Int]] = [:]

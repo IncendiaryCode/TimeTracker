@@ -98,7 +98,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         // Add Refresh Control to Table View
         tblUserDetails.addSubview(refreshControl)
         refreshControl.bounds = CGRect(x: refreshControl.bounds.origin.x,
-                                       y: -20,
+                                       y: -30,
                                        width: refreshControl.bounds.size.width,
                                        height: refreshControl.bounds.size.height)
         
@@ -522,6 +522,22 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 90
     }
+    
+    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? UserTaskInfoCell {
+            // Highlight touch.
+//            cell.gradientLayer.colors = [g_colorMode.textColor().withAlphaComponent(0.3).cgColor
+//                , g_colorMode.textColor().withAlphaComponent(0.3).cgColor]
+            cell.alpha = 0.5
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+//        tableView.reloadRows(at: [indexPath], with: .none)
+        if let cell = tableView.cellForRow(at: indexPath) as? UserTaskInfoCell {
+            cell.alpha = 1
+        }
+    }
 
     /// Table header button filter pressed
     @objc func btnFilterPressed(_ sender: Any) {
@@ -704,8 +720,8 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 imgVLoader.image = #imageLiteral(resourceName: "synch")
             }
             else {
-                label.text = "End of tasks"
-                imgVLoader.image = #imageLiteral(resourceName: "rightIcon")
+                label.text = "That's all!"
+                imgVLoader.image = nil
             }
             return footerView
         }
@@ -894,10 +910,8 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         
         if let indxPath = indexPath {
             let cell = tblUserDetails.cellForRow(at: indxPath) as! UserTaskInfoCell
-            cell.imgTimer.image = #imageLiteral(resourceName: "synch")
             let cTaskDetails = g_arrCTaskDetails[indxPath.row]
             let taskId = cTaskDetails.taskId // Fetch task id from selected cell
-            cell.isUserInteractionEnabled = false
             
             if cTaskDetails.bIsRunning! {
                 // Stop running task.
@@ -907,12 +921,22 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 stopTask(taskId: taskId!)
             }
             else {
+                // Check for already time exists.
+                guard !taskTimeCDController.isCurrentOrFutureTimeExist(taskId: taskId!) else {
+                    tblUserDetails.reloadData()
+                    showAlert(msg:
+    "This task already containing present/future time. Please delete those timings before start.")
+                    return
+                }
+                
                 // Start task.
                 cTaskDetails.bIsRunning = true
                 cell.lblTotalDuration.text = "Synching"
                 reloadCollection()
                 startTask(taskId: taskId!)
             }
+            cell.imgTimer.image = #imageLiteral(resourceName: "synch")
+            cell.isUserInteractionEnabled = false
         }
         else {
             //Button action when user starts and ends break.
@@ -1039,7 +1063,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Check punched out.
         if g_isPunchedOut {
-            alertPunchedOut(
+            showAlert(
                 msg: "Sorry, your already punched out. Please login tommorow to start a task.")
             return
         }
@@ -1122,7 +1146,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     /// Alert punched out.
-    func alertPunchedOut(msg: String) {
+    func showAlert(msg: String) {
         let alert = UIAlertController(title: "Alert"
             , message: msg, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default,
@@ -1134,10 +1158,11 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     
     @IBAction func btnStatePressed(_ sender: Any) {
         guard g_isPunchedOut != true else {
-            alertPunchedOut(
+            showAlert(
                 msg: "Sorry, your already punched out. Please login tommorow for update punchin.")
             return
         }
+        
         // If not punched in.
         if !(g_isPunchedIn ?? false)  {
             indexPathToRun = nil

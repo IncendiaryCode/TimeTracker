@@ -28,6 +28,20 @@ extension UILabel {
         self.layer.addSublayer(border)
         self.layer.masksToBounds = false
     }
+    
+    /// Shake text field.
+    func shakeLabel()
+    {
+        let animation = CABasicAnimation(keyPath: "position")
+        animation.duration = 0.07
+        animation.repeatCount = 3
+        animation.autoreverses = true
+        animation.fromValue = NSValue(cgPoint: CGPoint(x: self.center.x - 10, y:
+            self.center.y))
+        animation.toValue = NSValue(cgPoint: CGPoint(x: self.center.x + 10, y:
+            self.center.y))
+        self.layer.add(animation, forKey: "position")
+    }
 }
 
 extension UITextField {
@@ -66,20 +80,6 @@ extension UITextView {
         border.borderColor = uiColor.cgColor
         border.frame = CGRect(origin: CGPoint(x: 0,y :self.frame.size.height ),
                               size: CGSize(width: self.frame.size.width, height:  1))
-        border.borderWidth = borderWidth
-        self.layer.addSublayer(border)
-        self.layer.masksToBounds = false
-    }
-}
-
-extension UILabel {
-    /// Draw line right side of label.(To separate multiple textfields in a row)
-    public func addRightSideLine(uiColor: UIColor = .lightGray) {
-        let border = CALayer()
-        let borderWidth = CGFloat(1.0)
-        border.borderColor = uiColor.withAlphaComponent(0.5).cgColor
-        border.frame = CGRect(origin: CGPoint(x: self.frame.size.width,y :0),
-                              size: CGSize(width: 1, height:  self.frame.size.height))
         border.borderWidth = borderWidth
         self.layer.addSublayer(border)
         self.layer.masksToBounds = false
@@ -374,6 +374,17 @@ extension UIView {
         layer.shadowColor = g_colorMode.invertColor().cgColor
         let cgRect = CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width, height: 2)
         self.layer.shadowPath = UIBezierPath(rect: cgRect).cgPath
+    }
+    
+    func addRightSideLine(uiColor: UIColor = .lightGray) {
+        let border = CALayer()
+        let borderWidth = CGFloat(1.0)
+        border.borderColor = uiColor.withAlphaComponent(0.5).cgColor
+        border.frame = CGRect(origin: CGPoint(x: self.frame.size.width,y :0),
+                              size: CGSize(width: 1, height:  self.frame.size.height))
+        border.borderWidth = borderWidth
+        self.layer.addSublayer(border)
+        self.layer.masksToBounds = false
     }
 }
 

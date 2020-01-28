@@ -44,8 +44,8 @@ class UserTaskInfoCell: UITableViewCell {
             shadowLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: 20).cgPath
             shadowLayer.fillColor = UIColor.white.cgColor
             shadowLayer.shadowPath = shadowLayer.path
-            shadowLayer.shadowOffset = CGSize(width: 0.0, height: 1.0)
-            shadowLayer.shadowOpacity = 0.3
+            shadowLayer.shadowOffset = CGSize(width: 0.0, height: 0.5)
+            shadowLayer.shadowOpacity = 0.15
             shadowLayer.shadowRadius = 2
             layer.insertSublayer(shadowLayer, at: 0)
 

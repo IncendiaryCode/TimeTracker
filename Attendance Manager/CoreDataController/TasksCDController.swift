@@ -34,16 +34,28 @@ class TasksCDController {
             Bool) -> Int {
         let userEntity = NSEntityDescription.entity(forEntityName: "Tasks", in: nsManagedContext)!
         nsMOForUserTimes = NSManagedObject(entity: userEntity, insertInto: nsManagedContext)
-        var taskId = 0
+        var taskId: Int!
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks")
-        do {
-            taskId = try nsManagedContext.count(for: fetchRequest)
-        } catch {
-            print(error.localizedDescription)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "task_id", ascending: true)]
+        let results = try! nsManagedContext.fetch(fetchRequest)
+        if results.count > 0 {
+            let firstTaskId = (results.first as! NSManagedObject).value(forKey: "task_id")
+                as! Int
+            
+            /// Offline task ids are stored in negative task id.
+            if firstTaskId < 0 {
+                taskId = firstTaskId - 1
+            }
+            else {
+                taskId = -1
+            }
         }
-        nsMOForUserTimes.setValuesForKeys(["task_id": taskId, "module_id": moduleId,
-            "task_name": taskName, "task_description": taskDesc, "is_work_in_progress": false,
-            "is_synched": isSynched])
+        else {
+            taskId = -1
+        }
+        nsMOForUserTimes.setValuesForKeys(["task_id": taskId, "project_id": projectId, "module_id": moduleId,
+                                           "task_name": taskName, "task_description": taskDesc, "is_work_in_progress": false,
+                                           "is_synched": isSynched])
         saveContext()
         return taskId
     }

@@ -28,6 +28,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var actIndicator: UIActivityIndicatorView!
     @IBOutlet weak var nsLBtnDisModeHeight: NSLayoutConstraint!
     @IBOutlet weak var btnMultiTask: UIButton!
+    @IBOutlet weak var actIndicatorProfile: UIActivityIndicatorView!
     
     @IBOutlet weak var btnAbout: UIButton!
     @IBOutlet weak var btnResetIntro: UIButton!
@@ -107,12 +108,16 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         else {
             if let strUrl = UserDefaults.standard.value(forKey: "profileUrl") as? String {
                 if let url = URL(string: strUrl) {
+                    actIndicatorProfile.startAnimating()
+                    imgVProfile.alpha = 0.5
                     downloadImage(from: url) {
                         data in
                         DispatchQueue.main.async {
                             let img = UIImage(data: data)
                             self.imgVProfile.image = img
                             g_userProfile = img
+                            self.imgVProfile.alpha = 1
+                            self.actIndicatorProfile.stopAnimating()
                             self.imgVProfile.setNeedsDisplay()
                         }
                     }
@@ -386,7 +391,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 UserDefaults.standard.set(false, forKey: "multi_task")
                 // Stop currently running tasks except one task.
                 let userActivityVC = self.tabBarController?.viewControllers![1] as! UserActivityVC
-                userActivityVC.stopRunningTask(stopAll: false, completion: {
+                userActivityVC.stopRunningTask(stopAll: true, completion: {
                     userActivityVC.updateProject()
                     self.hideDisplayMode()
                 })

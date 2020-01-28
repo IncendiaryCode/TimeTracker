@@ -194,7 +194,7 @@ class LoginViewController: UIViewController {
             // If internet not connected.
             if !RequestController.shared.reachabilityManager!.isReachable {
                 let alert = UIAlertController(title: "Alert", message:
-                    "Your not connected to the internet.",
+                    "Please connect to internet.",
                                               preferredStyle: UIAlertController.Style.alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default,
                                               handler: nil))

@@ -747,6 +747,17 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			return [editAction]
 	}
 	
+	func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+		if let cell = tableView.cellForRow(at: indexPath) as? UserTaskInfoCell {
+			// Highlight touch.
+			cell.gradientLayer.colors = [g_colorMode.textColor().withAlphaComponent(0.2).cgColor
+				, g_colorMode.textColor().withAlphaComponent(0.2).cgColor]
+		}
+	}
+	
+	func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+		tableView.reloadRows(at: [indexPath], with: .none)
+	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		if nSliderView == 0 {
@@ -877,11 +888,11 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			if nWeek < arrWeekDetails.count - 1 {
 				nWeek += 1
 				resetWeekBar()
-				setupWeekView()
 				// Scroll table view to top.
 				if arrCTaskDetails.count > 0 && tblActivities.contentOffset.y > 0 {
 					tblActivities.scrollToRow(at: [0,0], at: .top, animated: true)
 				}
+				setupWeekView()
 			}
 		}
 		else{
@@ -930,10 +941,11 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			if nWeek > 0 {
 				nWeek -= 1
 				resetWeekBar()
-				setupWeekView()
+				// Scroll to top.
 				if arrCTaskDetails.count > 0 {
 					tblActivities.scrollToRow(at: [0,0], at: .top, animated: true)
 				}
+				setupWeekView()
 			}
 		}
 		else {

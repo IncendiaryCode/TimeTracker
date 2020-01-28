@@ -71,6 +71,8 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
         viewMain.layer.cornerRadius = 35
         viewMain.layer.borderColor = g_colorMode.lineColor().cgColor
         viewMain.layer.borderWidth = 0.3
+        viewButtons.clipsToBounds = false
+        
         let panGesture = UIPanGestureRecognizer(target: self, action:#selector(self
             .handlePanGesture(panGesture:)))
         viewMain.addGestureRecognizer(panGesture)
@@ -116,6 +118,9 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
         btnProject.backgroundColor = g_colorMode.btnbackgroundColor()
         arrSortTypes = [SortTypes.tasks, SortTypes.projects,
                         SortTypes.duration]
+        
+        btnProject.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15.0)
+        btnSort.titleLabel?.font = UIFont.systemFont(ofSize: 15.0)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -124,6 +129,8 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
         // Apply drop shadow.
         viewHeader.drawShadowFromBzrPath()
         viewFooter.inverseShadowToTop()
+        viewButtons.addInsideShadow(to: [.right], radius: 1, opacity: 0.2
+            , color: g_colorMode.lineColor().cgColor)
     }
     
     // Handle pangetsture to main view. (Filter view)
@@ -250,16 +257,16 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     @IBAction func btnProjectPressed(_ sender: Any) {
-        btnProject.backgroundColor = g_colorMode.btnbackgroundColor()
-        btnSort.backgroundColor = .clear
+        btnProject.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15.0)
+        btnSort.titleLabel?.font = UIFont.systemFont(ofSize: 15.0)
         lblResultsCounter.isHidden = false
         bIsProjectSelection = true
         tbleProject.reloadData()
     }
     
     @IBAction func btnSortPressed(_ sender: Any) {
-        btnProject.backgroundColor = .clear
-        btnSort.backgroundColor = g_colorMode.btnbackgroundColor()
+        btnSort.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15.0)
+        btnProject.titleLabel?.font = UIFont.systemFont(ofSize: 15.0)
         lblResultsCounter.isHidden = true
         bIsProjectSelection = false
         tbleProject.reloadData()
