@@ -274,13 +274,23 @@ class User_model extends CI_Model {
         $this->db->join('task AS t', 't.id = d.task_id');
         $this->db->where('d.total_minutes','0');
         $this->db->where('d.task_date !=',date('Y-m-d'));
-        $data = $this->db->get();
-        if($data->num_rows() > 0){
-            $tasks = $data->result_array();
+        $tasks_data = $this->db->get();
+        if($tasks_data->num_rows() > 0){
+            $data['task_data'] = $tasks_data->result_array();
         }else{
-            $tasks = '';
+            $data['task_data'] = '';
         }
-        return $tasks;
+        $this->db->select('user_id,task_date,start_time');
+        $this->db->from('login_details');
+        $this->db->where('task_date !=',date('Y-m-d'));
+        $this->db->where('user_id',$this->session->userdata('userid'));
+        $login_check = $this->db->get();
+        if($login_check->num_rows() > 0){
+            $data['login_data'] = $login_check->row_array();
+        }else{
+            $data['login_data'] = '';
+        }
+        return $data;
     }
 
 
@@ -1281,18 +1291,26 @@ class User_model extends CI_Model {
             return FALSE;
         }
         if (strrchr($str,":")) {
-            list($hh, $mm, $ss) = explode(':', $str);
-            if (!is_numeric($hh) || !is_numeric($mm) || !is_numeric($ss)){
-                return FALSE;
-            }elseif ((int) $hh > 24 || (int) $mm > 59 || (int) $ss > 59){
-                return FALSE;
-            }elseif (mktime((int) $hh, (int) $mm, (int) $ss) === FALSE){
+            $timeline_datab = explode(' ', $str);
+            if(isset($timeline_datab[1]))
+            {
+                list($hh, $mm, $ss) = explode(':', $timeline_datab[1]);
+                if (!is_numeric($hh) || !is_numeric($mm) || !is_numeric($ss)){
+                    return FALSE;
+                }elseif ((int) $hh > 24 || (int) $mm > 59 || (int) $ss > 59){
+                    return FALSE;
+                }/*elseif (mktime((int) $hh, (int) $mm, (int) $ss) === FALSE){
+                    return FALSE;
+                }*/
+                return TRUE;
+            }
+            else
+            {
                 return FALSE;
             }
-            return TRUE;
         }else{
             return FALSE;
-        }   
+        }
     }
 }
 ?>

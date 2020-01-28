@@ -800,14 +800,11 @@ class Dashboard_model extends CI_Model
 
             $data = array();
             foreach($users AS $u){
-                $this->db->select('u.id,u.name');
-                $this->db->select('count(distinct d.task_id) AS tasks_count');
+                $this->db->select('count(distinct t.id) AS tasks_count');
                 $this->db->select_sum('d.total_minutes','t_minutes');
                 $this->db->from('task AS t');
-                $this->db->join('time_details AS d','d.task_id = t.id');
-                $this->db->join('users AS u','u.id = d.user_id');
-                $this->db->where(array('u.type'=>'user','t.project_id'=>$project_id,'u.id'=>$u['user_id']));
-                $this->db->group_by('d.user_id');
+                $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
+                $this->db->where(array('t.project_id'=>$project_id));
                 $this->db->limit($length,$start);
                 $details = $this->db->get();
                 $task = $details->row_array();
@@ -853,25 +850,26 @@ class Dashboard_model extends CI_Model
      */
     public function get_project_data($proj_id)
     {
-        $this->db->select_sum('d.total_minutes','t_minutes');
-        $this->db->from('time_details AS d');
-        $this->db->join('task AS t','t.id = d.task_id');
-        $this->db->where('t.project_id',$proj_id);
+        $this->db->select('count(distinct a.user_id) AS users_count');
+        $this->db->from('project_assignee AS a');
+        $this->db->join('task AS t','t.project_id = a.project_id','LEFT');
+        $this->db->where('a.project_id',$proj_id);
         $result = $this->db->get();
         if($result->num_rows() > 0){
-            $total_time = $result->row_array()['t_minutes'];
-            $this->db->select('count(distinct a.user_id) AS users_count');
+            $usr = $result->row_array()['users_count'];
+            $this->db->select_sum('d.total_minutes','t_minutes');
             $this->db->select('count(distinct t.id) AS tasks_count');
             $this->db->select('p.name AS project_name,p.image_name,p.id AS project_id');
-            $this->db->from('project_assignee AS a');
-            $this->db->join('task AS t','t.project_id = a.project_id');
+            $this->db->from('task AS t');
+            $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
             $this->db->join('project AS p','p.id = t.project_id');
+            
             $this->db->where('p.id',$proj_id);
             $res = $this->db->get();
             if($res->num_rows() > 0){
                 $count = $res->result_array();
                 foreach($count as $c){
-                    $data = array('project_name'=>$c['project_name'],'project_id'=>$c['project_id'],'users'=>$c['users_count'],'tasks'=>$c['tasks_count'],'image_name'=>$c['image_name'],'total_minutes'=>$total_time);
+                    $data = array('project_name'=>$c['project_name'],'project_id'=>$c['project_id'],'users'=>$usr,'tasks'=>$c['tasks_count'],'image_name'=>$c['image_name'],'total_minutes'=>$c['t_minutes']);
                 }
             }else{
                 $data = '';
