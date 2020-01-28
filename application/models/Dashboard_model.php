@@ -332,16 +332,16 @@ class Dashboard_model extends CI_Model
             $data = array();
             foreach($employees->result() as $rows)
             {
-                $user_data = array();
+                $user_data = $rows->user_name;
 
-                $user = explode(',',$rows->user_name);
+                $user = explode(',',$user_data);
                 foreach($user AS $u){
                     $split_data = explode('~',$u);
                     $user_id = $split_data[0];
                     $user_name = $split_data[1];
-                    $user_data[] = '<a href="../admin/load_userdetails_page?user_id='.$split_data[0].'">'.$split_data[1].'</a>';
                 }
-                $user_name = !empty($user_data) ? implode(' ', $user_data) : '--';
+                /*$user_id = $user[0];
+                $user_name = $user[1];*/
                 $data[]= array(
                     $rows->task_name,
                     ($rows->description)?$rows->description:'--',
@@ -800,11 +800,15 @@ class Dashboard_model extends CI_Model
 
             $data = array();
             foreach($users AS $u){
+                $this->db->select('u.id,u.name');
                 $this->db->select('count(distinct t.id) AS tasks_count');
                 $this->db->select_sum('d.total_minutes','t_minutes');
-                $this->db->from('task AS t');
-                $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
+                $this->db->from('users AS u');
+                $this->db->join('task_assignee AS ta','ta.user_id = u.id','LEFT');
+                $this->db->join('task AS t','t.id = ta.task_id','LEFT');
+                $this->db->join('time_details AS d','d.task_id = t.id');
                 $this->db->where(array('t.project_id'=>$project_id));
+                $this->db->group_by('u.id');
                 $this->db->limit($length,$start);
                 $details = $this->db->get();
                 $task = $details->row_array();

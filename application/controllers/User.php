@@ -164,7 +164,7 @@ class User extends CI_Controller
         if($this->user_model->validate_time($this->input->post('time')) == TRUE){
             return TRUE;
         }else{
-            $this->form_validation->set_message('validate_time', 'Invalid time input.');
+            $this->form_validation->set_message('validate_time', 'End time cannot be less than Start time.');
             return FALSE;
         }   
     }
@@ -421,42 +421,16 @@ class User extends CI_Controller
     //Edit profile function to edit User name and phone number
     public function edit_profile()
     {
-        $this->form_validation->set_rules('profile-name', 'User Name', 'trim|required|max_length[100]|xss_clean');
-        $this->form_validation->set_rules('profile-email', 'User Email', 'trim|required|valid_email');
-        $this->form_validation->set_rules('profile-ph', 'Contact number', 'trim|required|min_length[10]|max_length[10]|xss_clean');
-        if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to profile page
-            $GLOBALS['page_title'] = 'My profile';
-            $userid = $this->session->userdata('userid');
-            $data['res'] = $this->user_model->my_profile($userid); //get user profile details
-            $this->load->view('user/header');
-            $this->load->view('user/profile', $data);
-            $this->load->view('user/footer');
+        $user_data['name'] = $this->input->post('profile-name');
+        $user_data['phone'] = $this->input->post('profile-ph');
+        $result = $this->user_model->edit_profile($user_data);
+        if($result == TRUE){
+            $this->session->set_flashdata('success', 'Profile data updated.');
+            redirect('user/load_my_profile');
+        } else {
+            $this->session->set_flashdata('err_msg', 'Unable to update profile data.');
+            redirect('user/load_my_profile');
         }
-        else{
-            if($this->input->post('username')){
-                $user_data['username'] = $this->input->post('username');
-            }else{
-                $user_data['username'] ='';
-            }
-            if($this->input->post('profile-ph')){
-                $user_data['phone'] = $this->input->post('profile-ph');
-            }else{
-                $user_data['phone'] = '';
-            }
-            if($this->input->post('profile-email')){
-                $user_data['email'] = $this->input->post('profile-email');
-            }else{
-                $user_data['email'] = '';
-            }
-            $result = $this->user_model->edit_profile($user_data);
-            if($result == TRUE){
-                $this->session->set_flashdata('success', 'Profile data updated.');
-                redirect('user/load_my_profile');
-            } else {
-                $this->session->set_flashdata('err_msg', 'Unable to update profile data.');
-                redirect('user/load_my_profile');
-            }
-        } 
     }
 
     //fetch user activity graph data into user profile page
@@ -516,9 +490,10 @@ class User extends CI_Controller
     public function update_end_time()
     {
         if($this->input->post('action')){
-            $data['row_id'] = $this->input->post('id');
-            $data['time'] = $this->input->post('time');
-            $result = $this->user_model->punchout_previous($data);
+            $id = $this->input->post('id');
+            $time = $this->input->post('time');
+
+            $result = $this->user_model->punchout_previous($time,$id);
             if($result == TRUE){
                 $res['status'] = TRUE;
                 $res['msg'] = "Punchout of previous day-punch in is done.";

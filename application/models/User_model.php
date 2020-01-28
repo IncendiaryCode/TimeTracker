@@ -919,7 +919,7 @@ class User_model extends CI_Model {
      */
     public function edit_profile($data){
         $this->db->where('id',$this->session->userdata('userid'));
-        $update = $this->db->update('users',array('phone'=>$data['phone'],'name'=>$data['username'],'email'=>$data['email']));
+        $update = $this->db->update('users',array('phone'=>$data['phone'],'name'=>$data['name']));
         if ($this->db->affected_rows() == 1) {
             return true;
         } else {
@@ -1005,10 +1005,10 @@ class User_model extends CI_Model {
      * 
      * returns TRUE/FALSE
      */
-    public function punchout_previous($punchout_data)
+    public function punchout_previous($punchout_time,$punchout_id)
     {
-        $update_logout_time = array('end_time'=>$punchout_data['time'],'modified_on'=>date('Y-m-d H:i:s'));
-        $this->db->where('id',$punchout_data['row_id']);
+        $update_logout_time = array('end_time'=>$punchout_time,'modified_on'=>date('Y-m-d H:i:s'));
+        $this->db->where('id',$punchout_id);
         $update_login_details = $this->db->update('login_details',$update_logout_time);
         if ($this->db->affected_rows() == 1) {
             return true;
