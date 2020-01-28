@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Login timer
 $this->load->helper('date');
+print_r($task_info);
 if (isset($task_info['login_status'])) {
     $login_time = $task_info['login_status']['start_time'];
     $login_time_display = date('g:i:s A',strtotime($task_info['login_status']['start_time']));
@@ -38,6 +39,15 @@ else{
     $flag = 0;
 }
 ?>
+<?php
+if(!empty($task_info['login_run'])){ ?>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+     <script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+ <script type="text/javascript">
+     $("#previous-punch-in").modal("show");
+ </script>   
+<?php } ?>
 <script type="text/javascript">
 //this will be send to JS for timer to start
 var __timeTrackerLoginTime = "<?=$logintime?>"; /*start date and time of the task.*/
@@ -210,7 +220,8 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
     <div class="modal modal-stop-now fade" id="previous-punch-in" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
             <div class="modal-dialog  modal-xl" role="document">
                 <div class="modal-content">
-                    <form action="<?=base_url();?>index.php/user/stop_timer?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-punch-in" method="post">
+                    <form action="#" id="update-punch-in" method="post">
+                        <input type="hidden" id="login-id" name="" value="<?=$task_info['login_run']['id'] ?>"><!-- keep value as login id -->
                         <div class="modal-header text-center">
                             <h5 class="modal-title">Punch out</h5>
                         </div>
@@ -221,9 +232,9 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                             </div>
                             <div class="input-group">
                                 <p>Punched in at: <strong id="old-punch-in">
-                                <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
+                                <?php echo $task_info['login_run']['start_time'] ?></strong></p>
                             </div>
-                            <input type="hidden" id="previous-punchout" name="" value="<?=$task_info['task_status'][0]['start_time'] ?>">
+                            <input type="hidden" id="previous-punchout" name="" value="<?=$task_info['login_run']['start_time'] ?>">
                             <div>
                                 
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -240,14 +251,11 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
                         </div>
-                        <div class="pt-3">
-                            <label for="punchout-description">Enter description: </label>
-                            <input type="text" class="form-control "  name="punchout-description">
-                        </div>
+                        
                     </div>
                         <p class="text-danger text-center" id="punchout-error"></p>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Next</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>
             </div>

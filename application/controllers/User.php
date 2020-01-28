@@ -515,16 +515,28 @@ class User extends CI_Controller
     //update logout time
     public function update_end_time()
     {
-        $userid = $this->session->userdata('userid');
-        $result = $this->user_model->update_logout_time($userid);
-        if($result == TRUE){
-            $res['status'] = TRUE;
-            $res['msg'] = 'Punchout successful.';
+        if($this->input->post('action')){
+            $row_id = $this->input->post('id');
+            $result = $this->user_model->punchout_previous($row_id);
+            if($result == TRUE){
+                $res['status'] = TRUE;
+                $res['msg'] = "Punchout of previous day-punch in is done.";
+            }else{
+                $res['status'] = FALSE;
+                $res['msg'] = "Unable to punchout the previous day punch in.";
+            }
         }else{
-            $res['status'] = FALSE;
-            $res['msg'] = 'Punchout unsuccessful.';
+            $userid = $this->session->userdata('userid');
+            $result = $this->user_model->update_logout_time($userid);
+            if($result == TRUE){
+                $res['status'] = TRUE;
+                $res['msg'] = 'Punchout successful.';
+            }else{
+                $res['status'] = FALSE;
+                $res['msg'] = 'Punchout unsuccessful.';
+            }
         }
-        echo json_encode($res);
+        echo json_encode($res);    
     }
 
     public function delete_task_data()

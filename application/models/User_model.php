@@ -59,6 +59,8 @@ class User_model extends CI_Model {
     public function task_status() {
         $details =array();
         $userid = $this->session->userdata('userid');
+
+        //send task details to user dashboard
         $this->db->select('*');
         $this->db->from('time_details AS d');
         $this->db->join('task AS t', 't.id = d.task_id');
@@ -71,6 +73,8 @@ class User_model extends CI_Model {
                 $d['start_time'] =  ($c_sdate) ? $c_sdate : $d['start_time'];                
             }
         }
+
+        //send present login details to user dashboard
         $this->db->where(array('user_id' => $userid, 'task_date' => date('Y:m:d')));
         //$this->db->where('end_time IS NULL');
         $query = $this->db->get('login_details');
@@ -78,6 +82,32 @@ class User_model extends CI_Model {
             $details['login_status'] =$query->row_array();
             $start = $this->convert_date($details['login_status']['start_time']);
             $details['login_status']['start_time'] = ($start) ? $start : $details['login_status']['start_time'];
+        }
+
+        //send previous day running task data to user dashboard
+        $this->db->select('d.task_id,d.start_time,t.task_name,t.description,d.task_date');
+        //$this->db->select('count(IF(d.total_minutes=0,1,0)) AS running_task_count');
+        $this->db->from('time_details AS d');
+        $this->db->join('task AS t', 't.id = d.task_id');
+        $this->db->where('d.total_minutes','0');
+        $this->db->where('d.task_date !=',date('Y-m-d'));
+        $tasks_data = $this->db->get();
+        if($tasks_data->num_rows() > 0){
+            $details['task_run'] = $tasks_data->result_array();
+        }else{
+            $details['task_run'] = '';
+        }
+
+        //send previous day login details to user dashboard
+        $this->db->select('id,user_id,task_date,start_time');
+        $this->db->from('login_details');
+        $this->db->where('task_date !=',date('Y-m-d'));
+        $this->db->where('user_id',$this->session->userdata('userid'));
+        $login_check = $this->db->get();
+        if($login_check->num_rows() > 0){
+            $details['login_run'] = $login_check->row_array();
+        }else{
+            $details['login_run'] = '';
         }
         return $details;
     }
@@ -966,6 +996,26 @@ class User_model extends CI_Model {
     }
 
     /**
+     * Function to update punchout time if previous day punchout is not done
+     * 
+     * @param $row_id
+     * 
+     * returns TRUE/FALSE
+     */
+    public function punchput_previous($row_id)
+    {
+        $update_logout_time = array('end_time'=>date('Y-m-d H:i:s'),'modified_on'=>date('Y-m-d H:i:s'));
+        $this->db->where('id',$row_id);
+        $update_login_details = $this->db->update('login_details',$update_logout_time);
+        $query = $this->db->update('login_details', $array);
+        if ($this->db->affected_rows() == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * (API)Function to get user projects
      * 
      * @param $user_id
@@ -1291,23 +1341,13 @@ class User_model extends CI_Model {
             return FALSE;
         }
         if (strrchr($str,":")) {
-            $timeline_datab = explode(' ', $str);
-            if(isset($timeline_datab[1]))
-            {
-                list($hh, $mm, $ss) = explode(':', $timeline_datab[1]);
+                list($hh, $mm, $ss) = explode(':', $str);
                 if (!is_numeric($hh) || !is_numeric($mm) || !is_numeric($ss)){
                     return FALSE;
                 }elseif ((int) $hh > 24 || (int) $mm > 59 || (int) $ss > 59){
                     return FALSE;
-                }/*elseif (mktime((int) $hh, (int) $mm, (int) $ss) === FALSE){
-                    return FALSE;
-                }*/
+                }
                 return TRUE;
-            }
-            else
-            {
-                return FALSE;
-            }
         }else{
             return FALSE;
         }
