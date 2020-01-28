@@ -162,21 +162,21 @@ if (!empty($task_info['login_run'])) { ?>
         <div class="modal modal-stop-now fade" id="stop-now" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
             <div class="modal-dialog  modal-xl" role="document">
                 <div class="modal-content">
-                    <form action="<?= base_url(); ?>index.php/user/stop_timer?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-stop-now" method="post">
+                    <form action="<?= base_url(); ?>index.php/user/stop_timer?id=<?php echo $task_info['task_run'][0]['task_id'] ?>" id="update-stop-now" method="post">
                         <div class="modal-header text-center">
                             <h5 class="modal-title">Stop now!</h5>
                         </div>
                         <div class="modal-body ">
                             <div class="input-group">
                                 <p>Please stop the task "<strong>
-                                        <?php echo $task_info['task_status'][0]['task_name'] ?> </strong>" that is already running.
+                                        <?php echo $task_info['task_run'][0]['task_name'] ?> </strong>" that is already running.
                                 </p>
                             </div>
                             <div class="input-group">
                                 <p>Started at: <strong id="old-start-date">
-                                        <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
+                                        <?php echo $task_info['task_run'][0]['start_time'] ?></strong></p>
                             </div>
-                            <input type="hidden" id="previous-date" name="" value="<?= $task_info['task_status'][0]['start_time'] ?>">
+                            <input type="hidden" id="previous-date" name="" value="<?= $task_info['task_run'][0]['start_time'] ?>">
                             <div>
 
                                 

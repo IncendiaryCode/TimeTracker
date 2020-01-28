@@ -117,10 +117,7 @@ function callTaskTableData()
         },{
             "targets": 3,
             "render": function ( data, type, row, meta ) {
-                if(row[9]!='--')
-                    return '<a href="../admin/load_userdetails_page?user_id='+row[9]+'">'+row[8]+'</a>';
-                else
-                    return row[8];
+                return row[8];
             }
         },{
             "targets": 4,

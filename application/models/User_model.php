@@ -91,6 +91,7 @@ class User_model extends CI_Model {
         $this->db->join('task AS t', 't.id = d.task_id');
         $this->db->where('d.total_minutes','0');
         $this->db->where('d.task_date !=',date('Y-m-d'));
+        $this->db->where('user_id',$this->session->userdata('userid'));
         $tasks_data = $this->db->get();
         if($tasks_data->num_rows() > 0){
             $details['task_run'] = $tasks_data->result_array();
@@ -1342,13 +1343,21 @@ class User_model extends CI_Model {
             return FALSE;
         }
         if (strrchr($str,":")) {
-                list($hh, $mm, $ss) = explode(':', $str);
+            $dat_time = explode(' ',$str);
+            if($dat_time[1])
+            {
+                list($hh, $mm, $ss) = explode(':', $dat_time[1]);
                 if (!is_numeric($hh) || !is_numeric($mm) || !is_numeric($ss)){
                     return FALSE;
                 }elseif ((int) $hh > 24 || (int) $mm > 59 || (int) $ss > 59){
                     return FALSE;
                 }
                 return TRUE;
+            }
+            else
+            {
+                return false;
+            }
         }else{
             return FALSE;
         }

@@ -332,16 +332,16 @@ class Dashboard_model extends CI_Model
             $data = array();
             foreach($employees->result() as $rows)
             {
-                $user_data = $rows->user_name;
+                $user_data = array();
 
-                $user = explode(',',$user_data);
+                $user = explode(',',$rows->user_name);
                 foreach($user AS $u){
                     $split_data = explode('~',$u);
                     $user_id = $split_data[0];
                     $user_name = $split_data[1];
+                    $user_data[] = '<a href="../admin/load_userdetails_page?user_id='.$split_data[0].'">'.$split_data[1].'</a>';
                 }
-                /*$user_id = $user[0];
-                $user_name = $user[1];*/
+                $user_name = !empty($user_data) ? implode(' ', $user_data) : '--';
                 $data[]= array(
                     $rows->task_name,
                     ($rows->description)?$rows->description:'--',

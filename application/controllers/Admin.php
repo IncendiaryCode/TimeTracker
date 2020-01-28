@@ -43,7 +43,7 @@
 		{
 			$header_data = array();
 			$header_data['profile'] = $this->session->userdata('user_profile');
-			$this->load->view('header', $header_data);
+			//$this->load->view('header', $header_data);
 
 			if(($this->session->userdata('logged_in'))==TRUE){
 				$result = array();
@@ -77,6 +77,7 @@
 						$final_result['status'] = TRUE;
 						$final_result = array(
 						            "draw" => $draw,
+						            "status" => TRUE,
 						            "recordsTotal" => count($result['data']),
 						            "recordsFiltered" => count($result['data']),
 						            "data" => $result['data']
