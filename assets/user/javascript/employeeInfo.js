@@ -199,8 +199,8 @@ function drawCards(data) {
 						document.getElementById("stop-time").childNodes[1].childNodes[0]
 							.classList[2] == "fa-play"
 					) {
-						/*$("#play-timer").modal("show");*/
-						alert("You cannot punch in again...");
+						$("#play-timer").modal("show");
+						//alert("You cannot punch in again...");
 					} else {
 						$.ajax({
 							type: "POST",
@@ -484,7 +484,7 @@ $(document).ready(function() {
 
 	$("#stop-time").click(function() {
 		if (stopped == 1) {
-			alert("You cannot punch in again...");
+			
 			return false;
 		}
 		var _dateObj = new Date();
@@ -730,7 +730,8 @@ $(document).ready(function() {
 						"Login time cannot be greater than current time";
 					return false;
 				} else if (stopped == 1) {
-					alert("You cannot punch in again...");
+					/*alert("You cannot punch in again...");*/
+					$('#alert-punchin').modal('show');
 					return false;
 				} else {
 					startTimer(login_timer);

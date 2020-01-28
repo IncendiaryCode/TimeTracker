@@ -284,5 +284,25 @@ if (!empty($task_info['login_run'])) { ?>
         </div>
 
 
+        <div class="modal" id="alert-punchin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header ">
+                        <button type="button" class="close text-danger" data-dismiss="modal">×</button>
+                    </div>
+                    <div class="modal-body ">
+                        <div>
+                            <p>Please punch in before starting task</p>
+                        </div>
+                    </div>
+                    <p class="text-danger text-center" id="stop-timer-error"></p>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" >Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </main>
