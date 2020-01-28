@@ -199,7 +199,8 @@ function drawCards(data) {
 						document.getElementById("stop-time").childNodes[1].childNodes[0]
 							.classList[2] == "fa-play"
 					) {
-						$("#play-timer").modal("show");
+						/*$("#play-timer").modal("show");*/
+						alert("You cannot punch in again...");
 					} else {
 						$.ajax({
 							type: "POST",

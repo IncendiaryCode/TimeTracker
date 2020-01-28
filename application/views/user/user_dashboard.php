@@ -182,11 +182,11 @@ if (!empty($task_info['login_run'])) { ?>
                                 
                                     <?php if (validation_errors()) { ?>
                                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        <?php echo validation_errors(); ?>
+                                            <?php echo validation_errors(); ?>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
                                         
                                     <?php  } ?>
                                 
