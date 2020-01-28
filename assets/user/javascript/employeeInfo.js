@@ -674,7 +674,7 @@ $(document).ready(function() {
 		punchout.onsubmit = function() {
 			var stop_now = document.getElementById("punchout-time").value;
 			if (stop_now == " " || stop_now == "") {
-				document.getElementById("stop-now-error").innerHTML =
+				document.getElementById("punchout-error").innerHTML =
 					"enter valid end time. ";
 				return false;
 			}
@@ -704,10 +704,11 @@ $(document).ready(function() {
 					url: timeTrackerBaseURL + "user/update_end_time",
 					data: { action: "previous", id: login_id , "time": serverDate },
 					success: function(res) {
+					    window.location.reload();
 					}
 				});
-				return true;
 			}
+			return false;
 		};
 	}
 

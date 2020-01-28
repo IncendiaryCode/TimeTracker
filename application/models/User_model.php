@@ -95,6 +95,10 @@ class User_model extends CI_Model {
         $tasks_data = $this->db->get();
         if($tasks_data->num_rows() > 0){
             $details['task_run'] = $tasks_data->result_array();
+            foreach($details['task_run'] AS &$rd){
+                $c_r_sdate = $this->convert_date($rd['start_time']);
+                $rd['start_time'] =  ($c_r_sdate) ? $c_r_sdate : $rd['start_time'];
+            }
         }else{
             $details['task_run'] = '';
         }
@@ -108,6 +112,8 @@ class User_model extends CI_Model {
         $login_check = $this->db->get();
         if($login_check->num_rows() > 0){
             $details['login_run'] = $login_check->row_array();
+            $r_start = $this->convert_date($details['login_run']['start_time']);
+            $details['login_run']['start_time'] = ($r_start) ? $r_start : $details['login_run']['start_time'];
         }else{
             $details['login_run'] = '';
         }

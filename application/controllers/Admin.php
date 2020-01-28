@@ -41,10 +41,6 @@
 		//Load user analytics page
 		public function load_snapshot()
 		{
-			$header_data = array();
-			$header_data['profile'] = $this->session->userdata('user_profile');
-			//$this->load->view('header', $header_data);
-
 			if(($this->session->userdata('logged_in'))==TRUE){
 				$result = array();
 				$get_data = $this->input->get();
@@ -54,6 +50,11 @@
 					$type = $this->input->post('type',TRUE);
 				}
 				
+				if ($type != 'task') {
+					$header_data = array();
+					$header_data['profile'] = $this->session->userdata('user_profile');
+					$this->load->view('header', $header_data);
+				}
 				if($type == 'user'){  //load user snapshot page
 					// $this->load->view('header');
 					$result['data'] = $this->dashboard_model->get_task_details($type); //get user information
