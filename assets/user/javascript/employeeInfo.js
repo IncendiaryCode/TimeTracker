@@ -476,13 +476,16 @@ $(document).ready(function() {
 	});
 	if(document.getElementById('previous-punch-in'))
 	{
-		console.log(document.getElementById('previous-punch-in'))
 		$("#previous-punch-in").modal({
 			keyboard: false
 		});
 	}
 
 	$("#stop-time").click(function() {
+		if (stopped == 1) {
+			alert("You cannot punch in again...");
+			return false;
+		}
 		var _dateObj = new Date();
 		var _hr = _dateObj.getHours();
 		if (_hr.toString().length == 1) {

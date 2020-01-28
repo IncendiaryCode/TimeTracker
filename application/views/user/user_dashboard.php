@@ -213,7 +213,7 @@ if (!empty($task_info['login_run'])) { ?>
         <div class="modal modal-stop-now fade" id="previous-punch-in" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
             <div class="modal-dialog  modal-xl" role="document">
                 <div class="modal-content">
-                    <form action="#" id="update-punch-in" method="post">
+                    <form action="" id="update-punch-in" method="post">
                         <input type="hidden" id="login-id" name="" value="<?= $task_info['login_run']['id'] ?>"><!-- keep value as login id -->
                         <div class="modal-header text-center">
                             <h5 class="modal-title">Punch out</h5>
