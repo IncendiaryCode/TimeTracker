@@ -96,30 +96,34 @@ $(document).ready(function () {
     });
     var emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+    if(document.getElementById("profile-error"))
     document.getElementById("profile-error").innerHTML = " ";
-
+    
+    if(document.getElementById('edit-profile') != undefined)
+    {
     var profile = document.getElementById('edit-profile');
     profile.onsubmit = function()
-    {
-        var user_name = document.getElementById("profile-name").value;
-        var user_ph = document.getElementById("profile-ph").value;
-        
-        if(user_name == " " || user_name == "")
         {
-            document.getElementById("profile-error").innerHTML ="Empty name";
-            return false;
-        }
-        if(user_ph.length != 0)
-        {
-            console.log(user_ph.length);
-            if(user_ph.length < 10)
+            var user_name = document.getElementById("profile-name").value;
+            var user_ph = document.getElementById("profile-ph").value;
+            
+            if(user_name == " " || user_name == "")
             {
-                document.getElementById("profile-error").innerHTML ="Wrong phone number";
+                document.getElementById("profile-error").innerHTML ="Empty name";
                 return false;
             }
+            if(user_ph.length != 0)
+            {
+                console.log(user_ph.length);
+                if(user_ph.length < 10)
+                {
+                    document.getElementById("profile-error").innerHTML ="Wrong phone number";
+                    return false;
+                }
+            }
+            document.getElementById("profile-error").innerHTML = " ";
+                return true;
         }
-        document.getElementById("profile-error").innerHTML = " ";
-            return true;
     }
     if (document.getElementById('year-chart')) {
         load_year_chart();

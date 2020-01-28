@@ -472,7 +472,9 @@ timerSlider = {
 
 $(document).ready(function() {
 	$("#stop-now").modal({
-		backdrop: "static",
+		keyboard: false
+	});
+	$("#previous-punch-in").modal({
 		keyboard: false
 	});
 
@@ -631,7 +633,7 @@ $(document).ready(function() {
 		stop_now.onsubmit = function() {
 			var stop_now = document.getElementById("stop-end-time").value;
 			if (stop_now == " " || stop_now == "") {
-				document.getElementById("stop-now-error").innerHTML =
+				document.getElementById("punchout-error").innerHTML =
 					"enter valid end time. ";
 				return false;
 			} else {
@@ -648,7 +650,7 @@ $(document).ready(function() {
 						input_element[i].value = serverDate;
 
 						if (typeof parseInt(serverDate.slice(0, 2)) == "string") {
-							document.getElementById("stop-now-error").innerHTML =
+							document.getElementById("punchout-error").innerHTML =
 								"enter valid end time. ";
 							return false;
 						}
@@ -667,7 +669,8 @@ $(document).ready(function() {
 				document.getElementById("stop-now-error").innerHTML =
 					"enter valid end time. ";
 				return false;
-			} else {
+			}
+			 else {
 				var input_element = __element.getElementsByClassName("check-for-utc");
 				for (var i = 0; i < input_element.length; i++) {
 					if (input_element[i].value != "" && input_element[i].value != " ") {
@@ -691,7 +694,7 @@ $(document).ready(function() {
 				$.ajax({
 					type: "POST",
 					url: timeTrackerBaseURL + "user/update_end_time",
-					data: { action: "previous", id: login_id },
+					data: { action: "previous", id: login_id , "time": serverDate },
 					success: function(res) {}
 				});
 				return true;
@@ -785,7 +788,6 @@ $(document).ready(function() {
 		url: timeTrackerBaseURL + "index.php/user/get_running_task",
 		dataType: "json",
 		success: function(res) {
-			console.log(res['data']['task_data'].length);
 			$("#stop-now").modal("show");
 		}
 	});
