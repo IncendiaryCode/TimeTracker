@@ -516,8 +516,9 @@ class User extends CI_Controller
     public function update_end_time()
     {
         if($this->input->post('action')){
-            $row_id = $this->input->post('id');
-            $result = $this->user_model->punchout_previous($row_id);
+            $data['row_id'] = $this->input->post('id');
+            $data['time'] = $this->input->post('time');
+            $result = $this->user_model->punchout_previous($data);
             if($result == TRUE){
                 $res['status'] = TRUE;
                 $res['msg'] = "Punchout of previous day-punch in is done.";

@@ -664,9 +664,10 @@ class User_model extends CI_Model {
     public function task_exists() {
         $userid = $this->session->userdata('userid');
         $task_name = $this->input->post('task_name');
-        $this->db->select('task_name');
-        $this->db->from('task');
-        $this->db->where(array('task.task_name' => $task_name, 'task.project_id' => $this->input->post('project')));
+        $this->db->select('t.task_name');
+        $this->db->from('task As t');
+        $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
+        $this->db->where(array('t.task_name' => $task_name, 'ta.user_id' => $userid, 't.project_id' => $this->input->post('project')));
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             $this->form_validation->set_message('task_exists', 'Task name exists.');
@@ -1002,10 +1003,10 @@ class User_model extends CI_Model {
      * 
      * returns TRUE/FALSE
      */
-    public function punchput_previous($row_id)
+    public function punchput_previous($punchout_data)
     {
-        $update_logout_time = array('end_time'=>date('Y-m-d H:i:s'),'modified_on'=>date('Y-m-d H:i:s'));
-        $this->db->where('id',$row_id);
+        $update_logout_time = array('end_time'=>$punchout_data['time'],'modified_on'=>date('Y-m-d H:i:s'));
+        $this->db->where('id',$punchout_data['row_id']);
         $update_login_details = $this->db->update('login_details',$update_logout_time);
         $query = $this->db->update('login_details', $array);
         if ($this->db->affected_rows() == 1) {
