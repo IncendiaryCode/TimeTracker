@@ -213,14 +213,14 @@ if (!empty($task_info['login_run'])) { ?>
         <div class="modal modal-stop-now fade" id="previous-punch-in" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
             <div class="modal-dialog  modal-xl" role="document">
                 <div class="modal-content">
-                    <form action="" id="update-punch-in" method="post">
+                    <form action="#" id="update-punch-in" method="post">
                         <input type="hidden" id="login-id" name="" value="<?= $task_info['login_run']['id'] ?>"><!-- keep value as login id -->
                         <div class="modal-header text-center">
                             <h5 class="modal-title">Punch out</h5>
                         </div>
                         <div class="modal-body ">
                             <div class="input-group">
-                                <p>Please stop the enter punch out time for the last punch in.
+                                <p>Please enter punch out time for the last punch in.
                                 </p>
                             </div>
                             <div class="input-group">
@@ -229,18 +229,16 @@ if (!empty($task_info['login_run'])) { ?>
                             </div>
                             <input type="hidden" id="previous-punchout" name="" value="<?= $task_info['login_run']['start_time'] ?>">
                             <div>
+                                <?php if (validation_errors()) { ?>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <?php echo validation_errors(); ?>
+                                    </div>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
 
-                                
-                                    <?php if (validation_errors()) { ?>
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        <?php echo validation_errors(); ?>
-                                        </div>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-
-                                    <?php  } ?>
-                                
+                                <?php  } ?>
+                            
                                 <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
                                 <input class="check-for-utc form-control timerpicker-stop-now" type="text" name="time" id="punchout-time" placeholder="End time">
                                 <div class="input-group-addon">

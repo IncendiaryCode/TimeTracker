@@ -102,6 +102,7 @@ class User_model extends CI_Model {
         $this->db->select('id,user_id,task_date,start_time');
         $this->db->from('login_details');
         $this->db->where('task_date !=',date('Y-m-d'));
+        $this->db->where('end_time IS NULL');
         $this->db->where('user_id',$this->session->userdata('userid'));
         $login_check = $this->db->get();
         if($login_check->num_rows() > 0){
@@ -1003,12 +1004,11 @@ class User_model extends CI_Model {
      * 
      * returns TRUE/FALSE
      */
-    public function punchput_previous($punchout_data)
+    public function punchout_previous($punchout_data)
     {
         $update_logout_time = array('end_time'=>$punchout_data['time'],'modified_on'=>date('Y-m-d H:i:s'));
         $this->db->where('id',$punchout_data['row_id']);
         $update_login_details = $this->db->update('login_details',$update_logout_time);
-        $query = $this->db->update('login_details', $array);
         if ($this->db->affected_rows() == 1) {
             return true;
         } else {

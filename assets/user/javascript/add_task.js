@@ -96,7 +96,6 @@ var addTime = {
 		});
 		array_of_timings.push({ date, start_time, end_time });
 		removeBtn.appendTo(row);
-
 		section.append(row);
 		this.ele.find(".primary-wrap").append(section);
 
@@ -482,7 +481,7 @@ $(document).ready(function() {
 						}
 						if (
 							input_elements[j].value != "" &&
-							input_elements[j + 2].value != " "
+							input_elements[j + 2].value != ""
 						) {
 							var serverEndDate = moment(
 								input_elements[j].value + " " + input_elements[j + 2].value

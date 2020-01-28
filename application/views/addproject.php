@@ -86,7 +86,3 @@ $this->load->helper('url_helper');
             </div>
         </div>
     </main>
-    <hr>
-    <footer>
-        <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</ p>
-    </footer>

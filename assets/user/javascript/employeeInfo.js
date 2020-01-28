@@ -474,9 +474,13 @@ $(document).ready(function() {
 	$("#stop-now").modal({
 		keyboard: false
 	});
-	$("#previous-punch-in").modal({
-		keyboard: false
-	});
+	if(document.getElementById('previous-punch-in'))
+	{
+		console.log(document.getElementById('previous-punch-in'))
+		$("#previous-punch-in").modal({
+			keyboard: false
+		});
+	}
 
 	$("#stop-time").click(function() {
 		var _dateObj = new Date();
@@ -695,7 +699,8 @@ $(document).ready(function() {
 					type: "POST",
 					url: timeTrackerBaseURL + "user/update_end_time",
 					data: { action: "previous", id: login_id , "time": serverDate },
-					success: function(res) {}
+					success: function(res) {
+					}
 				});
 				return true;
 			}
