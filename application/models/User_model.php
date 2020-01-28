@@ -102,7 +102,7 @@ class User_model extends CI_Model {
         if ($date == '') {
             $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
             $this->db->where('ta.user_id', $userid);
-            $this->db->group_by('t.id');
+            $this->db->group_by('t.created_on');
         } else {
             if ($sort_type == 'daily_chart') {
                 $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
@@ -280,7 +280,7 @@ class User_model extends CI_Model {
         }else{
             $data['task_data'] = '';
         }
-        $this->db->select('user_id,task_date,start_time');
+        $this->db->select('id,user_id,task_date,start_time');
         $this->db->from('login_details');
         $this->db->where('task_date !=',date('Y-m-d'));
         $this->db->where('user_id',$this->session->userdata('userid'));
