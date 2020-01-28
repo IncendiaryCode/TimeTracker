@@ -456,7 +456,11 @@ timerSlider = {
 };
 
 $(document).ready(function () {
-	
+		$('#stop-now').modal({
+		    backdrop: 'static',
+		    keyboard: false;
+		});
+
 	$("#stop-time").click(function () {
 
 		var _dateObj = new Date();
@@ -663,10 +667,21 @@ $(document).ready(function () {
 						}
 					}
 				}
+				var login_id = document.getElementById('login-id').value;
+				$.ajax({
+					type: "POST",
+					url: timeTrackerBaseURL + "user/update_end_time",
+					data : { action: 'previous',id: login_id}
+					success: function (res) {
+						
+					}
+				});
 				return true;
 			}
 		};
 	}
+
+
 
 	if (document.getElementById("starting-timer")) {
 		var startingTimer = document.getElementById("starting-timer");

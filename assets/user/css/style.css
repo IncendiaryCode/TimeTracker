@@ -818,5 +818,8 @@ opacity: 0.5;
 .table td, .table th
 {
     border-top: 0px;
-
+}
+.modal
+{
+    position: fixed;
 }

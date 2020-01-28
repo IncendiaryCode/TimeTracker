@@ -75,7 +75,11 @@ if ($this->input->get('t_id')) { ?>
                             </div>
                             <div class="form-group">
                                 <label for="choose-module">Choose project module</label>
+                                <?php if ($this->input->get('t_id')) { ?>
                                 <select type="text" readonly="" class="form-control project_name" id="choose-module" name="project_module" value="<?= $task_data['module_name'] ?>">
+                                <?php } else { ?>
+                                    <select type="text" class="form-control project_name" id="choose-module" name="project_module" value="<?= $task_data['module_name'] ?>">
+                                    <?php } ?>
                                     <?php if ($this->input->get('t_id')) { ?>
                                         <option value=<?= $task_data['module_id'] ?>><?= $task_data['module_name'] ?></option>
                                     <?php } else { ?>

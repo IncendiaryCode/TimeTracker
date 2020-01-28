@@ -553,6 +553,7 @@ $(document).ready(function() {
 		document.getElementById("start-time-0").value = start_time;
 	}
 
+
 	$("select.project_name").change(function() {
 		var project_id = $(this)
 			.children("option:selected")
