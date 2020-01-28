@@ -205,7 +205,7 @@ function drawCards(data) {
 						dataType: "json",
 						success: function (res) {
 							var res = res["data"]["details"];
-							var startDateTime =new Date().getHours()+':'+new Date().getMinutes();
+							var startDateTime = moment().format('h:mm:ss A');
 							var row = $(
 								'<div id="slider-' +
 								res["task_id"] +
@@ -629,6 +629,36 @@ $(document).ready(function () {
 					if(typeof(parseInt(serverDate.slice(0,2))) == 'string')
 						{
 							document.getElementById("stop-now-error").innerHTML = "enter valid end time. ";
+							return false;	
+						}
+					}
+				}
+				return true;
+			}
+		};
+	}
+	if (document.getElementById("update-punch-in")) {
+		var punchout = document.getElementById("update-punch-in");
+		var __element = document.getElementById("update-punch-in");
+		punchout.onsubmit = function () {
+			var stop_now = document.getElementById("punchout-time").value;
+			if (stop_now == " " || stop_now == "") {
+				document.getElementById("stop-now-error").innerHTML =
+					"enter valid end time. ";
+				return false;
+			}
+			else {
+				var input_element = __element.getElementsByClassName('check-for-utc');
+				for(var i=0; i<input_element.length; i++)
+				{
+					if(input_element[i].value != "" && input_element[i].value != " ")
+					{
+						var serverDate = moment(document.getElementById('previous-punchout').value.slice(0,10) +' '+ input_element[i].value).tz('utc').format('Y-MM-DD H:mm:ss');
+						input_element[i].value = serverDate;
+						
+					if(typeof(parseInt(serverDate.slice(0,2))) == 'string')
+						{
+							document.getElementById("punchout-error").innerHTML = "enter valid end time. ";
 							return false;	
 						}
 					}

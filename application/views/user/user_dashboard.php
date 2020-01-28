@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 //Login timer
 $this->load->helper('date');
-
 if (isset($task_info['login_status'])) {
     $login_time = $task_info['login_status']['start_time'];
     $login_time_display = date('g:i:s A',strtotime($task_info['login_status']['start_time']));
@@ -102,7 +101,7 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
 <main class="container-fluid-main">
     <div class="md main-container-employee container timer">
         <div class="text-center shadow-lg topWidth stop-time" id="stop-time" data-tasktype="<?=$task_type?>" data-id="<?=$task_id?>">
-            <h3><i id="icon-for-task" class="fas action-icon <?=$timerClass?>"></i></h3>
+            <h2><i id="icon-for-task" class="fas action-icon <?=$timerClass?>"></i></h2>
         </div>
 
 
@@ -125,10 +124,10 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                     url: timeTrackerBaseURL + "index.php/user/get_running_task",
                     dataType: "json",
                     success: function(res) {
+                    console.log(res['data']['task_data'].length);
                     $("#stop-now").modal("show");
                     }
                 });
-
             </script>
 
         <?php } } } } ?>
@@ -189,27 +188,71 @@ var stopped = "<?=$flag?>"; /*to check for punch out action*/
                                         </button>
                               <?php  } ?>
                             </div>
-
-
-                                <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
-                                <input  class="check-for-utc form-control timerpicker-stop-now" type="text" name="time" id="stop-end-time" placeholder="End time" >
-                                <div class="input-group-addon">
-                                    <span class="glyphicon glyphicon-th"></span>
-                                </div>
-                            </div>
-                            <div class="pt-3">
-                                <label for="task-description">Enter description: </label>
-                                <input type="text" class="form-control "  name="task-description">
+                            <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
+                            <input  class="check-for-utc form-control timerpicker-stop-now" type="text" name="time" id="stop-end-time" placeholder="End time" >
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
                             </div>
                         </div>
-                            <p class="text-danger text-center" id="stop-now-error"></p>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Next</button>
+                        <div class="pt-3">
+                            <label for="task-description">Enter description: </label>
+                            <input type="text" class="form-control "  name="task-description">
                         </div>
-                    </form>
-                </div>
+                    </div>
+                        <p class="text-danger text-center" id="stop-now-error"></p>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Next</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
+    <div class="modal modal-stop-now fade" id="previous-punch-in" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
+            <div class="modal-dialog  modal-xl" role="document">
+                <div class="modal-content">
+                    <form action="<?=base_url();?>index.php/user/stop_timer?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-punch-in" method="post">
+                        <div class="modal-header text-center">
+                            <h5 class="modal-title">Punch out</h5>
+                        </div>
+                        <div class="modal-body ">
+                            <div class="input-group">
+                                <p>Please stop the enter punch out time for the last punch in.
+                                </p>
+                            </div>
+                            <div class="input-group">
+                                <p>Punched in at: <strong id="old-punch-in">
+                                <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
+                            </div>
+                            <input type="hidden" id="previous-punchout" name="" value="<?=$task_info['task_status'][0]['start_time'] ?>">
+                            <div>
+                                
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <?php if (validation_errors()) { ?>
+                                       <?php echo validation_errors(); ?>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                              <?php  } ?>
+                            </div>
+                            <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
+                            <input  class="check-for-utc form-control timerpicker-stop-now" type="text" name="time" id="punchout-time" placeholder="End time" >
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                        <div class="pt-3">
+                            <label for="punchout-description">Enter description: </label>
+                            <input type="text" class="form-control "  name="punchout-description">
+                        </div>
+                    </div>
+                        <p class="text-danger text-center" id="punchout-error"></p>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Next</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
         <div class="modal" id="play-timer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
