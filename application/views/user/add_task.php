@@ -30,6 +30,9 @@ if ($this->input->get('t_id')) { ?>
                     <?php if (!empty($this->session->flashdata('success'))) { ?>
                         <div class="alert alert-success mb-5">
                             <?php echo (!empty($this->session->flashdata('success'))) ? $this->session->flashdata('success') : ''; ?>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                     <?php } ?>
                     <?php if (isset($task_data['task_id'])) { ?>

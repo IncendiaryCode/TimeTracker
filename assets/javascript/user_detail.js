@@ -124,9 +124,12 @@ if(document.getElementById('user-id') != null)
                 if(json["status"] ==  false)
                 {
                 document.getElementById('search-error').innerHTML = "No results found";
+                    console.log(document.getElementById('user-task-datatable'));
+                    $('#user-task-datatable_processing').hide();
                 }
                 else{
                    document.getElementById('search-error').innerHTML = " "; 
+                   
                 }
                 return json.data;
             }  
@@ -166,9 +169,11 @@ if(document.getElementById('user-id') != null)
                 if(json["status"] ==  false)
                 {
                 document.getElementById('user-project-error').innerHTML = "No results found";
+                $('#user-project-datatable_processing').hide();
                 }
                 else{
                    document.getElementById('user-project-error').innerHTML = " "; 
+                   
                 }
                 return json.data;
             } 

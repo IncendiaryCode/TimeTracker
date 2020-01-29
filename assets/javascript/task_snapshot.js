@@ -190,8 +190,17 @@ $(document).ready(function() {
             url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
             data: { 'month': document.getElementById('curr-month').value },
             success: function(res) {
-                var result = JSON.parse(res);
-                __draw_task_chart(result);
+                if(JSON.parse(res)['status'] == false)
+                {
+                    document.getElementById('task-chart-error').innerHTML = "No data available";
+                    $('#task-chart').hide();
+                }
+                else
+                {
+                    var result = JSON.parse(res);
+                    $('#task-chart').show();
+                    __draw_task_chart(result);
+                }
             }
         });
      callTaskTableData();
@@ -202,9 +211,17 @@ $(document).ready(function() {
                 url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
                 data: { 'month': document.getElementById('curr-month').value },
                 success: function(res) {
-
-                    var result = JSON.parse(res);
-                    __draw_task_chart(result);
+                if(JSON.parse(res)['status'] == false)
+                    {
+                        document.getElementById('task-chart-error').innerHTML = "No data available";
+                        $('#task-chart').hide();
+                    }
+                    else
+                    {
+                        var result = JSON.parse(res);
+                        $('#task-chart').show();
+                        __draw_task_chart(result);
+                    }
                 }
             });
         callTaskTableData();

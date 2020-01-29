@@ -10,24 +10,30 @@ $this->load->helper('url_helper');
                     <div class="col-md-6 offset-md-3">
                         <?php 
                             if(validation_errors()) { ?>
-                                <div class="alert alert-danger">
-                                    <?php 
-                                        echo validation_errors();
-                                    ?>    
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <?php echo validation_errors();  ?>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button> 
                                 </div>
                             <?php } 
                             if($this->session->flashdata('true')){ ?>
-                                <div class="alert-success">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
                                     <?php
-                                        echo $this->session->flashdata('true'); 
-                                    ?>    
+                                        echo $this->session->flashdata('true'); ?>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                 </div>
                             <?php } 
                             else if($this->session->flashdata('err')){ ?>
                                 <div class = "alert alert-danger">
                                     <?php echo $this->session->flashdata('err'); ?>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
-                            <?php } ?> 
+                            <?php } ?>
                             <h1 class="text-center display-heading">Add project</h1>
                         <form action="<?php echo base_url();?>index.php/admin/add_projects" id="add-project" method="post" enctype="multipart/form-data">
                             <div class="form-group mt-3" id="new-project-input">
@@ -52,9 +58,9 @@ $this->load->helper('url_helper');
                                 <div class="col-12">
                                     <label for="assign-name">Name:</label>
                                     <select class="form-control user"  id="assign-name0" multiple="" name="assign-name[0][name]">
-                                        <?php
+                                        <?php $i=1;
                                             foreach($names as $name){ ?>
-                                            <option ><?php echo $name['name']; ?></option>
+                                            <option name="assign-name[$i++][name]"><?php echo $name['name']; ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -68,8 +74,7 @@ $this->load->helper('url_helper');
                                 <label for="task-name ">Choose color:</label>
                                 <input type="color"  value="#e384fb" class="form-control" name="project-color" id="Project-color">
                             </div>
-
-                            <div class="form-group mt-3">
+                            <!-- <div class="form-group mt-3">
                                 <label for="task-name ">Start date:</label>
                                 <input type="text" class="form-control edit-date" name="start-date" id="start-date">
                             </div>
@@ -77,7 +82,7 @@ $this->load->helper('url_helper');
                             <div class="form-group mt-3">
                                 <label for="task-name ">End date:</label>
                                 <input type="text" class="form-control edit-date" name="end-date" id="end-date">
-                            </div>
+                            </div> -->
                             <p id="module-error" class="text-danger"></p>
                             <div class="text-right"><button type="submit" class="btn btn-primary text-right">Add Project</button></div>
                         </form>

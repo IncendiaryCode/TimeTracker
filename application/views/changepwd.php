@@ -35,7 +35,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <?php
 
             if ($this->session->flashdata('err_msg')) { ?>
-                <div class="alert alert-danger"><?php echo $this->session->flashdata('err_msg'); ?></div>
+                <div class="alert alert-danger"><?php echo $this->session->flashdata('err_msg'); ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             <?php } ?>
             <div class="form-group">
                 <div class="input-group">

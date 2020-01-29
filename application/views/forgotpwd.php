@@ -30,7 +30,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <h4 class="text-center mt-5 mt-md-0">Forgot Password</h4>
         <?php
         if ($this->session->flashdata('error_msg')) { ?>
-            <div class="alert alert-danger"><?php echo $this->session->flashdata('error_msg'); ?></div>
+            <div class="alert alert-danger"><?php echo $this->session->flashdata('error_msg'); ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         <?php } ?>
         <form id="forgotPassword" method="post" action="<?= base_url(); ?>login/check_otp" novalidate>
             <div class="logo-space">
@@ -40,7 +44,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </div>
             <?php
             if ($this->session->flashdata('err_msg')) { ?>
-                <div class="alert alert-danger"><?php echo $this->session->flashdata('err_msg'); ?></div>
+                <div class="alert alert-danger"><?php echo $this->session->flashdata('err_msg'); ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                            
+                </div>
             <?php }  ?>
             <div class="form-group" id="enter-email">
                 <div class="input-group top-space">

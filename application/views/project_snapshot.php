@@ -12,6 +12,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row mt-5">
         <div class="col-12">
             <div id="chart_div" style=" height: 500px;"></div>
+            <p id="project-snap-error"></p>
         </div>
     </div>
     <div class="row mt-5">

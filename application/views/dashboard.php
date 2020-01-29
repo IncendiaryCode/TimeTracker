@@ -105,14 +105,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <!-- TODO.. -->
         <div class="col-md-6">
             <?php
-            $count = 0;
-            if ($top_projects[0] < 5) {
-                $count = $top_projects[0];
-            } else {
-                $count = 5;
-            }
+            if($top_projects[0] != 0)
+                {
+                $count = 0;
+                if ($top_projects[0] < 5) {
+                    $count = $top_projects[0];
+                } else {
+                    $count = 5;
+                }
             ?>
-            <h4>Top <?= $count; ?> projects</h4>
+            <h4>Top <?= $count; ?> projects</h4> <?php } ?>
             <ul class="list-group mt-4">
                 <?php foreach ($top_projects[1] as $project) { ?>
                     <!--  -->

@@ -15,20 +15,27 @@ $this->load->library('form_validation');
                             if(validation_errors()) { ?>
                                 <div class="alert alert-danger">
                                     <?php 
-                                        echo validation_errors();
-                                    ?>    
+                                        echo validation_errors(); ?>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                 </div>
                             <?php } 
                             if($this->session->flashdata('true')){ ?>
-                                <div class="alert-success">
+                                <div class="alert alert-success">
                                     <?php  
-                                        echo $this->session->flashdata('true'); 
-                                    ?>    
+                                        echo $this->session->flashdata('true'); ?>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                 </div>
                             <?php } 
                             else if($this->session->flashdata('err')){ ?>
                                 <div class = "alert alert-danger">
                                     <?php echo $this->session->flashdata('err'); ?>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                             <?php } ?>
                             <h1 class="text-center display-heading">Add task</h1>

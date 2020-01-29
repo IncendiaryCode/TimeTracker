@@ -96,14 +96,15 @@ function drawCards(data) {
 					var timeZone = moment.tz.guess();
 					var date = data[x][y].start_time.slice(0, 10);
 					var start_time = data[x][y].start_time;
-					var serverDate = moment(start_time)
-						.tz(timeZone)
-						.format("Y-MM-DD h:mm:ss a");
-					if (serverDate != "Invalid date") {
+					var serverDate1 = moment(start_time).tz(timeZone).format("Y-MM-DD h:mm:ss a");
+						console.log("start_time",start_time);
+						console.log("Converted date",serverDate1);
+						console.log("timeZone",timeZone);
+					if (serverDate1 != "Invalid date") {
 						cardHeaderRow.append(
 							'<div class="col-6 text-left"><span class="vertical-line"></span>' +
 								" " +
-								serverDate +
+								serverDate1 +
 								"</div>"
 						);
 					} else {

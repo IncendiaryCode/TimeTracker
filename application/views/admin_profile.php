@@ -10,9 +10,15 @@ $this->load->helper('url_helper');
                     <div class="container">
                         <div class="alert-success">
                         <?php echo (!empty($this->session->flashdata('success')))?$this->session->flashdata('success'):''; ?>
+                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                         </div>
                         <div class="alert-danger">
                         <?php echo (!empty($this->session->flashdata('failure')))?$this->session->flashdata('failure'):''; ?>
+                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                         <div class="text-center">
                                 <img id="profile-pic" src="<?=base_url().UPLOAD_PATH.$res['profile'];?>" class="rounded-circle" width="150px;" height="150px;">

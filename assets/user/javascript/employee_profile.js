@@ -114,10 +114,9 @@ $(document).ready(function () {
             }
             if(user_ph.length != 0)
             {
-                console.log(user_ph.length);
-                if(user_ph.length < 10)
+                if(user_ph.length != 10 )
                 {
-                    document.getElementById("profile-error").innerHTML ="Wrong phone number";
+                    document.getElementById("profile-error").innerHTML ="Invalid phone number";
                     return false;
                 }
             }

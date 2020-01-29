@@ -6,6 +6,13 @@ function drawProjectChart() {
     "type": "POST",
     data: { 'type': "get_user" },
     success: function(res) {
+    	if(JSON.parse(res)['status'] == false)
+        {
+        	$('#chart_div').hide();
+        	document.getElementById('project-snap-error').innerHTML = "No data available";
+        }
+        else
+        {
         result = JSON.parse(res);
     	var total_time = 0;
         for(var time=0; time<result['result'].length; time++)
@@ -16,6 +23,7 @@ function drawProjectChart() {
 	    	}
 	    }
         result = result['result'];
+        
 	    var x=10;
 	    var y=10;
 	    var data = google.visualization.arrayToDataTable([
@@ -39,10 +47,10 @@ function drawProjectChart() {
       	vAxis: {title: 'Percentage of time spent'},
     };
 
-    var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
-
+	    var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
+	    chart.draw(data, options);
         }
+    }
     });
   }
 

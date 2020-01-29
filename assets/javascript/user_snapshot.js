@@ -8,7 +8,8 @@ gradient = user_chart.createLinearGradient(0, 0, 0, 600);
     gradient.addColorStop(1, '#ea4776');
 if(res['status'] == false)
 {
-    document.getElementById('user-chart-error').innerHTML = "This project does not have any data.";
+    document.getElementById('user-chart-error').innerHTML = "No data availbale.";
+    
     $('#user_chart').hide();
 }
 else{

@@ -105,8 +105,10 @@ $(document).ready(function() {
 					if (json["status"] == false) {
 						document.getElementById("project-datatabel-error").innerHTML =
 							"No results found";
+						$('#project-list-datatable_processing').hide();
 					} else {
 						document.getElementById("project-datatabel-error").innerHTML = " ";
+						$('#project-list-datatable_processing').show();
 					}
 					return json.data;
 				}
@@ -150,6 +152,7 @@ $(document).ready(function() {
 					if (json["status"] == false) {
 						document.getElementById("task-datatabel-error").innerHTML =
 							"No results found";
+						$('#task-list-datatable_processing').hide();
 					} else {
 						document.getElementById("task-datatabel-error").innerHTML = " ";
 					}

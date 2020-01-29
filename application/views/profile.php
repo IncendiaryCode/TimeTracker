@@ -34,11 +34,19 @@
                 <?php 
                     $this->load->library('form_validation');
                     if(validation_errors()) { ?>
-                        <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
+                        <div class="alert alert-danger"><?php echo validation_errors(); ?>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                    <?php } 
                     if( $this->session->flashdata('err_msg') )
                  { ?>
-               <div class="alert alert-danger"><?php echo $this->session->flashdata('err_msg');?></div>
+               <div class="alert alert-danger"><?php echo $this->session->flashdata('err_msg');?>
+                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+               </div>
                <?php } ?>
 
                 <form method="post" action="<?=base_url();?>index.php/admin/change_password" id="changePsw">

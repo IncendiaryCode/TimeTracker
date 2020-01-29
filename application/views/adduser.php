@@ -12,8 +12,11 @@ $profile = $this->session->userdata('user_profile');
                             if(validation_errors()) { ?>
                                 <div class="alert alert-danger">
                                     <?php 
-                                        echo validation_errors('<span class="error close">', '</span>');
-                                    ?>    
+                                        echo validation_errors('<span class="error close">', '</span>'); ?>    
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    
                                 </div>
                             <?php } 
                             if($this->session->flashdata('true')){ ?>
@@ -21,11 +24,17 @@ $profile = $this->session->userdata('user_profile');
                                     <?php  
                                         echo $this->session->flashdata('true'); 
                                     ?>    
+                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                             <?php } 
                             else if($this->session->flashdata('err')){ ?>
                                 <div class = "alert alert-danger">
                                     <?php echo $this->session->flashdata('err'); ?>
+                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                             <?php } ?> 
                         <h1 class="text-center display-heading">Add user</h1>
