@@ -477,7 +477,10 @@ $(document).ready(function() {
 			keyboard: false
 		});
 	}
-
+	$('#alert-for-punchin').click(function()
+	{
+		$('#play-timer').modal('show');
+	})
 	$("#stop-time").click(function() {
 		if (stopped == 1) {
 			$("#alert-punchin").modal("show");

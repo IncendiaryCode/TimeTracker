@@ -533,6 +533,11 @@ a:hover {
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+#alert-punchin .modal-header
+{
+    border: none;
+    padding: 0.75rem;
+}
 .hr {
     margin-top: 1rem;
     margin-bottom: 1rem;
