@@ -140,7 +140,12 @@ class User extends CI_Controller
             echo json_encode($output_result); //send response to the ajax call
         }else{
             $data['task_type'] = 'task';
-            $data['start_time'] = (isset($data['time']))?$data['time']:date('Y:m:d H:i:s');
+            if($this->input->post('time')){
+                $data['start_time'] = $this->input->post('time');
+            }
+            else{
+                $data['start_time'] = date('Y-m-d H:i:s');
+            }
             $result['details'] = $this->user_model->start_timer($data); //start the timer for the requested task id 
             if ($result['details'] == FALSE) {
                 $output_result['status'] = FALSE;
@@ -381,8 +386,8 @@ class User extends CI_Controller
                 $picture    = $uploadData['file_name']; //to update profile in db
             } else {
                 //if image is not uploaded, print error message
-                echo $this->upload->display_errors();
-                $picture = 'images.png';
+                $this->session->set_flashdata('failure', $this->upload->display_errors());
+                redirect('user/load_my_profile','refresh');
             }
         } else {
             //if image file is not present, assign default image to $picture variable
@@ -396,7 +401,7 @@ class User extends CI_Controller
         }else{
             //if update is unsuccessful, redirect with error message
             $this->session->set_flashdata('failure', 'Profile picture not updated.');
-            redirect('admin/load_my_profile','refresh');
+            redirect('user/load_my_profile','refresh');
         }
     }
 
