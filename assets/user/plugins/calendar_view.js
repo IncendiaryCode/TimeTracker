@@ -39,7 +39,10 @@ function draw_chart_cards(data) {
                 var timeZone = moment.tz.guess();
                 var date = data[x][y].start_time.slice(0, 10);
                 var start_time = data[x][y].start_time;
-                var serverDate = moment(start_time).tz(timeZone).format('Y-MM-DD h:mm:ss a');
+                    var start_time_utc = moment.utc(start_time).toDate();
+                    var serverDate = moment(start_time_utc).format(
+                        "YYYY-MM-DD hh:mm:ss a"
+                    );
                 if(serverDate != 'Invalid date')
                 {
                     cardHeaderRow.append(
@@ -114,7 +117,7 @@ function draw_chart_cards(data) {
                 "href",
                 timeTrackerBaseURL +
                 "index.php/user/load_add_task?t_id=" +
-                data[x][y].id+"timeZone="+timeZone
+                data[x][y].id
             );
             footerRight.append(actionEdit);
             cardFooter.append(footerRow);
@@ -347,10 +350,15 @@ function draw_customized_chart(res) {
     if (res['data'] != "No activity in this date.") {
 
         for (var i = 0; i < res['data'][1].length; i++) {
-            //color = parseInt(color) + 123456;
+            var start_time_utc = moment.utc(res['data'][1][i]["start_time"]).toDate();
+            var start_time_local = moment(start_time_utc).format("YYYY-MM-DD HH:mm:ss");
 
-            var start_time = res['data'][1][i]["start_time"].slice(10, 16);
-            var end_time = res['data'][1][i]["end_time"].slice(10, 16);
+
+            var end_time_utc = moment.utc(res['data'][1][i]["end_time"]).toDate();
+            var end_time_local = moment(end_time_utc).format("YYYY-MM-DD HH:mm:ss");
+
+            var start_time = start_time_local.slice(10,16);
+            var end_time = end_time_local.slice(10,16);
 
             var start_time_min = (start_time.slice(0, 3) * 60) + parseInt(start_time.slice(4, 6));
             var end_time_min = (end_time.slice(0, 3) * 60) + parseInt(end_time.slice(4, 6));
@@ -416,7 +424,6 @@ var color = "000000";
 function printChart(start, width, top, task_name, id) {
     for (var i = 0; i < last_task_name.length; i++) {
         if (task_name == last_task_name[i]['task_name']) {
-
             color = last_task_name[i]['color'];
             break;
         }
@@ -536,7 +543,6 @@ function loadMonthlyChart() {
         data: { 'chart_type': "monthly_chart", 'date': year },
         dataType: 'json',
         success: function (res) {
-            console.log(res);
             if(res['data'][0] == 0)
             {
                 document.getElementById('monthly-chart-error').innerHTML = "No works in this year."
