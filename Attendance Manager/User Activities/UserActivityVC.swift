@@ -299,6 +299,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         lblEmpty.textColor = .lightGray
         refreshControl.tintColor = g_colorMode.midColor()
         tblUserDetails.backgroundColor = g_colorMode.defaultColor()
+//        tblUserDetails.backgroundColor = UIColor(hexString: "#EEEEEE")
         tblUserDetails.layer.borderWidth = 0.3
         tblUserDetails.layer.borderColor = g_colorMode.textColor().cgColor
         tblUserDetails.reloadData()
@@ -310,21 +311,27 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             // To start animation running cell to top
 //            tblUserDetails.reloadRows(at: arrIndexOfRunningTask, with: .none)
         }
+        showIntroPage()
+    }
+    
+    /// Show intro page if required.
+    func showIntroPage() {
         /// Create intro page if first time installed.(Showing add task)
-        if nil == UserDefaults.standard.object(forKey: "IntroStatusTask") ||
-                false == UserDefaults.standard.value(forKey: "IntroStatusTask") as? Bool {
+        if (nil == UserDefaults.standard.object(forKey: "IntroStatusTask") ||
+            false == UserDefaults.standard.value(forKey: "IntroStatusTask") as? Bool)
+            && g_isPunchedIn ?? false && !g_isPunchedOut {
             let cgRect = CGRect(x: btnAddTask.frame.minX, y: btnAddTask.frame.minY-11
                 , width: btnAddTask.frame.width, height: btnAddTask.frame.height)
             let userGuideData = UserguideData(itemFrame: cgRect, itemHint:
                 "To create new task.")
             viewUserGuideTask = UserguideView(userguideData: userGuideData)
             viewUserGuideTask.completionHandler = {
+                UserDefaults.standard.setValue(true, forKey: "IntroStatusTask")
                 if g_arrCTaskDetails.count != 0 {
                     self.setupCellintroPage()
                 }
             }
             tabBarController?.view.addSubview(viewUserGuideTask)
-            UserDefaults.standard.setValue(true, forKey: "IntroStatusTask")
         }
     }
     
@@ -429,10 +436,22 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 .getTaskDetailsFromProjectNameUnFinished(arrProj: arrProj)
         }
         
+        var nContainsOfflineTask: Int?
         // Sort array of task based on sort type.
+        var i = 0
         g_arrCTaskDetails.sort { (task1, task2) -> Bool in
             switch (sortType) {
                 case .tasks :
+                    if task1.taskId < 0 {
+                        // Set contains offline task in array.
+                        if nil == nContainsOfflineTask {
+                            nContainsOfflineTask = i+1
+                        }
+                        if task2.taskId < 0 {
+                            return task1.taskId < task2.taskId
+                        }
+                    }
+                    i += 1
                     return task1.taskId > task2.taskId
                 case .projects:
                     return task1.projId > task2.projId
@@ -442,6 +461,13 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                     return false
             }
         }
+        
+        // Check for offline tasks. (Sort local_task_ids to top, ids are stored in negative value).
+        if let indexShift = nContainsOfflineTask {
+            g_arrCTaskDetails = g_arrCTaskDetails.shift(withDistance:
+                indexShift - g_arrCTaskDetails.count)
+        }
+        
         if g_arrCTaskDetails.count == 0 {
             lblEmpty.isHidden = false
         }
@@ -495,9 +521,10 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             let userGuideData = UserguideData(itemFrame: cgRect, itemHint:
                 "1. Tap to start/stop the task.\n2. Swipe left for edit/stop.")
             viewUserGuideCell = UserguideView(userguideData: userGuideData)
-            
+            viewUserGuideTask.completionHandler = {
+                UserDefaults.standard.setValue(true, forKey: "IntroStatusCell")
+            }
             tabBarController?.view.addSubview(viewUserGuideCell)
-            UserDefaults.standard.setValue(true, forKey: "IntroStatusCell")
         }
     }
     
@@ -682,6 +709,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         let header = TableHeaderView()
         header.customInit(title: "Recent Activities", section: section)
         header.contentView.backgroundColor = g_colorMode.defaultColor()
+//        header.contentView.backgroundColor = UIColor(hexString: "#EEEEEE")
         // tap gesture to Filter button.
         let tap = UITapGestureRecognizer(target: self, action: #selector(btnFilterPressed(_:)))
         header.btnFilter.addGestureRecognizer(tap)
@@ -744,9 +772,6 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath)
         -> [UITableViewRowAction]? {
-            
-        // If punched out.
-
         let cTaskDetails = g_arrCTaskDetails[indexPath.row]
         let taskId = cTaskDetails.taskId
         let editAction = UITableViewRowAction(style: .default, title: "Edit" , handler: {
@@ -857,7 +882,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     /// To stop task.
-    func stopTask(taskId: Int) {
+    func stopTask(taskId: Int, completion: @escaping (() -> Void) = {}) {
         tasksCDController.stopTask(taskId: taskId, completion: {
             status in
             if status {
@@ -871,6 +896,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 print("Error while starting task..!")
             }
             self.updateProject()
+            completion()
         })
     }
     
@@ -1181,10 +1207,12 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             g_isPunchedIn = true
             self.btnAddTask.isHidden = false
             self.collectionTimer.reloadData()
-            
             if let indexPath = self.indexPathToRun {
                 self.startOrStopTask(indexPath: indexPath)
             }
+            
+            // If intro page not shown.
+            self.showIntroPage()
         }
         tabBarController?.view.addSubview(viewTimeAdder)
     }

@@ -219,10 +219,11 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         
         refreshAlert.addAction(UIAlertAction(title: "Yes", style: .default
             , handler: { (action: UIAlertAction!) in
-                
-            // Reset flag.
-            UserDefaults.standard.setValue(false, forKey: "IntroStatusCell")
-            UserDefaults.standard.setValue(false, forKey: "IntroStatusTask")
+                // Reset flag.
+                UserDefaults.standard.setValue(false, forKey: "IntroStatusCell")
+                UserDefaults.standard.setValue(false, forKey: "IntroStatusTask")
+                UserDefaults.standard.setValue(false, forKey: "IntroStatusWeekLeft")
+                UserDefaults.standard.setValue(false, forKey: "IntroStatusDayLeft")
         }))
         refreshAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         present(refreshAlert, animated: true, completion: nil)
@@ -306,6 +307,9 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if tableSelection == .multiTask {
+            return 50
+        }
         return 40
     }
     
@@ -316,6 +320,9 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         else {
             header.customInit(title: "Multi task", section: section)
+            header.lblHint.text = "If you disable multi task, you can run only one task at a time."
+            header.lblHint.isHidden = false
+            header.imgHint.isHidden = false
         }
         header.lblTitle.center = CGPoint(x: header.lblTitle.frame.midX, y: 20)
         header.contentView.backgroundColor = g_colorMode.defaultColor()
@@ -382,7 +389,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func showMultitaskAlert() {
         let alert = UIAlertController(title: "Alert..!", message:
-            "Currently multiple tasks are running. Do you want to stop it?", preferredStyle: UIAlertController.Style.alert)
+            "Currently multiple tasks are running. Do you want to stop it?"
+            , preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel
             , handler: { _ in
         }))

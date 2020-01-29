@@ -41,6 +41,10 @@ class APIResponseHandler {
                     if let userProfUrl = dictResLogin["profile_pic"] as? String, userProfUrl != "" {
                         UserDefaults.standard.set(userProfUrl, forKey: "profileUrl")
                     }
+                    if let phoneNo = dictResLogin["phone"] as? String, phoneNo != ""
+                        , phoneNo != "0" {
+                        UserDefaults.standard.set(phoneNo, forKey: "phoneNo")
+                    }
                     completion(true, "")
                 }
                 else {
@@ -470,7 +474,9 @@ class APIResponseHandler {
             var dictParams = Dictionary<String, Any>()
             let strUserId = UserDefaults.standard.value(forKey: "userId") as! String
             dictParams.updateValue(strUserId, forKey: "userid")
-            dictParams.updateValue("\(taskDetails.taskId!)", forKey: "task_id")
+            if taskDetails.taskId! > 0 {
+                dictParams.updateValue("\(taskDetails.taskId!)", forKey: "task_id")
+            }
             dictParams.updateValue(taskDetails.taskName!, forKey: "task_name")
             dictParams.updateValue(taskDetails.taskDescription!, forKey: "task_desc")
             dictParams.updateValue("\(taskDetails.projId!)", forKey: "project_id")
@@ -569,7 +575,7 @@ class APIResponseHandler {
     
     /// To send OTP to the user's email address.
     static func sendOTP(email: String, completion:@escaping (Bool, String) -> ()) {
-        let url = URL(string: "\(g_baseURL)/user/send_otp")
+        let url = URL(string: "\(g_baseURL)/timetracker/index.php/api/user/send_otp")
         let params = ["email": email]
         RequestController.requestToAPI(params: params, url: url!, completion: {
                 dictResult in
@@ -600,6 +606,12 @@ class APIResponseHandler {
                 }
             }
         })
+    }
+    
+    @IBAction func txtEmailPrimaryAction(_ sender: Any) {
+    }
+    
+    @IBAction func txtOtpPrimaryAction(_ sender: Any) {
     }
     
     static func resetOtpPassword(newPW: String, completion:@escaping (Bool, String) -> ()) {

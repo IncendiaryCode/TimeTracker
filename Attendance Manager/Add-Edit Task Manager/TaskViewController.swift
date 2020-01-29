@@ -1488,7 +1488,8 @@ UIGestureRecognizerDelegate {
     }
     
     @IBAction func btnSavePressed(_ sender: Any) {
-        guard !(txtTaskName.text == "") && nil != selectedProjId && nil != selectedModId && checkAllTimingsFilled() else {
+        guard !(txtTaskName.text == "") && nil != selectedProjId && nil != selectedModId
+            && checkAllTimingsFilled() else {
                     errorMessage(msg: "Fill all the fields")
                     return
         }

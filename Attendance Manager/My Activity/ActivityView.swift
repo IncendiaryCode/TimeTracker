@@ -15,7 +15,12 @@
 protocol TableviewTap {
 	/// Delegate sends selected cell's task id.
 	func cellSelected(taskId: Int)
-	func alertCellSwipe()
+	/// When swipe action performed to cell and that cell belongs to running task.
+	func cellSwipeToStop(taskId: Int)
+	/// Show intro page in day view.
+	func showIntroPageDayView()
+	/// Show intro page in week view.
+	func showIntroPageWeekView()
 }
 
 protocol BarChartViewDelegate {
@@ -118,6 +123,18 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		viewDayAndWeekChanger.isHidden =  false
         nSliderView = sliderView
         arrIntDate = []
+		
+		// Setup label no data indicator
+		let cgRect = CGRect(x: 0, y: tblActivities.frame.minY + 40
+			, width: UIScreen.main.bounds.width, height: 30)
+		lblNoData = UILabel(frame: cgRect)
+		//			lblNoData.center = tblActivities.center
+		lblNoData.text = "No task available."
+		lblNoData.textAlignment = .center
+		lblNoData.textColor = g_colorMode.textColor()
+		lblNoData.isHidden = true
+		self.addSubview(lblNoData)
+		
         updateChartWithData()
 		if nSliderView == 0 {
 			// Set label for long press in day graph.
@@ -584,17 +601,6 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			calendarView.isHidden = true
 		}
 		else {
-			// Setup label no data indicator
-			let cgRect = CGRect(x: 0, y: tblActivities.frame.minY + 40
-				, width: UIScreen.main.bounds.width, height: 30)
-			lblNoData = UILabel(frame: cgRect)
-//			lblNoData.center = tblActivities.center
-			lblNoData.text = "No task available."
-			lblNoData.textAlignment = .center
-			lblNoData.textColor = g_colorMode.textColor()
-			lblNoData.isHidden = true
-			self.addSubview(lblNoData)
-			
 			calendarView.dataSource = self
 			calendarView.delegate = self
 			calendarView.setDisplayDate(Date()) // Initially display current month.
@@ -633,6 +639,9 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			arrCTaskDetails = tasksCDCtrlr.getDataFromDate(arrDate: arrIntDate)
 			nCell = arrCTaskDetails.count
 			tblActivities.reloadDataWithAnimation()
+		}
+		else {
+			lblTotalHr.text = "Duration: 00:00:00"
 		}
 		checkArrowAlpha()
 		calendarView.reloadData()
@@ -727,6 +736,13 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 				
 			}
 			
+			// Setup stop action.
+			let stopAction = UITableViewRowAction(style: .default, title: "Stop" , handler: {
+				(action:UITableViewRowAction, indexPath: IndexPath) -> Void in
+				self.delegate?.cellSwipeToStop(taskId: taskId)
+			})
+			stopAction.backgroundColor =  g_colorMode.midColor()
+			
 			// If punched out.
 //			if g_isPunchedOut {
 //				return nil
@@ -735,8 +751,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			// If task is running guard it.
 			let taskInfo = getTaskDetails(taskId: taskId)
 			if true == taskInfo?.bIsRunning {
-				delegate?.alertCellSwipe()
-				return []
+				return [stopAction]
 			}
 			
 			let editAction = UITableViewRowAction(style: .default, title: "Edit" , handler: {
@@ -791,10 +806,17 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		if nSliderView == 2 && nCell == 0 {
 			lblNoData.isHidden = false
 		}
-		else if nSliderView == 2 {
+		else {
 			lblNoData.isHidden = true
 		}
 		
+		// In initial user creation condition if task count is zero.
+		if arrIntDate.count == 0 && nSliderView != 2 {
+			lblNoData.isHidden = false
+		}
+		else if nSliderView != 2 {
+			lblNoData.isHidden = true
+		}
         return nCell
     }
     
@@ -909,16 +931,30 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			if indexSelDate >= arrIntDate.count - 1 {
 				btnLeftMove.alpha = 0.05
 			}
+			else {
+				// Show intro pagein day view. (If first installation/reset intro page)
+				if false == UserDefaults.standard.value(forKey: "IntroStatusDayLeft")
+					as? Bool ?? false {
+					delegate?.showIntroPageDayView()
+				}
+			}
 			if indexSelDate == 0 {
 				btnRightMove.alpha = 0.05
 			}
 		}
 		else if nSliderView == 1 {
-			if nWeek <= 0 {
-				btnRightMove.alpha = 0.05
-			}
 			if nWeek >= arrWeekDetails.count - 1 {
 				btnLeftMove.alpha = 0.05
+			}
+			else {
+				// Show intro page week view. (If first installation/reset intro page)
+				if false == UserDefaults.standard.value(forKey: "IntroStatusWeekLeft")
+					as? Bool ?? false {
+					delegate?.showIntroPageWeekView()
+				}
+			}
+			if nWeek <= 0 {
+				btnRightMove.alpha = 0.05
 			}
 		}
 		else {

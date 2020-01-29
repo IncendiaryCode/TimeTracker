@@ -200,20 +200,48 @@ class MyActivityViewController: UIViewController, TableviewTap, BarChartViewDele
         self.present(alert, animated: true, completion: nil)
     }
     
-    func alertCellSwipe() {
+    func cellSwipeToStop(taskId: Int) {
         //If user tries to logout ihn the break time shows alert.
-        let alert = UIAlertController(title: "Alert..!", message:
-            "Please stop this task, before moving to edit"
-            , preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default,
-                                      handler: { _ in
-        }))
-        self.present(alert, animated: true, completion: nil)
+        if let userActivtyVC = tabBarController?.viewControllers?[1] as? UserActivityVC {
+            userActivtyVC.stopTask(taskId: taskId) {
+                // Refresh history views.
+                self.arrActView[0].setupDayView()
+                self.arrActView[1].resetWeekBar()
+                self.arrActView[1].setupWeekView()
+                self.arrActView[2].setupMonthView()
+            }
+        }
     }
     
     func cellSelected(taskId: Int) {
         ntaskId = taskId
         performSegue(withIdentifier: "SegueToTaskController", sender: self)
+    }
+    
+    func showIntroPageDayView() {
+        let cgRect = CGRect(x: arrActView[0].btnLeftMove.frame.minX
+            , y: arrActView[0].btnLeftMove.frame.maxY+viewSelection.frame.minY, width: 44
+            , height: 44)
+        let userGuideData = UserguideData(itemFrame: cgRect, itemHint:
+            "To check previous working day's task details.")
+        let viewUserGuideTask = UserguideView(userguideData: userGuideData)
+        viewUserGuideTask.completionHandler = {
+        }
+        UserDefaults.standard.set(true, forKey: "IntroStatusDayLeft")
+        tabBarController?.view.addSubview(viewUserGuideTask)
+    }
+    
+    func showIntroPageWeekView() {
+        let cgRect = CGRect(x: arrActView[0].btnLeftMove.frame.minX
+            , y: arrActView[0].btnLeftMove.frame.maxY+viewSelection.frame.minY, width: 44
+            , height: 44)
+        let userGuideData = UserguideData(itemFrame: cgRect, itemHint:
+            "To check previous working week's task details.")
+        let viewUserGuideTask = UserguideView(userguideData: userGuideData)
+        viewUserGuideTask.completionHandler = {
+        }
+        UserDefaults.standard.set(true, forKey: "IntroStatusWeekLeft")
+        tabBarController?.view.addSubview(viewUserGuideTask)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

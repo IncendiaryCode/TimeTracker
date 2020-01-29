@@ -77,10 +77,11 @@ class UserguideView: UIView {
         viewHighlight = UIView()
         self.addSubview(viewHighlight)
         
-        txtVHint = UITextView()
+        txtVHint = UITextView(frame: CGRect(x: 0, y: 0, width: 250
+            , height: 100))
         txtVHint.text = arrUserguideData[0].itemHint
         txtVHint.textAlignment = .center
-        txtVHint.font = .systemFont(ofSize: 16)
+        txtVHint.font = .systemFont(ofSize: 14)
         txtVHint.translatesAutoresizingMaskIntoConstraints = true
         txtVHint.sizeToFit()
         txtVHint.isUserInteractionEnabled = false
@@ -132,7 +133,7 @@ class UserguideView: UIView {
             txtVHint.text = arrUserguideData[currentPage].itemHint
             
             let hintPoint = calculateTextHintFrame(for: arrUserguideData[currentPage].itemFrame)
-            var hintFrame = CGRect(x: hintPoint.x, y: hintPoint.y, width: 250, height: 70)
+            var hintFrame = CGRect(x: hintPoint.x, y: hintPoint.y, width: 250, height: 60)
             //Set height based on contentsize.
             hintFrame.size.height = txtVHint.contentSize.height
             txtVHint.frame = hintFrame

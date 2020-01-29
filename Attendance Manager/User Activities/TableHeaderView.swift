@@ -19,6 +19,11 @@ class TableHeaderView: UITableViewHeaderFooterView {
     var nSection: Int!
     /// Header label in header view.
     var lblTitle: UILabel!
+    /// Hint in the header view.(By default hidden)
+    var lblHint: UILabel!
+    /// Hint image
+    public var imgHint: UIImageView!
+    
     var btnFilter: UIButton!
     var lblFilterIndicator: UILabel!
     override init(reuseIdentifier: String?) {
@@ -41,7 +46,24 @@ class TableHeaderView: UITableViewHeaderFooterView {
         lblTitle.font = lblTitle.font.withSize(12)
         self.lblTitle.text = title
         self.addSubview(lblTitle)
-
+        
+        // Setup hint text.
+        cgRValue = CGRect(x: 35, y: lblTitle.bounds.maxY+10, width: cgFScreenWidth-60, height: 15)
+        lblHint = UILabel(frame: cgRValue)
+        lblHint.textColor = UIColor.lightGray.withAlphaComponent(0.7)
+        lblHint.font = lblHint.font.withSize(10)
+        lblHint.isHidden = true
+        self.addSubview(lblHint)
+        
+        // Setup hint image.
+        cgRValue = CGRect(x: 20, y: lblTitle.bounds.maxY+10, width: 10, height: 10)
+        imgHint = UIImageView(frame: cgRValue)
+        imgHint.center = CGPoint(x: imgHint.center.x, y: lblHint.center.y)
+        imgHint.alpha = 0.5
+        imgHint.image = #imageLiteral(resourceName: "AboutIcon")
+        imgHint.isHidden = true
+        self.addSubview(imgHint)
+        
         // Set constraints to filter button.
         cgRValue = CGRect(x: cgFScreenWidth - 64, y: lblTitle.frame.minY - 12, width: 44,
                           height: 44)
