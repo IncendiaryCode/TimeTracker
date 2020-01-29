@@ -93,13 +93,12 @@ function drawCards(data) {
 						'<div class="col-6 text-left"><span class="vertical-line"></span>Not yet started.</div>'
 					);
 				} else {
-					var timeZone = moment.tz.guess();
 					var date = data[x][y].start_time.slice(0, 10);
 					var start_time = data[x][y].start_time;
-					var serverDate1 = moment(start_time).tz(timeZone).format("Y-MM-DD h:mm:ss a");
-						console.log("start_time",start_time);
-						console.log("Converted date",serverDate1);
-						console.log("timeZone",timeZone);
+					var start_time_utc = moment.utc(start_time).toDate();
+					var serverDate1 = moment(start_time_utc).format(
+						"YYYY-MM-DD hh:mm:ss a"
+					);
 					if (serverDate1 != "Invalid date") {
 						cardHeaderRow.append(
 							'<div class="col-6 text-left"><span class="vertical-line"></span>' +
@@ -343,15 +342,12 @@ function drawCards(data) {
 				var actionEdit = $(
 					'<a href="#" class=" pl-2  text-white " id="action-edit"><i class="far fa-edit action-play" data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
 				);
-
-				var timeZone = moment.tz.guess();
+				
 				actionEdit.attr(
 					"href",
 					timeTrackerBaseURL +
 						"index.php/user/load_add_task?t_id=" +
-						data[x][y].id +
-						"timeZone=" +
-						timeZone
+						data[x][y].id
 				);
 				footerRight.append(actionEdit);
 				cardFooter.append(footerRow);
@@ -476,8 +472,7 @@ $(document).ready(function() {
 	$("#stop-now").modal({
 		keyboard: false
 	});
-	if(document.getElementById('previous-punch-in'))
-	{
+	if (document.getElementById("previous-punch-in")) {
 		$("#previous-punch-in").modal({
 			keyboard: false
 		});
@@ -485,7 +480,7 @@ $(document).ready(function() {
 
 	$("#stop-time").click(function() {
 		if (stopped == 1) {
-			$('#alert-punchin').modal('show');
+			$("#alert-punchin").modal("show");
 			return false;
 		}
 		var _dateObj = new Date();
@@ -678,8 +673,7 @@ $(document).ready(function() {
 				document.getElementById("punchout-error").innerHTML =
 					"enter valid end time. ";
 				return false;
-			}
-			 else {
+			} else {
 				var input_element = __element.getElementsByClassName("check-for-utc");
 				for (var i = 0; i < input_element.length; i++) {
 					if (input_element[i].value != "" && input_element[i].value != " ") {
@@ -703,9 +697,9 @@ $(document).ready(function() {
 				$.ajax({
 					type: "POST",
 					url: timeTrackerBaseURL + "user/update_end_time",
-					data: { action: "previous", id: login_id , "time": serverDate },
+					data: { action: "previous", id: login_id, time: serverDate },
 					success: function(res) {
-					    window.location.reload();
+						window.location.reload();
 					}
 				});
 			}
@@ -733,7 +727,7 @@ $(document).ready(function() {
 					return false;
 				} else if (stopped == 1) {
 					/*alert("You cannot punch in again...");*/
-					$('#alert-punchin').modal('show');
+					$("#alert-punchin").modal("show");
 					return false;
 				} else {
 					startTimer(login_timer);
@@ -803,5 +797,4 @@ $(document).ready(function() {
 			$("#stop-now").modal("show");
 		}
 	});
-
 });
