@@ -43,7 +43,7 @@ $this->load->helper('url_helper');
 </head>
 
 <body>
-    <header class="container main-header">
+    <header class="container main-header" id="main-header">
         <div class="row">
             <?php if(empty($GLOBALS['page_title'])) { ?>
                 <div class="col-md-6 col-6 time-tracker">

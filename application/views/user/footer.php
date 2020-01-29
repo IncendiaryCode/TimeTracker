@@ -1,26 +1,26 @@
 <?php
-    $this->load->library('session');
-    $profile = $this->session->userdata('user_profile');
-    $name = $this->session->userdata('username');
+// $this->load->library('session');
+$profile = $this->session->userdata('user_profile');
+$name = $this->session->userdata('username');
 ?>
-    <div class="modal modal-transparent fade" id="change-profile" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-header">
-                <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times  main-modal-close"></i></button>
-            </div>
-            <div class="modal-content text-center">
-                <img id="new_img" src="<?=base_url().USER_UPLOAD_PATH.$profile;?>" class="rounded-circle img-fluid" > 
+<div class="modal modal-transparent fade" id="change-profile" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-header">
+            <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times  main-modal-close"></i></button>
+        </div>
+        <div class="modal-content text-center">
+            <img id="new_img" src="<?= base_url() . USER_UPLOAD_PATH . $profile; ?>" class="rounded-circle img-fluid">
 
-                <h5 class="text-center mt-4 font-weight-light"><?php echo $name;?></h5>
-                <ul class="text-center">
-                    <!-- profile options -->
-                    <li id="empplyee-profile"><a href="<?=base_url();?>index.php/user/load_my_profile">My profile</a></li>
-                    <li><a href="<?=base_url();?>user/load_employee_activities">My activities</a></li>
-                    <li><a href="<?=base_url();?>login/logout" >Logout</a></li>
-                </ul>
-            </div>
+            <h5 class="text-center mt-4 font-weight-light"><?php echo $name; ?></h5>
+            <ul class="text-center">
+                <!-- profile options -->
+                <li id="empplyee-profile"><a href="<?= base_url(); ?>index.php/user/load_my_profile">My profile</a></li>
+                <li><a href="<?= base_url(); ?>user/load_employee_activities">My activities</a></li>
+                <li><a href="<?= base_url(); ?>login/logout">Logout</a></li>
+            </ul>
         </div>
     </div>
+</div>
 <div class="modal" id="changeimage" data-backdrop="false">
     <!-- to change the profile picture of user-->
     <div class="modal-dialog animated">
@@ -29,7 +29,7 @@
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
-                <form id="upload-image" method="post" action="<?=base_url();?>index.php/user/upload_profile" enctype="multipart/form-data">
+                <form id="upload-image" method="post" action="<?= base_url(); ?>index.php/user/upload_profile" enctype="multipart/form-data">
                     <p><input type="file" name="change_img" placeholder="Upload image" id="image"></p>
                     <p class="text-danger" id="imageerror"></p>
                     <button type="submit" class="btn btn-primary" id="submit-profile-pic">Upload</button>
@@ -42,25 +42,26 @@
 <div class="modal" id="pause-action" data-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content text-center">
-                <form method="post" id="punch-out-action">
-                    <div class="modal-body text-left">                        
-                        <ul class="text-muted"><li>Hope all your task are done for today...!</li>
-                            <li>Do you want to punch out?</li>
-                        </ul>
-                    </div>
-                    <div class="modal-footer text-center">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                        <button type="submit" class="btn btn-primary" id="punch-out">Yes</button>
-                    </div>
-                </form>
-            </div>
+            <form method="post" id="punch-out-action">
+                <div class="modal-body text-left">
+                    <ul class="text-muted">
+                        <li>Hope all your task are done for today...!</li>
+                        <li>Do you want to punch out?</li>
+                    </ul>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-primary" id="punch-out">Yes</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
 <div class="modal fade" id="end-time-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="<?=base_url();?>index.php/user/stop_timer?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-endtime" method="post">
+            <form action="<?= base_url(); ?>index.php/user/stop_timer?id=<?php echo $task_info['task_status'][0]['task_id'] ?>" id="update-endtime" method="post">
                 <div class="modal-header">
                     <h5 class="modal-title" id="">Stop now!</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -70,11 +71,11 @@
                 <div class="modal-body">
                     <div class="input-group">
                         <p>Task name: <strong>
-                            <?php echo $task_info['task_status'][0]['task_name'] ?></strong></p>
+                                <?php echo $task_info['task_status'][0]['task_name'] ?></strong></p>
                     </div>
                     <div class="input-group">
                         <p>Started at: <strong id="old-start-date">
-                        <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
+                                <?php echo $task_info['task_status'][0]['start_time'] ?></strong></p>
                     </div>
                     <div>
                         <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
@@ -99,7 +100,7 @@
 </div>
 <div class="modal" id="timestopmodal" tabindex="-1">
     <!-- Modal Timer to Stop or Confirm -->
-    <div class="modal-dialog modal-lg" >
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="timestopmodalLabel">Confirm Timer Action</h5>
@@ -126,64 +127,22 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script  src="//www.gstatic.com/charts/loader.js" type="text/javascript"></script>
-
-
-<script src="//momentjs.com/downloads/moment.js"></script> 
+<script src="//www.gstatic.com/charts/loader.js" type="text/javascript"></script>
+<script src="//momentjs.com/downloads/moment.js"></script>
 <script src="//momentjs.com/downloads/moment-timezone.js"></script>
-
-
-
-
 <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="//unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
-
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
-<script src="<?=base_url();?>assets/user/plugins/calendar_view.js?v=<?=VERSION?>"></script>
-
-
-<script src="<?=base_url();?>assets/user/javascript/momet_copy.js?v=<?=VERSION?>"></script>
-<script src="<?=base_url();?>assets/user/javascript/moment_zone.js?v=<?=VERSION?>"></script>
-
-
-<script src="<?=base_url();?>assets/user/javascript/employeeInfo.js?v=<?=VERSION?>"></script>
-<script src="<?=base_url();?>assets/user/javascript/add_task.js?v=<?=VERSION?>"></script>
-<script src="<?=base_url();?>assets/user/javascript/utils.js?v=<?=VERSION?>"></script>
-<script src="<?=base_url();?>assets/user/javascript/change_password.js?v=<?=VERSION?>"></script>
-<script src="<?=base_url();?>assets/plugins/bxslider/js/jquery.bxslider.min.js?v=<?=VERSION?>"></script>
-<script src="<?=base_url();?>assets/user/javascript/employee_profile.js?v=<?=VERSION?>"></script>
-<script type="text/javascript">
-
- $(function() {
- $('.edit-date-time').datetimepicker({
-          useCurrent: false, format: 'YYYY-MM-DD hh:mm A',
-     });
- });
- $(function() {
- $('.edit-date').datepicker({
-          useCurrent: false, format: 'yyyy-mm-dd',
-     });
- });
-$(function() {
-$('.edit-time').timepicker({
-      useCurrent: false, format: 'hh:mm:ss',
- });
-});
-
-function check_for_punchIn()
-{
-if(document.getElementById("stop-time"))
-    {
-        if (document.getElementById("stop-time").childNodes[1].childNodes[0].classList[2] == "fa-play") {
-            // $("#play-timer").modal("show");
-            $('#alert-punchin').modal('show');
-        }
-        else{
-            window.location.href = timeTrackerBaseURL +"user/load_add_task";
-        }
-    }
-}
-
-</script>
+<script src="<?= base_url(); ?>assets/user/plugins/calendar_view.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/user/javascript/momet_copy.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/user/javascript/moment_zone.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/user/javascript/employeeInfo.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/user/javascript/add_task.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/user/javascript/utils.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/user/javascript/change_password.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/plugins/bxslider/js/jquery.bxslider.min.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/user/javascript/employee_profile.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/user/javascript/app.js?v=<?= VERSION ?>"></script>
 </body>
+
 </html>
