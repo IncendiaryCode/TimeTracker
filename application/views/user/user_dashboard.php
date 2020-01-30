@@ -287,7 +287,7 @@ if (!empty($task_info['login_run'])) { ?>
                     </div>
                     <div class="modal-body text-center">
                         <div>
-                            <h4>Please punch in before start</h4>
+                            <h4 class="text-dark">Please punch in before start</h4>
                         </div>
                         <button type="button" class="btn btn-primary mt-4" data-dismiss="modal" id="alert-for-punchin">Punch in now!</button>
                     </div>

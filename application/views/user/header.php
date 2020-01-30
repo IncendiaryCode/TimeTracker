@@ -75,12 +75,17 @@ $this->load->helper('url_helper');
            
             <!-- refers to all other pages  -->
                 <a href="#" class="text-white profile-icon"><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-placement="top" title="User Profile"></i></a>
-            </div>
-            <div class="col-12">
-                <p class="display-heading pt-3 text-center">
-                    <?php echo $GLOBALS['page_title'] ?>
-                </p>
             <?php } ?>
             </div>
         </div>
     </header>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <p class="display-heading pt-3 text-center text-white">
+                    <?php if(!empty($GLOBALS['page_title'])) {
+                    echo $GLOBALS['page_title']; } ?>
+                </p>
+            </div>
+        </div>
+    </div>

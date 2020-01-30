@@ -28,7 +28,8 @@ header.main-header {
 	background-color: #927bfd;
     background-image: linear-gradient(-40deg, #c482fc 40%, #6d77ff 100%);
 	width: 100%;
-	max-width: 100%;
+	/*max-width: 100%;*/
+	z-index: 2000;
 }
 
 header.main-header h1 {

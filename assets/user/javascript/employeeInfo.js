@@ -340,7 +340,7 @@ function drawCards(data) {
 				});
 				//action Edit
 				var actionEdit = $(
-					'<a href="#" class=" pl-2  text-white " id="action-edit"><i class="far fa-edit action-play" data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
+					'<a href="#" class=" pl-2  text-white " id="action-edit"><i class="fas fa-pencil-alt action-play" data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
 				);
 				
 				actionEdit.attr(

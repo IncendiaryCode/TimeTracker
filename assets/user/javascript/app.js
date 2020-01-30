@@ -44,6 +44,5 @@ $(function() {
     $(".edit-time").timepicker({
 		useCurrent: false,
 		format: "hh:mm:ss"
-    });
-    
+    }); 
 });

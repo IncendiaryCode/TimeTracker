@@ -31,7 +31,7 @@
                                         <h5 id="current-date"></h5>
                                         <h6 class="mt-3 mb-1">Duration</h6>
                                         <input type="hidden" class="form-control- edit-date" id="daily-chart" data-date-format="YYYY-mm-DD ">
-                                        <h4 id="daily-duration">10:15</h4>
+                                        <h4 id="daily-duration">00:00</h4>
                                     </div>
                                     <div class="col-3 text-center">
                                         <a href="#" id="next-date"><h1><i class="fas fa-angle-right"></i></h1></a>
@@ -110,7 +110,7 @@
                                     <div class="col-6 text-center">
                                         <h5 id="current-year"></h5>
                                         <h6 class="mt-3 mb-1">Duration</h6>
-                                        <h4 id="daily-duration">135:12</h4>
+                                        <h4 id="monthly-duration">135:12</h4>
                                         <input type="number" class="form-control" id="monthly-chart">
                                     </div>
                                     <div class="col-3 text-center">

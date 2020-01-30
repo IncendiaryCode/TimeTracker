@@ -157,6 +157,7 @@ function loadTask(type, date) {
         success: function (values) {
             if (values == "No activity in this date.") {
                 $("#attachPanels").empty();
+
                 $("#attachPanels").empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
             } else {
                 var data = JSON.parse(values);
@@ -317,6 +318,7 @@ function retrieveChartData(type, date) {
                     $('#weekly').hide();
                 }
                 if (type == 'daily_chart') {
+                    document.getElementById('daily-duration').innerHTML = '00:00';
                     document.getElementById('daily-error').innerHTML = res['data'];
                     $("#attachPanels").empty();
                 }
@@ -348,6 +350,10 @@ function draw_customized_chart(res) {
     var margin_top = 290;
     var top1 = top;
     var window_width = $('.cust_daily_chart').width();
+
+
+
+    document.getElementById('daily-duration').innerHTML = parseInt((res['total_minutes']/60))+':'+res['total_minutes']%60;
     if(window_width > 700)
     {
         margin_top = 364;
@@ -553,10 +559,11 @@ function loadMonthlyChart() {
                 document.getElementById('monthly-chart-error').innerHTML = "No works in this year."
                 $('#calendar_basic').hide();
                 $('#attachPanels').hide();
-
+                document.getElementById('monthly-duration').innerHTML = "00:00";
             }
             else
             {
+                document.getElementById('monthly-duration').innerHTML = parseInt((res['total_minutes']/60))+':'+res['total_minutes']%60;
                 $('#calendar_basic').show();
                 $('#attachPanels').show();
             document.getElementById('monthly-chart-error').innerHTML = " ";
