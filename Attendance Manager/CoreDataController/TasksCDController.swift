@@ -31,7 +31,7 @@ class TasksCDController {
     
     /// Creates a new task with name, description and project id.
     func addNewTask(projectId: Int, taskName: String, taskDesc: String, moduleId: Int, isSynched:
-            Bool) -> Int {
+        Bool, isRunning: Bool, startTime: Int64 = 0) -> Int {
         let userEntity = NSEntityDescription.entity(forEntityName: "Tasks", in: nsManagedContext)!
         nsMOForUserTimes = NSManagedObject(entity: userEntity, insertInto: nsManagedContext)
         var taskId: Int!
@@ -53,9 +53,9 @@ class TasksCDController {
         else {
             taskId = -1
         }
-        nsMOForUserTimes.setValuesForKeys(["task_id": taskId, "project_id": projectId, "module_id": moduleId,
-                                           "task_name": taskName, "task_description": taskDesc, "is_work_in_progress": false,
-                                           "is_synched": isSynched])
+        nsMOForUserTimes.setValuesForKeys(["task_id": taskId!, "project_id": projectId
+            , "module_id": moduleId, "task_name": taskName, "task_description": taskDesc
+            , "is_work_in_progress": isRunning,"is_synched": isSynched, "start_time": startTime])
         saveContext()
         return taskId
     }
@@ -543,7 +543,7 @@ class TasksCDController {
     
     /// Returns task details in array of dictionary .
     /// Requires project names.
-    func getTaskDetailsFromProjectNameUnFinished(arrProj: Array<Int>) ->
+    func getTaskDetailsFromProjectNameUnFinished(arrProj: Array<Int>, onlyTodays: Bool = false) ->
         Array<TaskDetails> {
             var arrCTaskDetails = Array<TaskDetails>()
         for projId in arrProj {
@@ -562,11 +562,25 @@ class TasksCDController {
                         let taskName = nsMObject.value(forKey: "task_name") as! String
                         let taskDesc = nsMObject.value(forKey: "task_description") as! String
                         let startDateTime = nsMObject.value(forKey: "start_time") as! Int64
+                        let bWorking = nsMObject.value(forKey: "is_work_in_progress") as! Bool
+                        let endTime = nsMObject.value(forKey: "end_time") as! Int64
+                        
+                        // Check for onlyTodays applies.
+                        if onlyTodays {
+                            let date = Date(milliseconds: startDateTime)
+                            // Return only if started today, currently running and not started.
+                            if startDateTime != 0 && getCurrentDate() != date.getStrDate() &&
+                                !bWorking {
+                                // discard it.
+                                continue
+                            }
+                        }
+                        
                         // get total work time from taskstime entity
                         let totalTime = taskTimeUpdater.getTaskTotalTime(taskId: taskId)
                         
-                        let endTime = nsMObject.value(forKey: "end_time") as! Int64
-                        let bWorking = nsMObject.value(forKey: "is_work_in_progress") as! Bool
+                        
+                        
                         cTaskDetails = TaskDetails(taskId: taskId, taskName: taskName, taskDescr:
                             taskDesc, projId: projId, modId: modId, nTotalTime: totalTime, nStartTime:
                             startDateTime, nEndTime: endTime, isRunnung: bWorking)
@@ -576,8 +590,11 @@ class TasksCDController {
             catch {
                 print("Error")
             }
-        }
-        return arrCTaskDetails
+            }
+            arrCTaskDetails.sort { (task1, task2) -> Bool in
+                return task1.taskId > task2.taskId
+            }
+            return arrCTaskDetails
     }
     
     /// To get all the dates.
@@ -833,8 +850,23 @@ class TasksCDController {
             let nsMObject = nsMContext[0] as! NSManagedObject
             nsMObject.setValue(true, forKey: "is_synched")
             taskTimeUpdater.deletedOfflineTimes(taskId: taskId)
+            let taskId = nsMObject.value(forKey: "task_id") as! Int
+            if taskId < 0 {
+                nsManagedContext.delete(nsMObject)
+            }
             saveContext()
         }
+        // Check for locally created tasks.
+//        fetchRequest.predicate = NSPredicate(format: "task_id < %d", 0)
+//        nsMContext = try! nsManagedContext.fetch(fetchRequest)
+//        for nsMObject in nsMContext {
+//            taskTimeUpdater.deletedOfflineTimes(taskId: taskId)
+//            let taskId = (nsMObject as! NSManagedObject).value(forKey: "task_id") as! Int
+//            if taskId < 0 {
+//                nsManagedContext.delete(nsMObject as! NSManagedObject)
+//            }
+//            saveContext()
+//        }
     }
     
     /// Locally stored task details (with is_synched value as true).

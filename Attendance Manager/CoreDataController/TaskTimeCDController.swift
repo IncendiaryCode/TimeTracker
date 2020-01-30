@@ -54,8 +54,8 @@ class TasksTimeCDController {
             let userEntity = NSEntityDescription.entity(forEntityName: "Tasks_time",
                                                         in: nsManagedContext)!
             nsMOForUserTimes = NSManagedObject(entity: userEntity, insertInto: nsManagedContext)
-            nsMOForUserTimes.setValuesForKeys(["time_id": timeId, "task_id": taskId,                                            "date": strDate, "start_time": startTime, "end_time": endTime,
-                                               "task_description": descr ?? ""])
+            nsMOForUserTimes.setValuesForKeys(["time_id": timeId, "task_id": taskId,                                            "date": strDate, "start_time": startTime, "end_time": endTime
+                , "task_description": descr ?? ""])
         }
         else {
             // Updates existing timeid timings.
@@ -569,6 +569,27 @@ class TasksTimeCDController {
         }
     }
 
+    /// To get available timings from task id.
+    func getTimingsCount(of taskId: Int) -> Int {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
+        fetchRequest.predicate = NSPredicate(format: "task_id = %d", taskId)
+        let res = try! nsManagedContext.fetch(fetchRequest)
+        return res.count
+    }
+    
+    /// To get all time ids from task id.
+    func getTimingsId(of taskId: Int) -> Array<Int> {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
+        fetchRequest.predicate = NSPredicate(format: "task_id = %d", taskId)
+        let results = try! nsManagedContext.fetch(fetchRequest)
+        var arrTimeId: Array<Int> = []
+        for result in results {
+            let timeId = (result as! NSManagedObject).value(forKey: "time_id") as! Int
+            arrTimeId.append(timeId)
+        }
+        return arrTimeId
+    }
+    
     /// Get total work time from date.
     func getTotalWorkTime(intDate: Int64) -> Int {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")

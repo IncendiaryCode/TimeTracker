@@ -12,6 +12,10 @@
  //
  //////////////////////////////////////////////////////////////////////////// */
 
+protocol FilterToday {
+    func switchChanged(to value: Bool)
+}
+
 import UIKit
 
 class TableHeaderView: UITableViewHeaderFooterView {
@@ -23,9 +27,13 @@ class TableHeaderView: UITableViewHeaderFooterView {
     var lblHint: UILabel!
     /// Hint image
     public var imgHint: UIImageView!
-    
     var btnFilter: UIButton!
     var lblFilterIndicator: UILabel!
+    var switchFilter: UISwitch!
+    var lblTitleSwitch: UILabel!
+    /// Delegate to switch.
+    var delegate: FilterToday?
+    
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
     }
@@ -73,6 +81,29 @@ class TableHeaderView: UITableViewHeaderFooterView {
         btnFilter.imageEdgeInsets = UIEdgeInsets(top: 14, left: 12, bottom: 14, right: 16)
         self.addSubview(btnFilter)
         
+        // Setup switch.
+        cgRValue = CGRect(x: cgFScreenWidth - 120, y: lblTitle.frame.minY, width: 50, height: 44)
+        switchFilter = UISwitch(frame: cgRValue)
+        switchFilter.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
+        switchFilter.onTintColor = g_colorMode.midColor()
+        switchFilter.center = CGPoint(x: switchFilter.center.x, y: btnFilter.center.y)
+        switchFilter.isHidden = true
+        switchFilter.addTarget(self, action: #selector(switchChanged), for: UIControl.Event
+            .valueChanged)
+        self.addSubview(switchFilter)
+        
+        // Setup title for switch.
+        cgRValue = CGRect(x: switchFilter.frame.minX, y: switchFilter.frame.maxY
+            , width: switchFilter.bounds.width+20, height: 15)
+        lblTitleSwitch = UILabel(frame: cgRValue)
+        lblTitleSwitch.text = "Today"
+        lblTitleSwitch.center = CGPoint(x: switchFilter.center.x, y: lblTitleSwitch.center.y)
+        lblTitleSwitch.textColor = .lightGray
+        lblTitleSwitch.textAlignment = .center
+        lblTitleSwitch.font = lblTitleSwitch.font.withSize(10)
+        lblTitleSwitch.isHidden = true
+        addSubview(lblTitleSwitch)
+        
         self.nSection = section // Optional..! To create multiple header
 
         // Add constraints to filter indicator view.
@@ -90,5 +121,9 @@ class TableHeaderView: UITableViewHeaderFooterView {
 //        self.layer.shadowOffset = CGSize(width: 0.0, height: 0.25)
 //        self.layer.shadowOpacity = 0.5
 //        self.layer.shadowRadius = 2
+    }
+    
+    @objc func switchChanged(switchFilter: UISwitch) {
+        delegate?.switchChanged(to: switchFilter.isOn)
     }
 }

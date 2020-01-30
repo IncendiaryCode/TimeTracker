@@ -925,11 +925,11 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	
 	/// Setup left and right arrow button alpha value, based on data existance.
 	func checkArrowAlpha() {
-		btnLeftMove.alpha = 0.2
-		btnRightMove.alpha = 0.2
+		btnLeftMove.alpha = 0.4
+		btnRightMove.alpha = 0.4
 		if nSliderView == 0 {
 			if indexSelDate >= arrIntDate.count - 1 {
-				btnLeftMove.alpha = 0.05
+				btnLeftMove.alpha = 0.1
 			}
 			else {
 				// Show intro pagein day view. (If first installation/reset intro page)
@@ -939,12 +939,12 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 				}
 			}
 			if indexSelDate == 0 {
-				btnRightMove.alpha = 0.05
+				btnRightMove.alpha = 0.1
 			}
 		}
 		else if nSliderView == 1 {
 			if nWeek >= arrWeekDetails.count - 1 {
-				btnLeftMove.alpha = 0.05
+				btnLeftMove.alpha = 0.1
 			}
 			else {
 				// Show intro page week view. (If first installation/reset intro page)
@@ -954,12 +954,12 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 				}
 			}
 			if nWeek <= 0 {
-				btnRightMove.alpha = 0.05
+				btnRightMove.alpha = 0.1
 			}
 		}
 		else {
 			if nSelectedIndexMonth == 0 {
-				btnRightMove.alpha = 0.05
+				btnRightMove.alpha = 0.1
 			}
 		}
 	}

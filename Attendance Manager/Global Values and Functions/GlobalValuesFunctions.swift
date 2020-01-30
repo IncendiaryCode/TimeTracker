@@ -104,6 +104,27 @@ enum ColorMode: Int {
         }
     }
     
+    // Get viewBackground color.
+    func backgroundColor() -> UIColor {
+        switch self {
+            case .light: return UIColor(hexString: "#F1F2F6")!
+            case .dark: return UIColor(hexString: "#0E0D09")!
+            
+            case .auto :
+                if #available(iOS 12.0, *) {
+                    switch UIScreen.main.traitCollection
+                        .userInterfaceStyle {
+                        case .light: return UIColor(hexString: "#F1F2F6")!
+                        case .dark: return UIColor(hexString: "#0E0D09")!
+                        default:
+                            return .clear
+                    }
+                } else {
+                    return .clear
+            }
+        }
+    }
+    
     // Get middle color.
     func midColor() -> UIColor {
         switch self {
@@ -934,6 +955,15 @@ func convert24to12Format(strTime: String) -> String {
     return dateF.string(from: date!)
 }
 
+/// Converts 12 hour time to 24 hour time HH:mm:ss format.
+func convert12to24Format(strTime: String) -> String {
+    let dateF = DateFormatter()
+    dateF.dateFormat = "h:mm a"
+    let date = dateF.date(from: strTime)
+    dateF.dateFormat = "HH:mm:ss"
+    return dateF.string(from: date!)
+}
+
 /// Converts 24 hour time to 12 hour time HH:mm format.
 func convert24to12FormatHourMinute(strTime: String) -> String {
     let dateF = DateFormatter()
@@ -985,6 +1015,16 @@ func convertStrDateFormate(strDate: String) -> String {
     let mon = String(arrDate[1])
     let year = String(arrDate[0])
     return "\(day)/\(mon)/\(year)"
+}
+
+/// Convert  to dd/MM/yyy to yyyy-MM-dd
+func convertStrDateFormate2(strDate: String) -> String {
+    let arrDate = strDate.split(separator: "/", maxSplits: 3
+        , omittingEmptySubsequences: false)
+    let year = String(arrDate[2])
+    let mon = String(arrDate[1])
+    let day = String(arrDate[0])
+    return "\(year)-\(mon)-\(day)"
 }
 
 /// Convert local time to UTC timezone (i.e. dd/MM/yyyy HH:mm:ss to yyyy-MM-dd HH:mm)
@@ -1159,6 +1199,17 @@ class ButtonWeekGraph: UIButton
 
 class StateButton: UIButton {
     var isHighlightedCustom = false
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.layer.cornerRadius = self.frame.width / 2
+        self.layer.shadowColor = g_colorMode.invertColor().withAlphaComponent(0.4).cgColor
+        self.layer.shadowOffset = CGSize(width: 0, height: 3)
+        self.layer.shadowRadius = 5
+        self.layer.shadowOpacity = 0.5
+        self.layer.masksToBounds = false
+    }
+    
     override var isHighlighted: Bool {
         didSet {
             // Custom highlight on touch.

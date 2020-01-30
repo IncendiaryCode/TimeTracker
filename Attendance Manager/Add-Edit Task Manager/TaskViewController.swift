@@ -95,6 +95,9 @@ UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Update project details.
+        APIResponseHandler.loadProjects(completion: { _ in })
+        
         // Adding gradient.
         view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.3))
         btnStart.addGradient(cgFRadius: 22)
@@ -984,8 +987,10 @@ UIGestureRecognizerDelegate {
                 }
             }
             else {
-                arrTaskTimeDetails[selectedCell.indexPath.row].description =
-                    selectedCell.txtFDescription.text
+                if let timeId = selectedCell.timeId, timeId > 0 {
+                    arrTaskTimeDetails[selectedCell.indexPath.row].description =
+                        selectedCell.txtFDescription.text
+                }
             }
             // Edit Action.
             if selectedCell.indexPath.row < arrTaskTimeDetails.count {
@@ -1076,7 +1081,8 @@ UIGestureRecognizerDelegate {
             timeId -= 1
         }
         else {
-            timeId = -1
+            let taskTimeCDCtrlr = TasksTimeCDController()
+            timeId = taskTimeCDCtrlr.getTimeIdToAddNewTaskTime()
         }
         selectedCell.timeId = timeId
         let date = selectedCell.lblDate.text!
@@ -1318,9 +1324,40 @@ UIGestureRecognizerDelegate {
         else {
             if nil == taskId {
                 // Adding new task.
+                var strTaskDescr = ""
+                if "Task description" != txtVTaskDescr.text {
+                    strTaskDescr = txtVTaskDescr.text!
+                }
+                var isRunning = false
+                var nStartTime: Int64 = 0
+                
+                // Get start time.
+                if arrTaskTimeDetails.count > 0 {
+                    // From array timings
+                    let cTaskTimeDetails = arrTaskTimeDetails[0]
+                    
+                    let time = getSecondsToHoursMinutesSeconds(seconds: cTaskTimeDetails
+                        .nStartTime)
+                    let strDate = convertStrDateFormate2(strDate: cTaskTimeDetails.strDate!)
+                    let date = convertUTCtoLocal(strDateTime: "\(strDate) \(time)")
+                    nStartTime = date.millisecondsSince1970
+                    if nEmptyRow == 1 {
+                        isRunning = true
+                    }
+                }
+                if nEmptyRow == 1 {
+                    // Else if available start time first index.
+                    let lastCell = tblviewTimings.cellForRow(at: [0, arrTaskTimeDetails.count])
+                        as! TimingsCell
+                    isRunning = true
+                    let time = convert12to24Format(strTime: lastCell.lblStartTime.text!)
+                    let strDate = convertStrDateFormate2(strDate: lastCell.lblDate.text!)
+                    let date = convertUTCtoLocal(strDateTime: "\(strDate) \(time)")
+                    nStartTime = date.millisecondsSince1970
+                }
                 taskId = tasksCDController.addNewTask(projectId: selectedProjId, taskName:
-                    txtTaskName.text!, taskDesc: txtVTaskDescr.text, moduleId: selectedModId,
-                                       isSynched: false)
+                    txtTaskName.text!, taskDesc: strTaskDescr, moduleId: selectedModId
+                    ,isSynched: false, isRunning: isRunning, startTime: nStartTime)
             }
             else {
                 // Editing selected task.
@@ -1346,8 +1383,33 @@ UIGestureRecognizerDelegate {
                     let nStartTime = cTaskTimeDetails.nStartTime!
                     let nEndTime = cTaskTimeDetails.nEndTime!
                     let descriptn = cTaskTimeDetails.description ?? ""
+                    
                     taskTimeCDCtrl.addOrUpdateTaskTimings(timeId: timeId, taskId: taskId!, strDate:
                         strDate, startTime: nStartTime, endTime: nEndTime, descr: descriptn)
+                }
+            }
+            // Check for last field filled with date and start time
+            // To indicate the task should start.
+            if nEmptyRow == 1 {
+                let lastCell = tblviewTimings.cellForRow(at: [0, arrTaskTimeDetails.count])
+                    as! TimingsCell
+                let strDate = lastCell.lblDate.text!
+                let strStartTime = lastCell.lblStartTime.text!
+                let strEndTime = lastCell.lblEndTime.text!
+                if "" == strEndTime && "" != strDate && "" != strStartTime {
+                    // Convert to valid format.
+                    let nStartTime = getSecondCount(strTime: strStartTime)
+                    
+                    if nil != timeId {
+                        timeId -= 1
+                    }
+                    else {
+                        let taskTimeCDCtrlr = TasksTimeCDController()
+                        timeId = taskTimeCDCtrlr.getTimeIdToAddNewTaskTime()
+                    }
+                    let descriptn = lastCell.txtFDescription.text
+                    taskTimeCDCtrl.addOrUpdateTaskTimings(timeId: timeId!, taskId: taskId!, strDate:
+                        strDate, startTime: nStartTime, endTime: nStartTime, descr: descriptn)
                 }
             }
             completion(true)

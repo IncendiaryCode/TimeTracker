@@ -100,17 +100,6 @@ extension UIScrollView {
 }
 
 extension UIButton {
-    /// Applies gradient color to a button in round.
-    public func drawRounded() {
-        self.addGradient(cgFRadius: self.bounds.height / 2)
-        self.layer.cornerRadius = self.frame.width / 2
-        self.layer.shadowColor = UIColor.gray.cgColor
-        self.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
-        self.layer.shadowRadius = 3
-        self.layer.shadowOpacity = 0.6
-        self.layer.masksToBounds = false
-    }
-    
     /// Draw rectangle inside button.
     ///
     /// - Parameters:
@@ -229,10 +218,28 @@ extension UITableView {
         // Update your data source here
         self.reloadData()
     }
+    
+    /// Animation reload.
+    func reloadWithAnimationEaseInOut() {
+        self.reloadData()
+        let tableViewHeight = self.bounds.size.height
+        let cells = self.visibleCells
+        var delayCounter = 0
+        for cell in cells {
+            cell.transform = CGAffineTransform(translationX: 0, y: tableViewHeight)
+        }
+        for cell in cells {
+            UIView.animate(withDuration: 0.5, delay: 0.08 * Double(delayCounter)
+                ,usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseInOut
+                , animations: {
+                cell.transform = CGAffineTransform.identity
+            }, completion: nil)
+            delayCounter += 1
+        }
+    }
 }
 
 extension UIView {
-    
     /// Draw a line.
     func addLine(rect: CGRect? = nil) {
         self.layer.masksToBounds = false
@@ -691,5 +698,4 @@ extension Array {
     mutating func shiftInPlace(withDistance distance: Int = 1) {
         self = shift(withDistance: distance)
     }
-    
 }

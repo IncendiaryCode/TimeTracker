@@ -17,7 +17,8 @@ import CoreData
 import Alamofire
 
 class UserActivityVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
-UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, FilterDelegate {
+UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, FilterDelegate
+, FilterToday {
     /// Button State (Start and Stop)
     @IBOutlet weak var btnState: UIButton!
     /// Label Timer for task and punch
@@ -31,6 +32,8 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     @IBOutlet weak var nsLCollectionHeight: NSLayoutConstraint!
     @IBOutlet weak var lblPunchInTimer: UILabel!
     @IBOutlet weak var actIndicator: UIActivityIndicatorView!
+    
+    var arrCTaskDetails: Array<TaskDetails>!
     var viewUserGuideCell: UserguideView!
     var viewUserGuideTask: UserguideView!
     
@@ -56,12 +59,15 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     var arrIndexOfRunningTask: [IndexPath] = []
     
     var lblEmpty = UILabel() //Label to show empty tasks.
+    var btnAddTaskNoData: UIButton! // Button visible when no task available.
     var lblUpdater = UILabel() // Label to indicate first time loader.
     /// Containing running task id.
     var arrRunningTask: Array<Int> = []
     var nSelectedRunTask: Int!
     /// Index path sets in tableview didSelect if punch in not performed.(To run selected task.)
     var indexPathToRun: IndexPath?
+    /// dashboard tableview array values applied with only today's task.
+    var isTodayShown: Bool = false
     
     // Coredata controller objects.
     var punchInOutCDController: PunchInOutCDController!
@@ -80,6 +86,17 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         lblEmpty.frame = CGRect(x: 0, y: (0.6 * screenHeight), width: screenWidth, height: 30)
         lblEmpty.textAlignment = .center
         view.addSubview(lblEmpty)
+        
+        // Set no task available add task button.
+        let cgRect = CGRect(x: 0, y: 0, width: 100, height: 44)
+        btnAddTaskNoData = UIButton(frame: cgRect)
+        btnAddTaskNoData.center = CGPoint(x: lblEmpty.center.x, y: lblEmpty.center.y+40)
+        btnAddTaskNoData.isHidden = true
+        btnAddTaskNoData.setTitle("Add Task", for: .normal)
+        btnAddTaskNoData.addTarget(self, action: #selector(btnAddNoTaskPressed(sender:))
+            , for: .touchUpInside)
+        btnAddTaskNoData.setTitleColor(g_colorMode.textColor(), for: .normal)
+        view.addSubview(btnAddTaskNoData)
         
         // Compress header minimum height.
         minHeaderHeight = 105   // Compressing minimum height while scrolling table view.
@@ -110,7 +127,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         refreshControl.attributedTitle = NSAttributedString(string: "Fetching Data...",
                                                             attributes: attributes)
         
-        g_arrCTaskDetails = Array()
+        arrCTaskDetails = Array()
         
         // Initialise Core data controller objects.
         punchInOutCDController = PunchInOutCDController()
@@ -152,8 +169,9 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             // Check previous day's punch out time.()
             if punchInOutCDTrlr.isPreviousDayUpdated() {
                 // If view initialise from login credentials.
-                if nil == g_arrCTaskDetails || 0 == g_arrCTaskDetails.count {
+                if nil == arrCTaskDetails || 0 == arrCTaskDetails.count {
                     lblEmpty.isHidden = true
+                    btnAddTaskNoData.isHidden = true
                     lblUpdater.isHidden = false
                     actIndicator.startAnimating()
                 }
@@ -234,7 +252,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             else {
                 // If no internet.
                 updateProjectDetails()
-                updateTaskDetails(pageNo: g_arrCTaskDetails.count/10)
+                updateTaskDetails(pageNo: self.arrCTaskDetails.count/10)
                 self.updateView()
             }
         })
@@ -294,12 +312,11 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         self.view.backgroundColor = g_colorMode.defaultColor()
         self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.5))
         tblUserDetails.roundCorners(corners: [.topLeft, .topRight], radius: 35.0)
-        btnState.drawRounded()
-        btnFinish.drawRounded()
+        btnState.addGradient(cgFRadius: btnState.bounds.height / 2)
+        btnFinish.addGradient(cgFRadius: btnState.bounds.height / 2)
         lblEmpty.textColor = .lightGray
         refreshControl.tintColor = g_colorMode.midColor()
         tblUserDetails.backgroundColor = g_colorMode.defaultColor()
-//        tblUserDetails.backgroundColor = UIColor(hexString: "#EEEEEE")
         tblUserDetails.layer.borderWidth = 0.3
         tblUserDetails.layer.borderColor = g_colorMode.textColor().cgColor
         tblUserDetails.reloadData()
@@ -327,7 +344,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             viewUserGuideTask = UserguideView(userguideData: userGuideData)
             viewUserGuideTask.completionHandler = {
                 UserDefaults.standard.setValue(true, forKey: "IntroStatusTask")
-                if g_arrCTaskDetails.count != 0 {
+                if self.arrCTaskDetails.count != 0 {
                     self.setupCellintroPage()
                 }
             }
@@ -338,7 +355,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     /// Provides all currently running task id.
     func getRunningTaskId() -> Array<Int> {
         var array = Array<Int>()
-        for cTaskDetails in g_arrCTaskDetails {
+        for cTaskDetails in arrCTaskDetails {
             if true == cTaskDetails.bIsRunning {
                 array.append(cTaskDetails.taskId)
             }
@@ -427,19 +444,21 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     func sortAndRefreshData() {
         // If filter applied.
         if let arrProj = arrSelectedProj {
-            g_arrCTaskDetails = tasksCDController
-                .getTaskDetailsFromProjectNameUnFinished(arrProj: arrProj)
+            arrCTaskDetails = tasksCDController
+                .getTaskDetailsFromProjectNameUnFinished(arrProj: arrProj, onlyTodays: isTodayShown)
         }
         else {
             let arrProj = getAllProjectIds()
-            g_arrCTaskDetails = tasksCDController
-                .getTaskDetailsFromProjectNameUnFinished(arrProj: arrProj)
+            arrCTaskDetails = tasksCDController
+                .getTaskDetailsFromProjectNameUnFinished(arrProj: arrProj, onlyTodays: isTodayShown)
         }
-        
+        let arrProj = getAllProjectIds()
+        g_arrCTaskDetails = tasksCDController
+            .getTaskDetailsFromProjectNameUnFinished(arrProj: arrProj)
         var nContainsOfflineTask: Int?
         // Sort array of task based on sort type.
         var i = 0
-        g_arrCTaskDetails.sort { (task1, task2) -> Bool in
+        arrCTaskDetails.sort { (task1, task2) -> Bool in
             switch (sortType) {
                 case .tasks :
                     if task1.taskId < 0 {
@@ -464,12 +483,13 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         
         // Check for offline tasks. (Sort local_task_ids to top, ids are stored in negative value).
         if let indexShift = nContainsOfflineTask {
-            g_arrCTaskDetails = g_arrCTaskDetails.shift(withDistance:
-                indexShift - g_arrCTaskDetails.count)
+            arrCTaskDetails = arrCTaskDetails.shift(withDistance:
+                indexShift - arrCTaskDetails.count)
         }
         
-        if g_arrCTaskDetails.count == 0 {
+        if arrCTaskDetails.count == 0 {
             lblEmpty.isHidden = false
+            btnAddTaskNoData.isHidden = false
         }
         tblUserDetails.reloadData()
     }
@@ -478,19 +498,31 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     func updateArrayDetails() {
         // If filter applied.
         if let arrProj = arrSelectedProj {
-            g_arrCTaskDetails = tasksCDController
-                .getTaskDetailsFromProjectNameUnFinished(arrProj: arrProj)
+            arrCTaskDetails = tasksCDController
+                .getTaskDetailsFromProjectNameUnFinished(arrProj: arrProj, onlyTodays: isTodayShown)
         }
         else {
             let arrProj = getAllProjectIds()
-            g_arrCTaskDetails = tasksCDController
-                .getTaskDetailsFromProjectNameUnFinished(arrProj: arrProj)
+            arrCTaskDetails = tasksCDController
+                .getTaskDetailsFromProjectNameUnFinished(arrProj: arrProj, onlyTodays: isTodayShown)
         }
         
+        var nContainsOfflineTask: Int?
         // Sort array of task based on sort type.
-        g_arrCTaskDetails.sort { (task1, task2) -> Bool in
+        var i = 0
+        arrCTaskDetails.sort { (task1, task2) -> Bool in
             switch (sortType) {
                 case .tasks :
+                    if task1.taskId < 0 {
+                        // Set contains offline task in array.
+                        if nil == nContainsOfflineTask {
+                            nContainsOfflineTask = i+1
+                        }
+                        if task2.taskId < 0 {
+                            return task1.taskId < task2.taskId
+                        }
+                    }
+                    i += 1
                     return task1.taskId > task2.taskId
                 case .projects:
                     return task1.projId > task2.projId
@@ -499,6 +531,29 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 default:
                     return false
             }
+        }
+        
+        // Check for offline tasks. (Sort local_task_ids to top, ids are stored in negative value).
+        if let indexShift = nContainsOfflineTask {
+            arrCTaskDetails = arrCTaskDetails.shift(withDistance:
+                indexShift - arrCTaskDetails.count)
+        }
+        
+        if arrCTaskDetails.count == 0 {
+            lblEmpty.isHidden = false
+            btnAddTaskNoData.isHidden = false
+        }
+    }
+    
+    @objc func btnAddNoTaskPressed(sender: UIButton!) {
+        if !(g_isPunchedIn ?? false) {
+            alertToPuchIn()
+        }
+        else if g_isPunchedOut {
+            showAlert(msg: "You cannot add task once you have punched out!")
+        }
+        else {
+            segueToAddTask()
         }
     }
     
@@ -529,9 +584,10 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if g_arrCTaskDetails.count > 0 {
+        if arrCTaskDetails.count > 0 {
             lblEmpty.isHidden = true
-            return g_arrCTaskDetails.count
+            btnAddTaskNoData.isHidden = true
+            return arrCTaskDetails.count
         }
         else {
             return 0
@@ -543,7 +599,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-            return 95
+            return 110
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -553,16 +609,21 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? UserTaskInfoCell {
             // Highlight touch.
-//            cell.gradientLayer.colors = [g_colorMode.textColor().withAlphaComponent(0.3).cgColor
-//                , g_colorMode.textColor().withAlphaComponent(0.3).cgColor]
-            cell.alpha = 0.5
+//            cell.alpha = 0.5
+            UIView.animate(withDuration: 0.2, animations: {
+//                cell.contentView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.2).cgColor
+                cell.center = CGPoint(x: cell.center.x+3, y: cell.center.y+3)
+            })
         }
     }
     
     func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
-//        tableView.reloadRows(at: [indexPath], with: .none)
         if let cell = tableView.cellForRow(at: indexPath) as? UserTaskInfoCell {
-            cell.alpha = 1
+//            cell.alpha = 1
+            UIView.animate(withDuration: 0.2, animations: {
+//                cell.contentView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.5).cgColor
+                cell.center = CGPoint(x: cell.center.x-3, y: cell.center.y-3)
+            })
         }
     }
 
@@ -672,11 +733,11 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         indexPath: IndexPath) {
         // Check total taskpage is set.(if no network)
         if nil == g_totalPagesTask {
-            g_totalPagesTask = g_arrCTaskDetails.count/10
+            g_totalPagesTask = arrCTaskDetails.count/10
         }
         
         // Detect tableview reached to almost bottom (-4).
-        if indexPath.row-3 == g_arrCTaskDetails.count-4 && g_taskPageNo < g_totalPagesTask {
+        if indexPath.row-3 == arrCTaskDetails.count-4 && g_taskPageNo < g_totalPagesTask {
             g_taskPageNo += 1
             updateTask()
         }
@@ -707,9 +768,18 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = TableHeaderView()
-        header.customInit(title: "Recent Activities", section: section)
+        if isTodayShown {
+            header.customInit(title: "Today's Activities", section: section)
+        }
+        else {
+            header.customInit(title: "Recent Activities", section: section)
+        }
         header.contentView.backgroundColor = g_colorMode.defaultColor()
-//        header.contentView.backgroundColor = UIColor(hexString: "#EEEEEE")
+        header.switchFilter.isHidden = false
+        header.lblTitleSwitch.isHidden = false
+        header.delegate = self
+        header.switchFilter.setOn(isTodayShown, animated: false)
+        header.contentView.backgroundColor = g_colorMode.defaultColor()
         // tap gesture to Filter button.
         let tap = UITapGestureRecognizer(target: self, action: #selector(btnFilterPressed(_:)))
         header.btnFilter.addGestureRecognizer(tap)
@@ -720,9 +790,15 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         return header
     }
     
+    func switchChanged(to value: Bool) {
+        isTodayShown = value
+        updateArrayDetails()
+        tblUserDetails.reloadWithAnimationEaseInOut()
+    }
+    
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         // Only if tasks loaded to core data.
-        if nil != g_totalPagesTask && 0 != g_arrCTaskDetails.count {
+        if nil != g_totalPagesTask && 0 != arrCTaskDetails.count {
             let footerView = UITableViewHeaderFooterView()
             // Setup label.
             var cgPoint = CGPoint(x: tableView.frame.midX, y: footerView.frame.maxY+30)
@@ -772,22 +848,22 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath)
         -> [UITableViewRowAction]? {
-        let cTaskDetails = g_arrCTaskDetails[indexPath.row]
+        let cTaskDetails = arrCTaskDetails[indexPath.row]
         let taskId = cTaskDetails.taskId
-        let editAction = UITableViewRowAction(style: .default, title: "Edit" , handler: {
+            let editAction = UITableViewRowAction(style: .normal, title: "Edit" , handler: {
                     (action:UITableViewRowAction, indexPath: IndexPath) -> Void in
             self.nSelectedId = taskId
             self.performSegue(withIdentifier: "SegueToTaskController", sender: self)
         })
         
-        editAction.backgroundColor = g_colorMode.midColor()
+        editAction.backgroundColor = UIColor(cgColor: g_colorMode.endColor())
         
         let stopAction = UITableViewRowAction(style: .default, title: "Stop" , handler: {
             (action:UITableViewRowAction, indexPath: IndexPath) -> Void in
             self.startOrStopTask(indexPath: indexPath)
         })
         
-        stopAction.backgroundColor =  g_colorMode.midColor()
+        stopAction.backgroundColor = UIColor(cgColor: g_colorMode.endColor())
         
         if arrRunningTask.contains(taskId!) {
             // If a task running then, send only done action.
@@ -802,12 +878,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "userBreakInfoCell",
                 for: indexPath) as! UserTaskInfoCell
-        
-        cell.lblTaskName.textColor = g_colorMode.textColor()
-        cell.lblStartTime.textColor = g_colorMode.lineColor()
-        cell.lblProjectName.textColor = g_colorMode.lineColor()
-        cell.lblTotalDuration.textColor = g_colorMode.textColor()
-        let cTaskDetails = g_arrCTaskDetails[indexPath.row]
+        let cTaskDetails = arrCTaskDetails[indexPath.row]
         
         // If punched out.
 //        if true == g_isPunchedOut {
@@ -935,8 +1006,9 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         }
         
         if let indxPath = indexPath {
+            animateCellPosition(indexPath: indxPath)
             let cell = tblUserDetails.cellForRow(at: indxPath) as! UserTaskInfoCell
-            let cTaskDetails = g_arrCTaskDetails[indxPath.row]
+            let cTaskDetails = arrCTaskDetails[indxPath.row]
             let taskId = cTaskDetails.taskId // Fetch task id from selected cell
             
             if cTaskDetails.bIsRunning! {
@@ -969,22 +1041,47 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             if btnState.currentTitle == "Stop" && arrRunningTask.count > 0 {
                 let index = pageCtrlCollection.currentPage
                 let taskId = arrRunningTask[index]
-                let cTaskDetails = getTaskDetails(taskId: taskId)!
+                let indexArray = arrCTaskDetails.firstIndex(where: {
+                    (item) -> Bool in
+                    item.taskId == taskId
+                })!
+                
+                let indexPath = IndexPath(row: indexArray, section: 0)
+                let cTaskDetails = arrCTaskDetails[indexPath.row]
+                let cell = tblUserDetails.cellForRow(at: indexPath) as! UserTaskInfoCell
+                animateCellPosition(indexPath: indexPath)
+
+                // Stop running task.
+                cell.isUserInteractionEnabled = false
+                cell.imgTimer.image = #imageLiteral(resourceName: "synch")
                 cTaskDetails.bIsRunning = false
+                cell.lblTotalDuration.text = "Stoping"
                 reloadCollection()
                 stopTask(taskId: taskId)
-                
-                let indexTable = g_arrCTaskDetails.firstIndex(where: {
-                    return $0.taskId == taskId
-                })
-                let indexPath = IndexPath(row: indexTable!, section: 0)
-                let cell = tblUserDetails.cellForRow(at: indexPath)!
-                cell.isUserInteractionEnabled = false
             }
             else {
                 // Provide alert message when there is no task id top start task.
                 showPunchOutAlert()
             }
+        }
+    }
+    
+    /// When action performed to cell animate cell.
+    func animateCellPosition(indexPath: IndexPath) {
+        if let cell = tblUserDetails.cellForRow(at: indexPath) as? UserTaskInfoCell {
+            // Highlight touch.
+//            cell.contentView.layer.borderColor = UIColor.lightGray.cgColor
+            UIView.animate(withDuration: 0.1, animations: {
+                cell.center = CGPoint(x: cell.center.x+3, y: cell.center.y+3)
+            }, completion: {
+                _ in
+                // Remove animated style.
+//                cell.contentView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.5)
+//                    .cgColor
+                UIView.animate(withDuration: 0.1, animations: {
+                    cell.center = CGPoint(x: cell.center.x-3, y: cell.center.y-3)
+                })
+            })
         }
     }
     
@@ -1046,12 +1143,12 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     func stopRunningTask(stopAll: Bool = true, completion: @escaping () -> ()) {
         // Stop running task.
         func stop(taskId: Int) {
-            let indexTable = g_arrCTaskDetails.firstIndex(where: {
+            let indexTable = arrCTaskDetails.firstIndex(where: {
                 return $0.taskId == taskId
             })
             let indexPath = IndexPath(row: indexTable!, section: 0)
             let cell = tblUserDetails.cellForRow(at: indexPath)! as! UserTaskInfoCell
-            let cTaskDetails = g_arrCTaskDetails[indexPath.row]
+            let cTaskDetails = arrCTaskDetails[indexPath.row]
             cell.imgTimer.image = #imageLiteral(resourceName: "synch")
             cell.isUserInteractionEnabled = false
             cTaskDetails.bIsRunning = false
@@ -1101,7 +1198,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         
         // Check for multi task disabled.
         if false == UserDefaults.standard.object(forKey: "multi_task") as? Bool {
-            let taskId = g_arrCTaskDetails[indexPath.row].taskId
+            let taskId = arrCTaskDetails[indexPath.row].taskId
             // Check for running task atleast one and tap not on running task.
             if arrRunningTask.count > 0 && arrRunningTask[0] != taskId {
                 stopRunningTask() {

@@ -22,22 +22,22 @@
                     <rect key="frame" x="20" y="74" width="374" height="268"/>
                     <subviews>
                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gsb-cX-Tqc">
-                            <rect key="frame" x="-20" y="0.0" width="414" height="64"/>
+                            <rect key="frame" x="-20" y="0.0" width="414" height="80"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1UU-lA-VtS">
-                                    <rect key="frame" x="207" y="37" width="0.0" height="0.0"/>
+                                    <rect key="frame" x="207" y="25" width="0.0" height="0.0"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sjG-sV-OxR">
-                                    <rect key="frame" x="207" y="42" width="0.0" height="0.0"/>
-                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
+                                    <rect key="frame" x="207" y="30" width="0.0" height="0.0"/>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <button opaque="NO" alpha="0.20000000000000001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hq3-kG-kJ9">
-                                    <rect key="frame" x="20" y="10" width="44" height="44"/>
+                                    <rect key="frame" x="20" y="-2" width="44" height="44"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="44" id="3Fg-Ad-qzA"/>
                                         <constraint firstAttribute="height" constant="44" id="DkN-PE-zeG"/>
@@ -51,7 +51,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" alpha="0.20000000000000001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rMB-yU-3t2">
-                                    <rect key="frame" x="350" y="10" width="44" height="44"/>
+                                    <rect key="frame" x="350" y="-2" width="44" height="44"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="44" id="RCe-fQ-DBZ"/>
                                         <constraint firstAttribute="width" constant="44" id="v7L-se-E9P"/>
@@ -66,15 +66,15 @@
                                 </button>
                             </subviews>
                             <constraints>
-                                <constraint firstAttribute="height" constant="64" id="Aiq-3l-BkG"/>
+                                <constraint firstAttribute="height" constant="80" id="Aiq-3l-BkG"/>
                                 <constraint firstAttribute="trailing" secondItem="rMB-yU-3t2" secondAttribute="trailing" constant="20" id="K90-IU-cQu"/>
                                 <constraint firstItem="hq3-kG-kJ9" firstAttribute="leading" secondItem="gsb-cX-Tqc" secondAttribute="leading" constant="20" id="aBy-1g-1j6"/>
                                 <constraint firstItem="sjG-sV-OxR" firstAttribute="centerX" secondItem="1UU-lA-VtS" secondAttribute="centerX" id="cGQ-1E-Xjw"/>
                                 <constraint firstItem="sjG-sV-OxR" firstAttribute="top" secondItem="1UU-lA-VtS" secondAttribute="bottom" constant="5" id="jOV-bC-nI5"/>
                                 <constraint firstItem="1UU-lA-VtS" firstAttribute="centerX" secondItem="gsb-cX-Tqc" secondAttribute="centerX" id="lxu-Xd-faD"/>
-                                <constraint firstItem="rMB-yU-3t2" firstAttribute="centerY" secondItem="gsb-cX-Tqc" secondAttribute="centerY" id="sZW-RB-ynO"/>
-                                <constraint firstItem="sjG-sV-OxR" firstAttribute="centerY" secondItem="gsb-cX-Tqc" secondAttribute="centerY" constant="10" id="tzh-Xx-MfP"/>
-                                <constraint firstItem="hq3-kG-kJ9" firstAttribute="centerY" secondItem="gsb-cX-Tqc" secondAttribute="centerY" id="vhh-Tn-aAx"/>
+                                <constraint firstItem="rMB-yU-3t2" firstAttribute="centerY" secondItem="gsb-cX-Tqc" secondAttribute="centerY" constant="-20" id="sZW-RB-ynO"/>
+                                <constraint firstItem="sjG-sV-OxR" firstAttribute="centerY" secondItem="gsb-cX-Tqc" secondAttribute="centerY" constant="-10" id="tzh-Xx-MfP"/>
+                                <constraint firstItem="hq3-kG-kJ9" firstAttribute="centerY" secondItem="gsb-cX-Tqc" secondAttribute="centerY" constant="-20" id="vhh-Tn-aAx"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AOe-IC-4eY" customClass="CalendarView" customModule="Attendance_Manager">

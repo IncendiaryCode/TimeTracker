@@ -24,7 +24,7 @@ class UserTaskInfoCell: UITableViewCell {
     @IBOutlet weak var imgTimer: UIImageView!
     
     var gradientLayer: CAGradientLayer!
-    private var shadowLayer: CAShapeLayer!
+    var shadowLayer: CAShapeLayer!
     var ntaskId: Int!
     var bTaskRunning = false
     
@@ -44,17 +44,17 @@ class UserTaskInfoCell: UITableViewCell {
             shadowLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: 20).cgPath
             shadowLayer.fillColor = UIColor.white.cgColor
             shadowLayer.shadowPath = shadowLayer.path
-            shadowLayer.shadowOffset = CGSize(width: 0.0, height: 0.5)
+            shadowLayer.shadowOffset = CGSize(width: 5, height: 5)
             shadowLayer.shadowOpacity = 0.15
-            shadowLayer.shadowRadius = 2
+            shadowLayer.shadowRadius = 5
             layer.insertSublayer(shadowLayer, at: 0)
 
             // Set cornering.
             contentView.layer.masksToBounds = true
             layer.cornerRadius = 20
             contentView.layer.cornerRadius = 20
-            contentView.layer.borderWidth = 0.3
-            contentView.layer.borderColor = UIColor.clear.cgColor
+            contentView.layer.borderWidth = 1
+            contentView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.2).cgColor
             backgroundColor = .clear
             selectionStyle = .none
             
@@ -76,13 +76,15 @@ class UserTaskInfoCell: UITableViewCell {
             gradientLayer.colors = [UIColor.lightGray
                 .withAlphaComponent(0.02).cgColor, UIColor.lightGray
                     .withAlphaComponent(0.3).cgColor]
+            shadowLayer.shadowColor = g_colorMode.invertColor().withAlphaComponent(1).cgColor
+            contentView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.4).cgColor
         }
         else {
-            gradientLayer.colors = [g_colorMode.defaultColor().cgColor,
-                                    g_colorMode.defaultColor().cgColor]
+            gradientLayer.colors = []
+            shadowLayer.shadowColor = g_colorMode.invertColor().withAlphaComponent(0.5).cgColor
+            contentView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.2).cgColor
         }
         selectionStyle = .none
-        shadowLayer.shadowColor = g_colorMode.invertColor().cgColor
         contentView.backgroundColor = g_colorMode.defaultColor()
     }
     
