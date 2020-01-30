@@ -222,9 +222,14 @@ class APIResponseHandler {
     /// Load task timings to core data.
     private static func loadTaskTimings(taskId: Int, arrDictValues: Array<Any>) {
         let taskTimeCDCtrlr = TasksTimeCDController()
+
+        // Check for deleted time id from external logins.
+        var arrTimeId: Array<Int> = []
+        
         for dictValues in arrDictValues {
             let dictValues = dictValues as! Dictionary<String, Any>
             let timeId = Int(dictValues["id"] as! String)
+            arrTimeId.append(timeId!)
             var taskDesc: String!
             if let descr = dictValues["task_description"] as? String {
                 taskDesc = descr
@@ -254,6 +259,16 @@ class APIResponseHandler {
             // If that time exists updates information otherwise, add.
             taskTimeCDCtrlr.addOrUpdateTaskTimings(timeId: timeId!, taskId: taskId, strDate:
                 strDate, startTime: nStartTime, endTime: nEndTime, descr: taskDesc)
+        }
+        
+        // Check count of time details from server and coredata.
+        if taskTimeCDCtrlr.getTimingsCount(of: taskId) > arrTimeId.count {
+            let setServerTimes = Set(arrTimeId)
+            let setCoreDataTimes = Set(taskTimeCDCtrlr.getTimingsId(of: taskId))
+            let setToDelete = setCoreDataTimes.subtracting(setServerTimes)
+            for timeId in setToDelete {
+                taskTimeCDCtrlr.deleteTaskTime(timeId: timeId)
+            }
         }
     }
     
@@ -485,10 +500,12 @@ class APIResponseHandler {
             let arrayTaskTimings = taskDetails.arrTaskTimings
             var arrDictTimings = Array<Any>()
             if arrayTaskTimings.count > 0 {
+                var index = 0
                 for cTaskTimeDetails in arrayTaskTimings {
                     let strDate = cTaskTimeDetails.strDate!
                     
                     let nStartTime = cTaskTimeDetails.nStartTime!
+                    
                     let nEndTime = cTaskTimeDetails.nEndTime!
                     let strStartTime = getSecondsToHoursMinutesSeconds(seconds: nStartTime)
                     let strEndTime = getSecondsToHoursMinutesSeconds(seconds: nEndTime)
@@ -497,9 +514,13 @@ class APIResponseHandler {
                         , format: "dd/MM/yyyy HH:mm:ss")
                     let strStartDateTime = convertLocalTimeToUTC(strDateTime:
                         "\(strDate) \(strStartTime)")
-                    let strEndDateTime = convertLocalTimeToUTC(strDateTime:
+                    var strEndDateTime = convertLocalTimeToUTC(strDateTime:
                         "\(strDate) \(strEndTime)")
                     let descriptn = cTaskTimeDetails.description ?? ""
+                    
+                    if taskDetails.bIsRunning! && index == arrayTaskTimings.count-1 {
+                        strEndDateTime = ""
+                    }
 
                     var dictTimings: Dictionary<String, Any>!
                     if cTaskTimeDetails.timeId > 0 {
@@ -515,7 +536,7 @@ class APIResponseHandler {
                             strEndDateTime, "task_description":descriptn]
                         
                         // If task is running send only start time.
-                        if taskDetails.bIsRunning! {
+                        if taskDetails.bIsRunning! && index == arrayTaskTimings.count-1 {
                             dictTimings["end"] = ""
                         }
                     }
@@ -528,6 +549,7 @@ class APIResponseHandler {
                         
                         arrDictTimings.append(dictTimings!)
                     }
+                    index += 1
                 }
             }
             dictParams.updateValue(arrDictTimings, forKey: "time_range")
@@ -541,6 +563,13 @@ class APIResponseHandler {
                         appNotif.sendNotification(msg
                             : "Unsynched data successfully loaded to the server")
                         appNotif.addGradient()
+                        if var topController = UIApplication.shared.keyWindow?.rootViewController {
+                            while let presentedViewController = topController
+                                .presentedViewController {
+                                topController = presentedViewController
+                            }
+                            topController.view.addSubview(appNotif)
+                        }
                     }
                     else {
                         print("Not updated offline data.. \(msg)")
