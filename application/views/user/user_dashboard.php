@@ -30,7 +30,6 @@ if (isset($task_info['login_status'])) {
 } else {
     $timerClass = 'fa-play';
 }
-
 if (isset($task_info['login_status']['end_time']) && ($task_info['login_status']['end_time']) != NULL) {
     $flag = 1;
 } else {
@@ -41,7 +40,6 @@ if (isset($task_info['login_status']['end_time']) && ($task_info['login_status']
 if (!empty($task_info['login_run'])) { ?>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
     <script type="text/javascript">
         $("#previous-punch-in").modal("show");
     </script>
@@ -59,7 +57,7 @@ if (!empty($task_info['login_run'])) { ?>
                 <!-- slider for login activity -->
                 <div>
                     <div class="section-slider" id="login-timer-details">
-                        <p class="font-weight-light time-font text-center login-time" id="login-time">
+                        <p class="mb-0 font-weight-light time-font text-center login-time" id="login-time">
                             Punch in at <?php echo $login_time_display; ?>
                         </p>
                         <div class="font-weight-light text-center primary-timer" id="primary-timer">
@@ -282,7 +280,6 @@ if (!empty($task_info['login_run'])) { ?>
             </div>
         </div>
 
-
         <div class="modal fade" id="alert-punchin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -291,7 +288,7 @@ if (!empty($task_info['login_run'])) { ?>
                     </div>
                     <div class="modal-body text-center">
                         <div>
-                            <h4>You have not punched in for the day.</h4>
+                            <h4>Please punch in before start</h4>
                         </div>
                         <button type="button" class="btn btn-primary mt-4" data-dismiss="modal" id="alert-for-punchin">Punch in now!</button>
                     </div>

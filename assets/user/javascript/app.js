@@ -6,7 +6,6 @@ function check_for_punchIn() {
 			document.getElementById("stop-time").childNodes[1].childNodes[0]
 				.classList[2] == "fa-play"
 		) {
-			// $("#play-timer").modal("show");
 			$("#alert-punchin").modal("show");
 		} else {
 			window.location.href = timeTrackerBaseURL + "user/load_add_task";
@@ -14,16 +13,22 @@ function check_for_punchIn() {
 	}
 }
 
+$('#alert-for-punchin').click(function()
+    {
+    	$("#play-timer").modal("show");
+    });
+
+
 $(function() {
     //sticky header on scroll
     $(window).on('scroll', function(e){
         // console.log($(window).scrollTop());
-        console.log($('header#main-header').outerHeight());
-        if($(window).scrollTop() > $('header#main-header').outerHeight()){
+        if($(window).scrollTop() > $('header#main-header').outerHeight()-60){
             $('header#main-header').addClass('main-header-sticky');
         } else {
             $('header#main-header').removeClass('main-header-sticky');
         }
+
     });
 
     $(".edit-date-time").datetimepicker({

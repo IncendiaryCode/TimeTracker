@@ -477,10 +477,10 @@ $(document).ready(function() {
 			keyboard: false
 		});
 	}
-	$('#alert-for-punchin').click(function()
-	{
-		$('#play-timer').modal('show');
-	})
+	if (document.getElementById("stop-time").childNodes[1].childNodes[0].classList[2] == "fa-play") {
+
+		document.getElementById('login-time').innerHTML = 'Punch in at 00:00:00'
+	};
 	$("#stop-time").click(function() {
 		if (stopped == 1) {
 			$("#alert-punchin").modal("show");

@@ -144,5 +144,4 @@ $name = $this->session->userdata('username');
 <script src="<?= base_url(); ?>assets/user/javascript/employee_profile.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/app.js?v=<?= VERSION ?>"></script>
 </body>
-
 </html>

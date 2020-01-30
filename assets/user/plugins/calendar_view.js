@@ -202,51 +202,15 @@ function loadWeeklyChart() {
     }
 }
 
-function retrieveChartData(type, date) {
-    $("#print-chart").empty();
-    $.ajax({
-        type: "GET",
-        url: timeTrackerBaseURL + 'index.php/user/activity_chart',
-        data: { 'chart_type': type, 'date': date },
-        dataType: 'json',
-        success: function (res) {
-            if (res["data"] == "No activity in this date.") {
-                if (type == 'weekly_chart') {
-                    document.getElementById('week-error').innerHTML = res['data'];
-                    $("#attachPanels").empty();
-                    $('#weekly').hide();
-                }
-                if (type == 'daily_chart') {
-                    document.getElementById('daily-error').innerHTML = res['data'];
-                    $("#attachPanels").empty();
-                }
-            } else {
-                if (type == 'weekly_chart') {
-                    loadTask(type, date);
-                    document.getElementById('week-error').innerHTML = " ";
-                    drawChart(type, res);
-                    $('#weekly').show();
-                }
-                if (type == 'daily_chart') {
-                    loadTask(type, date);
-                    document.getElementById('daily-error').innerHTML = " ";
-                    draw_customized_chart(res);
-                }
-            }
-        }
-    });
-}
 
-function dateFromDay(year, day) {
-    var date = new Date(year, 0); // initialize a date in year-01-01
-    return new Date(date.setDate(day)); // add the number of days
-}
 function drawChart(type, res) {
     if (res == "No activity in this week.") {
         if (daily_chart) daily_chart.destroy();
         document.getElementById('week-error').innerHTML = "No activity in this week.";
+        document.getElementById('weekly-duration').innerHTML = '00:00';
         $("#attachPanels").empty();
     } else {
+        document.getElementById('weekly-duration').innerHTML = parseInt((res['total_minutes']/60))+':'+res['total_minutes']%60;
         var week_chart = document.getElementById('weekly').getContext('2d');
         gradient = week_chart.createLinearGradient(0, 0, 0, 600);
 
@@ -254,6 +218,7 @@ function drawChart(type, res) {
         gradient.addColorStop(0.5, '#e58dfb');
         gradient.addColorStop(1, '#ffffff');
 
+        
         var const_lable = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
         var labels = [];
         var data = [];
@@ -298,6 +263,7 @@ function drawChart(type, res) {
                                 var new_day = dateFromDay(year, day_from_week).toString();
                                 new_day = new_day.slice(11, 15) + '-' + getMonth(new_day.slice(4, 7)) + '-' + new_day.slice(8, 10)
                                 document.getElementById('daily-chart').value = new_day;
+                                document.getElementById('current-date').innerHTML = moment(moment(new Date(new_day))).format('dddd MMMM DD');
                                 $('#chart-navigation a[href="#daily-view"]').tab('show');
                             }
                         }
@@ -335,20 +301,60 @@ function drawChart(type, res) {
     daily_chart = new Chart(week_chart, config);
 }
 
+
+function retrieveChartData(type, date) {
+    $("#print-chart").empty();
+    $.ajax({
+        type: "GET",
+        url: timeTrackerBaseURL + 'index.php/user/activity_chart',
+        data: { 'chart_type': type, 'date': date },
+        dataType: 'json',
+        success: function (res) {
+            if (res["data"] == "No activity in this date.") {
+                if (type == 'weekly_chart') {
+                    document.getElementById('week-error').innerHTML = res['data'];
+                    $("#attachPanels").empty();
+                    $('#weekly').hide();
+                }
+                if (type == 'daily_chart') {
+                    document.getElementById('daily-error').innerHTML = res['data'];
+                    $("#attachPanels").empty();
+                }
+            } else {
+                if (type == 'weekly_chart') {
+                    loadTask(type, date);
+                    document.getElementById('week-error').innerHTML = " ";
+                    drawChart(type, res);
+                    $('#weekly').show();
+                }
+                if (type == 'daily_chart') {
+                    loadTask(type, date);
+                    document.getElementById('daily-error').innerHTML = " ";
+                    draw_customized_chart(res);
+                }
+            }
+        }
+    });
+}
+
+function dateFromDay(year, day) {
+    var date = new Date(year, 0); // initialize a date in year-01-01
+    return new Date(date.setDate(day)); // add the number of days
+}
 function draw_customized_chart(res) {
     var element = document.getElementById('daily');
     var pixel = [];
     var top = 25;
-    var margin_top = 298;
+    var margin_top = 290;
     var top1 = top;
     var window_width = $('.cust_daily_chart').width();
     if(window_width > 700)
     {
-        margin_top = 367;
+        margin_top = 364;
     }
+
     var p_left = parseInt(window_width) / 12;
     if (res['data'] != "No activity in this date.") {
-
         for (var i = 0; i < res['data'][1].length; i++) {
             var start_time_utc = moment.utc(res['data'][1][i]["start_time"]).toDate();
             var start_time_local = moment(start_time_utc).format("YYYY-MM-DD HH:mm:ss");
@@ -377,7 +383,7 @@ function draw_customized_chart(res) {
 
             var v = 0;
             for (var k = 0; k < pixel.length; k++) {
-                if ((start_time_pixel >= pixel[k][0]) && (start_time_pixel < pixel[k][1])) {
+                if ((start_time_pixel >= pixel[k][0]) && (start_time_pixel <= pixel[k][1])) {
                     v = 25;
                     var pixel1 = pixel;
                     pixel1[k][0] = null;
@@ -386,7 +392,7 @@ function draw_customized_chart(res) {
                         if ((start_time_pixel + width) >= window_width) {
                             width = window_width - (start_time_pixel);
                         }
-                        if (((start_time_pixel >= pixel1[e][0]) && (start_time_pixel < pixel1[e][1]))) {
+                        if (((start_time_pixel >= pixel1[e][0]) && (start_time_pixel <= pixel1[e][1]))) {
                             v = v + 25;
                             printChart(start_time_pixel, width, ((margin_top) - v), task_name, res['data'][0][i]);
                             break;
@@ -523,7 +529,6 @@ function getDay(day) {
     }
     return day_no;
 }
-
 function __get_date(w, y) {
     var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
     return new Date(y, 0, d);
@@ -579,7 +584,6 @@ function drawMonthlyChart(res) {
         }
     }
     var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
-
     var chart_width = $('#calendar_basic').width();
     var cellsize = chart_width / 60;
     var options = {
@@ -604,6 +608,7 @@ function drawMonthlyChart(res) {
             var topping = dataTable.getValue(selectedItem[0].row, 0);
             var day_from_year = (topping.toString().slice(11, 15)) + '-' + getMonth(topping.toString().slice(4, 7)) + '-' + topping.toString().slice(8, 10);
             document.getElementById('daily-chart').value = day_from_year;
+            document.getElementById('current-date').innerHTML = moment(moment(new Date(day_from_year))).format('dddd MMMM DD');
             $('#chart-navigation a[href="#daily-view"]').tab('show');
         } else {
             alert("No activities in this date");
@@ -615,6 +620,11 @@ function drawMonthlyChart(res) {
 
 $(document).ready(function () {
     //Tab Change
+
+    $('#weekly-chart').hide();
+    $('#monthly-chart').hide();
+
+
     var win_width = $('.cust_daily_chart').width();
     var p_l = parseInt(win_width) / 23;
     $('.cust_chart').css("padding-left", p_l);
@@ -627,7 +637,160 @@ $(document).ready(function () {
     });
     $("#monthly-chart").change(function () {
         loadMonthlyChart();
+
     });
+
+var tday = moment(new Date());
+document.getElementById('current-date').innerHTML = moment(tday).format('dddd MMMM DD');
+var daily_chart_date = document.getElementById('daily-chart').value;
+
+var day = new Date(daily_chart_date);
+var nextDay = new Date(day);
+nextDay.setDate(day.getDate() + 1);
+if((moment(nextDay).format('YYYY-MM-DD') > moment(new Date()).format('YYYY-MM-DD')))
+{
+    $('#next-date').css('color', "#666");
+}
+    $("#next-date").unbind().click(function()
+    {
+         var daily_chart_date = document.getElementById('daily-chart').value;
+
+         var day = new Date(daily_chart_date);
+
+            var nextDay = new Date(day);
+            nextDay.setDate(day.getDate() + 1);
+            if((moment(nextDay).format('YYYY-MM-DD') > moment(new Date()).format('YYYY-MM-DD')))
+            {
+                $('#next-date').css('color', "#666");
+            }
+            else
+            {
+            $('#next-date').css('color', "#a280fc");
+                document.getElementById('daily-chart').value = moment(nextDay).format('YYYY-MM-DD');
+
+                document.getElementById('current-date').innerHTML = moment(nextDay).format('dddd MMMM DD');
+                loadDailyChart();
+            }
+            var check_for_ancher = nextDay;
+            check_for_ancher.setDate(day.getDate() + 2);
+            if ((moment(check_for_ancher).format('YYYY-MM-DD') > moment(new Date()).format('YYYY-MM-DD'))) {
+                $('#next-date').css('color', "#666");
+            }
+            
+    });
+
+    $("#previous-date").unbind().click(function()
+    {
+         var daily_chart_date = document.getElementById('daily-chart').value;
+
+         var day = new Date(daily_chart_date);
+
+            var nextDay = new Date(day);
+            $('#next-date').css('color', "#a280fc");
+            nextDay.setDate(day.getDate() - 1);
+            document.getElementById('daily-chart').value = moment(nextDay).format('YYYY-MM-DD');
+            document.getElementById('current-date').innerHTML = moment(nextDay).format('dddd MMMM DD');
+            loadDailyChart();
+    });
+
+
+
+
+var tday = moment(new Date());
+var t_day = new Date();
+var day = moment(tday).format('E');
+t_day.setDate(t_day.getDate() - day);
+var start_week = t_day;
+var s_date = moment(t_day).format("MMM DD");
+t_day.setDate(t_day.getDate() + 7);
+var e_date = moment(t_day).format("MMM DD");
+t_day.setDate(t_day.getDate() - 7);
+
+document.getElementById('current-week').innerHTML = s_date+ ' - ' +e_date;
+var daily_chart_date1 = document.getElementById('weekly-chart').value;
+
+$("#next-week").unbind().click(function()
+    {
+        var daily_chart_date1 = document.getElementById('weekly-chart').value;
+        var week_no = parseInt(daily_chart_date1.slice(6,8));
+        var day = moment(new Date()).format('E');
+        if(!((parseInt(day) < (week_no)) && (parseInt(daily_chart_date1.slice(0,4)) == parseInt((moment(new Date()).format('YYYY'))))))
+        {
+            if(day == week_no)
+            {
+                $('#next-week').css('color', "#666");
+            }
+            $('#next-week').css('color', "#a280fc");
+            week_no++;
+            if (week_no.toString().length == 1) {
+                week_no = '0'+week_no;
+                document.getElementById('weekly-chart').value = daily_chart_date1.slice(0,6)+week_no;
+            }
+            else
+            {
+               document.getElementById('weekly-chart').value = daily_chart_date1.slice(0,6)+week_no;
+            }
+
+            t_day.setDate(t_day.getDate() + 7);
+            var s_date = moment(t_day).format("MMM DD");
+            t_day.setDate(t_day.getDate() + 7);
+            var e_date = moment(t_day).format("MMM DD");
+            t_day.setDate(t_day.getDate() - 7);
+            document.getElementById('current-week').innerHTML = s_date+ ' - ' +e_date;
+            loadWeeklyChart();
+        }else{
+            $('#next-week').css('color', "#666");
+        }
+    });
+$("#previous-week").unbind().click(function()
+    {
+        var daily_chart_date1 = document.getElementById('weekly-chart').value;
+        var week_no = parseInt(daily_chart_date1.slice(6,8));
+
+        if ((parseInt(daily_chart_date1.slice(0,4)) == parseInt((moment(new Date()).format('YYYY'))))) {
+        week_no--;
+        if (week_no.toString().length == 1) {
+            week_no = '0'+week_no;
+            document.getElementById('weekly-chart').value = daily_chart_date1.slice(0,6)+week_no;
+        }
+        else
+        {
+           document.getElementById('weekly-chart').value = daily_chart_date1.slice(0,6)+week_no;
+        }
+            var e_date = moment(t_day).format("MMM DD");
+            t_day.setDate(t_day.getDate() - 7);
+            var s_date = moment(t_day).format("MMM DD");
+            document.getElementById('current-week').innerHTML = s_date+ ' - ' +e_date;
+            loadWeeklyChart();
+        }
+                     
+    });
+var c_year = moment(new Date()).format('YYYY');
+document.getElementById('current-year').innerHTML = "Year- "+c_year;
+
+$("#next-year").unbind().click(function()
+    {
+    var year = parseInt(document.getElementById('current-year').innerHTML.slice(-4));
+    if((year) < parseInt(c_year))
+    {
+    document.getElementById('current-year').innerHTML = "Year- "+(year+1);
+    document.getElementById('monthly-chart').value = year+1;
+    loadMonthlyChart();
+    }
+    else
+    {
+        $('#next-year').css('color', "#666");
+    }
+});
+$("#previous-year").unbind().click(function()
+    {
+    var year = parseInt(document.getElementById('current-year').innerHTML.slice(-4));
+     document.getElementById('current-year').innerHTML = "Year- "+(year-1);
+     document.getElementById('monthly-chart').value = year-1;
+    loadMonthlyChart();
+    
+});
+
 
     /*daily_value.*/
     if (win_width < 400) {

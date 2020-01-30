@@ -21,20 +21,50 @@
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="daily-view" role="tabpanel" aria-labelledby="daily-view-tab">
                             <div class="daily-chart">
-                                <div class="form-group m-5">
-                                    <label for="end-date">Select date</label>
-                                    <div class="input-group">
-                                        <!-- chart that shows daily activities -->
-                                        <input type="text" class="form-control edit-date" id="daily-chart" data-date-format="YYYY-mm-DD ">
-                                        <!-- <button class="btn btn-primary" onclick="loadDailyChart()">view chart</button> -->
+                                <div class="row mt-5">
+                                    <div class="col-3 text-center">
+                                        <a href="#" id="previous-date"><h1 ><i class="fas fa-angle-left"></i></h1></a>
+
+
                                     </div>
+                                    <div class="col-6 text-center">
+                                        <h5 id="current-date"></h5>
+                                        <h6 class="mt-3 mb-1">Duration</h6>
+                                        <input type="hidden" class="form-control- edit-date" id="daily-chart" data-date-format="YYYY-mm-DD ">
+                                        <h4 id="daily-duration">10:15</h4>
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        <a href="#" id="next-date"><h1><i class="fas fa-angle-right"></i></h1></a>
+                                        <!-- <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div> -->
+                                        
+                                    </div>
+                                    <!-- <div class="col-6 text-right">
+                                        <div class="input-group">
+                                            <label for="end-date">Select date</label>
+                                            <div class="input-group ">
+                                            <div class="input-group mb-3">
+                                                  <input type="hidden-" class="form-control- edit-date" id="daily-chart" data-date-format="YYYY-mm-DD ">
+                                                  <div class="input-group-append">
+                                                    <button class="btn fa fa-calendar edit-date" type="button"></button>
+                                                  </div>
+                                            </div>
+
+                                            </div>
+
+
+                                        </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <p id="daily-error"class="text-center"></p>
                             <div id="daily">
                                 <div><p id="print-chart"></p></div>
                                 <p class="cust_daily_chart" id="cust_daily_chart"><hr>
-                                    <span id="chart-labels"><span class="">8AM</span>
+                                <span id="chart-labels"><span class="">8AM</span>
                                     <span class="cust_chart">9AM</span>
                                     <span class="cust_chart">10AM</span>
                                     <span class="cust_chart">11AM</span>            
@@ -46,17 +76,25 @@
                                     <span class="cust_chart">5PM</span>
                                     <span class="cust_chart">6PM</span>
                                     <span class="cust_chart">7PM</span>
-                                    <span class="cust_chart">8PM</span></span>
+                                    <span class="cust_chart">8PM</span>
+                                </span>
                                 </p>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="weekly-view" role="tabpanel" aria-labelledby="weekly-view-tab">
                             <div class="daily-chart">
-                                <div class="form-group m-5">
-                                    <label for="end-date">Select week</label>
-                                    <div class="input-group">
+                                <div class="row mt-5">
+                                    <div class="col-3 text-center">
+                                        <a href="#" id="previous-week"><h1 ><i class="fas fa-angle-left"></i></h1></a>
+                                    </div>
+                                    <div class="col-6 text-center">
+                                        <h5 id="current-week"></h5>
+                                        <h6 class="mt-3 mb-1">Duration</h6>
+                                        <h4 id="weekly-duration">35:12</h4>
                                         <input type="week" class="form-control " id="weekly-chart">
-                                        <!-- <button class="btn btn-primary" onclick="loadWeeklyChart()">view chart</button> -->
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        <a href="#" id="next-week"><h1><i class="fas fa-angle-right"></i></h1></a>
                                     </div>
                                 </div>
                                 <p id="week-error"class="text-center"></p>
@@ -64,12 +102,19 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="monthly-view" role="tabpanel" aria-labelledby="monthly-view-tab">
-                            <div class="daily-chart">
-                                <div class="form-group m-5">
-                                    <label for="end-date">Select year</label>
-                                    <div class="input-group">
-                                        <!-- chart that shows monthly activities -->
+                            <div class="monthly-chart">
+                                <div class="row mt-5">
+                                    <div class="col-3 text-center">
+                                        <a href="#" id="previous-year"><h1 ><i class="fas fa-angle-left"></i></h1></a>
+                                    </div>
+                                    <div class="col-6 text-center">
+                                        <h5 id="current-year"></h5>
+                                        <h6 class="mt-3 mb-1">Duration</h6>
+                                        <h4 id="daily-duration">135:12</h4>
                                         <input type="number" class="form-control" id="monthly-chart">
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        <a href="#" id="next-year"><h1><i class="fas fa-angle-right"></i></h1></a>
                                     </div>
                                 </div>
                             </div>

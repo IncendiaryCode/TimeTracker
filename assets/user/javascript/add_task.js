@@ -346,43 +346,6 @@ $(document).ready(function() {
 	if (document.getElementById("task-add-time")) {
 		addTime.init("#task-add-time");
 	}
-
-	// var element = document.getElementById("task-times");
-	// if (element != null) {
-	// 	var input_element = element.getElementsByClassName("date-utc");
-	// 	for (var i = 0; i < input_element.length; i++) {
-	// 		if (input_element[i].value != "" && input_element[i].value != " ") {
-	// 			var timeZone = moment.tz.guess();
-	// 			var date = input_element[i].value;
-	// 			if (input_element[i + 1]) {
-	// 				var start_time = input_element[i + 1].value;
-	// 				var serverDate = moment(date + " " + start_time)
-	// 					.tz(timeZone)
-	// 					.format("Y-MM-DD h:mm:ss");
-	// 				if (serverDate != "Invalid date") {
-	// 					// input_element[i].value = serverDate.slice(0, 10);
-	// 					// input_element[i + 1].value = serverDate.slice(11, 15);
-	// 					input_element[i].value = moment(serverDate).format("Y-MM-DD");
-	// 					input_element[i + 1].value = moment(serverDate).format("hh:mm");
-	// 				}
-	// 			}
-	// 			if (input_element[i + 2]) {
-	// 				var end_time = input_element[i + 2].value;
-	// 				var serverDateEnd = moment(date + " " + end_time)
-	// 					.tz(timeZone)
-	// 					.format("Y-MM-DD h:mm:ss");
-	// 				if (
-	// 					serverDateEnd != "Invalid date" &&
-	// 					(end_time != "" || end_time != " ")
-	// 				) {
-	// 					input_element[i + 2].value = moment(serverDateEnd).format("hh:mm");
-	// 				}
-	// 			}
-	// 		}
-	// 		i = i + 3;
-	// 	}
-	// }
-
 	var addTask = document.getElementById("addTask");
 	if (addTask) {
 		var m = new Date();
@@ -552,30 +515,33 @@ $(document).ready(function() {
 		document.getElementById("start-time-0").value = start_time;
 	}
 
-
 	$("select.project_name").change(function() {
 		var project_id = $(this)
 			.children("option:selected")
 			.val();
-		$.ajax({
-			type: "POST",
-			url: timeTrackerBaseURL + "index.php/user/get_project_module",
-			data: { id: project_id },
-			success: function(res) {
-				var result = JSON.parse(res);
-				var array = result["result"];
-				for (var i = 0; i < array.length; i++) {
-					var module_name = $(
-						"<option value=" +
-							array[i]["id"] +
-							">" +
-							array[i]["name"] +
-							"</option>"
-					);
-					$("#choose-module").append(module_name);
+		if(project_id != "Select Project")
+		{
+			$.ajax({
+				type: "POST",
+				url: timeTrackerBaseURL + "index.php/user/get_project_module",
+				data: { id: project_id },
+				success: function(res) {
+					/*$("#choose-module").empty();*/
+					var result = JSON.parse(res);
+					var array = result["result"];
+					for (var i = 0; i < array.length; i++) {
+						var module_name = $(
+							"<option value=" +
+								array[i]["id"] +
+								">" +
+								array[i]["name"] +
+								"</option>"
+						);
+						$("#choose-module").append(module_name);
+					}
 				}
-			}
-		});
+			});
+		}
 	});
 
 	if (document.getElementById("task-len")) {
