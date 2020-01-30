@@ -27,7 +27,7 @@ class User_model extends CI_Model {
      */
     public function start_login_timer(){
         //check whether login data already present in logindetails table
-        $this->db->where(array('task_date' => date('Y:m:d'),'user_id' => $this->session->userdata('userid')));
+        $this->db->where(array('task_date' => date('Y-m-d'),'user_id' => $this->session->userdata('userid')));
         $query_check = $this->db->get('login_details');
         if ($query_check->num_rows() > 0) { //if present, update the login timings
             $result = $query_check->row_array();
@@ -75,7 +75,7 @@ class User_model extends CI_Model {
         }
 
         //send present login details to user dashboard
-        $this->db->where(array('user_id' => $userid, 'task_date' => date('Y:m:d')));
+        $this->db->where(array('user_id' => $userid, 'task_date' => date('Y-m-d')));
         //$this->db->where('end_time IS NULL');
         $query = $this->db->get('login_details');
         if ($query->num_rows() > 0) {
@@ -342,12 +342,12 @@ class User_model extends CI_Model {
     public function start_timer($data) {
         if ($data['task_type'] == 'login') //check if the timer-start request is for login
         {
-            $this->db->where(array('task_date' => date('Y:m:d'), 'user_id' => $data['userid']));
+            $this->db->where(array('task_date' => date('Y-m-d'), 'user_id' => $data['userid']));
             $query_check = $this->db->get('login_details');
             if ($query_check->num_rows() > 0) {
                 return true;
             }else{
-                 $array1 = array('user_id'=>$data['userid'],'task_date'=>date('Y:m:d'),'start_time'=>$data['start_time'],'created_on'=>date('Y:m:d H:i:s'));
+                 $array1 = array('user_id'=>$data['userid'],'task_date'=>date('Y-m-d'),'start_time'=>$data['start_time'],'created_on'=>date('Y-m-d H:i:s'));
                 $this->db->set($array1);
                 $query1 = $this->db->insert('login_details', $array1);
                 if ($query1) {
@@ -359,8 +359,8 @@ class User_model extends CI_Model {
         } else if ($data['task_type'] == 'task') //check if the timer-start request is for task
         {
             
-            $start = (isset($data['start_time']))?$data['start_time']:date('Y:m:d H:i:s');
-            $array2 = array('task_id' => $data['task_id'], 'user_id' => $data['userid'], 'task_date' => date('Y:m:d'), 'start_time' => $start, 'total_hours' => '0', 'total_minutes' => '0', 'created_on' => date('Y:m:d H:i:s'));
+            $start = (isset($data['start_time']))?$data['start_time']:date('Y-m-d H:i:s');
+            $array2 = array('task_id' => $data['task_id'], 'user_id' => $data['userid'], 'task_date' => date('Y-m-d'), 'start_time' => $start, 'total_hours' => '0', 'total_minutes' => '0', 'created_on' => date('Y-m-d H:i:s'));
             $this->db->set($array2);
             $query2 = $this->db->insert('time_details', $array2);
             if ($query2) {
@@ -408,7 +408,7 @@ class User_model extends CI_Model {
             $t_minutes = (($diff / 60) < 1) ? ceil(abs($diff / 60)) : abs($diff / 60);
             $hours = round(abs($diff / (60 * 60)));
             $this->db->where(array('id' => $data['id']));
-            $query2 = $this->db->update('time_details', array('task_description' => $req_data['task_desc'], 'end_time' => $update_time, 'total_hours' => $hours, 'total_minutes' => $t_minutes, 'modified_on' => date('Y:m:d H:i:s')));
+            $query2 = $this->db->update('time_details', array('task_description' => $req_data['task_desc'], 'end_time' => $update_time, 'total_hours' => $hours, 'total_minutes' => $t_minutes, 'modified_on' => date('Y-m-d H:i:s')));
             if ($query2) {
                 if ($req_data['flag'] == 1) //if flag is 1, request is to complete the task
                 {
@@ -450,6 +450,7 @@ class User_model extends CI_Model {
         //get task activities
         $userid = $this->session->userdata('userid');
         $taskdate = $date;
+        $total_minutes = 0;
         if ($chart_type == "daily_chart") {
             $this->db->select('*,d.id AS table_id');
             //$this->db->select('*,count(t.task_name) as tasks');
@@ -482,12 +483,16 @@ class User_model extends CI_Model {
                     $query = $this->db->get();
                     $timing[] = $query->row_array();
                 }
+                foreach($timing AS $time){
+                    $total_minutes += $time['total_minutes'];
+                }
                 $chart_data = array('daily_chart', "status" => TRUE,
                 //"labels"=> $week_days,
-                "data" => array($task_id, $timing, $task_name));
+                "data" => array($task_id, $timing, $task_name),
+                "total_minutes" => $total_minutes);
             
             } else {
-                $chart_data = array('daily_chart', 'status' => FALSE, 'data' => "No activity in this date.");
+                $chart_data = array('daily_chart', 'status' => FALSE, 'data' => "No activity in this date.",'total_minutes' => '0');
             }
             return $chart_data;
         }
@@ -503,7 +508,7 @@ class User_model extends CI_Model {
             $this->db->where(array('user_id' => $userid));
             $this->db->where('end_time IS NOT NULL');
             $this->db->where('task_date BETWEEN "' . date('Y-m-d', strtotime($getdate[0])) . '" and "' . date('Y-m-d', strtotime($getdate[1])) . '"');
-            $this->db->group_by('task_id');
+            $this->db->group_by('task_date');
             $query = $this->db->get();
             if ($query->num_rows() > 0) {
                 $data = $query->result_array();
@@ -512,9 +517,10 @@ class User_model extends CI_Model {
                     $minutes = $d['minutes'];
                     $to_hours[] = round(($minutes / 60), 2); //get total_minutes interms of hour;
                     $week_days[] = $day;
+                    $total_minutes +=  $d['minutes'];
                 }
                 $week = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
-                $chart_data = array('weekly_chart', "status" => TRUE, "labels" => $week_days, "data" => $to_hours);
+                $chart_data = array('weekly_chart', "status" => TRUE, "labels" => $week_days, "data" => $to_hours, "total_minutes" => $total_minutes);
                 return $chart_data;
             } else {
                 $status = "No activity in this week.";
@@ -530,18 +536,20 @@ class User_model extends CI_Model {
             $this->db->where(array('user_id' => $userid));
             $this->db->where('end_time IS NOT NULL');
             $this->db->where('task_date BETWEEN "' . $year_start . '" and "' . $year_end . '"');
-            $this->db->group_by('task_id');
+            $this->db->group_by('task_date');
             $query = $this->db->get();
             if ($query->num_rows() > 0) {
                 $data = $query->result_array();
                 foreach ($data as $d) {
                     $values[] = array(date('Y-m-d', strtotime($d['task_date'])), round(($d['t_minutes'] / 60), 2));
+                    $total_minutes += $d['t_minutes'];
                 }
                 $chart_data = array('monthy_chart', "status" => TRUE,
                 /*date with working hours in standard format*/
-                "data" => $values);
+                "data" => $values,
+                "total_minutes" => $total_minutes);
             } else {
-                $chart_data = array('monthy_chart', "status" => FALSE, "data" => '0');
+                $chart_data = array('monthy_chart', "status" => FALSE, "data" => '0','total_minutes' => '0');
             }
             return $chart_data;
         }

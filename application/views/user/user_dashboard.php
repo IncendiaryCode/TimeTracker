@@ -79,10 +79,9 @@ if (!empty($task_info['login_run'])) { ?>
                         $timer_start = $datetime2->getTimestamp();
                         $task_start = strtotime($timer);
                         $task_id = $taskinfo['task_id'];
-
-                        $offset_min = ((date('Z')) / 60);
+                        /*$offset_min = ((date('Z')) / 60);
                         $local_time_min = ((substr($taskinfo['start_time'], 11, 2) * 60) + (substr($taskinfo['start_time'], 14, 2))) + $offset_min;
-                        $local_time = round(($local_time_min / 60), 0) . ':' . ($local_time_min % 60);
+                        $local_time = round(($local_time_min / 60), 0) . ':' . ($local_time_min % 60);*/
                 ?>
                         <div id="slider<?= $task_id ?>">
                             <!-- slider for all task -->
@@ -90,7 +89,7 @@ if (!empty($task_info['login_run'])) { ?>
                                 <input type="hidden" id="<?php echo $taskinfo['task_id'] ?>" value="<?php echo $timer_start ?>">
                                 <input type="hidden" id="id<?= $id ?>" value="<?php echo $taskinfo['task_id'] ?>">
                                 <p class="font-weight-light time-font text-center login-time" id="start-time<?= $id ?>">
-                                    Started at <?php echo $local_time; ?>
+                                    Started at <?php echo $timer_display; ?>
                                 </p>
                                 <div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer<?= $taskinfo['task_id'] ?>" data-type="" data-time="">
                                     00:00:00
