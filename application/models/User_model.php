@@ -294,6 +294,9 @@ class User_model extends CI_Model {
                 $end = '';
             $details['timeline_data'][] = array('table_id'=>$d['id'],'task_date'=>($d['task_date'])?$d['task_date']:date('Y-m-d'),'start_time'=>$start,'end_time'=>$end,'task_description'=>($d['task_description'])?$d['task_description']:null);
         }
+
+        //send list of project module to edit task page
+        $details['project_module_list'] = $this->get_module_name($d['project_id']);
         return $details;
     }
 

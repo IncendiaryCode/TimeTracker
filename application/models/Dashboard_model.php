@@ -211,6 +211,18 @@ class Dashboard_model extends CI_Model
                 $this->db->join('time_details AS d','d.task_id = t.id');
                 $this->db->where('d.user_id',$u['user_id']);
                 $task_count = $this->db->get()->row_array();
+
+                $hours = floor($task_count['t_minutes'] / 60);
+                $minutes = ($task_count['t_minutes'] % 60);
+                if(($minutes < 1) && ($hours < 1))
+                    $time_taken = sprintf('--');
+                else if($minutes < 1)
+                    $time_taken = sprintf('%02dh', $hours);
+                else if($hours < 1)
+                    $time_taken = sprintf('%02dm', $minutes);
+                else
+                    $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
+
                 $this->db->select('p.id AS project_id,p.name AS project_name,p.image_name,p.color_code');
                 $this->db->from('project AS p');
                 $this->db->join('project_assignee AS a','a.project_id = p.id');
@@ -220,7 +232,7 @@ class Dashboard_model extends CI_Model
                         'user_id'=>$u['user_id'],
                         'user_name'=> $u['user_name'],
                         'project'=>$project_names,
-                        'total_minutes'=>isset($task_count['t_minutes'])?$task_count['t_minutes']:'0',
+                        'total_minutes'=>isset($time_taken)?$time_taken:'0',
                         'tasks_count'=>$task_count['tasks_count']
                     );
             }
@@ -236,6 +248,16 @@ class Dashboard_model extends CI_Model
             $this->db->group_by('p.id');
             $projects = $this->db->get()->result_array();
             foreach ($projects as $project) {
+                $hours = floor($project['t_minutes'] / 60);
+                $minutes = ($project['t_minutes'] % 60);
+                if(($hours<1) && ($minutes <1))
+                    $time_taken = '--';
+                else if($minutes < 1)
+                    $time_taken = sprintf('%02dh', $hours);
+                else if($hours < 1)
+                    $time_taken = sprintf('%02dm', $minutes);
+                else
+                    $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
 
                 $this->db->select('count(distinct a.user_id) AS user_count');
                 $this->db->from('project AS p');
@@ -256,7 +278,7 @@ class Dashboard_model extends CI_Model
                     $this->db->where('p.id',$project['project_id']);
                     $user_details = $this->db->get()->result_array();
 
-                    $final_result[$project['project_id']] = array('project_id'=>$project['project_id'],'project_name'=>$project['project_name'],'project_icon'=>$project['image_name'],'project_color'=>$project['color_code'],'time_used'=>$project['t_minutes'], 'total_users'=>$p['user_count'], 'user_details' =>$user_details );
+                    $final_result[$project['project_id']] = array('project_id'=>$project['project_id'],'project_name'=>$project['project_name'],'project_icon'=>$project['image_name'],'project_color'=>$project['color_code'],'time_used'=>$time_taken, 'total_users'=>$p['user_count'], 'user_details' =>$user_details );
                 }
             }
 
@@ -349,20 +371,31 @@ class Dashboard_model extends CI_Model
                             $user_id = '';
                             $user_name = '--';
                         }
-                    }*/                    
-	        $data[]= array(
-	            $rows->task_name,
-	            ($rows->task_description)?$rows->task_description:'--',
-	            $rows->project_name,
-	            isset($rows->start_time)?$rows->start_time:'--',
-	            isset($rows->end_time)?$rows->end_time:'--',
-	            isset($rows->t_minutes)?$rows->t_minutes:'0',
-	            $rows->table_id,
-	            $rows->project_id,
-	            $rows->user_name,
-	            $rows->user_id
-	        );     
-            }
+                    }*/
+                    $hours = floor($rows->t_minutes / 60);
+                    $minutes = ($rows->t_minutes % 60);
+                    if(($minutes < 1) && ($hours < 1))
+                        $time_taken = sprintf('--');
+                    else if($minutes < 1)
+                        $time_taken = sprintf('%02dh', $hours);
+                    else if($hours < 1)
+                        $time_taken = sprintf('%02dm', $minutes);
+                    else
+                        $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
+
+	                $data[]= array(
+    	            $rows->task_name,
+    	            ($rows->task_description)?$rows->task_description:'--',
+    	            $rows->project_name,
+    	            isset($rows->start_time)?$rows->start_time:'--',
+    	            isset($rows->end_time)?$rows->end_time:'--',
+    	            isset($rows->t_minutes)?$time_taken:'0',
+    	            $rows->table_id,
+    	            $rows->project_id,
+    	            $rows->user_name,
+    	            $rows->user_id
+    	        );     
+                }
             return $data;
         }
     }
@@ -568,12 +601,22 @@ class Dashboard_model extends CI_Model
             $data = array();
             foreach($employees->result() as $rows)
             {
-                $time = date('H:i', mktime(0,$rows->t_minutes));
-                //print_r($time);
+                //$time = date('H:i', mktime(0,$rows->t_minutes));
+                $hours = floor($rows->t_minutes / 60);
+                $minutes = ($rows->t_minutes % 60);
+                if(($minutes < 1) && ($hours < 1))
+                    $time_taken = sprintf('--');
+                else if($minutes < 1)
+                    $time_taken = sprintf('%02dh', $hours);
+                else if($hours < 1)
+                    $time_taken = sprintf('%02dm', $minutes);
+                else
+                    $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
+
                 $data[]= array(
                     $rows->task_name,
                     $rows->project_name,
-                    $rows->t_minutes
+                    $time_taken
                 );     
             }
             return $data;
@@ -645,7 +688,18 @@ class Dashboard_model extends CI_Model
                 $details = $this->db->get();
                 $total_time = $details->row_array();
 
-                $data[]= array($t['task_name'],($total_time['users_count'])?($total_time['users_count']):'0',($total_time['t_minutes'])?$total_time['t_minutes']:'0');
+                $hours = floor($total_time['t_minutes'] / 60);
+                $minutes = ($total_time['t_minutes'] % 60);
+                if(($minutes < 1) && ($hours < 1))
+                    $time_taken = sprintf('--');
+                else if($minutes < 1)
+                    $time_taken = sprintf('%02dh', $hours);
+                else if($hours < 1)
+                    $time_taken = sprintf('%02dm', $minutes);
+                else
+                    $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
+
+                $data[]= array($t['task_name'],($total_time['users_count'])?($total_time['users_count']):'0',($time_taken)?$time_taken:'0');
             }
             if($order !=null)
             {
@@ -747,11 +801,21 @@ class Dashboard_model extends CI_Model
 
             foreach($employees->result() as $rows)
             {
+                $hours = floor($rows->t_minutes / 60);
+                $minutes = ($rows->t_minutes % 60);
+                if(($minutes < 1) && ($hours < 1))
+                    $time_taken = sprintf('--');
+                else if($minutes < 1)
+                    $time_taken = sprintf('%02dh', $hours);
+                else if($hours < 1)
+                    $time_taken = sprintf('%02dm', $minutes);
+                else
+                    $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
 
                 $data[]= array(
                     $rows->project_name,
                     $rows->tasks_count,
-                    $rows->t_minutes
+                    $time_taken
                 );     
             }
             return $data;
@@ -820,7 +884,19 @@ class Dashboard_model extends CI_Model
                 //$this->db->limit($length,$start);
                 $details = $this->db->get();
                 $task = $details->row_array();
-                $data[] = array($u['name'],($task['tasks_count'])?($task['tasks_count']):'0',$task['t_minutes']);  
+
+                $hours = floor($task['t_minutes'] / 60);
+                    $minutes = ($task['t_minutes'] % 60);
+                    if(($minutes < 1) && ($hours < 1))
+                        $time_taken = sprintf('--');
+                    else if($minutes < 1)
+                        $time_taken = sprintf('%02dh', $hours);
+                    else if($hours < 1)
+                        $time_taken = sprintf('%02dm', $minutes);
+                    else
+                        $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
+
+                $data[] = array($u['name'],($task['tasks_count'])?($task['tasks_count']):'0',$time_taken);  
             }
             if($order !=null)
             {
@@ -882,7 +958,17 @@ class Dashboard_model extends CI_Model
             if($res->num_rows() > 0){
                 $count = $res->result_array();
                 foreach($count as $c){
-                    $data = array('project_name'=>$c['project_name'],'project_id'=>$c['project_id'],'users'=>$usr,'tasks'=>$c['tasks_count'],'image_name'=>$c['image_name'],'total_minutes'=>$c['t_minutes']);
+                    $hours = floor($c['t_minutes'] / 60);
+                    $minutes = ($c['t_minutes'] % 60);
+                    if(($minutes < 1) && ($hours < 1))
+                        $time_taken = sprintf('--');
+                    else if($minutes < 1)
+                        $time_taken = sprintf('%02dh', $hours);
+                    else if($hours < 1)
+                        $time_taken = sprintf('%02dm', $minutes);
+                    else
+                        $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
+                    $data = array('project_name'=>$c['project_name'],'project_id'=>$c['project_id'],'users'=>$usr,'tasks'=>$c['tasks_count'],'image_name'=>$c['image_name'],'total_minutes'=>$time_taken);
                 }
             }else{
                 $data = '';
@@ -971,6 +1057,17 @@ class Dashboard_model extends CI_Model
         $this->db->join('users AS u','u.id = ta.user_id');
         $this->db->where('u.id',$user_id);
         $user_data = $this->db->get()->row_array();
+        $hours = floor($user_data['t_minutes'] / 60);
+        $minutes = ($user_data['t_minutes'] % 60);
+        if(($minutes < 1) && ($hours < 1))
+            $user_data['t_minutes'] = sprintf('--');
+        else if($minutes < 1)
+            $user_data['t_minutes'] = sprintf('%02dh', $hours);
+        else if($hours < 1)
+            $user_data['t_minutes'] = sprintf('%02dm', $minutes);
+        else
+            $user_data['t_minutes'] = sprintf('%02dh %02dm', $hours, $minutes);
+
         return $user_data;
     }
 

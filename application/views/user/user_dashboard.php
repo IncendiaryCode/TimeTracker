@@ -5,7 +5,7 @@ $this->load->helper('date');
 // print_r($task_info);
 if (isset($task_info['login_status'])) {
     $login_time = $task_info['login_status']['start_time'];
-    $login_time_display = date('g:i:s A', strtotime($task_info['login_status']['start_time']));
+    $login_time_display = date('g:i A', strtotime($task_info['login_status']['start_time']));
     $login = new DateTime($login_time, new DateTimeZone('UTC'));
     $logintime = $login->getTimestamp();
 } else //Disable punchin card for the day
@@ -74,7 +74,7 @@ if (!empty($task_info['login_run'])) { ?>
                     //task timer
                     foreach ($task_info['task_status'] as $taskinfo) {
                         $timer = $taskinfo['start_time'];
-                        $timer_display = date('g:i:s A', strtotime($taskinfo['start_time']));
+                        $timer_display = date('g:i A', strtotime($taskinfo['start_time']));
                         $datetime2 = new DateTime($timer, new DateTimeZone('UTC'));
                         $timer_start = $datetime2->getTimestamp();
                         $task_start = strtotime($timer);

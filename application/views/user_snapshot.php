@@ -62,7 +62,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?php }  ?>
                 </div>
                 <div class="col-2">
-                    <p><?= round(($k['total_minutes'] / 60), 2); ?> hrs</p>
+                    <p><?= $k['total_minutes']; ?></p>
                 </div>
                 <div class="col-2">
                     <div class="remove-user">

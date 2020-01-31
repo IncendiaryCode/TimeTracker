@@ -47,7 +47,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card user-card">
                 <div class="card-body">
                     <div class="mx-auto d-block">
-                        <div class="text-center"><span class="project-details"><?= round(($data['total_minutes'] / 60), 2); ?></span>h
+                        <div class="text-center"><span class="project-details"><?= $data['total_minutes']; ?></span>
                             <p class="text-center">Total time spent</p>
                         </div>
                     </div>

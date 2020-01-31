@@ -133,7 +133,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </a>
                             </div>
                             <div class="col-6">
-                                <?php echo round($project["t_minutes"] / 60, 2); ?> hrs</div>
+                                <?php
+                                    $hours = floor($project['t_minutes'] / 60);
+                                    $minutes = ($project['t_minutes'] % 60);
+                                    if($hours < 1)
+                                        echo sprintf('%02dm', $minutes);
+                                    else if($minutes < 1)
+                                        echo sprintf('%02dh', $hours);
+                                    else if(($hours<1) && ($minutes <1))
+                                        echo "--";
+                                    else
+                                        echo sprintf('%02dh %02dm', $hours, $minutes);
+                                ?>
+                            </div>
                         </div>
                     </li>
                 <?php } ?>
@@ -159,7 +171,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </a>
                             </div>
                             <div class="col-6">
-                                <?php echo round($user["t_minutes"] / 60, 2); ?> hrs</div>
+                                <?php
+                                    $hours = floor($user['t_minutes'] / 60);
+                                    $minutes = ($user['t_minutes'] % 60);
+                                    if($hours < 1)
+                                        echo sprintf('%02dm', $minutes);
+                                    else if($minutes < 1)
+                                        echo sprintf('%02dh', $hours);
+                                    else if(($hours<1) && ($minutes <1))
+                                        echo "--";
+                                    else
+                                        echo sprintf('%02dh %02dm', $hours, $minutes);
+                                ?>
                         </div>
                     </li>
                 <?php } ?>

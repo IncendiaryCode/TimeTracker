@@ -53,7 +53,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </a>
                 <?php  } ?>
             </div>
-            <div class="col-2"><?= round($proj['time_used'] / 60, 2) ?> hrs</div>
+            <div class="col-2"><?=$proj['time_used'];?></div>
 
         </div>
         <hr>

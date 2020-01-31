@@ -33,11 +33,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="card-body">
                     <?php
                     if ($data['t_minutes']) { ?>
-                        <div><span class="display-3"><?= round(($data['t_minutes'] / 60), 2); ?></span><span class="display-5">h</span></div>
+                        <div><span class="display-3"><?= $data['t_minutes']; ?></span></div>
                         <p class="text-center">Time spent</p>
 
                     <?php } else { ?>
-                        <div><span class="display-heading"><?= round(($data['t_minutes'] / 60), 2); ?></span><span class="display-5">h</span></div> <?php } ?>
+                        <div><span class="display-heading"><?= $data['t_minutes'];?></span></div> <?php } ?>
                 </div>
             </div>
         </div>

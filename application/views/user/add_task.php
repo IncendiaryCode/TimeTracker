@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 $local_start_time = 0;
-if ($this->input->get('t_id')) { ?>
+if ($this->input->get('t_id')) { print_r($project_module_list);?>
     <script type="text/javascript">
         var edit = 1;
     </script>
@@ -65,7 +65,7 @@ if ($this->input->get('t_id')) { ?>
                                         </option>
                                     </select>
                                 <?php } else { ?>
-                                    <select type="text" class="form-control project_name" id="choose-project" name="project" value="<?= $task_data['project_name'] ?>">
+                                    <select type="text" class="form-control project_name" id="choose-project" name="project" value="<?=$task_data['project_name']?>">
                                         <option>Select Project</option>
                                         <?php
                                         foreach ($result as $p) { ?>
@@ -79,13 +79,15 @@ if ($this->input->get('t_id')) { ?>
                             <div class="form-group">
                                 <label for="choose-module">Choose project module</label>
                                 <?php if ($this->input->get('t_id')) { ?>
-                                <select type="text" readonly="" class="form-control project_name" id="choose-module" name="project_module" value="<?= $task_data['module_name'] ?>">
+                                <select type="text"  class="form-control project_name" id="choose-module" name="project_module" value="<?=$task_data['module_name']?>">
+                                    <option><?=$task_data['module_name']?></option>
+                                     <?php foreach($project_module_list AS $module){ ?>
+                                        <option value="<?=$module->id;?>"><?=$module->name;?></option>
+
+                                    <!-- <option value=<?=$task_data['module_name']?>><?=$task_data['module_name']?></option> -->
+                                <?php } ?></select>
                                 <?php } else { ?>
                                     <select type="text" class="form-control project_name" id="choose-module" name="project_module" value="<?= $task_data['module_name'] ?>">
-                                    <?php } ?>
-                                    <?php if ($this->input->get('t_id')) { ?>
-                                        <option value=<?= $task_data['module_id'] ?>><?= $task_data['module_name'] ?></option>
-                                    <?php } else { ?>
                                         <option>Select module</option>
                                     <?php } ?>
                                 </select>
