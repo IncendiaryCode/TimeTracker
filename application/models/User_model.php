@@ -452,10 +452,11 @@ class User_model extends CI_Model {
         $taskdate = $date;
         $total_minutes = 0;
         if ($chart_type == "daily_chart") {
-            $this->db->select('*,d.id AS table_id');
+            $this->db->select('d.*,d.id AS table_id,p.color_code,t.task_name,t.id AS task_id');
             //$this->db->select('*,count(t.task_name) as tasks');
             $this->db->from('time_details AS d');
             $this->db->join('task AS t', 't.id = d.task_id');
+            $this->db->join('project AS p','p.id = t.project_id');
             $this->db->where('d.end_time IS NOT NULL'); //tasks that are not running
             $this->db->where(array('d.user_id' => $userid, 'd.task_date' => $taskdate));
             $this->db->group_by('d.id');
@@ -467,6 +468,7 @@ class User_model extends CI_Model {
                     $table_id[] = $d['table_id'];
                     $task_id[] = $d['task_id'];
                     $task_name[] = $d['task_name'];
+                    $project_color[] = $d['color_code'];
                 }
                 /*$tasks = array_count_values($task_id);
                 foreach ($tasks as $key => $count) {
@@ -488,7 +490,7 @@ class User_model extends CI_Model {
                 }
                 $chart_data = array('daily_chart', "status" => TRUE,
                 //"labels"=> $week_days,
-                "data" => array($task_id, $timing, $task_name),
+                "data" => array($task_id, $timing, $task_name, $project_color),
                 "total_minutes" => $total_minutes);
             
             } else {
@@ -503,12 +505,14 @@ class User_model extends CI_Model {
             $week = explode('W', $week_value); //format: W23
             $getdate = $this->get_start_and_end_date($week[1], $year_value[0]); //start and end date for 23rd week and year 2019
             $this->db->select('*');
-            $this->db->select_sum('total_minutes', 'minutes');
-            $this->db->from('time_details');
-            $this->db->where(array('user_id' => $userid));
-            $this->db->where('end_time IS NOT NULL');
-            $this->db->where('task_date BETWEEN "' . date('Y-m-d', strtotime($getdate[0])) . '" and "' . date('Y-m-d', strtotime($getdate[1])) . '"');
-            $this->db->group_by('task_date');
+            $this->db->select_sum('d.total_minutes', 'minutes');
+            $this->db->from('time_details AS d');
+            $this->db->join('task AS t','t.id = d.task_id');
+            $this->db->join('project AS p','p.id = t.project_id');
+            $this->db->where(array('d.user_id' => $userid));
+            $this->db->where('d.end_time IS NOT NULL');
+            $this->db->where('d.task_date BETWEEN "' . date('Y-m-d', strtotime($getdate[0])) . '" and "' . date('Y-m-d', strtotime($getdate[1])) . '"');
+            $this->db->group_by('d.task_date');
             $query = $this->db->get();
             if ($query->num_rows() > 0) {
                 $data = $query->result_array();
@@ -518,9 +522,10 @@ class User_model extends CI_Model {
                     $to_hours[] = round(($minutes / 60), 2); //get total_minutes interms of hour;
                     $week_days[] = $day;
                     $total_minutes +=  $d['minutes'];
+                    $project_color = $d['color_code'];
                 }
                 $week = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
-                $chart_data = array('weekly_chart', "status" => TRUE, "labels" => $week_days, "data" => $to_hours, "total_minutes" => $total_minutes);
+                $chart_data = array('weekly_chart', "status" => TRUE, "labels" => $week_days, "data" => array('time_taken'=>$to_hours,'project_color'=>$project_color), "total_minutes" => $total_minutes);
                 return $chart_data;
             } else {
                 $status = "No activity in this week.";
@@ -531,17 +536,19 @@ class User_model extends CI_Model {
             $year_start = date('Y-m-d', strtotime(date($taskdate . '-01-01')));
             $year_end = date('Y-m-d', strtotime(date($taskdate . '-12-31')));
             $this->db->select('*');
-            $this->db->select_sum('total_minutes', 't_minutes');
-            $this->db->from('time_details');
-            $this->db->where(array('user_id' => $userid));
-            $this->db->where('end_time IS NOT NULL');
-            $this->db->where('task_date BETWEEN "' . $year_start . '" and "' . $year_end . '"');
-            $this->db->group_by('task_date');
+            $this->db->select_sum('d.total_minutes', 't_minutes');
+            $this->db->from('time_details AS d');
+            $this->db->join('task AS t','t.id = d.task_id');
+            $this->db->join('project AS p','p.id = t.project_id');
+            $this->db->where(array('d.user_id' => $userid));
+            $this->db->where('d.end_time IS NOT NULL');
+            $this->db->where('d.task_date BETWEEN "' . $year_start . '" and "' . $year_end . '"');
+            $this->db->group_by('d.task_date');
             $query = $this->db->get();
             if ($query->num_rows() > 0) {
                 $data = $query->result_array();
                 foreach ($data as $d) {
-                    $values[] = array(date('Y-m-d', strtotime($d['task_date'])), round(($d['t_minutes'] / 60), 2));
+                    $values[] = array(date('Y-m-d', strtotime($d['task_date'])), round(($d['t_minutes'] / 60), 2),$d['color_code']);
                     $total_minutes += $d['t_minutes'];
                 }
                 $chart_data = array('monthy_chart', "status" => TRUE,
