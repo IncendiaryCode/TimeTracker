@@ -98,7 +98,7 @@ function callTaskTableData()
                 return json.data;
             }
         },
-        "order": [[ 0, "desc" ]],
+        "order": [[ 4, "desc" ]],
         "columnDefs": [{
             "targets": 0,
             "render": function ( data, type, row, meta) {

@@ -568,7 +568,8 @@ class Dashboard_model extends CI_Model
             $data = array();
             foreach($employees->result() as $rows)
             {
-
+                $time = date('H:i', mktime(0,$rows->t_minutes));
+                //print_r($time);
                 $data[]= array(
                     $rows->task_name,
                     $rows->project_name,
@@ -624,27 +625,27 @@ class Dashboard_model extends CI_Model
                 $this->db->like('t.task_name',$search);                 
             }
 
-            $this->db->select('count(distinct a.user_id) AS users_count');
+            
             $this->db->select('t.id,t.task_name');
             $this->db->from('task AS t');
-            $this->db->join('project_assignee AS a','a.project_id = t.project_id');
-            $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
+            //$this->db->join('project_assignee AS a','a.project_id = t.project_id');
             $this->db->where('t.project_id',$project_id);
             $tasks = $this->db->get()->result_array();
 
             $data = array();
             foreach($tasks as $t){
-                
+                $this->db->select('count(distinct ta.user_id) AS users_count');
                 $this->db->select_sum('d.total_minutes','t_minutes');
                 $this->db->from('task AS t');
+                $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
                 $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
                 $this->db->where(array('t.project_id'=>$project_id,'t.id'=>$t['id']));
-                //$this->db->group_by('d.task_id');
+                $this->db->group_by('d.task_id');
                 //$this->db->limit($length,$start);
                 $details = $this->db->get();
                 $total_time = $details->row_array();
 
-                $data[]= array($t['task_name'],($t['users_count'])?($t['users_count']):'0',($total_time['t_minutes'])?$total_time['t_minutes']:'0');
+                $data[]= array($t['task_name'],($total_time['users_count'])?($total_time['users_count']):'0',($total_time['t_minutes'])?$total_time['t_minutes']:'0');
             }
             if($order !=null)
             {
