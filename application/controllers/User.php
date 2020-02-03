@@ -90,24 +90,50 @@ class User extends CI_Controller
             $date = $this->input->get('date');
             if($this->input->get('chart_type') == 'daily_chart'){
                 //to display daily activities of the user
-                $type = 'daily_chart'; 
+                $type = 'daily_chart';
+                $task_details['data'] = $this->user_model->get_task_details($type,$date); //get task data
+                if($task_details['data'] == NULL){ //if no data, send failure message
+                    $task_details['status'] = FALSE;
+                    $task_details['data'] = NULL;
+                    $task_details['msg'] = "No activity in this date.";
+                }else{ //if data is present, send the data
+                    $task_details['status'] = TRUE;
+                }
+                echo json_encode($task_details);
             }else if($this->input->get('chart_type') == 'weekly_chart'){
                 //to display weekly activities of the user
                 $type = 'weekly_chart';
+                if(!preg_match('/^\d{1,4}-[W](\d|[0-4]\d|5[0123])$/',$date)){ //check input format for week number
+                    $task_details['status'] = FALSE;
+                    $task_details['data'] = NULL;
+                    $task_details['msg'] = "Invalid input format.";
+                    echo json_encode($task_details);
+                }else{
+                    $task_details['data'] = $this->user_model->get_task_details($type,$date); //get task data
+                    if($task_details['data'] == NULL){ //if no data, send failure message
+                        $task_details['status'] = FALSE;
+                        $task_details['data'] = NULL;
+                        $task_details['msg'] = "No activity in this date.";
+                    }else{ //if data is present, send the data
+                        $task_details['status'] = TRUE;
+                    }
+                    echo json_encode($task_details);
+                }
             }else{
                 //to display monthly activities of the user
                 $type = 'monthly_chart';
+                $task_details['data'] = $this->user_model->get_task_details($type,$date); //get task data
+                if($task_details['data'] == NULL){ //if no data, send failure message
+                    $task_details['status'] = FALSE;
+                    $task_details['data'] = NULL;
+                    $task_details['msg'] = "No activity in this date.";
+                }else{ //if data is present, send the data
+                    $task_details['status'] = TRUE;
+                }
+                echo json_encode($task_details);
             }
         }
-        $task_details['data'] = $this->user_model->get_task_details($type,$date); //get task data
-        if($task_details['data'] == NULL){ //if no data, send failure message
-            $task_details['status'] = FALSE;
-            $task_details['data'] = NULL;
-            $task_details['msg'] = "No activity in this date.";
-        }else{ //if data is present, send the data
-            $task_details['status'] = TRUE;
-        }
-        echo json_encode($task_details);
+        
     }
 
     //stop the old task by updating end time(in user dashboard page)
@@ -249,18 +275,28 @@ class User extends CI_Controller
     {
         //ajax call
         if (isset($_GET['chart_type']) && isset($_GET['date'])) {
+            $date       = $_GET['date'];
             if ($_GET['chart_type'] == 'daily_chart') {
                 $chart_type = 'daily_chart';
+                $chart_data = $this->user_model->get_activity($chart_type, $date); //get activity of the user for given arguments
+                echo json_encode($chart_data);
             }
             if ($_GET['chart_type'] == 'weekly_chart') {
                 $chart_type = 'weekly_chart';
+                if(!preg_match('/^\d{1,4}-[W](\d|[0-4]\d|5[0123])$/',$date)){
+                    $chart_data['status'] = FALSE;
+                    $chart_data['msg'] = "Invalid input format.";
+                    echo json_encode($chart_data);
+                }else{
+                    $chart_data = $this->user_model->get_activity($chart_type, $date); //get activity of the user for given arguments
+                    echo json_encode($chart_data);
+                }
             }
             if ($_GET['chart_type'] == 'monthly_chart') {
                 $chart_type = 'monthly_chart';
+                $chart_data = $this->user_model->get_activity($chart_type, $date); //get activity of the user for given arguments
+                echo json_encode($chart_data);
             }
-            $date       = $_GET['date'];
-            $chart_data = $this->user_model->get_activity($chart_type, $date); //get activity of the user for given arguments
-            echo json_encode($chart_data);
         }
     }
 

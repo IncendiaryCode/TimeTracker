@@ -507,37 +507,35 @@ class User_model extends CI_Model {
             $week_value = $year_value[1]; //W23
             $week = explode('W', $week_value); //format: W23
             $getdate = $this->get_start_and_end_date($week[1], $year_value[0]); //start and end date for 23rd week and year 2019
-            $this->db->select('*');
-            $this->db->select_sum('d.total_minutes', 'minutes');
-            $this->db->from('time_details AS d');
-            $this->db->join('task AS t','t.id = d.task_id');
-            $this->db->join('project AS p','p.id = t.project_id');
-            $this->db->where(array('d.user_id' => $userid));
-            $this->db->where('d.end_time IS NOT NULL');
-            $this->db->where('d.task_date BETWEEN "' . date('Y-m-d', strtotime($getdate[0])) . '" and "' . date('Y-m-d', strtotime($getdate[1])) . '"');
-            $this->db->group_by('d.task_date');
-            $query = $this->db->get();
-            if ($query->num_rows() > 0) {
+            $date_range = $this->getDatesFromRange($getdate[0], $getdate[1]);
+            foreach($date_range AS $range){
+                $query = $this->db->query("SELECT t.id,t.task_name,p.name,p.color_code,td.* FROM `task` AS `t` JOIN `project` AS `p` ON `p`.`id` = `t`.`project_id` LEFT JOIN `task_assignee` AS `ta` ON ta.task_id = t.id LEFT JOIN (SELECT d.task_id, d.start_time, d.end_time, d.task_description,d.task_date, SUM(`d`.`total_minutes`) AS `minutes` FROM `time_details` AS `d` WHERE `d`.`task_date`='".$range."' AND d.end_time IS NOT NULL) AS td ON td.task_id = t.id GROUP BY t.id");
                 $data = $query->result_array();
+                $i=0;
                 foreach ($data as $d) {
                     $day = date('D', strtotime($d['task_date']));
                     $minutes = $d['minutes'];
-                    $to_hours[] = round(($minutes / 60), 2); //get total_minutes interms of hour;
-                    $week_days[] = $day;
+                    $to_hours[$i] = round(($minutes / 60), 2); //get total_minutes interms of hour
+                    $week_days[$i] = $day;
                     $total_minutes +=  $d['minutes'];
-                    $project_color = $d['color_code'];
-                }
+                    $project_color[$i] = $d['color_code'];
+                    $task_name[$i] = $d['task_name'];
+                    $i=$i+1;
+                } 
+                $week_day = date('D', strtotime($range));
                 $week = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
-                $chart_data = array('weekly_chart', "status" => TRUE, "labels" => $week_days, "data" => array('time_taken'=>$to_hours,'project_color'=>$project_color), "total_minutes" => $total_minutes);
-                return $chart_data;
-            } else {
-                $status = "No activity in this week.";
-                return $status;
+                $chart_data[] = array('weekly_chart', "status" => TRUE, "labels" => $week_days, "data" => array('day'=>$week_day,'task_name'=>$task_name,'time'=>$to_hours,'project_color'=>$project_color,'total_minutes'=>$total_minutes)); 
             }
+            return $chart_data;
         }
         if ($chart_type == "monthly_chart") {
-            $year_start = date('Y-m-d', strtotime(date($taskdate . '-01-01')));
-            $year_end = date('Y-m-d', strtotime(date($taskdate . '-12-31')));
+            $month_array = explode(' ',$date);
+            $month_value = $month_array[0];
+            $year_value = $month_array[1];
+            $first = date($year_value . '-' . $month_value . '-' . '01');
+            $last = date($year_value . '-' . $month_value . '-' . 't');
+            /*$month_start = date('Y-m-1', strtotime($date));
+            $month_end = date('Y-m-t', strtotime($month_start));*/
             $this->db->select('*');
             $this->db->select_sum('d.total_minutes', 't_minutes');
             $this->db->from('time_details AS d');
@@ -545,7 +543,7 @@ class User_model extends CI_Model {
             $this->db->join('project AS p','p.id = t.project_id');
             $this->db->where(array('d.user_id' => $userid));
             $this->db->where('d.end_time IS NOT NULL');
-            $this->db->where('d.task_date BETWEEN "' . $year_start . '" and "' . $year_end . '"');
+            $this->db->where('d.task_date BETWEEN "' . $first . '" and "' . $last . '"');
             $this->db->group_by('d.task_date');
             $query = $this->db->get();
             if ($query->num_rows() > 0) {
@@ -554,12 +552,12 @@ class User_model extends CI_Model {
                     $values[] = array(date('Y-m-d', strtotime($d['task_date'])), round(($d['t_minutes'] / 60), 2),$d['color_code']);
                     $total_minutes += $d['t_minutes'];
                 }
-                $chart_data = array('monthy_chart', "status" => TRUE,
+                $chart_data = array('monthly_chart', "status" => TRUE,
                 /*date with working hours in standard format*/
                 "data" => $values,
                 "total_minutes" => $total_minutes);
             } else {
-                $chart_data = array('monthy_chart', "status" => FALSE, "data" => '0','total_minutes' => '0');
+                $chart_data = array('monthly_chart', "status" => FALSE, "data" => '0','total_minutes' => '0');
             }
             return $chart_data;
         }
@@ -616,6 +614,29 @@ class User_model extends CI_Model {
         (new DateTime())->setISODate($year, $week, 0)->format('Y-m-d'), //start date
         (new DateTime())->setISODate($year, $week, 6)->format('Y-m-d') //end date
         ];
+    }
+
+    /**
+     * Function to get all the dates for the given date range
+     * 
+     * @params $week, $year
+     *
+     * returns array(dates in a week)
+     */
+    public function getDatesFromRange($start, $end, $format = 'Y-m-d') { 
+        // Declare an empty array 
+        $array = array(); 
+        // Variable that store the date interval of period 1 day 
+        $interval = new DateInterval('P1D'); 
+        $realEnd = new DateTime($end); 
+        $realEnd->add($interval); 
+        $period = new DatePeriod(new DateTime($start), $interval, $realEnd); 
+        // Use loop to store date into array 
+        foreach($period as $date) {                  
+            $array[] = $date->format($format);  
+        }
+        // Return the array elements 
+        return $array; 
     }
 
     /**
