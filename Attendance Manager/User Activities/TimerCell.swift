@@ -24,14 +24,16 @@ class TimerCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+//        lblTimer.font = UIFont.monospacedDigitSystemFont(ofSize: 50, weight: UIFont.Weight.semibold)
     }
     
     func customInit(taskId: Int) {
+        let taskCDCtrlr = TasksCDController()
         let strStartedOn = getTaskStartTime(taskId: taskId)
         let strTaskName = getTaskName(taskId: taskId)
         lblTaskTitle.text = strTaskName
         lblStartTime.text = strStartedOn
-        nTotalTime = getTaskTotalTime(taskId: taskId)
+        nTotalTime = taskCDCtrlr.getTotalTime(taskId: taskId)
         lblTimer.text = "\(getSecondsToHoursMinutesSeconds(seconds: self.nTotalTime))"
         runTime()
     }

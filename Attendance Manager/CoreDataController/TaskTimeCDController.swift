@@ -590,6 +590,44 @@ class TasksTimeCDController {
         return arrTimeId
     }
     
+    /// Returns day timings ratio based on task timings.
+    func getTaskRatioBasedOnProject(intDate: Int64) -> Dictionary<Int, CGFloat> {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
+        let strDate = Date().getStrDate(from: intDate)
+        fetchRequest.predicate = NSPredicate(format: "date = %@", strDate)
+        var dictRatio: Dictionary<Int, CGFloat> =  Dictionary<Int, CGFloat>()
+        var totalTime:CGFloat = 0
+        do {
+            let res = try nsManagedContext.fetch(fetchRequest)
+            for i in 0..<res.count {
+                let object = res[i] as! NSManagedObject
+                let workStart = object.value(forKey: "start_time") as! Int
+                let workEnd = object.value(forKey: "end_time") as! Int
+                let taskId = object.value(forKey: "task_id") as! Int
+                let total = workEnd - workStart
+                // get project id of task
+                let projId = getProjectId(taskId: taskId)
+                
+                // Store each projects total work time.
+                if nil == dictRatio[projId] {
+                    dictRatio[projId] = CGFloat(total)
+                }
+                else {
+                    dictRatio[projId]! += CGFloat(total)
+                }
+                totalTime += CGFloat(total)
+            }
+        } catch {
+            print("Eror")
+        }
+        
+        // Get each projects ratio.
+        for (key, value) in dictRatio {
+            dictRatio[key] = value/totalTime
+        }
+        return dictRatio
+    }
+    
     /// Get total work time from date.
     func getTotalWorkTime(intDate: Int64) -> Int {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")

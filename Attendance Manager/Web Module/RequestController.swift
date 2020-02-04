@@ -143,7 +143,7 @@ class RequestController {
                         let json = self.parseData(JSONData: response.data!)!
                         completion(json)
                     case let .failure(error):
-                        print("Failed to update\(error)")
+                        print("Failed to update\(error) in \(url)")
                         let dictError = ["success": 0, "msg":
                             "Error response"] as [String : Any]
                         completion(dictError)

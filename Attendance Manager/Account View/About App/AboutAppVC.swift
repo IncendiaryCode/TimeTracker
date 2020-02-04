@@ -20,7 +20,7 @@ class AboutAppVC: UIViewController {
     @IBOutlet weak var imgLogo: UIImageView!
     @IBOutlet weak var viewContainer: UIView!
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var txtInfo: UITextView!
+    @IBOutlet weak var lblInfo: UILabel!
     @IBOutlet weak var viewFooter: UIView!
     @IBOutlet weak var lblAbout: UILabel!
     @IBOutlet weak var lblVersion: UILabel!
@@ -43,8 +43,12 @@ class AboutAppVC: UIViewController {
         // Get app version
         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
             self.lblVersion.text = "Version \(version)"
+            if let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+                self.lblVersion.text = "\(self.lblVersion.text!).\(build)"
+            }
         }
     }
+    
     @IBAction func btnBackPressed(_ sender: Any) {
         self.navigationController?.popToRootViewController(animated: true)
     }

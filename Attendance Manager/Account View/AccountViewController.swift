@@ -15,10 +15,10 @@
 import UIKit
 
 class AccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
-    UIGestureRecognizerDelegate {
+UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     @IBOutlet weak var imgVProfile: UIImageView!
-    @IBOutlet weak var lblUsername: UILabel!
+    @IBOutlet weak var txtUsername: UITextField!
     @IBOutlet weak var btnChangePswd: UIButton!
     @IBOutlet weak var btnLogout: UIButton!
     @IBOutlet weak var viewButtons: UIView!
@@ -29,6 +29,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var nsLBtnDisModeHeight: NSLayoutConstraint!
     @IBOutlet weak var btnMultiTask: UIButton!
     @IBOutlet weak var actIndicatorProfile: UIActivityIndicatorView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var btnAbout: UIButton!
     @IBOutlet weak var btnResetIntro: UIButton!
@@ -37,9 +38,18 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var viewAccount: UIView!
     @IBOutlet weak var viewApp: UIView!
     @IBOutlet weak var viewBG: UIView!
-    @IBOutlet weak var lblEmailPhone: UILabel!
-    var cgFTableDisHeight: CGFloat!
+    @IBOutlet weak var txtEmailPhone: UITextField!
+    @IBOutlet weak var nsLtxtFCenter: NSLayoutConstraint!
+    @IBOutlet weak var btnEditSave: UIButton!
+    @IBOutlet weak var nsLTxtFEmailTop: NSLayoutConstraint!
+    @IBOutlet weak var txtPhone: UITextField!
+    @IBOutlet weak var nsLScrollViewTop: NSLayoutConstraint!
+    @IBOutlet weak var nsLTxtUsernameTop: NSLayoutConstraint!
+    @IBOutlet weak var btnChangeImage: UIButton!
+    @IBOutlet weak var btnCancel: UIButton!
     
+    
+    var cgFTableDisHeight: CGFloat!
     var punchInOutCDController: PunchInOutCDController!
     var projectCDController: ProjectsCDController!
     var tasksCDController: TasksCDController!
@@ -71,7 +81,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         viewButtons.addGestureRecognizer(tap)
         
         viewBG.backgroundColor = UIColor.black.withAlphaComponent(0.7)
-        lblEmailPhone.textColor = g_colorMode.defaultColor().withAlphaComponent(0.5)
+        txtEmailPhone.textColor = g_colorMode.defaultColor().withAlphaComponent(0.5)
         
         // Tap gesture to BG view.
         tap = UITapGestureRecognizer(target: self, action: #selector
@@ -80,26 +90,23 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         tap.numberOfTapsRequired = 1
         viewBG.addGestureRecognizer(tap)
         
+        tap = UITapGestureRecognizer(target: self, action: #selector
+            (imgProfileTapped(sender:)))
+        imgVProfile.addGestureRecognizer(tap)
+        
         let panGesture = UIPanGestureRecognizer(target: self, action:#selector(self
             .panToTableview(panGesture:)))
         tblDisplayModes.addGestureRecognizer(panGesture)
         
         imgVProfile.image = #imageLiteral(resourceName: "personIcon")
         if let strName = UserDefaults.standard.string(forKey: "username") {
-            lblUsername.text = strName
+            txtUsername.text = strName
         }
         else {
-            lblUsername.text = ""
+            txtUsername.text = ""
         }
-        if let strEmail = UserDefaults.standard.string(forKey: "userEmail") {
-            lblEmailPhone.text = strEmail
-        }
-        else {
-            lblEmailPhone.text = ""
-        }
-        if let strPhone = UserDefaults.standard.string(forKey: "phoneNo") {
-            lblEmailPhone.text = "\(lblEmailPhone.text!)  |  \(strPhone)"
-        }
+        
+        setUpEmailPhone()
         
         // Update image
         if let img = g_userProfile {
@@ -146,6 +153,19 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    func setUpEmailPhone() {
+        if let strEmail = UserDefaults.standard.string(forKey: "userEmail") {
+            txtEmailPhone.text = strEmail
+        }
+        else {
+            txtEmailPhone.text = ""
+        }
+        if let strPhone = UserDefaults.standard.string(forKey: "phoneNo") {
+            txtEmailPhone.text = "\(txtEmailPhone.text!)  |  \(strPhone)"
+            txtPhone.text = strPhone
+        }
+    }
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive
         touch: UITouch) -> Bool {
         if touch.view == viewButtons || touch.view == viewBG {
@@ -156,9 +176,14 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func updateViewsAndColor() {
         // Update colors.
-        view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.5))
-        viewButtons.layer.borderColor = g_colorMode.textColor().cgColor
-        viewButtons.layer.borderWidth = 0.3
+        if UIScreen.main.bounds.height > 600 {
+            self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.6))
+        }
+        else {
+            self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.7))
+        }
+        scrollView.layer.borderColor = g_colorMode.textColor().cgColor
+        scrollView.layer.borderWidth = 0.3
         btnChangePswd.setTitleColor(g_colorMode.textColor(), for: .normal)
         btnLogout.setTitleColor(g_colorMode.textColor(), for: .normal)
         btnDisplayMode.setTitleColor(g_colorMode.textColor(), for: .normal)
@@ -168,16 +193,196 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         tblDisplayModes.layer.borderColor = g_colorMode.lineColor().cgColor
         lblAccSetting.textColor = .lightGray
         lblAppSetting.textColor = .lightGray
-        
+        scrollView.backgroundColor = g_colorMode.defaultColor()
         viewAccount.backgroundColor = g_colorMode.defaultColor()
         viewApp.backgroundColor = g_colorMode.defaultColor()
+        view.backgroundColor = g_colorMode.defaultColor()
+        btnChangeImage.backgroundColor = g_colorMode.midColor()
+        btnChangeImage.setImage(#imageLiteral(resourceName: "camera"), for: .normal)
+        btnChangeImage.layer.borderWidth = 1
+        imgVProfile.layer.borderWidth = 1
+        imgVProfile.layer.borderColor = UIColor.white.cgColor
+        btnChangeImage.layer.borderColor = UIColor.white.cgColor
     }
     
     @IBAction func btnChangePswdPressed(_ sender: Any) {
         performSegue(withIdentifier: "SegueToResetPw", sender: nil)
     }
     
+    func openCamera()
+    {
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType
+            .camera) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = UIImagePickerController.SourceType.camera
+            imagePicker.allowsEditing = false
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+        else
+        {
+            let alert  = UIAlertController(title: "Warning", message: "You don't have camera"
+                , preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    /// To open image picker view.
+    func openGallary()
+    {
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType
+            .photoLibrary){
+            actIndicator.startAnimating()
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = true
+            imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+        else
+        {
+            let alert  = UIAlertController(title: "Warning"
+                , message: "You don't have permission to access gallery.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo
+        info: [UIImagePickerController.InfoKey : Any]) {
+        if (info[UIImagePickerController.InfoKey.editedImage] as? UIImage) != nil {
+            imgVProfile.image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+            self.btnEditSave.alpha = 1
+            self.btnEditSave.isUserInteractionEnabled = true
+        }
+        picker.dismiss(animated: true, completion: nil)
+        self.actIndicator.stopAnimating()
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.actIndicator.stopAnimating()
+    }
+    
+    @IBAction func btnChangeImagePressed(_ sender: Any) {
+        let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle:
+            .actionSheet)
+        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+            self.openCamera()
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
+            self.openGallary()
+        }))
+        
+        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func btnEditProfilePressed(_ sender: Any) {
+        if btnEditSave.currentTitle == "Edit" {
+            nsLScrollViewTop.constant = scrollView.frame.maxY
+            nsLtxtFCenter.constant = -150
+            nsLTxtFEmailTop.constant = 30
+            nsLTxtUsernameTop.constant = 30
+            UIView.animate(withDuration: 0.3, animations: {
+                self.view.layoutIfNeeded()
+            })
+            if let strEmail = UserDefaults.standard.string(forKey: "userEmail") {
+                txtEmailPhone.text = strEmail
+            }
+            self.txtEmailPhone.font = txtEmailPhone.font?.withSize(15)
+            self.txtUsername.useUnderline()
+            self.txtPhone.useUnderline()
+            self.txtUsername.isUserInteractionEnabled = true
+            self.txtPhone.isUserInteractionEnabled = true
+            self.txtEmailPhone.textAlignment = .left
+            self.txtUsername.textAlignment = .left
+            self.btnChangeImage.isHidden = false
+            self.btnEditSave.setTitle("Save", for: .normal)
+            self.btnCancel.isHidden = false
+            self.btnEditSave.alpha = 0.5
+            self.btnEditSave.isUserInteractionEnabled = false
+            self.view.layer.sublayers?.removeFirst()
+            self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 1))
+        }
+        else {
+            
+        }
+    }
+    
+    @IBAction func btnCancelPressed(_ sender: Any) {
+        nsLtxtFCenter.constant = 0
+        nsLTxtFEmailTop.constant = 0
+        nsLTxtUsernameTop.constant = 8
+        nsLScrollViewTop.constant = 15
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.layoutIfNeeded()
+            self.view.layer.sublayers?.removeFirst()
+            if UIScreen.main.bounds.height > 600 {
+                self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.6))
+            }
+            else {
+                self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.7))
+            }
+        })
+        setUpEmailPhone()
+        self.txtUsername.layer.sublayers?.removeFirst()
+        self.txtEmailPhone.font = txtEmailPhone.font?.withSize(10)
+        self.txtUsername.isUserInteractionEnabled = false
+        self.txtPhone.isUserInteractionEnabled = false
+        self.txtEmailPhone.textAlignment = .center
+        self.txtUsername.textAlignment = .center
+        self.btnChangeImage.isHidden = true
+        self.btnEditSave.setTitle("Edit", for: .normal)
+        self.btnCancel.isHidden = true
+        self.btnEditSave.alpha = 1
+        self.btnEditSave.isUserInteractionEnabled = true
+    }
+    
+    @objc func imgProfileTapped(sender: UITapGestureRecognizer) {
+        let imageView = sender.view as! UIImageView
+        let imgView = UIImageView(image: imageView.image)
+        imgView.frame = CGRect.zero
+        imgView.center = imgVProfile.center
+        imgView.contentMode = .scaleAspectFit
+        imgView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissFullscreenImage(sender:)))
+        imgView.addGestureRecognizer(tap)
+        self.view.addSubview(imgView)
+        self.tabBarController?.tabBar.isHidden = true
+        UIView.animate(withDuration: 0.3, animations: {
+            imgView.frame = UIScreen.main.bounds
+            imgView.backgroundColor = UIColor.black.withAlphaComponent(0.8)
+        })
+    }
+    
+    @objc func dismissFullscreenImage(sender: UITapGestureRecognizer) {
+        self.tabBarController?.tabBar.isHidden = false
+        sender.view?.removeFromSuperview()
+    }
+    
+    @IBAction func txtUsernamePrimaryAction(_ sender: Any) {
+        txtPhone.becomeFirstResponder()
+    }
+    
+    @IBAction func txtPhonePrimaryAction(_ sender: Any) {
+        txtPhone.endEditing(true)
+    }
+    
+    @IBAction func txtUsernameChanged(_ sender: Any) {
+        self.btnEditSave.alpha = 1
+        self.btnEditSave.isUserInteractionEnabled = true
+    }
+    
+    @IBAction func txtPhoneChanged(_ sender: Any) {
+        self.btnEditSave.alpha = 1
+        self.btnEditSave.isUserInteractionEnabled = true
+    }
+    
     @IBAction func btnLogoutPressed(_ sender: Any) {
+        
         //User wants log out.
         if tasksCDController.isSynched() {
             showLogoutAlert()
@@ -464,6 +669,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.view.layoutIfNeeded()
             }
         }
+        self.view.endEditing(true)
     }
     
     deinit {
@@ -623,7 +829,12 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             tabController.updateAllViewCtrlrs()
         }
         
-        view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.3))
+        if UIScreen.main.bounds.height > 600 {
+            self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.5))
+        }
+        else {
+            self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.6))
+        }
         view.layer.needsLayout()
     }
 }

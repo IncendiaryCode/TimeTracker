@@ -20,7 +20,7 @@ class APIResponseHandler {
     
     /// Login authentication handler.
     static func login(email: String, password: String, completion:@escaping (Bool, String) -> ()) {
-        let url = URL(string: "\(g_baseURL)/timetracker/index.php/api/login/")
+        let url = URL(string: "\(g_baseURL)\(g_subUrl)/login/")
         let params = ["username": email, "password": password]
         RequestController.requestToAPI(params: params, url: url!, completion: {
             dictResult in
@@ -61,7 +61,7 @@ class APIResponseHandler {
         print(container.persistentStoreDescriptions.first?.url as Any)
         let projectsCDController = ProjectsCDController()
         let moduleCDController = ModuleCDController()
-        let url = URL(string: "\(g_baseURL)/timetracker/index.php/api/task/projects")
+        let url = URL(string: "\(g_baseURL)\(g_subUrl)/task/projects")
         if let authKey = UserDefaults.standard.value(forKey: "userAuthKey") {
             let strUserId = UserDefaults.standard.value(forKey: "userId") as! String
             let dictUserId = ["userid" : strUserId]
@@ -136,7 +136,7 @@ class APIResponseHandler {
     static func loadTaskDetails(pageNo: Int, completion:@escaping (Bool) -> ()) {
         let taskCDController = TasksCDController()
         let url = URL(string:
-            "\(g_baseURL)/timetracker/index.php/api/task")
+            "\(g_baseURL)\(g_subUrl)/task")
         if let authKey = UserDefaults.standard.value(forKey: "userAuthKey") {
             let strUserId = UserDefaults.standard.value(forKey: "userId") as! String
             
@@ -276,7 +276,7 @@ class APIResponseHandler {
     static func addTask(params: Dictionary<String, Any>, completion:@escaping (Bool, Int, String)
         -> ()) {
         let url = URL(string:
-            "\(g_baseURL)/timetracker/index.php/api/task/create_edit")
+            "\(g_baseURL)\(g_subUrl)/task/create_edit")
         if let authKey = UserDefaults.standard.value(forKey: "userAuthKey") {
             RequestController.requestToAPI(params: params, url: url!, authKey: authKey
                 as? String, completion: { dictResult in
@@ -303,7 +303,7 @@ class APIResponseHandler {
     /// To start punch in or task. (If taskId is nil, function works as punch in updator else task time starter)
     static func startTaskOrPunchIn(taskId: String? = nil, time: String? = nil
         , completion:@escaping (Bool, String) -> ()) {
-        let url = URL(string: "\(g_baseURL)/timetracker/index.php/api/task/start_timer")
+        let url = URL(string: "\(g_baseURL)\(g_subUrl)/task/start_timer")
         if let authKey = UserDefaults.standard.value(forKey: "userAuthKey") {
             let strUserId = UserDefaults.standard.value(forKey: "userId") as! String
             // Handling start task.
@@ -346,7 +346,7 @@ class APIResponseHandler {
     
     /// To stop task or update punch out time. (If taskId is nil, function works as punch out updator else task time stoper)
     static func stopTaskOrPunchIn(taskId: String? = nil, completion:@escaping (Bool) -> ()) {
-        let url = URL(string: "\(g_baseURL)/timetracker/index.php/api/task/stop_timer")
+        let url = URL(string: "\(g_baseURL)\(g_subUrl)/task/stop_timer")
         if let authKey = UserDefaults.standard.value(forKey: "userAuthKey") {
             let strUserId = UserDefaults.standard.value(forKey: "userId") as! String
             
@@ -389,7 +389,7 @@ class APIResponseHandler {
     /// Load punch in/out data to coredata.
     static func loadPunchInOut(pageNo: Int, completion:@escaping (Bool) -> ()) {
         let punchInOutCDCtrlr = PunchInOutCDController()
-        let url = URL(string: "\(g_baseURL)/timetracker/index.php/api/login/details")
+        let url = URL(string: "\(g_baseURL)\(g_subUrl)/login/details")
         if let authKey = UserDefaults.standard.value(forKey: "userAuthKey") {
             let strUserId = UserDefaults.standard.value(forKey: "userId") as! String
             let params = ["userid": strUserId, "page_no": String(pageNo)]
@@ -435,7 +435,7 @@ class APIResponseHandler {
     /// Update punch out timings to server. (Previous day's)
     static func updatePunchOutTimings(date: String, time: String, completion:@escaping (Bool, String)
         -> ()) {
-        let url = URL(string: "\(g_baseURL)/timetracker/index.php/api/task/update_time")
+        let url = URL(string: "\(g_baseURL)\(g_subUrl)/task/update_time")
         if let authKey = UserDefaults.standard.value(forKey: "userAuthKey") {
             let strUserId = UserDefaults.standard.value(forKey: "userId") as! String
             let params = ["userid": strUserId, "type": "login", "date": date, "time": time]
@@ -458,7 +458,7 @@ class APIResponseHandler {
     /// Update task timings to server. (Previous day's)
     static func updateTaskTimings(taskId: Int, date: String, time: String
         , completion:@escaping (Bool, String) -> ()) {
-        let url = URL(string: "\(g_baseURL)/timetracker/index.php/api/task/update_time")
+        let url = URL(string: "\(g_baseURL)\(g_subUrl)/task/update_time")
         if let authKey = UserDefaults.standard.value(forKey: "userAuthKey") {
             let strUserId = UserDefaults.standard.value(forKey: "userId") as! String
             let params = ["userid": strUserId, "task_id": String(taskId), "type": "task", "date":
@@ -561,7 +561,7 @@ class APIResponseHandler {
                         taskCDCtrlr.synchSuccessfull(taskId: taskDetails.taskId!)
                         let appNotif = InAppNotificationView()
                         appNotif.sendNotification(msg
-                            : "Unsynched data successfully loaded to the server")
+                            : "Offline data successfully loaded to the server")
                         appNotif.addGradient()
                         if var topController = UIApplication.shared.keyWindow?.rootViewController {
                             while let presentedViewController = topController
@@ -582,7 +582,7 @@ class APIResponseHandler {
     /// To reset password from current password.
     static func resetPassword(oldPW: String, newPW: String, completion: @escaping (Bool, String)
         -> ()) {
-        let url = URL(string: "\(g_baseURL)/timetracker/index.php/api/user/changepassword")
+        let url = URL(string: "\(g_baseURL)\(g_subUrl)/user/changepassword")
         if let authKey = UserDefaults.standard.value(forKey: "userAuthKey") {
             let strUserId = UserDefaults.standard.value(forKey: "userId") as! String
             let params = ["userid": strUserId, "old_password": oldPW, "new_password": newPW]
@@ -604,7 +604,7 @@ class APIResponseHandler {
     
     /// To send OTP to the user's email address.
     static func sendOTP(email: String, completion:@escaping (Bool, String) -> ()) {
-        let url = URL(string: "\(g_baseURL)/timetracker/index.php/api/user/send_otp")
+        let url = URL(string: "\(g_baseURL)\(g_subUrl)/user/send_otp")
         let params = ["email": email]
         RequestController.requestToAPI(params: params, url: url!, completion: {
                 dictResult in
@@ -621,7 +621,7 @@ class APIResponseHandler {
     }
     
     static func validateOTP(email: String, otp: String, completion:@escaping (Bool, String) -> ()) {
-        let url = URL(string: "\(g_baseURL)/timetracker/index.php/api/user/validate_otp")
+        let url = URL(string: "\(g_baseURL)\(g_subUrl)/user/validate_otp")
         let params = ["email": email, "otp": otp]
         RequestController.requestToAPI(params: params, url: url!, completion: {
             dictResult in
@@ -644,7 +644,7 @@ class APIResponseHandler {
     }
     
     static func resetOtpPassword(newPW: String, completion:@escaping (Bool, String) -> ()) {
-        let url = URL(string: "\(g_baseURL)/timetracker/index.php/api/user/resetpassword")
+        let url = URL(string: "\(g_baseURL)\(g_subUrl)/user/resetpassword")
         let email = UserDefaults.standard.value(forKey: "userEmail") as! String
         let params = ["email": email, "new_password": newPW]
         RequestController.requestToAPI(params: params, url: url!, completion: {

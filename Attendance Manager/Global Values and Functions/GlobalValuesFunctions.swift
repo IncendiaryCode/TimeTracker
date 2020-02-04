@@ -18,6 +18,7 @@ import CoreData
 
 /// Base url of time tracker project API request (brightlightventures.com/timetracker/index.php/api).
 let g_baseURL = "http://www.brightlightventures.com"
+let g_subUrl = "/timetracker/index.php/api"
 /// Request punch in/out details using page no.
 var g_loginPageNo = 1
 /// User profile picture.
@@ -1178,6 +1179,7 @@ class ButtonDayGraph: UIButton
         let relativeFrame = self.bounds
         let hitTestEdgeInsets = UIEdgeInsets( top: -7, left: 0, bottom: -7, right: 0 )
         let hitFrame = relativeFrame.inset( by: hitTestEdgeInsets )
+        self.contentEdgeInsets = UIEdgeInsets(top: -2, left: 0, bottom: -2, right: 0 )
         return hitFrame.contains( point )
     }
 }
@@ -1185,6 +1187,45 @@ class ButtonDayGraph: UIButton
 /// Touch area with min of 44 to left and right..
 class ButtonWeekGraph: UIButton
 {
+    var colors : [UIColor?] = [UIColor?]() {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    var values : [CGFloat] = [CGFloat]() {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .clear
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override func draw(_ rect: CGRect) {
+        let r = self.bounds
+        // number of segments to render
+        let numberOfSegments = values.count
+        // get the current context
+        let ctx = UIGraphicsGetCurrentContext()
+        // store a cumulative value in order to start each line after the last one
+        var cumulativeValue:CGFloat = 0
+        for i in 0..<numberOfSegments {
+            // set fill color to the given color
+            ctx!.setFillColor(colors[i]!.cgColor)
+            // fill that given segment
+            ctx!.fill(CGRect(x: 0, y: cumulativeValue*r.size.height, width: r.size.width
+                , height: values[i]*r.size.height))
+            cumulativeValue += values[i]
+        }
+    }
+    
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool
     {
         let relativeFrame = self.bounds
@@ -1194,6 +1235,50 @@ class ButtonWeekGraph: UIButton
     }
 }
 
+@IBDesignable
+
+class MonthDayLabel: UILabel {
+    
+    var colors : [UIColor?] = [UIColor?]() {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    var values : [CGFloat] = [CGFloat]() {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .clear
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        let width = self.bounds.width
+        let numberOfSegments = values.count
+        let ctx = UIGraphicsGetCurrentContext()
+        // store a cumulative value in order to start each line after the last one
+        var startAngle = -CGFloat.pi * 0.5
+        let viewCenter = width/CGFloat(2)
+        for i in 0..<numberOfSegments {
+            ctx!.setFillColor(colors[i]!.cgColor)
+            let endAngle = startAngle + 2 * .pi * (values[i])
+            ctx?.move(to: CGPoint(x: viewCenter, y: viewCenter))
+            ctx?.addArc(center: CGPoint(x: viewCenter, y: viewCenter), radius: viewCenter
+                , startAngle: startAngle, endAngle: endAngle, clockwise: false)
+            ctx!.fillPath()
+            startAngle = endAngle
+        }
+    }
+}
 
 @IBDesignable
 

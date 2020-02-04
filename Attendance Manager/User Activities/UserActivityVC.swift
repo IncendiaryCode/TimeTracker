@@ -88,14 +88,15 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         view.addSubview(lblEmpty)
         
         // Set no task available add task button.
-        let cgRect = CGRect(x: 0, y: 0, width: 100, height: 44)
+        let cgRect = CGRect(x: 0, y: 0, width: 130, height: 44)
         btnAddTaskNoData = UIButton(frame: cgRect)
         btnAddTaskNoData.center = CGPoint(x: lblEmpty.center.x, y: lblEmpty.center.y+40)
         btnAddTaskNoData.isHidden = true
-        btnAddTaskNoData.setTitle("Add Task", for: .normal)
+        btnAddTaskNoData.setTitle("+ Add Task", for: .normal)
         btnAddTaskNoData.addTarget(self, action: #selector(btnAddNoTaskPressed(sender:))
             , for: .touchUpInside)
         btnAddTaskNoData.setTitleColor(g_colorMode.textColor(), for: .normal)
+        btnAddTask.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         view.addSubview(btnAddTaskNoData)
         
         // Compress header minimum height.
@@ -310,7 +311,14 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     func updateViewsAndColor() {
         // Setup initial views.
         self.view.backgroundColor = g_colorMode.defaultColor()
-        self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.5))
+        
+        if UIScreen.main.bounds.height > 600 {
+            self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.5))
+        }
+        else {
+            self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.6))
+        }
+        
         tblUserDetails.roundCorners(corners: [.topLeft, .topRight], radius: 35.0)
         btnState.addGradient(cgFRadius: btnState.bounds.height / 2)
         btnFinish.addGradient(cgFRadius: btnState.bounds.height / 2)
@@ -891,7 +899,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         cell.lblTotalDuration.text =
         "\(getSecondsToHoursMinutesSeconds(seconds: cTaskDetails.nTotalTime!))"
         cell.imgTimer.image = #imageLiteral(resourceName: "timer3")
-        cell.imgTimer.alpha = 1
+        cell.imgTimer.alpha = 0.2
         // If cell equals to running task cell.
         if cTaskDetails.bIsRunning! == true {
             // Store running task id.
@@ -902,9 +910,20 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             if !(arrIndexOfRunningTask.contains(indexPath)) {
                 arrIndexOfRunningTask.append(indexPath) // running task indexpath.
             }
-            cell.lblTotalDuration.text = "Running"
+            
             cell.imgTimer.image = #imageLiteral(resourceName: "task")
-            cell.imgTimer.alpha = 0.5
+            cell.imgTimer.alpha = 0.4
+            
+            if nil == cell.timer {
+                cell.nTotalTime = cTaskDetails.nTotalTime!
+                cell.timer = Timer.scheduledTimer(timeInterval: 1, target: cell, selector:
+                    #selector(cell.timerAction), userInfo: nil, repeats: true)
+                RunLoop.current.add(cell.timer!, forMode: RunLoop.Mode.common)
+            }
+        }
+        else {
+            cell.timer?.invalidate()
+            cell.timer = nil
         }
         
         // If task started.
@@ -1221,7 +1240,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         
         // Create new label, to determine the cell height. Incase task name contains more than one
         // line characters increase cell height based on line numbers.
-//        let label = UILabel(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 57,
+//        let label = UILabel(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 51,
 //                                          height: 20))
 //        label.numberOfLines = 0
 //        label.lineBreakMode = .byWordWrapping
@@ -1369,13 +1388,25 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        // Get current page
-        let x = scrollView.contentOffset.x
-        let w = scrollView.bounds.size.width
-        let currentPage = Int(ceil(x/w))
-        
-        // Update visble page.
-        nSelectedRunTask = currentPage
-        pageCtrlCollection.currentPage = nSelectedRunTask
+        if scrollView == collectionTimer {
+            // Get current page
+            let x = scrollView.contentOffset.x
+            let w = scrollView.bounds.size.width
+            let currentPage = Int(ceil(x/w))
+            
+            // Update visble page.
+            nSelectedRunTask = currentPage
+            pageCtrlCollection.currentPage = nSelectedRunTask
+            
+            // Animate scrolled cell.
+            let index = pageCtrlCollection.currentPage
+            let taskId = arrRunningTask[index]
+            let indexArray = arrCTaskDetails.firstIndex(where: {
+                (item) -> Bool in
+                item.taskId == taskId
+            })!
+            let indexPath = IndexPath(row: indexArray, section: 0)
+            animateCellPosition(indexPath: indexPath)
+        }
     }
 }

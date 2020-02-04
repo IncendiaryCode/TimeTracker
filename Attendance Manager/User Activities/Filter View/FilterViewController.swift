@@ -76,7 +76,7 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let panGesture = UIPanGestureRecognizer(target: self, action:#selector(self
             .handlePanGesture(panGesture:)))
         viewMain.addGestureRecognizer(panGesture)
-        cgFMidYViewMain = UIScreen.main.bounds.height * 0.7 // 70% of screen height.
+        cgFMidYViewMain = 560
         nsLViewMainHeight.constant = cgFMidYViewMain
         
         viewHeader.backgroundColor = g_colorMode.defaultColor()
@@ -115,7 +115,7 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
         btnProject.setTitleColor(g_colorMode.textColor(), for: .normal)
         btnClearFilter.setTitleColor(g_colorMode.textColor(), for: .normal)
         btnSort.setTitleColor(g_colorMode.textColor(), for: .normal)
-        btnProject.backgroundColor = g_colorMode.btnbackgroundColor()
+        btnProject.backgroundColor = g_colorMode.defaultColor()
         arrSortTypes = [SortTypes.tasks, SortTypes.projects,
                         SortTypes.duration]
         

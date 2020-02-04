@@ -778,7 +778,7 @@ UIGestureRecognizerDelegate {
         if cell.lblDate.text != "Add Timeline" {
             // Change date selected index.
             dateTimePicker.datePickerMode = .date
-            let minDate = NSCalendar.current.date(byAdding: .weekOfYear, value: -1, to: NSDate() as
+            let minDate = NSCalendar.current.date(byAdding: .year, value: -1, to: NSDate() as
                 Date)
             let maxDate = Date()
             dateTimePicker.minimumDate = minDate
@@ -804,8 +804,8 @@ UIGestureRecognizerDelegate {
             removeAddSelected(indexPath: indexPath)
         }
         // Show hint.
-        lblHintDate.isHidden = false
-        imgHintDate.isHidden = false
+        lblHintDate.isHidden = true
+        imgHintDate.isHidden = true
     }
     
     func startTimeSelected(indexPath: IndexPath) {
@@ -1272,12 +1272,31 @@ UIGestureRecognizerDelegate {
                 APIResponseHandler.loadTaskDetails(pageNo: g_taskPageNo, completion: {
                     status in
                     if status {
-                        self.dismiss(animated: true, completion: nil)
-                    }
-                    else {
-                        self.errorMessage(msg: "Error while updation")
-                    }
-                })
+                        // Refresh dashboard.
+                        if let tabBarController = (self.presentingViewController
+                            as! UINavigationController).viewControllers[0] as? TabBarController {
+                            
+                            // Update activity view.
+                            if let viewActivity = tabBarController.viewControllers![0]
+                                as? MyActivityViewController {
+                                viewActivity.updateCoredataTimings()
+                                viewActivity.arrActView[0].setupDayView()
+                                viewActivity.arrActView[1].resetWeekBar()
+                                viewActivity.arrActView[1].setupWeekView()
+                                viewActivity.arrActView[2].setupMonthView()
+                                self.dismiss(animated: true, completion: nil)
+                            }
+                            if let viewActivity = tabBarController.viewControllers![1]
+                                as? UserActivityVC {
+                                viewActivity.updateProject()
+                                viewActivity.arrRunningTask = viewActivity.getRunningTaskId()
+                                // If no task running draw play icon or stop icon.
+                                viewActivity.drawTaskState()
+                                viewActivity.collectionTimer.reloadData()
+                            }
+                        }
+                    }}
+                )
             }
         }
     }

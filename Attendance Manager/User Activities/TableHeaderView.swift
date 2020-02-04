@@ -82,7 +82,7 @@ class TableHeaderView: UITableViewHeaderFooterView {
         self.addSubview(btnFilter)
         
         // Setup switch.
-        cgRValue = CGRect(x: cgFScreenWidth - 120, y: lblTitle.frame.minY, width: 50, height: 44)
+        cgRValue = CGRect(x: cgFScreenWidth - 110, y: lblTitle.frame.minY, width: 50, height: 44)
         switchFilter = UISwitch(frame: cgRValue)
         switchFilter.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         switchFilter.onTintColor = g_colorMode.midColor()

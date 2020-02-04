@@ -27,6 +27,8 @@ class UserTaskInfoCell: UITableViewCell {
     var shadowLayer: CAShapeLayer!
     var ntaskId: Int!
     var bTaskRunning = false
+    var timer: Timer?
+    var nTotalTime: Int!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -41,7 +43,12 @@ class UserTaskInfoCell: UITableViewCell {
         if shadowLayer == nil {
             // Draw drop shadow.
             shadowLayer = CAShapeLayer()
-            shadowLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: 20).cgPath
+            if #available(iOS 11, *) {
+                shadowLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: 20).cgPath
+            }
+            else {
+                shadowLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: 0).cgPath
+            }
             shadowLayer.fillColor = UIColor.white.cgColor
             shadowLayer.shadowPath = shadowLayer.path
             shadowLayer.shadowOffset = CGSize(width: 5, height: 5)
@@ -51,8 +58,10 @@ class UserTaskInfoCell: UITableViewCell {
 
             // Set cornering.
             contentView.layer.masksToBounds = true
-            layer.cornerRadius = 20
-            contentView.layer.cornerRadius = 20
+            if #available(iOS 11, *) {
+                layer.cornerRadius = 20
+                contentView.layer.cornerRadius = 20
+            }
             contentView.layer.borderWidth = 1
             contentView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.2).cgColor
             backgroundColor = .clear
@@ -69,10 +78,11 @@ class UserTaskInfoCell: UITableViewCell {
                 , height: frame.size.height)
             contentView.layer.insertSublayer(gradientLayer, at: 0)
         }
+
         
         // Check running task.
         if lblTotalDuration.text == "Running" || lblTotalDuration.text == "Synching" ||
-                lblTotalDuration.text == "Stoping" {
+                nil != timer {
             gradientLayer.colors = [UIColor.lightGray
                 .withAlphaComponent(0.02).cgColor, UIColor.lightGray
                     .withAlphaComponent(0.3).cgColor]
@@ -88,11 +98,21 @@ class UserTaskInfoCell: UITableViewCell {
         contentView.backgroundColor = g_colorMode.defaultColor()
     }
     
+    @objc func timerAction() {
+        //Update counter label.
+        self.nTotalTime += 1
+        lblTotalDuration.text = "\(getSecondsToHoursMinutesSeconds(seconds: self.nTotalTime))"
+    }
+    
     override var frame: CGRect {
         get {
             return super.frame
         }
         set (newFrame) {
+            guard #available(iOS 11, *) else {
+                super.frame = newFrame
+                return
+            }
             var frame =  newFrame
             frame.origin.y += 10
             frame.origin.x += 12

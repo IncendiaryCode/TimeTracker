@@ -22,7 +22,7 @@ extension UILabel {
         let border = CALayer()
         let borderWidth = CGFloat(1.0)
         border.borderColor = uiColor.cgColor
-        border.frame = CGRect(origin: CGPoint(x: 0,y :self.frame.size.height ),
+        border.frame = CGRect(origin: CGPoint(x: 0, y :self.frame.size.height ),
                               size: CGSize(width: self.frame.size.width, height:  1))
         border.borderWidth = borderWidth
         self.layer.addSublayer(border)
@@ -46,14 +46,19 @@ extension UILabel {
 
 extension UITextField {
     /// To provide underline for text field.
-    public func useUnderline(uiColor: UIColor = .white) {
+    public func useUnderline(uiColor: UIColor = .white, width: CGFloat = 0) {
         let border = CALayer()
         let borderWidth = CGFloat(1.0)
         border.borderColor = uiColor.cgColor
-        border.frame = CGRect(origin: CGPoint(x: 0,y :self.frame.size.height ),
-                              size: CGSize(width: self.frame.size.width, height:  1))
+        if width == 0 {
+            border.frame = CGRect(origin: CGPoint(x: 0,y :self.frame.size.height ),size: CGSize(width: self.frame.size.width, height:  1))
+        }
+        else {
+            border.frame = CGRect(origin: CGPoint(x: 0,y :self.frame.size.height),size: CGSize(width: width, height:  1))
+        }
         border.borderWidth = borderWidth
-        self.layer.addSublayer(border)
+//        self.layer.addSublayer(border)
+        self.layer.insertSublayer(border, at: 0)
         self.layer.masksToBounds = false
     }
     

@@ -230,12 +230,12 @@ extension CalendarView: UICollectionViewDataSource {
         
         dayCell.bgView.backgroundColor = .clear
 //        dayCell.backgroundColor = .clear
-        var label: UILabel!
+        var label: MonthDayLabel!
         if let lbl = dayCell.contentView.viewWithTag(4) {
-            label = (lbl as! UILabel)
+            label = (lbl as! MonthDayLabel)
         }
         else {
-            label = UILabel()
+            label = MonthDayLabel()
         }
 
         label.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
@@ -246,7 +246,25 @@ extension CalendarView: UICollectionViewDataSource {
 //            let strDate = getStringDate(date: date!)
             let intDate = date?.millisecondsSince1970
             let totalTime = taskTimeController.getTotalWorkTime(intDate: intDate!)
-            let width = CGFloat(60 * totalTime / 45000)
+            let perc = CGFloat(CGFloat(totalTime) / 45000.0)
+            
+            // Get ratio of each project work.
+            let dictRatio = taskTimeController.getTaskRatioBasedOnProject(intDate: intDate!)
+            // Sort project id's
+            let sortedProjId = Array(dictRatio.keys).sorted(by: <)
+            
+            // Find ratio and colors based on projects.
+            var colors: [UIColor] = []
+            var ratio: [CGFloat] = []
+            for projId in sortedProjId {
+                colors.append(g_dictProjectDetails[projId]!.color)
+                ratio.append(dictRatio[projId]!)
+            }
+            
+            label.colors = colors
+            label.values = ratio
+            
+            let width = 60 * perc
             //60 maximum width for label, 45000 maximum work tim i.e approximately equal to 13 hours
             let size = dayCell.frame.size
             label.clipsToBounds = false
@@ -259,8 +277,10 @@ extension CalendarView: UICollectionViewDataSource {
                 label.layer.cornerRadius = width/2
                 label.center = CGPoint(x: x, y: y)
             }
-            label.backgroundColor = g_colorMode.midColor()
-            label.alpha = 0.4
+//            label.backgroundColor = g_colorMode.midColor()
+            let minAlpha: CGFloat = 0.2
+            let maxAlpha: CGFloat = 0.5
+            label.alpha = ((maxAlpha-minAlpha) * perc) + minAlpha
         }
         dayCell.contentView.addSubview(label)
         bringSubviewToFront(label)

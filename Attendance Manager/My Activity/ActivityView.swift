@@ -62,11 +62,11 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	/// Week button minY value.
 	var cgFButtonMinY: CGFloat!
 	/// Array of buttons to display graph in daily view.
-	var arrBtnsDayTask: Array<UIButton>!
+	var arrBtnsDayTask: Array<ButtonDayGraph>!
 	/// X axis labels are drawn in this view.
 	var viewGraphXAxis: UIView!
 	/// Buttons for graph in week view.
-	var arrBtnWeekView: Array<UIButton>!
+	var arrBtnWeekView: Array<ButtonWeekGraph>!
 	/// Week count in year.
 	var nWeek = 0
 	/// Array of dates in a week(Only work days). Required to fetch task details from this dates.(Same array date used in daily view)
@@ -297,6 +297,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			}
 			// Setup button for graph
 			let btnTaskGraph = ButtonDayGraph(frame: cgRect)
+			btnTaskGraph.layer.borderColor = g_colorMode.defaultColor().cgColor
+			btnTaskGraph.layer.borderWidth = 1
 	
 			// Negative beacause its sorted in reverse.
 			btnTaskGraph.tag = arrReverseSort.count - i - 1 // Tag used to identify each button.
@@ -522,7 +524,22 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 				let strDate = Date().getStrDate(from: intDate)
 				let totalWork = CGFloat(tasksTimeCDCtrlr.getTotalWorkTime(intDate: intDate))
 				let day = getDayNumber(strDate: strDate)
-
+					
+				// Get ratio of each project work.
+				let dictRatio = tasksTimeCDCtrlr.getTaskRatioBasedOnProject(intDate: intDate)
+				// Sort project id's
+				let sortedProjId = Array(dictRatio.keys).sorted(by: <)
+				
+				// Find ratio and colors based on projects.
+				var colors: [UIColor] = []
+				var ratio: [CGFloat] = []
+				for projId in sortedProjId {
+					colors.append(g_dictProjectDetails[projId]!.color)
+					ratio.append(dictRatio[projId]!)
+				}
+				arrBtnWeekView[day-1].colors = colors
+				arrBtnWeekView[day-1].values = ratio
+				
 				// day-1 starts from sunday
 				arrBtnWeekView[day-1].setTitle(String(intDate), for: .normal)
 				let diff = ((UIScreen.main.bounds.height * 0.25) / 6) * 4
@@ -587,10 +604,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			for i in 0..<7 {
 				let x = gap * CGFloat(i+1) - (gap / 2) // Calculate x value for a button.
 				let frame = CGRect(x: x + 10, y: startPoint.y + 30, width: 20, height: 0)
-				
 				let btn = ButtonWeekGraph(frame: frame)
-				
-				btn.backgroundColor = g_colorMode.midColor()
+//				btn.backgroundColor = g_colorMode.midColor()
 				btn.tag = i
 				btn.topRounded()
 				btn.setTitleColor(.clear, for: .normal)
@@ -610,25 +625,28 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			lblDate.text = strMonth
 			nSelectedIndexMonth = 0
 			calendarView.backgroundColor = .clear
-			arrDictMonthData = tasksCDCtrlr.getMonthWiseDetails()
-			
-			for monthDetails in arrDictMonthData {
-				// arrDate contains all working days date in month.
-				let arrDate = monthDetails.arrStrDates
-				for strDate in arrDate {
-					// Returns date object.
-					let date = getDateFromString(strDate: strDate)
-					// date will be selected. Total work of each day represented in circle.
-					calendarView.selectDate(date)
-				}
-			}
+			self.updateMonthDataSource()
 			self.setupMonthView()
 		}
     }
 	
+	/// To update month data source.
+	func updateMonthDataSource() {
+		arrDictMonthData = tasksCDCtrlr.getMonthWiseDetails()
+		for monthDetails in arrDictMonthData {
+			// arrDate contains all working days date in month.
+			let arrDate = monthDetails.arrStrDates
+			for strDate in arrDate {
+				// Returns date object.
+				let date = getDateFromString(strDate: strDate)
+				// date will be selected. Total work of each day represented in circle.
+				calendarView.selectDate(date)
+			}
+		}
+	}
+	
 	// Setup month view.
 	func setupMonthView() {
-		arrDictMonthData = tasksCDCtrlr.getMonthWiseDetails()
 		if arrDictMonthData.count > 0 && arrDictMonthData.count > nSelectedIndexMonth
 			, let mothDetails = arrDictMonthData?[nSelectedIndexMonth] {
 			// Display inforamation about a month.
@@ -823,7 +841,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "userBreakInfoCell",
 												 for: indexPath) as! UserTaskInfoCell
-		cell.imgTimer.image = #imageLiteral(resourceName: "timer2")
+		cell.imgTimer.image = #imageLiteral(resourceName: "timer3")
 		cell.imgTimer.alpha = 0.2
 		if nSliderView == 0 {
 			let cTaskTimeDetails = arrCTaskTimeDetails[indexPath.row]
