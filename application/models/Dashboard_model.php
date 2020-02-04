@@ -291,6 +291,7 @@ class Dashboard_model extends CI_Model
                 $start_date = date($month.'-01');
                 $end_date = date('Y-m-t',strtotime($month));
             }
+            $data = array();
             $draw = intval($this->input->post("draw"));
             $start = intval($this->input->post("start"));
             $length = intval($this->input->post("length"));

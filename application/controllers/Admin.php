@@ -73,7 +73,6 @@
 					if($result['data'] == NULL){ //if no data, return failure message
 						$final_result['status'] = FALSE;
 						$final_result['msg'] = "No results Found.";
-						$final_result['data'] == NULL;
 					}else{ //if data present, send the data
 						$total_data = $this->dashboard_model->original_task_data();
 						$final_result['status'] = TRUE;
