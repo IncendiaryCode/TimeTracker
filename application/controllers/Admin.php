@@ -75,11 +75,12 @@
 						$final_result['msg'] = "No results Found.";
 						$final_result['data'] == NULL;
 					}else{ //if data present, send the data
+						$total_data = $this->dashboard_model->original_task_data();
 						$final_result['status'] = TRUE;
 						$final_result = array(
 						            "draw" => $draw,
 						            "status" => TRUE,
-						            "recordsTotal" => count($result['data']),
+						            "recordsTotal" => $total_data,
 						            "recordsFiltered" => count($result['data']),
 						            "data" => $result['data']
 						        );
@@ -235,9 +236,9 @@
 					$result['status'] = TRUE;
 					$result = array(
 						            "draw" => $draw,
-						            "recordsTotal" => count($result['data']),
-						            "recordsFiltered" => count($result['data']),
-						            "data" => $result['data']
+						            "recordsTotal" => count($result['data']['total_records']),
+						            "recordsFiltered" => $result['data']['filtered_records'],
+						            "data" => $result['data']['total_records']
 						        );
 				}
 			echo json_encode($result);

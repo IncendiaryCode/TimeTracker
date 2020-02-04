@@ -161,12 +161,15 @@ class User_model extends CI_Model {
                 $this->db->order_by('d.start_time');
             } else {
                 //for monthly chart
-                $year_start = date('Y-m-d', strtotime(date($date . '-01-01')));
-                $year_end = date('Y-m-d', strtotime(date($date . '-12-31')));
+                $month_array = explode(' ',$date);
+                $month_value = $month_array[0];
+                $year_value = $month_array[1];
+                $first = date($year_value . '-' . $month_value . '-' . '01');
+                $last = date($year_value . '-' . $month_value . '-' . 't');
                 $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
                 $this->db->where(array('d.user_id' => $userid));
                 $this->db->where('d.end_time IS NOT NULL');
-                $this->db->where('d.task_date BETWEEN "' . $year_start . '" and "' . $year_end . '"');
+                $this->db->where('d.task_date BETWEEN "' . $first . '" and "' . $last . '"');
                 $this->db->group_by('d.task_date');
                 $this->db->order_by('d.start_time');
             }
@@ -178,8 +181,10 @@ class User_model extends CI_Model {
             $this->db->order_by("t.created_on", "desc"); //sort by task date
             
         } else if ($sort_type == 'task') {
-            $this->db->order_by("t.id", "asc"); //sort by task id
-            
+            $this->db->order_by("t.id", "asc"); //sort by task id 
+        }
+        else if($sort_type == 'project') {
+            $this->db->order_by('p.name','asc');
         }
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
@@ -502,30 +507,43 @@ class User_model extends CI_Model {
             return $chart_data;
         }
         if ($chart_type == "weekly_chart") {
+            $t_minutes = 0;
             $date = $this->input->get('date');
             $year_value = explode('-', $date); //format: 2019-W23
             $week_value = $year_value[1]; //W23
             $week = explode('W', $week_value); //format: W23
             $getdate = $this->get_start_and_end_date($week[1], $year_value[0]); //start and end date for 23rd week and year 2019
             $date_range = $this->getDatesFromRange($getdate[0], $getdate[1]);
+            $j=0;
+            $week = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
             foreach($date_range AS $range){
-                $query = $this->db->query("SELECT t.id,t.task_name,p.name,p.color_code,td.* FROM `task` AS `t` JOIN `project` AS `p` ON `p`.`id` = `t`.`project_id` LEFT JOIN `task_assignee` AS `ta` ON ta.task_id = t.id LEFT JOIN (SELECT d.task_id, d.start_time, d.end_time, d.task_description,d.task_date, SUM(`d`.`total_minutes`) AS `minutes` FROM `time_details` AS `d` WHERE `d`.`task_date`='".$range."' AND d.end_time IS NOT NULL) AS td ON td.task_id = t.id GROUP BY t.id");
-                $data = $query->result_array();
-                $i=0;
-                foreach ($data as $d) {
-                    $day = date('D', strtotime($d['task_date']));
-                    $minutes = $d['minutes'];
-                    $to_hours[$i] = round(($minutes / 60), 2); //get total_minutes interms of hour
-                    $week_days[$i] = $day;
-                    $total_minutes +=  $d['minutes'];
-                    $project_color[$i] = $d['color_code'];
-                    $task_name[$i] = $d['task_name'];
-                    $i=$i+1;
-                } 
-                $week_day = date('D', strtotime($range));
-                $week = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
-                $chart_data[] = array('weekly_chart', "status" => TRUE, "labels" => $week_days, "data" => array('day'=>$week_day,'task_name'=>$task_name,'time'=>$to_hours,'project_color'=>$project_color,'total_minutes'=>$total_minutes)); 
+                $query = $this->db->query("SELECT t.id,t.task_name,p.name,p.color_code,d.task_id, d.start_time, d.end_time, d.task_description,d.task_date, SUM(`d`.`total_minutes`) AS `minutes` FROM `task` AS `t` JOIN `project` AS `p` ON `p`.`id` = `t`.`project_id` LEFT JOIN `task_assignee` AS `ta` ON ta.task_id = t.id JOIN `time_details` AS `d` ON d.task_id = t.id WHERE `d`.`task_date`= '".$range."' AND d.end_time IS NOT NULL GROUP BY d.task_date,t.id");
+                if($query->num_rows() > 1){
+                    $data = $query->result_array();
+                    for($i=0;$i<count($data);$i++) {
+                        $day = date('D', strtotime($data[$i]['task_date']));
+                        $minutes = $data[$i]['minutes'];
+                        $to_hours[$i] = round(($minutes / 60), 2); //get total_minutes interms of hour
+                        $week_days[$i] = $day;
+                        $total_minutes += $data[$i]['minutes'];
+                        $project_color[$i] = $data[$i]['color_code'];
+                        $task_name[$i] = $data[$i]['task_name'];
+                    }
+                    $week_day = date('D', strtotime($range));
+                    $send_data[$j] = array('day'=>$week_day,'task_name'=>$task_name,'time'=>$to_hours,'project_color'=>$project_color);
+                }else if($query->num_rows() == 1){
+                    $data = $query->row_array();
+                    $week_day = date('D', strtotime($range));
+                    $hours = round(($data['minutes']/60),2);
+                    $send_data[$j] = array('day'=>$week_day,'task_name'=>$data['task_name'],'time'=>$hours,'project_color'=>$data['color_code']);
+                }else{
+                    $week_day = date('D', strtotime($range));
+                    $send_data[$j] = array('day'=>$week_day,'task_name'=>NULL,'time'=>'0','project_color'=>NULL);
+                }
+                $j=$j+1;
             }
+            $t_minutes += $total_minutes;
+            $chart_data = array('weekly_chart', "status" => TRUE, "labels" => $week, "data" => $send_data, 'total_minutes'=>$t_minutes);
             return $chart_data;
         }
         if ($chart_type == "monthly_chart") {

@@ -357,6 +357,7 @@ class Dashboard_model extends CI_Model
             $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
             $this->db->join('users AS u','u.id = d.user_id');
             $this->db->group_by('d.id');
+            $this->db->limit($length,$start);
             $employees = $this->db->get();
                 foreach($employees->result() as $rows)
                 {
@@ -398,6 +399,20 @@ class Dashboard_model extends CI_Model
                 }
             return $data;
         }
+    }
+
+    /**
+     * Function to get data count without filter for task snapshot datatable
+     * 
+     * @param void
+     * 
+     * @returns $count
+     * 
+     */
+    public function original_task_data(){
+        $this->db->select('count(id) AS data_count');
+        $records = $this->db->get('time_details')->row();
+        return $records->data_count;
     }
 
     /**
@@ -795,7 +810,7 @@ class Dashboard_model extends CI_Model
             $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
             $this->db->group_by('p.id');
             $this->db->where('ta.user_id',$user_id);
-            //$this->db->limit($length,$start);
+            $this->db->limit($length,$start);
             $employees = $this->db->get();
             $data = array();
 
@@ -812,11 +827,12 @@ class Dashboard_model extends CI_Model
                 else
                     $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
 
-                $data[]= array(
+                $data['total_records'][]= array(
                     $rows->project_name,
                     $rows->tasks_count,
                     $time_taken
-                );     
+                );
+                $data['filtered_records'] = $employees->num_rows(); 
             }
             return $data;
         }else if($table_type == 'project_user'){ //load datatable data into project details page

@@ -85,6 +85,15 @@ class User extends CI_Controller
             //load task data into user dashboard page
             $type                 = $this->input->get('type', TRUE);
             $date                 = '';
+            $task_details['data'] = $this->user_model->get_task_details($type,$date); //get task data
+            if($task_details['data'] == NULL){ //if no data, send failure message
+                $task_details['status'] = FALSE;
+                $task_details['data'] = NULL;
+                $task_details['msg'] = "No activity in this date.";
+            }else{ //if data is present, send the data
+                $task_details['status'] = TRUE;
+            }
+            echo json_encode($task_details);
         }else if(!empty($this->input->get('chart_type'))){
             //load task data into employee activities page
             $date = $this->input->get('date');
@@ -149,6 +158,19 @@ class User extends CI_Controller
         echo json_encode($result);
     }
 
+    //fetch project names to dashboard page
+    public function get_projects(){
+        $data['result'] = $this->user_model->get_project_name();
+        if($data == NULL){
+            $project_data['status'] = FALSE;
+            $project_data['result'] = NULL;
+            $project_data['msg'] = "No projects assigned to you.";
+        }else{
+            $project_data['status'] = TRUE;
+            $project_data['result'] = $data;
+        }
+        echo json_encode($project_data);
+    }
     //Start timer function
     public function start_timer()
     {
