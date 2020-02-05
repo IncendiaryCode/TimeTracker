@@ -516,13 +516,13 @@ class User_model extends CI_Model {
             $getdate = $this->get_start_and_end_date($week[1], $year_value[0]); //start and end date for 23rd week and year 2019
             $date_range = $this->getDatesFromRange($getdate[0], $getdate[1]);
             $week = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
-            $query = $this->db->query("SELECT t.id AS task_id,t.task_name,p.name,p.color_code,d.task_id, d.start_time, d.end_time, d.task_description,d.task_date, SUM(`d`.`total_minutes`) AS `minutes` FROM `task` AS `t` JOIN `project` AS `p` ON `p`.`id` = `t`.`project_id` LEFT JOIN `task_assignee` AS `ta` ON ta.task_id = t.id JOIN `time_details` AS `d` ON d.task_id = t.id WHERE `d`.`task_date` BETWEEN '".$getdate[0]."' AND '".$getdate[1]."' AND d.end_time IS NOT NULL GROUP BY t.id");
+            $query = $this->db->query("SELECT t.id AS task_id,t.task_name,p.name,p.color_code,d.task_id, d.start_time, d.end_time, d.task_description,d.task_date, SUM(`d`.`total_minutes`) AS `minutes` FROM `task` AS `t` JOIN `project` AS `p` ON `p`.`id` = `t`.`project_id` LEFT JOIN `task_assignee` AS `ta` ON ta.task_id = t.id JOIN `time_details` AS `d` ON d.task_id = t.id WHERE `d`.`task_date` BETWEEN '".$getdate[0]."' AND '".$getdate[1]."' AND d.end_time IS NOT NULL  AND d.user_id = '".$userid."' GROUP BY t.id");
             if($query->num_rows() >= 1){
                 $data = $query->result_array();
                 for($i=0;$i<count($data);$i++) {
                     $k=0;
                     foreach($date_range AS $date){
-                        $select_task_data = $this->db->query("SELECT SUM(d.total_minutes) AS t_minutes FROM time_details AS d WHERE `d`.`task_date` = '".$date."' AND d.end_time IS NOT NULL AND d.task_id=".$data[$i]['task_id']);
+                        $select_task_data = $this->db->query("SELECT SUM(d.total_minutes) AS t_minutes FROM time_details AS d WHERE `d`.`task_date` = '".$date."' AND d.end_time IS NOT NULL AND d.task_id='".$data[$i]['task_id']."' AND d.user_id=".$userid);
                         if($select_task_data->num_rows() > 1){
                             $timeline_data = $select_task_data->result_array();
                             foreach($timeline_data AS $time){

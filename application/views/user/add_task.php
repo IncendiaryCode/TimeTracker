@@ -79,11 +79,13 @@ if ($this->input->get('t_id')) { ?>
                             <div class="form-group">
                                 <label for="choose-module">Choose project module</label>
                                 <?php if ($this->input->get('t_id')) { ?>
-                                <select type="text"  class="form-control" id="choose-module" name="project_module" value="<?=$task_data['module_name']?>">
-                                    <option><?=$task_data['module_name']?></option>
-                                     <?php foreach($project_module_list AS $module){ ?>
-                                        <option value="<?=$module->id;?>"><?=$module->name;?></option>
-
+                                <select type="text"  class="form-control" id="choose-module" name="project_module">
+                                    <?php foreach($project_module_list AS $module){ ?>
+                                        <?php if($task_data['module_id'] == $module->id){ ?>
+                                            <option value="<?=$module->id;?>" selected><?=$module->name;?></option>
+                                        <?php  }else{ ?>
+                                            <option value="<?=$module->id;?>"><?=$module->name;?></option>
+                                    <?php } ?>
                                     <!-- <option value=<?=$task_data['module_name']?>><?=$task_data['module_name']?></option> -->
                                 <?php } ?></select>
                                 <?php } else { ?>
