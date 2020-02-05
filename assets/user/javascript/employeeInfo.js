@@ -773,7 +773,6 @@ $(document).ready(function() {
 					$("#play-timer").modal("show");
 					return false;
 				} else {
-					
 					$("#icon-for-task").removeClass("fa-play");
 					$("#icon-for-task").addClass("fa-stop");
 					var input_element = startingTimer.getElementsByClassName(
@@ -781,19 +780,7 @@ $(document).ready(function() {
 					);
 					for (var i = 0; i < input_element.length; i++) {
 						if (input_element[i].value != "" && input_element[i].value != " ") {
-							var server_start_time = moment(
-								new Date().getFullYear() +
-									"-" +
-									new Date().getMonth() +
-									1 +
-									"-" +
-									new Date().getDate() +
-									" " +
-									input_element[i].value
-							)
-								.tz("utc")
-								.format("Y-MM-DD H:mm:ss");
-								console.log(server_start_time);
+							var server_start_time = moment(new Date().getFullYear() +"-" +(parseInt(new Date().getMonth()) +1) +"-" +new Date().getDate() +" " +input_element[i].value).tz("utc").format("YYYY-MM-DD H:mm:ss");
 							input_element[i].value = server_start_time;
 						}
 					}
