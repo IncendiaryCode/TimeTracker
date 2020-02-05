@@ -57,17 +57,19 @@ $this->load->helper('url_helper');
             </div>
         <?php } ?>
             <!-- refers to home page -->
-            <div class=" col-6 text-right">
+            <div class="col-6 text-right">
             <?php
              if(empty($GLOBALS['page_title'])) {
                 ?>
-                <div class="row">
-                    <div class="col-9 col-md-11 text-right btn-task">
-                <a href="#" class="btn btn-primary" id="new-task" onclick="check_for_punchIn()"><i class="fas fa-plus icon-White "></i> Task</a>
-
-            </div>
+                <div class="row text-right">
+                    <div class="col-5 col-md-5 btn-task pt-3">
+                        <a href="<?= base_url(); ?>user/load_employee_activities" class="text-white">My activities</a>
+                    </div>
+                    <div class="col-4 col-md-5 btn-task">
+                        <a href="#" class="btn btn-primary" id="new-task" onclick="check_for_punchIn()"><i class="fas fa-plus icon-White "></i> Task</a>
+                    </div>
                     <!-- to chage image -->
-                    <div class="col-3 col-md-1 text-right">
+                    <div class="col-3 col-md-2">
                     <a href="#" class="text-white profile-icon"><i class="fas fa-bars figure" id="append-hide" data-toggle="modal" data-target="#change-profile" data-toggle="tooltip" data-placement="top" title="User Profile"></i></a>
                 </div>
             </div>
@@ -79,13 +81,15 @@ $this->load->helper('url_helper');
             </div>
         </div>
     </header>
+
     <div class="container">
         <div class="row">
+            <?php if(!empty($GLOBALS['page_title'])) { ?>
             <div class="col-12">
                 <p class="display-heading pt-3 text-center text-white">
-                    <?php if(!empty($GLOBALS['page_title'])) {
-                    echo $GLOBALS['page_title']; } ?>
+                  <?php  echo $GLOBALS['page_title'];  ?>
                 </p>
             </div>
+        <?php } ?>
         </div>
     </div>

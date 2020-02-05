@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 $local_start_time = 0;
-if ($this->input->get('t_id')) { print_r($project_module_list);?>
+if ($this->input->get('t_id')) { ?>
     <script type="text/javascript">
         var edit = 1;
     </script>
@@ -79,7 +79,7 @@ if ($this->input->get('t_id')) { print_r($project_module_list);?>
                             <div class="form-group">
                                 <label for="choose-module">Choose project module</label>
                                 <?php if ($this->input->get('t_id')) { ?>
-                                <select type="text"  class="form-control project_name" id="choose-module" name="project_module" value="<?=$task_data['module_name']?>">
+                                <select type="text"  class="form-control" id="choose-module" name="project_module" value="<?=$task_data['module_name']?>">
                                     <option><?=$task_data['module_name']?></option>
                                      <?php foreach($project_module_list AS $module){ ?>
                                         <option value="<?=$module->id;?>"><?=$module->name;?></option>
@@ -87,7 +87,7 @@ if ($this->input->get('t_id')) { print_r($project_module_list);?>
                                     <!-- <option value=<?=$task_data['module_name']?>><?=$task_data['module_name']?></option> -->
                                 <?php } ?></select>
                                 <?php } else { ?>
-                                    <select type="text" class="form-control project_name" id="choose-module" name="project_module" value="<?= $task_data['module_name'] ?>">
+                                    <select type="text" class="form-control" id="choose-module" name="project_module" value="<?= $task_data['module_name'] ?>">
                                         <option>Select module</option>
                                     <?php } ?>
                                 </select>
@@ -162,7 +162,7 @@ if ($this->input->get('t_id')) { print_r($project_module_list);?>
                                                         <div class="col-2 text-right mb-3">
                                                             <?php if ($key == sizeof($timeline_data) - 1) { ?>
                                                                 <a href="javascript:void(0);" id="add-new-time" title="Add">
-                                                                    <i class="fas fa-plus pt-2 icon-plus"></i>
+                                                                    <i class="fas fa-plus p-2 icon-plus"></i>
                                                                 </a>
                                                             <?php } else { ?>
                                                                 <a href="javascript:void(0);" id="delete-task-<?= $key ?>" class="delete-task">

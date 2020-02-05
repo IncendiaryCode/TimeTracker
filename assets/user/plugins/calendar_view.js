@@ -19,29 +19,29 @@ function minutesToTime(mins) {
 var daily_chart;
 
 
-function draw_chart_cards(data) {
-    for (x in data) {
-        for (var y = 0; y < data[x].length; y++) {
+function draw_chart_cards(data, type) {
+        var x = data['data'].length;
+        for (var y = 0; y < x; y++) {
             var cardHeader = $('<div class="card-header card-header" />');
             var cardHeaderRow = $('<div class="row pt-2" />');
             var today = getTime();
-            if (data[x][y].start_time != null) {
-                var task_date = data[x][y].start_time.slice(0, 10);
+            if (data['data'][y].start_time != null) {
+                var task_date =data['data'][y].start_time.slice(0, 10);
                 if (today != task_date) {
                     $(".alert-box").show();
                 }
             }
-            if (data[x][y].start_time == null) {
+            if (data['data'][y].start_time == null) {
                 cardHeaderRow.append(
                     '<div class="col-6 text-left"><span class="vertical-line"></span>Not yet started.</div>'
                 );
             } else {
                 var timeZone = moment.tz.guess();
-                var date = data[x][y].start_time.slice(0, 10);
-                var start_time = data[x][y].start_time;
+                var date = data['data'][y].start_time.slice(0, 10);
+                var start_time = data['data'][y].start_time;
                     var start_time_utc = moment.utc(start_time).toDate();
                     var serverDate = moment(start_time_utc).format(
-                        "YYYY-MM-DD hh:mm:ss a"
+                        "YYYY-MM-DD hh:mm a"
                     );
                 if(serverDate != 'Invalid date')
                 {
@@ -56,27 +56,28 @@ function draw_chart_cards(data) {
                     cardHeaderRow.append(
                         '<div class="col-6 text-left"><span class="vertical-line"></span>' +
                         " " +
-                        data[x][y].start_time +
+                        data['data'][y].start_time +
                         "</div>"
                     );
                 }
             }
+
             var stopCol = $(
                 '<div class="col-6 text-right"  id="btn-stop' +
-                data[x][y].id +
+                data['data'][y].id +
                 '" />'
             );
 
-            if (data[x][y].running_task == 0) {
+            if (data['data'][y].running_task == 0) {
                 /*check whether task is ended or not*/
-                var timeUsed = minutesToTime(data[x][y].t_minutes);
+                var timeUsed = minutesToTime(data['data'][y].t_minutes);
                 stopCol.append('<i class="far fa-clock"></i> ' + timeUsed);
             } else {
-                var id = data[x][y].id;
-                if (data[x][y].start_time != null) {
+                var id = data['data'][y].id;
+                if (data['data'][y].start_time != null) {
                     var stopButton = $(
                         '<span class=""><i class="fa fa-hourglass-1"></i> Running</span>'
-                    ).data("taskid", data[x][y].id);
+                    ).data("taskid", data['data'][y].id);
                 }
                 stopCol.append(stopButton);
             }
@@ -90,34 +91,33 @@ function draw_chart_cards(data) {
             cardInner.append(cardHeader);
 
             var cardBody = $("<div class='card-body' />");
-            cardBody.append(data[x][y].task_name);
+            cardBody.append(data['data'][y].task_name);
             cardInner.append(cardBody);
             var cardFooter = $("<div class='card-footer card-footer'>");
             var footerRow = $('<div class="row" />');
 
-            footerRow.append(((data[x][y].image_name !== null) ?
+            footerRow.append(((data['data'][y].image_name !== null) ?
                 "<div class='col-12'> <img src=" +
-                data[x][y].image_name +
+                data['data'][y].image_name +
                 " width='20px;'> " : '') +
-                data[x][y].project +
+                data['data'][y].project +
                 "</div>"
             );
 
             var footerRight = $(
                 "<div class='card-actions' id='footer-right-" +
-                data[x][y].id +
+                data['data'][y].id +
                 "'>"
             );
             //action Edit
-            var timeZone = moment.tz.guess();
             var actionEdit = $(
-                '<a href="#" class=" pl-2  text-white " id="action-edit"><i class="far fa-edit action-play " data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
+                '<a href="#" class=" pl-2  text-white " id="action-edit"><i class="fas fa-pencil-alt action-play " data-toggle="tooltip" data-placement="top" title="edit"></i></a>'
             );
             actionEdit.attr(
                 "href",
                 timeTrackerBaseURL +
                 "index.php/user/load_add_task?t_id=" +
-                data[x][y].id
+                data['data'][y].id
             );
             footerRight.append(actionEdit);
             cardFooter.append(footerRow);
@@ -131,21 +131,26 @@ function draw_chart_cards(data) {
             var cardActions = $("<div class='card-action-overlay' />");
             cardActions.append(footerRight);
             cardInner.append(cardActions);
-            var cardCol = $("<div class='col-lg-6 mb-4 card-col card-count"+panel_id++ +"' />");
+            var cardCol = $("<div class='col-lg-6 mb-4 card-col animated card-count"+panel_id+"' />");
             cardCol.append(cardInner);
 
             $("#attachPanels").append(cardCol);
-            
-            var id = data[x][y].id;
+                
+                if(type == "daily_chart")
+                {
+                    panel_id++;
+                }
+
+            var id = data['data'][y].id;
             cardCol.click(function () {
                 $('.print-chart-row' + id).addClass('animated zoomIn');
             });
-            if (data[x][y].running_task == 1 && data[x][y].start_time != null) {
+            if (data['data'][y].running_task == 1 && data['data'][y].start_time != null) {
                 //change background of current running task entries.
                 document.getElementsByClassName("title").innerText +=
-                    data[x][y].task_name;
+                    data['data'][y].task_name;
             }
-        }
+            
     }
 }
 function loadTask(type, date) {
@@ -162,7 +167,7 @@ function loadTask(type, date) {
             } else {
                 var data = JSON.parse(values);
                 $("#attachPanels").empty();
-                draw_chart_cards(data);
+                draw_chart_cards(data, type);
             }
         }
     });
@@ -205,46 +210,38 @@ function loadWeeklyChart() {
 
 
 function drawChart(type, res) {
-    if (res == "No activity in this week.") {
+    if (res['status'] == false) {
         if (daily_chart) daily_chart.destroy();
         document.getElementById('week-error').innerHTML = "No activity in this week.";
         document.getElementById('weekly-duration').innerHTML = '00:00';
         $("#attachPanels").empty();
     } else {
-        document.getElementById('weekly-duration').innerHTML = parseInt((res['total_minutes']/60))+':'+res['total_minutes']%60;
-        var week_chart = document.getElementById('weekly').getContext('2d');
-        gradient = week_chart.createLinearGradient(0, 0, 0, 600);
+        document.getElementById('weekly-duration').innerHTML = res["total_hours"];
+        var week_chart = document.getElementById('weekly').getContext('2d');    
+        var const_lable = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-        gradient.addColorStop(0, '#7078ff');
-        gradient.addColorStop(0.5, '#e58dfb');
-        gradient.addColorStop(1, '#ffffff');
-
-        
-        var const_lable = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-        var labels = [];
-        var data = [];
-        for (var i = 0, j = 0; i < const_lable.length; i++) {
-            if (res.labels[j] == const_lable[i]) {
-                labels[i] = res.labels[j];
-                data[i] = res.data[j];
-                j++;
-            } else {
-                labels[i] = const_lable[i];
-                data[i] = 0;
+        var data = {
+            labels: const_lable,
+            datasets: []
+            };
+        for(var n = 0; n < res['data'].length; n++)
+        {
+            var ind_set = {
+              label : res['data'][n]['task_name'],
+              backgroundColor : res['data'][n]['project_color'],
+              data: []
+            };
+            var ind_data = [];
+            for(var n1 = 0; n1<res['data'][n]['time'].length; n1++)
+            {
+                ind_set.data.push(res['data'][n]['time'][n1]);
             }
+            data.datasets.push(ind_set);
         }
         var config = {
             type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Time interval',
-                    borderColor: "#7078ff",
-                    backgroundColor: gradient,
-                    data: data,
+            data: data,
 
-                }]
-            },
             options: {
                 responsive: true,
                 title: {
@@ -311,7 +308,7 @@ function retrieveChartData(type, date) {
         data: { 'chart_type': type, 'date': date },
         dataType: 'json',
         success: function (res) {
-            if (res["data"] == "No activity in this date.") {
+            if (res["msg"] == "No activity in this date.") {
                 if (type == 'weekly_chart') {
                     document.getElementById('week-error').innerHTML = res['data'];
                     $("#attachPanels").empty();
@@ -347,25 +344,23 @@ function draw_customized_chart(res) {
     var element = document.getElementById('daily');
     var pixel = [];
     var top = 25;
-    var margin_top = 290;
+    var margin_top = 320;
     var top1 = top;
     var window_width = $('.cust_daily_chart').width();
-
-
-
     document.getElementById('daily-duration').innerHTML = parseInt((res['total_minutes']/60))+':'+res['total_minutes']%60;
-    if(window_width > 700)
+    if(window_width > 340)
+    {
+        margin_top = 295;
+    }
+    if(window_width > 679)
     {
         margin_top = 364;
     }
-
     var p_left = parseInt(window_width) / 12;
     if (res['data'] != "No activity in this date.") {
         for (var i = 0; i < res['data'][1].length; i++) {
             var start_time_utc = moment.utc(res['data'][1][i]["start_time"]).toDate();
             var start_time_local = moment(start_time_utc).format("YYYY-MM-DD HH:mm:ss");
-
-
             var end_time_utc = moment.utc(res['data'][1][i]["end_time"]).toDate();
             var end_time_local = moment(end_time_utc).format("YYYY-MM-DD HH:mm:ss");
 
@@ -375,9 +370,9 @@ function draw_customized_chart(res) {
             var start_time_min = (start_time.slice(0, 3) * 60) + parseInt(start_time.slice(4, 6));
             var end_time_min = (end_time.slice(0, 3) * 60) + parseInt(end_time.slice(4, 6));
             //calculate width for the graph.
-
             var interval = res['data'][1][i]['total_minutes'];
             var task_name = res['data'][2][i];
+            var color = res['data'][3][i];
 
             var width = ((interval / 60) * p_left);
             if (start_time_min < 480) // graph leess than 8 am is not shown
@@ -400,10 +395,10 @@ function draw_customized_chart(res) {
                         }
                         if (((start_time_pixel >= pixel1[e][0]) && (start_time_pixel <= pixel1[e][1]))) {
                             v = v + 25;
-                            printChart(start_time_pixel, width, ((margin_top) - v), task_name, res['data'][0][i]);
+                            printChart(start_time_pixel, width, ((margin_top) - v), task_name, res['data'][0][i], moment(start_time_local).format('hh:mm a'), moment(end_time_local).format('hh:mm a'), color);
                             break;
                         } else {
-                            printChart(start_time_pixel, width, ((margin_top) - v), task_name, res['data'][0][i]);
+                            printChart(start_time_pixel, width, ((margin_top) - v), task_name, res['data'][0][i], moment(start_time_local).format('hh:mm a'), moment(end_time_local).format('hh:mm a'), color);
                             break;
                         }
                     }
@@ -414,14 +409,14 @@ function draw_customized_chart(res) {
                     if ((start_time_pixel + width) >= window_width) {
                         width = window_width - (start_time_pixel);
                     }
-                    printChart(start_time_pixel, width, (margin_top), task_name, res['data'][0][i]);
+                    printChart(start_time_pixel, width, (margin_top), task_name, res['data'][0][i], moment(start_time_local).format('hh:mm a'), moment(end_time_local).format('hh:mm a'), color);
                 }
             }
             if (pixel.length == 0) {
                 if ((start_time_pixel + width) >= window_width) {
                     width = window_width - (start_time_pixel);
                 }
-                printChart(start_time_pixel, width, (margin_top), task_name, res['data'][0][i]);
+                printChart(start_time_pixel, width, (margin_top), task_name, res['data'][0][i], moment(start_time_local).format('hh:mm a'), moment(end_time_local).format('hh:mm a'), color);
             }
             pixel.push([start_time_pixel, end_time_pixel]);
         }
@@ -432,25 +427,34 @@ function draw_customized_chart(res) {
 var last_index;
 var last_task_name = [];
 var same_task = 0;
-var color = "000000";
-function printChart(start, width, top, task_name, id) {
-    for (var i = 0; i < last_task_name.length; i++) {
-        if (task_name == last_task_name[i]['task_name']) {
-            color = last_task_name[i]['color'];
-            break;
-        }
-        else {
-            color = parseInt(color) + 123456;
-        }
-    }
-    var row = $("<span class='positon-chart animated zoomIn print-chart-row " + id + "'  data-toggle='tooltip' data-placement='top' title=" + task_name + " id='new-daily-chart" + graph_id + "'>.<input type = 'hidden' value = " + graph_id + "></span>");
+function printChart(start, width, top, task_name, id, start_time, end_time, color) {
+    var row = $("<span class='positon-chart animated fadeInLeft print-chart-row " + id + "'  data-toggle='tooltip' data-placement='top' title=" + task_name + " id='new-daily-chart" + graph_id + "'>.<input type = 'hidden' value = " + graph_id + "></span>");
     $(row).css("margin-left", start);
     $(row).css("position", "absolute");
     $(row).css("top", top);
     $(row).css("width", width);
-    $(row).css("backgroundColor", '#' + color);
-    $(row).css("color", '#' + color);
+    $(row).css("backgroundColor", color);
+    $(row).css("color", color);
     $("#print-chart").append(row);
+    $('#new-daily-chart' + graph_id).mousedown(function(){
+        document.getElementById("task-detail").innerHTML = start_time+' - '+end_time;
+        $("#task-detail").css("display", "block");
+        $("#task-detail").css("margin-left", start+10);
+        var str = this.id; 
+        var matches = str.match(/(\d+)/);
+        var card = document.getElementsByClassName('card-count'+matches[0])[0];
+        card.className += " shake";
+    });
+
+    $('#new-daily-chart' + graph_id).mouseup(function(){
+        document.getElementById("task-detail").innerHTML =" ";
+        $("#task-detail").css("display", "none");
+        var str = this.id;
+        var matches = str.match(/(\d+)/);
+        var card = document.getElementsByClassName('card-count'+matches[0])[0];
+        card.classList.remove("shake")
+    });
+
     $('#new-daily-chart' + graph_id).click(function () {
         var ele = document.getElementById(this.id);
         var index = parseInt(ele.childNodes[1].value)+4;
@@ -460,9 +464,11 @@ function printChart(start, width, top, task_name, id) {
         last_index = id;
         var elmnt = document.getElementsByClassName('card-count' + index);
     });
+
     graph_id++;
     last_task_name.push({ task_name, color });
-}
+    }
+   
 last_index = undefined;
 
 function getMonth(month) {
@@ -540,97 +546,158 @@ function __get_date(w, y) {
     return new Date(y, 0, d);
 }
 
-function loadMonthlyChart() {
-    var year = document.getElementById('monthly-chart').value;
-    if (year == "" || year == " " || year == null) {
-        var cur_year = parseInt(new Date().toString().slice(10, 15));
-        document.getElementById('monthly-chart').value = cur_year;
-        year = cur_year;
-        document.getElementById("monthly-chart").setAttribute("max", cur_year);
+
+
+function next() {
+        var currentYear =  parseInt(document.getElementById('monthly-chart').value.split(" ")[1]);
+        var currentMonth =  parseInt(document.getElementById('monthly-chart').value.split(" ")[0]);
+        var cur_MY  = new Date().getMonth()+' '+new Date().getFullYear();
+        if(parseInt(cur_MY.split(" ")[0]) == currentMonth && (currentYear == parseInt(cur_MY.split(" ")[1])))
+            {
+               $('#next-year').css('color', "#666"); 
+            }
+            else
+            {
+                currentYear = (currentMonth === 11) ? currentYear + 1 : currentYear;
+                currentMonth = (currentMonth + 1) % 12;
+                document.getElementById('monthly-chart').value = currentMonth+ ' '+currentYear;
+                $('#next-year').css('color', "#a280fc");
+            
+                showCalendar(currentMonth,currentYear); 
+            }
     }
+
+    function previous() {
+        var currentYear =  parseInt(document.getElementById('monthly-chart').value.split(" ")[1]);
+        var currentMonth =  parseInt(document.getElementById('monthly-chart').value.split(" ")[0]);
+        currentYear = (currentMonth === 0) ? currentYear - 1 : currentYear;
+        currentMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
+        document.getElementById('monthly-chart').value = currentMonth+ ' '+currentYear;
+        showCalendar(currentMonth,currentYear);  
+    }
+
+
+function showCalendar(month, year) {
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let firstDay = (new Date(year, month)).getDay();
+    let daysInMonth = 32 - new Date(year, month, 32).getDate();
+
+    let tbl = document.getElementById("calendar-body"); // body of the calendar
+
+    // clearing all previous cells
+    tbl.innerHTML = "";    // filing data about month and in the page via DOM.
+    document.getElementById('current-year').innerHTML = months[month] + " " + year; // creating all cells
+    let date = 1;
+
     $.ajax({
         type: "GET",
         url: timeTrackerBaseURL + 'index.php/user/activity_chart',
-        data: { 'chart_type': "monthly_chart", 'date': year },
+        data: { 'chart_type': "monthly_chart", 'date': (month+1)+' '+year },
         dataType: 'json',
-        success: function (res) {
-            if(res['data'][0] == 0)
+        success: function (result) {
+            if(result['status'] == false)
             {
-                document.getElementById('monthly-chart-error').innerHTML = "No works in this year."
-                $('#calendar_basic').hide();
+                document.getElementById('monthly-chart-error').innerHTML = "No works in this month."
+
+                $('.card').hide();
                 $('#attachPanels').hide();
                 document.getElementById('monthly-duration').innerHTML = "00:00";
             }
             else
             {
-                document.getElementById('monthly-duration').innerHTML = parseInt((res['total_minutes']/60))+':'+res['total_minutes']%60;
-                $('#calendar_basic').show();
-                $('#attachPanels').show();
-            document.getElementById('monthly-chart-error').innerHTML = " ";
-            google.charts.load("current", { packages: ["calendar"] });
-            google.setOnLoadCallback(drawMonthlyChart(res));
-            loadTask("monthly_chart", year);
+                $('.card').show();
+                document.getElementById('monthly-duration').innerHTML = parseInt(result['total_minutes']/60)+':'+result['total_minutes']%60;
+                document.getElementById('monthly-chart-error').innerHTML = " ";
+                    for (let i = 0; i < 6; i++) {
+                    let row = document.createElement("tr");
+                    //creating individual cells, filing them up with data.
+                    for (let j = 0; j < 7; j++) {
+                        if (i === 0 && j < firstDay) {
+                            let cell = document.createElement("td");
+                            let cellText = document.createTextNode("");
+                            cell.appendChild(cellText);
+                            row.appendChild(cell);
+                        }
+                        else if (date > daysInMonth) {
+                            break;
+                        }
+                        else {
+                            let today = new Date();
+                            let cell = document.createElement("td");
+                            /*let cellInner = document.createElement("div");*/
+                            let cellText = document.createTextNode(date);
+                            //cell.appendChild(cellInner);
+                            cell.appendChild(cellText);
+                            for(var a=0; a< result['data'].length; a++)
+                            {
+                            if((parseInt(result['data'][a][0].split('-')[2])) == date)
+                                {
+                                    
+                                    var width = ((parseInt(result['data'][a][1])*10)*2);
+                                    $(cell).css('border-radius',(100-width)+"%");
+                                    
+                                    $(cell).css('background-color',result['data'][a][2]);   
+                                    break;
+                                }
+                            }
+
+                            $(cell).click(function()
+                            {
+                                var date = year+'-'+ (month+1)+'-'+this.innerHTML;
+                                $.ajax({
+                                    type: 'GET',
+                                    url: timeTrackerBaseURL + 'index.php/user/load_task_data',
+                                    data: { 'chart_type': "daily_chart", 'date':  date },
+                                    success: function (values) {
+                                        if(JSON.parse(values)['status'] == false)
+                                        {
+                                            alert("No data available");
+                                        }
+                                        else
+                                        {
+                                            document.getElementById('daily-chart').value = date;
+                                            document.getElementById('current-date').innerHTML = moment(moment(new Date(document.getElementById('daily-chart').value))).format('dddd MMMM DD');
+                                            $('#chart-navigation a[href="#daily-view"]').tab('show');
+                                        }
+                                    }
+                                });
+                               
+                            });
+
+                            row.appendChild(cell);
+                            date++;
+                        }
+                    }
+
+                    tbl.appendChild(row); // appending each row into calendar body.
+                }
+                loadTask("monthly-chart", month+' '+year)
             }
         }
     });
+
 }
+function loadCalendarChart()
+{
+    let today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+    let selectYear = moment().format("YYYY");
+    let selectMonth = document.getElementById("month");
+    let monthAndYear = document.getElementById("monthAndYear");    
+    showCalendar(currentMonth, currentYear);
 
-function drawMonthlyChart(res) {
-    if (document.getElementById('calendar_basic')) {
-        var dataTable = new google.visualization.DataTable();
-        dataTable.addColumn({ type: 'date', id: 'Date' });
-        dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
-        for (var k = 0; k < res["data"].length; k++) {
-            var year = parseInt(res['data'][k][0].slice(0, 4).toString());
-            var month = parseInt(res['data'][k][0].slice(5, 7)) - 1;
-            var day = parseInt(res['data'][k][0].slice(8, 10));
-            var value = res['data'][k][1];
-            dataTable.addRows([
-                [new Date(year, month, day), value],
-            ]);
-        }
-    }
-    var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
-    var chart_width = $('#calendar_basic').width();
-    var cellsize = chart_width / 60;
-    var options = {
-        title: " ",
-        calendar: {
-            cellSize: cellsize,
-            yearLabel: { fontSize: 1 }
-        },
-        noDataPattern: {
-            backgroundColor: '#ebedf0',
-        },
-        monthOutlineColor: {
-            stroke: 'white',
-            strokeOpacity: 0.0,
-            strokeWidth: 2,
-        },
-    };
-
-    function selectHandler() {
-        var selectedItem = chart.getSelection();
-        if (selectedItem[0]['row'] != undefined) {
-            var topping = dataTable.getValue(selectedItem[0].row, 0);
-            var day_from_year = (topping.toString().slice(11, 15)) + '-' + getMonth(topping.toString().slice(4, 7)) + '-' + topping.toString().slice(8, 10);
-            document.getElementById('daily-chart').value = day_from_year;
-            document.getElementById('current-date').innerHTML = moment(moment(new Date(day_from_year))).format('dddd MMMM DD');
-            $('#chart-navigation a[href="#daily-view"]').tab('show');
-        } else {
-            alert("No activities in this date");
-        }
-    }
-    google.visualization.events.addListener(chart, 'select', selectHandler);
-    chart.draw(dataTable, options);
 }
 
 $(document).ready(function () {
     //Tab Change
-
+    $("#task-detail").css("display", "none");
     $('#weekly-chart').hide();
-    $('#monthly-chart').hide();
-
+    //$('#monthly-chart').hide();
+    let today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+    document.getElementById('monthly-chart').value = currentMonth+' '+currentYear;
 
     var win_width = $('.cust_daily_chart').width();
     var p_l = parseInt(win_width) / 23;
@@ -643,13 +710,14 @@ $(document).ready(function () {
         loadWeeklyChart();
     });
     $("#monthly-chart").change(function () {
-        loadMonthlyChart();
-
+        loadCalendarChart();
     });
 
 var tday = moment(new Date());
 document.getElementById('current-date').innerHTML = moment(tday).format('dddd MMMM DD');
+document.getElementById('daily-chart').value = moment(tday).format('YYYY-MM-DD');
 var daily_chart_date = document.getElementById('daily-chart').value;
+loadDailyChart();
 
 var day = new Date(daily_chart_date);
 var nextDay = new Date(day);
@@ -658,54 +726,49 @@ if((moment(nextDay).format('YYYY-MM-DD') > moment(new Date()).format('YYYY-MM-DD
 {
     $('#next-date').css('color', "#666");
 }
-    $("#next-date").unbind().click(function()
-    {
-         var daily_chart_date = document.getElementById('daily-chart').value;
+$("#next-date").unbind().click(function()
+{
+     var daily_chart_date = document.getElementById('daily-chart').value;
 
-         var day = new Date(daily_chart_date);
-
-            var nextDay = new Date(day);
-            nextDay.setDate(day.getDate() + 1);
-            if((moment(nextDay).format('YYYY-MM-DD') > moment(new Date()).format('YYYY-MM-DD')))
-            {
-                $('#next-date').css('color', "#666");
-            }
-            else
-            {
-            $('#next-date').css('color', "#a280fc");
-                document.getElementById('daily-chart').value = moment(nextDay).format('YYYY-MM-DD');
-
-                document.getElementById('current-date').innerHTML = moment(nextDay).format('dddd MMMM DD');
-                loadDailyChart();
-            }
-            var check_for_ancher = nextDay;
-            check_for_ancher.setDate(day.getDate() + 2);
-            if ((moment(check_for_ancher).format('YYYY-MM-DD') > moment(new Date()).format('YYYY-MM-DD'))) {
-                $('#next-date').css('color', "#666");
-            }
-            
-    });
-
-    $("#previous-date").unbind().click(function()
-    {
-         var daily_chart_date = document.getElementById('daily-chart').value;
-
-         var day = new Date(daily_chart_date);
-
-            var nextDay = new Date(day);
-            $('#next-date').css('color', "#a280fc");
-            nextDay.setDate(day.getDate() - 1);
+     var day = new Date(daily_chart_date);
+        var nextDay = new Date(day);
+        nextDay.setDate(day.getDate() + 1);
+        if((moment(nextDay).format('YYYY-MM-DD') > moment(new Date()).format('YYYY-MM-DD')))
+        {
+            $('#next-date').css('color', "#666");
+        }
+        else
+        {
+        $('#next-date').css('color', "#a280fc");
             document.getElementById('daily-chart').value = moment(nextDay).format('YYYY-MM-DD');
+
             document.getElementById('current-date').innerHTML = moment(nextDay).format('dddd MMMM DD');
             loadDailyChart();
-    });
+        }
+        var check_for_ancher = nextDay;
+        check_for_ancher.setDate(day.getDate() + 2);
+        if ((moment(check_for_ancher).format('YYYY-MM-DD') > moment(new Date()).format('YYYY-MM-DD'))) {
+            $('#next-date').css('color', "#666");
+        }
+        
+});
 
+$("#previous-date").unbind().click(function()
+{
+     var daily_chart_date = document.getElementById('daily-chart').value;
 
+     var day = new Date(daily_chart_date);
 
+        var nextDay = new Date(day);
+        $('#next-date').css('color', "#a280fc");
+        nextDay.setDate(day.getDate() - 1);
+        document.getElementById('daily-chart').value = moment(nextDay).format('YYYY-MM-DD');
+        document.getElementById('current-date').innerHTML = moment(nextDay).format('dddd MMMM DD');
+        loadDailyChart();
+});
 
-var tday = moment(new Date());
 var t_day = new Date();
-var day = moment(tday).format('E');
+var day = moment(t_day).format('E');
 t_day.setDate(t_day.getDate() - day);
 var start_week = t_day;
 var s_date = moment(t_day).format("MMM DD");
@@ -714,16 +777,22 @@ var e_date = moment(t_day).format("MMM DD");
 t_day.setDate(t_day.getDate() - 7);
 
 document.getElementById('current-week').innerHTML = s_date+ ' - ' +e_date;
+
+document.getElementById('weekly-chart').value = moment(t_day).format("YYYY")+ '-W' +moment(t_day).format('W'); //format 2020-W05
+
 var daily_chart_date1 = document.getElementById('weekly-chart').value;
 
 $("#next-week").unbind().click(function()
     {
         var daily_chart_date1 = document.getElementById('weekly-chart').value;
         var week_no = parseInt(daily_chart_date1.slice(6,8));
-        var day = moment(new Date()).format('E');
-        if(!((parseInt(day) < (week_no)) && (parseInt(daily_chart_date1.slice(0,4)) == parseInt((moment(new Date()).format('YYYY'))))))
+        var c_week = moment(new Date()).format('W');
+        console.log(c_week, week_no);
+        console.log(document.getElementById('weekly-chart').value, parseInt(daily_chart_date1.slice(6,8)));
+
+        if(( (week_no+1) < (parseInt(c_week)) && (parseInt(daily_chart_date1.slice(0,4)) == parseInt((moment(new Date()).format('YYYY'))))))
         {
-            if(day == week_no)
+            if(c_week == week_no)
             {
                 $('#next-week').css('color', "#666");
             }
@@ -772,31 +841,6 @@ $("#previous-week").unbind().click(function()
         }
                      
     });
-var c_year = moment(new Date()).format('YYYY');
-document.getElementById('current-year').innerHTML = "Year- "+c_year;
-
-$("#next-year").unbind().click(function()
-    {
-    var year = parseInt(document.getElementById('current-year').innerHTML.slice(-4));
-    if((year) < parseInt(c_year))
-    {
-    document.getElementById('current-year').innerHTML = "Year- "+(year+1);
-    document.getElementById('monthly-chart').value = year+1;
-    loadMonthlyChart();
-    }
-    else
-    {
-        $('#next-year').css('color', "#666");
-    }
-});
-$("#previous-year").unbind().click(function()
-    {
-    var year = parseInt(document.getElementById('current-year').innerHTML.slice(-4));
-     document.getElementById('current-year').innerHTML = "Year- "+(year-1);
-     document.getElementById('monthly-chart').value = year-1;
-    loadMonthlyChart();
-    
-});
 
 
     /*daily_value.*/
@@ -819,9 +863,10 @@ $("#previous-year").unbind().click(function()
         var x = $(event.target).attr("href"); // active tab
         var y = $(event.relatedTarget); // previous tab
         if (x == '#daily-view') {
+            var date = document.getElementById('daily-chart').value;
             loadDailyChart();
-            var date = document.getElementById('monthly-chart').value;
-            loadTask('weekly_chart', date);
+
+            //loadTask('daily-chart', date);
         }
         if (x == '#weekly-view') {
             loadWeeklyChart();
@@ -829,18 +874,8 @@ $("#previous-year").unbind().click(function()
             loadTask('weekly_chart', date);
         }
         if (x == '#monthly-view') {
-            loadMonthlyChart();
+            loadCalendarChart();
             var year = document.getElementById('monthly-chart').value;
         }
     });
-
 });
-
-window.onload = function () {
-    if (document.getElementById('daily-chart')) {
-        loadDailyChart();
-        var date = document.getElementById('daily-chart').value;
-        loadMonthlyChart();
-        loadTask('daily_chart', date);
-    }
-}

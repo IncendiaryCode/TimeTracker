@@ -6,7 +6,16 @@ function check_for_punchIn() {
 			document.getElementById("stop-time").childNodes[1].childNodes[0]
 				.classList[2] == "fa-play"
 		) {
-			$("#alert-punchin").modal("show");
+			/*$("#alert-punchin").modal("show");*/
+				if (stopped == 1) {
+					$("#play-timer").modal("show");
+					return false;
+				}
+				if (not_logged == 1) {
+					$("#alert-punchin").modal("show");
+					document.getElementById("start-login-time").value = moment().format("HH:mm");
+					return false;
+				}
 		} else {
 			window.location.href = timeTrackerBaseURL + "user/load_add_task";
 		}

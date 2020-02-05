@@ -3,7 +3,7 @@
 $profile = $this->session->userdata('user_profile');
 $name = $this->session->userdata('username');
 ?>
-<div class="modal modal-transparent fade" id="change-profile" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
+<div class="modal modal-transparent fade m-0" id="change-profile" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="false" data-backdrop="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-header">
             <button type="button" class="close text-right" data-dismiss="modal"><i class="fas fa-times  main-modal-close"></i></button>

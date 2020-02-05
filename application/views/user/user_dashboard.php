@@ -21,6 +21,14 @@ $task_id = 0;
 $start_text = 'Start punch in/out';
 $task_id = '';
 $task_name = 'Punch In/Out';
+
+if(empty($task_info['login_status'])){
+$not_logged = 1;
+}else{
+$not_logged = 0;
+}
+
+
 if (isset($task_info['login_status'])) {
     if ($task_info['login_status']['end_time'] == NULL) {
         $timerClass = 'fa-stop';
@@ -31,9 +39,9 @@ if (isset($task_info['login_status'])) {
     $timerClass = 'fa-play';
 }
 if (isset($task_info['login_status']['end_time']) && ($task_info['login_status']['end_time']) != NULL) {
-    $flag = 1;
+    $already_logged = 1;
 } else {
-    $flag = 0;
+    $already_logged = 0;
 }
 ?>
 <?php
@@ -47,7 +55,8 @@ if (!empty($task_info['login_run'])) { ?>
 <script type="text/javascript">
     //this will be send to JS for timer to start
     var __timeTrackerLoginTime = "<?= $logintime ?>"; /*start date and time of the task.*/
-    var stopped = "<?= $flag ?>"; /*to check for punch out action*/
+    var stopped = "<?= $already_logged ?>"; /*to check for punch out action*/
+    var not_logged = "<?= $not_logged ?>"; /*to check for punch in action*/
 </script>
 <!-- new scoll for task -->
 <div class="container timer-slider">
@@ -136,6 +145,15 @@ if (!empty($task_info['login_run'])) { ?>
                             <!-- sorting options -->
                             <a class="dropdown-item" href="#" data-type="name">Task name</a>
                             <a class="dropdown-item" href="#" data-type="date">Created date</a>
+                            <a class="dropdown-submenu" href="#">
+                              <a href="#" role="button" data-toggle="dropdown" class="dropdown-item dropdown-toggle">Projects</a>
+                              <ul class="dropdown-menu" id="append-prj-names">
+                                <!-- <li><a href="#" class="dropdown-item">level 3</a></li>
+                                <li><a href="#" class="dropdown-item">level 3</a></li> -->
+
+                              </ul>
+                            </a>
+
                         </div>
                     </div>
                 </div>
@@ -253,17 +271,18 @@ if (!empty($task_info['login_run'])) { ?>
         </div>
 <?php } ?>
 
-        <div class="modal" id="play-timer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
+        <div class="modal" id="alert-punchin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <form action="<?= base_url(); ?>index.php/user/save_login_time" id="starting-timer" method="post">
                         <div class="modal-header ">
+                            <h4>Punching IN..</h4>
                             <button type="button" class="close text-danger" data-dismiss="modal">×</button>
                         </div>
                         <div class="modal-body ">
                             <div>
-                                <p>You have not punched in for the day.</p>
-                                <label for="old-datepicker">Please enter start time: <span class="text-danger">*</span></label>
+                                <h4>Please punch in before start</h4>
+                                <label for="old-datepicker">start time: <span class="text-danger">*</span></label>
                                 <input type="text" class="check-for-utc form-control  timerpicker-c" name="start-login-time" id="start-login-time" placeholder="hh:mm">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
@@ -279,7 +298,7 @@ if (!empty($task_info['login_run'])) { ?>
             </div>
         </div>
 
-        <div class="modal fade" id="alert-punchin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
+        <div class="modal fade" id="play-timer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -287,9 +306,9 @@ if (!empty($task_info['login_run'])) { ?>
                     </div>
                     <div class="modal-body text-center">
                         <div>
-                            <h4 class="text-dark">Please punch in before start</h4>
+                            <h4>You have already punched out for the day!!!</h4>
                         </div>
-                        <button type="button" class="btn btn-primary mt-4" data-dismiss="modal" id="alert-for-punchin">Punch in now!</button>
+                        
                     </div>
                     <p class="text-danger" id="stop-timer-error"></p>
                 </div>

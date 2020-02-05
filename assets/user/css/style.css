@@ -32,6 +32,15 @@ header.main-header {
 	z-index: 2000;
 }
 
+.modal
+{
+	margin-top: 50px;
+}
+.gj-modal .selected
+{
+	color: #7077ff;
+}
+
 header.main-header h1 {
 	color: white;
 	margin-top: 7%;
@@ -347,7 +356,7 @@ header.main-header h1 {
 
 .login-time {
 	font-weight: 200 !important;
-	padding-top: 50px;
+	padding-top: 20px;
 	opacity: 0.5;
 	color: #fff;
 }
@@ -461,7 +470,13 @@ a:hover {
 .card-col .card-action-overlay {
 	z-index: 1;
 	right: -100%;
-	top: 35%;
+	top: 55%;
+}
+.running-task {
+	position: absolute;
+	left: 85%;
+	color: #ccc;
+	top: 30%;
 }
 
 .card-col:hover .card-overlay {
@@ -484,8 +499,25 @@ a:hover {
 	padding: 0px 15px 0px 15px;
 }
 
+
+.task-detail
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	border: 1px solid;
+	border-radius: 20px;
+	padding:  5px 10px 5px 10px;
+	border-color:#ccc;
+}
+.animate-card
+{
+	-webkit-transition: all 0.4s ease-in-out 0s;
+	-moz-transition: all 0.4s ease-in-out 0s;
+	transition: all 0.4s ease-in-out 0s;
+}
 .icon-plus {
-	padding: 10px;
+	padding: 12px;
 	background-color: #e484fb;
 	color: #fff;
 	border: 1px;
@@ -751,6 +783,14 @@ a:hover {
 	color: #b3b3b3;
 	font-size: 24px;
 }
+/*
+.dropdown-menu
+{
+	-webkit-transition: all 0.4s ease-in-out 0s;
+	-moz-transition: all 0.4s ease-in-out 0s;
+	transition: all 0.4s ease-in-out 0s;
+	right: 0px;
+}*/
 .sorting-icon {
 	font-size: 24px;
 	color: #b3b3b3;
@@ -796,4 +836,8 @@ a:hover {
 .table td,
 .table th {
 	border-top: 0px;
+}
+.monthly-chart .card
+{
+	border:none;
 }

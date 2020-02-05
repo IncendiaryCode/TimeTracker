@@ -130,11 +130,7 @@ $(document).ready(function() {
 				{
 					targets: 2,
 					render: function(data, type, row, meta) {
-						var task_time_sec = row[2] / 60 - Math.floor(row[2] / 60);
-						task_time_sec = task_time_sec.toString().slice(0, 4);
-						var total_time =
-							Math.floor(row[2] / 60) + parseFloat(task_time_sec) + " hrs";
-						return total_time;
+						return row[2];
 					}
 				}
 			]

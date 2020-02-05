@@ -61,17 +61,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <a href="<?= base_url(); ?>login" class="text-left forgot-color"><i class="fas fa-arrow-left"></i> Back to login</a>
                     </div>
                     <div class="col-6 text-right">
-                        <button class="btn btn-primary login-color" onclick="sendOTP()" type="button" id="getOTP">Send OTP</button>
+                        <button class="btn btn-primary login-color" onclick="sendOTP()" type="button" id="getOTP">Send code</button>
                     </div>
                 </div>
             </div>
             <div class="form-group otp email-input" id="enter-otp">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control font-weight-light border-top-0 border-left-0 border-right-0" id="otp1" name="otp" placeholder="Enter OTP">
+                    <input type="text" class="form-control font-weight-light border-top-0 border-left-0 border-right-0" id="otp1" name="otp" placeholder="Enter verification code">
                     <div class="spinner-border resend-otp-spinner" id="send-otp-spinner"></div>
                 </div>
                 <p class="text-success" id="resent-otp"></p>
-                <p>Check your email for OTP. &nbsp;&nbsp; <a href="javascript:resendOTP()" id="getOTP1">Resend</a></p>
+                <p>Check your email for verification code. &nbsp;&nbsp; <a href="javascript:resendOTP()" id="getOTP1">Resend</a></p>
                 <div class="row email-input" style="width: 100%;">
                     <div class="col-8">
                         <a href="<?= base_url(); ?>login" class="text-left forgot-color"><i class="fas fa-arrow-left"></i> Back to login</a>

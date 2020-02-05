@@ -375,33 +375,38 @@ $(document).ready(function() {
 				addTime.array_of_timings.push({ date, start_time, end_time });
 				var elements = document.getElementById("task-times");
 				if (elements != null) {
-					var input_element = elements.getElementsByClassName("date-utc");
-					for (var i = 0; i < input_element.length; i++) {
-						if (input_element[i].value != "" && input_element[i].value != " ") {
+					var input_elements = elements.getElementsByClassName("date-utc");
+					var j = 0;
+					for (var i = 0; i < input_elements.length / 3; i++) {
+						if (
+							input_elements[j].value != "" &&
+							input_elements[j + 1].value != " "
+						) {
 							var timeZone = moment.tz.guess();
-							var date = input_element[i].value;
-							if (input_element[i + 1]) {
-								var start_time = input_element[i + 1].value;
-								var serverDate = moment(date + " " + start_time)
-									.tz("utc")
-									.format("Y-MM-DD H:mm:ss");
-
-								if (serverDate != "Invalid date") {
-									input_element[i + 1].value = serverDate;
-								}
-							}
-							if (input_element[i + 2].value) {
-								var end_time = input_element[i + 2].value;
-								var serverDateEnd = moment(date + " " + end_time)
-									.tz("utc")
-									.format("Y-MM-DD H:mm:ss");
-								if (serverDateEnd != "Invalid date" && (end_time.length > 2)
-								) {
-									input_element[i + 2].value = serverDateEnd;
-								}
-							}
+							var serverStartDate = moment(
+								input_elements[j].value + " " + input_elements[j + 1].value
+							)
+								.tz("utc")
+								.format("Y-MM-DD H:mm:ss");
+							input_elements[j].value = serverStartDate.slice(0, 10);
+							if(serverStartDate != "Invalid date")
+							input_elements[j + 1].value = serverStartDate;
 						}
-						i = i + 3;
+						if (
+							input_elements[j].value != "" &&
+							input_elements[j + 2].value != ""
+						) {
+							var serverEndDate = moment(
+								input_elements[j].value + " " + input_elements[j + 2].value
+							)
+								.tz("utc")
+								.format("Y-MM-DD H:mm:ss");
+								if(input_elements[j + 2].value.length > 2)
+								{
+									input_elements[j + 2].value = serverEndDate;
+								}
+						}
+						j = j + 3;
 					}
 				}
 				return true;
@@ -496,7 +501,7 @@ $(document).ready(function() {
 	$(".timepicker-b").timepicker({
 		uiLibrary: "bootstrap4"
 	});
-	$("#choose-project").click(function() {
+	$("#choose-project").change(function() {
 		$("#choose-module")
 			.empty()
 			.html("<option>Select module</option>");
@@ -526,7 +531,6 @@ $(document).ready(function() {
 				url: timeTrackerBaseURL + "index.php/user/get_project_module",
 				data: { id: project_id },
 				success: function(res) {
-					/*$("#choose-module").empty();*/
 					var result = JSON.parse(res);
 					var array = result["result"];
 					for (var i = 0; i < array.length; i++) {
