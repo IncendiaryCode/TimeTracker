@@ -121,6 +121,12 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         btnProject.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15.0)
         btnSort.titleLabel?.font = UIFont.systemFont(ofSize: 15.0)
+        
+        // Check filter applied from activty VC.
+        if delegate is MyActivityViewController {
+            self.btnSort.isHidden = true
+            self.lblResultsCounter.isHidden = true
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

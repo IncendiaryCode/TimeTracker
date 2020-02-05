@@ -122,6 +122,10 @@ public class CalendarView: UIView {
     internal var _cachedMonthInfoForSection = [Int:(firstDay: Int, daysTotal: Int)]()
     internal var eventsByIndexPath = [IndexPath: [CalendarEvent]]()
     
+    var selectedProjects: Array<Int> = g_dictProjectDetails.map { $0.key }
+    /// Checks whether selection of date is from user or program.
+    var bIsUserTap = false
+    
     public var events: [CalendarEvent] = [] {
         didSet {
             self.eventsByIndexPath.removeAll()
@@ -437,6 +441,7 @@ extension CalendarView {
      function: - mark date as selected and add it to the array of selected dates
      */
     public func selectDate(_ date : Date) {
+        
         guard let indexPath = self.indexPathForDate(date) else { return }
         
         #if swift(>=4.2)
@@ -444,6 +449,7 @@ extension CalendarView {
         #else
             self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: UICollectionView.ScrollPosition())
         #endif
+        bIsUserTap = false
         self.collectionView(collectionView, didSelectItemAt: indexPath)
     }
     

@@ -249,7 +249,8 @@ extension CalendarView: UICollectionViewDataSource {
             let perc = CGFloat(CGFloat(totalTime) / 45000.0)
             
             // Get ratio of each project work.
-            let dictRatio = taskTimeController.getTaskRatioBasedOnProject(intDate: intDate!)
+            let dictRatio = taskTimeController.getTaskRatioBasedOnProject(intDate: intDate!
+                , arrProj: self.selectedProjects)
             // Sort project id's
             let sortedProjId = Array(dictRatio.keys).sorted(by: <)
             

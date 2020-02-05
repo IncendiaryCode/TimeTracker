@@ -44,7 +44,7 @@ extension CalendarView: UICollectionViewDelegateFlowLayout {
         }
         
         let strDate = getStrDateTime(date: date)
-        if selectedDates.contains(date) {
+        if selectedDates.contains(date) && bIsUserTap {
             let intDate = date.millisecondsSince1970
             let strDate = Date().getStrDate(from: intDate)
             // Date indicates start time of day.
@@ -53,7 +53,7 @@ extension CalendarView: UICollectionViewDelegateFlowLayout {
             
             delegateChart?.chartPressed(intDate: nDate)
         }
-        else {
+        else if bIsUserTap {
             delegateChart?.noData()
         }
         if arrDates.contains(strDate) && !selectedDates.contains(date) {

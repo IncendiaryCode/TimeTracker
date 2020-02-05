@@ -88,11 +88,13 @@ class UserTaskInfoCell: UITableViewCell {
                     .withAlphaComponent(0.3).cgColor]
             shadowLayer.shadowColor = g_colorMode.invertColor().withAlphaComponent(1).cgColor
             contentView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.4).cgColor
+            imgTimer.tintColor = g_colorMode.midColor()
         }
         else {
             gradientLayer.colors = []
             shadowLayer.shadowColor = g_colorMode.invertColor().withAlphaComponent(0.5).cgColor
             contentView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.2).cgColor
+            imgTimer.tintColor = .clear
         }
         selectionStyle = .none
         contentView.backgroundColor = g_colorMode.defaultColor()

@@ -350,7 +350,7 @@ class TasksTimeCDController {
         return arrTaskTimes
     }
     
-    func getTaskTimes(strDate: String) -> Array<TaskTimeDetails> {
+    func getTaskTimes(strDate: String, arrProj: Array<Int> = []) -> Array<TaskTimeDetails> {
         var arrTaskTimes = Array<TaskTimeDetails>()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
         fetchRequest.predicate = NSPredicate(format: "date = %@", strDate)
@@ -361,6 +361,16 @@ class TasksTimeCDController {
                 let nsMObject = nsMContext[i] as! NSManagedObject
                 let timeId = nsMObject.value(forKey: "time_id") as! Int
                 let taskId = nsMObject.value(forKey: "task_id") as! Int
+                
+                // Check projects.
+                if arrProj.count > 0 {
+                    // If project id not containing in the array.
+                    let projId = getProjectId(taskId: taskId)
+                    if !arrProj.contains(projId) {
+                        continue
+                    }
+                }
+                
                 let strDate = nsMObject.value(forKey: "date") as! String
                 let start = nsMObject.value(forKey: "start_time") as! Int
                 let end = nsMObject.value(forKey: "end_time") as! Int
@@ -591,7 +601,7 @@ class TasksTimeCDController {
     }
     
     /// Returns day timings ratio based on task timings.
-    func getTaskRatioBasedOnProject(intDate: Int64) -> Dictionary<Int, CGFloat> {
+    func getTaskRatioBasedOnProject(intDate: Int64, arrProj: Array<Int>?) -> Dictionary<Int, CGFloat> {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
         let strDate = Date().getStrDate(from: intDate)
         fetchRequest.predicate = NSPredicate(format: "date = %@", strDate)
@@ -601,12 +611,20 @@ class TasksTimeCDController {
             let res = try nsManagedContext.fetch(fetchRequest)
             for i in 0..<res.count {
                 let object = res[i] as! NSManagedObject
+                let taskId = object.value(forKey: "task_id") as! Int
+                let projId = getProjectId(taskId: taskId)
+                
+                // Check project filter applied.
+                if nil != arrProj {
+                    if !(arrProj?.contains(projId))! {
+                        continue
+                    }
+                }
+                
                 let workStart = object.value(forKey: "start_time") as! Int
                 let workEnd = object.value(forKey: "end_time") as! Int
-                let taskId = object.value(forKey: "task_id") as! Int
                 let total = workEnd - workStart
                 // get project id of task
-                let projId = getProjectId(taskId: taskId)
                 
                 // Store each projects total work time.
                 if nil == dictRatio[projId] {
@@ -629,15 +647,26 @@ class TasksTimeCDController {
     }
     
     /// Get total work time from date.
-    func getTotalWorkTime(intDate: Int64) -> Int {
+    func getTotalWorkTime(intDate: Int64, arrProj: Array<Int>? = []) -> Int {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
         let strDate = Date().getStrDate(from: intDate)
         fetchRequest.predicate = NSPredicate(format: "date = %@", strDate)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "start_time", ascending: true)]
         var arrAllTimes: Array<Array<Int>> = []
         do {
             let res = try nsManagedContext.fetch(fetchRequest)
             for i in 0..<res.count {
                 let object = res[i] as! NSManagedObject
+                
+                // If project filter applied.
+                if nil != arrProj && arrProj!.count > 0 {
+                    let taskId = object.value(forKey: "task_id") as! Int
+                    let projId = getProjectId(taskId: taskId)
+                    if !arrProj!.contains(projId) {
+                        continue
+                    }
+                }
+                
                 let workStart = object.value(forKey: "start_time") as! Int
                 let workEnd = object.value(forKey: "end_time") as! Int
                 arrAllTimes.append([workStart, workEnd])
@@ -646,10 +675,10 @@ class TasksTimeCDController {
             print("Eror")
         }
         // Sort array timings based on start time.
-        let sortedArray = arrAllTimes.sorted(by: {
-            $0[0] < $1[0]
-        })
-        arrAllTimes = sortedArray // Assign sorted array to all timings.
+//        let sortedArray = arrAllTimes.sorted(by: {
+//            $0[0] < $1[0]
+//        })
+//        arrAllTimes = sortedArray // Assign sorted array to all timings.
         
         // array to store only reuired timings.(Removed duplicate tim entry)
         var arrReqTimes: Array<Array<Int>> = arrAllTimes

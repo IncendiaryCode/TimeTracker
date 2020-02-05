@@ -383,6 +383,7 @@ enum SortTypes {
     case projects
     case tasks
     case duration
+    case none
 }
 
 class ProjectDetails{
@@ -631,11 +632,13 @@ class MonthDetails {
         }
     }
     var strMonth: String!
+    var arrProj: Array<Int>?
     
-    init(nDate: Int64) {
+    init(nDate: Int64, arrProj: Array<Int>?) {
         self.arrDates = [nDate]
         let strDate = Date().getStrDate(from: nDate)
         self.strMonth = getMonthName(strDate: strDate)
+        self.arrProj = arrProj
     }
     
     func addDate(nDate: Int64) {
@@ -646,7 +649,7 @@ class MonthDetails {
         var totalTime = 0
         let tasksTimeCDCtrlr = TasksTimeCDController()
         for date in arrDates {
-            totalTime += tasksTimeCDCtrlr.getTotalWorkTime(intDate: date)
+            totalTime += tasksTimeCDCtrlr.getTotalWorkTime(intDate: date, arrProj: arrProj ?? [])
         }
         return totalTime
     }
@@ -654,6 +657,7 @@ class MonthDetails {
 
 class WeekDetails {
     var arrDates: Array<Int64>
+    var arrProj: Array<Int>?
     var totalWork: Int {
         get {
             computeTotaltime()
@@ -661,9 +665,10 @@ class WeekDetails {
     }
     var weeknumber: Int!
     
-    init(nDate: Int64) {
+    init(nDate: Int64, arrProj: Array<Int>?) {
         self.arrDates = [nDate]
         self.weeknumber = getWeekNumber(nDate: nDate)
+        self.arrProj = arrProj
     }
     
     func addDate(nDate: Int64) {
@@ -674,7 +679,7 @@ class WeekDetails {
         var totalTime = 0
         let tasksTimeCDCtrlr = TasksTimeCDController()
         for date in arrDates {
-            totalTime += tasksTimeCDCtrlr.getTotalWorkTime(intDate: date)
+            totalTime += tasksTimeCDCtrlr.getTotalWorkTime(intDate: date, arrProj: arrProj ?? [])
         }
         return totalTime
     }

@@ -81,7 +81,6 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         viewButtons.addGestureRecognizer(tap)
         
         viewBG.backgroundColor = UIColor.black.withAlphaComponent(0.7)
-        txtEmailPhone.textColor = g_colorMode.defaultColor().withAlphaComponent(0.5)
         
         // Tap gesture to BG view.
         tap = UITapGestureRecognizer(target: self, action: #selector
@@ -203,6 +202,9 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         imgVProfile.layer.borderWidth = 1
         imgVProfile.layer.borderColor = UIColor.white.cgColor
         btnChangeImage.layer.borderColor = UIColor.white.cgColor
+        txtEmailPhone.textColor = .white
+        txtUsername.tintColor = g_colorMode.midColor()
+        txtPhone.tintColor = g_colorMode.midColor()
     }
     
     @IBAction func btnChangePswdPressed(_ sender: Any) {
@@ -216,7 +218,7 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
             imagePicker.sourceType = UIImagePickerController.SourceType.camera
-            imagePicker.allowsEditing = false
+            imagePicker.allowsEditing = true
             self.present(imagePicker, animated: true, completion: nil)
         }
         else
@@ -282,6 +284,11 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
     
     @IBAction func btnEditProfilePressed(_ sender: Any) {
         if btnEditSave.currentTitle == "Edit" {
+            self.txtEmailPhone.font = txtEmailPhone.font?.withSize(14)
+            self.txtUsername.font = txtUsername.font?.withSize(14)
+            self.txtEmailPhone.useUnderline()
+            self.txtUsername.useUnderline()
+            self.txtPhone.useUnderline()
             nsLScrollViewTop.constant = scrollView.frame.maxY
             nsLtxtFCenter.constant = -150
             nsLTxtFEmailTop.constant = 30
@@ -292,9 +299,6 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
             if let strEmail = UserDefaults.standard.string(forKey: "userEmail") {
                 txtEmailPhone.text = strEmail
             }
-            self.txtEmailPhone.font = txtEmailPhone.font?.withSize(15)
-            self.txtUsername.useUnderline()
-            self.txtPhone.useUnderline()
             self.txtUsername.isUserInteractionEnabled = true
             self.txtPhone.isUserInteractionEnabled = true
             self.txtEmailPhone.textAlignment = .left
@@ -308,7 +312,10 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
             self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 1))
         }
         else {
-            
+            let notifiaction = InAppNotificationView()
+            notifiaction.sendNotification(msg: "No response")
+            notifiaction.addGradient()
+            self.view.addSubview(notifiaction)
         }
     }
     
@@ -329,7 +336,9 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         })
         setUpEmailPhone()
         self.txtUsername.layer.sublayers?.removeFirst()
+        self.txtEmailPhone.layer.sublayers?.removeFirst()
         self.txtEmailPhone.font = txtEmailPhone.font?.withSize(10)
+        self.txtUsername.font = txtUsername.font?.withSize(16)
         self.txtUsername.isUserInteractionEnabled = false
         self.txtPhone.isUserInteractionEnabled = false
         self.txtEmailPhone.textAlignment = .center
@@ -360,7 +369,14 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
     
     @objc func dismissFullscreenImage(sender: UITapGestureRecognizer) {
         self.tabBarController?.tabBar.isHidden = false
-        sender.view?.removeFromSuperview()
+        UIView.animate(withDuration: 0.3, animations: {
+            let cgRect = CGRect(x: self.imgVProfile.frame.origin.x, y: self.imgVProfile.frame
+                .origin.y, width: self.imgVProfile.bounds.width, height: self.imgVProfile.bounds.height)
+            sender.view?.frame = cgRect
+            sender.view?.alpha = 0
+        }) { _ in
+            sender.view?.removeFromSuperview()
+        }
     }
     
     @IBAction func txtUsernamePrimaryAction(_ sender: Any) {

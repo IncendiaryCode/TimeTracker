@@ -747,6 +747,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         // Detect tableview reached to almost bottom (-4).
         if indexPath.row-3 == arrCTaskDetails.count-4 && g_taskPageNo < g_totalPagesTask {
             g_taskPageNo += 1
+            actIndicator.startAnimating()
             updateTask()
         }
     }
@@ -805,7 +806,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        // Only if tasks loaded to core data.
+        // Only if tasks lochangedFilterViewPosition
         if nil != g_totalPagesTask && 0 != arrCTaskDetails.count {
             let footerView = UITableViewHeaderFooterView()
             // Setup label.
@@ -912,7 +913,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             }
             
             cell.imgTimer.image = #imageLiteral(resourceName: "task")
-            cell.imgTimer.alpha = 0.4
+            cell.imgTimer.alpha = 1
             
             if nil == cell.timer {
                 cell.nTotalTime = cTaskDetails.nTotalTime!

@@ -22,7 +22,7 @@ class InAppNotificationView: UIView {
     /// If auto dismiss notifiacation disabled then, user need to dismiss notifiction manually (Default always true).
     var autoDismiss = true
     /// setup delay time in seconds.
-    var delaySec = 3
+    var delaySec = 2
     
     init() {
         let screenBounds = UIScreen.main.bounds
@@ -85,6 +85,7 @@ class InAppNotificationView: UIView {
         
         // If dismiss auto.
         if isDismissRequired {
+            btnDismiss.isHidden = true
             UIView.animate(withDuration: 0.5, animations: {
                 // Animate while showing.
                 self.frame.size = CGSize(width: self.frame.width, height: 100)

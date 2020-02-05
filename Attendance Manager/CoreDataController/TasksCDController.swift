@@ -19,14 +19,14 @@ import CoreData
 class TasksCDController {
     var nsMOForUserTimes: NSManagedObject!
     var nsManagedContext: NSManagedObjectContext!
-    var projectUpdater: ProjectsCDController!
-    var taskTimeUpdater: TasksTimeCDController!
+    var projectCDCtrlr: ProjectsCDController!
+    var tasksTimeCDCtrlr: TasksTimeCDController!
     
     init() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         nsManagedContext = appDelegate.persistentContainer.viewContext
-        projectUpdater = ProjectsCDController()
-        taskTimeUpdater = TasksTimeCDController()
+        projectCDCtrlr = ProjectsCDController()
+        tasksTimeCDCtrlr = TasksTimeCDController()
     }
     
     /// Creates a new task with name, description and project id.
@@ -188,7 +188,7 @@ class TasksCDController {
                 if nsMObject.value(forKey: "start_time") as! Int64 == 0 {
                     nsMObject.setValue(Date().millisecondsSince1970, forKey: "start_time")
                 }
-                taskTimeUpdater.addStartTime(taskId: taskId)
+                tasksTimeCDCtrlr.addStartTime(taskId: taskId)
                 
                 // For future refference store running task id.
                 UserDefaults.standard.set(taskId, forKey: "previousTaskId")
@@ -228,7 +228,7 @@ class TasksCDController {
                 let nsMObject = nsMContext[0] as! NSManagedObject
                 let taskId = nsMObject.value(forKey: "task_id") as! Int
                 let isSynched = nsMObject.value(forKey: "is_synched") as! Bool
-                taskTimeUpdater.updateTime(taskId: taskId, isSynched: isSynched)
+                tasksTimeCDCtrlr.updateTime(taskId: taskId, isSynched: isSynched)
                 nsMObject.setValue(false, forKey: "is_work_in_progress")
                 nsMObject.setValue(false, forKey: "is_synched")
                 saveContext()
@@ -273,7 +273,7 @@ class TasksCDController {
                 if nsMObject.value(forKey: "start_time") as! Int64 == 0 {
                     nsMObject.setValue(Date().millisecondsSince1970, forKey: "start_time")
                 }
-                taskTimeUpdater.addStartTime(taskId: taskId)
+                tasksTimeCDCtrlr.addStartTime(taskId: taskId)
                 // For future refference store running task id.
                 UserDefaults.standard.set(taskId, forKey: "previousTaskId")
                 bProcessState = true
@@ -341,7 +341,7 @@ class TasksCDController {
         let result = res[0] as! NSManagedObject
         let bTaskInProcess = result.value(forKey: "is_work_in_progress") as! Bool
         if res.count > 0 && !bTaskInProcess {
-            arrTaskTimes = taskTimeUpdater.getTaskTimes(taskId: taskId)
+            arrTaskTimes = tasksTimeCDCtrlr.getTaskTimes(taskId: taskId)
         }
         return arrTaskTimes
     }
@@ -356,7 +356,7 @@ class TasksCDController {
             let nsMObject = res[i] as! NSManagedObject
             let taskId = nsMObject.value(forKey: "task_id") as! Int
             let isSynched = nsMObject.value(forKey: "is_synched") as! Bool
-            taskTimeUpdater.updateTime(taskId: taskId, isSynched: isSynched)
+            tasksTimeCDCtrlr.updateTime(taskId: taskId, isSynched: isSynched)
             saveContext()
         }
     }
@@ -368,7 +368,7 @@ class TasksCDController {
         fetchRequest.predicate = NSPredicate(format: "task_id = %d",taskId)
         let res = try! nsManagedContext.fetch(fetchRequest)
         if res.count > 0 {
-            nTotTime = taskTimeUpdater.getTaskTotalTime(taskId: taskId)
+            nTotTime = tasksTimeCDCtrlr.getTaskTotalTime(taskId: taskId)
         }
         return nTotTime
     }
@@ -382,7 +382,7 @@ class TasksCDController {
         let res = try! nsManagedContext.fetch(fetchRequest)
         if res.count > 0 {
             let nsMObject = res[0] as! NSManagedObject
-            nTotTime = taskTimeUpdater.getTaskTotalTime(taskId: taskId)
+            nTotTime = tasksTimeCDCtrlr.getTaskTotalTime(taskId: taskId)
             let taskName = nsMObject.value(forKey: "task_name") as! String
             let projId = nsMObject.value(forKey: "project_id") as! Int
             let startIntDateTime = nsMObject.value(forKey: "start_time") as! Int64
@@ -503,7 +503,7 @@ class TasksCDController {
         var arrTasks = Array<Dictionary<String, Any>>()
         for index in 0..<arrProj.count {
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks")
-            let projId = projectUpdater.getProjectId(project: arrProj[index])
+            let projId = projectCDCtrlr.getProjectId(project: arrProj[index])
             fetchRequest.predicate = NSPredicate(format: "project_id = %d", projId)
             var dictResult = Dictionary<String, Any>()
             do {
@@ -522,7 +522,7 @@ class TasksCDController {
                     dictResult.updateValue(startTime, forKey: "Start Time")
                     
                     // get total work time from taskstime entity
-                    let totalTime = taskTimeUpdater.getTaskTotalTime(nDate: startTime, taskId:
+                    let totalTime = tasksTimeCDCtrlr.getTaskTotalTime(nDate: startTime, taskId:
                         taskId!)
                     dictResult.updateValue(totalTime, forKey: "Total Time")
                     
@@ -577,7 +577,7 @@ class TasksCDController {
                         }
                         
                         // get total work time from taskstime entity
-                        let totalTime = taskTimeUpdater.getTaskTotalTime(taskId: taskId)
+                        let totalTime = tasksTimeCDCtrlr.getTaskTotalTime(taskId: taskId)
                         
                         
                         
@@ -620,7 +620,7 @@ class TasksCDController {
     /// To get date, task count and total work in every date.
     func getDayWiseDetails() -> Array<Dictionary<String, Any>> {
         var arrTasks = Array<Dictionary<String, Any>>()
-        let arrDates = taskTimeUpdater.getAllDates()
+        let arrDates = tasksTimeCDCtrlr.getAllDates()
         for index in 0..<arrDates.count {
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks")
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "task_id", ascending:
@@ -635,7 +635,7 @@ class TasksCDController {
                     let startTime = nsMObject.value(forKey: "start_time") as! Int64
                     
                     // get total work time from taskstime entity
-                    let totalTime = taskTimeUpdater.getTaskTotalTime(nDate: startTime,
+                    let totalTime = tasksTimeCDCtrlr.getTaskTotalTime(nDate: startTime,
                                                                      taskId: taskId)
                     totalTimeWork += totalTime
                 }
@@ -653,9 +653,9 @@ class TasksCDController {
     }
     
     /// To get date, task count and total work in every month.
-    func getMonthWiseDetails() -> Array<MonthDetails> {
+    func getMonthWiseDetails(arrProj: Array<Int>?) -> Array<MonthDetails> {
         var arrMonthDetails = Array<MonthDetails>()
-        let arrIntDates = taskTimeUpdater.getAllDates()
+        let arrIntDates = tasksTimeCDCtrlr.getAllDates()
         var arrDates: Array<String> = []
         for intDate in arrIntDates {
             let strDate = Date().getStrDate(from: intDate)
@@ -678,7 +678,7 @@ class TasksCDController {
             }
             if flag {
                 // create new object. (If new week.)
-                let monthDetails = MonthDetails(nDate: arrIntDates[index])
+                let monthDetails = MonthDetails(nDate: arrIntDates[index], arrProj: arrProj)
                 arrMonthDetails.append(monthDetails)
             }
         }
@@ -686,9 +686,9 @@ class TasksCDController {
     }
     
     /// To get date, task count and total work in every week.
-    func getWeekWiseDetails() -> Array<WeekDetails> {
+    func getWeekWiseDetails(arrProj: Array<Int>?) -> Array<WeekDetails> {
         var arrWeekDetails = Array<WeekDetails>()
-        let arrIntDates = taskTimeUpdater.getAllDates()
+        let arrIntDates = tasksTimeCDCtrlr.getAllDates()
         
         for index in 0..<arrIntDates.count {
             var flag = true
@@ -703,7 +703,7 @@ class TasksCDController {
             }
             if flag {
                 // create new object. (If new week.)
-                let weekDetails = WeekDetails(nDate: arrIntDates[index])
+                let weekDetails = WeekDetails(nDate: arrIntDates[index], arrProj: arrProj)
                 arrWeekDetails.append(weekDetails)
             }
         }
@@ -715,7 +715,7 @@ class TasksCDController {
         var count = 0
         for index in 0..<arrProj.count {
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks")
-            let projId = projectUpdater.getProjectId(project: arrProj[index])
+            let projId = projectCDCtrlr.getProjectId(project: arrProj[index])
             fetchRequest.predicate = NSPredicate(format: "project_id = %d", projId)
             do {
                 let nsMContext = try nsManagedContext.fetch(fetchRequest)
@@ -765,24 +765,32 @@ class TasksCDController {
         catch {
             print("Error")
         }
-        taskTimeUpdater.deleteAllData()
+        tasksTimeCDCtrlr.deleteAllData()
     }
     
     /// Get all the tasks details from provided array of dates.
-    func getDataFromDate(arrDate: Array<Int64>) -> Array<TaskDetails> {
-        let arrTaskId = taskTimeUpdater.getTasksId(arrIntDate: arrDate)
-        let arrTaskDetails = getDataFromIds(taskIds: arrTaskId)
+    func getDataFromDate(arrDate: Array<Int64>, arrProj: Array<Int>?) -> Array<TaskDetails> {
+        let arrTaskId = tasksTimeCDCtrlr.getTasksId(arrIntDate: arrDate)
+        let arrTaskDetails = getDataFromIds(taskIds: arrTaskId, arrProj: arrProj)
         return arrTaskDetails
     }
     
     /// To get all the task details from provide array of task ids.
-    func getDataFromIds(taskIds: Array<Int>) -> Array<TaskDetails> {
+    func getDataFromIds(taskIds: Array<Int>, arrProj: Array<Int>?) -> Array<TaskDetails> {
         var arrDetails = Array<TaskDetails>()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "start_time", ascending:
             false)]
         for taskId in taskIds {
-            fetchRequest.predicate = NSPredicate(format: "task_id = %d", taskId)
+            // Apply filter.
+            if nil != arrProj {
+                fetchRequest.predicate = NSPredicate(format:
+                    "task_id = %d AND project_id IN %@", taskId, arrProj!)
+            }
+            else {
+                fetchRequest.predicate = NSPredicate(format:
+                    "task_id = %d", taskId)
+            }
             do {
                 let nsMContext = try nsManagedContext.fetch(fetchRequest)
                 for result in nsMContext {
@@ -792,7 +800,7 @@ class TasksCDController {
                     let modId = nsMObject.value(forKey: "module_id") as! Int
                     let taskName = nsMObject.value(forKey: "task_name") as! String
                     let taskDesc = nsMObject.value(forKey: "task_description") as! String
-                    let totalTime = taskTimeUpdater.getTaskTotalTime(taskId: taskId)
+                    let totalTime = tasksTimeCDCtrlr.getTaskTotalTime(taskId: taskId)
                     let bWorking = nsMObject.value(forKey: "is_work_in_progress") as! Bool
 
                     let nStartDateTime = nsMObject.value(forKey: "start_time") as! Int64
@@ -816,28 +824,29 @@ class TasksCDController {
         }
         return arrDetails
     }
-
-    func getEachTaskTimeDataFromDate(intDate: Int64) -> Array<TaskTimeDetails> {
-        var arrDetails = Array<TaskTimeDetails>()
-        let strDate = Date(milliseconds: intDate).getStrDate()
-        arrDetails = taskTimeUpdater.getTaskTimes(strDate: strDate)
-        
-        // Sort based on end time.
-        arrDetails.sort { (task1, task2) -> Bool in
-            return task1.nEndTime > task2.nEndTime
-        }
-        
-        // Sort based on start time.
-        arrDetails.sort { (task1, task2) -> Bool in
-            return task1.nStartTime > task2.nStartTime
-        }
-        
-        // Sort array details based on date.
-        arrDetails.sort { (task1, task2) -> Bool in
-            return getDateFromString(strDate: task1.strDate) < getDateFromString(strDate:
-                task2.strDate)
-        }
-        return arrDetails
+    
+    func getEachTaskTimeDataFromDate(intDate: Int64, arrProj: Array<Int> = [])
+        -> Array<TaskTimeDetails> {
+            var arrDetails = Array<TaskTimeDetails>()
+            let strDate = Date(milliseconds: intDate).getStrDate()
+            arrDetails = tasksTimeCDCtrlr.getTaskTimes(strDate: strDate, arrProj: arrProj)
+            
+            // Sort based on end time.
+            arrDetails.sort { (task1, task2) -> Bool in
+                return task1.nEndTime > task2.nEndTime
+            }
+            
+            // Sort based on start time.
+            arrDetails.sort { (task1, task2) -> Bool in
+                return task1.nStartTime > task2.nStartTime
+            }
+            
+            // Sort array details based on date.
+            arrDetails.sort { (task1, task2) -> Bool in
+                return getDateFromString(strDate: task1.strDate) < getDateFromString(strDate:
+                    task2.strDate)
+            }
+            return arrDetails
     }
     
     /// Set synch to server successful.
@@ -849,7 +858,7 @@ class TasksCDController {
             //User finishes work.
             let nsMObject = nsMContext[0] as! NSManagedObject
             nsMObject.setValue(true, forKey: "is_synched")
-            taskTimeUpdater.deletedOfflineTimes(taskId: taskId)
+            tasksTimeCDCtrlr.deletedOfflineTimes(taskId: taskId)
             let taskId = nsMObject.value(forKey: "task_id") as! Int
             if taskId < 0 {
                 nsManagedContext.delete(nsMObject)
@@ -883,7 +892,7 @@ class TasksCDController {
                     let modId = nsMObject.value(forKey: "module_id") as! Int
                     let taskName = nsMObject.value(forKey: "task_name") as! String
                     let taskDesc = nsMObject.value(forKey: "task_description") as! String
-                    let totalTime = taskTimeUpdater.getTaskTotalTime(taskId: taskId)
+                    let totalTime = tasksTimeCDCtrlr.getTaskTotalTime(taskId: taskId)
                     let bWorking = nsMObject.value(forKey: "is_work_in_progress") as! Bool
                     
                     let nStartDateTime = nsMObject.value(forKey: "start_time") as! Int64

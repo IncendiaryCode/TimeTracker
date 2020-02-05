@@ -14,7 +14,8 @@
 
 import UIKit
 
-class MyActivityViewController: UIViewController, TableviewTap, BarChartViewDelegate {
+class MyActivityViewController: UIViewController, ActivityViewDelagate, BarChartViewDelegate
+, FilterDelegate {
     
     @IBOutlet weak var nsLBtnWidth: NSLayoutConstraint!
     @IBOutlet weak var btnDaily: UIButton!
@@ -29,6 +30,8 @@ class MyActivityViewController: UIViewController, TableviewTap, BarChartViewDele
     var headerText: String?
     var topSafeArea: CGFloat!
     var actIndicator: UIActivityIndicatorView!
+    /// Page in which filter pressed.
+    var nFilteringPage: Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +42,7 @@ class MyActivityViewController: UIViewController, TableviewTap, BarChartViewDele
         let cgPoint = view.center
         let cgSize = CGSize(width: 40, height: 40)
 
+        
         // Setup activity indicator to setup view.
         actIndicator = UIActivityIndicatorView()
         actIndicator.color = .white
@@ -156,6 +160,7 @@ class MyActivityViewController: UIViewController, TableviewTap, BarChartViewDele
     
     @IBAction func btnMonthlyPressed(_ sender: Any) {
         updateCoredataTimings()
+//        arrActView[2].updateMonthDataSource()
         arrActView[2].nSelectedIndexMonth = 0 // display current month.
         arrActView[2].calendarView.setDisplayDate(Date())
         arrActView[2].dateCurrentMonth = arrActView[2].calendarView.displayDate
@@ -171,6 +176,7 @@ class MyActivityViewController: UIViewController, TableviewTap, BarChartViewDele
             self.viewSelection.frame.origin = cgPoint
         }
         // Update task timings.
+        arrActView[2].updateMonthDataSource()
         arrActView[2].setupMonthView()
     }
     
@@ -244,8 +250,68 @@ class MyActivityViewController: UIViewController, TableviewTap, BarChartViewDele
         tabBarController?.view.addSubview(viewUserGuideTask)
     }
     
+    func btnFilterPressed(page: Int) {
+        nFilteringPage = page
+        performSegue(withIdentifier: "ShowFilter", sender: nil)
+        self.view.alpha = 0.2
+    }
+    
+    func selectedProjects(arrProj: Array<Int>) {
+        // Display only selected projects.
+        arrActView[nFilteringPage].arrSelectedProj = Array<Int>()
+        arrActView[nFilteringPage].arrSelectedProj = arrProj
+        refreshActivity()
+        self.view.alpha = 1
+    }
+    
+    func refreshActivity() {
+        if nFilteringPage == 0 {
+            arrActView[0].setupDayView()
+        }
+        else if nFilteringPage == 1 {
+            arrActView[1].resetWeekBar()
+            arrActView[1].setupWeekView()
+        }
+        else {
+            arrActView[2].updateMonthDataSource()
+            arrActView[2].setupMonthView()
+        }
+    }
+    
+    func dismissedView() {
+        // Dismissed view from filter view.
+        self.view.alpha = 1
+    }
+    
+    func clearedFilter() {
+        // Apply clear filter.
+        arrActView[nFilteringPage].arrSelectedProj = nil
+        self.view.alpha = 1
+        refreshActivity()
+    }
+    
+    func sortApplied(sortType: SortTypes, indexSelected: IndexPath) {
+        self.view.alpha = 1
+    }
+    
+    func changedFilterViewPosition(cgFAlpha: CGFloat) {
+        if cgFAlpha >= 0.2 {
+            self.view.alpha = cgFAlpha
+        }
+    }
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "SegueToTaskController" {
+        if segue.destination is FilterViewController {
+            let vc = segue.destination as? FilterViewController
+            vc?.delegate = self
+            if let arrProj = arrActView[nFilteringPage].arrSelectedProj {
+                // If already filter applied pass the filter values to filter view.
+                vc?.arrSelectedProj = Array<Int>()
+                vc?.arrSelectedProj = arrProj
+            }
+        }
+        else if segue.identifier == "SegueToTaskController" {
             let taskController = segue.destination as! TaskViewController
             taskController.taskId = ntaskId
         }

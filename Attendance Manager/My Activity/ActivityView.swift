@@ -12,7 +12,7 @@
 //
 //////////////////////////////////////////////////////////////////////////// */
 
-protocol TableviewTap {
+protocol ActivityViewDelagate {
 	/// Delegate sends selected cell's task id.
 	func cellSelected(taskId: Int)
 	/// When swipe action performed to cell and that cell belongs to running task.
@@ -21,6 +21,8 @@ protocol TableviewTap {
 	func showIntroPageDayView()
 	/// Show intro page in week view.
 	func showIntroPageWeekView()
+	/// Delagate when filter pressed.
+	func btnFilterPressed(page: Int)
 }
 
 protocol BarChartViewDelegate {
@@ -49,7 +51,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	/// Delegate to intaract daily and week view.
 	var delegateChart: BarChartViewDelegate?
 	/// Delegate when table cell tapped.
-    var delegate: TableviewTap?
+    var delegate: ActivityViewDelagate?
 	
 	/// To store week details.(week number, total work in week, etc)
     var arrWeekDetails: Array<WeekDetails>!
@@ -79,6 +81,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	var indexSelDate = 0
 	/// Label to show no data.
 	var lblNoData: UILabel!
+	/// Display selected project, if filter applied.
+	var arrSelectedProj: Array<Int>?
 	
 	@IBOutlet weak var nsLBarViewHeight: NSLayoutConstraint!
 	@IBOutlet weak var btnLeftMove: UIButton!
@@ -89,7 +93,9 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
     @IBOutlet weak var tblActivities: UITableView!
     @IBOutlet var barChartView: UIView!
 	@IBOutlet weak var calendarView: CalendarView!
-
+	@IBOutlet weak var btnFilter: UIButton!
+	@IBOutlet weak var viewFilterIndicator: UIView!
+	
 	override func awakeFromNib() {
         super.awakeFromNib()
 		punchInOutCDCtrlr = PunchInOutCDController()
@@ -111,6 +117,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		tblActivities.backgroundColor = g_colorMode.defaultColor()
 		lblDate.textColor = g_colorMode.textColor()
 		lblTotalHr.textColor = g_colorMode.textColor()
+		viewFilterIndicator.backgroundColor = g_colorMode.midColor()
     }
 	
 	/// Update colors (If display mode changed.. Call this function)
@@ -188,7 +195,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 				let totWork = mothDetails.totalWork
 				let strTotWork = getSecondsToHoursMinutesSeconds(seconds: totWork)
 				lblTotalHr.text = "Duration: \(strTotWork)"
-				arrCTaskDetails = tasksCDCtrlr.getDataFromDate(arrDate: arrIntDate)
+				arrCTaskDetails = tasksCDCtrlr.getDataFromDate(arrDate: arrIntDate
+					, arrProj: arrSelectedProj)
 				nCell = arrCTaskDetails.count
 			}
 			else {
@@ -475,9 +483,26 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		arrBtnsDayTask.removeAll()
 		arrIntDate = tasksTimeCDCtrlr.getAllDates() // get all dates task timings.
 		
+		// Get total time excluding overlaped tasks time.
+		var totalTime = 0
+		
 		if arrIntDate.count > 0 && arrIntDate.count > indexSelDate {
-			arrCTaskTimeDetails = tasksCDCtrlr.getEachTaskTimeDataFromDate(intDate:
-				arrIntDate[indexSelDate])
+			// If filter applied.
+			if nil != arrSelectedProj {
+				arrCTaskTimeDetails = tasksCDCtrlr.getEachTaskTimeDataFromDate(intDate:
+					arrIntDate[indexSelDate], arrProj: arrSelectedProj!)
+				
+				totalTime = tasksTimeCDCtrlr.getTotalWorkTime(intDate: arrIntDate[indexSelDate]
+					, arrProj: arrSelectedProj!)
+				viewFilterIndicator.isHidden = false
+			}
+			else {
+				arrCTaskTimeDetails = tasksCDCtrlr.getEachTaskTimeDataFromDate(intDate:
+					arrIntDate[indexSelDate])
+				totalTime = tasksTimeCDCtrlr.getTotalWorkTime(intDate: arrIntDate[indexSelDate])
+				viewFilterIndicator.isHidden = true
+			}
+			
 			nCell = arrCTaskTimeDetails.count
 			tblActivities.reloadDataWithAnimation()
 			drawDayDetailsGraph()
@@ -485,8 +510,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			let strDate = Date().getStrDate(from: arrIntDate[indexSelDate]) // Initial setup for current date.
 			lblDate.text = getDayWeekMonthInString(strDate: strDate)
 			
-			// Get total time excluding overlaped tasks time.
-			let totalTime = tasksTimeCDCtrlr.getTotalWorkTime(intDate: arrIntDate[indexSelDate])
+			
 			lblTotalHr.text = """
 			Duration: \(getSecondsToHoursMinutesSeconds(seconds: totalTime))
 			"""
@@ -502,14 +526,22 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	
 	/// Setup week activity view.
 	func setupWeekView() {
-		arrWeekDetails = tasksCDCtrlr.getWeekWiseDetails() // Get week information.
+		if nil == arrSelectedProj {
+			viewFilterIndicator.isHidden = true
+		}
+		else {
+			viewFilterIndicator.isHidden = false
+		}
+		// Get week information.
+		arrWeekDetails = tasksCDCtrlr.getWeekWiseDetails(arrProj: arrSelectedProj)
 		arrIntDate = tasksTimeCDCtrlr.getAllDates() // get all dates task timings.
 		if arrWeekDetails.count > 0 {
 			// Setup tableview.
 //			arrWeekDetails = tasksCDCtrlr.getWeekWiseDetails()
 			let weekDetails = arrWeekDetails[nWeek]
 			arrIntDate = weekDetails.arrDates // Value in timesince1970
-			arrCTaskDetails = tasksCDCtrlr.getDataFromDate(arrDate: arrIntDate)
+			arrCTaskDetails = tasksCDCtrlr.getDataFromDate(arrDate: arrIntDate
+				, arrProj: arrSelectedProj)
 			nCell = arrCTaskDetails.count
 			tblActivities.reloadDataWithAnimation()
 			
@@ -522,11 +554,13 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			for intDate in arrIntDate {
 				// Draw button for all seven days in a view based on total work time in a day.
 				let strDate = Date().getStrDate(from: intDate)
-				let totalWork = CGFloat(tasksTimeCDCtrlr.getTotalWorkTime(intDate: intDate))
+				let totalWork = CGFloat(tasksTimeCDCtrlr.getTotalWorkTime(intDate: intDate
+					, arrProj: arrSelectedProj))
 				let day = getDayNumber(strDate: strDate)
 					
 				// Get ratio of each project work.
-				let dictRatio = tasksTimeCDCtrlr.getTaskRatioBasedOnProject(intDate: intDate)
+				let dictRatio = tasksTimeCDCtrlr.getTaskRatioBasedOnProject(intDate: intDate
+					, arrProj: arrSelectedProj)
 				// Sort project id's
 				let sortedProjId = Array(dictRatio.keys).sorted(by: <)
 				
@@ -594,7 +628,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			barChartView.drawXAxisForWeek(start: startPoint, toPoint: endPoint, ofColor: .lightGray,
 										  lineWidth: 1.0)
 			
-			arrWeekDetails = tasksCDCtrlr.getWeekWiseDetails() // Get week information.
+			arrWeekDetails = tasksCDCtrlr.getWeekWiseDetails(arrProj: arrSelectedProj) // Get week information.
 			arrBtnWeekView = []
 			
 			let width = endPoint.x - startPoint.x // Total width of x-axis.
@@ -632,7 +666,10 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	
 	/// To update month data source.
 	func updateMonthDataSource() {
-		arrDictMonthData = tasksCDCtrlr.getMonthWiseDetails()
+		arrDictMonthData = tasksCDCtrlr.getMonthWiseDetails(arrProj: arrSelectedProj)
+		if nil != arrSelectedProj {
+			calendarView.selectedProjects = arrSelectedProj!
+		}
 		for monthDetails in arrDictMonthData {
 			// arrDate contains all working days date in month.
 			let arrDate = monthDetails.arrStrDates
@@ -643,10 +680,17 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 				calendarView.selectDate(date)
 			}
 		}
+		calendarView.bIsUserTap = true
 	}
 	
 	// Setup month view.
 	func setupMonthView() {
+		if nil == arrSelectedProj {
+			viewFilterIndicator.isHidden = true
+		}
+		else {
+			viewFilterIndicator.isHidden = false
+		}
 		if arrDictMonthData.count > 0 && arrDictMonthData.count > nSelectedIndexMonth
 			, let mothDetails = arrDictMonthData?[nSelectedIndexMonth] {
 			// Display inforamation about a month.
@@ -654,7 +698,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			let totWork = mothDetails.totalWork
 			let strTotWork = getSecondsToHoursMinutesSeconds(seconds: totWork)
 			lblTotalHr.text = "Duration: \(strTotWork)"
-			arrCTaskDetails = tasksCDCtrlr.getDataFromDate(arrDate: arrIntDate)
+			arrCTaskDetails = tasksCDCtrlr
+				.getDataFromDate(arrDate: arrIntDate, arrProj: arrSelectedProj)
 			nCell = arrCTaskDetails.count
 			tblActivities.reloadDataWithAnimation()
 		}
@@ -966,10 +1011,10 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			}
 			else {
 				// Show intro page week view. (If first installation/reset intro page)
-				if false == UserDefaults.standard.value(forKey: "IntroStatusWeekLeft")
-					as? Bool ?? false {
-					delegate?.showIntroPageWeekView()
-				}
+//				if false == UserDefaults.standard.value(forKey: "IntroStatusWeekLeft")
+//					as? Bool ?? false {
+//					delegate?.showIntroPageWeekView()
+//				}
 			}
 			if nWeek <= 0 {
 				btnRightMove.alpha = 0.1
@@ -1006,6 +1051,10 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			// Move to next month.
 			calendarView.goToNextMonth()
 		}
+	}
+	
+	@IBAction func btnFilterPressed(_ sender: Any) {
+		delegate?.btnFilterPressed(page: self.nSliderView)
 	}
 	
 	/// Set button height to zero.
