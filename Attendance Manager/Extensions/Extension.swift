@@ -168,24 +168,6 @@ extension UIButton {
     }
 }
 
-extension UITableView {
-    /// Rounded corners to table view
-    ///
-    /// - parameters:
-    ///   - corners: Specify UIRectCorners to add rounded corner.
-    ///   - radius: Corner radius.
-    public func roundCorners(corners: UIRectCorner, radius: CGFloat){
-        if #available(iOS 11.0, *) {
-            clipsToBounds = true
-            layer.cornerRadius = radius
-            layer.maskedCorners = CACornerMask(rawValue: corners.rawValue)
-        } else {
-            layer.cornerRadius = 35
-            layer.masksToBounds = true
-        }
-    }
-}
-
 extension UILabel {
     /// Animation while changing the font size.
     public func animateToFont(_ font: UIFont, withDuration duration: TimeInterval) {
@@ -399,6 +381,22 @@ extension UIView {
         border.borderWidth = borderWidth
         self.layer.addSublayer(border)
         self.layer.masksToBounds = false
+    }
+    
+    /// Rounded corners to table view
+    ///
+    /// - parameters:
+    ///   - corners: Specify UIRectCorners to add rounded corner.
+    ///   - radius: Corner radius.
+    public func roundCorners(corners: UIRectCorner, radius: CGFloat){
+        if #available(iOS 11.0, *) {
+            clipsToBounds = true
+            layer.cornerRadius = radius
+            layer.maskedCorners = CACornerMask(rawValue: corners.rawValue)
+        } else {
+            layer.cornerRadius = 35
+            layer.masksToBounds = true
+        }
     }
 }
 

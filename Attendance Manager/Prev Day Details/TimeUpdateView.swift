@@ -76,7 +76,7 @@ class TimeUpdateView: UIView {
         cgRect = CGRect(x: 20, y: lblHeader.frame.maxY, width: screenBounds.width-40, height: 90)
         lblDesc = UILabel(frame: cgRect)
         lblDesc.font = lblHeader.font.withSize(18)
-        lblDesc.numberOfLines = 2
+        lblDesc.numberOfLines = 3
         lblDesc.textColor = g_colorMode.textColor()
         viewContainer.addSubview(lblDesc)
         
@@ -234,9 +234,10 @@ class TimeUpdateView: UIView {
                     
                     // Update end time in core data.
                     let taskTimeCDTrlr = TasksTimeCDController()
-                    let strTime = date.getStrTime()
-                    taskTimeCDTrlr.updateDateTimings(timeId: self.timeId, date: strTime, startTime: getSecondCountFormat2(strTime: self.startTime), endTime: getTimeInSec()
-                        , descr: "")
+                    let date = date.getStrDate()
+                    taskTimeCDTrlr.updateDateTimings(timeId: self.timeId, date: date
+                        , startTime: getSecondCountFormat2(strTime: self.startTime)
+                        , endTime: getTimeInSec(), descr: "")
 
                     self.completionHandler()
                     self.removeFromSuperview()

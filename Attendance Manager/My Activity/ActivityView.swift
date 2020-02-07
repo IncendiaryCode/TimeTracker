@@ -277,6 +277,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 				task2.strDate)
 		}
 		
+		var delay = 0.0
 		for cTaskDetails in arrReverseSort {
 			let startTime = cTaskDetails.nStartTime!
 			let endTime = cTaskDetails.nEndTime!
@@ -329,9 +330,11 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			self.addSubview(arrBtnsDayTask.last!)
 			
 			let cgSize = CGSize(width: (endX-startX), height: 20)
-			UIView.animate(withDuration: 0.5){
+			// Animate day graph.
+			UIView.animate(withDuration: 0.5, delay: delay, options: [], animations: {
 				self.arrBtnsDayTask.last!.frame.size = cgSize
-			}
+			})
+			delay += 0.2
 			i += 1
 			
 			// Update graph height.
@@ -551,7 +554,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			let week = weekDetails.weeknumber
 			lblDate.text = getStartAndEndDateFromWeekNumber(weekOfYear: week!)
 			
-			for intDate in arrIntDate {
+			var delay = 0.0
+			for intDate in arrIntDate.reversed() {
 				// Draw button for all seven days in a view based on total work time in a day.
 				let strDate = Date().getStrDate(from: intDate)
 				let totalWork = CGFloat(tasksTimeCDCtrlr.getTotalWorkTime(intDate: intDate
@@ -582,9 +586,10 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 				// value 70 : Drawing x axis labels height and upper remaining heights.
 				let height: CGFloat = CGFloat(totalWork * diff) / CGFloat(43200)
 				// Animate frame setup.
-				UIView.animate(withDuration: 0.5) {
+				UIView.animate(withDuration: 0.5, delay: delay, options: [], animations: {
 					self.arrBtnWeekView[day-1].height = -height
-				}
+				})
+				delay += 0.2
 			}
 		}
 		else {

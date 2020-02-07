@@ -313,7 +313,7 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         }
         else {
             let notifiaction = InAppNotificationView()
-            notifiaction.sendNotification(msg: "No response")
+            notifiaction.sendNotification(msg: "Not saved..! This feature coming soon!")
             notifiaction.addGradient()
             self.view.addSubview(notifiaction)
         }

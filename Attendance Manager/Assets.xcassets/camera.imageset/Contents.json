@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "kisspng-video-cameras-logo-photography-clip-art-camera-5ac987b1bb7898.3528106715231569137679.png",
+      "filename" : "camera.png",
       "scale" : "1x"
     },
     {
@@ -17,5 +17,8 @@
   "info" : {
     "version" : 1,
     "author" : "xcode"
+  },
+  "properties" : {
+    "localizable" : true
   }
 }

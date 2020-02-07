@@ -285,8 +285,9 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                         , taskName: taskName, taskId: taskTimings.taskId!
                         , timeId: taskTimings.timeId, type: .task)
                     
-                    // If it is a last index update add completion handler.
-                    if i == arrTaskTimings.count - 1 {
+                    // If it is a last index update add completion handler.(bottom most in executes
+                    // last.)
+                    if i == 0 {
                         viewTimeAdder.completionHandler = {
                             self.updateProject()
                         }
