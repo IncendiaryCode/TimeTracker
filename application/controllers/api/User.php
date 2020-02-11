@@ -141,8 +141,9 @@ class User extends REST_Controller {
               {
                 
                 $image_base64 = $post['image_data'];//base64_decode($post['image_data']);
-                $image_data = explode(',', $image_base64);
-                $content = base64_decode($image_data[1]);
+                /*$image_data = explode(',', $image_base64);
+                $content = base64_decode($image_data[1]);*/
+                $content = base64_decode($image_base64);
                 $filename = uniqid() . '.png';
                 $file = USER_UPLOAD_PATH . $filename;
                 file_put_contents($file, $content);
