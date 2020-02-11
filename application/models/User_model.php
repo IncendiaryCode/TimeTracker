@@ -1437,5 +1437,20 @@ class User_model extends CI_Model {
             return false;
         }
     }
+
+    public function get_user_details($userid){
+
+        $this->db->select('name,phone,profile');
+        $this->db->from('users');
+        $this->db->where('id',$userid);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            $data = $query->row_array();
+            $data['profile_pic'] = base_url().USER_UPLOAD_PATH.$data['profile'];
+            return $data;
+        }else{
+            return false;
+        }
+    }
 }
 ?>

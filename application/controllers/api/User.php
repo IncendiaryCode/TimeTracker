@@ -181,4 +181,32 @@ class User extends REST_Controller {
             $this->response($verify_data, REST_Controller::HTTP_OK);
         }
      }
+
+     public function fetch_profile_post(){
+        $headers = $this->input->request_headers();
+        $verify_data = $this->verify->verify_request($headers);
+        if(isset($verify_data->username))
+        {
+          $post = $this->input->post();
+          if(!empty($post['userid']))
+          {
+              $user_data = $this->user_model->get_user_details($post['userid']);
+              if($data !== false){
+                $data['success'] = 1;
+                $data['details'] = $user_data;
+                $this->response($data, REST_Controller::HTTP_OK);
+              }else{
+                $data['success'] = 0;
+                $data['msg'] = 'Failed to fetch!';
+                $this->response($data, parent::HTTP_NOT_FOUND);
+              }
+          }else{
+                $data['success'] = 0;
+                $data['msg'] = 'Fields are invalid!';
+                $this->response($data, parent::HTTP_NOT_FOUND);
+            }
+        }else{
+            $this->response($verify_data, REST_Controller::HTTP_OK);
+        }
+     }
 }
