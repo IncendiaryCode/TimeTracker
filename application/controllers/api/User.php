@@ -129,4 +129,55 @@ class User extends REST_Controller {
       }
     }
 
+     public function edit_profile_post(){
+      $headers = $this->input->request_headers();
+      $verify_data = $this->verify->verify_request($headers);
+      if(isset($verify_data->username))
+      {
+           $post = $this->input->post();
+           if(!empty($post['userid']))
+           {
+              if(isset($post['image_data']) && !empty($post['image_data']))
+              {
+                
+                $image_base64 = $post['image_data'];//base64_decode($post['image_data']);
+                $image_data = explode(',', $image_base64);
+                $content = base64_decode($image_data[1]);
+                $filename = uniqid() . '.png';
+                $file = USER_UPLOAD_PATH . $filename;
+                file_put_contents($file, $content);
+                $user_data['profile'] = $filename;
+              }
+              if(isset($post['name']) && !empty($post['name']))
+              {
+                $user_data['name'] = $post['name'];
+              }
+              if(isset($post['phone']) && !empty($post['phone']))
+              {
+                $user_data['phone'] = $post['phone'];
+              }
+              if(count($user_data) > 0)
+              {
+                $user_data['modified_on'] = date('Y-m-d H:i:s');
+              }
+              $result = $this->user_model->update_user_details($post['userid'],$user_data);
+              if($result){
+                $data['success'] = 1;
+                $data['msg'] = 'User Profile updated successfully!';
+                $this->response($data, REST_Controller::HTTP_OK);
+              }else{
+                $data['success'] = 0;
+                $data['msg'] = 'User Profile update failed!';
+                $this->response($data, parent::HTTP_NOT_FOUND);
+              }
+           }else{
+                $data['success'] = 0;
+                $data['msg'] = 'Fields are invalid!';
+                $this->response($data, parent::HTTP_NOT_FOUND);
+            }
+           
+        }else{
+            $this->response($verify_data, REST_Controller::HTTP_OK);
+        }
+     }
 }

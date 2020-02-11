@@ -1427,5 +1427,15 @@ class User_model extends CI_Model {
             return FALSE;
         }
     }
+
+    public function update_user_details($userid,$data){
+        $this->db->where(array('id' => $userid));
+        $query = $this->db->update('users',$data);
+        if ($query) {
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
 ?>
