@@ -191,7 +191,7 @@ class User extends REST_Controller {
           if(!empty($post['userid']))
           {
               $user_data = $this->user_model->get_user_details($post['userid']);
-              if($data !== false){
+              if($user_data !== false){
                 $data['success'] = 1;
                 $data['details'] = $user_data;
                 $this->response($data, REST_Controller::HTTP_OK);
