@@ -28,24 +28,13 @@ $this->load->helper('url_helper');
                 <?php } ?>
             </div>
             </div>
-
-                <!-- <div class="col-12 mt-5">
-                    <form method="post" action="<?=base_url();?>index.php/user/dark" id="dark-mode">
-                        <div class="dropdown text-right" id="dropdown-recent-acts">
-                            <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
-                                <div class="dropdown-item checkbox"><input type="hidden" name="status" id="hidden-status"><input type="checkbox" id="dark-mode-checkbox" name="dark-mode"> Dark mode</div>
-                            </div>
-                        </div>
-                    </form>
-                </div> -->
                 <form method="post" action="<?= base_url(); ?>user/edit_profile" id="edit-profile">
-                    <div class="row pt-5">
+                    <div class="row pt-5 pb-5">
                         <div class="col-md-2 offset-md-2 col-6 offset-3 text-center">
                             <img src="<?=base_url().USER_UPLOAD_PATH.$res['profile'];?>"  class="rounded-circle text-center" width="200px;" height="200px;">
                             <div class="edit">
                                 <div class="img-icon">
-                                    <a href="#" class="text-white"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#changeimage"></i></a>
+                                    <a href="#" class="text-white m-0"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#changeimage"></i></a>
                                 </div>
                             </div>
                             
@@ -72,26 +61,25 @@ $this->load->helper('url_helper');
                                 <div class="col-8 pt-3">
                                         <input type="text" class="form-control-file  border-top-0 border-left-0 border-right-0" name="profile-ph" id="profile-ph" value = "<?php echo ($res['phone'] != 0)?$res['phone']:'';?>">
                                 </div>
-                                <div class="col-4">
-                                    <a href="<?=base_url();?>index.php/user/change_password">Change password</a>
+                                <div class="col-4 pt-3">
+                                    <a class=" m-0" href="<?=base_url();?>index.php/user/change_password">Change password</a>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-6 pt-3">
                                     <p id="profile-error" class="text-danger"></p>  
                                 </div>
-                                <div class="col-2">
+                                <div class="col-2 pt-3">
                                     <button type="submit" class="btn btn-primary login-color" id="save-profile">Save</button>
                                 </div>
                             </div>                               
                             </div>
                     </div>
                 </form>
-            
             <hr>
             <div class="row shadow-lg">
                 <div class="col-6 col-md-4 offset-md-2">
                     <div class="card user-card ">
                         <div class="card-body">
-                            <h1 class="text-center mt-4"><?php echo round($res['t_minutes'], 0);?></h1>
+                            <h1 class="text-center mt-4"><?php echo round($res['t_minutes'], 0);?><span>h</span></h1>
                             <p class="text-center">Total working hours for this month</p>
                         </div>
                     </div>
@@ -100,7 +88,7 @@ $this->load->helper('url_helper');
                 <div class="col-5 col-md-4 ">
                     <div class="card user-card ">
                         <div class="card-body">
-                            <h1 class="text-center mt-4"><?php echo round($res['total_time'], 0);?></h1>
+                            <h1 class="text-center mt-4"><?php echo round($res['total_time'], 0);?><span>h</span></h1>
                             <p class="text-center">Total working hours</p>
                         </div>
                     </div>
@@ -111,7 +99,13 @@ $this->load->helper('url_helper');
                     <div class="row">
                     <div class="text-right input-group col-md-3 offset-md-9 pt-4 ">
                         <!-- chart that shows monthly activities -->
-                        <input type="number" class="" id="year-chart">
+                        
+                        <div class="input-group mb-3">
+                            <input type="year" class="year-chart" id="year-chart" max =<?=date('YYYY');?>>
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 </div>

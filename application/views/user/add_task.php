@@ -25,12 +25,27 @@ if ($this->input->get('t_id')) { ?>
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-
                     <?php } ?>
                     <?php if (!empty($this->session->flashdata('success'))) { ?>
                         <div class="alert alert-success mb-5">
                             <?php echo (!empty($this->session->flashdata('success'))) ? $this->session->flashdata('success') : ''; ?>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <?php } ?>
+                    <?php if(!empty($this->session->flashdata('date_failure'))) { ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                           <?php echo (!empty($this->session->flashdata('date_failure'))) ? $this->session->flashdata('date_failure') : ''; ?>
+                           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <?php } ?>
+                    <?php if(!empty($this->session->flashdata('start_end'))) { ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                           <?php echo (!empty($this->session->flashdata('start_end'))) ? $this->session->flashdata('start_end') : ''; ?>
+                           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -157,28 +172,29 @@ if ($this->input->get('t_id')) { ?>
                                                                 <input type="text" class="date-utc form-control timepicker-<?= $tnum + 1 ?>" id="end-time-<?= $key ?>" name="time[<?= $key ?>][end]" value="<?= $end ?>" placeholder="hh:mm">
                                                             </div>
                                                         </div>
-                                                        <div class="col-10 text-center mb-3">
+                                                        <div class="col-md-11 col-10 text-center mb-3">
                                                             <input type="text" class="form-control" id="description-<?= $key ?>" name="time[<?= $key ?>][task_description]" value="<?= $task['task_description']; ?>" placeholder="Description">
                                                             <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= $key ?>][table_id]" id="table_id<?= $key ?>">
                                                         </div>
-                                                        <div class="col-2 text-right mb-3">
-                                                            <?php if ($key == sizeof($timeline_data) - 1) { ?>
-                                                                <a href="javascript:void(0);" id="add-new-time" title="Add">
-                                                                    <i class="fas fa-plus p-2 icon-plus"></i>
-                                                                </a>
-                                                            <?php } else { ?>
-                                                                <a href="javascript:void(0);" id="delete-task-<?= $key ?>" class="delete-task">
-                                                                    <i class="fas fa-minus text-white pt-2 icon-plus" name="time[<?= $key ?>][deleted_time_range]">
-                                                                        <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= $key ?>][table_id]" id="table_id<?= $key ?>">
-                                                                    </i>
-                                                                </a>
-                                                            <?php } ?>
+                                                        <div class="col-md-1 col-2 text-center mb-3">
+                                                            <a href="javascript:void(0);" class="ml-0 delete-task" id="delete-task-<?= $key ?>">
+                                                                <i class="fas fa-minus text-white pt-2 icon-plus" name="time[<?= $key ?>][deleted_time_range]">
+                                                                    <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= $key ?>][table_id]" id="table_id<?= $key ?>">
+                                                                </i>
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             <?php $tnum = $tnum + 2;
                                             } ?>
                                         </div>
+                                        <?php if ($this->input->get('t_id')) { ?>
+                                            <div class="text-right pr-2">
+                                                <a href="javascript:void(0);" class="ml-0" id="add-new-time" title="Add">
+                                                    <i class="fas fa-plus icon-plus"></i>
+                                                </a>
+                                            </div>
+                                        <?php } ?>
                                     </div>
                                     <!-- END: Add time  -->
                                 <?php
@@ -207,12 +223,12 @@ if ($this->input->get('t_id')) { ?>
                                                         <input id="end-time-0" class="date-utc form-control timepicker-b" name="time[0][end]" placeholder="hh:mm" />
                                                     </div>
                                                 </div>
-                                                <div class="col-10 text-center">
+                                                <div class="col-10 col-md-11 text-center">
                                                     <input id="description-0" class="form-control" name="time[0][task_description]" placeholder="description" />
                                                 </div>
 
-                                                <div class="col-2 text-center">
-                                                    <a href="javascript:void(0);" id="add-new-time" title="Add">
+                                                <div class="col-2 col-md-1 text-center">
+                                                    <a href="javascript:void(0);"  class="ml-0" id="add-new-time" title="Add">
                                                         <i class="fas fa-plus pt-2 icon-plus"></i>
                                                     </a>
                                                 </div>

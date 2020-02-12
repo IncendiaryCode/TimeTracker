@@ -2,7 +2,6 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 //Login timer
 $this->load->helper('date');
-// print_r($task_info);
 if (isset($task_info['login_status'])) {
     $login_time = $task_info['login_status']['start_time'];
     $login_time_display = date('g:i A', strtotime($task_info['login_status']['start_time']));
@@ -88,9 +87,6 @@ if (!empty($task_info['login_run'])) { ?>
                         $timer_start = $datetime2->getTimestamp();
                         $task_start = strtotime($timer);
                         $task_id = $taskinfo['task_id'];
-                        /*$offset_min = ((date('Z')) / 60);
-                        $local_time_min = ((substr($taskinfo['start_time'], 11, 2) * 60) + (substr($taskinfo['start_time'], 14, 2))) + $offset_min;
-                        $local_time = round(($local_time_min / 60), 0) . ':' . ($local_time_min % 60);*/
                 ?>
                         <div id="slider<?= $task_id ?>">
                             <!-- slider for all task -->
@@ -121,39 +117,72 @@ if (!empty($task_info['login_run'])) { ?>
             <h2><i id="icon-for-task" class="fas action-icon <?= $timerClass ?>"></i></h2>
         </div>
         <div class="container">
-            <?php /* if (!empty($task_info['task_status'])) {
-                $first_dislpay = 0;
-                foreach ($task_info['task_status'] as $taskinfo) {
-                    $today_date = date("Y-m-d");
-                    $task_date = substr($taskinfo['start_time'], 0, 10);
-                    if (strcmp($today_date, $task_date) != 0) {
-                        if ($first_dislpay != 1) {
-                            $first_dislpay = 1;
-            ?>
-            <?php }
-                    }
-                }
-            } */ ?>            
             <div class="row mb-3 pt-2">
                 <div class="col-6">
                     <h5 class="font-weight-light text-left recent-activites">Recent Activities</h5>
                 </div>
-                <div class="col-6">
-                    <div class="dropdown text-right" id="dropdown-recent-acts">
-                        <i class="fas fa-sliders-h sorting-icon" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
-                            <!-- sorting options -->
-                            <a class="dropdown-item" href="#" data-type="name">Task name</a>
-                            <a class="dropdown-item" href="#" data-type="date">Created date</a>
-                            <a class="dropdown-submenu" href="#">
-                              <a href="#" role="button" data-toggle="dropdown" class="dropdown-item dropdown-toggle">Projects</a>
-                              <ul class="dropdown-menu" id="append-prj-names">
-                                <!-- <li><a href="#" class="dropdown-item">level 3</a></li>
-                                <li><a href="#" class="dropdown-item">level 3</a></li> -->
-
-                              </ul>
+                <div class="col-6">                
+                    <ul class="nav float-right">
+                        <li class="nav-item" id="clear-filter">
+                            <a class="nav-link" href="#"><i class="far fa-times-circle"></i> Clear filter</a>
+                        </li>                        
+                        <li class="nav-item">
+                            <a class="nav-link" id="action-filter" href="#navbarToggleExternalContent" data-toggle="collapse" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle Filter">
+                                <i class="fas fa-sliders-h"></i>
                             </a>
-
+                        </li>
+                    </ul>                    
+                </div>
+                <div class="col-12">
+                        <div class="collapse" id="navbarToggleExternalContent">
+                            <div class="bg-light- p-4">
+                                <form action="#" id="dashboard-filter">
+                                    <div class="row">
+                                        <div class="col-4" id="sorting">
+                                            <h5 class="pb-2">Sort by</h5>
+                                            <div class="form-check">
+                                                <input class="form-check-input" data-type="name" type="radio" name="exampleRadios" id="exampleRadios1" value="date" checked>
+                                                <label class="form-check-label" for="exampleRadios1">
+                                                    Date
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" data-type="name" type="radio" name="exampleRadios" id="exampleRadios1" value="task">
+                                                <label class="form-check-label" for="exampleRadios1">
+                                                    Task
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" data-type="project" type="radio" name="exampleRadios" id="exampleRadios2" value="project">
+                                                <label class="form-check-label" for="exampleRadios2">
+                                                    Project
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" data-type="duration" type="radio" name="exampleRadios" id="exampleRadios3" value="duration">
+                                                <label class="form-check-label" for="exampleRadios3">
+                                                    Duration
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-4" id="filtering">
+                                            <h5 class="pb-2">Filter by</h5>
+                                            <?php
+                                                for($p=0; $p<sizeof($project_list); $p++) { ?>                                            
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox">
+                                                    <input type="hidden" value=<?=$project_list[$p]['id'] ?>>
+                                                    <label class="form-check-label" for="defaultCheck1">
+                                                    <?=$project_list[$p]['name'] ?>
+                                                    </label>
+                                                </div>
+                                            <?php } ?>
+                                        </div>
+                                        <div class="col-4 text-right">
+                                            <button type="submit" class="btn btn-primary">Apply </button>
+                                        </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -254,7 +283,7 @@ if (!empty($task_info['login_run'])) { ?>
                                 <?php  } ?>
                             
                                 <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
-                                <input class="check-for-utc form-control timerpicker-stop-now" type="text" name="time" id="punchout-time" placeholder="End time">
+                                <input class="check-for-utc form-control timerpicker-stop-now" type="text" name="time" id="punchout-time" placeholder="HH:MM">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>

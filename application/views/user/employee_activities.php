@@ -9,30 +9,30 @@
                 <div class="au-card-title pt-5">
                     <ul class="nav nav-tabs" id="chart-navigation" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="daily-view-tab" data-toggle="tab" href="#daily-view" role="tab" aria-controls="daily-view" aria-selected="true">Daily</a>
+                            <a class="nav-link active text-center" id="daily-view-tab" data-toggle="tab" href="#daily-view" role="tab" aria-controls="daily-view" aria-selected="true">Daily</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="weekly-view-tab" data-toggle="tab" href="#weekly-view" role="tab" aria-controls="weekly-view" aria-selected="false">Weekly</a>
+                            <a class="nav-link text-center" id="weekly-view-tab" data-toggle="tab" href="#weekly-view" role="tab" aria-controls="weekly-view" aria-selected="false">Weekly</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="monthly-view-tab" data-toggle="tab" href="#monthly-view" role="tab" aria-controls="monthly-view" aria-selected="false">Monthly</a>
+                            <a class="nav-link text-center" id="monthly-view-tab" data-toggle="tab" href="#monthly-view" role="tab" aria-controls="monthly-view" aria-selected="false">Monthly</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="daily-view" role="tabpanel" aria-labelledby="daily-view-tab">
                             <div class="daily-chart">
                                 <div class="row mt-5">
-                                    <div class="col-3 text-center">
-                                        <a href="#" id="previous-date"><h1 ><i class="fas fa-angle-left"></i></h1></a>
+                                    <div class="col-3 text-right">
+                                        <a href="#" class="arrow-style" id="previous-date"><i class="fas fa-angle-left"></i></a>
                                     </div>
-                                    <div class="col-6 text-center">
+                                    <div class="col-6 text-center pl-md-5">
                                         <h5 id="current-date"></h5>
                                         <h6 class="mt-3 mb-1">Duration</h6>
-                                        <input type="hidden" class="form-control- edit-date" id="daily-chart" data-date-format="YYYY-mm-DD ">
+                                        <input type="hidden" class="edit-date" id="daily-chart" data-date-format="YYYY-mm-DD ">
                                         <h4 id="daily-duration">00:00</h4>
                                     </div>
-                                    <div class="col-3 text-center">
-                                        <a href="#" id="next-date"><h1><i class="fas fa-angle-right"></i></h1></a>
+                                    <div class="col-3 text-left">
+                                        <a href="#" class="arrow-style" id="next-date"><i class="fas fa-angle-right"></i></a>
                                     </div>
                                     <div class="col-12">
                                         <p class="task-detail" id="task-detail"></p>
@@ -61,62 +61,43 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="weekly-view" role="tabpanel" aria-labelledby="weekly-view-tab">
-                            <div class="daily-chart">
+                            <div class="daily-chart text-center">
                                 <div class="row mt-5">
-                                    <div class="col-3 text-center">
-                                        <a href="#" id="previous-week"><h1 ><i class="fas fa-angle-left"></i></h1></a>
+                                    <div class="col-3 text-right">
+                                        <a href="#" class="arrow-style" id="previous-week"><i class=" fas fa-angle-left"></i></a>
                                     </div>
-                                    <div class="col-6 text-center">
+                                    <div class="col-6 pl-md-5">
                                         <h5 id="current-week"></h5>
                                         <h6 class="mt-3 mb-1">Duration</h6>
                                         <h4 id="weekly-duration">35:12</h4>
                                         <input type="text" class="form-control " id="weekly-chart">
                                     </div>
-                                    <div class="col-3 text-center">
-                                        <a href="#" id="next-week"><h1><i class="fas fa-angle-right"></i></h1></a>
+                                    <div class="col-3 text-left">
+                                        <a href="#" class="arrow-style" id="next-week"><i class="fas fa-angle-right"></i></a>
                                     </div>
                                 </div>
-                                <p id="week-error"class="text-center"></p>
+                                <p id="week-error"></p>
                                 <canvas id="weekly" class="offset-2 col-8"></canvas>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="monthly-view" role="tabpanel" aria-labelledby="monthly-view-tab">
-                            <!-- <div class="monthly-chart">
-                                <div class="row mt-5">
-                                    <div class="col-3 text-center">
-                                        <a href="#" id="previous-year"><h1 ><i class="fas fa-angle-left"></i></h1></a>
-                                    </div>
-                                    <div class="col-6 text-center">
-                                        <h5 id="current-year"></h5>
-                                        <h6 class="mt-3 mb-1">Duration</h6>
-                                        <h4 id="monthly-duration">135:12</h4>
-                                        <input type="number" class="form-control" id="monthly-chart">
-                                    </div>
-                                    <div class="col-3 text-center">
-                                        <a href="#" id="next-year"><h1><i class="fas fa-angle-right"></i></h1></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pl-2" id="calendar_basic"></div><p class="text-center" id="monthly-chart-error"></p> -->
-
-
                             <div class="monthly-chart">
                                 <div class="row mt-5">
-                                    <div class="col-3 text-center">
-                                        <a href="javascript:previous()" id="previous-year"><h1 ><i class="fas fa-angle-left"></i></h1></a>
+                                    <div class="col-3 text-right">
+                                        <a href="javascript:previous()" class="arrow-style" id="previous-year"><i class="fas fa-angle-left"></i></a>
                                     </div>
-                                    <div class="col-6 text-center">
+                                    <div class="col-6 text-center pl-md-5">
                                         <h5 id="current-year"></h5>
                                         <h6 class="mt-3 mb-1">Duration</h6>
                                         <h4 id="monthly-duration"></h4>
                                         <input type="hidden" class="form-control" id="monthly-chart">
                                     </div>
-                                    <div class="col-3 text-center">
-                                        <a href="javascript:next()" id="next-year"><h1><i class="fas fa-angle-right"></i></h1></a>
+                                    <div class="col-3 text-left">
+                                        <a href="javascript:next()" class="arrow-style" id="next-year"><i class="fas fa-angle-right"></i></a>
                                     </div>
                                     <div class="col-md-8 offset-md-2 mt-4">
                                         <div class="card">
-                                        <table class="table table-bordered- text-center table-dark" id="calendar">
+                                        <table class="table text-center" id="calendar">
                                             <thead>
                                             <tr>
                                                 <th>Sun</th>
@@ -128,7 +109,7 @@
                                                 <th>Sat</th>
                                             </tr>
                                             </thead>
-                                            <tbody id="calendar-body" class="">
+                                            <tbody id="calendar-body">
                                             </tbody>
                                         </table>
                                         </div>
@@ -152,7 +133,7 @@
         </div>
         <div>
         <footer class="footer">
-            <p class="text-center pt-2 ">Copyright © 2020 Printgreener.com</p>
+            <p class="text-center pt-2 ">Copyright © <?=date("Y") ?> Printgreener.com</p>
         </footer>
     </div>
 </main>

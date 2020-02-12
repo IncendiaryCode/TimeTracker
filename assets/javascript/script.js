@@ -190,6 +190,7 @@ function sendOTP() {
 				if(data["status"] == false)
 				{
 					document.getElementById("email-error").innerHTML = "Entered email address is not available";
+					$('.send-otp-spinner').css("display", "none");
 					return false;
 				}
 				document.getElementById("email-error").innerHTML = " ";
