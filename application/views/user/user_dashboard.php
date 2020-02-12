@@ -305,17 +305,13 @@ if (!empty($task_info['login_run'])) { ?>
                 <div class="modal-content">
                     <form action="<?= base_url(); ?>index.php/user/save_login_time" id="starting-timer" method="post">
                         <div class="modal-header ">
-                            <h4>Punching IN..</h4>
                             <button type="button" class="close text-danger" data-dismiss="modal">×</button>
                         </div>
                         <div class="modal-body ">
-                            <div>
-                                <h4>Please punch in before start</h4>
-                                <label for="old-datepicker">start time: <span class="text-danger">*</span></label>
-                                <input type="text" class="check-for-utc form-control  timerpicker-c" name="start-login-time" id="start-login-time" placeholder="hh:mm">
-                                <div class="input-group-addon">
-                                    <span class="glyphicon glyphicon-th"></span>
-                                </div>
+                            <h4>You have not punched in for the day</h4>
+                            <input type="text" class="check-for-utc form-control  timerpicker-c" name="start-login-time" id="start-login-time" placeholder="hh:mm">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
                             </div>
                         </div>
                         <p class="text-danger text-center" id="stop-timer-error"></p>

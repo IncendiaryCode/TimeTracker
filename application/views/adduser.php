@@ -37,7 +37,7 @@ $profile = $this->session->userdata('user_profile');
                                     </button>
                                 </div>
                             <?php } ?> 
-                        <h1 class="text-center display-heading">Add user</h1>
+                        <h1 class="text-center display-heading">Add User</h1>
                         <form action="<?php echo base_url();?>index.php/admin/add_users" id="addUser" method="post" novalidate>
                             <div class="form-group mt-3">
                                 <label for="task-name ">Name:<span class="text-danger">*</span></label>

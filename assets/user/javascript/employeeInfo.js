@@ -124,21 +124,30 @@ function drawCards(data) {
 				var serverDate = moment(date).tz('utc').format('Y-MM-DD H:mm:ss');
 
 				var footerRight = $("<div class='card-actions' id='footer-right-" + data[x][y].id + "'>");
-				var actionPlay = $('<a href="' + timeTrackerBaseURL + 'user/start_timer?id=' + data[x][y].id + '&time=' + serverDate + '" class="card-action action-delete" data-id="' + data[x][y].id + '" data-toggle="tooltip" data-placement="top" title="Play"></a>');
+
+				//action Edit
+				var actionEdit = $('<a href="#" class=" pl-2  text-white " id="action-edit"><i class="fas fa-pencil-alt action-play" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
+				actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_add_task?t_id=' + data[x][y].id );
+				footerRight.append(actionEdit);
+
+				var actionPlay = $('<a href="' + timeTrackerBaseURL + 'user/start_timer?id=' + data[x][y].id + '&time=' + serverDate + '" class="card-action" data-id="' + data[x][y].id + '" id=play-' + data[x][y].id + ' data-toggle="tooltip" data-placement="top" title="Play"></a>');
 				actionPlay.append('<i class="fas action-edit  fa-play"></i>');
 
-				var actionStop = $('<a href="' + timeTrackerBaseURL + 'user/stop_timer?id=' + data[x][y].id + '&time=' + serverDate + '" class="card-action action-delete" data-id="' + data[x][y].id + '" data-toggle="tooltip" data-placement="top" title="Stop"></a>');
+				var actionStop = $('<a href="' + timeTrackerBaseURL + 'user/stop_timer?id=' + data[x][y].id + '&time=' + serverDate + '" class="card-action" data-id="' + data[x][y].id  + '" id=stop-' + data[x][y].id + ' data-toggle="tooltip" data-placement="top" title="Stop"></a>');
 
 				actionStop.append('<i class="fas action-edit fa-stop"></i>');
+				footerRight.append(actionPlay);
+				footerRight.append(actionStop);
+
 				if (data[x][y].running_task == 0) {
-					footerRight.append(actionPlay);
+					//$('#stop-' + data[x][y].id).hide();
+					$(actionStop).hide();
 				} else {
-					footerRight.append(actionStop);
+					//$('#play-' + data[x][y].id).hide();
+					$(actionPlay).hide();
 				}
 				actionPlay.on('click', function(e) {
 					e.preventDefault();
-					alert("play");
-					
 					var t_id = $(this).data('id');
 					if (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play') {
 						$('#play-timer').modal('show');
@@ -149,6 +158,8 @@ function drawCards(data) {
 							data: { action: 'task', id: t_id, time: serverDate },
 							dataType: 'json',
 							success: function(res) {
+								if(res['status'] == true)
+								{
 								var res = res['data']['details'];
 								var startDateTime = moment().format('h:mm A');
 								var row = $(
@@ -181,22 +192,18 @@ function drawCards(data) {
 										'</div>' +
 										'</div>'
 								);
-
 								var stopButton = $('<i class="fa fa-hourglass-1"></i><span class="running-task" id="running-task-' + t_id + '"></span>').data('taskid', t_id);
-
 								document.getElementById('btn-stop' + t_id).childNodes[0].remove();
 								document.getElementById('btn-stop' + t_id).childNodes[0].remove();
 								$('#btn-stop' + t_id).append(stopButton);
-
-								document.getElementById('footer-right-' + t_id).childNodes[0].remove();
-
-								var action_stop = $('<a href="' + timeTrackerBaseURL + 'user/stop_timer?id=' + t_id + '&time=' + serverDate + '" class="card-action action-delete" data-id="' + t_id + '" data-toggle="tooltip" data-placement="top" title="Stop"></a>');
-								action_stop.append('<i class="fas action-edit fa-stop"></i>');
-								$('#footer-right-' + t_id).append(action_stop);
+						
+								$('#play-' + t_id).hide();
+								$('#stop-' + t_id).show();
 
 								$('#timer-slider').append(row);
 								timerSlider.reload();
-								document.getElementsByClassName('title').innerText += start_task_timer(-19800, t_id);
+								document.getElementsByClassName('title').innerText += start_task_timer(-19800, t_id);	
+								}
 							}
 						});
 					}
@@ -204,7 +211,6 @@ function drawCards(data) {
 
 				actionStop.on('click', function(e) {
 					e.preventDefault();
-					alert("stopped");
 					var task_id = $(this).data('id');
 					if (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play') {
 						$('#play-timer').modal('show');
@@ -221,31 +227,26 @@ function drawCards(data) {
 							dataType: 'json',
 							success: function(res) {
 								var data = res['flag'];
-								document.getElementById('footer-right-' + task_id).childNodes[0].remove();
-
-								var action_play = $('<a href="' + timeTrackerBaseURL + 'user/start_timer?id=' + task_id + '" class="card-action action-delete" data-id="' + task_id + '" data-toggle="tooltip" data-placement="top" title="Play"></a>');
-								action_play.append('<i class="fas action-edit  fa-play"></i>');
-								$('#footer-right-' + task_id).append(action_play);
+								if(res['status'] == true)
+								{
 								$('#running-task-' + task_id).hide();
+								$('#play-' + task_id).show();
+								$('#stop-' + task_id).hide();
 
 								document.getElementById('btn-stop' + task_id).childNodes[0].remove();
 								$('#btn-stop' + task_id).append('<i class="far fa-clock"></i> ' + minutesToTime(data['details']['t_minutes']));
-								$('#action-play' + task_id).css('display', 'block');
-
 								document.getElementById('slider' + task_id).remove();
 								if (timerSlider.slider.getSlideCount() == 1) {
 									$('.bx-pager-item').css('display', 'none');
 								}
 								timerSlider.reload();
+								}
+								
 							}
 						});
 					}
 				});
-				//action Edit
-				var actionEdit = $('<a href="#" class=" pl-2  text-white " id="action-edit"><i class="fas fa-pencil-alt action-play" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
-				actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_add_task?t_id=' + data[x][y].id );
-
-				footerRight.append(actionEdit);
+				
 				cardFooter.append(footerRow);
 				cardInner.append(cardFooter);
 				//add a overlay layer
@@ -474,7 +475,7 @@ $(document).ready(function() {
 					success: function(res) {
 						var data = JSON.parse(res);
 						var task_id_no = t_id.match(/(\d+)/);
-						var action_play = $('<a href="' + timeTrackerBaseURL + 'user/start_timer?id=' + task_id_no[0] + '" class="card-action action-delete" data-id="' + task_id_no[0] + '" data-toggle="tooltip" data-placement="top" title="Play"></a>');
+						var action_play = $('<a href="' + timeTrackerBaseURL + 'user/start_timer?id=' + task_id_no[0] + '" class="card-action" data-id="' + task_id_no[0] + '" data-toggle="tooltip" data-placement="top" title="Play"></a>');
 						action_play.append('<i class="fas action-edit  fa-play"></i>');
 
 						document.getElementById('footer-right-' + task_id_no[0]).childNodes[0].remove();
@@ -544,18 +545,18 @@ $(document).ready(function() {
 	}
 	$('.timerpicker-c').timepicker({
 		mode: '24hr',
-		format: 'HH:MM',
+		format: 'HH:mm',
 		uiLibrary: 'bootstrap4'
 	});
 	$('.timerpicker-stop-now').timepicker({
 		mode: '24hr',
-		format: 'HH:MM',
+		format: 'HH:mm',
 		uiLibrary: 'bootstrap4'
 	});
 	$(function() {
 		$('.stopnow-time').timepicker({
 			mode: '24hr',
-			format: 'HH:"MM',
+			format: 'HH:"mm',
 			useCurrent: false
 		});
 	});
@@ -624,8 +625,9 @@ $(document).ready(function() {
 		startingTimer.onsubmit = function() {
 			var startTime = document.getElementById('start-login-time').value;
 			var t_day = moment().format('YYYY-MM-DD');
-			startTime = moment(t_day + ' ' + startTime).format('HH:MM');
+			startTime = moment(t_day + ' ' + startTime).format('HH:mm');
 			document.getElementById('start-login-time').value = startTime;
+			console.log(startTime);
 			if (startTime == 'Invalid date') {
 				document.getElementById('stop-timer-error').innerHTML = 'Please enter valid time';
 				return false;
@@ -641,7 +643,6 @@ $(document).ready(function() {
 					document.getElementById('stop-timer-error').innerHTML = 'Login time cannot be greater than current time';
 					return false;
 				} else if (stopped == 1) {
-					/*alert("You cannot punch in again...");*/
 					$('#play-timer').modal('show');
 					return false;
 				} else {
@@ -650,7 +651,7 @@ $(document).ready(function() {
 					var input_element = startingTimer.getElementsByClassName('check-for-utc');
 					for (var i = 0; i < input_element.length; i++) {
 						if (input_element[i].value != '' && input_element[i].value != ' ') {
-							var server_start_time = moment(new Date().getFullYear() + '-' + (parseInt(new Date().getMonth()) + 1) + '-' + new Date().getDate() + ' ' + input_element[i].value).tz('utc').format('YYYY-MM-DD H:mm:ss');
+							var server_start_time = moment(new Date().getFullYear() + '-' + (parseInt(new Date().getMonth()) + 1) + '-' + new Date().getDate() + ' ' + input_element[i].value).tz('utc').format('YYYY-MM-DD HH:mm:ss');
 							input_element[i].value = server_start_time;
 						}
 					}
@@ -674,7 +675,7 @@ $(document).ready(function() {
 	}
 	if (document.getElementById('punch-out')) {
 		$('#punch-out').on('click', function(e) {
-			var pounchOutTime = moment().tz('utc').format('Y-MM-DD H:mm:ss');
+			var pounchOutTime = moment().tz('utc').format('Y-MM-DD HH:mm:ss');
 			$.ajax({
 				type: 'POST',
 				url: timeTrackerBaseURL + 'user/update_end_time',

@@ -34,7 +34,7 @@ $this->load->helper('url_helper');
                                     </button>
                                 </div>
                             <?php } ?>
-                            <h1 class="text-center display-heading">Add project</h1>
+                            <h1 class="text-center display-heading">Add Project</h1>
                         <form action="<?php echo base_url();?>index.php/admin/add_projects" id="add-project" method="post" enctype="multipart/form-data">
                             <div class="form-group mt-3" id="new-project-input">
                                 <label for="task-name ">Project name:<span class="text-danger">*</span></label>

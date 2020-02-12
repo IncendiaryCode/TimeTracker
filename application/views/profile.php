@@ -10,22 +10,6 @@
             </div>
         </div>
     </header> 
-
-   <!--  <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="dropdown text-right" id="dropdown-recent-acts">
-                    <i class="fas fa-sliders-h" id="dropdown-recent-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-btn">
-                        
-                        <div class="dropdown-item checkbox"><input type="checkbox"  id="admin-dark-mode" name="dark-mode"> Dark mode</div>
-                        <div class="dropdown-item checkbox"><input type="checkbox"  id="admin-normal-mode" name="normal-mode"> Normal mode</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
     <main class="container-fluid-main">
         <div class="main-container-inner mt-3">
         <div class="md main-container-employee text-center">

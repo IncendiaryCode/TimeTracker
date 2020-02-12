@@ -56,7 +56,7 @@ var addTime = {
 		if (edit == 0) {
 			if (end_time == array_of_timings[0]['end_time']) {
 				document.getElementById('date-picker-0').value = moment().format('YYYY-MM-DD');
-				document.getElementById('start-time-0').value = moment().format('HH:MM');
+				document.getElementById('start-time-0').value = moment().format('HH:mm');
 			}
 			this.ele.find('.primary-wrap').prepend(section);
 		} else {
@@ -76,19 +76,19 @@ var addTime = {
 			}
 			if (end_time == array_of_timings[0]['end_time']) {
 				document.getElementById('date-picker-0').value = moment().format('YYYY-MM-DD');
-				document.getElementById('start-time-0').value = moment().format('HH:MM');
+				document.getElementById('start-time-0').value = moment().format('HH:mm');
 			}
 		}
 		document.getElementById('end-time-0').value = '';
 
 		section.find('.timepicker').timepicker({
 			mode: '24hr',
-			format: 'HH:MM',
+			format: 'HH:mm',
 			uiLibrary: 'bootstrap4'
 		});
 		section.find('.timepicker1').timepicker({
 			mode: '24hr',
-			format: 'HH.MM',
+			format: 'HH:mm',
 			uiLibrary: 'bootstrap4'
 		});
 		section.find('.datepicker').datepicker({
@@ -448,12 +448,12 @@ $(document).ready(function() {
 
 	$('.timepicker-a').timepicker({
 		mode: '24hr',
-		format: 'HH:MM',
+		format: 'HH:mm',
 		uiLibrary: 'bootstrap4'
 	});
 	$('.timepicker-b').timepicker({
 		mode: '24hr',
-		format: 'HH:MM',
+		format: 'HH:mm',
 		uiLibrary: 'bootstrap4'
 	});
 	$('#choose-project').change(function() {
@@ -497,7 +497,7 @@ $(document).ready(function() {
 		for (var i = 0; i < len * 2; i++) {
 			$('.timepicker-' + i).timepicker({
 				mode: '24hr',
-				format: 'HH:MM',
+				format: 'HH:mm',
 				uiLibrary: 'bootstrap4'
 			});
 		}

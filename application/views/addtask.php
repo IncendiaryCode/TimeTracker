@@ -9,7 +9,7 @@ $this->load->library('form_validation');
         <div class="container-fluid">
             <div class="main-container-inner">
                 <div class="container">
-                    <div class="row">
+                    <div class="row mt-2">
                         <div class="col-md-6 offset-md-3">
                             <?php 
                             if(validation_errors()) { ?>
@@ -38,7 +38,7 @@ $this->load->library('form_validation');
                                     </button>
                                 </div>
                             <?php } ?>
-                            <h1 class="text-center display-heading">Add task</h1>
+                            <h1 class="text-center display-heading">Add Task</h1>
                             <form action="<?php echo base_url();?>index.php/admin/add_tasks" id="addTask" method="post">
                                 <div class="form-group">
                                     <label for="task-name">Task name</label>

@@ -315,6 +315,8 @@ header.main-header h1 {
 	border-radius: 100%;
 	color: black;
 	padding: 12px;
+	position: absolute;
+    top: -50px;
 }
 
 .items:hover {

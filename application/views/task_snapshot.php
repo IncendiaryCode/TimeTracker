@@ -3,25 +3,26 @@
     ?>
 
  <!-- UI for task snapshot -->
- <h1 class="display-heading text-center">Task snapshot</h1>
+ 
  <div class="container">
      <!-- <div class="input-group">
          <div class="text-right form">
              <input type="month" class="border p-1" id="curr-month" name="cur_month">
          </div>
      </div> -->
-     <div class="row">
-        <div class="col-3 offset-9">
-        <div class="input-group">
-            <input type="text" class="form-control" id="curr-month" name="cur_month" value="<?= date('F Y'); ?>">
-            <div class="input-group-append">
-                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+     <div class="row  pt-3">
+        <div class="col-6">
+            <h1 class="display-heading text-left">Task snapshot</h1>
+        </div>
+        <div class="col-3 offset-3">
+            <div class="input-group">
+                <input type="text" class="form-control" id="curr-month" name="cur_month" value="<?= date('F Y'); ?>">
+                <div class="input-group-append">
+                    <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                </div>
             </div>
         </div>
-        </div>
     </div>
-
-
      <div class="row mt-5">
          <div class="col-12">
              <canvas id="task-chart" height="80px" class=" mb-5"></canvas>

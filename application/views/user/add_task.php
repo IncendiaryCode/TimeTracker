@@ -151,7 +151,7 @@ if ($this->input->get('t_id')) { ?>
 
                                                                 <?php
                                                                     if($task['start_time'])
-                                                                        $start = date('H:i:s',strtotime($task['start_time']));
+                                                                        $start = date('H:i',strtotime($task['start_time']));
                                                                     else
                                                                         $start = '';
                                                                 ?>
@@ -165,7 +165,7 @@ if ($this->input->get('t_id')) { ?>
 
                                                                 <?php
                                                                     if($task['end_time'])
-                                                                        $end = date('H:i:s',strtotime($task['end_time']));
+                                                                        $end = date('H:i',strtotime($task['end_time']));
                                                                     else
                                                                         $end = '';
                                                                 ?>
