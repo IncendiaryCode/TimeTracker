@@ -105,6 +105,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <!-- TODO.. -->
         <div class="col-md-6">
             <?php
+            if(!empty($top_projects[0])){
             if($top_projects[0] != 0)
                 {
                 $count = 0;
@@ -150,9 +151,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </li>
                 <?php } ?>
             </ul>
+        <?php } ?>
         </div>
         <div class="col-md-6">
             <?php
+            if(!empty($top_users[0])){
             $cnt = 0;
             if ($top_users[0] < 5) {
                 $cnt = $top_users[0];
@@ -187,6 +190,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </li>
                 <?php } ?>
             </ul>
+        <?php } ?>
         </div>
     </div>
 </div>

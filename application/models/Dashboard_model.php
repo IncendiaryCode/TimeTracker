@@ -72,28 +72,22 @@ class Dashboard_model extends CI_Model
      * 
      */
     public function get_top_users(){
+        $final_data = array();
         $this->db->select('u.id AS user_id,u.name AS user_name');
         $this->db->select_sum('d.total_minutes','t_minutes');
-        $this->db->from('project AS p');
-        $this->db->join('task AS t','t.project_id = p.id');
-        $this->db->join('time_details AS d','d.task_id = t.id');
-        $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
-        $this->db->join('users AS u','u.id = ta.user_id');
+        $this->db->from('time_details AS d');
+        $this->db->join('users AS u','u.id = d.user_id');
         $this->db->group_by('u.id');
-        $this->db->order_by('d.total_minutes','desc');
+        $this->db->order_by('t_minutes','desc');
+        $this->db->limit(5);
         $query = $this->db->get();
-        if($query->num_rows() <= 5){
+        if($query->num_rows() >0){
             $users = $query->result_array();
-        }else if($query->num_rows() > 5){
-            $user = $query->result_array();
-            for($i=0;$i<5;$i++){
-                $users[] = $user[$i];
-            }
+            $final_data = array($query->num_rows(),$users);
+        }else{
+            $final_data = '';
         }
-        else{
-            $users = '';
-        }
-        return array($query->num_rows(),$users);
+        return $final_data;
     }
 
     /**
@@ -110,22 +104,16 @@ class Dashboard_model extends CI_Model
         $this->db->from('project AS p');
         $this->db->join('task AS t','t.project_id = p.id');
         $this->db->join('time_details AS d','d.task_id = t.id');
-        $this->db->join('users AS u','u.id = d.user_id');
         $this->db->group_by('p.id');
-        $this->db->order_by('d.total_minutes','desc');
+        $this->db->order_by('t_minutes','desc');
+        $this->db->limit(5);
         $query = $this->db->get();
-        if($query->num_rows() <= 5){
-            $users = $query->result_array();
-        }else if($query->num_rows() > 5){
-            $user = $query->result_array();
-            for($i=0;$i<5;$i++){
-                $users[] = $user[$i];
-            }
+        if($query->num_rows() > 0 ){
+            $projects = $query->result_array();
+        }else{
+            $projects = '';
         }
-        else{
-            $users = '';
-        }
-        return array($query->num_rows(),$users);
+        return array($query->num_rows(),$projects);
     }
 
     /**
@@ -204,38 +192,50 @@ class Dashboard_model extends CI_Model
             $this->db->where('u.type','user');
             $user_names = $this->db->get()->result_array();
 
-            foreach ($user_names as $u) { 
-                $this->db->select('count(distinct t.id) AS tasks_count');
+            foreach ($user_names as $u) {
+
+                //find total time spent by the user on all projects
                 $this->db->select_sum('d.total_minutes','t_minutes');
-                $this->db->from('task AS t');
-                $this->db->join('time_details AS d','d.task_id = t.id');
+                $this->db->from('time_details AS d');
                 $this->db->where('d.user_id',$u['user_id']);
                 $task_count = $this->db->get()->row_array();
 
-                $hours = floor($task_count['t_minutes'] / 60);
-                $minutes = ($task_count['t_minutes'] % 60);
-                if(($minutes < 1) && ($hours < 1))
-                    $time_taken = sprintf('--');
-                else if($minutes < 1)
-                    $time_taken = sprintf('%02dh', $hours);
-                else if($hours < 1)
-                    $time_taken = sprintf('%02dm', $minutes);
-                else
-                    $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
+                //get all the project details along with time taken by the user on each project
+                $sql = $this->db->query("SELECT GROUP_CONCAT(CONCAT_WS('~',p.name,p.id,p.image_name,p.color_code,p.t_minutes)) AS proj, `u`.`name` AS `user_name`, `u`.`id` AS `user_id` FROM `users` AS `u` JOIN `project_assignee` AS `a` ON a.user_id = u.id  JOIN (SELECT ps.name,ps.id,ps.image_name,ps.color_code,t.id AS task_id,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `project` AS `ps` JOIN `task` AS `t` ON `t`.`project_id` = `ps`.`id` LEFT JOIN task_assignee AS ta ON ta.task_id = t.id LEFT JOIN `time_details` AS `d` ON d.task_id = ta.task_id WHERE ta.user_id = '".$u['user_id']."' GROUP BY ps.id) AS p ON p.id = a.project_id WHERE `a`.`user_id` =".$u['user_id']);
+                $sql_result = $sql->row_array();
+                $data = array();
+                if ($sql_result['proj'] != NULL) {
+                    $projects = explode(',',$sql_result['proj']);
+                    foreach ($projects as $p_value) {
+                        $proj = explode('~',$p_value);
+                        if (is_array($proj)) {
+                            $time_format = $this->format_time($proj[4]);
+                            $data[] = array('project_name'=>$proj[0],'project_id'=>$proj[1],'image_name'=>$proj[2],'color_code'=>$proj[3],'project_time'=>$time_format);
+                        }
+                    }
+                } else {
+                    $data = '';
+                }
+                $total_time_format = $this->format_time($task_count['t_minutes']);
 
+                /*$this->db->select_sum('d.total_minutes','t_minutes');
                 $this->db->select('p.id AS project_id,p.name AS project_name,p.image_name,p.color_code');
-                $this->db->from('project AS p');
-                $this->db->join('project_assignee AS a','a.project_id = p.id');
+                $this->db->select('u.name AS user_name,u.id AS user_id');
+                $this->db->from('sers AS u');
+                $this->db->join('project_assignee AS a','a.user_id = u.id');
+                $this->db->join('project AS p','p.id = a.project_id','LEFT');
+                $this->db->join('task AS t','t.project_id = p.id','LEFT');
+                $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
                 $this->db->where(array('a.user_id'=>$u['user_id']));
-                $project_names = $this->db->get()->result_array();    
-                    $details[$u['user_id']] = array(
+                $project_names = $this->db->get()->result_array();*/
+                    $details[] = array(
                         'user_id'=>$u['user_id'],
                         'user_name'=> $u['user_name'],
-                        'project'=>$project_names,
-                        'total_minutes'=>isset($time_taken)?$time_taken:'0',
-                        'tasks_count'=>$task_count['tasks_count']
+                        'project'=>$data,
+                        'total_minutes'=>isset($total_time_format)?$total_time_format:'0'
                     );
             }
+            //print_r($details); exit();
             return $details;
         }
 
@@ -248,16 +248,7 @@ class Dashboard_model extends CI_Model
             $this->db->group_by('p.id');
             $projects = $this->db->get()->result_array();
             foreach ($projects as $project) {
-                $hours = floor($project['t_minutes'] / 60);
-                $minutes = ($project['t_minutes'] % 60);
-                if(($hours<1) && ($minutes <1))
-                    $time_taken = '--';
-                else if($minutes < 1)
-                    $time_taken = sprintf('%02dh', $hours);
-                else if($hours < 1)
-                    $time_taken = sprintf('%02dm', $minutes);
-                else
-                    $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
+                $total_time_format = $this->format_time($project['t_minutes']);
 
                 $this->db->select('count(distinct a.user_id) AS user_count');
                 $this->db->from('project AS p');
@@ -278,7 +269,7 @@ class Dashboard_model extends CI_Model
                     $this->db->where('p.id',$project['project_id']);
                     $user_details = $this->db->get()->result_array();
 
-                    $final_result[$project['project_id']] = array('project_id'=>$project['project_id'],'project_name'=>$project['project_name'],'project_icon'=>$project['image_name'],'project_color'=>$project['color_code'],'time_used'=>$time_taken, 'total_users'=>$p['user_count'], 'user_details' =>$user_details );
+                    $final_result[$project['project_id']] = array('project_id'=>$project['project_id'],'project_name'=>$project['project_name'],'project_icon'=>$project['image_name'],'project_color'=>$project['color_code'],'time_used'=>$total_time_format, 'total_users'=>$p['user_count'], 'user_details' =>$user_details );
                 }
             }
 
@@ -360,6 +351,7 @@ class Dashboard_model extends CI_Model
             $this->db->group_by('d.id');
             $this->db->limit($length,$start);
             $employees = $this->db->get();
+            $this->load->model('user_model');
                 foreach($employees->result() as $rows)
                 {
                     /*$user_data = $rows->user_name;
@@ -374,28 +366,18 @@ class Dashboard_model extends CI_Model
                             $user_name = '--';
                         }
                     }*/
-                    $hours = floor($rows->t_minutes / 60);
-                    $minutes = ($rows->t_minutes % 60);
-                    if(($minutes < 1) && ($hours < 1))
-                        $time_taken = sprintf('--');
-                    else if($minutes < 1)
-                        $time_taken = sprintf('%02dh', $hours);
-                    else if($hours < 1)
-                        $time_taken = sprintf('%02dm', $minutes);
-                    else
-                        $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
-
+                    $total_time_format = $this->format_time($rows->t_minutes);
+                    $username = '<a href=../admin/load_userdetails_page?user_id='.$rows->user_id.'">'.$rows->user_name.'</a>';
 	                $data[]= array(
     	            $rows->task_name,
     	            ($rows->task_description)?$rows->task_description:'--',
     	            $rows->project_name,
-    	            isset($rows->start_time)?$rows->start_time:'--',
-    	            isset($rows->end_time)?$rows->end_time:'--',
-    	            isset($rows->t_minutes)?$time_taken:'0',
+    	            isset($rows->start_time)?$this->user_model->convert_date($rows->start_time):'--',
+    	            isset($rows->end_time)?$this->user_model->convert_date($rows->end_time):'--',
+    	            isset($rows->t_minutes)?$total_time_format:'0',
     	            $rows->table_id,
     	            $rows->project_id,
-    	            $rows->user_name,
-    	            $rows->user_id
+    	            $user_name = !empty($username) ? $username : '--'
     	        );     
                 }
             return $data;
@@ -410,10 +392,38 @@ class Dashboard_model extends CI_Model
      * @returns $count
      * 
      */
-    public function original_task_data(){
-        $this->db->select('count(id) AS data_count');
-        $records = $this->db->get('time_details')->row();
-        return $records->data_count;
+    public function original_task_data($type,$id){
+        if($type == 'task'){
+            $this->db->select('count(id) AS data_count');
+            $records = $this->db->get('time_details')->row();
+            return $records->data_count;
+        }else if($type == 'project_user'){
+            $this->db->select('count(u.id) AS user_data_count');
+            $this->db->from('project_assignee AS a');
+            $this->db->join('users AS u','u.id = a.user_id');
+            $this->db->where('a.project_id',$id);
+            $users = $this->db->get()->row();
+            return $users->user_data_count;
+        }else if($type == 'project_task'){
+            $this->db->select('count(t.id) AS task_data_count');
+            $this->db->from('task AS t');
+            $this->db->where('t.project_id',$id);
+            $tasks = $this->db->get()->row();
+            return $tasks->task_data_count;
+        }else if($type == 'user_task'){
+            $this->db->select('count(t.id) AS task_count');
+            $this->db->from('task AS t');
+            $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
+            $this->db->where('ta.user_id',$id);
+            $users_taskdata_count = $this->db->get()->row();
+            return $users_taskdata_count->task_count;
+        }else if($type == 'user_project'){
+            $this->db->select('count(a.project_id) AS project_count');
+            $this->db->from('project_assignee AS a');
+            $this->db->where('a.user_id',$id);
+            $projects = $this->db->get()->row();
+            return $projects->project_count;
+        }
     }
 
     /**
@@ -425,6 +435,7 @@ class Dashboard_model extends CI_Model
      * 
      */
     public function user_graph_data(){
+        $data = array();
         if($this->input->post('month')){
             if(!empty($this->input->post('month'))){
                 $month = $this->input->post('month');
@@ -441,48 +452,38 @@ class Dashboard_model extends CI_Model
             }
         }else if($this->input->post('project_name')){
             if(!empty($this->input->post('project_name'))){
+                //get project from project name
                 $project_name = $this->input->post('project_name');
                 $get_project_id = $this->db->get_where('project',array('name'=>$project_name));
-                $project_id = $get_project_id->row_array()['id'];    
-            }else{
-                $project_id = '';
-            }
-            //get usernames assigned to projects
-            $this->db->distinct()->select('u.name,u.id');
-            $this->db->from('project_assignee AS a');
-            $this->db->join('users AS u','u.id = a.user_id');
-            if($project_id != ''){
-                $this->db->where('a.project_id',$project_id);
-            }
-            $query = $this->db->get();
-            if($query->num_rows() > 0){
-                $users = $query->result_array();
-                //get task names under those usernames
-                foreach($users as $u){
-                    $this->db->select('d.total_minutes');
-                    $this->db->select_sum('d.total_minutes','t_minutes');   //get total minutes for a particular task
-                    $this->db->from('task AS t');
-                    $this->db->join('time_details AS d','d.task_id = t.id');
-                    $this->db->where(array('d.user_id'=>$u['id']));
-                    $this->db->group_by('d.user_id');
-                    $tasks = $this->db->get()->result_array();       
-                    foreach($tasks as $t){
-                        $data[] = array('user_name'=>$u['name'],'time_used'=>$t['t_minutes']); //total minutes for each task
+                $project_id = $get_project_id->row_array()['id'];
+
+                $this->db->distinct()->select('u.name,u.id');
+                $this->db->select_sum('d.total_minutes','t_minutes');
+                $this->db->from('task AS t');
+                $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
+                $this->db->join('time_details AS d','d.task_id = ta.task_id','LEFT');
+                $this->db->join('users AS u','u.id = ta.user_id','LEFT');
+                $this->db->where('t.project_id',$project_id);
+                $this->db->group_by('u.id');
+                $query = $this->db->get();
+                if($query->num_rows() > 0){
+                    $users = $query->result_array();
+                    foreach($users as $u){
+                        $data[] = array('user_name'=>$u['name'],'time_used'=>$u['t_minutes']);
                     }
-                }  
+                }else{
+                    $data = '';
+                }
             }else{
-                $data = '';
+                $data['error'] = "Project id is empty.";
             }
         }else{
-            $this->db->select('id,name');
-            $this->db->from('project');
-            $projects = $this->db->get()->result_array();
-            $this->db->select('p.name AS project_name,u.id AS user_id,u.name AS user_name');
+            $this->db->select('u.id AS user_id,u.name AS user_name');
             $this->db->select_sum('d.total_minutes','t_minutes');
-            $this->db->from('project AS p');
-            $this->db->join('project_assignee AS a','a.project_id = p.id');
-            $this->db->join('time_details AS d','d.user_id = a.user_id');
-            $this->db->join('users AS u','u.id = d.user_id');
+            $this->db->from('task AS t');
+            $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
+            $this->db->join('time_details AS d','d.task_id = ta.task_id','LEFT');
+            $this->db->join('users AS u','u.id = ta.user_id','LEFT');
             $this->db->group_by('u.id');
             $details = $this->db->get();
         
@@ -595,7 +596,7 @@ class Dashboard_model extends CI_Model
             }
             if($order !=null)
             {
-                //if($col == 0)
+                if($col == 0 || $col == 1)
                     $this->db->order_by($order, $dir);
             }
             
@@ -604,38 +605,47 @@ class Dashboard_model extends CI_Model
                 $this->db->like('t.task_name',$search);                 
             }
 
-            $this->db->select('t.task_name,p.name AS project_name');
-            $this->db->select_sum('d.total_minutes','t_minutes');
-            $this->db->from('task as t');
+            $this->db->select('t.id AS task_id,t.task_name,p.name AS project_name');
+            $this->db->from('project as p');
+            $this->db->join('task AS t','t.project_id = p.id','LEFT');
             $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
-            $this->db->join('project as p','p.id = t.project_id');
-            $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
             $this->db->where('ta.user_id',$user_id);
             $this->db->group_by('t.id');
-            //$this->db->limit($length,$start);
+            $this->db->limit($length,$start);
             $employees = $this->db->get();
             $data = array();
             foreach($employees->result() as $rows)
             {
-                //$time = date('H:i', mktime(0,$rows->t_minutes));
-                $hours = floor($rows->t_minutes / 60);
-                $minutes = ($rows->t_minutes % 60);
-                if(($minutes < 1) && ($hours < 1))
-                    $time_taken = sprintf('--');
-                else if($minutes < 1)
-                    $time_taken = sprintf('%02dh', $hours);
-                else if($hours < 1)
-                    $time_taken = sprintf('%02dm', $minutes);
-                else
-                    $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
+                $this->db->select_sum('d.total_minutes','t_minutes');
+                $this->db->from('time_details AS d');
+                $this->db->where(array('d.task_id'=>$rows->task_id,'d.user_id'=>$user_id));
+                $user_timings = $this->db->get()->row();
 
-                $data[]= array(
-                    $rows->task_name,
-                    $rows->project_name,
-                    $time_taken
-                );     
+                //$time = date('H:i', mktime(0,$rows->t_minutes));
+                $total_time_format = $this->format_time($user_timings->t_minutes);
+                $sort_data[] = array($rows->task_name,$rows->project_name,$user_timings->t_minutes);
+                $data[]= array($rows->task_name,$rows->project_name,$total_time_format);
             }
-            return $data;
+            if($order !=null)
+            {
+                if($col == 2){
+                    if($dir == 'asc')
+                        array_multisort(array_column($sort_data, 2), SORT_ASC, $sort_data);
+                    else
+                        array_multisort(array_column($sort_data, 2), SORT_DESC, $sort_data);
+                    foreach($sort_data as $key=>$value){
+                        $value[2] = $this->format_time($value[2]);
+                        $sorted[] = $value;
+                    }
+                    return $sorted;
+                }
+                else{
+                    return $data;
+                }
+            }else{
+                return $data;
+            }
+            //return $data;
         }else if($table_type == 'project_task'){ //load datatable data into projectdetails page
             $project_id = $this->input->post('project_id');
             $draw = intval($this->input->post("draw"));
@@ -687,12 +697,13 @@ class Dashboard_model extends CI_Model
             
             $this->db->select('t.id,t.task_name');
             $this->db->from('task AS t');
-            //$this->db->join('project_assignee AS a','a.project_id = t.project_id');
+            //$this->db->join('project_assignee AS a','a.project_id = t.project_id','LEFT');
             $this->db->where('t.project_id',$project_id);
             $tasks = $this->db->get()->result_array();
 
             $data = array();
             foreach($tasks as $t){
+                
                 $this->db->select('count(distinct ta.user_id) AS users_count');
                 $this->db->select_sum('d.total_minutes','t_minutes');
                 $this->db->from('task AS t');
@@ -700,21 +711,11 @@ class Dashboard_model extends CI_Model
                 $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
                 $this->db->where(array('t.project_id'=>$project_id,'t.id'=>$t['id']));
                 $this->db->group_by('d.task_id');
-                //$this->db->limit($length,$start);
+                $this->db->limit($length,$start);
                 $details = $this->db->get();
                 $total_time = $details->row_array();
 
-                $hours = floor($total_time['t_minutes'] / 60);
-                $minutes = ($total_time['t_minutes'] % 60);
-                if(($minutes < 1) && ($hours < 1))
-                    $time_taken = sprintf('--');
-                else if($minutes < 1)
-                    $time_taken = sprintf('%02dh', $hours);
-                else if($hours < 1)
-                    $time_taken = sprintf('%02dm', $minutes);
-                else
-                    $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
-
+                $time_taken = $this->format_time($total_time['t_minutes']);
                 $data[]= array($t['task_name'],($total_time['users_count'])?($total_time['users_count']):'0',($time_taken)?$time_taken:'0');
             }
             if($order !=null)
@@ -795,6 +796,7 @@ class Dashboard_model extends CI_Model
             }
             if($order !=null)
             {
+                if($col == 0 || $col == 1)
                 $this->db->order_by($order, $dir);
             }
             
@@ -802,40 +804,53 @@ class Dashboard_model extends CI_Model
             {
                 $this->db->like('p.name',$search);                 
             }
-            $this->db->select('p.name AS project_name');
-            $this->db->select('count(distinct t.id) AS tasks_count');
-            $this->db->select_sum('d.total_minutes','t_minutes');
+            $this->db->select('p.id AS project_id,p.name AS project_name');
             $this->db->from('project AS p');
-            $this->db->join('task AS t','t.project_id = p.id');
-            $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
-            $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
+            $this->db->join('project_assignee AS a','a.project_id = p.id','LEFT');
             $this->db->group_by('p.id');
-            $this->db->where('ta.user_id',$user_id);
+            $this->db->where('a.user_id',$user_id);
             $this->db->limit($length,$start);
             $employees = $this->db->get();
             $data = array();
 
             foreach($employees->result() as $rows)
             {
-                $hours = floor($rows->t_minutes / 60);
-                $minutes = ($rows->t_minutes % 60);
-                if(($minutes < 1) && ($hours < 1))
-                    $time_taken = sprintf('--');
-                else if($minutes < 1)
-                    $time_taken = sprintf('%02dh', $hours);
-                else if($hours < 1)
-                    $time_taken = sprintf('%02dm', $minutes);
-                else
-                    $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
+                $this->db->select('count(distinct t.id) AS tasks_count');
+                $this->db->select_sum('d.total_minutes','t_minutes');
+                $this->db->from('project AS p');
+                $this->db->join('task AS t','t.project_id = p.id','LEFT');
+                $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
+                $this->db->join('time_details AS d','d.task_id = ta.task_id','left');
+                $this->db->where(array('ta.user_id'=>$user_id,'p.id'=>$rows->project_id));
+                $timings = $this->db->get()->row();
 
-                $data['total_records'][]= array(
+                $time_taken_format = $this->format_time($timings->t_minutes);
+
+                $data[]= array(
                     $rows->project_name,
-                    $rows->tasks_count,
-                    $time_taken
-                );
-                $data['filtered_records'] = $employees->num_rows(); 
+                    $timings->tasks_count,
+                    $time_taken_format
+                ); 
             }
-            return $data;
+            if($order !=null)
+            {
+                if($col == 2){
+                    if($dir == 'asc')
+                        array_multisort(array_column($data, 2), SORT_ASC, $data);
+                    else
+                        array_multisort(array_column($data, 2), SORT_DESC, $data);
+                    foreach($data as $key=>$value){
+                        $sorted[] = $value;
+                    }
+                    return $sorted;
+                }
+                else{
+                    return $data;
+                }
+            }else{
+                return $data;
+            }
+            //return $data;
         }else if($table_type == 'project_user'){ //load datatable data into project details page
             $project_id = $this->input->post('project_id');
             $draw = intval($this->input->post("draw"));
@@ -894,25 +909,16 @@ class Dashboard_model extends CI_Model
                 $this->db->select('count(distinct t.id) AS tasks_count');
                 $this->db->select_sum('d.total_minutes','t_minutes');
                 $this->db->from('task AS t');
+                $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
                 $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
-                $this->db->join('users AS u','u.id = d.user_id','LEFT');
+                $this->db->join('users AS u','u.id = ta.user_id','LEFT');
                 $this->db->where(array('t.project_id'=>$project_id,'u.id'=>$u['user_id']));
                 //$this->db->group_by('u.id');
-                //$this->db->limit($length,$start);
+                $this->db->limit($length,$start);
                 $details = $this->db->get();
                 $task = $details->row_array();
 
-                $hours = floor($task['t_minutes'] / 60);
-                    $minutes = ($task['t_minutes'] % 60);
-                    if(($minutes < 1) && ($hours < 1))
-                        $time_taken = sprintf('--');
-                    else if($minutes < 1)
-                        $time_taken = sprintf('%02dh', $hours);
-                    else if($hours < 1)
-                        $time_taken = sprintf('%02dm', $minutes);
-                    else
-                        $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
-
+                $time_taken = $this->format_time($task['t_minutes']);
                 $data[] = array($u['name'],($task['tasks_count'])?($task['tasks_count']):'0',$time_taken);  
             }
             if($order !=null)
@@ -975,16 +981,7 @@ class Dashboard_model extends CI_Model
             if($res->num_rows() > 0){
                 $count = $res->result_array();
                 foreach($count as $c){
-                    $hours = floor($c['t_minutes'] / 60);
-                    $minutes = ($c['t_minutes'] % 60);
-                    if(($minutes < 1) && ($hours < 1))
-                        $time_taken = sprintf('--');
-                    else if($minutes < 1)
-                        $time_taken = sprintf('%02dh', $hours);
-                    else if($hours < 1)
-                        $time_taken = sprintf('%02dm', $minutes);
-                    else
-                        $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
+                    $time_taken = $this->format_time($c['t_minutes']);
                     $data = array('project_name'=>$c['project_name'],'project_id'=>$c['project_id'],'users'=>$usr,'tasks'=>$c['tasks_count'],'image_name'=>$c['image_name'],'total_minutes'=>$time_taken);
                 }
             }else{
@@ -1063,28 +1060,23 @@ class Dashboard_model extends CI_Model
     public function get_user_data(){
         $user_id = $this->input->get('user_id');
         $this->db->select('u.id,u.name AS user_name,u.email,u.profile,u.phone');
-        $this->db->select('count(distinct t.id) AS tasks_count');
         $this->db->select_sum('d.total_minutes','t_minutes');
-        $this->db->select('count(distinct p.id) AS project_count');
+        $this->db->select('count(distinct t.id) AS tasks_count');
         $this->db->from('project AS p');
-        //$this->db->join('project_assignee AS a','a.project_id = p.id','LEFT');
         $this->db->join('task AS t','t.project_id = p.id');
-        $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
         $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
-        $this->db->join('users AS u','u.id = ta.user_id');
+        $this->db->join('users AS u','u.id = d.user_id');
         $this->db->where('u.id',$user_id);
-        $user_data = $this->db->get()->row_array();
-        $hours = floor($user_data['t_minutes'] / 60);
-        $minutes = ($user_data['t_minutes'] % 60);
-        if(($minutes < 1) && ($hours < 1))
-            $user_data['t_minutes'] = sprintf('--');
-        else if($minutes < 1)
-            $user_data['t_minutes'] = sprintf('%02dh', $hours);
-        else if($hours < 1)
-            $user_data['t_minutes'] = sprintf('%02dm', $minutes);
-        else
-            $user_data['t_minutes'] = sprintf('%02dh %02dm', $hours, $minutes);
+        $user_details = $this->db->get()->row_array();
 
+        $this->db->select('count(distinct a.project_id) AS project_count');
+        $this->db->from('project_assignee AS a');
+        $this->db->where('a.user_id',$user_id);
+        $project_count = $this->db->get()->row_array();
+
+        $user_data = array('id'=>$user_details['id'],'profile'=>$user_details['profile'],'user_name'=>$user_details['user_name'],'email'=>$user_details['email'],'phone'=>$user_details['phone'],'t_minutes'=>$user_details['t_minutes'],'tasks_count'=>$user_details['tasks_count'],'project_count'=>$project_count['project_count']);
+
+        $user_data['t_minutes'] = $this->format_time($user_data['t_minutes']);
         return $user_data;
     }
 
@@ -1105,7 +1097,7 @@ class Dashboard_model extends CI_Model
             'phone' => $this->input->post('contact'),
             'type' => 'user',
             'profile' => 'images.png',
-            'created_on' => date('Y:m:d H:i:s')
+            'created_on' => date('Y-m-d H:i:s')
         );
         $this->db->set($array1);
         $query          = $this->db->insert('users', $array1);
@@ -1247,7 +1239,7 @@ class Dashboard_model extends CI_Model
                 );
         $this->db->set($array);
         $query = $this->db->insert('task', $array);
-        $project_id = $this->db->insert_id();
+        $task_id = $this->db->insert_id();
         if(sizeof($select) > 0){
             for($i=0;$i<sizeof($select);$i++){
                 $query  = $this->db->get_where('users', array(
@@ -1258,19 +1250,24 @@ class Dashboard_model extends CI_Model
                 //assign user to the task
                 $array  = array(
                         'user_id' => $user_id[$i]['id'],
-                        'task_id' => $project_id,
-                        'created_on' => date('Y:m:d H:i:s')
+                        'task_id' => $task_id,
+                        'created_on' => date('Y-m-d H:i:s')
                 );
                 $this->db->set($array);
                 $assign_task = $this->db->insert('task_assignee', $array);
 
-                //assign user to project
-                $assign_project_user = array('user_id'=> $user_id[$i]['id'], 'project_id'=> $this->input->post('chooseProject'), 'created_on' => date('Y-m-d H:i:s'));
-                $this->db->set($assign_project_user);
-                $assign_project = $this->db->insert('project_assignee', $assign_project_user);
+                //check whether user is assigned to the project
+                $this->db->where(array('user_id'=>$user_id[$i]['id'],'project_id'=>$this->input->post('chooseProject')));
+                $assignee_check = $this->db->get('project_assignee');
+                if($assignee_check->num_rows() == 0){
+                    //assign user to project
+                    $assign_project_user = array('user_id'=> $user_id[$i]['id'], 'project_id'=> $this->input->post('chooseProject'), 'created_on' => date('Y-m-d H:i:s'));
+                    $this->db->set($assign_project_user);
+                    $assign_project = $this->db->insert('project_assignee', $assign_project_user);
+                }
             }
         }
-        return $project_id;
+        return $task_id;
     }
 
     /**
@@ -1543,7 +1540,7 @@ class Dashboard_model extends CI_Model
                 $data['username'] = $row->name;
                 $data['phone'] = $row->phone;
                 $data['profile_pic'] = base_url().USER_UPLOAD_PATH.$row->profile;
-                $data['login_time'] = date('Y:m:d H:i:s');
+                $data['login_time'] = date('Y-m-d H:i:s');
                 return $data;
             }
             else {
@@ -1618,6 +1615,8 @@ class Dashboard_model extends CI_Model
                 'user_type' => $row->type,
                 'user_tz' => ($this->input->post('time-zone'))?$this->input->post('time-zone'):'Asia/Kolkata'
             );
+            $this->session->sess_expiration = '86400';// expires in 4 hours
+            $this->session->sess_expire_on_close = FALSE;
             $this->session->set_userdata($data);
 
             return $row->type;
@@ -1715,6 +1714,21 @@ class Dashboard_model extends CI_Model
             $this->session->set_flashdata('error_msg', 'Enter correct OTP.');
             return false;
         }
+    }
+
+    public function format_time($minutes){
+        $hours = floor($minutes / 60);
+        $minutes = ($minutes % 60);
+        if(($minutes < 1) && ($hours < 1))
+            $time_taken = sprintf('--');
+        else if($minutes < 1)
+            $time_taken = sprintf('%02dh', $hours);
+        else if($hours < 1)
+            $time_taken = sprintf('%02dm', $minutes);
+        else
+            $time_taken = sprintf('%02dh %02dm', $hours, $minutes);
+
+        return $time_taken;
     }
 }
 ?>

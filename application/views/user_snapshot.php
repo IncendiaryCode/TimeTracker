@@ -36,6 +36,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <hr>
     <div>
         <?php
+        //print_r($data); exit;
         foreach ($data as $k) {
         ?>
             <div class="row pt-3">
@@ -46,20 +47,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
                 <div class="col-6">
                     <?php
-                    foreach ($k['project'] as $d) {
-                    ?>
-                        <a href="<?= base_url(); ?>index.php/admin/load_project_detail?project_id=<?= $d['project_id'] ?>" class="">
-                            <div class="mr-2">
-                                <?php
-                                if ($d['image_name'] != '') {
-                                ?>
-                                    <img src="<?= base_url() . UPLOAD_PATH . $d['image_name'] ?>" height="15px;" width="18px;">
-                                <?php
-                                }
-                                echo $d['project_name']; ?></div>
+                    if (is_array($k['project'])) {
+                        foreach ($k['project'] as $d) {
+                        ?>
+                            <a href="<?= base_url(); ?>index.php/admin/load_project_detail?project_id=<?= $d['project_id'] ?>" class="">
+                                <div class="mr-2">
+                                    <?php
+                                    if ($d['image_name'] != '') {
+                                    ?>
+                                        <img src="<?= base_url() . UPLOAD_PATH . $d['image_name'] ?>" height="15px;" width="18px;">
+                                    <?php
+                                    }
+                                    echo $d['project_name']; ?></div>
 
-                        </a>
-                    <?php }  ?>
+                            </a>
+                    <?php } 
+                        }  ?>
                 </div>
                 <div class="col-2">
                     <p><?= $k['total_minutes']; ?></p>
