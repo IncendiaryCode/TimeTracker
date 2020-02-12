@@ -69,7 +69,7 @@
                                     <div class="col-6 pl-md-5">
                                         <h5 id="current-week"></h5>
                                         <h6 class="mt-3 mb-1">Duration</h6>
-                                        <h4 id="weekly-duration">35:12</h4>
+                                        <h4 id="weekly-duration">00:00</h4>
                                         <input type="text" class="form-control " id="weekly-chart">
                                     </div>
                                     <div class="col-3 text-left">
@@ -89,7 +89,7 @@
                                     <div class="col-6 text-center pl-md-5">
                                         <h5 id="current-year"></h5>
                                         <h6 class="mt-3 mb-1">Duration</h6>
-                                        <h4 id="monthly-duration"></h4>
+                                        <h4 id="monthly-duration">00:00</h4>
                                         <input type="hidden" class="form-control" id="monthly-chart">
                                     </div>
                                     <div class="col-3 text-left">

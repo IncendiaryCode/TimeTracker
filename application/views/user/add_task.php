@@ -247,11 +247,11 @@ if ($this->input->get('t_id')) { ?>
                                 <button type="submit" class="btn btn-primary save-task">Save Task</button><!-- to store the task entry. -->
                             </div>
                             </form>
+                        </div>
+                    </div>
                 </div>
+                <footer class="footer">
+                    <p class="text-center ">Copyright © 2020 Printgreener.com</p>
+                </footer>
             </div>
-        </div>
-        <footer class="footer">
-            <p class="text-center ">Copyright © 2020 Printgreener.com</p>
-        </footer>
-    </div>
-</main>
+        </main>

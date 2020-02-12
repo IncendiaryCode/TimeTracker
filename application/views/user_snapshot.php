@@ -50,17 +50,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     if (is_array($k['project'])) {
                         foreach ($k['project'] as $d) {
                         ?>
-                            <a href="<?= base_url(); ?>index.php/admin/load_project_detail?project_id=<?= $d['project_id'] ?>" class="">
-                                <div class="mr-2">
-                                    <?php
-                                    if ($d['image_name'] != '') {
-                                    ?>
-                                        <img src="<?= base_url() . UPLOAD_PATH . $d['image_name'] ?>" height="15px;" width="18px;">
-                                    <?php
-                                    }
-                                    echo $d['project_name']; ?></div>
-
-                            </a>
+                        <a href="<?= base_url(); ?>index.php/admin/load_project_detail?project_id=<?= $d['project_id'] ?>" class="badge badge-light p-3 user_project_details mr-2">
+                            <?php
+                                if ($d['image_name'] != '') {
+                                ?>
+                                    <img src="<?= base_url() . UPLOAD_PATH . $d['image_name'] ?>" height="15px;" width="18px;">
+                                <?php
+                                }
+                                echo $d['project_name']; ?>
+                            <span class="badge badge-pill badge-dark"><?=$d['project_time'] ?></span>
+                        </a>
                     <?php } 
                         }  ?>
                 </div>

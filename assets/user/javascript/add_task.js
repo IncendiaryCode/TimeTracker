@@ -83,12 +83,12 @@ var addTime = {
 
 		section.find('.timepicker').timepicker({
 			mode: '24hr',
-			format: 'HH:mm',
+			format: 'HH:MM',
 			uiLibrary: 'bootstrap4'
 		});
 		section.find('.timepicker1').timepicker({
 			mode: '24hr',
-			format: 'HH:mm',
+			format: 'HH:MM',
 			uiLibrary: 'bootstrap4'
 		});
 		section.find('.datepicker').datepicker({
@@ -354,12 +354,12 @@ $(document).ready(function() {
 					for (var i = 0; i < input_elements.length / 3; i++) {
 						if (input_elements[j].value != '' && input_elements[j + 1].value != ' ') {
 							var timeZone = moment.tz.guess();
-							var serverStartDate = moment(input_elements[j].value + ' ' + input_elements[j + 1].value).tz('utc').format('Y-MM-DD H:mm:ss');
+							var serverStartDate = moment(input_elements[j].value + ' ' + input_elements[j + 1].value).tz('utc').format('Y-MM-DD HH:mm:ss');
 							input_elements[j].value = serverStartDate.slice(0, 10);
 							if (serverStartDate != 'Invalid date') input_elements[j + 1].value = serverStartDate;
 						}
 						if (input_elements[j].value != '' && input_elements[j + 2].value != '') {
-							var serverEndDate = moment(input_elements[j].value + ' ' + input_elements[j + 2].value).tz('utc').format('Y-MM-DD H:mm:ss');
+							var serverEndDate = moment(input_elements[j].value + ' ' + input_elements[j + 2].value).tz('utc').format('Y-MM-DD HH:mm:ss');
 							if (input_elements[j + 2].value.length > 2) {
 								input_elements[j + 2].value = serverEndDate;
 							}
@@ -377,7 +377,11 @@ $(document).ready(function() {
 			editTask.onsubmit = function(e) {
 				var taskName = document.getElementById('Taskname').value;
 				var project = document.getElementById('choose-project').value;
-				var start_time = document.getElementById('start-time-0').value;
+				var start_time;
+				if(document.getElementById('start-time-0'))
+				{
+					start_time = document.getElementById('start-time-0').value;
+				}
 				if (taskName == '' || taskName == ' ') {
 					document.getElementById('taskError').innerHTML = 'Please Enter Task Name ';
 					return false;
@@ -386,7 +390,7 @@ $(document).ready(function() {
 					document.getElementById('taskError').innerHTML = 'Please Choose Project Name ';
 					return false;
 				}
-				if (start_time == '' || start_time == ' ') {
+				if ((start_time == '' || start_time == ' ') && (document.getElementById('start-time-0')  == true)) {
 					document.getElementById('taskError').innerHTML = 'Please enter start time';
 					return false;
 				} else {
@@ -448,12 +452,12 @@ $(document).ready(function() {
 
 	$('.timepicker-a').timepicker({
 		mode: '24hr',
-		format: 'HH:mm',
+		format: 'HH:MM',
 		uiLibrary: 'bootstrap4'
 	});
 	$('.timepicker-b').timepicker({
 		mode: '24hr',
-		format: 'HH:mm',
+		format: 'HH:MM',
 		uiLibrary: 'bootstrap4'
 	});
 	$('#choose-project').change(function() {
@@ -497,7 +501,7 @@ $(document).ready(function() {
 		for (var i = 0; i < len * 2; i++) {
 			$('.timepicker-' + i).timepicker({
 				mode: '24hr',
-				format: 'HH:mm',
+				format: 'HH:MM',
 				uiLibrary: 'bootstrap4'
 			});
 		}

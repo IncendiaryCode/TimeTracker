@@ -48,7 +48,8 @@ $(function() {
 
 	$('.edit-time').timepicker({
 		useCurrent: false,
-		format: 'hh:mm:ss'
+		format: 'HH:`MM',
+		uiLibrary: 'bootstrap4'
 	});
 	$('.year-chart').datepicker({
 		minViewMode: 2,

@@ -393,7 +393,6 @@ h6 {
 		z-index: 1;
 	}
 }
-
 .footer {
 	margin-top: 3rem;
 	border-top: 1px solid #ddd;
@@ -401,4 +400,8 @@ h6 {
 	padding-bottom: 2rem;
 	text-align: center;
 	color: #999;
+}
+.user_project_details
+{
+	border-radius: 25px;
 }

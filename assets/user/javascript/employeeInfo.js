@@ -202,7 +202,8 @@ function drawCards(data) {
 
 								$('#timer-slider').append(row);
 								timerSlider.reload();
-								document.getElementsByClassName('title').innerText += start_task_timer(-19800, t_id);	
+								document.getElementsByClassName('title').innerText += start_task_timer(-19800, t_id);
+								// $('.toast').toast('show');
 								}
 							}
 						});
@@ -534,10 +535,6 @@ $(document).ready(function() {
 		loadTaskActivities({ type: 'task' });
 	}
 
-	$('#dropdown-recent-acts a.dropdown-item').click(function(e) {
-		loadTaskActivities({ type: $(this).data('type') });
-	});
-
 	timerSlider.init();
 
 	if (typeof timerSlider.slider.getSlideCount !== 'undefined' && timerSlider.slider.getSlideCount() == 1) {
@@ -545,18 +542,18 @@ $(document).ready(function() {
 	}
 	$('.timerpicker-c').timepicker({
 		mode: '24hr',
-		format: 'HH:mm',
+		format: 'HH:MM',
 		uiLibrary: 'bootstrap4'
 	});
 	$('.timerpicker-stop-now').timepicker({
 		mode: '24hr',
-		format: 'HH:mm',
+		format: 'HH:MM',
 		uiLibrary: 'bootstrap4'
 	});
 	$(function() {
 		$('.stopnow-time').timepicker({
 			mode: '24hr',
-			format: 'HH:"mm',
+			format: 'HH:MM',
 			useCurrent: false
 		});
 	});

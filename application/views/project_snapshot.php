@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 
 <div class="container">
-    <div class="row mt-5">
+    <div class="row mt-2">
         <div class="col">
             <h1 class="display-heading">Project Snapshot</h1>
         </div>

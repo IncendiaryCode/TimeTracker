@@ -121,6 +121,13 @@ if (!empty($task_info['login_run'])) { ?>
                 <div class="col-6">
                     <h5 class="font-weight-light text-left recent-activites">Recent Activities</h5>
                 </div>
+                <!-- <div class="col-4">
+                    <div class="toast">
+                        <div class="toast-body">
+                            Task started.
+                        </div>
+                    </div>
+                </div> -->
                 <div class="col-6">                
                     <ul class="nav float-right">
                         <li class="nav-item" id="clear-filter">
@@ -281,7 +288,6 @@ if (!empty($task_info['login_run'])) { ?>
                                     </div>
 
                                 <?php  } ?>
-                            
                                 <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
                                 <input class="check-for-utc form-control timerpicker-stop-now" type="text" name="time" id="punchout-time" placeholder="HH:MM">
                                 <div class="input-group-addon">
