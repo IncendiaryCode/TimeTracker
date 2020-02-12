@@ -71,9 +71,17 @@ class User extends CI_Controller
     {
         if ($this->input->get('type',TRUE)) {
             //load task data into user dashboard page
-            $type                 = $this->input->get('type', TRUE);
+            $sort_type                 = $this->input->get('type', TRUE);
             $date                 = '';
-            $task_details['data'] = $this->user_model->get_task_details($type,$date); //get task data
+        if($this->input->get('project_filter')){
+            $filter_type = 'proj_filter';
+            $filter = json_decode($this->input->get('project_filter'));
+        }
+        else{
+            $filter_type = '';
+            $filter = '';
+        }
+        $task_details['data'] = $this->user_model->get_task_details($sort_type,$filter_type,$date,$filter); //get task data
             if($task_details['data'] == NULL){ //if no data, send failure message
                 $task_details['status'] = FALSE;
                 $task_details['data'] = NULL;
@@ -82,17 +90,13 @@ class User extends CI_Controller
                 $task_details['status'] = TRUE;
                 echo json_encode($task_details);
             }
-        /*if($this->input->get('project_filter')){
-            $filter[] = json_decode($this->input->get('project_filter'));
-        }*/
-        
         }else if(!empty($this->input->get('chart_type'))){
             //load task data into employee activities page
             $date = $this->input->get('date');
             if($this->input->get('chart_type') == 'daily_chart'){
                 //to display daily activities of the user
                 $type = 'daily_chart';
-                $task_details['data'] = $this->user_model->get_task_details($type,$date); //get task data
+                $task_details['data'] = $this->user_model->get_task_details($type,$filter_type = '',$date,$filter = ''); //get task data
                 if($task_details['data'] == NULL){ //if no data, send failure message
                     $task_details['status'] = FALSE;
                     $task_details['data'] = NULL;
@@ -110,7 +114,7 @@ class User extends CI_Controller
                     $task_details['msg'] = "Invalid input format.";
                     echo json_encode($task_details);
                 }else{
-                    $task_details['data'] = $this->user_model->get_task_details($type,$date); //get task data
+                    $task_details['data'] = $this->user_model->get_task_details($type,$filter_type = '',$date,$filter = ''); //get task data
                     if($task_details['data'] == NULL){ //if no data, send failure message
                         $task_details['status'] = FALSE;
                         $task_details['data'] = NULL;
@@ -123,7 +127,7 @@ class User extends CI_Controller
             }else{
                 //to display monthly activities of the user
                 $type = 'monthly_chart';
-                $task_details['data'] = $this->user_model->get_task_details($type,$date); //get task data
+                $task_details['data'] = $this->user_model->get_task_details($type,$filter_type = '',$date,$filter = ''); //get task data
                 if($task_details['data'] == NULL){ //if no data, send failure message
                     $task_details['status'] = FALSE;
                     $task_details['data'] = NULL;

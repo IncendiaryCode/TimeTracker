@@ -209,7 +209,7 @@ class Dashboard_model extends CI_Model
                     foreach ($projects as $p_value) {
                         $proj = explode('~',$p_value);
                         if (is_array($proj)) {
-                            $time_format = $this->format_time($proj[4]);
+                            $time_format = isset($proj[4]) ? $this->format_time($proj[4]) : 0;
                             $data[] = array('project_name'=>$proj[0],'project_id'=>$proj[1],'image_name'=>$proj[2],'color_code'=>$proj[3],'project_time'=>$time_format);
                         }
                     }
@@ -1226,10 +1226,17 @@ class Dashboard_model extends CI_Model
         $select = $this->input->post('user-name');
         if(!empty($this->input->post('module'))){
             $module_id = $this->input->post('module');
-        }
-        else{
-            $module_id = 1;
-        }
+        }else{
+            $check_module = $this->db->get_where('project_module',array('id'=>1));
+            if($check_module->num_rows() == 1){
+                $module_id = $check_module->row_array()['id'];
+            }else{
+                $module_data = array('id'=>1,'project_id'=>$this->input->post('chooseProject'),'name'=>'General','meta_data'=>'Default for any task if not select any module.','created_on'=>date('Y-m-d H:i:s'));
+                $this->db->set($module_data);
+                $insert_module_id = $this->db->insert('project_module',$module_data);
+                $module_id = $this->db->insert_id();
+            }
+        }  
         $array   = array(
                     'task_name' => $this->input->post('task_name'),
                     'description' => $this->input->post('description'),
