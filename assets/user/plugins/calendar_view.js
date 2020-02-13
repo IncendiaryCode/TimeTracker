@@ -167,7 +167,16 @@ function drawChart(type, res, date) {
 		document.getElementById('weekly-duration').innerHTML = '00:00';
 		$('#attachPanels').empty();
 	} else {
-		document.getElementById('weekly-duration').innerHTML = res['total_hours'];
+		var weekly_hr = parseInt(res['total_minutes'] / 60);
+		var weekly_min = res['total_minutes'] % 60;
+		if (weekly_hr.toString().length == 1) {
+			weekly_hr = '0' + weekly_hr;
+		}
+		if (weekly_min.toString().length == 1) {
+			weekly_min = '0' + weekly_min;
+	}
+
+		document.getElementById('weekly-duration').innerHTML = weekly_hr + ':' + weekly_min;
 		var const_lable = [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ];
 		var data = {
 			labels: const_lable,

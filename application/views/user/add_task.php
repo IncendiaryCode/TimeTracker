@@ -241,7 +241,7 @@ if ($this->input->get('t_id')) { ?>
                             <p id="taskError" class=" text-danger"></p>
                             <p>&nbsp;</p>
                             <div class="text-right">
-                                <button type="submit" class="btn btn-primary save-task">Save Task</button><!-- to store the task entry. -->
+                                <button type="submit" class="btn btn-primary save-task" id="save-tasks">Save Task</button><!-- to store the task entry. -->
                             </div>
                             </form>
                         </div>

@@ -503,6 +503,8 @@ $(document).ready(function() {
 
 	$('select.project_name').change(function() {
 		var project_id = $(this).children('option:selected').val();
+		// document.getElementById("choose-module").disabled = true;
+		// document.getElementById("save-tasks").disabled = true;
 		if (project_id != 'Select Project') {
 			$.ajax({
 				type: 'POST',
@@ -515,6 +517,8 @@ $(document).ready(function() {
 						var module_name = $('<option value=' + array[i]['id'] + '>' + array[i]['name'] + '</option>');
 						$('#choose-module').append(module_name);
 					}
+					// document.getElementById("choose-module").disabled = false;
+					// document.getElementById("save-tasks").disabled = false;
 				}
 			});
 		}

@@ -310,7 +310,7 @@ function setTaskTime(startTime, id) {
 function loadTaskActivities(formData) {
 	$('#attach-card #section-loader').show();
 	$.ajax({
-		type: 'GET',
+		type: 'POST',
 		url: timeTrackerBaseURL + 'index.php/user/load_task_data',
 		data: formData,
 		success: function(values) {
