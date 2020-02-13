@@ -67,7 +67,7 @@
                                         <a href="#" class="arrow-style" id="previous-week"><i class=" fas fa-angle-left"></i></a>
                                     </div>
                                     <div class="col-6 pl-md-5">
-                                        <h5 id="current-week"></h5>
+                                        <h5 id="current-week"></h5><span id="week_y"></span>
                                         <h6 class="mt-3 mb-1">Duration</h6>
                                         <h4 id="weekly-duration">00:00</h4>
                                         <input type="text" class="form-control " id="weekly-chart">

@@ -112,7 +112,7 @@ function draw_chart_cards(data, type) {
 function loadTask(type, date) {
 	$('#attachPanels').empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
 	$.ajax({
-		type: 'GET',
+		type: 'POST',
 		url: timeTrackerBaseURL + 'index.php/user/load_task_data',
 		data: { chart_type: type, date: date },
 		success: function(values) {
@@ -151,26 +151,11 @@ function loadWeeklyChart() {
 		var weekControl = document.querySelector('input[type="week"]');
 		var week = document.getElementById('weekly-chart').value;
 		var day_range = '';
-		if(document.getElementById('current-week'))
-		{
+		if (document.getElementById('current-week')) {
 			day_range = document.getElementById('current-week').innerHTML;
+			day_range = moment().format('YYYY') + '-' + day_range.split(' ')[0] + '-' + day_range.split(' ')[1] + '~' + moment().format('YYYY') + '-' + day_range.split(' ')[3] + '-' + day_range.split(' ')[4];
 			retrieveChartData('weekly_chart', day_range);
 		}
-		// if (week == '' || week == ' ' || week == null) {
-		// 	var today = new Date(); // get current date
-		// 	var weekNumber = today.getWeek(); // Returns the week number as an integer
-		// 	if (weekNumber.toString().length == 1) {
-		// 		weekNumber = '0' + weekNumber;
-		// 	}
-		// 	weekControl.value = today.getFullYear() + '-W' + weekNumber;
-		// 	week = today.getFullYear() + '-W' + weekNumber;
-		// 	document.getElementById('weekly-chart').setAttribute('max', week);
-		// 	console.log(day_range);
-		// 	retrieveChartData('weekly_chart', day_range);
-		// } else {
-		// 	console.log(day_range);
-		// 	retrieveChartData('weekly_chart', day_range);
-		// }
 	}
 }
 
@@ -183,7 +168,7 @@ function drawChart(type, res, date) {
 		$('#attachPanels').empty();
 	} else {
 		document.getElementById('weekly-duration').innerHTML = res['total_hours'];
-		var const_lable = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ];
+		var const_lable = [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ];
 		var data = {
 			labels: const_lable,
 			datasets: []
@@ -254,7 +239,7 @@ function drawChart(type, res, date) {
 function retrieveChartData(type, date) {
 	$('#print-chart').empty();
 	$.ajax({
-		type: 'GET',
+		type: 'POST',
 		url: timeTrackerBaseURL + 'index.php/user/activity_chart',
 		data: { chart_type: type, date: date },
 		dataType: 'json',
@@ -510,12 +495,10 @@ function next() {
 	var currentYear = parseInt(document.getElementById('monthly-chart').value.split(' ')[1]);
 	var currentMonth = parseInt(document.getElementById('monthly-chart').value.split(' ')[0]);
 	var cur_MY = new Date().getMonth() + ' ' + new Date().getFullYear();
-	if(parseInt(cur_MY.split(' ')[0])-1 == currentMonth && currentYear == parseInt(cur_MY.split(' ')[1]))
-	{
+	if (parseInt(cur_MY.split(' ')[0]) - 1 == currentMonth && currentYear == parseInt(cur_MY.split(' ')[1])) {
 		$('#next-year').css('color', '#ccc');
 	}
 	if (!(parseInt(cur_MY.split(' ')[0]) == currentMonth && currentYear == parseInt(cur_MY.split(' ')[1]))) {
-		
 		currentYear = currentMonth === 11 ? currentYear + 1 : currentYear;
 		currentMonth = (currentMonth + 1) % 12;
 		document.getElementById('monthly-chart').value = currentMonth + ' ' + currentYear;
@@ -577,17 +560,15 @@ function showCalendar(month, year) {
 		tbl.appendChild(row); // appending each row into calendar body.
 	}
 	$.ajax({
-		type: 'GET',
+		type: 'POST',
 		url: timeTrackerBaseURL + 'index.php/user/activity_chart',
 		data: { chart_type: 'monthly_chart', date: month + 1 + ' ' + year },
 		dataType: 'json',
 		success: function(result) {
 			$('.card').show();
-			if(result['status'] == false)
-			{
+			if (result['status'] == false) {
 				document.getElementById('monthly-chart-error').innerHTML = 'No activities in this month';
-			}else
-			{
+			} else {
 				document.getElementById('monthly-chart-error').innerHTML = ' ';
 			}
 			var monthly_hr = parseInt(result['total_minutes'] / 60);
@@ -638,8 +619,8 @@ function showCalendar(month, year) {
 						$(innerCell).css('z-index', '0');
 
 						let innerSpan = document.createElement('span');
-						innerSpan.classList.add("monthly-action");
-						innerCell.classList.add("monthly-action1");
+						innerSpan.classList.add('monthly-action');
+						innerCell.classList.add('monthly-action1');
 						$(innerSpan).css('border-radius', '100%');
 						$(innerSpan).css('height', '50px');
 						$(innerSpan).css('width', '50px');
@@ -658,7 +639,7 @@ function showCalendar(month, year) {
 						$(innerSpan).click(function() {
 							var date = year + '-' + (month + 1) + '-' + this.innerText;
 							$.ajax({
-								type: 'GET',
+								type: 'POST',
 								url: timeTrackerBaseURL + 'index.php/user/load_task_data',
 								data: {
 									chart_type: 'daily_chart',
@@ -723,7 +704,6 @@ $(document).ready(function() {
 	}
 	var daily_chart_date = document.getElementById('daily-chart').value;
 	loadDailyChart();
-
 	var day = new Date(daily_chart_date);
 	var nextDay = new Date(day);
 	nextDay.setDate(day.getDate() + 1);
@@ -772,6 +752,7 @@ $(document).ready(function() {
 	$('#next-year').css('color', '#ccc');
 
 	document.getElementById('current-week').innerHTML = s_date + ' - ' + e_date;
+	document.getElementById('week_y').innerHTML = moment(t_day).format('YYYY-MM-DD');
 
 	document.getElementById('weekly-chart').value = moment(t_day).format('YYYY') + '-W' + (parseInt(moment(t_day).format('W')) + 1); //format 2020-W05
 
@@ -782,10 +763,11 @@ $(document).ready(function() {
 		var week_no = parseInt(daily_chart_date1.slice(6, 8));
 		var c_week = moment(new Date()).format('W');
 		if (week_no < parseInt(c_week) && parseInt(daily_chart_date1.slice(0, 4)) == parseInt(moment(new Date()).format('YYYY'))) {
-			if (c_week == week_no+1) {
+			if (c_week == week_no + 1) {
 				$('#next-week').css('color', '#ccc');
 			}
 			week_no++;
+			//document.getElementById('week_y').innerHTML = moment(t_day).format("YYYY-MM-DD");
 			if (week_no.toString().length == 1) {
 				week_no = '0' + week_no;
 				document.getElementById('weekly-chart').value = daily_chart_date1.slice(0, 6) + week_no;

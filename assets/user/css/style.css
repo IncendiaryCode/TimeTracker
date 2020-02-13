@@ -880,3 +880,7 @@ a#action-filter:hover {
 .monthly-action:hover + span {
 	border: 1px #3208ee solid;
 }
+#week_y
+{
+	display: none;;
+}
