@@ -69,19 +69,19 @@ class User extends CI_Controller
     }
     public function load_task_data() //Load task data to user dashboard
     {
-        if ($this->input->get('type',TRUE)) {
+        if ($this->input->post('type',TRUE)) {
             //load task data into user dashboard page
-            $sort_type                 = $this->input->get('type', TRUE);
-            $date                 = '';
-        if($this->input->get('project_filter')){
-            $filter_type = 'proj_filter';
-            $filter = json_decode($this->input->get('project_filter'));
-        }
-        else{
-            $filter_type = '';
-            $filter = '';
-        }
-        $task_details['data'] = $this->user_model->get_task_details($sort_type,$filter_type,$date,$filter); //get task data
+            $sort_type = $this->input->post('type', TRUE);
+            $date = '';
+            if($this->input->post('project_filter')){
+                $filter_type = 'proj_filter';
+                $filter = json_decode($this->input->post('project_filter'));
+            }
+            else{
+                $filter_type = '';
+                $filter = '';
+            }
+            $task_details['data'] = $this->user_model->get_task_details($sort_type,$date,$filter_type,$filter); //get task data
             if($task_details['data'] == NULL){ //if no data, send failure message
                 $task_details['status'] = FALSE;
                 $task_details['data'] = NULL;
@@ -90,53 +90,26 @@ class User extends CI_Controller
                 $task_details['status'] = TRUE;
                 echo json_encode($task_details);
             }
-        }else if(!empty($this->input->get('chart_type'))){
+        }else if(!empty($this->input->post('chart_type'))){
             //load task data into employee activities page
-            $date = $this->input->get('date');
-            if($this->input->get('chart_type') == 'daily_chart'){
-                //to display daily activities of the user
-                $type = 'daily_chart';
-                $task_details['data'] = $this->user_model->get_task_details($type,$filter_type = '',$date,$filter = ''); //get task data
-                if($task_details['data'] == NULL){ //if no data, send failure message
+            $date = $this->input->post('date');
+            $chart_type = $this->input->post('chart_type');
+            $task_details['data'] = $this->user_model->get_task_details($chart_type,$date); //get task data
+            if($task_details['data'] == NULL){ //if no data, send failure message
                     $task_details['status'] = FALSE;
                     $task_details['data'] = NULL;
                     $task_details['msg'] = "No activity in this date.";
-                }else{ //if data is present, send the data
-                    $task_details['status'] = TRUE;
-                }
-                echo json_encode($task_details);
-            }else if($this->input->get('chart_type') == 'weekly_chart'){
-                //to display weekly activities of the user
-                $type = 'weekly_chart';
-                if(!preg_match('/^\d{1,4}-[W](\d|[0-4]\d|5[0123])$/',$date)){ //check input format for week number
-                    $task_details['status'] = FALSE;
-                    $task_details['data'] = NULL;
-                    $task_details['msg'] = "Invalid input format.";
-                    echo json_encode($task_details);
-                }else{
-                    $task_details['data'] = $this->user_model->get_task_details($type,$filter_type = '',$date,$filter = ''); //get task data
-                    if($task_details['data'] == NULL){ //if no data, send failure message
-                        $task_details['status'] = FALSE;
-                        $task_details['data'] = NULL;
-                        $task_details['msg'] = "No activity in this date.";
-                    }else{ //if data is present, send the data
-                        $task_details['status'] = TRUE;
-                    }
-                    echo json_encode($task_details);
-                }
-            }else{
-                //to display monthly activities of the user
-                $type = 'monthly_chart';
-                $task_details['data'] = $this->user_model->get_task_details($type,$filter_type = '',$date,$filter = ''); //get task data
-                if($task_details['data'] == NULL){ //if no data, send failure message
-                    $task_details['status'] = FALSE;
-                    $task_details['data'] = NULL;
-                    $task_details['msg'] = "No activity in this date.";
-                }else{ //if data is present, send the data
-                    $task_details['status'] = TRUE;
-                }
-                echo json_encode($task_details);
+            }else{ //if data is present, send the data
+                $task_details['status'] = TRUE;
             }
+            echo json_encode($task_details);
+        }
+        else
+        {
+            $task_details['status'] = FALSE;
+            $task_details['data'] = NULL;
+            $task_details['msg'] = "Invalid input format.";
+            echo json_encode($task_details);
         }
         
     }
@@ -297,29 +270,19 @@ class User extends CI_Controller
     public function activity_chart()
     {
         //ajax call
-        if (isset($_GET['chart_type']) && isset($_GET['date'])) {
-            $date       = $_GET['date'];
-            if ($_GET['chart_type'] == 'daily_chart') {
-                $chart_type = 'daily_chart';
-                $chart_data = $this->user_model->get_activity($chart_type, $date); //get activity of the user for given arguments
-                echo json_encode($chart_data);
-            }
-            if ($_GET['chart_type'] == 'weekly_chart') {
-                $chart_type = 'weekly_chart';
-                if(!preg_match('/^\d{1,4}-[W](\d|[0-4]\d|5[0123])$/',$date)){
-                    $chart_data['status'] = FALSE;
-                    $chart_data['msg'] = "Invalid input format.";
-                    echo json_encode($chart_data);
-                }else{
-                    $chart_data = $this->user_model->get_activity($chart_type, $date); //get activity of the user for given arguments
-                    echo json_encode($chart_data);
-                }
-            }
-            if ($_GET['chart_type'] == 'monthly_chart') {
-                $chart_type = 'monthly_chart';
-                $chart_data = $this->user_model->get_activity($chart_type, $date); //get activity of the user for given arguments
-                echo json_encode($chart_data);
-            }
+        if (isset($_POST['chart_type']) && isset($_POST['date'])) {
+            $date = $_POST['date'];
+            $chart_type = $_POST['chart_type'];
+
+            $chart_data = $this->user_model->get_activity($chart_type, $date); //get activity of the user for given arguments
+            echo json_encode($chart_data);
+        }
+        else
+        {
+            $chart_data['status'] = FALSE;
+            $chart_data['data'] = NULL;
+            $chart_data['msg'] = "Invalid input format.";
+            echo json_encode($task_details);
         }
     }
 
@@ -418,6 +381,92 @@ class User extends CI_Controller
             $data['task_desc'] = $this->input->post('task_desc');
             if(!empty($this->input->post('time'))){
                 $data['timings'] = $this->input->post('time');                
+            }
+            $punch_in_time = $this->user_model->get_punch_in_time($user_id);
+            $punch_time = strtotime($punch_in_time);
+            $punch_date = date('Y-m-d',$punch_time);
+            $punch_in_compare = strtotime($punch_date);
+            $current_date = date('Y-m-d');
+            /*** Validate Date, Start Time and End Time Inputs ***/
+            foreach($data['timings'] AS $time){
+                if ($time['date'] == '' || $time['date'] == 'Invalid da' || !(preg_match('/\d{4}-\d{2}-\d{2}/', $time['date']))) {
+                    //input date validation
+                    $t_id = $this->input->post('task_id', TRUE);
+                    $this->session->set_flashdata('date_failure', 'Invalid Task Date.');
+                    redirect('user/load_add_task?t_id=' . $t_id);
+                } else if ($time['start'] == '' || !(preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/', $time['start']))) {
+                    //check for start time format
+                    $t_id = $this->input->post('task_id', TRUE);
+                    $this->session->set_flashdata('start_time_error', 'Invalid Start Time.');
+                    redirect('user/load_add_task?t_id=' . $t_id);
+                } else if ($time['end'] == '' || !(preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/', $time['end']))) {
+                    //check for end time input
+                    $t_id = $this->input->post('task_id', TRUE);
+                    $this->session->set_flashdata('end_time_error', 'Invalid End Time.');
+                    redirect('user/load_add_task?t_id=' . $t_id);
+                } else {
+                    $task_date = strtotime($time['date']); //entered date
+                    $start_date = date('Y-m-d',strtotime($time['start']));
+                    $end_date = date('Y-m-d',strtotime($time['end']));
+                    $start_time = strtotime($time['start']);
+                    $end_time = strtotime($time['end']);
+                    if (!empty($punch_in_time)) {
+                        //if the user punched in and try to edit task
+
+                        if($task_date > $punch_in_compare) {
+                            //trying to edit next day timings
+
+                            $t_id = $this->input->post('task_id', TRUE);
+                            $this->session->set_flashdata('greater_date', "You cannot insert future task timings.");
+                            redirect('user/load_add_task?t_id=' . $t_id);
+                        } else if ($task_date == $punch_in_compare || $task_date < $punch_in_compare) {
+                            //if entered time is same as punch in date
+                            if ($start_date != $time['date'] || $end_date != $time['date']) {
+                                //if start date and end date is not same as respective task date
+                                $t_id = $this->input->post('task_id', TRUE);
+                                $this->session->set_flashdata('start_time_error', 'Invalid StartDate/EndDate sent.');
+                                redirect('user/load_add_task?t_id=' . $t_id);
+                            } else if ($end_time < $start_time) {
+                                    $t_id = $this->input->post('task_id', TRUE);
+                                    $this->session->set_flashdata('less_end_than_start', 'End Time cannot be lesser than Start Time.');
+                                    redirect('user/load_add_task?t_id=' . $t_id);
+                            }
+                        }
+                        if ($time['date'] == $punch_date) {
+                            if ($start_time < $punch_time) {
+                                //If start time is less than punch-in time
+                                $t_id = $this->input->post('task_id', TRUE);
+                                $this->session->set_flashdata('less_start_than_punch_in', "Start time cannot be lesser than punch-in time.");
+                                redirect('user/load_add_task?t_id=' . $t_id);
+                            } else if ($end_time < $punch_time) {
+                                $t_id = $this->input->post('task_id', TRUE);
+                                $this->session->set_flashdata('less_end_than_punch_in', 'End Time cannot be lesser than punch-in time.');
+                                redirect('user/load_add_task?t_id=' . $t_id);
+                            }
+                        }
+                    } else {
+                        //if the user did not punch-in and try to edit task timings
+                        $now = strtotime(date('Y-m-d')); //current date
+                        if(($task_date > $now) || ($task_date == $now)) {
+                            //trying to edit next day timings
+
+                            $t_id = $this->input->post('task_id', TRUE);
+                            $this->session->set_flashdata('no_punchin_date_error', "Punch in to add timings for the day or the next day.");
+                            redirect('user/load_add_task?t_id=' . $t_id);
+                        } else {
+                            if ($start_date != $time['date'] || $end_date != $time['date']) {
+                                //if start date and end date is not same as respective task date
+                                $t_id = $this->input->post('task_id', TRUE);
+                                $this->session->set_flashdata('start_time_error', 'Invalid StartDate/EndDate sent.');
+                                redirect('user/load_add_task?t_id=' . $t_id);
+                            } else if ($end_time < $start_time) {
+                                    $t_id = $this->input->post('task_id', TRUE);
+                                    $this->session->set_flashdata('less_end_than_start', 'End Time cannot be lesser than Start Time.');
+                                    redirect('user/load_add_task?t_id=' . $t_id);
+                            }
+                        }
+                    }
+                }
             }
             $result = $this->user_model->add_tasks($data);
             if (!$result) {
