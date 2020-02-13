@@ -229,16 +229,14 @@ if (!empty($task_info['login_run'])) { ?>
                             </div>
                             <input type="hidden" id="previous-date" name="" value="<?= $task_info['task_run'][0]['start_time'] ?>">
                             <div>
-
-                                
-                                    <?php if (validation_errors()) { ?>
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <?php echo validation_errors(); ?>
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    <?php  } ?>
+                                <?php if (validation_errors()) { ?>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <?php echo validation_errors(); ?>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                <?php  } ?>
                                 
                                 <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
                                 <input class="check-for-utc form-control timerpicker-stop-now" type="text" name="time" id="stop-end-time" placeholder="End time">
@@ -314,7 +312,7 @@ if (!empty($task_info['login_run'])) { ?>
                             <button type="button" class="close text-danger" data-dismiss="modal">×</button>
                         </div>
                         <div class="modal-body ">
-                            <h4>You have not punched in for the day</h4>
+                            <h4 class="pb-3">You have not punched in for the day</h4>
                             <input type="text" class="check-for-utc form-control  timerpicker-c" name="start-login-time" id="start-login-time" placeholder="hh:mm">
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
@@ -339,7 +337,6 @@ if (!empty($task_info['login_run'])) { ?>
                         <div>
                             <h4>You have already punched out for the day!!!</h4>
                         </div>
-                        
                     </div>
                     <p class="text-danger" id="stop-timer-error"></p>
                 </div>

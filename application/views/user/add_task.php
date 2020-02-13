@@ -237,9 +237,6 @@ if ($this->input->get('t_id')) { ?>
                                     </div>
                                     <!-- END: Add time  -->
                                 <?php } ?>
-                                <div class="text-left text-danger">
-                                    <p id="datetime-error" class="pt-4"></p>
-                                </div>
                             </div>
                             <p id="taskError" class=" text-danger"></p>
                             <p>&nbsp;</p>

@@ -42,14 +42,21 @@ $name = $this->session->userdata('username');
 <div class="modal" id="pause-action" data-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content text-center">
-            <form method="post" id="punch-out-action">
+            <form method="post" action="<?= base_url(); ?>index.php/user/update_end_time" id="punch-out-action">
+                <div class="modal-header">
+                    <h4>Punch Out</h4>
+                </div>
                 <div class="modal-body text-left">
                     <ul class="text-muted">
                         <li>Hope all your task are done for today...!</li>
                         <li>Do you want to punch out?</li>
                     </ul>
+                    <div class="input-group date">
+                        <input id="timerpicker-punchout" class="form-control timerpicker-punchout check-for-utc" name="punch-out-time" placeholder="hh:mm" />
+                    </div>
                 </div>
                 <div class="modal-footer text-center">
+                    <p class="punch-out-err"></p>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                     <button type="submit" class="btn btn-primary" id="punch-out">Yes</button>
                 </div>

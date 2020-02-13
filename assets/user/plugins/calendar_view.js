@@ -139,6 +139,7 @@ function loadDailyChart() {
 		document.getElementById('daily-chart').setAttribute('max', date);
 
 		date = document.getElementById('daily-chart').value;
+
 		retrieveChartData('daily_chart', date);
 	} else {
 		retrieveChartData('daily_chart', date);
@@ -149,19 +150,27 @@ function loadWeeklyChart() {
 	if (document.getElementById('weekly-chart')) {
 		var weekControl = document.querySelector('input[type="week"]');
 		var week = document.getElementById('weekly-chart').value;
-		if (week == '' || week == ' ' || week == null) {
-			var today = new Date(); // get current date
-			var weekNumber = today.getWeek(); // Returns the week number as an integer
-			if (weekNumber.toString().length == 1) {
-				weekNumber = '0' + weekNumber;
-			}
-			weekControl.value = today.getFullYear() + '-W' + weekNumber;
-			week = today.getFullYear() + '-W' + weekNumber;
-			document.getElementById('weekly-chart').setAttribute('max', week);
-			retrieveChartData('weekly_chart', week);
-		} else {
-			retrieveChartData('weekly_chart', week);
+		var day_range = '';
+		if(document.getElementById('current-week'))
+		{
+			day_range = document.getElementById('current-week').innerHTML;
+			retrieveChartData('weekly_chart', day_range);
 		}
+		// if (week == '' || week == ' ' || week == null) {
+		// 	var today = new Date(); // get current date
+		// 	var weekNumber = today.getWeek(); // Returns the week number as an integer
+		// 	if (weekNumber.toString().length == 1) {
+		// 		weekNumber = '0' + weekNumber;
+		// 	}
+		// 	weekControl.value = today.getFullYear() + '-W' + weekNumber;
+		// 	week = today.getFullYear() + '-W' + weekNumber;
+		// 	document.getElementById('weekly-chart').setAttribute('max', week);
+		// 	console.log(day_range);
+		// 	retrieveChartData('weekly_chart', day_range);
+		// } else {
+		// 	console.log(day_range);
+		// 	retrieveChartData('weekly_chart', day_range);
+		// }
 	}
 }
 
@@ -174,7 +183,7 @@ function drawChart(type, res, date) {
 		$('#attachPanels').empty();
 	} else {
 		document.getElementById('weekly-duration').innerHTML = res['total_hours'];
-		var const_lable = [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat','Sun' ];
+		var const_lable = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ];
 		var data = {
 			labels: const_lable,
 			datasets: []
@@ -292,19 +301,14 @@ function draw_customized_chart(res) {
 
 	var daily_hr = parseInt(res['total_minutes'] / 60);
 	var daily_min = res['total_minutes'] % 60;
-	if(daily_hr.toString().length == 1)
-	{
-		daily_hr = '0'+daily_hr;
+	if (daily_hr.toString().length == 1) {
+		daily_hr = '0' + daily_hr;
 	}
-	if(daily_min.toString().length == 1)
-	{
-		daily_min = '0'+daily_min;
+	if (daily_min.toString().length == 1) {
+		daily_min = '0' + daily_min;
 	}
-
-	
 
 	document.getElementById('daily-duration').innerHTML = daily_hr + ':' + daily_min;
-
 
 	if (window_width > 340) {
 		margin_top = 295;
@@ -506,13 +510,16 @@ function next() {
 	var currentYear = parseInt(document.getElementById('monthly-chart').value.split(' ')[1]);
 	var currentMonth = parseInt(document.getElementById('monthly-chart').value.split(' ')[0]);
 	var cur_MY = new Date().getMonth() + ' ' + new Date().getFullYear();
-	if (parseInt(cur_MY.split(' ')[0]) == currentMonth && currentYear == parseInt(cur_MY.split(' ')[1])) {
-		$('#next-year').css('color', '#666');
-	} else {
+	if(parseInt(cur_MY.split(' ')[0])-1 == currentMonth && currentYear == parseInt(cur_MY.split(' ')[1]))
+	{
+		$('#next-year').css('color', '#ccc');
+	}
+	if (!(parseInt(cur_MY.split(' ')[0]) == currentMonth && currentYear == parseInt(cur_MY.split(' ')[1]))) {
+		
 		currentYear = currentMonth === 11 ? currentYear + 1 : currentYear;
 		currentMonth = (currentMonth + 1) % 12;
 		document.getElementById('monthly-chart').value = currentMonth + ' ' + currentYear;
-		$('#next-year').css('color', '#a280fc');
+		//$('#next-year').css('color', '#666');
 		showCalendar(currentMonth, currentYear);
 	}
 }
@@ -522,16 +529,17 @@ function previous() {
 	currentYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 	currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
 	document.getElementById('monthly-chart').value = currentMonth + ' ' + currentYear;
+	$('#next-year').css('color', '#666');
 	showCalendar(currentMonth, currentYear);
 }
 function hexToRgb(hex) {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	return result
 		? {
-			r: parseInt(result[1], 16),
-			g: parseInt(result[2], 16),
-			b: parseInt(result[3], 16)
-		}
+				r: parseInt(result[1], 16),
+				g: parseInt(result[2], 16),
+				b: parseInt(result[3], 16)
+			}
 		: null;
 }
 
@@ -571,24 +579,27 @@ function showCalendar(month, year) {
 	$.ajax({
 		type: 'GET',
 		url: timeTrackerBaseURL + 'index.php/user/activity_chart',
-		data: { chart_type: 'monthly_chart', date: (month + 1) + ' ' + year },
+		data: { chart_type: 'monthly_chart', date: month + 1 + ' ' + year },
 		dataType: 'json',
 		success: function(result) {
 			$('.card').show();
-
+			if(result['status'] == false)
+			{
+				document.getElementById('monthly-chart-error').innerHTML = 'No activities in this month';
+			}else
+			{
+				document.getElementById('monthly-chart-error').innerHTML = ' ';
+			}
 			var monthly_hr = parseInt(result['total_minutes'] / 60);
 			var monthly_min = result['total_minutes'] % 60;
-			
-			if(monthly_hr.toString().length == 1)
-			{
-				monthly_hr = '0'+monthly_hr;
+
+			if (monthly_hr.toString().length == 1) {
+				monthly_hr = '0' + monthly_hr;
 			}
-			if(monthly_min.toString().length == 1)
-			{
-				monthly_min = '0'+monthly_min;
+			if (monthly_min.toString().length == 1) {
+				monthly_min = '0' + monthly_min;
 			}
 			document.getElementById('monthly-duration').innerHTML = monthly_hr + ':' + monthly_min;
-			document.getElementById('monthly-chart-error').innerHTML = ' ';
 			for (var i = 0; i < result['data'].length; i++) {
 				var res_date = result['data'][i][0].split('-')[2];
 				var cal_date = document.getElementsByTagName('td');
@@ -609,7 +620,6 @@ function showCalendar(month, year) {
 						if (opacity < 0.5) {
 							opacity = 0.5;
 						}
-
 						var rgb = hexToRgb(result['data'][i][2]);
 						var rgb_color = 'rgb(' + rgb['r'] + ',' + rgb['g'] + ',' + rgb['b'] + ',' + opacity + ')';
 						cal_date[j].innerText = '';
@@ -628,6 +638,8 @@ function showCalendar(month, year) {
 						$(innerCell).css('z-index', '0');
 
 						let innerSpan = document.createElement('span');
+						innerSpan.classList.add("monthly-action");
+						innerCell.classList.add("monthly-action1");
 						$(innerSpan).css('border-radius', '100%');
 						$(innerSpan).css('height', '50px');
 						$(innerSpan).css('width', '50px');
@@ -636,9 +648,7 @@ function showCalendar(month, year) {
 						$(innerSpan).css('position', 'absolute');
 						$(innerSpan).css('left', '28.5%');
 						$(innerSpan).css('z-index', '1');
-
 						let cellText1 = document.createTextNode(table_date);
-						
 						cal_date[j].appendChild(innerCell);
 						cal_date[j].appendChild(innerSpan);
 
@@ -671,11 +681,9 @@ function showCalendar(month, year) {
 	});
 }
 function loadCalendarChart() {
-	if(document.getElementById('monthly-chart'))
-	{
-		showCalendar(parseInt(document.getElementById('monthly-chart').value.split(" ")[0]), parseInt(document.getElementById('monthly-chart').value.split(" ")[1]));
-	}
-	else{
+	if (document.getElementById('monthly-chart')) {
+		showCalendar(parseInt(document.getElementById('monthly-chart').value.split(' ')[0]), parseInt(document.getElementById('monthly-chart').value.split(' ')[1]));
+	} else {
 		let today = new Date();
 		let currentMonth = today.getMonth();
 		let currentYear = today.getFullYear();
@@ -686,12 +694,10 @@ $(document).ready(function() {
 	//Tab Change
 	$('#task-detail').css('display', 'none');
 	$('#weekly-chart').hide();
-	//$('#monthly-chart').hide();
 	let today = new Date();
 	let currentMonth = today.getMonth();
 	let currentYear = today.getFullYear();
-	if(document.getElementById('monthly-chart'))
-	{
+	if (document.getElementById('monthly-chart')) {
 		document.getElementById('monthly-chart').value = currentMonth + ' ' + currentYear;
 	}
 
@@ -709,12 +715,10 @@ $(document).ready(function() {
 		loadCalendarChart();
 	});
 	var tday = moment(new Date());
-	if(document.getElementById('current-date'))
-	{
+	if (document.getElementById('current-date')) {
 		document.getElementById('current-date').innerHTML = moment(tday).format('dddd MMMM DD');
 	}
-	if(document.getElementById('daily-chart'))
-	{
+	if (document.getElementById('daily-chart')) {
 		document.getElementById('daily-chart').value = moment(tday).format('YYYY-MM-DD');
 	}
 	var daily_chart_date = document.getElementById('daily-chart').value;
@@ -728,7 +732,6 @@ $(document).ready(function() {
 	}
 	$('#next-date').unbind().click(function() {
 		var daily_chart_date = document.getElementById('daily-chart').value;
-
 		var day = new Date(daily_chart_date);
 		var nextDay = new Date(day);
 		nextDay.setDate(day.getDate() + 1);
@@ -737,7 +740,6 @@ $(document).ready(function() {
 		} else {
 			$('#next-date').css('color', '#a280fc');
 			document.getElementById('daily-chart').value = moment(nextDay).format('YYYY-MM-DD');
-
 			document.getElementById('current-date').innerHTML = moment(nextDay).format('dddd MMMM DD');
 			loadDailyChart();
 		}
@@ -760,13 +762,14 @@ $(document).ready(function() {
 	});
 
 	var t_day = new Date();
-	var day = moment(t_day).format('E');
+	var day = parseInt(moment(t_day).format('E'));
 	t_day.setDate(t_day.getDate() - day);
-	var start_week = t_day;
 	var s_date = moment(t_day).format('MMM DD');
-	t_day.setDate(t_day.getDate() + 7);
+	t_day.setDate(t_day.getDate() + 6);
 	var e_date = moment(t_day).format('MMM DD');
-	t_day.setDate(t_day.getDate() - 7);
+	t_day.setDate(t_day.getDate() - 6);
+	$('#next-week').css('color', '#ccc');
+	$('#next-year').css('color', '#ccc');
 
 	document.getElementById('current-week').innerHTML = s_date + ' - ' + e_date;
 
@@ -779,10 +782,9 @@ $(document).ready(function() {
 		var week_no = parseInt(daily_chart_date1.slice(6, 8));
 		var c_week = moment(new Date()).format('W');
 		if (week_no < parseInt(c_week) && parseInt(daily_chart_date1.slice(0, 4)) == parseInt(moment(new Date()).format('YYYY'))) {
-			if (c_week == week_no) {
+			if (c_week == week_no+1) {
 				$('#next-week').css('color', '#ccc');
 			}
-			$('#next-week').css('color', '#666');
 			week_no++;
 			if (week_no.toString().length == 1) {
 				week_no = '0' + week_no;
@@ -793,9 +795,9 @@ $(document).ready(function() {
 
 			t_day.setDate(t_day.getDate() + 7);
 			var s_date = moment(t_day).format('MMM DD');
-			t_day.setDate(t_day.getDate() + 7);
+			t_day.setDate(t_day.getDate() + 6);
 			var e_date = moment(t_day).format('MMM DD');
-			t_day.setDate(t_day.getDate() - 7);
+			t_day.setDate(t_day.getDate() - 6);
 			document.getElementById('current-week').innerHTML = s_date + ' - ' + e_date;
 			loadWeeklyChart();
 		} else {
@@ -808,20 +810,21 @@ $(document).ready(function() {
 
 		if (parseInt(daily_chart_date1.slice(0, 4)) == parseInt(moment(new Date()).format('YYYY'))) {
 			week_no--;
+			$('#next-week').css('color', '#666');
 			if (week_no.toString().length == 1) {
 				week_no = '0' + week_no;
 				document.getElementById('weekly-chart').value = daily_chart_date1.slice(0, 6) + week_no;
 			} else {
 				document.getElementById('weekly-chart').value = daily_chart_date1.slice(0, 6) + week_no;
 			}
+			t_day.setDate(t_day.getDate() - 1);
 			var e_date = moment(t_day).format('MMM DD');
-			t_day.setDate(t_day.getDate() - 7);
+			t_day.setDate(t_day.getDate() - 6);
 			var s_date = moment(t_day).format('MMM DD');
 			document.getElementById('current-week').innerHTML = s_date + ' - ' + e_date;
 			loadWeeklyChart();
 		}
 	});
-
 	/*daily_value.*/
 	if (win_width < 400) {
 		document.getElementById('chart-labels').remove();
@@ -850,7 +853,7 @@ $(document).ready(function() {
 		if (x == '#weekly-view') {
 			loadWeeklyChart();
 			var date = document.getElementById('weekly-chart').value;
-			loadTask('weekly_chart', date);
+			//loadTask('weekly_chart', date);
 		}
 		if (x == '#monthly-view') {
 			loadCalendarChart();

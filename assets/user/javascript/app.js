@@ -47,10 +47,40 @@ $(function() {
 	});
 
 	$('.edit-time').timepicker({
-		useCurrent: false,
-		format: 'HH:`MM',
-		uiLibrary: 'bootstrap4'
+		mode: '24hr',
+		format: 'HH:MM',
+		useCurrent: false
 	});
+
+	$('#timerpicker-punchout').timepicker({
+		mode: '24hr',
+		format: 'HH:MM',
+		useCurrent: false
+	});
+	document.getElementById('timerpicker-punchout').value = moment().format("HH:mm");
+	if (document.getElementById('punch-out-action')) {
+		var punch_out = document.getElementById('punch-out-action');
+		var __element = document.getElementById('punch-out-action');
+		punch_out.onsubmit = function() {
+			var punch_out = document.getElementById('timerpicker-punchout').value;
+			if (punch_out == ' ' || punch_out == '') {
+				document.getElementById('punch-out-err').innerHTML = 'enter valid punch out time. ';
+				return false;
+			} else {
+				var serverDate = moment(moment().format("YYYY-MM-DD") + ' ' + punch_out).tz('utc').format('YYYY-MM-DD H:mm:ss');
+				document.getElementById('timerpicker-punchout').value = serverDate;
+				if (typeof parseInt(serverDate.slice(0, 2)) == 'string') {
+					document.getElementById('punch-out-err').innerHTML = 'enter valid punch out time. ';
+					return false;
+				}
+				if (serverDate == 'Invalid date') {
+					document.getElementById('punch-out-err').innerHTML = 'enter valid punch out time. ';
+					return false;
+				}
+				return true;
+			}
+		};
+	}
 	$('.year-chart').datepicker({
 		minViewMode: 2,
 		format: 'yyyy'

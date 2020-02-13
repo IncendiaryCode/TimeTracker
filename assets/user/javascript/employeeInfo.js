@@ -363,7 +363,7 @@ function clear_filter() {
 			$('.clear-filter').hide();
 		}
 	}
-	loadTaskActivities({ type: 'task' });
+	loadTaskActivities({ type: 'date' });
 }
 
 $(document).ready(function() {
@@ -532,7 +532,7 @@ $(document).ready(function() {
 	}
 
 	if ($('#attach-card').length > 0) {
-		loadTaskActivities({ type: 'task' });
+		loadTaskActivities({ type: 'date' });
 	}
 
 	timerSlider.init();
@@ -624,7 +624,6 @@ $(document).ready(function() {
 			var t_day = moment().format('YYYY-MM-DD');
 			startTime = moment(t_day + ' ' + startTime).format('HH:mm');
 			document.getElementById('start-login-time').value = startTime;
-			console.log(startTime);
 			if (startTime == 'Invalid date') {
 				document.getElementById('stop-timer-error').innerHTML = 'Please enter valid time';
 				return false;
@@ -670,21 +669,21 @@ $(document).ready(function() {
 			} else return true;
 		};
 	}
-	if (document.getElementById('punch-out')) {
-		$('#punch-out').on('click', function(e) {
-			var pounchOutTime = moment().tz('utc').format('Y-MM-DD HH:mm:ss');
-			$.ajax({
-				type: 'POST',
-				url: timeTrackerBaseURL + 'user/update_end_time',
-				data: { punch_out_time: pounchOutTime },
-				success: function(res) {
-					document.getElementById('stop-time').childNodes[1].childNodes[0].classList.remove('fa-stop');
-					document.getElementById('stop-time').childNodes[1].childNodes[0].classList.add('fa-play');
-					document.getElementById('stop-time').removeEventListener('click');
-				}
-			});
-		});
-	}
+	// if (document.getElementById('punch-out')) {
+	// 	$('#punch-out').on('click', function(e) {
+	// 		var pounchOutTime = moment().tz('utc').format('Y-MM-DD HH:mm:ss');
+	// 		$.ajax({
+	// 			type: 'POST',
+	// 			url: timeTrackerBaseURL + 'user/update_end_time',
+	// 			data: { punch_out_time: pounchOutTime },
+	// 			success: function(res) {
+	// 				document.getElementById('stop-time').childNodes[1].childNodes[0].classList.remove('fa-stop');
+	// 				document.getElementById('stop-time').childNodes[1].childNodes[0].classList.add('fa-play');
+	// 				document.getElementById('stop-time').removeEventListener('click');
+	// 			}
+	// 		});
+	// 	});
+	// }
 
 	//check for existing running tasks
 	$.ajax({
