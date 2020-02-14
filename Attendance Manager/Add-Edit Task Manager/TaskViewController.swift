@@ -60,6 +60,7 @@ UIGestureRecognizerDelegate {
         case updatable
         case punchedout
         case punchin
+        case outOfWorkTime
     }
     
     var bIsQuickAction = false
@@ -722,6 +723,19 @@ UIGestureRecognizerDelegate {
             return .startGreater
         }
         
+        // Validate time in between working hour.(Punch in/out)
+        let startTime = getSecondsToHoursMinutesSeconds(seconds: start)
+        let endTime = getSecondsToHoursMinutesSeconds(seconds: end)
+        let punchInOutCDCtrlr = PunchInOutCDController()
+        let startDate = convertStrDateTimeToDate(strDateTime:
+            "\(date) \(startTime)")
+        let endDate = convertStrDateTimeToDate(strDateTime:
+            "\(date) \(endTime)")
+        if !punchInOutCDCtrlr.isTimeExistInPunchInOut(start: startDate, end: endDate) {
+            return .outOfWorkTime
+        }
+        
+        
         /// Date and time is greater than current time.
 //        if date == Date().getStrDate() {
 //            if (start-60) > getTimeInSec() || (end-60) > getTimeInSec() {
@@ -890,21 +904,21 @@ UIGestureRecognizerDelegate {
         }
     }
     
-    /// Setup time picker.
+    /// Setup time picker.(Maximum and Minimum time)
     func setTimePickerView(dateTime: Date) {
         dateTimePicker.datePickerMode = .time
-        let calendar = Calendar.current
-        var components = DateComponents()
-        components.day = dateTime.day
-        components.month = dateTime.mon
-        components.year = dateTime.year
-        components.hour = 8 // Minimum time from 6 AM
-        components.minute = 00
-        let minTime = calendar.date(from: components)!
-        dateTimePicker.minimumDate = minTime
-        components.hour = 20 // // Max time to 8 PM
-        let maxTime = calendar.date(from: components)!
-        dateTimePicker.maximumDate = maxTime
+//        let calendar = Calendar.current
+//        var components = DateComponents()
+//        components.day = dateTime.day
+//        components.month = dateTime.mon
+//        components.year = dateTime.year
+//        components.hour = 8 // Minimum time from 6 AM
+//        components.minute = 00
+//        let minTime = calendar.date(from: components)!
+        dateTimePicker.minimumDate = nil
+//        components.hour = 20 // // Max time to 8 PM
+//        let maxTime = calendar.date(from: components)!
+        dateTimePicker.maximumDate = nil
         dateTimePicker.setDate(dateTime, animated: true)
     }
     
@@ -1132,17 +1146,20 @@ UIGestureRecognizerDelegate {
         let strError: String!
         switch type {
             case .futureTime:
-                strError = "You have entered future timings."
+                strError = "You should not enter the future timings"
             case .startGreater:
-                strError = "Entered start time greater than end time."
+                strError = "Start time should not be greater than end time"
             case .timeExist:
-                strError = "Entered timings already exists."
+                strError = "Time you have entered is already exists"
             case .punchedout:
                 strError =
-                "Since your punched out not able start a task, please enter end time if you want to update timings"
+                "Since you are punched out, You will be not able to start a task, please enter end time if you want to update the timings"
             case .punchin:
                 strError =
-            "Since your not punched in not able start a task, please enter end time if you want to update timings"
+            "Since you are not punched in, You will be not able to start a task, please enter end time if you want to update the timings"
+            case .outOfWorkTime:
+                strError =
+            "Start/End time should be within the punch in/out timings"
             default:
                 strError = "Enter valid time"
         }
@@ -1151,7 +1168,9 @@ UIGestureRecognizerDelegate {
             UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { _ in
                 // If updation failed set end field empty
+            if nil != self.selectedCell {
                 self.selectedCell.lblEndTime.text = ""
+            }
         }
         ))
         self.present(alert, animated: true, completion: nil)

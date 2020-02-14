@@ -171,6 +171,21 @@ class APIResponseHandler {
                                     let serverStartTime = startTaskTime["start_time"] as! String
                                     let localStartTime = convertAPITimeToLocal(strDateTime:
                                         serverStartTime)
+                                    // Check for invalid data.
+                                    if localStartTime == "invalid" {
+                                        // Dont store that data.
+                                        // Say invalide data.
+                                        let alert = UIAlertController(title: "Alert"
+                                            , message: "Some task timings stored in inavlid format. Please contact admin to fix it."
+                                            , preferredStyle: UIAlertController.Style.alert)
+                                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default
+                                            , handler: {(_: UIAlertAction!) in
+                                        }
+                                        ))
+                                        let presentingVC = UIApplication.topViewController()
+                                        presentingVC!.present(alert, animated: true, completion: nil)
+                                        continue
+                                    }
                                     let startDate = convertUTCtoLocal(strDateTime:
                                         localStartTime)
                                     nStartDate = startDate.millisecondsSince1970
@@ -241,6 +256,21 @@ class APIResponseHandler {
             // Get task date, start time and end time.
             let serverStartDate = dictValues["start_time"] as! String
             let localStartTime = convertAPITimeToLocal(strDateTime: serverStartDate)
+            // Check for invalid data.
+            if localStartTime == "invalid" {
+                // Dont store that data.
+                // Say invalide data.
+                let alert = UIAlertController(title: "Alert"
+                    , message: "Some task timings stored in inavlid format. Please contact admin to fix it."
+                    , preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default
+                    , handler: {(_: UIAlertAction!) in
+                }
+                ))
+                let presentingVC = UIApplication.topViewController()
+                presentingVC!.present(alert, animated: true, completion: nil)
+                continue
+            }
             let startDate = convertUTCtoLocal(strDateTime: localStartTime)
             
             /// Get only date
@@ -253,6 +283,11 @@ class APIResponseHandler {
             var nEndTime: Int = 0
             if let strEndDate = dictValues["end_time"] as? String {
                 let serverEndTime = convertAPITimeToLocal(strDateTime: strEndDate)
+                // Check for invalid data.
+                if serverEndTime == "invalid" {
+                    // Dont store that data.
+                    continue
+                }
                 let localEndTime = convertUTCtoLocal(strDateTime: serverEndTime)
                 nEndTime = localEndTime.timeInDate
             }
@@ -637,12 +672,6 @@ class APIResponseHandler {
         })
     }
     
-    @IBAction func txtEmailPrimaryAction(_ sender: Any) {
-    }
-    
-    @IBAction func txtOtpPrimaryAction(_ sender: Any) {
-    }
-    
     static func resetOtpPassword(newPW: String, completion:@escaping (Bool, String) -> ()) {
         let url = URL(string: "\(g_baseURL)\(g_subUrl)/user/resetpassword")
         let email = UserDefaults.standard.value(forKey: "userEmail") as! String
@@ -659,5 +688,61 @@ class APIResponseHandler {
                 }
             }
         })
+    }
+    
+    static func updateUserProfile(name: String, phone: String, imgData: Data
+        , completion:@escaping (Bool, String) -> ()) {
+        let url = URL(string: "\(g_baseURL)\(g_subUrl)/user/edit_profile")
+        if let authKey = UserDefaults.standard.value(forKey: "userAuthKey") {
+            let strUserId = UserDefaults.standard.value(forKey: "userId") as! String
+            let params = ["userid": strUserId, "name": name, "phone": phone, "image_data": imgData]
+                as [String : Any]
+            RequestController.requestToAPI(params: params, url: url!, authKey: authKey
+                as? String, completion: {
+                    dictResult in
+                    DispatchQueue.main.async {
+                        let strMsg = dictResult["msg"] as! String
+                        if 1 == dictResult["success"] as! Int {
+                            completion(true, strMsg)
+                        }
+                        else {
+                            completion(false, strMsg)
+                        }
+                    }
+            })
+        }
+    }
+    
+    static func fetchUserProfile(completion: @escaping (Bool, String) -> ()) {
+        let url = URL(string: "\(g_baseURL)\(g_subUrl)/user/fetch_profile")
+        if let authKey = UserDefaults.standard.value(forKey: "userAuthKey") {
+            let strUserId = UserDefaults.standard.value(forKey: "userId") as! String
+            let params = ["userid": strUserId]
+            RequestController.requestToAPI(params: params, url: url!, authKey: authKey
+                as? String, completion: {
+                    dictResult in
+                    DispatchQueue.main.async {
+                        if 1 == dictResult["success"] as! Int {
+                            let dictResLogin = dictResult["details"] as! Dictionary<String, Any>
+                            if let strName = dictResLogin["name"] {
+                                UserDefaults.standard.set(strName, forKey: "username")
+                            }
+                            if let userProfUrl = dictResLogin["profile_pic"] as? String
+                                , userProfUrl != "" {
+                                UserDefaults.standard.set(userProfUrl, forKey: "profileUrl")
+                            }
+                            if let phoneNo = dictResLogin["phone"] as? String, phoneNo != ""
+                                , phoneNo != "0" {
+                                UserDefaults.standard.set(phoneNo, forKey: "phoneNo")
+                            }
+                            completion(true, "User Profile loaded")
+                        }
+                        else {
+                            let strMsg = dictResult["msg"] as! String
+                            completion(false, strMsg)
+                        }
+                    }
+            })
+        }
     }
 }

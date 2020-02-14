@@ -165,46 +165,61 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         
         // Check for internet connectivity.
         if RequestController.shared.reachabilityManager!.isReachable {
-            let punchInOutCDTrlr = PunchInOutCDController()
-            
-            // Check previous day's punch out time.()
-            if punchInOutCDTrlr.isPreviousDayUpdated() {
-                // If view initialise from login credentials.
-                if nil == arrCTaskDetails || 0 == arrCTaskDetails.count {
-                    lblEmpty.isHidden = true
-                    btnAddTaskNoData.isHidden = true
-                    lblUpdater.isHidden = false
-                    actIndicator.startAnimating()
-                }
-                updateProject()
-                // If puched out.
-                if punchInOutCDTrlr.isTodayPunchedOut() {
-                    btnAddTask.isHidden = true
-                }
-                collectionTimer.reloadData()
-            }
-            else {
-                // If prev day not updated.
-                g_isPunchedOut = false
-                g_isPunchedIn = false
+                    let punchInOutCDTrlr = PunchInOutCDController()
+                    
+                    // Check previous day's punch out time.()
+                    if punchInOutCDTrlr.isPreviousDayUpdated() {
+                        // If view initialise from login credentials.
+                        if nil == self.arrCTaskDetails || 0 == self.arrCTaskDetails.count {
+                            self.lblEmpty.isHidden = true
+                            self.btnAddTaskNoData.isHidden = true
+                            self.lblUpdater.isHidden = false
+                            self.actIndicator.startAnimating()
+                        }
+                        self.updateProject()
+                        // If puched out.
+//                        if punchInOutCDTrlr.isTodayPunchedOut() {
+//                            self.btnAddTask.isHidden = true
+//                        }
+                        self.collectionTimer.reloadData()
+                    }
+                    else {
+                        // If prev day not updated.
+                        g_isPunchedOut = false
+                        g_isPunchedIn = false
+                        
+                        let date = punchInOutCDTrlr.getPreviousDate()
+                        let viewTimeAdder: TimeUpdateView = TimeUpdateView(frame: self.view.bounds)
+                        
+                        // Check this issue. time conversion
+                        viewTimeAdder.customInit(date: date.getStrDate()
+                            , time: date.getStrTime(format: "HH:mm:ss")
+                            , taskName: "", taskId: 0, type: .prevDayPunchOut)
+                        viewTimeAdder.completionHandler = {
+                            status in
+                            let viewNotif = InAppNotificationView()
+                            
+                            if status {
+                                viewNotif.sendNotification(msg: "Punch out time is updated successfully.",
+                                                           autoDismiss: true)
+                                self.updateProject()
+                                self.collectionTimer.reloadData()
+                            }
+                            else {
+                                viewNotif.sendNotification(msg: "Punch out time updation is got failed.",
+                                                           autoDismiss: true)
+                            }
+                            viewNotif.addGradient()
+                            self.view.addSubview(viewNotif)
+                        }
+                        self.tabBarController?.view.addSubview(viewTimeAdder)
+                    }
+                    
+                    // If punched in not proccessed.
+//                    if !punchInOutCDTrlr.isTodayDateExists() {
+//                        self.btnAddTask.isHidden = true
+//                    }
                 
-                let date = punchInOutCDTrlr.getPreviousDate()
-                let viewTimeAdder: TimeUpdateView = TimeUpdateView(frame: self.view.bounds)
-                
-                // Check this issue. time conversion
-                viewTimeAdder.customInit(date: date.getStrDate(), time: "09:00:00"
-                    , taskName: "", taskId: 0, type: .logout)
-                viewTimeAdder.completionHandler = {
-                    self.updateProject()
-                    self.collectionTimer.reloadData()
-                }
-                tabBarController?.view.addSubview(viewTimeAdder)
-            }
-            
-            // If punched in not proccessed.
-            if !punchInOutCDTrlr.isTodayDateExists() {
-                btnAddTask.isHidden = true
-            }
         }
         else {
             // Send notification to connect internet.
@@ -244,7 +259,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         lblUpdater.center = cgPoint
     }
     
-    func updateProject() {
+    func updateProject(completion: @escaping (() -> Void) = {}) {
         /// Update values to core data from server.
         APIResponseHandler.loadProjects(completion: { status in
             if status {
@@ -256,6 +271,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 updateTaskDetails(pageNo: self.arrCTaskDetails.count/10)
                 self.updateView()
             }
+            completion()
         })
     }
     
@@ -289,7 +305,21 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                     // last.)
                     if i == 0 {
                         viewTimeAdder.completionHandler = {
-                            self.updateProject()
+                            status in
+                            let viewNotif = InAppNotificationView()
+                            if status {
+                                self.updateProject()
+                                viewNotif.sendNotification(msg:
+                                    "Task: \(taskName)\nTime updated to \(strTime)"
+                                    , autoDismiss: true)
+                            }
+                            else {
+                                viewNotif.sendNotification(msg:
+                                    "Task: \(taskName)\nUpdation failed."
+                                    , autoDismiss: true)
+                            }
+                            viewNotif.addGradient()
+                            self.view.addSubview(viewNotif)
                         }
                     }
                     self.tabBarController?.view.addSubview(viewTimeAdder)
@@ -346,7 +376,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         if (nil == UserDefaults.standard.object(forKey: "IntroStatusTask") ||
             false == UserDefaults.standard.value(forKey: "IntroStatusTask") as? Bool)
             && g_isPunchedIn ?? false && !g_isPunchedOut {
-            let cgRect = CGRect(x: btnAddTask.frame.minX, y: btnAddTask.frame.minY-11
+            let cgRect = CGRect(x: btnAddTask.frame.minX, y: btnAddTask.frame.minY-5
                 , width: btnAddTask.frame.width, height: btnAddTask.frame.height)
             let userGuideData = UserguideData(itemFrame: cgRect, itemHint:
                 "To create new task.")
@@ -379,8 +409,8 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     /// Fetch data from server.
-    func fetchTaskDataFromServer() {
-        updateProject()
+    func fetchTaskDataFromServer(completion: @escaping (() -> Void) = {}) {
+        updateProject(completion: completion)
     }
     
     @IBAction func btnFinishPressed(_ sender: Any) {
@@ -559,7 +589,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             alertToPuchIn()
         }
         else if g_isPunchedOut {
-            showAlert(msg: "You cannot add task once you have punched out!")
+            showAlert(msg: "You cannot add tasks for today as you have already punched out")
         }
         else {
             segueToAddTask()
@@ -599,6 +629,12 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             return arrCTaskDetails.count
         }
         else {
+            if isTodayShown {
+                lblEmpty.text =  "No task added today!"
+            }
+            else {
+                lblEmpty.text =  "No task available!"
+            }
             return 0
         }
     }
@@ -898,8 +934,6 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         cell.isUserInteractionEnabled = true
 //        }
         
-        cell.lblTotalDuration.text =
-        "\(getSecondsToHoursMinutesSeconds(seconds: cTaskDetails.nTotalTime!))"
         cell.imgTimer.image = #imageLiteral(resourceName: "timer3")
         cell.imgTimer.alpha = 0.2
         // If cell equals to running task cell.
@@ -917,21 +951,27 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             cell.imgTimer.alpha = 1
             
             if nil == cell.timer {
+                // Add time and start timer.
                 cell.nTotalTime = cTaskDetails.nTotalTime!
                 cell.timer = Timer.scheduledTimer(timeInterval: 1, target: cell, selector:
                     #selector(cell.timerAction), userInfo: nil, repeats: true)
                 RunLoop.current.add(cell.timer!, forMode: RunLoop.Mode.common)
             }
+            else {
+                // Update time.
+                cell.nTotalTime = cTaskDetails.nTotalTime!
+            }
         }
         else {
+            cell.lblTotalDuration.text =
+            "\(getSecondsToHoursMinutesSeconds(seconds: cTaskDetails.nTotalTime!, format: .hm))"
             cell.timer?.invalidate()
             cell.timer = nil
         }
         
         // If task started.
         if let strDate = cTaskDetails.getStartDate() {
-            let strTime = getSecondsToHoursMinutesSecondsWithAllFields(seconds:
-                cTaskDetails.getStartTime()!)
+            let strTime = getSecondsToHoursMinutesSeconds(seconds: cTaskDetails.getStartTime()!)
             cell.lblStartTime.text =
             "\(getDateDay(date: strDate)) \(convert24to12Format(strTime: strTime))"
         }
@@ -969,7 +1009,13 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 print("Error while starting task..!")
                 self.actIndicator.stopAnimating()
             }
+            // Remove current time updation to cell view.
+            if let cellPrevRunTask = self.collectionTimer.cellForItem(at: [0
+                , self.arrRunningTask.count-1]) as? TimerCell {
+                cellPrevRunTask.withCurrentTime = false
+            }
             self.updateProject()
+            
         })
     }
     
@@ -1008,9 +1054,14 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         self.present(alert, animated: true, completion: nil)
     }
     
-    // Reload collection view.
-    func reloadCollection() {
+    // Reload collection view.(If with current time is true updates current time to cell.)
+    func reloadCollection(withCurrentTime: Bool = false) {
         self.arrRunningTask = self.getRunningTaskId()
+        // To update current time to cell view without dealy.
+        if let cellPrevRunTask = self.collectionTimer.cellForItem(at: [0, arrRunningTask.count-1]) as?
+            TimerCell {
+            cellPrevRunTask.withCurrentTime = true
+        }
         self.drawTaskState()
         if self.arrRunningTask.count>1 {
             // If more than one task running, show right button initially.
@@ -1051,6 +1102,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 // Start task.
                 cTaskDetails.bIsRunning = true
                 cell.lblTotalDuration.text = "Synching"
+                
                 reloadCollection()
                 startTask(taskId: taskId!)
             }
@@ -1115,8 +1167,40 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         alert.addAction(UIAlertAction(title: "Yes", style: UIAlertAction.Style.default,
                                       handler: {(_: UIAlertAction!) in
                                         //Office Leave action
-                                        self.btnState.isUserInteractionEnabled = false
-                                        self.updatePunchOutTime()
+                                        self.btnState.isUserInteractionEnabled = true
+                                        let viewTimeAdder: TimeUpdateView = TimeUpdateView(frame:
+                                            self.view.bounds)
+                                        let date = self.punchInOutCDController.getPunchInTime()
+                                        viewTimeAdder.customInit(date: date.getStrDate()
+                                            , time: date.getStrTime(format: "HH:mm:ss")
+                                            , taskName: "", taskId: 0, type: .todayPunchOut)
+                                        viewTimeAdder.completionHandler = {
+                                            status in
+                                            let viewNotif = InAppNotificationView()
+                                            if status {
+                                                g_isPunchedOut = true
+                                                self.actIndicator.startAnimating()
+                                                self.updateProject()
+                                                self.collectionTimer.reloadData()
+                                                viewNotif.sendNotification(msg:
+                                                    "Punched out successfully", autoDismiss: true)
+                                                self.collectionTimer.reloadData()
+                                                self.tblUserDetails.reloadData()
+                                                self.btnState.drawPlay(layerHeight: self
+                                                    .btnState.bounds.width * 0.30)
+                                            }
+                                            else {
+                                                viewNotif.sendNotification(msg:
+                                                    "Error while updating punch out."
+                                                    , autoDismiss: true)
+                                            }
+                                            viewNotif.addGradient()
+                                            if let presentingVC = UIApplication.topViewController() {
+                                                presentingVC.view.addSubview(viewNotif)
+                                            }
+                                            self.btnState.isUserInteractionEnabled = true
+                                        }
+                                        self.tabBarController?.view.addSubview(viewTimeAdder)
         }
         ))
         alert.addAction(UIAlertAction(title: "No", style: UIAlertAction.Style.cancel, handler:
@@ -1124,40 +1208,6 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 //Cancel Action
         }))
         self.present(alert, animated: true, completion: nil)
-    }
-    
-    /// Update punch out timings.
-    func updatePunchOutTime() {
-        actIndicator.startAnimating()
-        APIResponseHandler.stopTaskOrPunchIn(completion: {
-            status in
-            if status {
-                print("Punch out time updated..!")
-                g_isPunchedOut = true
-                APIResponseHandler.loadPunchInOut(pageNo: 1, completion: {
-                    status in
-                    if status {
-                        let viewNotif = InAppNotificationView()
-                        viewNotif.sendNotification(msg: "Punched out successfully",
-                                                   autoDismiss: true)
-                        viewNotif.addGradient()
-                        self.view.addSubview(viewNotif)
-                        self.collectionTimer.reloadData()
-                        self.tblUserDetails.reloadData()
-                        self.btnState.drawPlay(layerHeight: self.btnState.bounds.width * 0.30)
-                        self.btnAddTask.isHidden = true
-                    }
-                    else {
-                        print("Error while updating punch out time..!")
-                    }
-                    self.btnState.isUserInteractionEnabled = true
-                })
-            }
-            else {
-                print("Error while updating punch out time..!")
-            }
-            self.actIndicator.stopAnimating()
-        })
     }
     
     /// Stop all task while starting new task, if multi task disabled.
@@ -1208,7 +1258,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         // Check punched out.
         if g_isPunchedOut {
             showAlert(
-                msg: "Sorry, your already punched out. Please login tommorow to start a task.")
+                msg: "Sorry, you have already punched out. Please login tommorow to start a task.")
             return
         }
         
@@ -1303,7 +1353,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     @IBAction func btnStatePressed(_ sender: Any) {
         guard g_isPunchedOut != true else {
             showAlert(
-                msg: "Sorry, your already punched out. Please login tommorow for update punchin.")
+                msg: "Sorry, you have already punched out. Again you cannot punch in for the day")
             return
         }
         
@@ -1321,16 +1371,27 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         viewTimeAdder.customInit(date: getCurrentDate(), time: getCurrentTime()
             , taskName: "", taskId: 0, type: .login)
         viewTimeAdder.completionHandler = {
-            self.updateProject()
-            g_isPunchedIn = true
-            self.btnAddTask.isHidden = false
-            self.collectionTimer.reloadData()
-            if let indexPath = self.indexPathToRun {
-                self.startOrStopTask(indexPath: indexPath)
+            status in
+            let viewNotif = InAppNotificationView()
+            if status {
+                self.updateProject()
+                g_isPunchedIn = true
+                //            self.btnAddTask.isHidden = false
+                self.collectionTimer.reloadData()
+                if let indexPath = self.indexPathToRun {
+                    self.startOrStopTask(indexPath: indexPath)
+                }
+                viewNotif.sendNotification(msg: "Punched in successfully.",
+                                           autoDismiss: true)
+                // If intro page not shown.
+                self.showIntroPage()
             }
-            
-            // If intro page not shown.
-            self.showIntroPage()
+            else {
+                viewNotif.sendNotification(msg: "Punch in error.",
+                                           autoDismiss: true)
+            }
+            viewNotif.addGradient()
+            self.view.addSubview(viewNotif)
         }
         tabBarController?.view.addSubview(viewTimeAdder)
     }

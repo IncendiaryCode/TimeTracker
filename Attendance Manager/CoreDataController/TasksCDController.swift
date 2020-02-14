@@ -368,7 +368,7 @@ class TasksCDController {
         fetchRequest.predicate = NSPredicate(format: "task_id = %d",taskId)
         let res = try! nsManagedContext.fetch(fetchRequest)
         if res.count > 0 {
-            nTotTime = tasksTimeCDCtrlr.getTaskTotalTime(taskId: taskId)
+            nTotTime = tasksTimeCDCtrlr.getTaskRunningTime(taskId: taskId)
         }
         return nTotTime
     }
@@ -499,6 +499,25 @@ class TasksCDController {
         }
     }
     
+    func getRunningTasks() -> Array<Int> {
+        var arrTaskIds = Array<Int>()
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks")
+        fetchRequest.predicate = NSPredicate(format: "is_work_in_progress = %d", 1)
+        do {
+            let nsMContext = try nsManagedContext.fetch(fetchRequest)
+            for task in 0..<nsMContext.count {
+                let nsMObject = nsMContext[task] as! NSManagedObject
+                let taskId = nsMObject.value(forKey: "task_id") as! Int
+                arrTaskIds.append(taskId)
+            }
+            return arrTaskIds
+        }
+        catch {
+            print("Failed")
+            return arrTaskIds
+        }
+    }
+    
     func getTaskDetailsFromProjectName(arrProj: Array<String>) -> Array<Dictionary<String, Any>> {
         var arrTasks = Array<Dictionary<String, Any>>()
         for index in 0..<arrProj.count {
@@ -568,8 +587,10 @@ class TasksCDController {
                         // Check for onlyTodays applies.
                         if onlyTodays {
                             let date = Date(milliseconds: startDateTime)
-                            // Return only if started today, currently running and not started.
-                            if startDateTime != 0 && getCurrentDate() != date.getStrDate() &&
+                            // Return only if todays timeloine exist, started today,
+                            // currently running and not started.
+                            if !tasksTimeCDCtrlr.isTodayTimeLineExist(taskId: taskId) &&
+                                startDateTime != 0 && getCurrentDate() != date.getStrDate() &&
                                 !bWorking {
                                 // discard it.
                                 continue
@@ -578,8 +599,6 @@ class TasksCDController {
                         
                         // get total work time from taskstime entity
                         let totalTime = tasksTimeCDCtrlr.getTaskTotalTime(taskId: taskId)
-                        
-                        
                         
                         cTaskDetails = TaskDetails(taskId: taskId, taskName: taskName, taskDescr:
                             taskDesc, projId: projId, modId: modId, nTotalTime: totalTime, nStartTime:
@@ -667,11 +686,11 @@ class TasksCDController {
         for index in 0..<arrIntDates.count {
             var flag = true
             let strDate = arrDates[index]
-            let strMonth = getMonthName(strDate: strDate)
+            let strMonth = getMonthAndYear(strDate: strDate)
             for i in 0..<arrMonthDetails.count {
                 let monthDetails = arrMonthDetails[i]
                 // If already month index exist.
-                if monthDetails.strMonth == strMonth {
+                if monthDetails.strMonthYear == strMonth {
                     monthDetails.addDate(nDate: arrIntDates[index])
                     flag = false
                 }
@@ -783,7 +802,7 @@ class TasksCDController {
             false)]
         for taskId in taskIds {
             // Apply filter.
-            if nil != arrProj {
+            if nil != arrProj || arrProj?.count == 0 {
                 fetchRequest.predicate = NSPredicate(format:
                     "task_id = %d AND project_id IN %@", taskId, arrProj!)
             }
@@ -825,7 +844,7 @@ class TasksCDController {
         return arrDetails
     }
     
-    func getEachTaskTimeDataFromDate(intDate: Int64, arrProj: Array<Int> = [])
+    func getEachTaskTimeDataFromDate(intDate: Int64, arrProj: Array<Int>? = nil)
         -> Array<TaskTimeDetails> {
             var arrDetails = Array<TaskTimeDetails>()
             let strDate = Date(milliseconds: intDate).getStrDate()

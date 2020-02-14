@@ -58,8 +58,8 @@ class ResetPasswordVC: UIViewController {
     
     /// Send new password to the server.
     @IBAction func btnResetPswdPressed(_ sender: Any) {
-        if txtResetPswd.text!.count >= 6 && txtResetPswd.text!.count >= 6{
-            lblErrPswd.text = "Please enter both the fields"
+        if txtResetPswd.text!.count <= 6  && txtResetPswd.text!.count <= 6 {
+            lblErrPswd.text = "Password should contain atleast 6 character"
             lblErrPswd.isHidden = false
             self.txtResetPswd.shakeTextField()
             self.txtResetRePswd.shakeTextField()
@@ -86,7 +86,7 @@ class ResetPasswordVC: UIViewController {
                     self.navigationController?.popToRootViewController(animated: true)
                     let viewNotif = InAppNotificationView()
                     vc.view.addSubview(viewNotif)
-                    viewNotif.sendNotification(msg: "Reset password success, Please login")
+                    viewNotif.sendNotification(msg: "Reset password success, Please login now")
                     viewNotif.addGradient()
                 }
                 else {

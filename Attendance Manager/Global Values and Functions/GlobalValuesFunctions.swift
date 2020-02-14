@@ -54,6 +54,11 @@ var g_isPunchedIn: Bool?
 /// Animation duration to top
 var g_nAnimatnDuratn = 0.2
 
+enum TimeFormat {
+    case hm
+    case HHmmss
+}
+
 enum ColorMode: Int {
     case auto = 0
     case light = 1
@@ -211,6 +216,29 @@ enum ColorMode: Int {
             }
         }
     }
+    
+    /// Get Tint color.(app start color and white)
+    func tintColor() -> UIColor {
+        switch self {
+            case .light: return UIColor(red: 181/255, green: 108/255,
+                                        blue: 249/255, alpha: 1.0)
+            case .dark: return .white
+            
+            case .auto :
+                if #available(iOS 12.0, *) {
+                    switch UIScreen.main.traitCollection
+                        .userInterfaceStyle {
+                        case .light: return  UIColor(red: 181/255, green: 108/255,
+                                                     blue: 249/255, alpha: 1.0)
+                        case .dark: return .white
+                        default:
+                            return .clear
+                    }
+                } else {
+                    return .clear
+            }
+        }
+    }
         
     /// Get text color.
     func btnbackgroundColor() -> UIColor {
@@ -274,6 +302,69 @@ enum ColorMode: Int {
             }
         }
     }
+    
+    /// color(light white with 0.3 opacity and white with 0.3 alpha)
+    func placeHolderColor() -> UIColor {
+        switch self {
+            case .light: return  UIColor.white.withAlphaComponent(0.3)
+            case .dark: return UIColor.white.withAlphaComponent(0.3)
+            
+            case .auto :
+                if #available(iOS 12.0, *) {
+                    switch UIScreen.main.traitCollection
+                        .userInterfaceStyle {
+                        case .light: return  UIColor.white.withAlphaComponent(0.3)
+                        case .dark: return UIColor.white.withAlphaComponent(0.3)
+                        default:
+                            return .clear
+                    }
+                } else {
+                    return .clear
+            }
+        }
+    }
+    
+    /// Alpha value (0.4 and 0.8)
+    func alphaValueHigh() -> CGFloat {
+        switch self {
+            case .light: return  0.4
+            case .dark: return 0.8
+            
+            case .auto :
+                if #available(iOS 12.0, *) {
+                    switch UIScreen.main.traitCollection
+                        .userInterfaceStyle {
+                        case .light: return  0.4
+                        case .dark: return 0.8
+                        default:
+                            return 0.8
+                    }
+                } else {
+                    return 0.8
+            }
+        }
+    }
+    
+    /// color(light gray with 0.8 opacity and white with 0.2 alpha)
+    func alphaValueLow() -> CGFloat {
+        switch self {
+            case .light: return  0.1
+            case .dark: return 0.4
+            
+            case .auto :
+                if #available(iOS 12.0, *) {
+                    switch UIScreen.main.traitCollection
+                        .userInterfaceStyle {
+                        case .light: return  0.1
+                        case .dark: return 0.4
+                        default:
+                            return 0.4
+                    }
+                } else {
+                    return 0.4
+            }
+        }
+    }
 }
 
 /// Set up app config
@@ -308,7 +399,9 @@ func setColorMode() {
     }
     else {
         if #available(iOS 12.0, *) {
+            // Uncomment if initially required with system display mode.
             if UIScreen.main.traitCollection.userInterfaceStyle == .light {
+            // Initially set to light.
                 g_colorMode = ColorMode.light
             }
             else {
@@ -631,13 +724,13 @@ class MonthDetails {
             computeTotaltime()
         }
     }
-    var strMonth: String!
+    var strMonthYear: String!
     var arrProj: Array<Int>?
     
     init(nDate: Int64, arrProj: Array<Int>?) {
         self.arrDates = [nDate]
         let strDate = Date().getStrDate(from: nDate)
-        self.strMonth = getMonthName(strDate: strDate)
+        self.strMonthYear = getMonthAndYear(strDate: strDate)
         self.arrProj = arrProj
     }
     
@@ -800,14 +893,14 @@ func getDateFromTime(strTime: String) -> Date {
     return date
 }
 
-func getMonthName(strDate: String) -> String {
+func getMonthAndYear(strDate: String) -> String {
     let strDate = strDate
     let words = strDate.split(separator: "/")
     let nMonth = Int(words[1])
     let monthStr = Calendar.current.monthSymbols[nMonth! - 1]
     let start = String.Index(utf16Offset: 0, in: monthStr)
     let end = String.Index(utf16Offset: 3, in: monthStr)
-    let strMon = String(monthStr[start..<end])
+    let strMon = "\(String(monthStr[start..<end])) \(words[2])"
     return strMon
 }
 
@@ -856,31 +949,57 @@ func getTimeInSec() -> Int {
 }
 
 /// Converts seconds to HH:mm:ss format
-func getSecondsToHoursMinutesSeconds (seconds : Int) -> String {
+func getSecondsToHoursMinutesSeconds(seconds : Int, format: TimeFormat
+    = .HHmmss) -> String {
     var second = String()
     var minute = String()
     var hour = String()
-    let (hr, min, sec) = (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
-    if hr > 0 {
-        hour = "\(hr):"
-    }
-    if min == 0 {
-        minute = "00:"
-    }
-    else if min >= 10 {
-        minute = "\(min):"
+    if format == .HHmmss {
+        let (hr, min, sec) = (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
+        if hr > 0 {
+            hour = "\(hr):"
+        }
+        if min == 0 {
+            minute = "00:"
+        }
+        else if min >= 10 {
+            minute = "\(min):"
+        }
+        else {
+            minute = "0\(min):"
+        }
+        
+        if sec < 10 {
+            second = "0\(sec)"
+        }
+        else {
+            second = "\(sec)"
+        }
+        return "\(hour)\(minute)\(second)"
     }
     else {
-        minute = "0\(min):"
+        var (hr, min, sec) = (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
+        if hr == 0 {
+            hour = ""
+        }
+        else {
+            hour = "\(hr)h"
+        }
+        if sec > 30 {
+            // If minute greater than 30 sec take ceil value.
+            min += 1
+        }
+        if min == 0 {
+            minute = "00m"
+        }
+        else if min >= 10 {
+            minute = "\(min)m"
+        }
+        else {
+            minute = "0\(min)m"
+        }
+        return "\(hour) \(minute)"
     }
-    
-    if sec < 10 {
-        second = "0\(sec)"
-    }
-    else {
-        second = "\(sec)"
-    }
-    return "\(hour)\(minute)\(second)"
 }
 
 /// Converts seconds to hh:mm:ss format
@@ -915,13 +1034,13 @@ func getSecondsToHoursMinutesSecondsWithAllFields(seconds : Int) -> String {
     }
     return "\(hour)\(minute)\(second)"
 }
-
-/// - returns:
-///   - if date equals today:  "Today"
-///   - if date equals to previos day: "Yesterday"
-///   - else: date in string.
-func getDateDay(date: String) -> String {
-    let dateObj = getDateFromString(strDate: date)
+    
+    /// - returns:
+    ///   - if date equals today:  "Today"
+    ///   - if date equals to previos day: "Yesterday"
+    ///   - else: date in string.
+    func getDateDay(date: String) -> String {
+        let dateObj = getDateFromString(strDate: date)
     let calendar = Calendar.current
     if calendar.isDateInToday(dateObj) {
         return "Today"
@@ -1074,7 +1193,8 @@ func convertAPITimeToLocal(strDateTime: String) -> String {
     dateFormatter.timeZone = TimeZone(abbreviation: "UTC")!
     // Convert to UTC Timezone.
     guard let utcDate = dateFormatter.date(from: strDateTime) else {
-        fatalError()
+        // If not valid.
+        return "invalid"
     }
     
     // Convert it to Current timezone.
@@ -1084,7 +1204,7 @@ func convertAPITimeToLocal(strDateTime: String) -> String {
 }
 
 /// Get time from string date and time.. (i.e. yyyy-MM-dd HH:mm:ss)
-func convertStrDateTimeToDate(strDateTime: String) -> Date {
+func convertStrDateTimeToDate(strDateTime: String, format: String = "dd/MM/yyyy HH:mm:ss") -> Date {
     let dateFormatter = DateFormatter()
     dateFormatter.timeZone = .current
     dateFormatter.dateFormat = "dd/MM/yyyy HH:mm:ss"

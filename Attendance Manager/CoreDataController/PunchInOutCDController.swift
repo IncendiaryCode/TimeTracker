@@ -47,7 +47,7 @@ class PunchInOutCDController {
         }
     }
     
-    /// Returns previous date of provided date.
+    /// Returns previous date .
     func getPreviousDate() -> Date {
         var date: Date!
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Punch_in_out_time")
@@ -57,7 +57,7 @@ class PunchInOutCDController {
             if nsMContext.count > 0 {
                 let value = nsMContext[0] as! NSManagedObject
                 let intDate = (value.value(forKey: "punch_in_time") as! Int64)
-                date = Date(milliseconds: intDate)
+                date = Date(milliseconds: (intDate - Int64(TimeZone.current.secondsFromGMT())))
             }
             
         }
@@ -114,6 +114,50 @@ class PunchInOutCDController {
             print("Error")
         }
         return intDate
+    }
+    
+    /// get exact punch in of today.
+    func getPunchInTime() -> Date {
+        var date: Date!
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Punch_in_out_time")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "punch_in_time", ascending: false)]
+        do {
+            let nsMContext = try nsManagedContext.fetch(fetchRequest)
+            if nsMContext.count > 0{
+                let nsMObject = nsMContext[0] as! NSManagedObject
+                let nTime = nsMObject.value(forKey: "punch_in_time") as! Int64
+                date = Date(milliseconds: (nTime - Int64(TimeZone.current.secondsFromGMT())))
+            }
+        }
+        catch {
+            print("Error")
+        }
+        return date
+    }
+    
+    /// get  punch in and out of recent punch.
+    func getPunchInAndOutTime() -> (Date, Date?) {
+        var datePunchIn: Date!
+        var datePunchOut: Date?
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Punch_in_out_time")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "punch_in_time", ascending: false)]
+        do {
+            let nsMContext = try nsManagedContext.fetch(fetchRequest)
+            if nsMContext.count > 0{
+                let nsMObject = nsMContext[0] as! NSManagedObject
+                let nStartTime = nsMObject.value(forKey: "punch_in_time") as! Int64
+                datePunchIn = Date(milliseconds:
+                    (nStartTime - Int64(TimeZone.current.secondsFromGMT())))
+                if let nEndTime = nsMObject.value(forKey: "punch_out_time") as? Int64 {
+                    datePunchOut = Date(milliseconds:
+                        (nEndTime - Int64(TimeZone.current.secondsFromGMT())))
+                }
+            }
+        }
+        catch {
+            print("Error")
+        }
+        return (datePunchIn, datePunchOut)
     }
     
     /// To load sample data.
@@ -186,6 +230,19 @@ class PunchInOutCDController {
                     g_isPunchedIn = true
                     return true
                 }
+                else {
+                    // Extend checking.(Check all available dates.)
+                    for i in 1..<nsMContext.count {
+                        let nsMObject = nsMContext[i] as! NSManagedObject
+                        let date = Date(milliseconds: nsMObject.value(forKey: "punch_in_time")
+                            as! Int64)
+                        let strDate = getStrDateTime(date: date)
+                        if strDate == getCurrentDate() {
+                            g_isPunchedIn = true
+                            return true
+                        }
+                    }
+                }
             }
         }
         catch {
@@ -193,6 +250,46 @@ class PunchInOutCDController {
         }
         g_isPunchedIn = false
         return false
+    }
+    
+    /// To check sent time is in between punch in and out.
+    func isTimeExistInPunchInOut(start: Date, end: Date) -> Bool {
+        let nStart = start.millisecondsSince1970+Int64(TimeZone.current.secondsFromGMT())
+        let nEnd = end.millisecondsSince1970+Int64(TimeZone.current.secondsFromGMT())
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Punch_in_out_time")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "punch_in_time", ascending: false)]
+        do {
+            let nsMContext = try nsManagedContext.fetch(fetchRequest)
+            for i in 0..<nsMContext.count {
+                let nsMObject = nsMContext[i] as! NSManagedObject
+                let nPunchIn = nsMObject.value(forKey: "punch_in_time") as! Int64
+                
+                // If date is today check only punch in.
+                let strDate = getStrDateTime(date: start)
+                if strDate == getCurrentDate()
+                    && nil == nsMObject.value(forKey: "punch_out_time") as? Int64 {
+                    if nPunchIn <= nStart {
+                        return true
+                    }
+                    else {
+                        return false
+                    }
+                }
+                
+                // Check other day.
+                if let nPunchOut = nsMObject.value(forKey: "punch_out_time") as? Int64 {
+                    if nPunchIn <= nStart && nPunchOut >= nEnd {
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+        catch {
+            print("Error while fetching..!")
+            return false
+        }
     }
     
     /// Check punch out updated or not.

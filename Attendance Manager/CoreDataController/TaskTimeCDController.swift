@@ -138,6 +138,25 @@ class TasksTimeCDController {
         }
     }
     
+    /// Check todays timeline exists.
+    func isTodayTimeLineExist(taskId: Int) -> Bool {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
+        fetchRequest.predicate = NSPredicate(format: "date = %@ AND task_id = %d", getCurrentDate()
+            ,taskId)
+        do {
+            let result = try nsManagedContext.fetch(fetchRequest)
+            if result.count > 0 {
+                return true
+            }
+            else {
+                return false
+            }
+        } catch {
+            print("Failed")
+            return false
+        }
+    }
+    
     /// Returns true if current or future time exist in the core data.
     func isCurrentOrFutureTimeExist(taskId: Int) -> Bool {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
@@ -270,6 +289,60 @@ class TasksTimeCDController {
         return totalTime
     }
     
+    // Get previuos time id started time.
+    func getTimelineStartTime(taskId: Int) -> String {
+        var strStartTime = ""
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
+        fetchRequest.predicate = NSPredicate(format: "task_id = %d", taskId)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "time_id", ascending: false)]
+        let res = try! nsManagedContext.fetch(fetchRequest)
+        if res.count > 0 {
+            let nsMObject = res[0] as! NSManagedObject
+            let strDate = nsMObject.value(forKey: "date") as! String
+            let nTimeStart = nsMObject.value(forKey: "start_time") as! Int
+            let strTime = getSecondsToHoursMinutesSeconds(seconds: nTimeStart)
+            let str12HrTime = convert24to12Format(strTime: strTime)
+            let strFormateDate = getDateDay(date: strDate)
+            strStartTime = "Started \(strFormateDate) \(str12HrTime)"
+        }
+        return strStartTime
+    }
+    
+    /// Get task time for running time id.
+    func getTaskRunningTime(taskId: Int) -> Int {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
+        fetchRequest.predicate = NSPredicate(format: "task_id = %d", taskId)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "time_id", ascending: false)]
+        let res = try! nsManagedContext.fetch(fetchRequest)
+        var totalTime: Int = 0
+        if res.count>0 {
+            do {
+                let nsMContext = try nsManagedContext.fetch(fetchRequest)
+                let nsMObject = nsMContext[0] as! NSManagedObject
+                let start = nsMObject.value(forKey: "start_time") as! Int
+                let end = nsMObject.value(forKey: "end_time") as! Int
+                let nTime = end - start
+                totalTime += nTime
+                
+                // Check for start greater than end.
+                if start > end {
+                    // Get date difference from today's date.
+                    let strDate = nsMObject.value(forKey: "date") as! String
+                    let date = Date(strDateTime: "\(strDate) \(getSecondsToHoursMinutesSeconds(seconds: start))")
+                    
+                    // Take difference of two dates.
+                    let nTimeStart = date.millisecondsSince1970
+                    let nToday = Date().millisecondsSince1970
+                    totalTime = Int(nToday - nTimeStart)
+                }
+            }
+            catch {
+                print("Error")
+            }
+        }
+        return totalTime
+    }
+    
     /// Check previous day's task pending.(Returns array of task id.)
     func getPrevDaysPendingTasks() -> Array<TaskTimeDetails> {
         var arrTaskId = Array<TaskTimeDetails>()
@@ -292,6 +365,37 @@ class TasksTimeCDController {
         }
         return arrTaskId
     }
+//    
+//    func getPrevDaysPendingTasks() -> Array<TaskTimeDetails> {
+//        var arrTimeDetails = Array<TaskTimeDetails>()
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
+//        let dateToday = getDate()
+//        let taskCDCtrlr = TasksCDController()
+//        let arrRunningTasks = taskCDCtrlr.getRunningTasks()
+//        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "start_time", ascending: false)]
+//        fetchRequest.predicate = NSPredicate(format: "task_id IN %@ AND date != %@"
+//            , arrRunningTasks, dateToday)
+//        let res = try! nsManagedContext.fetch(fetchRequest)
+//        for i in 0..<res.count {
+//            let nsMContext = try! nsManagedContext.fetch(fetchRequest)
+//            let nsMObject = nsMContext[i] as! NSManagedObject
+//            let timeId = nsMObject.value(forKey: "time_id") as! Int
+//            let taskId = nsMObject.value(forKey: "task_id") as! Int
+//            let date = nsMObject.value(forKey: "date") as! String
+//            let start = nsMObject.value(forKey: "start_time") as! Int
+//            
+//            // Only last index values from time details.
+//            if arrTimeDetails.contains(where: { return $0.taskId == taskId }) {
+//                continue
+//            }
+//            
+//            // Note time id is updated with task id.(Only here.)
+//            let timeDetails = TaskTimeDetails(timeId: timeId, taskId: taskId, date: date, start:
+//                start, end: 0, descr: "")
+//            arrTimeDetails.append(timeDetails)
+//        }
+//        return arrTimeDetails
+//    }
         
     /// Get task times from task id. Returns array of array, i.e, [[time id,Date, Start Time, End Time],...]
     func getTaskTimes(taskId: Int) -> Array<Array<Any>> {
@@ -350,7 +454,7 @@ class TasksTimeCDController {
         return arrTaskTimes
     }
     
-    func getTaskTimes(strDate: String, arrProj: Array<Int> = []) -> Array<TaskTimeDetails> {
+    func getTaskTimes(strDate: String, arrProj: Array<Int>? = nil) -> Array<TaskTimeDetails> {
         var arrTaskTimes = Array<TaskTimeDetails>()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
         fetchRequest.predicate = NSPredicate(format: "date = %@", strDate)
@@ -363,10 +467,10 @@ class TasksTimeCDController {
                 let taskId = nsMObject.value(forKey: "task_id") as! Int
                 
                 // Check projects.
-                if arrProj.count > 0 {
+                if arrProj != nil {
                     // If project id not containing in the array.
                     let projId = getProjectId(taskId: taskId)
-                    if !arrProj.contains(projId) {
+                    if !arrProj!.contains(projId) {
                         continue
                     }
                 }
@@ -644,6 +748,28 @@ class TasksTimeCDController {
             dictRatio[key] = value/totalTime
         }
         return dictRatio
+    }
+    
+    /// Check any task time exist greater than current time.
+    func tasksBeyondCurrentTime() -> Array<Int> {
+        var arrTaskId = Array<Int>()
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
+        fetchRequest.predicate = NSPredicate(format: "date = %@", getCurrentDate())
+        do {
+            let res = try nsManagedContext.fetch(fetchRequest)
+            for i in 0..<res.count {
+                let object = res[i] as! NSManagedObject
+                let endTime = object.value(forKey: "end_time") as! Int
+                let taskId = object.value(forKey: "task_id") as! Int
+                if endTime > getTimeInSec() && !arrTaskId.contains(taskId) {
+                    arrTaskId.append(taskId)
+                }
+            }
+        }
+        catch {
+            print("Eror")
+        }
+        return arrTaskId
     }
     
     /// Get total work time from date.

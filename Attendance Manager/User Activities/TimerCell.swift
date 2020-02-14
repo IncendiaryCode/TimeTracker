@@ -21,6 +21,7 @@ class TimerCell: UICollectionViewCell {
     
     var timer: Timer? = Timer()
     var nTotalTime: Int!
+    var withCurrentTime: Bool = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -28,14 +29,24 @@ class TimerCell: UICollectionViewCell {
     }
     
     func customInit(taskId: Int) {
+        var strStartedOn: String!
         let taskCDCtrlr = TasksCDController()
-        let strStartedOn = getTaskStartTime(taskId: taskId)
+        if withCurrentTime {
+            let time = getCurrentTime()
+            let strTimeFor12 = convert24to12Format(strTime: time)
+            strStartedOn = "Started Today \(strTimeFor12)"
+            nTotalTime = 0
+        }
+        else {
+            let taskTimeCDCtrlr = TasksTimeCDController()
+            strStartedOn = taskTimeCDCtrlr.getTimelineStartTime(taskId: taskId)
+            nTotalTime = taskCDCtrlr.getTotalTime(taskId: taskId)
+            runTime()
+        }
         let strTaskName = getTaskName(taskId: taskId)
         lblTaskTitle.text = strTaskName
         lblStartTime.text = strStartedOn
-        nTotalTime = taskCDCtrlr.getTotalTime(taskId: taskId)
         lblTimer.text = "\(getSecondsToHoursMinutesSeconds(seconds: self.nTotalTime))"
-        runTime()
     }
     
     func customInitPuncher() {

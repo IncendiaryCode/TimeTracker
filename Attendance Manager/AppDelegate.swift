@@ -16,7 +16,7 @@ import UIKit
 import CoreData
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     var window: UIWindow?
     var taskUpdater: TasksCDController!
@@ -29,6 +29,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setAppConfig()
         /// This will notify whenever internet connection status changes.
         RequestController.shared.startNetworkReachabilityObserver()
+        
+        // Ask permission for notifications
+        let center = UNUserNotificationCenter.current()
+        center.delegate = self
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+            if granted {
+                self.setUpNotification(hour: 10, minute: 00, title: "Remainder"
+                    , body: "Good morning, Remainder to punch in for the day")
+                self.setUpNotification(hour: 18, minute: 30, title: "Remainder"
+                    , body: "Good evening, Remainder to punch out for the day")
+                print("Permission granted")
+            } else {
+                print("Permission denied")
+            }
+        }
         return true
     }
     
@@ -90,6 +105,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
+    }
+    
+    /// Setup notification.
+    func setUpNotification(hour: Int, minute: Int, title: String, body: String) {
+        let calendar = Calendar.current
+        var dateFire = Date()
+        
+        // if today's date is passed, use tomorrow
+        var fireComponents = calendar.dateComponents( [Calendar.Component.day
+            , Calendar.Component.month, Calendar.Component.year, Calendar.Component.hour
+            , Calendar.Component.minute], from:dateFire)
+        
+        if (fireComponents.hour! > hour
+            || (fireComponents.hour == hour && fireComponents.minute! >= minute) ) {
+            
+            dateFire = dateFire.addingTimeInterval(86400)  // Use tomorrow's date
+            fireComponents = calendar.dateComponents( [Calendar.Component.day
+                , Calendar.Component.month, Calendar.Component.year, Calendar.Component.hour
+                , Calendar.Component.minute], from:dateFire)
+        }
+        
+        // set up the time
+        fireComponents.hour = hour
+        fireComponents.minute = minute
+        
+        // Check for weekends.(1 for sunday and 7 for saturday)
+        guard fireComponents.weekday != 1 || fireComponents.weekday != 7 else {
+            return
+        }
+        
+        // schedule local notification
+        dateFire = calendar.date(from: fireComponents)!
+        let center = UNUserNotificationCenter.current()
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = UNNotificationSound.default
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: fireComponents, repeats: true)
+        
+        // Create request
+        let uniqueID = UUID().uuidString // Keep a record of this if necessary
+        let request = UNNotificationRequest(identifier: uniqueID, content: content, trigger: trigger)
+        center.add(request) // Add the notification request
     }
     
     // MARK: - Core Data stack

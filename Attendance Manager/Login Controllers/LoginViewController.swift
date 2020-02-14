@@ -98,12 +98,15 @@ class LoginViewController: UIViewController {
         // If already todays date exist.
         else {
             self.performSegue(withIdentifier: "LoginSuccess", sender: nil)
-            APIResponseHandler.loadPunchInOut(pageNo: g_loginPageNo, completion: {
-                status in
-                if status {
-                    print("Successfully loaded punch timings")
-                }
-            })
+            // Load 3 pagination data.
+            for i in 1...3 {
+                APIResponseHandler.loadPunchInOut(pageNo: i, completion: {
+                    status in
+                    if status {
+                        print("Successfully loaded punch timings")
+                    }
+                })
+            }
         }
     }
     

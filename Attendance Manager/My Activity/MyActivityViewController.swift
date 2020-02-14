@@ -39,9 +39,9 @@ class MyActivityViewController: UIViewController, ActivityViewDelagate, BarChart
         
         nsLBtnWidth.constant = self.view.bounds.width / 3
         
-        let cgPoint = view.center
+        let screenBounds = UIScreen.main.bounds
+        let cgPoint = CGPoint(x: screenBounds.midX, y: screenBounds.midY)
         let cgSize = CGSize(width: 40, height: 40)
-
         
         // Setup activity indicator to setup view.
         actIndicator = UIActivityIndicatorView()
@@ -226,7 +226,7 @@ class MyActivityViewController: UIViewController, ActivityViewDelagate, BarChart
     
     func showIntroPageDayView() {
         let cgRect = CGRect(x: arrActView[0].btnLeftMove.frame.minX
-            , y: arrActView[0].btnLeftMove.frame.maxY+viewSelection.frame.minY, width: 44
+            , y: arrActView[0].btnLeftMove.frame.minY+viewSelection.frame.minY+15, width: 44
             , height: 44)
         let userGuideData = UserguideData(itemFrame: cgRect, itemHint:
             "To check previous working day's task details.")
@@ -300,6 +300,11 @@ class MyActivityViewController: UIViewController, ActivityViewDelagate, BarChart
         }
     }
     
+    func refreshData(completion: @escaping (() -> Void) = {}) {
+        if let dashboardVC = tabBarController?.viewControllers![1] as? UserActivityVC {
+            dashboardVC.fetchTaskDataFromServer(completion: completion)
+        }
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.destination is FilterViewController {

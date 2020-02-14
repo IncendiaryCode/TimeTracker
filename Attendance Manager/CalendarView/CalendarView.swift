@@ -122,7 +122,7 @@ public class CalendarView: UIView {
     internal var _cachedMonthInfoForSection = [Int:(firstDay: Int, daysTotal: Int)]()
     internal var eventsByIndexPath = [IndexPath: [CalendarEvent]]()
     
-    var selectedProjects: Array<Int> = g_dictProjectDetails.map { $0.key }
+    var selectedProjects: Array<Int> = getAllProjectIds()
     /// Checks whether selection of date is from user or program.
     var bIsUserTap = false
     

@@ -79,6 +79,12 @@ class ForgetPasswordVC: UIViewController {
             APIResponseHandler.sendOTP(email: email, completion: {
                 status, msg in
                 if status {
+                    // Notify by InAppNotication.
+                    let viewNotif = InAppNotificationView()
+                    self.view.addSubview(viewNotif)
+                    viewNotif.sendNotification(msg: "OTP has been sent to your email id.")
+                    viewNotif.addGradient()
+                    
                     self.txtOTP.alpha = 1.0
                     self.txtOTP.isHidden = false
                     self.btnOtpSubmit.alpha = 1.0
@@ -197,7 +203,7 @@ class ForgetPasswordVC: UIViewController {
                 status, msg in
                 if status {
                     let viewNotif = InAppNotificationView()
-                    viewNotif.sendNotification(msg: "OTP sent successfully",
+                    viewNotif.sendNotification(msg: "OTP re-sent successfully",
                                                autoDismiss: true)
                     viewNotif.addGradient()
                     self.view.addSubview(viewNotif)

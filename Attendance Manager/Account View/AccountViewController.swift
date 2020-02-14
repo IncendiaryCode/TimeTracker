@@ -48,7 +48,7 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
     @IBOutlet weak var btnChangeImage: UIButton!
     @IBOutlet weak var btnCancel: UIButton!
     
-    
+    var prevImage: UIImage!
     var cgFTableDisHeight: CGFloat!
     var punchInOutCDController: PunchInOutCDController!
     var projectCDController: ProjectsCDController!
@@ -98,15 +98,71 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         tblDisplayModes.addGestureRecognizer(panGesture)
         
         imgVProfile.image = #imageLiteral(resourceName: "personIcon")
-        if let strName = UserDefaults.standard.string(forKey: "username") {
-            txtUsername.text = strName
+        
+        setUpNameEmailPhone()
+        setupProfileImage()
+        
+        tblDisplayModes.dataSource = self
+        tblDisplayModes.delegate = self
+        tblDisplayModes.layer.borderColor = g_colorMode.lineColor().cgColor
+        cgFTableDisHeight = UIScreen.main.bounds.midY
+        
+        // Initialise Core data controller objects.
+        punchInOutCDController = PunchInOutCDController()
+        projectCDController = ProjectsCDController()
+        tasksCDController = TasksCDController()
+        taskTimeCDController = TasksTimeCDController()
+        self.actIndicatorProfile.center = self.imgVProfile.center
+        // Disable display mode if ios less than 12.0.
+        if #available(iOS 13.0, *) {
+            btnDisplayMode.isHidden = false
         }
         else {
-            txtUsername.text = ""
+            nsLBtnDisModeHeight.constant = 0
+            btnDisplayMode.isHidden = true
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.actIndicatorProfile.center = self.imgVProfile.center
         
-        setUpEmailPhone()
-        
+        var oldUrl: String!
+        if nil != UserDefaults.standard.value(forKey: "profileUrl") {
+            oldUrl = (UserDefaults.standard.value(forKey: "profileUrl") as! String)
+        }
+        // Check any profile changed from external device.
+        APIResponseHandler.fetchUserProfile(completion: {
+            status, msg in
+            if status {
+                self.setUpNameEmailPhone()
+                // Check profile image changed.
+                if let newUrl = UserDefaults.standard.value(forKey: "profileUrl") as? String {
+                    if newUrl != oldUrl {
+                        // Update profile image.
+                        if let url = URL(string: newUrl) {
+                            self.actIndicatorProfile.startAnimating()
+                            self.imgVProfile.alpha = 0.5
+                            downloadImage(from: url) {
+                                data in
+                                DispatchQueue.main.async {
+                                    let img = UIImage(data: data)
+                                    self.imgVProfile.image = img
+                                    g_userProfile = img
+                                    self.imgVProfile.alpha = 1
+                                    self.actIndicatorProfile.stopAnimating()
+                                    self.imgVProfile.setNeedsDisplay()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
+    
+    /// Loads profile picture.
+    func setupProfileImage() {
         // Update image
         if let img = g_userProfile {
             imgVProfile.image = img
@@ -114,6 +170,7 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         else {
             if let strUrl = UserDefaults.standard.value(forKey: "profileUrl") as? String {
                 if let url = URL(string: strUrl) {
+                    actIndicatorProfile.center = imgVProfile.center
                     actIndicatorProfile.startAnimating()
                     imgVProfile.alpha = 0.5
                     downloadImage(from: url) {
@@ -130,29 +187,15 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
                 }
             }
         }
-        
-        tblDisplayModes.dataSource = self
-        tblDisplayModes.delegate = self
-        tblDisplayModes.layer.borderColor = g_colorMode.lineColor().cgColor
-        cgFTableDisHeight = UIScreen.main.bounds.midY
-        
-        // Initialise Core data controller objects.
-        punchInOutCDController = PunchInOutCDController()
-        projectCDController = ProjectsCDController()
-        tasksCDController = TasksCDController()
-        taskTimeCDController = TasksTimeCDController()
-        
-        // Disable display mode if ios less than 12.0.
-        if #available(iOS 13.0, *) {
-            btnDisplayMode.isHidden = false
-        }
-        else {
-            nsLBtnDisModeHeight.constant = 0
-            btnDisplayMode.isHidden = true
-        }
     }
     
-    func setUpEmailPhone() {
+    func setUpNameEmailPhone() {
+        if let strName = UserDefaults.standard.string(forKey: "username") {
+            txtUsername.text = strName
+        }
+        else {
+            txtUsername.text = ""
+        }
         if let strEmail = UserDefaults.standard.string(forKey: "userEmail") {
             txtEmailPhone.text = strEmail
         }
@@ -203,8 +246,13 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         imgVProfile.layer.borderColor = UIColor.white.cgColor
         btnChangeImage.layer.borderColor = UIColor.white.cgColor
         txtEmailPhone.textColor = .white
-        txtUsername.tintColor = g_colorMode.midColor()
-        txtPhone.tintColor = g_colorMode.midColor()
+        txtUsername.tintColor = .white
+        txtPhone.tintColor = .white
+        actIndicatorProfile.tintColor = .white
+        txtUsername.attributedPlaceholder = NSAttributedString(string: "Name"
+            , attributes: [NSAttributedString.Key.foregroundColor: g_colorMode.placeHolderColor()])
+        txtPhone.attributedPlaceholder = NSAttributedString(string: "Phone No."
+            , attributes: [NSAttributedString.Key.foregroundColor: g_colorMode.placeHolderColor()])
     }
     
     @IBAction func btnChangePswdPressed(_ sender: Any) {
@@ -263,6 +311,7 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
         self.actIndicator.stopAnimating()
     }
     
@@ -290,7 +339,7 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
             self.txtUsername.useUnderline()
             self.txtPhone.useUnderline()
             nsLScrollViewTop.constant = scrollView.frame.maxY
-            nsLtxtFCenter.constant = -150
+            nsLtxtFCenter.constant = 0
             nsLTxtFEmailTop.constant = 30
             nsLTxtUsernameTop.constant = 30
             UIView.animate(withDuration: 0.3, animations: {
@@ -303,6 +352,7 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
             self.txtPhone.isUserInteractionEnabled = true
             self.txtEmailPhone.textAlignment = .left
             self.txtUsername.textAlignment = .left
+            self.txtPhone.textAlignment = .left
             self.btnChangeImage.isHidden = false
             self.btnEditSave.setTitle("Save", for: .normal)
             self.btnCancel.isHidden = false
@@ -311,15 +361,55 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
             self.view.layer.sublayers?.removeFirst()
             self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 1))
         }
-        else {
-            let notifiaction = InAppNotificationView()
-            notifiaction.sendNotification(msg: "Not saved..! This feature coming soon!")
-            notifiaction.addGradient()
-            self.view.addSubview(notifiaction)
+        else if btnEditSave.currentTitle == "Save" {
+            self.btnEditSave.isUserInteractionEnabled = false
+            let strName = txtUsername.text!
+            let phone = txtPhone.text!
+            actIndicatorProfile.center = btnEditSave.center
+            btnEditSave.setTitle("", for: .normal)
+            actIndicatorProfile.startAnimating()
+            if let imgData = imgVProfile.image?.jpegData(compressionQuality: 1.0) {
+                print(imgData)
+                APIResponseHandler.updateUserProfile(name: strName, phone: phone, imgData: imgData
+                    , completion: {
+                    status, msg in
+                        self.profileUpdationHandler(status: status, msg: msg)
+                })
+            }
+            else {
+                APIResponseHandler.updateUserProfile(name: strName, phone: phone, imgData: Data()
+                    , completion: {
+                    status, msg in
+                        self.profileUpdationHandler(status: status, msg: msg)
+                })
+            }
         }
     }
     
+    func profileUpdationHandler(status: Bool, msg: String) {
+        if status {
+            UserDefaults.standard.set(txtUsername.text!, forKey: "userName")
+            UserDefaults.standard.set(txtPhone.text!, forKey: "phoneNo")
+        }
+        else {
+            setUpNameEmailPhone()
+            setupProfileImage()
+        }
+        let notifiaction = InAppNotificationView()
+        notifiaction.sendNotification(msg: msg)
+        notifiaction.addGradient()
+        self.view.addSubview(notifiaction)
+        actIndicatorProfile.stopAnimating()
+        hideProfileEdit()
+        btnEditSave.setTitle("Edit", for: .normal)
+    }
+    
     @IBAction func btnCancelPressed(_ sender: Any) {
+        hideProfileEdit()
+        self.btnEditSave.setTitle("Edit", for: .normal)
+    }
+    
+    func hideProfileEdit() {
         nsLtxtFCenter.constant = 0
         nsLTxtFEmailTop.constant = 0
         nsLTxtUsernameTop.constant = 8
@@ -334,7 +424,7 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
                 self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.7))
             }
         })
-        setUpEmailPhone()
+        setUpNameEmailPhone()
         self.txtUsername.layer.sublayers?.removeFirst()
         self.txtEmailPhone.layer.sublayers?.removeFirst()
         self.txtEmailPhone.font = txtEmailPhone.font?.withSize(10)
@@ -344,7 +434,6 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         self.txtEmailPhone.textAlignment = .center
         self.txtUsername.textAlignment = .center
         self.btnChangeImage.isHidden = true
-        self.btnEditSave.setTitle("Edit", for: .normal)
         self.btnCancel.isHidden = true
         self.btnEditSave.alpha = 1
         self.btnEditSave.isUserInteractionEnabled = true
@@ -759,6 +848,17 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         self.present(alert, animated: true, completion: nil)
     }
     
+    func alertMessage(title: String, msg: String) {
+        //If user tries to logout ihn the break time shows alert.
+        let alert = UIAlertController(title: title, message:
+            msg, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.cancel,
+                                      handler: { _ in
+                                        
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     func showLogoutAlert() {
         //Alert while log out.
         let alert = UIAlertController(title: "Log out?", message: "Please select an option",
@@ -784,8 +884,10 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
                     //Office Leave action
                     let userActivityVC = self.tabBarController?.viewControllers![1]
                         as! UserActivityVC
+                    self.actIndicator.startAnimating()
                     userActivityVC.stopRunningTask(stopAll: true, completion: {
                         userActivityVC.showPunchOutAlert()
+                        self.actIndicator.stopAnimating()
                     })
             }))
         }
@@ -796,12 +898,18 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         self.present(alert, animated: true, completion: nil)
     }
     
-    func updatePunchOutTime() {
-        actIndicator.startAnimating()
-        APIResponseHandler.stopTaskOrPunchIn(completion: {
-            status in
-            if status {
-                print("Punch out time updated..!")
+//    func updatePunchOutTime() {
+//
+//        if let dashboardVC  = self.tabBarController?.viewControllers![1] as? UserActivityVC {
+//            dashboardVC.updatePunchOutTime(completion: {
+//
+//            })
+//        }
+        
+//        APIResponseHandler.stopTaskOrPunchIn(completion: {
+//            status in
+//            if status {
+//                print("Punch out time updated..!")
 //                self.resetViews()
 //                if let viewLogin = self.presentingViewController as? LoginViewController {
 //                    viewLogin.nSleepTime = 0
@@ -809,14 +917,14 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
 //                self.presentingViewController?.dismiss(animated: true, completion: {
 //                    self.view = nil
 //                })
-                g_isPunchedOut = true
-            }
-            else {
-                print("Error while updating punch out time..!")
-            }
-            self.actIndicator.stopAnimating()
-        })
-    }
+//                g_isPunchedOut = true
+//            }
+//            else {
+//                print("Error while updating punch out time..!")
+//            }
+//            self.actIndicator.stopAnimating()
+//        })
+//    }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)

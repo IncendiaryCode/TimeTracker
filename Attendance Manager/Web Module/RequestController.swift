@@ -131,6 +131,12 @@ class RequestController {
                     strValue += "]"
                     multipartFormData.append(Data(strValue.utf8), withName: key)
                 }
+                else if value is Data {
+                    // User profile picture.
+                    let base64Data = (value as! Data)
+                        .base64EncodedString(options: [])
+                    multipartFormData.append(Data((base64Data).utf8), withName: key)
+                }
                 else {
                     multipartFormData.append(Data((value as! String).utf8), withName: key)
                 }
@@ -145,7 +151,7 @@ class RequestController {
                     case let .failure(error):
                         print("Failed to update\(error) in \(url)")
                         let dictError = ["success": 0, "msg":
-                            "Error response"] as [String : Any]
+                            "No response"] as [String : Any]
                         completion(dictError)
                 }
         }

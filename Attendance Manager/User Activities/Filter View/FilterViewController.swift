@@ -42,6 +42,7 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var viewHeader: UIView!
     @IBOutlet weak var viewButtons: UIView!
     @IBOutlet weak var nsLViewMainHeight: NSLayoutConstraint!
+    @IBOutlet weak var lblNoProject: UILabel!
     
     var taskCDController: TasksCDController!
     var delegate: FilterDelegate?
@@ -175,9 +176,17 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if bIsProjectSelection {
+            // If no projects assigned.
+            if g_dictProjectDetails.count == 0 {
+                lblNoProject.isHidden = false
+            }
+            else {
+                lblNoProject.isHidden = true
+            }
             return g_dictProjectDetails.count
         }
         else {
+            lblNoProject.isHidden = true
             return 3
         }
     }

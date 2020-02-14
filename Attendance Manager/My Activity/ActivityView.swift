@@ -23,6 +23,8 @@ protocol ActivityViewDelagate {
 	func showIntroPageWeekView()
 	/// Delagate when filter pressed.
 	func btnFilterPressed(page: Int)
+	/// Delagate to refresh table view.
+	func refreshData(completion: @escaping (() -> Void))
 }
 
 protocol BarChartViewDelegate {
@@ -83,6 +85,12 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	var lblNoData: UILabel!
 	/// Display selected project, if filter applied.
 	var arrSelectedProj: Array<Int>?
+	/// Minimum height for pan gesture hide view.
+	var minHeightChart: CGFloat!
+	/// To store previous pan location.
+	var prevLocation: CGFloat!
+	/// Refresh table view.
+	let refreshControl = UIRefreshControl()
 	
 	@IBOutlet weak var nsLBarViewHeight: NSLayoutConstraint!
 	@IBOutlet weak var btnLeftMove: UIButton!
@@ -95,6 +103,9 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	@IBOutlet weak var calendarView: CalendarView!
 	@IBOutlet weak var btnFilter: UIButton!
 	@IBOutlet weak var viewFilterIndicator: UIView!
+	@IBOutlet weak var viewFilter: UIView!
+	@IBOutlet weak var lblSelectedFilter: UILabel!
+	@IBOutlet weak var nsLBarChartViewTop: NSLayoutConstraint!
 	
 	override func awakeFromNib() {
         super.awakeFromNib()
@@ -105,10 +116,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
         tblActivities.dataSource = self
         tblActivities.register(UINib(nibName: "userBreakInfoCell", bundle: nil),
 							   forCellReuseIdentifier: "userBreakInfoCell")
-		tblActivities.contentInset = UIEdgeInsets(top: -22, left: 0, bottom: 0, right: 0)
 		tblActivities.layer.masksToBounds = true
-		tblActivities.layer.borderWidth = 0.25
-		tblActivities.layer.borderColor = g_colorMode.lineColor().cgColor
 		
 		nCell = 0
 		backgroundColor = g_colorMode.defaultColor()
@@ -118,6 +126,11 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		lblDate.textColor = g_colorMode.textColor()
 		lblTotalHr.textColor = g_colorMode.textColor()
 		viewFilterIndicator.backgroundColor = g_colorMode.midColor()
+		barChartView.backgroundColor = g_colorMode.defaultColor()
+		calendarView.backgroundColor = g_colorMode.defaultColor()
+		viewDayAndWeekChanger.backgroundColor = g_colorMode.defaultColor()
+		viewFilter.backgroundColor = .clear
+		viewDayAndWeekChanger.roundCorners(corners: [.topLeft, .topRight], radius: 35)
     }
 	
 	/// Update colors (If display mode changed.. Call this function)
@@ -132,7 +145,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
         arrIntDate = []
 		
 		// Setup label no data indicator
-		let cgRect = CGRect(x: 0, y: tblActivities.frame.minY + 40
+		var cgRect = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.55
 			, width: UIScreen.main.bounds.width, height: 30)
 		lblNoData = UILabel(frame: cgRect)
 		//			lblNoData.center = tblActivities.center
@@ -142,7 +155,74 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		lblNoData.isHidden = true
 		self.addSubview(lblNoData)
 		
+		// Add pan gesture to table view.
+		tblActivities.panGestureRecognizer.addTarget(self
+			, action: #selector(self.tableViewDragged(gestureRecognizer:)))
+		
+		// Pan gesture to table header view.
+		let panGesture = UIPanGestureRecognizer(target: self, action:#selector(self
+			.tableViewDragged(gestureRecognizer:)))
+		viewFilter.addGestureRecognizer(panGesture)
+		
+		// Pan gesture top header.
+		let tapGesture = UITapGestureRecognizer(target: self, action:#selector(self
+			.viewHeaderTapper(tapGesture:)))
+		viewDayAndWeekChanger.addGestureRecognizer(tapGesture)
+		
+		// Add shadow to filter view.
+		var shadowLayer = CAShapeLayer()
+		let cornerRadius: CGFloat = 35
+		cgRect = CGRect(x: 0, y: -4, width: UIScreen.main.bounds.width, height: 2)
+
+		
+		var gradientLayer = CAGradientLayer()
+		gradientLayer.colors = [g_colorMode.defaultColor().cgColor, UIColor.lightGray.withAlphaComponent(0.5).cgColor]
+		gradientLayer.opacity = 0.4
+		gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+		gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+		gradientLayer.frame = cgRect
+		viewFilter.layer.insertSublayer(gradientLayer, at: 0)
+		
+		viewFilter.clipsToBounds = false
+		cgRect = CGRect(x: 0, y: viewFilter.bounds.height-1, width: UIScreen.main.bounds.width
+			, height: 1)
+		
+		// Add shadow to header view.
+		cgRect = CGRect(x: 0, y: viewDayAndWeekChanger.bounds.maxY-2
+			, width: UIScreen.main.bounds.width, height: 2)
+		
+		gradientLayer = CAGradientLayer()
+		gradientLayer.colors = [UIColor.lightGray.withAlphaComponent(0.5).cgColor, g_colorMode.defaultColor().cgColor]
+		gradientLayer.opacity = 0.4
+		gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+		gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+		gradientLayer.frame = cgRect
+
+		
+		if nSliderView == 0 {
+			minHeightChart = 40
+		}
+		else {
+			minHeightChart = 80
+		}
+		
+		// Setup refresh controller to table view.
+		tblActivities.addSubview(refreshControl)
+		refreshControl.bounds = CGRect(x: refreshControl.bounds.origin.x,
+									   y: 0,
+									   width: refreshControl.bounds.size.width,
+									   height: refreshControl.bounds.size.height)
+		
+		refreshControl.addTarget(self, action: #selector(refreshTableviewData(_:)), for:
+			.valueChanged)
+		refreshControl.tintColor = g_colorMode.midColor()
+		var attributes = [NSAttributedString.Key: AnyObject]()
+		attributes[.foregroundColor] = g_colorMode.midColor()
+		refreshControl.attributedTitle = NSAttributedString(string: "Fetching Data...",
+															attributes: attributes)
         updateChartWithData()
+		viewFilterIndicator.isHidden = false
+		
 		if nSliderView == 0 {
 			// Set label for long press in day graph.
 			let cgRect = CGRect(x: 0, y: 0, width: 150, height: 20)
@@ -169,7 +249,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	
 	func endDate() -> Date {
 		var dateComponents = DateComponents()
-		// Calendar till current month.
+		// Calendar till this month.
 		dateComponents.month = 0
 		let today = Date()
 		let currentMonth = self.calendarView.calendar.date(byAdding:
@@ -182,27 +262,55 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	}
 	
 	func calendar(_ calendar: CalendarView, didScrollToMonth date: Date) {
+		// To avoid half scrolled and rolls back to same month.
 		if date.month != dateCurrentMonth.month {
 			// Set month diffrence.
-			nSelectedIndexMonth = Date().months(from: date)
+			//			nSelectedIndexMonth = Date().months(from: date)
 			
+			// Setup month header name.
 			let strMonth = calendarView.dateOnHeader(date)
 			lblDate.text = strMonth
-			if arrDictMonthData.count > nSelectedIndexMonth {
-				// If month exists set up details.
-				let mothDetails = arrDictMonthData[nSelectedIndexMonth]
-				let arrIntDate = mothDetails.arrDates
-				let totWork = mothDetails.totalWork
-				let strTotWork = getSecondsToHoursMinutesSeconds(seconds: totWork)
-				lblTotalHr.text = "Duration: \(strTotWork)"
-				arrCTaskDetails = tasksCDCtrlr.getDataFromDate(arrDate: arrIntDate
-					, arrProj: arrSelectedProj)
-				nCell = arrCTaskDetails.count
+			
+			let strScrolledDate = date.getStrDate()
+			let strScrolledMonthYear = getMonthAndYear(strDate: strScrolledDate)
+			// Check array contains srolled month data.
+			if arrDictMonthData.contains(where: { return $0.strMonthYear == strScrolledMonthYear }) {
+				// month scrolled to future month.
+				let strDate = Date().getStrDate()
+				if strScrolledMonthYear == getMonthAndYear(strDate: strDate) {
+					nSelectedIndexMonth = 0
+				}
+				else if dateCurrentMonth < date {
+					nSelectedIndexMonth -= 1
+				}
+				else {
+					nSelectedIndexMonth += 1
+				}
+				
+				if arrDictMonthData.count > nSelectedIndexMonth {
+					// If month exists set up details.
+					let mothDetails = arrDictMonthData[nSelectedIndexMonth]
+					let arrIntDate = mothDetails.arrDates
+					
+					// Check for filter applied.
+					var totWork: Int!
+					if arrSelectedProj != nil && arrSelectedProj!.count == 0 {
+						totWork = 0
+					}
+					else {
+						totWork = mothDetails.totalWork
+					}
+					let strTotWork = getSecondsToHoursMinutesSeconds(seconds: totWork, format: .hm)
+					lblTotalHr.text = "\(strTotWork)"
+					arrCTaskDetails = tasksCDCtrlr.getDataFromDate(arrDate: arrIntDate
+						, arrProj: arrSelectedProj)
+					nCell = arrCTaskDetails.count
+				}
 			}
 			else {
 				// If there is no working day in a month.
 				nCell = 0
-				lblTotalHr.text = "Duration: 00:00:00"
+				lblTotalHr.text = "00m"
 			}
 			dateCurrentMonth = date
 			tblActivities.reloadDataWithAnimation()
@@ -286,13 +394,11 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			// Calculation based on total work time from 8AM to 8PM
 			// 28800sec = 8AM
 			// 43200sec = 8PM
-			let startX = (CGFloat(startTime - 28800) * (UIScreen.main.bounds.width-40) / 43200)
-				+ 20 // (-40) for left and right safe area, (+20) to start from left safe area.
-			let endX = (CGFloat(endTime - 28800) * (UIScreen.main.bounds.width-40) / 43200)
-				+ 20
+			let startX = (CGFloat(startTime - 28800) * (barChartView.bounds.width) / 43200)
+			let endX = (CGFloat(endTime - 28800) * (barChartView.bounds.width) / 43200)
 			
 			// Get y position for drawing.
-			let minY = findMinYforDayBtnGraph(start: startTime, end: endTime, minY: 103,
+			let minY = findMinYforDayBtnGraph(start: startTime, end: endTime, minY: 70,
 								dictDrawnPoint: dictDrawnPoints)
 			let cgRect = CGRect(x: startX, y: CGFloat(minY), width: 0, height: 20)
 			
@@ -327,7 +433,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			btnTaskGraph.layer.cornerRadius = 3
 			
 			arrBtnsDayTask.append(btnTaskGraph)
-			self.addSubview(arrBtnsDayTask.last!)
+			self.barChartView.addSubview(arrBtnsDayTask.last!)
 			
 			let cgSize = CGSize(width: (endX-startX), height: 20)
 			// Animate day graph.
@@ -340,9 +446,13 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			// Update graph height.
 			let maxHeight = max(nsLBarViewHeight.constant, CGFloat(110 + (88 - minY)))
 			nsLBarViewHeight.constant = maxHeight
-			
 			//Set graph positiion
 			viewGraphXAxis.frame.origin = CGPoint(x: 0, y: maxHeight - 20)
+		}
+		// If there is no data available.
+		if arrCTaskTimeDetails.count == 0 {
+			// Update graph label position.
+			viewGraphXAxis.frame.origin = CGPoint(x: 0, y: 100)
 		}
 		// Set btn positions.
 		let steps = (nsLBarViewHeight.constant - 110)
@@ -375,7 +485,6 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			removeHighlightDayGraphButton(index: indexPath.row)
 			
 			if let cell = tblActivities.cellForRow(at: indexPath) {
-//				cell?.contentView.backgroundColor = g_colorMode.defaultColor()
 				(cell as! UserTaskInfoCell).gradientLayer.colors =
 					[]
 			}
@@ -391,7 +500,6 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			}) {
 				_ in
 				let cell = self.tblActivities.cellForRow(at: indexPath) as! UserTaskInfoCell
-//				cell?.contentView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
 				cell.gradientLayer.colors = [UIColor.lightGray
 					.withAlphaComponent(0.1).cgColor, UIColor.lightGray
 						.withAlphaComponent(0.3).cgColor]
@@ -400,8 +508,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	}
 	
 	func setUpLabelForStartAndEndTime(btn: UIButton) {
-		let pointX = btn.frame.midX
-		var pointY = btn.frame.minY
+		let pointX = btn.frame.midX + barChartView.frame.minX
+		var pointY = btn.frame.minY + barChartView.frame.minY
 		
 		// Draw line
 		var point = CGPoint(x: pointX, y: pointY)
@@ -409,7 +517,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		let linePath = UIBezierPath()
 		linePath.move(to: point)
 		
-		let nLines = Int((btn.frame.minY - barChartView.frame.minY) / 5)
+//		let nLines = Int((btn.frame.minY - barChartView.frame.minY) / 5)
+		let nLines = Int((btn.frame.minY - barChartView.frame.minY) / 15)
 		for i in 0..<nLines {
 			pointY -= 5
 			point = CGPoint(x: pointX, y: pointY)
@@ -495,8 +604,14 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 				arrCTaskTimeDetails = tasksCDCtrlr.getEachTaskTimeDataFromDate(intDate:
 					arrIntDate[indexSelDate], arrProj: arrSelectedProj!)
 				
-				totalTime = tasksTimeCDCtrlr.getTotalWorkTime(intDate: arrIntDate[indexSelDate]
+				// If selected filter is zero.
+				if arrSelectedProj!.count == 0 {
+					totalTime = 0
+				}
+				else {
+					totalTime = tasksTimeCDCtrlr.getTotalWorkTime(intDate: arrIntDate[indexSelDate]
 					, arrProj: arrSelectedProj!)
+				}
 				viewFilterIndicator.isHidden = false
 			}
 			else {
@@ -515,16 +630,25 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			
 			
 			lblTotalHr.text = """
-			Duration: \(getSecondsToHoursMinutesSeconds(seconds: totalTime))
+			\(getSecondsToHoursMinutesSeconds(seconds: totalTime, format: .hm))
 			"""
 		}
 		else {
 			lblDate.text = getCurrentDate()
 			lblTotalHr.text = """
-			Duration: 00:00:00
+			00m
 			"""
 		}
 		checkArrowAlpha()
+		// Minimum height set for a day graph.
+		nsLBarChartViewTop.constant = minHeightChart
+		UIView.animate(withDuration: 0.2, animations: {
+			self.layoutIfNeeded()
+		})
+		
+		self.tblActivities.contentInset = UIEdgeInsets(top: self.viewFilter.frame.maxY - self
+			.viewDayAndWeekChanger.frame.maxY - 50, left: 0, bottom: 0, right: 0)
+		tblActivities.scrollToTop()
     }
 	
 	/// Setup week activity view.
@@ -549,8 +673,17 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			tblActivities.reloadDataWithAnimation()
 			
 			// Display week information
-			let strTotWork = getSecondsToHoursMinutesSeconds(seconds: weekDetails.totalWork)
-			lblTotalHr.text = "Duration: \(strTotWork)"
+			
+			// If filter has no project.
+			var strTotWork: String!
+			if nil != arrSelectedProj && arrSelectedProj?.count == 0 {
+				strTotWork = "00m"
+			}
+			else {
+				strTotWork = getSecondsToHoursMinutesSeconds(seconds: weekDetails.totalWork
+					, format: .hm)
+			}
+			lblTotalHr.text = "\(strTotWork!)"
 			let week = weekDetails.weeknumber
 			lblDate.text = getStartAndEndDateFromWeekNumber(weekOfYear: week!)
 			
@@ -589,18 +722,25 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 				UIView.animate(withDuration: 0.5, delay: delay, options: [], animations: {
 					self.arrBtnWeekView[day-1].height = -height
 				})
-				delay += 0.2
+				delay += 0.1
 			}
 		}
 		else {
 			// If no work in a week
 			let totTime = tasksTimeCDCtrlr.getTotalWorkTime(intDate: Date().millisecondsSince1970)
 			let strTotWork = "\(getSecondsToHoursMinutesSeconds(seconds: totTime))"
-			lblTotalHr.text = "Duration: \(strTotWork)"
+			lblTotalHr.text = "\(strTotWork)"
 			let week = getWeekNumber(nDate: Date().millisecondsSince1970)
 			lblDate.text = getStartAndEndDateFromWeekNumber(weekOfYear: week)
 		}
 		checkArrowAlpha()
+		nsLBarChartViewTop.constant = minHeightChart
+		UIView.animate(withDuration: 0.2, animations: {
+			self.layoutIfNeeded()
+		})
+		self.tblActivities.contentInset = UIEdgeInsets(top: self.viewFilter.frame.maxY - self
+			.viewDayAndWeekChanger.frame.maxY - 50, left: 0, bottom: 0, right: 0)
+		tblActivities.scrollToTop()
 	}
     
     func updateChartWithData() {
@@ -638,19 +778,18 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			
 			let width = endPoint.x - startPoint.x // Total width of x-axis.
 			let gap: CGFloat = width / 7 // Gap required for 7 days.
-			cgFButtonMinY = startPoint.y + 30
+			cgFButtonMinY = startPoint.y
 			// Create 7 buttons: Represents 7 days total work time based on button height.
 			for i in 0..<7 {
 				let x = gap * CGFloat(i+1) - (gap / 2) // Calculate x value for a button.
-				let frame = CGRect(x: x + 10, y: startPoint.y + 30, width: 20, height: 0)
+				let frame = CGRect(x: x-10, y: startPoint.y, width: 20, height: 0)
 				let btn = ButtonWeekGraph(frame: frame)
-//				btn.backgroundColor = g_colorMode.midColor()
 				btn.tag = i
 				btn.topRounded()
 				btn.setTitleColor(.clear, for: .normal)
 				btn.addTarget(self, action:#selector(self.btnChartBarPressed), for: .touchUpInside)
 				arrBtnWeekView.append(btn)
-				self.addSubview(arrBtnWeekView[i])
+				self.barChartView.addSubview(arrBtnWeekView[i])
 			}
 			calendarView.isHidden = true
 		}
@@ -674,6 +813,9 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		arrDictMonthData = tasksCDCtrlr.getMonthWiseDetails(arrProj: arrSelectedProj)
 		if nil != arrSelectedProj {
 			calendarView.selectedProjects = arrSelectedProj!
+		}
+		else {
+			calendarView.selectedProjects = getAllProjectIds()
 		}
 		for monthDetails in arrDictMonthData {
 			// arrDate contains all working days date in month.
@@ -700,19 +842,34 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			, let mothDetails = arrDictMonthData?[nSelectedIndexMonth] {
 			// Display inforamation about a month.
 			let arrIntDate = mothDetails.arrDates
-			let totWork = mothDetails.totalWork
-			let strTotWork = getSecondsToHoursMinutesSeconds(seconds: totWork)
-			lblTotalHr.text = "Duration: \(strTotWork)"
+			
+			// Check for filter applied.
+			var totWork: Int!
+			if arrSelectedProj != nil && arrSelectedProj!.count == 0 {
+				totWork = 0
+			}
+			else {
+				totWork = mothDetails.totalWork
+			}
+			let strTotWork = getSecondsToHoursMinutesSeconds(seconds: totWork, format: .hm)
+			lblTotalHr.text = "\(strTotWork)"
 			arrCTaskDetails = tasksCDCtrlr
 				.getDataFromDate(arrDate: arrIntDate, arrProj: arrSelectedProj)
 			nCell = arrCTaskDetails.count
 			tblActivities.reloadDataWithAnimation()
 		}
 		else {
-			lblTotalHr.text = "Duration: 00:00:00"
+			lblTotalHr.text = "00m"
 		}
 		checkArrowAlpha()
 		calendarView.reloadData()
+		nsLBarChartViewTop.constant = minHeightChart
+		UIView.animate(withDuration: 0.2, animations: {
+			self.layoutIfNeeded()
+		})
+		self.tblActivities.contentInset = UIEdgeInsets(top: self.viewFilter.frame.maxY - self
+			.viewDayAndWeekChanger.frame.maxY - 50, left: 0, bottom: 0, right: 0)
+		tblActivities.scrollToTop()
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -782,9 +939,130 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		}
 	}
 	
+	/// Called when table view refreshed.
+	@objc func refreshTableviewData(_ sender: Any) {
+		// Fetch Data from server.
+		if nSliderView == 0 {
+			delegate?.refreshData(completion: {
+				self.refreshControl.endRefreshing()
+				self.setupDayView()
+				self.tblActivities.scrollToTop()
+			})
+		}
+		else if nSliderView == 1 {
+			delegate?.refreshData(completion: {
+				self.refreshControl.endRefreshing()
+				self.resetWeekBar()
+				self.setupWeekView()
+				self.tblActivities.scrollToTop()
+			})
+		}
+		else {
+			delegate?.refreshData(completion: {
+				self.updateMonthDataSource()
+				self.refreshControl.endRefreshing()
+				self.setupMonthView()
+				self.tblActivities.scrollToTop()
+			})
+		}
+	}
+	
+	@objc func tableViewDragged(gestureRecognizer: UIPanGestureRecognizer) {
+		if gestureRecognizer.state == .began {
+			prevLocation = gestureRecognizer.translation(in: self).y
+		}
+			
+		else if gestureRecognizer.state == .changed {
+			if (viewFilter.frame.minY >= (viewDayAndWeekChanger.frame.maxY)) {
+				
+				let touchY = gestureRecognizer.location(in: self).y
+				let transaltionY = gestureRecognizer.translation(in: self).y - prevLocation
+				var maxValue: CGFloat!
+				if nSliderView == 0 {
+					maxValue = 40
+				}
+				else {
+					maxValue = 80
+				}
+				// Check for scroll down.
+				if prevLocation > 0 {
+					if tblActivities.contentOffset.y <= 0 && nsLBarChartViewTop.constant <= maxValue {
+						nsLBarChartViewTop.constant += transaltionY
+						self.layoutIfNeeded()
+						tblActivities.scrollIndicatorInsets = UIEdgeInsets(top: viewFilter.frame
+							.minY - viewDayAndWeekChanger.frame.maxY
+							, left: 0, bottom: 0, right: 0)
+						
+						tblActivities.contentInset = UIEdgeInsets(top: viewFilter.frame
+							.minY - viewDayAndWeekChanger.frame.maxY
+							, left: 0, bottom: 0, right: 0)
+					}
+				}
+				else if ((touchY) <= viewFilter.frame.minY || prevLocation > 0)
+					&& nsLBarChartViewTop.constant <= maxValue {
+					nsLBarChartViewTop.constant += transaltionY
+					
+					tblActivities.scrollIndicatorInsets = UIEdgeInsets(top: viewFilter.frame
+						.minY - viewDayAndWeekChanger.frame.maxY
+						, left: 0, bottom: 0, right: 0)
+					tblActivities.contentInset = UIEdgeInsets(top: viewFilter.frame
+						.minY - viewDayAndWeekChanger.frame.maxY
+						, left: 0, bottom: 0, right: 0)
+				}
+				prevLocation = gestureRecognizer.translation(in: self).y
+			}
+		}
+		else {
+			let midHeight = nsLBarViewHeight.constant/2
+			let movedHeight = viewFilter.frame.minY - viewDayAndWeekChanger.frame.maxY
+			if movedHeight < midHeight || gestureRecognizer.velocity(in: tblActivities).y < -2000 {
+				minHeightChart = 40 - nsLBarViewHeight.constant
+			}
+			else if movedHeight > midHeight || gestureRecognizer.velocity(in: tblActivities).y > 500{
+				if nSliderView == 1 || nSliderView == 2 {
+					minHeightChart = 80
+				}
+				else {
+					minHeightChart = 40
+				}
+			}
+			nsLBarChartViewTop.constant = minHeightChart
+			UIView.animate(withDuration: 0.1, animations: {
+				self.layoutIfNeeded()
+				self.tblActivities.contentInset = UIEdgeInsets(top: self.viewFilter.frame.minY - self.viewDayAndWeekChanger.frame.maxY
+					, left: 0, bottom: 0, right: 0)
+			})
+		}
+	}
+	
+	@objc func viewHeaderTapper(tapGesture: UITapGestureRecognizer) {
+		if nSliderView == 1 || nSliderView == 2 {
+			minHeightChart = 80
+			// If already expanded graph.
+			guard nsLBarChartViewTop.constant != minHeightChart else {
+				return
+			}
+		}
+		else {
+			minHeightChart = 40
+			guard nsLBarChartViewTop.constant != minHeightChart else {
+				return
+			}
+		}
+		
+		nsLBarChartViewTop.constant = minHeightChart
+		UIView.animate(withDuration: 0.1, animations: {
+			self.layoutIfNeeded()
+		})
+		
+		self.tblActivities.setContentOffset(CGPoint(x: 0, y: tblActivities.contentOffset.y - nsLBarViewHeight.constant), animated: true)
+		self.tblActivities.contentInset = UIEdgeInsets(top: self.viewFilter.frame.maxY - self
+			.viewDayAndWeekChanger.frame.maxY - 50, left: 0, bottom: 0, right: 0)
+	}
+	
 	func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
 		// Without puchin updation no edit option, as well as after punched out.
-//		if !(g_isPunchedIn ?? false) || (g_isPunchedOut) {
+		//		if !(g_isPunchedIn ?? false) || (g_isPunchedOut) {
 //			return false
 //		}
 		return true
@@ -871,20 +1149,25 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		// To show and hide data availability in month view.
-		if nSliderView == 2 && nCell == 0 {
+		if nCell == 0 {
 			lblNoData.isHidden = false
 		}
 		else {
 			lblNoData.isHidden = true
 		}
 		
+		// Decrease height of bar in month view.
+		if nSliderView == 2 {
+			nsLBarViewHeight.constant = 220
+		}
+		
 		// In initial user creation condition if task count is zero.
-		if arrIntDate.count == 0 && nSliderView != 2 {
-			lblNoData.isHidden = false
-		}
-		else if nSliderView != 2 {
-			lblNoData.isHidden = true
-		}
+//		if arrIntDate.count == 0 && nSliderView != 2 {
+//			lblNoData.isHidden = false
+//		}
+//		else if nSliderView != 2 {
+//			lblNoData.isHidden = true
+//		}
         return nCell
     }
     
@@ -898,7 +1181,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			let taskId = cTaskTimeDetails.taskId
 			let cTaskDetails = tasksCDCtrlr.getDetails(taskId: taskId!)!
 			cell.lblTotalDuration.text =
-			"\(getSecondsToHoursMinutesSeconds(seconds: cTaskTimeDetails.nTotalTime))"
+			"\(getSecondsToHoursMinutesSeconds(seconds: cTaskTimeDetails.nTotalTime, format: .hm))"
 			let strTime = getSecondsToHoursMinutesSecondsWithAllFields(seconds:
 				cTaskTimeDetails.nStartTime)
 			let strDate = cTaskTimeDetails.strDate
@@ -923,7 +1206,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		else {
 			let cTaskDetails = arrCTaskDetails[indexPath.row]
 			cell.lblTotalDuration.text =
-			"\(getSecondsToHoursMinutesSeconds(seconds: cTaskDetails.nTotalTime!))"
+			"\(getSecondsToHoursMinutesSeconds(seconds: cTaskDetails.nTotalTime!, format: .hm))"
 			let strTime = getSecondsToHoursMinutesSecondsWithAllFields(seconds:
 				cTaskDetails.getStartTime()!)
 			if let strDate = cTaskDetails.getStartDate() {
@@ -993,11 +1276,11 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	
 	/// Setup left and right arrow button alpha value, based on data existance.
 	func checkArrowAlpha() {
-		btnLeftMove.alpha = 0.4
-		btnRightMove.alpha = 0.4
+		btnLeftMove.alpha = g_colorMode.alphaValueHigh()
+		btnRightMove.alpha = g_colorMode.alphaValueHigh()
 		if nSliderView == 0 {
 			if indexSelDate >= arrIntDate.count - 1 {
-				btnLeftMove.alpha = 0.1
+				btnLeftMove.alpha = g_colorMode.alphaValueLow()
 			}
 			else {
 				// Show intro pagein day view. (If first installation/reset intro page)
@@ -1007,12 +1290,12 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 				}
 			}
 			if indexSelDate == 0 {
-				btnRightMove.alpha = 0.1
+				btnRightMove.alpha = g_colorMode.alphaValueLow()
 			}
 		}
 		else if nSliderView == 1 {
 			if nWeek >= arrWeekDetails.count - 1 {
-				btnLeftMove.alpha = 0.1
+				btnLeftMove.alpha = g_colorMode.alphaValueLow()
 			}
 			else {
 				// Show intro page week view. (If first installation/reset intro page)
@@ -1022,12 +1305,13 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 //				}
 			}
 			if nWeek <= 0 {
-				btnRightMove.alpha = 0.1
+				btnRightMove.alpha = g_colorMode.alphaValueLow()
 			}
 		}
 		else {
 			if nSelectedIndexMonth == 0 {
-				btnRightMove.alpha = 0.1
+				// If future dates disabled.
+				btnRightMove.alpha = g_colorMode.alphaValueLow()
 			}
 		}
 	}
@@ -1141,7 +1425,7 @@ extension UIView {
 			// 5th postion to display y label header.
 			if i == 5 {
 				// Change y postion.
-				frame = CGRect(x: end.x+2, y: endPoint.y + 10, width: 20, height: 10)
+				frame = CGRect(x: end.x+2, y: endPoint.y + 15, width: 20, height: 10)
 			}
 			let label = UILabel (frame: frame)
 			switch i {

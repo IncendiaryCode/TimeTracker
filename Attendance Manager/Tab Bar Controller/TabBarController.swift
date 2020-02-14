@@ -23,6 +23,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         self.selectedIndex = 1
         self.delegate = self
         tabBar.backgroundColor = g_colorMode.defaultColor()
+        tabBar.tintColor = g_colorMode.tintColor()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -68,6 +69,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         // Get all view cntrlr objects.
         let tabBarCtrlr = self.navigationController?.viewControllers[0] as! TabBarController
         tabBar.backgroundColor = g_colorMode.defaultColor()
+        tabBar.tintColor = g_colorMode.tintColor()
         
         let taskHistoryVC = tabBarCtrlr.viewControllers?[0] as! MyActivityViewController
         let userActVC = tabBarCtrlr.viewControllers?[1] as! UserActivityVC

@@ -568,9 +568,9 @@ extension Date {
     }
     
     /// format h:mm a
-    func getStrTime() -> String {
+    func getStrTime(format: String = "h:mm a") -> String {
         let dateF = DateFormatter()
-        dateF.dateFormat = "h:mm a"
+        dateF.dateFormat = format
         let strTime = dateF.string(from: self)
         return strTime
     }
@@ -702,5 +702,28 @@ extension Array {
     
     mutating func shiftInPlace(withDistance distance: Int = 1) {
         self = shift(withDistance: distance)
+    }
+}
+
+extension NSMutableAttributedString {
+    var fontSize:CGFloat { return 18 }
+    var semiBold:UIFont { return UIFont.systemFont(ofSize: fontSize, weight: UIFont.Weight.semibold)}
+    var normalFont:UIFont { return UIFont.systemFont(ofSize: fontSize)}
+    
+    func semiBold(_ value:String) -> NSMutableAttributedString {
+        
+        let attributes:[NSAttributedString.Key : Any] = [
+            .font : semiBold
+        ]
+        self.append(NSAttributedString(string: value, attributes:attributes))
+        return self
+    }
+    
+    func normal(_ value:String) -> NSMutableAttributedString {
+        let attributes:[NSAttributedString.Key : Any] = [
+            .font : normalFont,
+        ]
+        self.append(NSAttributedString(string: value, attributes:attributes))
+        return self
     }
 }
