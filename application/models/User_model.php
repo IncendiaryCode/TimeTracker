@@ -550,13 +550,14 @@ class User_model extends CI_Model {
                             foreach($timeline_data AS $time){
                                 $total_mins += $time['t_minutes'];
                                 $hours[$k] = round(($time['t_minutes']/60),2);
+                                $format_hours[$k] = sprintf('%02d.%02d',floor($time['t_minutes'] / 60),($time['t_minutes']%60));
                             }
                         }else{
                             $hours[$k] = '0';
                         }
                         $k=$k+1;
                     }
-                    $send_data[$i] = array('task_name'=>$data[$i]['task_name'],'time'=>$hours,'project_color'=>$data[$i]['color_code']);
+                    $send_data[$i] = array('task_name'=>$data[$i]['task_name'],'time'=>$format_hours,'project_color'=>$data[$i]['color_code']);
                 }
                 /*$hours = floor($total_mins / 60);
                 $minutes = ($total_mins % 60);
@@ -587,8 +588,10 @@ class User_model extends CI_Model {
             if ($query->num_rows() > 0) {
                 $data = $query->result_array();
                 foreach ($data as $d) {
-                    $values[] = array(date('Y-m-d', strtotime($d['task_date'])), round(($d['t_minutes'] / 60), 2),$d['color_code']);
+                    $format_hours = sprintf('%02d.%02d',floor($d['t_minutes'] / 60),($d['t_minutes']%60));
+                    $values[] = array(date('Y-m-d', strtotime($d['task_date'])), $format_hours, $d['color_code']);
                     $total_minutes += $d['t_minutes'];
+                    
                 }
                 $chart_data = array('monthly_chart', "status" => TRUE,
                 /*date with working hours in standard format*/

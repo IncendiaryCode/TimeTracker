@@ -388,7 +388,7 @@ class User extends CI_Controller
             $punch_in_compare = strtotime($punch_date);
             $current_date = date('Y-m-d');
             /*** Validate Date, Start Time and End Time Inputs ***/
-            foreach($data['timings'] AS $time){
+            /*foreach($data['timings'] AS $time){
                 if ($time['date'] == '' || $time['date'] == 'Invalid da' || !(preg_match('/\d{4}-\d{2}-\d{2}/', $time['date']))) {
                     //input date validation
                     $t_id = $this->input->post('task_id', TRUE);
@@ -467,7 +467,7 @@ class User extends CI_Controller
                         }
                     }
                 }
-            }
+            }*/
             $result = $this->user_model->add_tasks($data);
             if (!$result) {
                 //if edit is unsuccessful, redirect to edit task page with error message
