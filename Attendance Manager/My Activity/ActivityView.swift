@@ -170,11 +170,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		viewDayAndWeekChanger.addGestureRecognizer(tapGesture)
 		
 		// Add shadow to filter view.
-		var shadowLayer = CAShapeLayer()
-		let cornerRadius: CGFloat = 35
 		cgRect = CGRect(x: 0, y: -4, width: UIScreen.main.bounds.width, height: 2)
-
-		
 		var gradientLayer = CAGradientLayer()
 		gradientLayer.colors = [g_colorMode.defaultColor().cgColor, UIColor.lightGray.withAlphaComponent(0.5).cgColor]
 		gradientLayer.opacity = 0.4
@@ -273,12 +269,14 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			
 			let strScrolledDate = date.getStrDate()
 			let strScrolledMonthYear = getMonthAndYear(strDate: strScrolledDate)
+			btnRightMove.alpha = g_colorMode.alphaValueHigh()
 			// Check array contains srolled month data.
 			if arrDictMonthData.contains(where: { return $0.strMonthYear == strScrolledMonthYear }) {
 				// month scrolled to future month.
 				let strDate = Date().getStrDate()
 				if strScrolledMonthYear == getMonthAndYear(strDate: strDate) {
 					nSelectedIndexMonth = 0
+					btnRightMove.alpha = g_colorMode.alphaValueLow()
 				}
 				else if dateCurrentMonth < date {
 					nSelectedIndexMonth -= 1
@@ -314,7 +312,6 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			}
 			dateCurrentMonth = date
 			tblActivities.reloadDataWithAnimation()
-			checkArrowAlpha()
 		}
 	}
 	
@@ -794,6 +791,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			calendarView.isHidden = true
 		}
 		else {
+			btnRightMove.alpha = g_colorMode.alphaValueLow()
+			btnLeftMove.alpha = g_colorMode.alphaValueHigh()
 			calendarView.dataSource = self
 			calendarView.delegate = self
 			calendarView.setDisplayDate(Date()) // Initially display current month.
@@ -861,7 +860,6 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		else {
 			lblTotalHr.text = "00m"
 		}
-		checkArrowAlpha()
 		calendarView.reloadData()
 		nsLBarChartViewTop.constant = minHeightChart
 		UIView.animate(withDuration: 0.2, animations: {
@@ -1309,10 +1307,10 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			}
 		}
 		else {
-			if nSelectedIndexMonth == 0 {
+//			if nSelectedIndexMonth == 0 {
 				// If future dates disabled.
-				btnRightMove.alpha = g_colorMode.alphaValueLow()
-			}
+//				btnRightMove.alpha = g_colorMode.alphaValueLow()
+//			}
 		}
 	}
 	
