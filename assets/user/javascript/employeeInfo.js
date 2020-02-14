@@ -122,32 +122,29 @@ function drawCards(data) {
 				footerRow.append((data[x][y].image_name !== null ? "<div class='col-12'> <img src=" + data[x][y].image_name + " width='20px;'> " : '') + data[x][y].project + '</div>');
 				var date = new moment().format('Y-MM-DD H:mm:ss');
 				var serverDate = moment(date).tz('utc').format('Y-MM-DD H:mm:ss');
-
 				var footerRight = $("<div class='card-actions' id='footer-right-" + data[x][y].id + "'>");
-
 				//action Edit
 				var actionEdit = $('<a href="#" class=" pl-2  text-white " id="action-edit"><i class="fas fa-pencil-alt action-play" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
-				actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_add_task?t_id=' + data[x][y].id );
+				actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_add_task?t_id=' + data[x][y].id);
 				footerRight.append(actionEdit);
 
 				var actionPlay = $('<a href="' + timeTrackerBaseURL + 'user/start_timer?id=' + data[x][y].id + '&time=' + serverDate + '" class="card-action" data-id="' + data[x][y].id + '" id=play-' + data[x][y].id + ' data-toggle="tooltip" data-placement="top" title="Play"></a>');
 				actionPlay.append('<i class="fas action-edit  fa-play"></i>');
 
-				var actionStop = $('<a href="' + timeTrackerBaseURL + 'user/stop_timer?id=' + data[x][y].id + '&time=' + serverDate + '" class="card-action" data-id="' + data[x][y].id  + '" id=stop-' + data[x][y].id + ' data-toggle="tooltip" data-placement="top" title="Stop"></a>');
+				var actionStop = $('<a href="' + timeTrackerBaseURL + 'user/stop_timer?id=' + data[x][y].id + '&time=' + serverDate + '" class="card-action" data-id="' + data[x][y].id + '" id=stop-' + data[x][y].id + ' data-toggle="tooltip" data-placement="top" title="Stop"></a>');
 
 				actionStop.append('<i class="fas action-edit fa-stop"></i>');
 				footerRight.append(actionPlay);
 				footerRight.append(actionStop);
 
 				if (data[x][y].running_task == 0) {
-					//$('#stop-' + data[x][y].id).hide();
 					$(actionStop).hide();
 				} else {
-					//$('#play-' + data[x][y].id).hide();
 					$(actionPlay).hide();
 				}
 				actionPlay.on('click', function(e) {
 					e.preventDefault();
+					var stop_time = moment().tz('utc').format('Y-MM-DD H:mm:ss');
 					var t_id = $(this).data('id');
 					if (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play') {
 						$('#play-timer').modal('show');
@@ -155,55 +152,55 @@ function drawCards(data) {
 						$.ajax({
 							type: 'POST',
 							url: timeTrackerBaseURL + 'index.php/user/start_timer',
-							data: { action: 'task', id: t_id, time: serverDate },
+							data: { action: 'task', id: t_id, time: stop_time },
 							dataType: 'json',
 							success: function(res) {
-								if(res['status'] == true)
-								{
-								var res = res['data']['details'];
-								var startDateTime = moment().format('h:mm A');
-								var row = $(
-									'<div id="slider-' +
-										res['task_id'] +
-										'">' +
-										'<div class="section-slider task-slider">' +
-										'<input type="hidden" id="' +
-										res['task_id'] +
-										'" value="' +
-										res['t_minutes'] +
-										'">' +
-										'<input type="hidden" id="id-' +
-										res.id +
-										'" value="' +
-										res['task_id'] +
-										'">' +
-										'<p class="font-weight-light time-font text-center login-time" id="start-time' +
-										res['task_id'] +
-										'">' +
-										'Started at ' +
-										startDateTime +
-										' </p>' +
-										'<div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer' +
-										res['task_id'] +
-										'" data-type="" data-time="">00:00:00</div>' +
-										'<p class="font-weight-light text-center taskName">' +
-										res['task_name'] +
-										'</p>' +
-										'</div>' +
-										'</div>'
-								);
-								var stopButton = $('<i class="fa fa-hourglass-1"></i><span class="running-task" id="running-task-' + t_id + '"></span>').data('taskid', t_id);
-								document.getElementById('btn-stop' + t_id).childNodes[0].remove();
-								document.getElementById('btn-stop' + t_id).childNodes[0].remove();
-								$('#btn-stop' + t_id).append(stopButton);
-						
-								$('#play-' + t_id).hide();
-								$('#stop-' + t_id).show();
+								if (res['status'] == true) {
+									var res = res['data']['details'];
+									var startDateTime = moment().format('h:mm A');
+									var row = $(
+										'<div id="slider-' +
+											res['task_id'] +
+											'">' +
+											'<div class="section-slider task-slider">' +
+											'<input type="hidden" id="' +
+											res['task_id'] +
+											'" value="' +
+											res['t_minutes'] +
+											'">' +
+											'<input type="hidden" id="id-' +
+											res.id +
+											'" value="' +
+											res['task_id'] +
+											'">' +
+											'<p class="font-weight-light time-font text-center login-time" id="start-time' +
+											res['task_id'] +
+											'">' +
+											'Started at ' +
+											startDateTime +
+											' </p>' +
+											'<div class="font-weight-light text-center primary-timer start-task-timer" id="task-timer' +
+											res['task_id'] +
+											'" data-type="" data-time="">00:00:00</div>' +
+											'<p class="font-weight-light text-center taskName">' +
+											res['task_name'] +
+											'</p>' +
+											'</div>' +
+											'</div>'
+									);
+									var stopButton = $('<i class="fa fa-hourglass-1"></i><span class="running-task" id="running-task-' + t_id + '"></span>').data('taskid', t_id);
+									document.getElementById('btn-stop' + t_id).childNodes[0].remove();
+									document.getElementById('btn-stop' + t_id).childNodes[0].remove();
+									console.log(document.getElementById('btn-stop' + t_id));
+									$('#btn-stop' + t_id).append(stopButton);
 
-								$('#timer-slider').append(row);
-								timerSlider.reload();
-								document.getElementsByClassName('title').innerText += start_task_timer(-19800, t_id);
-								// $('.toast').toast('show');
+									$('#play-' + t_id).hide();
+									$('#stop-' + t_id).show();
+
+									$('#timer-slider').append(row);
+									timerSlider.reload();
+									document.getElementsByClassName('title').innerText += start_task_timer(-19800, t_id);
+									// $('.toast').toast('show');
 								}
 							}
 						});
@@ -212,6 +209,7 @@ function drawCards(data) {
 
 				actionStop.on('click', function(e) {
 					e.preventDefault();
+					var stop_time = moment().tz('utc').format('Y-MM-DD H:mm:ss');
 					var task_id = $(this).data('id');
 					if (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play') {
 						$('#play-timer').modal('show');
@@ -223,31 +221,32 @@ function drawCards(data) {
 								action: 'task',
 								id: task_id,
 								flag: '0',
-								time: serverDate
+								time: stop_time
 							},
 							dataType: 'json',
 							success: function(res) {
 								var data = res['flag'];
-								if(res['status'] == true)
-								{
-								$('#running-task-' + task_id).hide();
-								$('#play-' + task_id).show();
-								$('#stop-' + task_id).hide();
+								if (res['status'] == true) {
+									$('#running-task-' + task_id).hide();
+									$('#play-' + task_id).show();
+									$('#stop-' + task_id).hide();
 
-								document.getElementById('btn-stop' + task_id).childNodes[0].remove();
-								$('#btn-stop' + task_id).append('<i class="far fa-clock"></i> ' + minutesToTime(data['details']['t_minutes']));
-								document.getElementById('slider' + task_id).remove();
-								if (timerSlider.slider.getSlideCount() == 1) {
-									$('.bx-pager-item').css('display', 'none');
+									document.getElementById('btn-stop' + task_id).childNodes[0].remove();
+									$('#btn-stop' + task_id).append('<i class="far fa-clock"></i> ' + minutesToTime(data['details']['t_minutes']));
+
+									console.log(document.getElementById('slider' + task_id), task_id);
+									document.getElementById('slider-' + task_id).remove();
+									if (timerSlider.slider.getSlideCount() == 1) {
+										$('.bx-pager-item').css('display', 'none');
+									}
+									start_task_timer("stop", task_id);
+									timerSlider.reload();
 								}
-								timerSlider.reload();
-								}
-								
 							}
 						});
 					}
 				});
-				
+
 				cardFooter.append(footerRow);
 				cardInner.append(cardFooter);
 				//add a overlay layer
@@ -292,7 +291,6 @@ function start_task_timer(startTime, id) {
 function setTaskTime(startTime, id) {
 	//update local storage
 	localStorage.setItem('timeStamp', startTime);
-
 	var date = new Date(startTime * 1000);
 	// Hours part from the timestamp
 	var hours = '0' + date.getHours();
@@ -303,6 +301,7 @@ function setTaskTime(startTime, id) {
 
 	var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 	$('#task-timer' + id).html(formattedTime);
+	console.log(id);
 	document.getElementById('running-task-' + id).innerHTML = formattedTime;
 	$('.title').html(formattedTime);
 }
@@ -367,8 +366,7 @@ function clear_filter() {
 }
 
 $(document).ready(function() {
-	if(document.getElementById('start-login-time'))
-	{
+	if (document.getElementById('start-login-time')) {
 		document.getElementById('start-login-time').value = moment().format('HH:mm a');
 		$('#stop-now').modal({
 			keyboard: false
@@ -383,39 +381,30 @@ $(document).ready(function() {
 		document.getElementById('login-time').innerHTML = 'Punch in at 00:00:00';
 	}
 
-	
-	if(document.getElementById('dashboard-filter'))
-	{
+	if (document.getElementById('dashboard-filter')) {
 		var filter_form = document.getElementById('dashboard-filter');
-		filter_form.onsubmit = function()
-		{
+		filter_form.onsubmit = function() {
 			var user_sorting = document.getElementById('sorting').getElementsByTagName('input');
 			var user_filtering = document.getElementById('filtering').getElementsByTagName('input');
-			var  sortBy = 'date';
+			var sortBy = 'date';
 			var filterBy = [];
-			for(var i=0; i<user_sorting.length; i++)
-			{
-				if(user_sorting[i].checked == true)
-				{
+			for (var i = 0; i < user_sorting.length; i++) {
+				if (user_sorting[i].checked == true) {
 					sortBy = user_sorting[i].value;
-					
 				}
 			}
-			for(var i=0; i<user_filtering.length; i++)
-			{
-				if(user_filtering[i].checked == true)
-				{
-					filterBy.push(user_filtering[i+1].value);
+			for (var i = 0; i < user_filtering.length; i++) {
+				if (user_filtering[i].checked == true) {
+					filterBy.push(user_filtering[i + 1].value);
 				}
 			}
 			$('#clear-filter').show();
-			loadTaskActivities({ "type": sortBy, "project_filter": JSON.stringify(filterBy) });
+			loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) });
 			$('#navbarToggleExternalContent').collapse('toggle');
 			return false;
-		}
+		};
 	}
-	$('#clear-filter').click(function(e)
-	{
+	$('#clear-filter').click(function(e) {
 		e.preventDefault();
 		for (var i = 0; i < document.getElementById('navbarToggleExternalContent').getElementsByTagName('input').length; i++) {
 			if (document.getElementById('navbarToggleExternalContent').getElementsByTagName('input')[i].checked == true) {
@@ -423,8 +412,8 @@ $(document).ready(function() {
 				$('#clear-filter').hide();
 			}
 		}
-		document.getElementById('sorting').getElementsByTagName('input')[0].checked = true
-		loadTaskActivities({ type: "date" });
+		document.getElementById('sorting').getElementsByTagName('input')[0].checked = true;
+		loadTaskActivities({ type: 'date' });
 	});
 
 	for (var i = 0; i < document.getElementById('filtering').getElementsByTagName('input').length; i++) {
@@ -491,6 +480,7 @@ $(document).ready(function() {
 						if (timerSlider.slider.getSlideCount() == 1) {
 							$('.bx-pager-item').css('display', 'none');
 						}
+						start_task_timer("stop", task_id);
 						timerSlider.reload();
 					}
 				});
@@ -562,8 +552,17 @@ $(document).ready(function() {
 		var __element = document.getElementById('update-stop-now');
 		stop_now.onsubmit = function() {
 			var stop_now = document.getElementById('stop-end-time').value;
+			var pre_time = document.getElementById('old-start-date').innerHTML;
+			var pre_time_new = pre_time.split(' ')[1].split(":");
+			var pre_time_sec = parseInt(pre_time_new[0])*60+parseInt(pre_time_new[1]);
+			var curr_sec = parseInt(stop_now.split(":")[0])*60 + parseInt(stop_now.split(":")[1]);
+			if(pre_time_sec >= curr_sec)
+			{
+				document.getElementById('stop-now-error').innerHTML = 'Start time cannot be greater than end time';
+				return false;
+			}
 			if (stop_now == ' ' || stop_now == '') {
-				document.getElementById('punchout-error').innerHTML = 'enter valid end time. ';
+				document.getElementById('stop-now-error').innerHTML = 'enter valid end time. ';
 				return false;
 			} else {
 				var input_element = __element.getElementsByClassName('check-for-utc');
@@ -571,9 +570,13 @@ $(document).ready(function() {
 					if (input_element[i].value != '' && input_element[i].value != ' ') {
 						var serverDate = moment(document.getElementById('previous-date').value.slice(0, 10) + ' ' + input_element[i].value).tz('utc').format('Y-MM-DD H:mm:ss');
 						input_element[i].value = serverDate;
-
+						if(input_element[i].value == "Invalid date")
+						{
+							document.getElementById('stop-now-error').innerHTML = 'enter valid end time. ';
+							return false;
+						}
 						if (typeof parseInt(serverDate.slice(0, 2)) == 'string') {
-							document.getElementById('punchout-error').innerHTML = 'enter valid end time. ';
+							document.getElementById('stop-now-error').innerHTML = 'enter valid end time. ';
 							return false;
 						}
 					}
@@ -587,6 +590,16 @@ $(document).ready(function() {
 		var __element = document.getElementById('update-punch-in');
 		punchout.onsubmit = function() {
 			var stop_now = document.getElementById('punchout-time').value;
+			var pre_punch_in = document.getElementById('old-punch-in').innerHTML;
+
+			var pre_punchIn = pre_punch_in.split(' ')[1].split(":");
+			var pre_punchIn_sec = parseInt(pre_punchIn[0])*60+parseInt(pre_punchIn[1]);
+			var punchOut_sec = parseInt(stop_now.split(":")[0])*60 + parseInt(stop_now.split(":")[1])
+			if(pre_punchIn_sec >= punchOut_sec)
+			{
+				document.getElementById('punchout-error').innerHTML = 'Punch out time cannot be greater than punch in time';
+				return false;
+			}
 			if (stop_now == ' ' || stop_now == '') {
 				document.getElementById('punchout-error').innerHTML = 'enter valid end time. ';
 				return false;
@@ -596,7 +609,11 @@ $(document).ready(function() {
 					if (input_element[i].value != '' && input_element[i].value != ' ') {
 						var serverDate = moment(document.getElementById('previous-punchout').value.slice(0, 10) + ' ' + input_element[i].value).tz('utc').format('Y-MM-DD H:mm:ss');
 						input_element[i].value = serverDate;
-
+						if(input_element[i].value == "Invalid date")
+						{
+							document.getElementById('punchout-error').innerHTML = 'enter valid end time. ';
+							return false;
+						}
 						if (typeof parseInt(serverDate.slice(0, 2)) == 'string') {
 							document.getElementById('punchout-error').innerHTML = 'enter valid end time. ';
 							return false;
@@ -669,21 +686,23 @@ $(document).ready(function() {
 			} else return true;
 		};
 	}
-	// if (document.getElementById('punch-out')) {
-	// 	$('#punch-out').on('click', function(e) {
-	// 		var pounchOutTime = moment().tz('utc').format('Y-MM-DD HH:mm:ss');
-	// 		$.ajax({
-	// 			type: 'POST',
-	// 			url: timeTrackerBaseURL + 'user/update_end_time',
-	// 			data: { punch_out_time: pounchOutTime },
-	// 			success: function(res) {
-	// 				document.getElementById('stop-time').childNodes[1].childNodes[0].classList.remove('fa-stop');
-	// 				document.getElementById('stop-time').childNodes[1].childNodes[0].classList.add('fa-play');
-	// 				document.getElementById('stop-time').removeEventListener('click');
-	// 			}
-	// 		});
-	// 	});
-	// }
+	var cur_punch_out = document.getElementById('punch-out');
+		$('#punch-out').click(function()
+		{				
+			var pounchOutTime = moment(moment().format("YYYY-MM-DD")+" "+document.getElementById('timerpicker-punchout').value);
+			$.ajax({
+				type: 'POST',
+				url: timeTrackerBaseURL + 'user/update_end_time',
+				data: { punch_out_time: moment(pounchOutTime).tz('utc').format('Y-MM-DD H:mm:ss') },
+				success: function(res) {
+					document.getElementById('stop-time').childNodes[1].childNodes[0].classList.remove('fa-stop');
+					document.getElementById('stop-time').childNodes[1].childNodes[0].classList.add('fa-play');
+					window.location.reload();
+					document.getElementById('stop-time').removeEventListener("click", function() {
+					  }, true);
+					}
+				});
+		});
 
 	//check for existing running tasks
 	$.ajax({

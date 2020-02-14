@@ -405,3 +405,11 @@ h6 {
 {
 	border-radius: 25px;
 }
+table.dataTable 
+{
+	margin: 0px;
+}
+#task-lists-datatable
+{
+	width: 100%  !important;;
+}

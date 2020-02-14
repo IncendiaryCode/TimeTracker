@@ -28,9 +28,9 @@
              <canvas id="task-chart" height="80px" class=" mb-5"></canvas>
              <p id="task-chart-error" class="text-center"></p>
          </div>
-         <div class="col-md-8 offset-md-2">
+         <div class="col-md-12 offset-md-0">
              <table id="task-lists-datatable" class="table table-striped table-bordered">
-                 <thead>
+                 <thead style="'width':'100%'">
                      <tr>
                          <th>Task name</th>
                          <th>Description</th>

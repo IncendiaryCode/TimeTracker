@@ -113,7 +113,7 @@ if ($this->input->get('t_id')) { ?>
                             <div id="task-times">
                                 <div id="show_list">
                                     <div class="row">
-                                        <div class="col-4 col-md-6">
+                                        <div class="col-4 col-md-5">
                                             <p>Date</p>
                                         </div>
                                         <div class="col-4 col-md-3">
@@ -135,7 +135,7 @@ if ($this->input->get('t_id')) { ?>
                                             ?>
                                                 <div class="time-section pt-3 pb-4">
                                                     <div class="row">
-                                                        <div class="col-4 col-md-6">
+                                                        <div class="col-4 col-md-5">
                                                             <div class="input-group mb-3">
                                                                 <input type="text" class="date-utc form-control datepicker" id="date-picker-<?= $key ?>" name="time[<?= $key ?>][date]" data-date-format="yyyy-mm-dd" value="<?= $task['task_date']; ?>">
                                                                 <div class="input-group-append">
@@ -203,7 +203,7 @@ if ($this->input->get('t_id')) { ?>
                                     <div id="task-add-time">
                                         <div class="primary-wrap">
                                             <div class="row">
-                                                <div class="col-4 col-md-6">
+                                                <div class="col-4 col-md-5">
                                                     <div class="input-group mb-3">
                                                         <input type="text" class="date-utc form-control datepicker " name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-0">
                                                         <div class="input-group-append">
@@ -238,7 +238,7 @@ if ($this->input->get('t_id')) { ?>
                                     <!-- END: Add time  -->
                                 <?php } ?>
                             </div>
-                            <p id="taskError" class=" text-danger"></p>
+                            <p id="taskError" class=" text-danger pt-4"></p>
                             <p>&nbsp;</p>
                             <div class="text-right">
                                 <button type="submit" class="btn btn-primary save-task" id="save-tasks">Save Task</button><!-- to store the task entry. -->

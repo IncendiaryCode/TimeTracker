@@ -11,7 +11,7 @@ var addTime = {
 		var array_of_timings = this.array_of_timings;
 
 		var colDate = $(
-			'<div class="col-4 col-md-6">' +
+			'<div class="col-4 col-md-5">' +
 				'<div class="input-group mb-3">' +
 				'<input type="text" class="form-control date-utc datepicker" name="time[' +
 				id +
@@ -57,6 +57,7 @@ var addTime = {
 			if (end_time == array_of_timings[0]['end_time']) {
 				document.getElementById('date-picker-0').value = moment().format('YYYY-MM-DD');
 				document.getElementById('start-time-0').value = moment().format('HH:mm');
+				document.getElementById('end-time-0').value = "";
 			}
 			this.ele.find('.primary-wrap').prepend(section);
 		} else {
@@ -74,12 +75,12 @@ var addTime = {
 			{
 				this.ele.find('.primary-wrap').prepend(section);
 			}
-			if (end_time == array_of_timings[0]['end_time']) {
+			if (end_time == array_of_timings[0]['end_time'] && (document.getElementById('date-picker-0') !=undefined)) {
 				document.getElementById('date-picker-0').value = moment().format('YYYY-MM-DD');
 				document.getElementById('start-time-0').value = moment().format('HH:mm');
+				document.getElementById('end-time-0').value = '';
 			}
 		}
-		document.getElementById('end-time-0').value = '';
 
 		section.find('.timepicker').timepicker({
 			mode: '24hr',
@@ -93,21 +94,24 @@ var addTime = {
 		});
 		section.find('.datepicker').datepicker({
 			weekStart: 1,
-			daysOfWeekHighlighted: '6,0',
 			autoclose: true,
 			todayHighlight: true
 		});
 	},
 	validate: function(endtimeValidation) {
 		var __this = this;
-		if(document.getElementById('date-picker-0') == undefined)
+		// if(document.getElementById('date-picker-0') == undefined)
+		// {
+		// 	__this.layout(moment().format('YYYY-MM-DD'), moment().format('HH:mm'), '', '');
+		// }
+		if(document.getElementById('date-picker-0'))
 		{
-			__this.layout(moment().format('YYYY-MM-DD'), moment().format('HH:mm'), '', '');
-		}
 		var date = document.getElementById('date-picker-0').value;
 		var start_time = document.getElementById('start-time-0').value;
 		var end_time = document.getElementById('end-time-0').value;
-
+		
+		var __start_seconds = parseInt(start_time.slice(0, 2)) * 60 + parseInt(start_time.slice(3, 5));
+		var __end_seconds = parseInt(end_time.slice(0, 2)) * 60 + parseInt(end_time.slice(3, 5));
 		if(endtimeValidation)
 		{
 			if (date == '' || date == ' ' || start_time == '' || start_time == ' ' ||  end_time == '' || end_time == ' ') {
@@ -118,14 +122,24 @@ var addTime = {
 				document.getElementById('taskError').innerHTML = 'Please enter valid time';
 				return false;
 			}
+			var cur_sec = parseInt(moment().format("HH"))*60+parseInt(moment().format("mm"));
+			if(__end_seconds > cur_sec && (moment("YYYY-MM-DD") == date))
+			{
+				document.getElementById('taskError').innerHTML = 'Start time cannot greater than current time';
+				return false;
+			}
 		}
 		else if(date == '' || date == ' ' || start_time == '' || start_time == ' ') {
 			document.getElementById('taskError').innerHTML = 'Please enter valid details...';
 			return false;
 		}
-		var __start_seconds = parseInt(start_time.slice(0, 2)) * 60 + parseInt(start_time.slice(3, 5));
-		var __end_seconds = parseInt(end_time.slice(0, 2)) * 60 + parseInt(end_time.slice(3, 5));
-
+		
+		var cur_sec = parseInt(moment().format("HH"))*60+parseInt(moment().format("mm"));
+		if(__start_seconds > cur_sec || __end_seconds > cur_sec && (moment().format("YYYY-MM-DD") == date))
+		{
+			document.getElementById('taskError').innerHTML = 'Start/end time cannot greater than current time';
+			return false;
+		}
 		// fetch timings form database
 		var t_day = moment(date).format('YYYY-MM-DD');
 		var startTime = moment(t_day + ' ' + start_time).format('HH:mm');
@@ -133,26 +147,7 @@ var addTime = {
 		
 		var validate_interval = __this.check_for_timeintervals(__start_seconds, __end_seconds, date);
 
-		// var punch_in_time = 0;
-		// if(punch_in_time == 0 && edit == 1)
-		// {
-		// 	if(date == moment().format("YYYY-MM-DD"))
-		// 	{
-		// 		document.getElementById('datetime-error').innerHTML = 'Please punch in to add today\'s task';
-		// 		return false;
-		// 	}
-		// }
-		// else{
-			// var punch_in_t = punch_in_time.split(" ");
-			// punch_in_t = punch_in_t[1].toString();
-			// punch_in_t_sec = parseInt(punch_in_t.split(":")[0])*60+(parseInt(punch_in_t.split(":")[1]));
-			// if((punch_in_t_sec > __start_seconds) && (punch_in_time.split(" ")[0] == moment().format("YYYY-MM-DD")))
-			// {
-			// 	document.getElementById('datetime-error').innerHTML = 'Start time cannot be lesser than punch in time';
-			// 	return false;
-			// }
-			// return false;
-		//}
+		
 		var check_for_date = __this.check_date(date);
 		var validate_greater_time = __this.check_for_greatertime(date, start_time, end_time);
 		if (endtimeValidation) {
@@ -184,6 +179,7 @@ var addTime = {
 		} else {
 			document.getElementById('taskError').innerHTML = ' ';
 			return true;
+			}
 		}
 	},
 	check_for_timeintervals: function(__start_seconds, __end_seconds, date) {
@@ -342,6 +338,7 @@ $(document).ready(function() {
 			var start_time = document.getElementById('start-time-0').value;
 			var end_time = document.getElementById('end-time-0').value;
 
+
 			var flag = false;
 			flag = addTime.validate(false);
 
@@ -358,11 +355,20 @@ $(document).ready(function() {
 							var serverStartDate = moment(input_elements[j].value + ' ' + input_elements[j + 1].value).tz('utc').format('Y-MM-DD HH:mm:ss');
 							input_elements[j].value = serverStartDate.slice(0, 10);
 							if (serverStartDate != 'Invalid date') input_elements[j + 1].value = serverStartDate;
+							else{
+								document.getElementById('taskError').innerHTML = 'Please enter valid time';
+								return false;	
+							}
 						}
 						if (input_elements[j].value != '' && input_elements[j + 2].value != '') {
 							var serverEndDate = moment(input_elements[j].value + ' ' + input_elements[j + 2].value).tz('utc').format('Y-MM-DD HH:mm:ss');
 							if (input_elements[j + 2].value.length > 2) {
 								input_elements[j + 2].value = serverEndDate;
+							}
+							if (serverEndDate == 'Invalid date') 
+							{
+								document.getElementById('taskError').innerHTML = 'Please enter valid time';
+								return false;	
 							}
 						}
 						j = j + 3;
@@ -406,11 +412,6 @@ $(document).ready(function() {
 					var input_elements = elements.getElementsByClassName('date-utc');
 					var j = 0;
 					for (var i = 0; i < input_elements.length / 3; i++) {
-						// console.log(input_elements[i]);
-						// if (input_elements[i] == '' || input_elements[i] == ' ') {
-						// 	document.getElementById('taskError').innerHTML = 'Please enter valid time';
-						// 	return false;
-						// }
 						
 						if (input_elements[j].value != '' && input_elements[j + 1].value != '') {
 							var serverStartDate = moment(input_elements[j].value + ' ' + input_elements[j + 1].value).tz('utc').format('Y-MM-DD H:mm:ss');
@@ -438,10 +439,6 @@ $(document).ready(function() {
 								input_elements[j + 2].value = serverEndDate;
 							}
 						}
-						// else{
-						// 	document.getElementById('taskError').innerHTML = 'Please enter valid time';
-						// 		return false;
-						// }
 						j = j + 3;
 					}
 					return true;
@@ -469,9 +466,7 @@ $(document).ready(function() {
 
 	$('.datepicker').datepicker({
 		weekStart: 1,
-		daysOfWeekHighlighted: '6,0',
 		autoclose: true,
-		todayHighlight: true
 	});
 
 	$('.timepicker-a').timepicker({

@@ -56,7 +56,7 @@ header.main-header .navbar .nav .nav-item .nav-link {
 	margin-top: 50px;
 }
 .gj-modal .selected {
-	color: #7077ff;
+	color: #d583fb;
 }
 
 header.main-header h1 {
@@ -880,7 +880,6 @@ a#action-filter:hover {
 .monthly-action:hover + span {
 	border: 1px #3208ee solid;
 }
-#week_y
-{
-	display: none;;
+#week_y {
+	display: none;
 }

@@ -159,15 +159,21 @@ function callTaskTableData()
             })
         })
     });
-
+    var filteredData = table
+    .columns( [0, 1] )
+    .data()
+    .flatten()
+    .filter( function ( value, index ) {
+        return value > 20 ? true : false;
+    } );
 }
 $(document).ready(function() {
 
     //rendering datatable
-
-        //initialize date picker
+    //initialize date picker
     var dashPrjDtPicker1 = $("#curr-month").datepicker({
-        minViewMode: 1
+        minViewMode: 1,
+        todayHighlight: true
     });
 
 

@@ -130,7 +130,11 @@ function loadTask(type, date) {
 }
 
 function loadDailyChart() {
-	var date = document.getElementById('daily-chart').value;
+	var date = "";
+	if(document.getElementById('daily-chart'))
+	{
+		date =  document.getElementById('daily-chart').value;
+	
 	if (date == '' || date == ' ' || date == null) {
 		var today = new Date();
 		document.getElementById('daily-chart').value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
@@ -145,6 +149,7 @@ function loadDailyChart() {
 		retrieveChartData('daily_chart', date);
 	}
 }
+}
 
 function loadWeeklyChart() {
 	if (document.getElementById('weekly-chart')) {
@@ -153,7 +158,10 @@ function loadWeeklyChart() {
 		var day_range = '';
 		if (document.getElementById('current-week')) {
 			day_range = document.getElementById('current-week').innerHTML;
-			day_range = moment().format('YYYY') + '-' + day_range.split(' ')[0] + '-' + day_range.split(' ')[1] + '~' + moment().format('YYYY') + '-' + day_range.split(' ')[3] + '-' + day_range.split(' ')[4];
+
+
+			var year = document.getElementById('week_y').innerHTML.split('-')[0];
+			day_range = year + '-' + day_range.split(' ')[0] + '-' + day_range.split(' ')[1] + '~' + moment().format('YYYY') + '-' + day_range.split(' ')[3] + '-' + day_range.split(' ')[4];
 			retrieveChartData('weekly_chart', day_range);
 		}
 	}
@@ -174,7 +182,7 @@ function drawChart(type, res, date) {
 		}
 		if (weekly_min.toString().length == 1) {
 			weekly_min = '0' + weekly_min;
-	}
+		}
 
 		document.getElementById('weekly-duration').innerHTML = weekly_hr + ':' + weekly_min;
 		var const_lable = [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ];
@@ -215,11 +223,15 @@ function drawChart(type, res, date) {
 					enabled: true
 				},
 				onClick: function(event, data) {
-					var matches = date.split('-')[1].match(/(\d+)/);
-					var day_from_week = moment().day('sunday').week(matches[0]);
-					var new_day = moment(moment(day_from_week).format('YYYY-MM-DD')).day(1).add(myBar.getElementsAtEvent(event)[0]['_index'], 'days').format('YYYY-MM-DD');
-					document.getElementById('daily-chart').value = new_day;
-					document.getElementById('current-date').innerHTML = moment(moment(new Date(new_day))).format('dddd MMMM DD');
+					var month = getMonth(document.getElementById('current-week').innerHTML.split('-')[0].split(' ')[0]);
+					if (month.toString().length == 1) {
+						month = '0' + month;
+					}
+					var day = parseInt(document.getElementById('current-week').innerHTML.split('-')[0].split(' ')[1]) + parseInt(myBar.getElementsAtEvent(event)[0]['_index']);
+					var year = document.getElementById('week_y');
+					var d_time = moment(month + '-' + day + '-' + year.innerHTML.split('-')[0]);
+					document.getElementById('current-date').innerHTML = d_time.format('dddd MMMM DD');
+					document.getElementById('daily-chart').value = d_time.format('YYYY-MM-DD');
 					$('#chart-navigation a[href="#daily-view"]').tab('show');
 				},
 				responsive: true,
@@ -558,7 +570,6 @@ function showCalendar(month, year) {
 			} else if (date > daysInMonth) {
 				break;
 			} else {
-				let today = new Date();
 				let cell = document.createElement('td');
 				let cellText = document.createTextNode(date);
 				cell.appendChild(cellText);
@@ -711,7 +722,11 @@ $(document).ready(function() {
 	if (document.getElementById('daily-chart')) {
 		document.getElementById('daily-chart').value = moment(tday).format('YYYY-MM-DD');
 	}
-	var daily_chart_date = document.getElementById('daily-chart').value;
+	var daily_chart_date = "";
+	if(document.getElementById('daily-chart'))
+	{
+		daily_chart_date = document.getElementById('daily-chart').value;
+	}
 	loadDailyChart();
 	var day = new Date(daily_chart_date);
 	var nextDay = new Date(day);
@@ -760,12 +775,19 @@ $(document).ready(function() {
 	$('#next-week').css('color', '#ccc');
 	$('#next-year').css('color', '#ccc');
 
-	document.getElementById('current-week').innerHTML = s_date + ' - ' + e_date;
+	if(document.getElementById('current-week'))
+		document.getElementById('current-week').innerHTML = s_date + ' - ' + e_date;
+	if(document.getElementById('week_y'))
 	document.getElementById('week_y').innerHTML = moment(t_day).format('YYYY-MM-DD');
 
+	if(document.getElementById('weekly-chart'))
 	document.getElementById('weekly-chart').value = moment(t_day).format('YYYY') + '-W' + (parseInt(moment(t_day).format('W')) + 1); //format 2020-W05
 
-	var daily_chart_date1 = document.getElementById('weekly-chart').value;
+	var daily_chart_date1 = "";
+	if(document.getElementById('weekly-chart'))
+	{
+		daily_chart_date1 = document.getElementById('weekly-chart').value
+	}
 
 	$('#next-week').unbind().click(function() {
 		var daily_chart_date1 = document.getElementById('weekly-chart').value;
@@ -776,14 +798,13 @@ $(document).ready(function() {
 				$('#next-week').css('color', '#ccc');
 			}
 			week_no++;
-			//document.getElementById('week_y').innerHTML = moment(t_day).format("YYYY-MM-DD");
 			if (week_no.toString().length == 1) {
 				week_no = '0' + week_no;
 				document.getElementById('weekly-chart').value = daily_chart_date1.slice(0, 6) + week_no;
 			} else {
 				document.getElementById('weekly-chart').value = daily_chart_date1.slice(0, 6) + week_no;
 			}
-
+			document.getElementById('week_y').innerHTML = moment(document.getElementById('week_y').innerHTML).add(7, 'days').format("YYYY-MM-DD");
 			t_day.setDate(t_day.getDate() + 7);
 			var s_date = moment(t_day).format('MMM DD');
 			t_day.setDate(t_day.getDate() + 6);
@@ -808,6 +829,7 @@ $(document).ready(function() {
 			} else {
 				document.getElementById('weekly-chart').value = daily_chart_date1.slice(0, 6) + week_no;
 			}
+			document.getElementById('week_y').innerHTML = moment(document.getElementById('week_y').innerHTML).subtract(7, 'days').format("YYYY-MM-DD");
 			t_day.setDate(t_day.getDate() - 1);
 			var e_date = moment(t_day).format('MMM DD');
 			t_day.setDate(t_day.getDate() - 6);

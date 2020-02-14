@@ -83,6 +83,7 @@ $(function() {
 	}
 	$('.year-chart').datepicker({
 		minViewMode: 2,
-		format: 'yyyy'
+		format: 'yyyy',
+		todayHighlight: true
 	});
 });

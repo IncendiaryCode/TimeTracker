@@ -219,13 +219,11 @@ if (!empty($task_info['login_run'])) { ?>
                         </div>
                         <div class="modal-body ">
                             <div class="input-group">
-                                <p>Please stop the task "<strong>
-                                        <?php echo $task_info['task_run'][0]['task_name'] ?> </strong>" that is already running.
+                                <p>Please stop the task "<strong><?php echo $task_info['task_run'][0]['task_name'] ?> </strong>" that is already running.
                                 </p>
                             </div>
                             <div class="input-group">
-                                <p>Started at: <strong id="old-start-date">
-                                        <?php echo $task_info['task_run'][0]['start_time'] ?></strong></p>
+                                <p>Started at: <strong id="old-start-date"><?php echo $task_info['task_run'][0]['start_time'] ?></strong></p>
                             </div>
                             <input type="hidden" id="previous-date" name="" value="<?= $task_info['task_run'][0]['start_time'] ?>">
                             <div>
@@ -268,12 +266,8 @@ if (!empty($task_info['login_run'])) { ?>
                         </div>
                         <div class="modal-body ">
                             <div class="input-group">
-                                <p>Please enter punch out time for the last punch in.
+                                <p>Please enter punch out time for the day.<strong id="old-punch-in"><?php echo $task_info['login_run']['start_time'] ?></strong>
                                 </p>
-                            </div>
-                            <div class="input-group">
-                                <p>Punched in at: <strong id="old-punch-in">
-                                        <?php echo $task_info['login_run']['start_time'] ?></strong></p>
                             </div>
                             <input type="hidden" id="previous-punchout" name="" value="<?= $task_info['login_run']['start_time'] ?>">
                             <div>
@@ -286,7 +280,6 @@ if (!empty($task_info['login_run'])) { ?>
                                     </div>
 
                                 <?php  } ?>
-                                <label for="old-datepicker">Enter end time: <span class="text-danger">*</span></label>
                                 <input class="check-for-utc form-control timerpicker-stop-now" type="text" name="time" id="punchout-time" placeholder="HH:MM">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
