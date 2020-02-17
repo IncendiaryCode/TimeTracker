@@ -74,7 +74,7 @@
 					            "draw" => $draw,
 					            "status" => TRUE,
 					            "recordsTotal" => $total_data,
-					            "recordsFiltered" => count($result['data']),
+					            "recordsFiltered" => $total_data,
 					            "data" => $result['data']
 					        );
 				}
@@ -182,7 +182,7 @@
 				$result = array(
 					            "draw" => $draw,
 					            "recordsTotal" => $total_data,
-					            "recordsFiltered" => count($result['data']),
+					            "recordsFiltered" => $total_data,
 					            "data" => $result['data']
 					        );
 			}
@@ -212,7 +212,7 @@
 				$result = array(
 					            "draw" => $draw,
 					            "recordsTotal" => $total_data,
-					            "recordsFiltered" => count($result['data']),
+					            "recordsFiltered" => $total_data,
 					            "data" => $result['data']
 					        );
 			}

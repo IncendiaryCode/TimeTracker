@@ -195,13 +195,13 @@ class Dashboard_model extends CI_Model
             foreach ($user_names as $u) {
 
                 //find total time spent by the user on all projects
-                $this->db->select_sum('d.total_minutes','t_minutes');
+                /*$this->db->select_sum('d.total_minutes','t_minutes');
                 $this->db->from('time_details AS d');
                 $this->db->where('d.user_id',$u['user_id']);
-                $task_count = $this->db->get()->row_array();
+                $task_count = $this->db->get()->row_array();*/
 
                 //get all the project details along with time taken by the user on each project
-                $sql = $this->db->query("SELECT GROUP_CONCAT(CONCAT_WS('~',p.name,p.id,p.image_name,p.color_code,p.t_minutes)) AS proj, `u`.`name` AS `user_name`, `u`.`id` AS `user_id` FROM `users` AS `u` JOIN `project_assignee` AS `a` ON a.user_id = u.id  JOIN (SELECT ps.name,ps.id,ps.image_name,ps.color_code,t.id AS task_id,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `project` AS `ps` JOIN `task` AS `t` ON `t`.`project_id` = `ps`.`id` LEFT JOIN task_assignee AS ta ON ta.task_id = t.id LEFT JOIN `time_details` AS `d` ON d.task_id = ta.task_id WHERE ta.user_id = '".$u['user_id']."' GROUP BY ps.id) AS p ON p.id = a.project_id WHERE `a`.`user_id` =".$u['user_id']);
+                $sql = $this->db->query("SELECT GROUP_CONCAT(CONCAT_WS('~',p.name,p.id,p.image_name,p.color_code,p.t_minutes)) AS proj, `u`.`name` AS `user_name`, `u`.`id` AS `user_id`, SUM(t_minutes) AS `tt_minutes` FROM `users` AS `u` JOIN `project_assignee` AS `a` ON a.user_id = u.id  JOIN (SELECT ps.name,ps.id,ps.image_name,ps.color_code,t.id AS task_id,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `project` AS `ps` JOIN `task` AS `t` ON `t`.`project_id` = `ps`.`id` LEFT JOIN task_assignee AS ta ON ta.task_id = t.id LEFT JOIN `time_details` AS `d` ON d.task_id = ta.task_id WHERE ta.user_id = '".$u['user_id']."' GROUP BY ps.id) AS p ON p.id = a.project_id WHERE `a`.`user_id` =".$u['user_id']);
                 $sql_result = $sql->row_array();
                 $data = array();
                 if ($sql_result['proj'] != NULL) {
@@ -216,7 +216,7 @@ class Dashboard_model extends CI_Model
                 } else {
                     $data = '';
                 }
-                $total_time_format = $this->format_time($task_count['t_minutes']);
+                $total_time_format = $this->format_time($sql_result['tt_minutes']);
 
                 /*$this->db->select_sum('d.total_minutes','t_minutes');
                 $this->db->select('p.id AS project_id,p.name AS project_name,p.image_name,p.color_code');
@@ -815,15 +815,16 @@ class Dashboard_model extends CI_Model
 
             foreach($employees->result() as $rows)
             {
-                $this->db->select('count(distinct t.id) AS tasks_count');
+                /*$this->db->select('count(t.id) AS tasks_count');
                 $this->db->select_sum('d.total_minutes','t_minutes');
                 $this->db->from('project AS p');
-                $this->db->join('task AS t','t.project_id = p.id','LEFT');
-                $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
+                $this->db->join('task AS t','t.project_id = p.id');
+                $this->db->join('task_assignee AS ta','ta.task_id = t.id');
                 $this->db->join('time_details AS d','d.task_id = ta.task_id','left');
-                $this->db->where(array('ta.user_id'=>$user_id,'p.id'=>$rows->project_id));
-                $timings = $this->db->get()->row();
-
+                $this->db->where(array('d.user_id'=>$user_id,'p.id'=>$rows->project_id));
+                $timings = $this->db->get()->row();*/
+                $timings_query = $this->db->query("SELECT tt.tasks_count, SUM(`d`.`total_minutes`) AS `t_minutes` FROM `project` AS `p` JOIN (SELECT ta.user_id,ta.task_id,t.project_id,count(ta.task_id) AS tasks_count FROM `task_assignee` AS `ta` LEFT JOIN `task` AS `t` ON ta.task_id = t.id WHERE t.project_id = '".$rows->project_id."' AND `ta`.`user_id` = {$user_id} GROUP BY ta.task_id) AS tt ON tt.project_id = p.id LEFT JOIN `time_details` AS `d` ON `d`.`task_id` = `tt`.`task_id` WHERE d.user_id = {$user_id}");
+                $timings = $timings_query->row();
                 $time_taken_format = $this->format_time($timings->t_minutes);
 
                 $data[]= array(
