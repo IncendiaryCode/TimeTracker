@@ -37,6 +37,9 @@ function __draw_task_chart(res) {
 			options: {
 				title: {
 					text: 'task snapshot'
+                },
+                legend: {
+					display: false
 				},
 				hover: {
 					display: false

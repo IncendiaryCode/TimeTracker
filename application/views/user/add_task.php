@@ -137,7 +137,7 @@ if ($this->input->get('t_id')) { ?>
                                                     <div class="row">
                                                         <div class="col-4 col-md-5">
                                                             <div class="input-group mb-3">
-                                                                <input type="text" class="date-utc form-control datepicker" id="date-picker-<?= $key ?>" name="time[<?= $key ?>][date]" data-date-format="yyyy-mm-dd" value="<?= $task['task_date']; ?>">
+                                                                <input type="text" class="date-utc form-control datepicker" id="date-picker-<?= ($key+1) ?>" name="time[<?= ($key+1) ?>][date]" data-date-format="yyyy-mm-dd" value="<?= $task['task_date']; ?>">
                                                                 <div class="input-group-append">
                                                                     <span class="input-group-text">
                                                                         <button type="button" class="btn fa fa-calendar p-0"></button>
@@ -155,7 +155,7 @@ if ($this->input->get('t_id')) { ?>
                                                                     else
                                                                         $start = '';
                                                                 ?>
-                                                                <input type="text" class="date-utc timepicker-<?= $tnum ?> form-control" id="start-time-<?= $key ?>" name="time[<?= $key ?>][start]" placeholder="hh:mm" value="<?= $start ?>">
+                                                                <input type="text" class="date-utc timepicker-<?= $tnum ?> form-control" id="start-time-<?= ($key+1) ?>" name="time[<?= ($key+1) ?>][start]" placeholder="hh:mm" value="<?= $start ?>">
 
                                                             </div>
                                                         </div>
@@ -169,17 +169,17 @@ if ($this->input->get('t_id')) { ?>
                                                                     else
                                                                         $end = '';
                                                                 ?>
-                                                                <input type="text" class="date-utc form-control timepicker-<?= $tnum + 1 ?>" id="end-time-<?= $key ?>" name="time[<?= $key ?>][end]" value="<?= $end ?>" placeholder="hh:mm">
+                                                                <input type="text" class="date-utc form-control timepicker-<?= ($tnum + 1) ?>" id="end-time-<?= ($key+1) ?>" name="time[<?= ($key+1) ?>][end]" value="<?= $end ?>" placeholder="hh:mm">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-11 col-10 text-center mb-3">
-                                                            <input type="text" class="form-control" id="description-<?= $key ?>" name="time[<?= $key ?>][task_description]" value="<?= $task['task_description']; ?>" placeholder="Description">
-                                                            <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= $key ?>][table_id]" id="table_id<?= $key ?>">
+                                                            <input type="text" class="form-control" id="description-<?= ($key+1) ?>" name="time[<?= ($key+1) ?>][task_description]" value="<?= $task['task_description']; ?>" placeholder="Description">
+                                                            <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= ($key+1) ?>][table_id]" id="table_id<?= ($key+1) ?>">
                                                         </div>
                                                         <div class="col-md-1 col-2 text-center mb-3">
-                                                            <a href="javascript:void(0);" class="ml-0 delete-task" id="delete-task-<?= $key ?>">
-                                                                <i class="fas fa-minus text-white pt-2 icon-plus" name="time[<?= $key ?>][deleted_time_range]">
-                                                                    <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= $key ?>][table_id]" id="table_id<?= $key ?>">
+                                                            <a href="javascript:void(0);" class="ml-0 delete-task" id="delete-task-<?= $key+1 ?>">
+                                                                <i class="fas fa-minus text-white pt-2 icon-plus" name="time[<?= ($key+1) ?>][deleted_time_range]">
+                                                                    <input type="hidden" value="<?= $task['table_id']; ?>" name="time[<?= ($key+1) ?>][table_id]" id="table_id<?= ($key+1) ?>">
                                                                 </i>
                                                             </a>
                                                         </div>

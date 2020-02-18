@@ -84,6 +84,7 @@ $(function() {
 	$('.year-chart').datepicker({
 		minViewMode: 2,
 		format: 'yyyy',
-		todayHighlight: true
+		todayHighlight: true,
+		autoclose: true
 	});
 });

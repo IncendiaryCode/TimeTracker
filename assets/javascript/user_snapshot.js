@@ -69,6 +69,9 @@ var configs = {
         title: {
             text: 'User snapshot',
         },
+        legend: {
+            display: false
+        },
         hover: {
                 mode: "nearest"
             },

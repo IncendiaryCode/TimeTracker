@@ -57,7 +57,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <canvas id="user_time_chart" height="80px;"></canvas>
     </div>
     <hr>
-    <p class="efficiency text-center mt-5">Task table</p>
+    <p class="efficiency text-left mt-5 mb-3">Task table</p>
     <table id="user-task-datatable" class="table table-striped table-bordered">
         <thead>
             <tr>
@@ -69,7 +69,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </table>
     <p class="text-center" id="search-error"></p>
     <hr>
-    <p class="efficiency text-center mt-5">Project table</p>
+    <p class="efficiency text-left mt-5 mb-3">Project table</p>
     <table id="user-project-datatable" class="table table-striped table-bordered ">
         <thead>
             <tr>

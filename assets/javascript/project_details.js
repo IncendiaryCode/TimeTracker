@@ -38,6 +38,9 @@ function __draw_project_chart(res) {
 			title: {
 				text: "task snapshot"
 			},
+			legend: {
+				display: false
+			},
 			hover: {
 				display: false
 			},

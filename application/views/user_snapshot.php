@@ -50,7 +50,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     if (is_array($k['project'])) {
                         foreach ($k['project'] as $d) {
                         ?>
-                        <a href="<?= base_url(); ?>index.php/admin/load_project_detail?project_id=<?= $d['project_id'] ?>" class="badge badge-light p-3 user_project_details mr-2">
+                        <a href="<?= base_url(); ?>index.php/admin/load_project_detail?project_id=<?= $d['project_id'] ?>" class="badge badge-light p-2 user_project_details mr-2">
                             <?php
                                 if ($d['image_name'] != '') {
                                 ?>

@@ -75,7 +75,7 @@ header {
 	border-width: 1px;
 	border-style: solid;
 	border-color: rgba(255, 255, 255, 0.2);
-	line-height: normal;
+	line-height: 1.2;
 }
 
 #dashboard-stats .card-footer a:hover {
@@ -330,6 +330,7 @@ header.main-header h1 {
 	.vl {
 		border-left: 1px solid #ccc;
 		height: 200px;
+		width: 2px;
 	}
 }
 .display-heading {
@@ -337,29 +338,6 @@ header.main-header h1 {
 	font-weight: 500;
 }
 
-h1 {
-	font-size: 36px;
-}
-
-h2 {
-	font-size: 30px;
-}
-
-h3 {
-	font-size: 24px;
-}
-
-h4 {
-	font-size: 18px;
-}
-
-h5 {
-	font-size: 15px;
-}
-
-h6 {
-	font-size: 13px;
-}
 
 .separator-hr {
     /* margin-top: 3rem; */
@@ -417,4 +395,14 @@ table.dataTable
 {
 	color: #e484fb;
 	display: none;
+}
+.badge
+{
+	font-size: 14px;
+	color: #666;
+}
+.badge .badge-pill
+{
+	font-size: 12px;
+	color: #fff;
 }
