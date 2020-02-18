@@ -191,7 +191,6 @@ function drawCards(data) {
 									var stopButton = $('<i class="fa fa-hourglass-1"></i><span class="running-task" id="running-task-' + t_id + '"></span>').data('taskid', t_id);
 									document.getElementById('btn-stop' + t_id).childNodes[0].remove();
 									document.getElementById('btn-stop' + t_id).childNodes[0].remove();
-									console.log(document.getElementById('btn-stop' + t_id));
 									$('#btn-stop' + t_id).append(stopButton);
 
 									$('#play-' + t_id).hide();
@@ -233,8 +232,6 @@ function drawCards(data) {
 
 									document.getElementById('btn-stop' + task_id).childNodes[0].remove();
 									$('#btn-stop' + task_id).append('<i class="far fa-clock"></i> ' + minutesToTime(data['details']['t_minutes']));
-
-									console.log(document.getElementById('slider' + task_id), task_id);
 									document.getElementById('slider-' + task_id).remove();
 									if (timerSlider.slider.getSlideCount() == 1) {
 										$('.bx-pager-item').css('display', 'none');
@@ -301,7 +298,6 @@ function setTaskTime(startTime, id) {
 
 	var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 	$('#task-timer' + id).html(formattedTime);
-	console.log(id);
 	document.getElementById('running-task-' + id).innerHTML = formattedTime;
 	$('.title').html(formattedTime);
 }

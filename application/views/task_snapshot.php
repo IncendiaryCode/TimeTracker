@@ -1,6 +1,6 @@
  <?php
     defined('BASEPATH') or exit('No direct script access allowed');
-    ?>
+?>
 
  <!-- UI for task snapshot -->
  
@@ -28,7 +28,49 @@
              <canvas id="task-chart" height="80px" class=" mb-5"></canvas>
              <p id="task-chart-error" class="text-center"></p>
          </div>
-         <div class="col-md-12 offset-md-0">
+         <div class="col-md-12 mt-4">
+            <div class="row pb-3 task-filters">
+                <div class="col-3">
+                    <div id="baseDateControl">
+                        <div class="dateControlBlock pb-3">
+                            Between <input type="text" name="dateStart" id="dateStart" class="datepicker p-0 border border-secondary" size="8" /> and
+                            <input type="text" name="dateEnd" id="dateEnd" class="datepicker p-0 border border-secondary" size="8"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <select class="custom-select" id="select-prt">
+                        <option selected>Select project</option>
+                    <?php 
+                    if(!empty($projects))
+                    {
+                        foreach($projects as $prj) { ?>
+                            <option value=<?=$prj['id']?> ><?=$prj['project_name']?></option>
+                        <?php }
+                    }   ?> 
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select class="custom-select" id ="select-user">
+                        <option selected>Select user</option>
+                        <?php 
+                        if(!empty($users)) {
+                            foreach($users as $usr) { ?>
+                                <option value=<?=$usr['id']?> ><?=$usr['name']?></option>
+                            <?php }
+                        }   ?> 
+                    </select>
+                </div>
+                <div class="col-2 text-right">
+                    <a class="clear-filter" href="#"><i class="far fa-times-circle"></i> Clear filter</a>
+                </div>
+                <div class="col-1 text-right">
+                    <button type="button" class="btn btn-primary" id="task-snapshot-filter">Apply</button>
+                </div>
+                <div class="col-12 text-center mt-2">
+                    <p class="text-danger pl-3" id="task-filter-error"></p>
+                </div>
+            </div>
              <table id="task-lists-datatable" class="table table-striped table-bordered">
                  <thead style="'width':'100%'">
                      <tr>

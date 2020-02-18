@@ -135,7 +135,7 @@ var addTime = {
 		}
 		
 		var cur_sec = parseInt(moment().format("HH"))*60+parseInt(moment().format("mm"));
-		if(__start_seconds > cur_sec || __end_seconds > cur_sec && (moment().format("YYYY-MM-DD") == date))
+		if((__start_seconds > cur_sec || __end_seconds > cur_sec) && (moment().format("YYYY-MM-DD") === date))
 		{
 			document.getElementById('taskError').innerHTML = 'Start/end time cannot greater than current time';
 			return false;
@@ -455,7 +455,7 @@ $(document).ready(function() {
 	if (_day.toString().length == 1) {
 		_day = '0' + _day.toString();
 	}
-	if (edit != undefined) {
+	if (edit != undefined || edit != null) {
 		if (edit == 0) {
 			var date = dateObj.getFullYear() + '-' + _month + '-' + _day;
 			if (document.getElementById('date-picker-0')) {

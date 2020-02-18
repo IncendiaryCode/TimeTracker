@@ -121,13 +121,6 @@ if (!empty($task_info['login_run'])) { ?>
                 <div class="col-6">
                     <h5 class="font-weight-light text-left recent-activites">Recent Activities</h5>
                 </div>
-                <!-- <div class="col-4">
-                    <div class="toast">
-                        <div class="toast-body">
-                            Task started.
-                        </div>
-                    </div>
-                </div> -->
                 <div class="col-6">                
                     <ul class="nav float-right">
                         <li class="nav-item" id="clear-filter">

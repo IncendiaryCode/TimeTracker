@@ -90,7 +90,8 @@ $(document).ready(function() {
 
 	//initialize date picker
 	var dashPrjDtPicker = $("#dash-prj-dtpicker").datepicker({
-		minViewMode: 1
+		minViewMode: 1,
+		autoclose: true,
 	});
 
 	//change event
