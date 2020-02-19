@@ -704,6 +704,7 @@ class Dashboard_model extends CI_Model
                 }
             return $data;
         }else if($table_type == 'project_user'){ //load datatable data into project details page
+            $data = array();
             $project_id = $this->input->post('project_id');
             $draw = intval($this->input->post("draw"));
             $start = intval($this->input->post("start"));

@@ -84,6 +84,7 @@ function __draw_task_chart(res) {
 }
 
 function callTaskTableData(start_date, end_date, project, user) {
+	//$('#task-lists-datatable').empty();
 	table = $('#task-lists-datatable')
 		.DataTable({
 			processing: true,
@@ -98,6 +99,7 @@ function callTaskTableData(start_date, end_date, project, user) {
 				dataSrc: function(json) {
 					//Make your callback here.
 					if (json['status'] == false) {
+						$('#task-lists-datatable').empty();
 						document.getElementById('task-tabel-error').innerHTML = 'No results found';
 					} else {
 						document.getElementById('task-tabel-error').innerHTML = ' ';
@@ -110,6 +112,7 @@ function callTaskTableData(start_date, end_date, project, user) {
 				{
 					targets: 0,
 					render: function(data, type, row, meta) {
+						console.log("row",row);
 						return row[0];
 					}
 				},
@@ -262,13 +265,13 @@ $(document).ready(function() {
         e.preventDefault();
         var start_date = document.getElementById('dateStart').value;
         var end_date = document.getElementById('dateEnd').value;
-		var project = " ";
-		var user = " ";
-		if(end_date == " "|| end_date == "")
+		var project = "";
+		var user = "";
+		if((end_date == " "|| end_date == "") && (start_date != ""))
 		{
 			document.getElementById('dateEnd').value = moment().format('YYYY-MM-DD');
 		}
-		if(start_date == " "|| start_date == "")
+		if(start_date == " "|| start_date == "" && (end_date != ""))
 		{
 			document.getElementById('task-filter-error').innerHTML = "Please enter start date";
 		}
@@ -281,7 +284,7 @@ $(document).ready(function() {
 			{
 				user = document.getElementById('select-user').value;
 			}
-			if((start_date == ' ' || start_date == '') && (end_date== ''|| end_date== ' ') && (project ==' ') && (user==' '))
+			if((start_date == '' || start_date == '') && (end_date== ''|| end_date== '') && (project =='') && (user==''))
 			{
 				document.getElementById('task-filter-error').innerHTML = "Apply some filters..";
 			}else{

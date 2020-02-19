@@ -30,7 +30,7 @@
          </div>
          <div class="col-md-12 mt-4">
             <div class="row pb-3 task-filters">
-                <div class="col-3">
+                <div class="col-md-3 col-6">
                     <div id="baseDateControl">
                         <div class="dateControlBlock pb-3">
                             Between <input type="text" name="dateStart" id="dateStart" class="datepicker p-0 border border-secondary" size="8" /> and
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-3">
+                <div class="col-md-3 col-6">
                     <select class="custom-select" id="select-prt">
                         <option selected>Select project</option>
                     <?php 
@@ -50,7 +50,7 @@
                     }   ?> 
                     </select>
                 </div>
-                <div class="col-3">
+                <div class="col-md-3 col-6">
                     <select class="custom-select" id ="select-user">
                         <option selected>Select user</option>
                         <?php 
@@ -61,10 +61,10 @@
                         }   ?> 
                     </select>
                 </div>
-                <div class="col-2 text-right">
+                <div class="col-md-2 col-3 text-right">
                     <a class="clear-filter" href="#"><i class="far fa-times-circle"></i> Clear filter</a>
                 </div>
-                <div class="col-1 text-right">
+                <div class="col-md-1 col-3 text-right">
                     <button type="button" class="btn btn-primary" id="task-snapshot-filter">Apply</button>
                 </div>
                 <div class="col-12 text-center mt-2">

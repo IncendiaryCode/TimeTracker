@@ -220,7 +220,13 @@ function drawChart(type, res, date) {
 				tooltips: {
 					mode: 'index',
 					intersect: true,
-					enabled: true
+					callbacks: {
+						label: function(tooltipItem, data) {
+							var label = data.datasets[tooltipItem.datasetIndex].label || '';
+							if(data.datasets[tooltipItem.datasetIndex]['data'][myBar.getElementsAtEvent(event)[0]['_index']] == "00.00") return false;
+							return (label+" "+data.datasets[tooltipItem.datasetIndex]['data'][myBar.getElementsAtEvent(event)[0]['_index']]);
+						}
+					}
 				},
 				onClick: function(event, data) {
 					var month = getMonth(document.getElementById('current-week').innerHTML.split('-')[0].split(' ')[0]);
