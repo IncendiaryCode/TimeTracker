@@ -16,21 +16,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
         </div>
     </div>
     <div class="row mt-5">
-        <div class="col-5">
+        <div class="col-4">
             <p><strong>Project name</strong></p>
         </div>
-        <div class="col-5">
+        <div class="col-4">
             <p><strong>Users</strong></p>
         </div>
         <div class="col-2">
             <p><strong>Time spent</strong></p>
+        </div>
+        <div class="col-2">
+            <p><strong>Action</strong></p>
         </div>
     </div>
     <hr>
     <?php foreach ($data as $proj) {
     ?>
         <div class="row" style="min-height: 50px;">
-            <div class="col-5">
+            <div class="col-4">
                 <a href="<?= base_url(); ?>index.php/admin/load_project_detail?project_id=<?= $proj['project_id'] ?>">
                     <div class="mr-2">
                         <?php
@@ -44,17 +47,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                 </a>
             </div>
-            <div class="col-5">
+            <div class="col-4">
                 <p>total users: <?= $proj['total_users']; ?></p>
                 <?php foreach ($proj['user_details'] as $user) {  ?>
                     <!-- redirect to user detail page -->
-                    <a href="<?= base_url(); ?>index.php/admin/load_userdetails_page?user_id=<?= $user['user_id']; ?>" class="pt-2 mr-3 mt-2">
+                    <a href="<?= base_url(); ?>index.php/admin/load_userdetails_page?user_id=<?= $user['user_id']; ?>" class="pt-2 mr-3 mt-2" >
                         <?= $user['user_name']; ?>
                     </a>
                 <?php  } ?>
             </div>
             <div class="col-2"><?=$proj['time_used'];?></div>
-
+            <div class="col-2">
+                <a href="<?= base_url(); ?>index.php/admin/load_edit_project?project_id=<?= $proj['project_id'] ?>" class="pt-2 mr-3 mt-2">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
+            </div>
         </div>
         <hr>
     <?php  } ?>

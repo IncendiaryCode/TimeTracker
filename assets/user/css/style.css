@@ -87,11 +87,14 @@ header.main-header h1 {
 	height: 100%;
 	background-image: linear-gradient(rgba(255, 255, 255, 0) 20%, #ffffff 45%);
 }
-
+#timerpicker-punchout
+{
+	width: 260%;
+}
 .gj-timepicker-md [role="right-icon"] {
 	cursor: pointer;
 	position: absolute;
-	left: 208%;
+	left: 245%;
 	top: 7px;
 	font-size: 24px;
 }

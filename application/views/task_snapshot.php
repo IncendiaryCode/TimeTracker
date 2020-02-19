@@ -89,7 +89,7 @@
          </div>
      </div>
  </div>
- <div class="modal" id="delete-task-modal" data-backdrop="false">
+ <div class="modal" id="delete-task-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
      <div class="modal-dialog">
          <div class="modal-content text-center">
              <div class="modal-header ">

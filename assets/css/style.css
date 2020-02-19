@@ -406,3 +406,21 @@ table.dataTable
 	font-size: 12px;
 	color: #fff;
 }
+#top-users li
+{
+ min-height: 55px;
+}
+.upload-image button
+{
+	float: right;
+}
+.module-append button
+{
+	color: #e383fb;
+	border-color: #e383fb;
+}
+.module-append button:hover
+{
+	color: #7077ff;
+	border-color: #7077ff;
+}
