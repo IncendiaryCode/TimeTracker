@@ -58,20 +58,4 @@
             </footer>
         </div>
     </main>
-     <div class="modal" id="changeImage">
-        <div class="modal-dialog animated">
-            <div class="modal-content ">
-                <div class="modal-header ">Upload image
-                    <button type="button" class="close text-danger" data-dismiss="modal">×</button>
-                </div>
-                <div class="modal-body">
-                    <form id="uploadImage" method="post" enctype="multipart/form-data" action="<?=base_url();?>index.php/admin/upload_profile">
-                        <p><input type="file" name="change_image" placeholder="Upload image" id="image"></p>
-                        <p class="text-danger" id="imageErr"></p>
-                        <button type="submit" class="btn save-task submitImage" >Upload</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
     

@@ -94,11 +94,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 </div>
 
-<div class="modal" id="add-user" data-backdrop="false">
+<div class="modal fade" id="add-user" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>Adding user</h4>
+                <h4>Add user</h4>
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
@@ -109,8 +109,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?php } else if ($this->session->flashdata('success')) { ?>
                         <div class="alert alert-success"><?php echo $this->session->flashdata('success'); ?></div>
                     <?php } ?>
-
-                    <label for="assing-user-name" class="text-left">Name:</label>
                     <select class="form-control user" id="assigning-user-name" name="assigning-user-name">
                         <option>select user</option>
                         <?php

@@ -23,6 +23,7 @@
 <script src="<?= base_url(); ?>assets/javascript/script.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/javascript/project_snapshot.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/javascript/task_snapshot.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/javascript/edit_project.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/javascript/user_snapshot.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/javascript/chart.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/javascript/user_detail.js?v=<?= VERSION ?>"></script>

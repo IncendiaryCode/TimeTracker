@@ -77,7 +77,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
 </div>
 
-<div class="modal" id="delete-entry" data-backdrop="false">
+<div class="modal fade" id="delete-entry" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content text-center">
             <div class="modal-header ">

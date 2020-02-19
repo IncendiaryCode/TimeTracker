@@ -64,16 +64,16 @@ $this->load->helper('url_helper');
             </div>
         </div>
     </main>
-    <div class="modal" id="change-profile-pic" data-backdrop="false">
+    <div class="modal" id="change-profile-pic" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <!-- to change the profile picture of user-->
     <div class="modal-dialog animated">
         <div class="modal-content text-center">
             <div class="modal-header ">Upload image
                 <button type="button" class="close text-danger" data-dismiss="modal">×</button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body upload-image">
                 <form id="uploadImage" method="post" action="<?=base_url();?>index.php/admin/upload_profile" enctype="multipart/form-data">
-                    <p class=""><input type="file" name="change_img" placeholder="Upload image" id="profile-image"></p>
+                    <p class=""><input type="file" name="change_img" placeholder="Upload image"  class="form-control" id="profile-image"></p>
                     <p class="text-danger pt-3" id="imageerror"></p>
                     <button type="submit" class="btn btn-primary" id="submit-profile">Upload</button>
                 </form>

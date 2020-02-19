@@ -118,7 +118,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <h4>Top <?= $count; ?> projects</h4> <?php } ?>
             <ul class="list-group mt-4">
                 <?php foreach ($top_projects[1] as $project) { ?>
-                    <!--  -->
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-6">
@@ -153,7 +152,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </ul>
         <?php } ?>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" id = "top-users">
             <?php
             if(!empty($top_users[0])){
             $cnt = 0;
