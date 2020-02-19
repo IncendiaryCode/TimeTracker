@@ -82,6 +82,22 @@
 			}
 		}
 
+		//load edit project page
+		public function load_edit_project(){
+			$header_data = array();
+			$project_id = $this->input->get('project_id');
+			$check_proj_id = $this->dashboard_model->check_project_id($project_id);
+			if($check_proj_id == FALSE){
+				show_error("Project doesn't exist.");
+			}else{
+				$header_data['profile'] = $this->session->userdata('user_profile');
+				$this->load->view('header', $header_data);
+				$get_project_data['project_data'] = $this->dashboard_model->load_edit_project_data($project_id);
+				$this->load->view('edit_project',$get_project_data);
+				$this->load->view('footer');
+			}
+		}
+
 		//assign user to the project (in project_details.php)
 		public function assign_user_to_project()
 		{
@@ -137,8 +153,10 @@
 		{
 			$header_data = array();
 			$header_data['profile'] = $this->session->userdata('user_profile');
+			$load_data['users'] = $this->dashboard_model->get_usernames();
+			$load_data['projects'] = $this->dashboard_model->get_project_name();
 			$this->load->view('header', $header_data);
-			$this->load->view('task_snapshot'); //contains task information(chart,table containing dat about all tasks)
+			$this->load->view('task_snapshot',$load_data); //contains task information(chart,table containing dat about all tasks)
 			$this->load->view('footer');
 		}
 

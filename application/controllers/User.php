@@ -311,7 +311,6 @@ class User extends CI_Controller
             $GLOBALS['page_title'] = 'Edit Task';
             $t_id = $this->input->get('t_id', TRUE);
             $task_data = $this->user_model->get_task_info($t_id); //get task details for the requested task id
-            $task_data['punch_in_time'] = $this->user_model->get_punch_in_time($loggedin_userid);
             $this->load->view('user/header');
             $this->load->view('user/add_task', $task_data);
             $this->load->view('user/footer');
@@ -319,7 +318,6 @@ class User extends CI_Controller
             $GLOBALS['page_title'] = 'Add Task';
             $this->load->view('user/header');
             $data['result'] = $this->user_model->get_project_name();
-            $data['punch_in_time'] = $this->user_model->get_punch_in_time($loggedin_userid);
             $this->load->view('user/add_task', $data);
             $this->load->view('user/footer');
         }
@@ -336,7 +334,6 @@ class User extends CI_Controller
             $GLOBALS['page_title'] = 'Add Task';
             $this->load->view('user/header');
             $data['result'] = $this->user_model->get_project_name();
-            $data['punch_in_time'] = $this->user_model->get_punch_in_time($this->session->userdata('userid'));
             $this->load->view('user/add_task', $data);
             $this->load->view('user/footer');
         } else { //if inputs are valid, insert task information into db
@@ -368,7 +365,6 @@ class User extends CI_Controller
             $this->load->view('user/header');
             $t_id = $this->input->post('task_id', TRUE);
             $task_data = $this->user_model->get_task_info($t_id);
-            $task_data['punch_in_time'] = $this->user_model->get_punch_in_time($user_id);
             $this->load->view('user/add_task', $task_data);
             $this->load->view('user/footer');
         } else { //if inputs are valid, update and/or insert task information into db

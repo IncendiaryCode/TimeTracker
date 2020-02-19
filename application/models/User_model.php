@@ -283,7 +283,7 @@ class User_model extends CI_Model {
         $this->db->join('project AS p', 'p.id = t.project_id');
         $this->db->join('project_module AS m', 'm.id = t.module_id');
         $this->db->where(array('t.id' => $task_id, 'ta.user_id' => $userid));
-        $this->db->order_by('d.id');
+        $this->db->order_by('d.task_date','desc');
         $query = $this->db->get();
         $data = $query->result_array();
         foreach($data as $d){
@@ -316,13 +316,13 @@ class User_model extends CI_Model {
      * 
      * returns $punch-in time
      */
-    public function get_punch_in_time($user_id){
-        $this->db->where(array('task_date'=>date('Y-m-d'),'user_id'=>$user_id,));
+    public function get_punch_in_time($user_id,$date){
+        $this->db->where(array('task_date'=>$date,'user_id'=>$user_id,));
         $this->db->where('end_time IS NULL');
         $punch_in = $this->db->get('login_details');
         if($punch_in->num_rows() == 1){
-            $punch_in_time = $punch_in->row_array()['start_time'];
-            $converted_time = $this->convert_date($punch_in_time);
+            $punch_in_time = $punch_in->row_array();
+            $converted_time = $this->convert_date($punch_in_time['start_time']);
         }else{
             $converted_time = NULL;
         }
@@ -337,12 +337,14 @@ class User_model extends CI_Model {
      * returns $tasks
      */
     public function running_task_data() {
+        $userid = $this->session->userdata('userid');
         $this->db->select('d.task_id,d.start_time,t.task_name,t.description');
         //$this->db->select('count(IF(d.total_minutes=0,1,0)) AS running_task_count');
         $this->db->from('time_details AS d');
         $this->db->join('task AS t', 't.id = d.task_id');
         $this->db->where('d.total_minutes','0');
         $this->db->where('d.task_date !=',date('Y-m-d'));
+        $this->db->where('d.user_id',$userid);
         $tasks_data = $this->db->get();
         if($tasks_data->num_rows() > 0){
             $data['task_data'] = $tasks_data->result_array();
@@ -352,7 +354,7 @@ class User_model extends CI_Model {
         $this->db->select('id,user_id,task_date,start_time');
         $this->db->from('login_details');
         $this->db->where('task_date !=',date('Y-m-d'));
-        $this->db->where('user_id',$this->session->userdata('userid'));
+        $this->db->where('user_id',$userid);
         $login_check = $this->db->get();
         if($login_check->num_rows() > 0){
             $data['login_data'] = $login_check->row_array();
