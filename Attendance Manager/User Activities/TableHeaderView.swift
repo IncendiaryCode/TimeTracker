@@ -85,7 +85,8 @@ class TableHeaderView: UITableViewHeaderFooterView {
         cgRValue = CGRect(x: cgFScreenWidth - 110, y: lblTitle.frame.minY, width: 50, height: 44)
         switchFilter = UISwitch(frame: cgRValue)
         switchFilter.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
-        switchFilter.onTintColor = g_colorMode.midColor()
+        switchFilter.onTintColor = UIColor(red: 181/255, green: 108/255,
+                                           blue: 249/255, alpha: 1.0)
         switchFilter.center = CGPoint(x: switchFilter.center.x, y: btnFilter.center.y)
         switchFilter.isHidden = true
         switchFilter.addTarget(self, action: #selector(switchChanged), for: UIControl.Event

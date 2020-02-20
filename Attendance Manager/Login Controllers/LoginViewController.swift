@@ -231,6 +231,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func btnFPasswordPressed(_ sender: Any) {
+        lblErrorValidator.isHidden = true
         performSegue(withIdentifier: "FindAcWithEmail", sender: nil)
     }
     

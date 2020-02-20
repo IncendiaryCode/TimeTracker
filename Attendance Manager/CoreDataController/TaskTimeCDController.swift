@@ -777,7 +777,7 @@ class TasksTimeCDController {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks_time")
         let strDate = Date().getStrDate(from: intDate)
         fetchRequest.predicate = NSPredicate(format: "date = %@", strDate)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "start_time", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "end_time", ascending: true)]
         var arrAllTimes: Array<Array<Int>> = []
         do {
             let res = try nsManagedContext.fetch(fetchRequest)
@@ -801,10 +801,10 @@ class TasksTimeCDController {
             print("Eror")
         }
         // Sort array timings based on start time.
-//        let sortedArray = arrAllTimes.sorted(by: {
-//            $0[0] < $1[0]
-//        })
-//        arrAllTimes = sortedArray // Assign sorted array to all timings.
+        let sortedArray = arrAllTimes.sorted(by: {
+            $0[0] < $1[0]
+        })
+        arrAllTimes = sortedArray // Assign sorted array to all timings.
         
         // array to store only reuired timings.(Removed duplicate tim entry)
         var arrReqTimes: Array<Array<Int>> = arrAllTimes

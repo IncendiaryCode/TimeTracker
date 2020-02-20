@@ -217,6 +217,29 @@ enum ColorMode: Int {
         }
     }
     
+    /// Get default color.(white and black)
+    func switchColor() -> UIColor {
+        switch self {
+            case .light: return  .white
+            case .dark: return UIColor(red: 181/255, green: 108/255,
+                                       blue: 249/255, alpha: 1.0)
+            
+            case .auto :
+                if #available(iOS 12.0, *) {
+                    switch UIScreen.main.traitCollection
+                        .userInterfaceStyle {
+                        case .light: return  .white
+                        case .dark: return UIColor(red: 181/255, green: 108/255,
+                                                   blue: 249/255, alpha: 1.0)
+                        default:
+                            return .clear
+                    }
+                } else {
+                    return .clear
+            }
+        }
+    }
+    
     /// Get Tint color.(app start color and white)
     func tintColor() -> UIColor {
         switch self {
@@ -369,8 +392,14 @@ enum ColorMode: Int {
 
 /// Set up app config
 func setAppConfig() {
+    // If first time installed.
     if nil == UserDefaults.standard.object(forKey: "multi_task") {
         UserDefaults.standard.set(true, forKey: "multi_task")
+    }
+    if nil == UserDefaults.standard.value(forKey: "colorMode") {
+        // Initially set to light mode.
+        UserDefaults.standard.setValue(1, forKey: "colorMode")
+        g_colorMode = ColorMode.light
     }
 }
 
@@ -395,20 +424,6 @@ func setColorMode() {
                         window.overrideUserInterfaceStyle = .unspecified
                 }
             }
-        }
-    }
-    else {
-        if #available(iOS 12.0, *) {
-            // Uncomment if initially required with system display mode.
-            if UIScreen.main.traitCollection.userInterfaceStyle == .light {
-            // Initially set to light.
-                g_colorMode = ColorMode.light
-            }
-            else {
-                g_colorMode = ColorMode.dark
-            }
-        } else {
-            g_colorMode = ColorMode.light
         }
     }
 }
@@ -1207,7 +1222,7 @@ func convertAPITimeToLocal(strDateTime: String) -> String {
 func convertStrDateTimeToDate(strDateTime: String, format: String = "dd/MM/yyyy HH:mm:ss") -> Date {
     let dateFormatter = DateFormatter()
     dateFormatter.timeZone = .current
-    dateFormatter.dateFormat = "dd/MM/yyyy HH:mm:ss"
+    dateFormatter.dateFormat = format
     // Convert to UTC Timezone.
     guard let date = dateFormatter.date(from: strDateTime) else {
         fatalError()

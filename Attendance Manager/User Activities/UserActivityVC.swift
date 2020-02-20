@@ -721,6 +721,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         arrSelectedProj = Array<Int>()
         arrSelectedProj = arrProj
         sortAndRefreshData()
+        reloadCollection()
         self.view.alpha = 1
     }
     
@@ -741,6 +742,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         // Set sort type to recent tasks.
         sortType = SortTypes.tasks
         sortAndRefreshData()
+        reloadCollection()
         self.view.alpha = 1
     }
     
@@ -751,6 +753,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         bIsFilterHidden = true
         self.view.alpha = 1
         sortAndRefreshData()
+        reloadCollection()
     }
     
     func changedFilterViewPosition(cgFAlpha: CGFloat) {
@@ -1033,6 +1036,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             else {
                 print("Error while starting task..!")
             }
+            self.btnState.isUserInteractionEnabled = true
             self.updateProject()
             completion()
         })
@@ -1059,7 +1063,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         self.arrRunningTask = self.getRunningTaskId()
         // To update current time to cell view without dealy.
         if let cellPrevRunTask = self.collectionTimer.cellForItem(at: [0, arrRunningTask.count-1]) as?
-            TimerCell {
+            TimerCell, withCurrentTime {
             cellPrevRunTask.withCurrentTime = true
         }
         self.drawTaskState()
@@ -1102,8 +1106,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 // Start task.
                 cTaskDetails.bIsRunning = true
                 cell.lblTotalDuration.text = "Synching"
-                
-                reloadCollection()
+                reloadCollection(withCurrentTime: true)
                 startTask(taskId: taskId!)
             }
             cell.imgTimer.image = #imageLiteral(resourceName: "synch")
@@ -1112,6 +1115,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
         else {
             //Button action when user starts and ends break.
             if btnState.currentTitle == "Stop" && arrRunningTask.count > 0 {
+                btnState.isUserInteractionEnabled = false
                 let index = pageCtrlCollection.currentPage
                 let taskId = arrRunningTask[index]
                 let indexArray = arrCTaskDetails.firstIndex(where: {
@@ -1121,14 +1125,15 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 
                 let indexPath = IndexPath(row: indexArray, section: 0)
                 let cTaskDetails = arrCTaskDetails[indexPath.row]
-                let cell = tblUserDetails.cellForRow(at: indexPath) as! UserTaskInfoCell
-                animateCellPosition(indexPath: indexPath)
-
-                // Stop running task.
-                cell.isUserInteractionEnabled = false
-                cell.imgTimer.image = #imageLiteral(resourceName: "synch")
-                cTaskDetails.bIsRunning = false
-                cell.lblTotalDuration.text = "Stoping"
+                if let cell = tblUserDetails.cellForRow(at: indexPath) as? UserTaskInfoCell {
+                    animateCellPosition(indexPath: indexPath)
+                    
+                    // Stop running task.
+                    cell.isUserInteractionEnabled = false
+                    cell.imgTimer.image = #imageLiteral(resourceName: "synch")
+                    cTaskDetails.bIsRunning = false
+                    cell.lblTotalDuration.text = "Stoping"
+                }
                 reloadCollection()
                 stopTask(taskId: taskId)
             }
@@ -1218,12 +1223,14 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 return $0.taskId == taskId
             })
             let indexPath = IndexPath(row: indexTable!, section: 0)
-            let cell = tblUserDetails.cellForRow(at: indexPath)! as! UserTaskInfoCell
             let cTaskDetails = arrCTaskDetails[indexPath.row]
-            cell.imgTimer.image = #imageLiteral(resourceName: "synch")
-            cell.isUserInteractionEnabled = false
+            if let cell = tblUserDetails.cellForRow(at: indexPath)
+                as? UserTaskInfoCell {
+                cell.imgTimer.image = #imageLiteral(resourceName: "synch")
+                cell.isUserInteractionEnabled = false
+                cell.lblTotalDuration.text = "Stoping"
+            }
             cTaskDetails.bIsRunning = false
-            cell.lblTotalDuration.text = "Stoping"
             reloadCollection()
             tasksCDController.stopTask(taskId: taskId, completion: {
                 status in

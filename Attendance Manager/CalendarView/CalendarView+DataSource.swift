@@ -229,17 +229,16 @@ extension CalendarView: UICollectionViewDataSource {
         }
         
         dayCell.bgView.backgroundColor = .clear
-//        dayCell.backgroundColor = .clear
-        var label: MonthDayLabel!
+        var lblPieChart: MonthDayLabel!
         if let lbl = dayCell.contentView.viewWithTag(4) {
-            label = (lbl as! MonthDayLabel)
+            lblPieChart = (lbl as! MonthDayLabel)
         }
         else {
-            label = MonthDayLabel()
+            lblPieChart = MonthDayLabel()
         }
 
-        label.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-        label.tag = 4
+        lblPieChart.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+        lblPieChart.tag = 4
         if selectedIndexPaths.contains(indexPath) {
             let date = dateFromIndexPath(indexPath)
             let taskTimeController = TasksTimeCDController()
@@ -262,29 +261,29 @@ extension CalendarView: UICollectionViewDataSource {
                 ratio.append(dictRatio[projId]!)
             }
             
-            label.colors = colors
-            label.values = ratio
+            lblPieChart.colors = colors
+            lblPieChart.values = ratio
             
             let width = 60 * perc
             //60 maximum width for label, 45000 maximum work tim i.e approximately equal to 13 hours
             let size = dayCell.frame.size
-            label.clipsToBounds = false
+            lblPieChart.clipsToBounds = false
             let x = size.width/2
             let y = size.height/2
-            label.center = CGPoint(x: x, y: y)
-            label.layer.masksToBounds = true
+            lblPieChart.center = CGPoint(x: x, y: y)
+            lblPieChart.layer.masksToBounds = true
             UIView.animate(withDuration: 0.5) {
-                label.frame.size = CGSize(width: width, height: width)
-                label.layer.cornerRadius = width/2
-                label.center = CGPoint(x: x, y: y)
+                lblPieChart.frame.size = CGSize(width: width, height: width)
+                lblPieChart.layer.cornerRadius = width/2
+                lblPieChart.center = CGPoint(x: x, y: y)
             }
 //            label.backgroundColor = g_colorMode.midColor()
             let minAlpha: CGFloat = 0.2
             let maxAlpha: CGFloat = 0.5
-            label.alpha = ((maxAlpha-minAlpha) * perc) + minAlpha
+            lblPieChart.alpha = ((maxAlpha-minAlpha) * perc) + minAlpha
         }
-        dayCell.contentView.addSubview(label)
-        bringSubviewToFront(label)
+        dayCell.contentView.addSubview(lblPieChart)
+        bringSubviewToFront(lblPieChart)
         
         if self.marksWeekends {
             let we = indexPath.item % 7

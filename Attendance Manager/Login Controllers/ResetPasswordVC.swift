@@ -58,7 +58,7 @@ class ResetPasswordVC: UIViewController {
     
     /// Send new password to the server.
     @IBAction func btnResetPswdPressed(_ sender: Any) {
-        if txtResetPswd.text!.count <= 6  && txtResetPswd.text!.count <= 6 {
+        if txtResetPswd.text!.count < 6  && txtResetPswd.text!.count < 6 {
             lblErrPswd.text = "Password should contain atleast 6 character"
             lblErrPswd.isHidden = false
             self.txtResetPswd.shakeTextField()

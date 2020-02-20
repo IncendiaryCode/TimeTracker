@@ -67,6 +67,10 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	var cgFButtonMinY: CGFloat!
 	/// Array of buttons to display graph in daily view.
 	var arrBtnsDayTask: Array<ButtonDayGraph>!
+	/// Array of message views to day graph.
+	var arrMsgViewDay: Array<MsgView>!
+	/// Array of message views to day graph.
+	var arrMsgViewWeek: Array<MsgView>!
 	/// X axis labels are drawn in this view.
 	var viewGraphXAxis: UIView!
 	/// Buttons for graph in week view.
@@ -170,7 +174,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		viewDayAndWeekChanger.addGestureRecognizer(tapGesture)
 		
 		// Add shadow to filter view.
-		cgRect = CGRect(x: 0, y: -4, width: UIScreen.main.bounds.width, height: 2)
+		cgRect = CGRect(x: 0, y: viewFilter.bounds.minY+1, width: UIScreen.main.bounds.width
+			, height: 1)
 		var gradientLayer = CAGradientLayer()
 		gradientLayer.colors = [g_colorMode.defaultColor().cgColor, UIColor.lightGray.withAlphaComponent(0.5).cgColor]
 		gradientLayer.opacity = 0.4
@@ -178,10 +183,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
 		gradientLayer.frame = cgRect
 		viewFilter.layer.insertSublayer(gradientLayer, at: 0)
-		
 		viewFilter.clipsToBounds = false
-		cgRect = CGRect(x: 0, y: viewFilter.bounds.height-1, width: UIScreen.main.bounds.width
-			, height: 1)
 		
 		// Add shadow to header view.
 		cgRect = CGRect(x: 0, y: viewDayAndWeekChanger.bounds.maxY-2
@@ -193,7 +195,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
 		gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
 		gradientLayer.frame = cgRect
-
+		viewDayAndWeekChanger.layer.insertSublayer(gradientLayer, at: 0)
 		
 		if nSliderView == 0 {
 			minHeightChart = 40
@@ -317,7 +319,6 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	
 	func calendar(_ calendar: CalendarView, didSelectDate date: Date, withEvents events:
 		[CalendarEvent]) {
-		
 	}
 	
 	func calendar(_ calendar: CalendarView, canSelectDate date: Date) -> Bool {
@@ -330,7 +331,6 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	
 	func calendar(_ calendar: CalendarView, didLongPressDate date: Date, withEvents events:
 		[CalendarEvent]?) {
-		
 	}
 	
 	/// Calculate y value to draw button in a day view graph.
@@ -388,6 +388,8 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			let endTime = cTaskDetails.nEndTime!
 			let taskId = cTaskDetails.taskId
 			
+			let totalTime = endTime - startTime
+			let strTotTime = getSecondsToHoursMinutesSeconds(seconds: totalTime, format: .hm)
 			// Calculation based on total work time from 8AM to 8PM
 			// 28800sec = 8AM
 			// 43200sec = 8PM
@@ -397,7 +399,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			// Get y position for drawing.
 			let minY = findMinYforDayBtnGraph(start: startTime, end: endTime, minY: 70,
 								dictDrawnPoint: dictDrawnPoints)
-			let cgRect = CGRect(x: startX, y: CGFloat(minY), width: 0, height: 20)
+			var cgRect = CGRect(x: startX, y: CGFloat(minY), width: 0, height: 20)
 			
 			// Update drawn x and y positions to dictionsary.
 			if var arrValue = dictDrawnPoints[minY] {
@@ -411,6 +413,12 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			let btnTaskGraph = ButtonDayGraph(frame: cgRect)
 			btnTaskGraph.layer.borderColor = g_colorMode.defaultColor().cgColor
 			btnTaskGraph.layer.borderWidth = 1
+			
+			// Setup infor msg view to day graph.
+			cgRect = CGRect(x: startX-10, y: CGFloat(minY-50), width: 60, height: 50)
+			let msgView = MsgView(frame: cgRect, msg: strTotTime)
+			msgView.tag = -(arrReverseSort.count - i - 1)-1 // Tag used to identify each msg view.
+															// -1 to since btn day graph has zero.
 	
 			// Negative beacause its sorted in reverse.
 			btnTaskGraph.tag = arrReverseSort.count - i - 1 // Tag used to identify each button.
@@ -429,8 +437,10 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			btnTaskGraph.layer.masksToBounds = true
 			btnTaskGraph.layer.cornerRadius = 3
 			
+			arrMsgViewDay.append(msgView)
 			arrBtnsDayTask.append(btnTaskGraph)
 			self.barChartView.addSubview(arrBtnsDayTask.last!)
+			self.addSubview(arrMsgViewDay.last!)
 			
 			let cgSize = CGSize(width: (endX-startX), height: 20)
 			// Animate day graph.
@@ -453,11 +463,18 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		}
 		// Set btn positions.
 		let steps = (nsLBarViewHeight.constant - 110)
-		for btn in arrBtnsDayTask {
+		for i in 0..<arrBtnsDayTask.count  {
+			let btn = arrBtnsDayTask[i]
+			let msgView = arrMsgViewDay[i]
 			var minYBtn = btn.frame.minY
 			let minXBtn = btn.frame.minX
+			let width = btn.bounds.width
 			minYBtn += steps
 			btn.frame.origin = CGPoint(x: minXBtn, y: minYBtn)
+			
+			// Add bar chart frame with minY.(Since msgview added to self)
+			msgView.frame.origin = CGPoint(x: minXBtn+width/2+20
+				, y: minYBtn-28+barChartView.frame.minY)
 		}
 	}
 	
@@ -580,7 +597,72 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		
 		lblStartEndTime.text = "\(strStart) - \(strEnd)"
 	}
+	
+	override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+		super.touchesMoved(touches, with: event)
+		guard let touch = event?.allTouches?.first else {return}
+		let touchLocation = touch.location(in: barChartView)
+		if nSliderView == 0 {
+			arrBtnsDayTask.forEach { (button) in
+				let tag = -button.tag-1
+				if button.frame.contains(touchLocation) {
+					if let msgView = self.viewWithTag(tag) as? MsgView {
+						msgView.layer.zPosition = 1
+						msgView.showView()
+						print("1")
+					}
+				}
+				else {
+					if let msgView = self.viewWithTag(tag) as? MsgView {
+						msgView.layer.zPosition = 1
+						msgView.hideView()
+						print("32")
+					}
+				}
+			}
+		}
+		else if nSliderView == 1 {
+			for i in 0..<arrBtnWeekView.count {
+				let button = arrBtnWeekView[i]
+				if button.frame.contains(touchLocation) {
+					let msgView = arrMsgViewWeek[i]
+						msgView.layer.zPosition = 1
+						msgView.showView()
+						print("1")
+					
+				}
+				else {
+					let msgView = arrMsgViewWeek[i]
+						msgView.layer.zPosition = 1
+						msgView.hideView()
+						print("32")
+					
+				}
+			}
+		}
+	}
 
+	override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+		super.touchesEnded(touches, with: event)
+		if touches.first != nil {
+			if nSliderView == 0 {
+				arrBtnsDayTask.forEach { (button) in
+					let tag = -button.tag-1
+					if let msgView = self.viewWithTag(tag) as? MsgView {
+						msgView.layer.zPosition = 1
+						msgView.hideView()
+					}
+				}
+			}
+			if nSliderView == 1 {
+				arrMsgViewWeek.forEach { (msgView) in
+					msgView.layer.zPosition = 1
+					msgView.hideView()
+				}
+			}
+		}
+	}
+	
 	/// Set up day activity view.
 	func setupDayView() {
         // Setup tableview for a day.
@@ -589,6 +671,10 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		for btn in arrBtnsDayTask {
 			btn.removeFromSuperview()
 		}
+		for msgView in arrMsgViewDay {
+			msgView.removeFromSuperview()
+		}
+		arrMsgViewDay.removeAll()
 		arrBtnsDayTask.removeAll()
 		arrIntDate = tasksTimeCDCtrlr.getAllDates() // get all dates task timings.
 		
@@ -670,10 +756,9 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			tblActivities.reloadDataWithAnimation()
 			
 			// Display week information
-			
-			// If filter has no project.
 			var strTotWork: String!
 			if nil != arrSelectedProj && arrSelectedProj?.count == 0 {
+				// If filter has no project.
 				strTotWork = "00m"
 			}
 			else {
@@ -720,6 +805,13 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 					self.arrBtnWeekView[day-1].height = -height
 				})
 				delay += 0.1
+				
+				let msgView = arrMsgViewWeek[day-1]
+				let cgRect = CGRect(x: arrBtnWeekView[day-1].frame.midX-6, y: cgFButtonMinY-height+24
+					, width: 50, height: 50)
+				msgView.frame = cgRect
+				let strTotWork = getSecondsToHoursMinutesSeconds(seconds: Int(totalWork), format: .hm)
+				msgView.setMsg(msg: strTotWork)
 			}
 		}
 		else {
@@ -755,6 +847,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 												lineWidth: 1.0)
 			barChartView.addSubview(viewGraphXAxis)
 			
+			arrMsgViewDay = []
 			arrBtnsDayTask = []
 			calendarView.isHidden = true  // Hide calendar view.
 			setupDayView()
@@ -772,6 +865,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			
 			arrWeekDetails = tasksCDCtrlr.getWeekWiseDetails(arrProj: arrSelectedProj) // Get week information.
 			arrBtnWeekView = []
+			arrMsgViewWeek = []
 			
 			let width = endPoint.x - startPoint.x // Total width of x-axis.
 			let gap: CGFloat = width / 7 // Gap required for 7 days.
@@ -787,6 +881,11 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 				btn.addTarget(self, action:#selector(self.btnChartBarPressed), for: .touchUpInside)
 				arrBtnWeekView.append(btn)
 				self.barChartView.addSubview(arrBtnWeekView[i])
+				
+				// Setup msgview.
+				let msgView = MsgView(frame: CGRect.zero)
+				self.addSubview(msgView)
+				arrMsgViewWeek.append(msgView)
 			}
 			calendarView.isHidden = true
 		}

@@ -246,6 +246,21 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 arrSelectedProj = Array<Int>()
                 arrSelectedProj.append(projId)
             }
+            
+            // Disable Done btn when no project selected.
+            if arrSelectedProj.count == 0 {
+                btnDone.isEnabled = false
+                UIView.animate(withDuration: 0.5) {
+                    self.btnDone.alpha = 0.2
+                }
+            }
+            else {
+                btnDone.isEnabled = true
+                UIView.animate(withDuration: 0.5) {
+                    self.btnDone.alpha = 1
+                }
+            }
+            
             updateCountLabel()
             tbleProject.reloadRows(at: [indexPath], with: .none)
         }

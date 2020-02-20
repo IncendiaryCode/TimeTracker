@@ -136,6 +136,7 @@ UIGestureRecognizerDelegate {
         let cgPEnd = CGPoint(x: 1, y: 0.75)
         btnDatePickDone.addGradient(cgPStart: cgPStart, cgPEnd: cgPEnd, cgFRadius: 15)
         txtVTaskDescr.textColor = g_colorMode.midText()
+        txtTaskName.textColor = g_colorMode.textColor()
         viewMain.backgroundColor = g_colorMode.defaultColor()
         scrollView.layer.masksToBounds = true
         scrollView.layer.cornerRadius = 35
@@ -687,18 +688,18 @@ UIGestureRecognizerDelegate {
     }
     
     func addNewCellTimings() {
-        if .updatable == checkTimeUpdatable() {
+        if .updatable == checkTimeUpdatable().0 {
             addArrayTimings()
             sortAndDisplayTimings()
         }
     }
     
     /// Validates time. (Whether updation possible or not).
-    func checkTimeUpdatable() -> TimeError {
+    func checkTimeUpdatable() -> (TimeError, String?, String?) {
         guard nil != selectedCell && !selectedCell.lblDate.text!.isEmpty &&
             !selectedCell.lblStartTime.text!.isEmpty && !selectedCell.lblEndTime.text!.isEmpty else
         {
-            return .undefined
+            return (.undefined, nil, nil)
         }
         
         var start = getSecondCount(strTime: selectedCell.lblStartTime.text!)
@@ -720,7 +721,7 @@ UIGestureRecognizerDelegate {
         
         /// Start time is greater than end time
         if start >= end {
-            return .startGreater
+            return (.startGreater, nil, nil)
         }
         
         // Validate time in between working hour.(Punch in/out)
@@ -731,8 +732,10 @@ UIGestureRecognizerDelegate {
             "\(date) \(startTime)")
         let endDate = convertStrDateTimeToDate(strDateTime:
             "\(date) \(endTime)")
-        if !punchInOutCDCtrlr.isTimeExistInPunchInOut(start: startDate, end: endDate) {
-            return .outOfWorkTime
+        let (isOutOfrange, strStart, strEnd) = punchInOutCDCtrlr.isTimeExistInPunchInOut(start:
+            startDate, end: endDate)
+        if !isOutOfrange {
+            return (.outOfWorkTime, strStart, strEnd)
         }
         
         
@@ -768,20 +771,20 @@ UIGestureRecognizerDelegate {
                     
                     print("validation \(start) < \(nStartTime) \t \(end) > \(nEndTime) \n.............\n")
                     if nStartTime <= start && nEndTime > start {
-                        return .timeExist
+                        return (.timeExist, nil, nil)
                     }
                     // When end time in between any other start and end time.
                     else if end > nStartTime && end < nEndTime {
-                        return .timeExist
+                        return (.timeExist, nil, nil)
                     }
                     // When start time less than and end time greater than any other timings.
                     else if start < nStartTime && end > nEndTime {
-                        return .timeExist
+                        return (.timeExist, nil, nil)
                     }
                 }
             }
         }
-        return .updatable
+        return (.updatable, nil, nil)
     }
     
     func dateSelected(indexPath: IndexPath) {
@@ -808,7 +811,7 @@ UIGestureRecognizerDelegate {
             }
             else {
                 dateTimePicker.setDate(Date(), animated: true)
-                cell.lblDate.text = Date().getStrDate()
+//                cell.lblDate.text = Date().getStrDate()
             }
             
 //            tblviewTimings.scrollToRow(at: indexPath, at: .bottom, animated: false)
@@ -838,7 +841,7 @@ UIGestureRecognizerDelegate {
         }
         else {
             setTimePickerView(dateTime: Date())
-            cell.lblStartTime.text = Date().getStrTime()
+//            cell.lblStartTime.text = Date().getStrTime()
         }
 //        tblviewTimings.scrollToRow(at: indexPath, at: .bottom, animated: false)
         // Hide hint.
@@ -862,7 +865,7 @@ UIGestureRecognizerDelegate {
         }
         else {
             setTimePickerView(dateTime: Date())
-            cell.lblEndTime.text = Date().getStrTime()
+//            cell.lblEndTime.text = Date().getStrTime()
         }
 //        tblviewTimings.scrollToRow(at: indexPath, at: .bottom, animated: false)
         // Hide hint.
@@ -923,6 +926,23 @@ UIGestureRecognizerDelegate {
     }
     
     @IBAction func btnDatePickDonePressed(_ sender: Any) {
+        if nil != selectedCell {
+            let date = dateTimePicker.date
+            if 0 == selectedRow {
+                let strDate = date.getStrDate()
+                selectedCell.lblDate.text = strDate
+            }
+            else if 1 == selectedRow{
+                let strStartTime = date.getStrTime()
+                selectedCell.lblStartTime.text = strStartTime
+            }
+            else if 2 == selectedRow {
+                let strEndTime = date.getStrTime()
+                selectedCell.lblEndTime.text = strEndTime
+            }
+            else {
+            }
+        }
         editDateTimeCompleted()
     }
     
@@ -968,7 +988,7 @@ UIGestureRecognizerDelegate {
                 return
         }
         let timesCheck = checkTimeUpdatable()
-        if .updatable == timesCheck {
+        if .updatable == timesCheck.0 {
             // Update edit timingss.
             let date = dateTimePicker.date
             if selectedRow == 0 {
@@ -1018,7 +1038,8 @@ UIGestureRecognizerDelegate {
             }
         }
         else {
-            alertUnableToChangeDate(type: timesCheck)
+            alertUnableToChangeDate(type: timesCheck.0, startTime: timesCheck.1
+                , endTime: timesCheck.2)
         }
         hideDateTimePicker()
     }
@@ -1142,7 +1163,7 @@ UIGestureRecognizerDelegate {
     }
     
     /// If time already exist.
-    func alertUnableToChangeDate(type: TimeError) {
+    func alertUnableToChangeDate(type: TimeError, startTime: String? = nil, endTime: String? = nil) {
         let strError: String!
         switch type {
             case .futureTime:
@@ -1158,8 +1179,14 @@ UIGestureRecognizerDelegate {
                 strError =
             "Since you are not punched in, You will be not able to start a task, please enter end time if you want to update the timings"
             case .outOfWorkTime:
-                strError =
-            "Start/End time should be within the punch in/out timings"
+                if nil != startTime {
+                    strError =
+                    "Start/End time should be within the punch in/out timings(\(startTime!)-\(endTime ?? "no punch out"))"
+                }
+                else {
+                    strError =
+                    "Date you have entered does not contain your punch in/out data"
+                }
             default:
                 strError = "Enter valid time"
         }
@@ -1204,7 +1231,12 @@ UIGestureRecognizerDelegate {
     @objc func viewBGPressed(sender: UITapGestureRecognizer) {
         if nsLDatePickerHeight.constant == cgFHeightForPopup {
             // Update date to the table cell and validate.
-            editDateTimeCompleted()
+//            editDateTimeCompleted()
+            if arrTaskTimeDetails.count > selectedCell.indexPath.row {
+                arrTaskTimeDetails[selectedCell.indexPath.row].description =
+                    selectedCell.txtFDescription.text
+            }
+            hideDateTimePicker()
         }
         setCellToConstantPosition()
         
@@ -1604,6 +1636,24 @@ UIGestureRecognizerDelegate {
                 errorMessage(msg: "Fill date and start time")
                 return
             }
+            // Check for punch in/out time if end time not mentioned.
+            else if cell.lblEndTime.text == "" {
+                let strDate = cell.lblDate.text
+                let strTime = cell.lblStartTime.text
+                
+                // Validate time in between working hour.(Punch in/out)
+                let startDate = convertStrDateTimeToDate(strDateTime:
+                    "\(strDate!) \(strTime!)", format: "dd/MM/yyyy h:mm a")
+                
+                let punchInOutCDCtrlr = PunchInOutCDController()
+                let (isOutOfrange, strStart, strEnd) = punchInOutCDCtrlr
+                    .isTimeExistInPunchInOut(start:
+                    startDate)
+                if !isOutOfrange {
+                    return alertUnableToChangeDate(type: .outOfWorkTime, startTime: strStart
+                        , endTime: strEnd)
+                }
+            }
             
             // Check for future time entered with end time blank.
             if cell.lblEndTime.text == "" && cell.lblDate.text == getCurrentDate()
@@ -1713,7 +1763,7 @@ UIGestureRecognizerDelegate {
     
     @IBAction func viewPressed(_ sender: Any) {
         if nil != selectedCell {
-            editDateTimeCompleted()
+//            editDateTimeCompleted()
         }
         self.view.endEditing(true)
     }

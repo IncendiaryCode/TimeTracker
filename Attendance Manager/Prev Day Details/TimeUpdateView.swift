@@ -478,5 +478,4 @@ class TimeUpdateView: UIView {
             viewController!.present(alert, animated: true, completion: nil)
         }
     }
-
 }

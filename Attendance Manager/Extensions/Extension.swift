@@ -51,7 +51,7 @@ extension UITextField {
         let borderWidth = CGFloat(1.0)
         border.borderColor = uiColor.cgColor
         if width == 0 {
-            border.frame = CGRect(origin: CGPoint(x: 0, y: self.frame.size.height )
+            border.frame = CGRect(origin: CGPoint(x: 0, y: self.frame.size.height)
                 ,size: CGSize(width: self.frame.size.width, height:  1))
         }
         else {
@@ -231,10 +231,9 @@ extension UITableView {
 extension UIView {
     /// Draw a line.
     func addLine(rect: CGRect? = nil) {
-        self.layer.masksToBounds = false
         let border = CALayer()
-        let borderWidth = CGFloat(0.25)
-        border.borderColor = g_colorMode.lineColor().withAlphaComponent(0.5).cgColor
+        let borderWidth = CGFloat(1)
+        border.borderColor = UIColor.lightGray.withAlphaComponent(0.4).cgColor
         if nil != rect {
             border.frame = rect!
         }
@@ -244,6 +243,7 @@ extension UIView {
         }
         border.borderWidth = borderWidth
         self.layer.addSublayer(border)
+        self.layer.masksToBounds = false
     }
     
     /// To add gradient to the view.
@@ -607,7 +607,7 @@ extension Date {
     }
 }
 
-extension UIButton {
+extension UIView {
     var height: CGFloat {
         get {
             return self.frame.size.height

@@ -52,6 +52,7 @@ class ResetPWVC: UIViewController {
         self.view.endEditing(true)
         guard txFNewPW.text != "" && txFReNewPW.text != "" && txFCurrentPW.text != "" else {
             lblError.text = "Enter all the fields"
+            lblError.shakeLabel()
             lblError.isHidden = false
             return
         }
@@ -83,6 +84,7 @@ class ResetPWVC: UIViewController {
         }
         else {
             lblError.text = "Passwords doesn't match..!"
+            lblError.shakeLabel()
             lblError.isHidden = false
             self.txFNewPW.text = ""
             self.txFReNewPW.text = ""

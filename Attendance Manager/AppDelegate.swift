@@ -25,8 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:
         [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Set color mode.
-        setColorMode()
         setAppConfig()
+        setColorMode()
         /// This will notify whenever internet connection status changes.
         RequestController.shared.startNetworkReachabilityObserver()
         
@@ -37,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if granted {
                 self.setUpNotification(hour: 10, minute: 00, title: "Remainder"
                     , body: "Good morning, Remainder to punch in for the day")
-                self.setUpNotification(hour: 18, minute: 30, title: "Remainder"
+                self.setUpNotification(hour: 17, minute: 55, title: "Remainder"
                     , body: "Good evening, Remainder to punch out for the day")
                 print("Permission granted")
             } else {
@@ -143,7 +143,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         content.body = body
         content.sound = UNNotificationSound.default
 
-        let trigger = UNCalendarNotificationTrigger(dateMatching: fireComponents, repeats: true)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: fireComponents, repeats: false)
         
         // Create request
         let uniqueID = UUID().uuidString // Keep a record of this if necessary

@@ -188,7 +188,6 @@ public class CalendarView: UIView {
     
     // MARK: Create Subviews
     private func setup() {
-        
         self.clipsToBounds = true
         self.translatesAutoresizingMaskIntoConstraints = false
         
@@ -224,20 +223,17 @@ public class CalendarView: UIView {
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(CalendarView.handleLongPress))
         self.collectionView.addGestureRecognizer(longPress)
-        
     }
     
     @objc func handleLongPress(gesture: UILongPressGestureRecognizer) {
         
-        #if swift(>=4.2)
-        guard gesture.state == UIGestureRecognizer.State.began else {
+        if gesture.state == UIGestureRecognizer.State.ended {
+            if let msgView = viewWithTag(1) as? MsgView {
+                msgView.hideView()
+                msgView.removeFromSuperview()
+            }
             return
         }
-        #else
-        guard gesture.state == UIGestureRecognizer.State.began else {
-            return
-        }
-        #endif
         
         let point = gesture.location(in: collectionView)
         
@@ -250,10 +246,35 @@ public class CalendarView: UIView {
         guard
             let indexPathEvents = collectionView.indexPathForItem(at: point),
             let events = self.eventsByIndexPath[indexPathEvents], events.count > 0 else {
-                self.delegate?.calendar(self, didLongPressDate: date, withEvents: nil)
+                if gesture.state == .began {
+                    self.delegate?.calendar(self, didLongPressDate: date, withEvents: nil)
+                    // Crete msg view popup.
+                    let cell = collectionView.cellForItem(at: indexPath)
+                    if nil != cell?.isSelected && cell!.isSelected {
+                        let cellLayoutFrame = collectionView.convert(collectionView
+                            .layoutAttributesForItem(at: indexPath)!.frame, to: nil)
+                        let cellFrame = cell!.frame
+                        let cgRect = CGRect(origin: CGPoint(x: cellLayoutFrame.midX-42
+                            , y: cellFrame.midY-40), size: CGSize(width: 50, height: 50 ))
+                        
+                        // Get total work time.
+                        let date = dateFromIndexPath(indexPath)
+                        let taskTimeController = TasksTimeCDController()
+                        let intDate = date?.millisecondsSince1970
+                        let totalTime = taskTimeController.getTotalWorkTime(intDate: intDate!)
+                        let strTotTime = getSecondsToHoursMinutesSeconds(seconds: totalTime
+                            , format: .hm)
+                        
+                        // Setup msg view.
+                        let msgView = MsgView(frame: cgRect, msg: strTotTime)
+                        msgView.tag = 1
+                        addSubview(msgView)
+                        msgView.layer.zPosition = 1
+                        msgView.showView()
+                    }
+                }
                 return
         }
-        
         self.delegate?.calendar(self, didLongPressDate: date, withEvents: events)
     }
     

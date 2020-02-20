@@ -61,8 +61,8 @@
                             <action selector="btnRemoveConfirmPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="7Op-lw-aNR"/>
                         </connections>
                     </button>
-                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Description" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="go9-pT-IY3">
-                        <rect key="frame" x="44" y="42.5" width="245" height="34"/>
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Description" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="go9-pT-IY3">
+                        <rect key="frame" x="54" y="44.5" width="235" height="18.5"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -115,9 +115,9 @@
                     <constraint firstItem="njr-KW-iHQ" firstAttribute="leading" secondItem="GLi-8t-sLy" secondAttribute="trailing" id="LZp-wb-1hU"/>
                     <constraint firstItem="njr-KW-iHQ" firstAttribute="top" secondItem="GLi-8t-sLy" secondAttribute="top" id="XLW-tc-bmV"/>
                     <constraint firstItem="go9-pT-IY3" firstAttribute="trailing" secondItem="njr-KW-iHQ" secondAttribute="trailing" id="aYN-Il-E51"/>
-                    <constraint firstItem="go9-pT-IY3" firstAttribute="top" secondItem="9H9-5a-cwA" secondAttribute="bottom" constant="10" id="eEK-uq-i6X"/>
+                    <constraint firstItem="go9-pT-IY3" firstAttribute="top" secondItem="9H9-5a-cwA" secondAttribute="bottom" constant="12" id="eEK-uq-i6X"/>
                     <constraint firstItem="Djz-ax-Ma4" firstAttribute="top" secondItem="vv9-Ht-bUv" secondAttribute="top" constant="15" id="tGa-Z4-v1J"/>
-                    <constraint firstItem="go9-pT-IY3" firstAttribute="leading" secondItem="9H9-5a-cwA" secondAttribute="leading" id="tQZ-mb-s48"/>
+                    <constraint firstItem="go9-pT-IY3" firstAttribute="leading" secondItem="9H9-5a-cwA" secondAttribute="leading" constant="10" id="tQZ-mb-s48"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

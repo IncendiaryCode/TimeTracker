@@ -47,8 +47,9 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
     @IBOutlet weak var nsLTxtUsernameTop: NSLayoutConstraint!
     @IBOutlet weak var btnChangeImage: UIButton!
     @IBOutlet weak var btnCancel: UIButton!
+    @IBOutlet weak var lblErrorName: UILabel!
     
-    var prevImage: UIImage!
+    var prevImage: UIImage?
     var cgFTableDisHeight: CGFloat!
     var punchInOutCDController: PunchInOutCDController!
     var projectCDController: ProjectsCDController!
@@ -135,6 +136,7 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         APIResponseHandler.fetchUserProfile(completion: {
             status, msg in
             if status {
+                
                 self.setUpNameEmailPhone()
                 // Check profile image changed.
                 if let newUrl = UserDefaults.standard.value(forKey: "profileUrl") as? String {
@@ -202,7 +204,9 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         else {
             txtEmailPhone.text = ""
         }
-        if let strPhone = UserDefaults.standard.string(forKey: "phoneNo") {
+        // phone number and should not be if edit page opended.
+        if let strPhone = UserDefaults.standard.string(forKey: "phoneNo")
+            , nsLScrollViewTop.constant != scrollView.frame.maxY  {
             txtEmailPhone.text = "\(txtEmailPhone.text!)  |  \(strPhone)"
             txtPhone.text = strPhone
         }
@@ -316,6 +320,7 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
     }
     
     @IBAction func btnChangeImagePressed(_ sender: Any) {
+        prevImage = imgVProfile.image
         let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle:
             .actionSheet)
         alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
@@ -362,49 +367,70 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
             self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 1))
         }
         else if btnEditSave.currentTitle == "Save" {
+            self.view.endEditing(true)
+            lblErrorName.isHidden = true
+            // Validate name.
+            guard txtUsername.text != "" else {
+                lblErrorName.isHidden = false
+                txtUsername.shakeTextField()
+                return
+            }
+            
             self.btnEditSave.isUserInteractionEnabled = false
             let strName = txtUsername.text!
             let phone = txtPhone.text!
             actIndicatorProfile.center = btnEditSave.center
             btnEditSave.setTitle("", for: .normal)
             actIndicatorProfile.startAnimating()
+            hideProfileEdit()
             if let imgData = imgVProfile.image?.jpegData(compressionQuality: 1.0) {
                 print(imgData)
                 APIResponseHandler.updateUserProfile(name: strName, phone: phone, imgData: imgData
                     , completion: {
                     status, msg in
-                        self.profileUpdationHandler(status: status, msg: msg)
+                        self.profileUpdationHandler(status: status, msg: msg
+                            , strName: strName, phone: phone)
                 })
             }
             else {
                 APIResponseHandler.updateUserProfile(name: strName, phone: phone, imgData: Data()
                     , completion: {
                     status, msg in
-                        self.profileUpdationHandler(status: status, msg: msg)
+                        self.profileUpdationHandler(status: status, msg: msg
+                            , strName: strName, phone: phone)
                 })
             }
         }
     }
     
-    func profileUpdationHandler(status: Bool, msg: String) {
+    func profileUpdationHandler(status: Bool, msg: String, strName: String, phone: String) {
         if status {
-            UserDefaults.standard.set(txtUsername.text!, forKey: "userName")
-            UserDefaults.standard.set(txtPhone.text!, forKey: "phoneNo")
+            UserDefaults.standard.set(strName, forKey: "username")
+            UserDefaults.standard.set(phone, forKey: "phoneNo")
         }
         else {
             setUpNameEmailPhone()
             setupProfileImage()
         }
+        setUpNameEmailPhone()
         let notifiaction = InAppNotificationView()
         notifiaction.sendNotification(msg: msg)
         notifiaction.addGradient()
-        self.view.addSubview(notifiaction)
+        if let vc = UIApplication.topViewController() {
+            vc.view.addSubview(notifiaction)
+        }
         actIndicatorProfile.stopAnimating()
-        hideProfileEdit()
         btnEditSave.setTitle("Edit", for: .normal)
     }
     
     @IBAction func btnCancelPressed(_ sender: Any) {
+        // Image changed and cancelled.
+        if let img = prevImage {
+            imgVProfile.image = img
+            prevImage = nil
+        }
+        self.view.endEditing(true)
+        actIndicator.stopAnimating()
         hideProfileEdit()
         self.btnEditSave.setTitle("Edit", for: .normal)
     }
@@ -699,7 +725,7 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
     
     func showMultitaskAlert() {
         let alert = UIAlertController(title: "Alert..!", message:
-            "Currently multiple tasks are running. Do you want to stop it?"
+            "Currently multiple tasks are running. Do you want to stop all?"
             , preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel
             , handler: { _ in
@@ -790,6 +816,7 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         UserDefaults.standard.removeObject(forKey: "userEmail")
         UserDefaults.standard.removeObject(forKey: "profileUrl")
         UserDefaults.standard.removeObject(forKey: "phoneNo")
+        
         g_dictProjectDetails = nil
         g_arrCTaskDetails = nil
         g_userProfile = nil

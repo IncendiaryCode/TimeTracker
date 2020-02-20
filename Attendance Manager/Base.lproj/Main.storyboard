@@ -452,7 +452,7 @@
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="User Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iqj-qh-MaP">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email Address" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iqj-qh-MaP">
                                         <rect key="frame" x="34.5" y="188" width="231" height="30"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -831,6 +831,20 @@
                                     <action selector="txtUsernamePrimaryAction:" destination="39J-RR-nt6" eventType="primaryActionTriggered" id="ELw-NA-txt"/>
                                 </connections>
                             </textField>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name cannot be blank" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WMR-ql-SVe">
+                                <rect key="frame" x="37.5" y="227" width="140" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="5t2-FG-t17"/>
+                                    <constraint firstAttribute="height" constant="20" id="UAB-Au-63b"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.85098039219999999" green="0.18823529410000001" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="10"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
                             <textField opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OLZ-qf-Hwj">
                                 <rect key="frame" x="37.5" y="222" width="300" height="20"/>
                                 <constraints>
@@ -1077,6 +1091,7 @@
                             <constraint firstItem="WQb-LL-F9W" firstAttribute="top" secondItem="lrv-Ws-ytI" secondAttribute="top" constant="44" id="Q5n-fi-8cd"/>
                             <constraint firstItem="OLZ-qf-Hwj" firstAttribute="top" secondItem="AVc-9Q-FgA" secondAttribute="bottom" id="SSQ-zO-eQG"/>
                             <constraint firstItem="Fam-7A-1h9" firstAttribute="leading" secondItem="OLZ-qf-Hwj" secondAttribute="leading" id="UrN-wk-UF1"/>
+                            <constraint firstItem="WMR-ql-SVe" firstAttribute="leading" secondItem="AVc-9Q-FgA" secondAttribute="leading" id="Xmm-MJ-Mon"/>
                             <constraint firstItem="OLZ-qf-Hwj" firstAttribute="leading" secondItem="AVc-9Q-FgA" secondAttribute="leading" id="YrU-CG-c6K"/>
                             <constraint firstItem="WQb-LL-F9W" firstAttribute="centerX" secondItem="S9Z-nV-dmi" secondAttribute="centerX" id="ZdG-td-5u2"/>
                             <constraint firstItem="S9Z-nV-dmi" firstAttribute="trailing" secondItem="hgo-r0-9eY" secondAttribute="trailing" id="Zeq-oe-9Qs"/>
@@ -1087,6 +1102,7 @@
                             <constraint firstItem="AVc-9Q-FgA" firstAttribute="centerX" secondItem="S9Z-nV-dmi" secondAttribute="centerX" id="g6q-j9-Vp0"/>
                             <constraint firstItem="yig-Hw-ri9" firstAttribute="centerX" secondItem="S9Z-nV-dmi" secondAttribute="centerX" id="hPe-Sf-3jd"/>
                             <constraint firstItem="qIg-WC-d0s" firstAttribute="leading" secondItem="S9Z-nV-dmi" secondAttribute="leading" id="il9-8C-6ZZ"/>
+                            <constraint firstItem="WMR-ql-SVe" firstAttribute="top" secondItem="AVc-9Q-FgA" secondAttribute="bottom" constant="5" id="jab-OY-bWQ"/>
                             <constraint firstItem="hgo-r0-9eY" firstAttribute="leading" secondItem="S9Z-nV-dmi" secondAttribute="leading" id="kUd-XO-c0K"/>
                             <constraint firstItem="83k-nO-hQO" firstAttribute="bottom" secondItem="S9Z-nV-dmi" secondAttribute="bottom" constant="100" id="mEH-mi-vkh"/>
                             <constraint firstItem="yig-Hw-ri9" firstAttribute="centerY" secondItem="S9Z-nV-dmi" secondAttribute="centerY" id="o7I-R5-n5u"/>
@@ -1118,6 +1134,7 @@
                         <outlet property="imgVProfile" destination="WQb-LL-F9W" id="LfH-0c-q4T"/>
                         <outlet property="lblAccSetting" destination="58t-rQ-foh" id="etG-8I-be1"/>
                         <outlet property="lblAppSetting" destination="y7G-6N-7oN" id="Z6p-pR-syW"/>
+                        <outlet property="lblErrorName" destination="WMR-ql-SVe" id="WR6-fE-gjj"/>
                         <outlet property="nsLBtnDisModeHeight" destination="BRw-PX-xMB" id="Zi7-DH-y8V"/>
                         <outlet property="nsLDisModeHeight" destination="9ss-TD-hbA" id="SrD-S3-gl2"/>
                         <outlet property="nsLScrollViewTop" destination="ega-gw-ia8" id="Dsb-vb-gAO"/>

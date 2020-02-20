@@ -253,9 +253,12 @@ class PunchInOutCDController {
     }
     
     /// To check sent time is in between punch in and out.
-    func isTimeExistInPunchInOut(start: Date, end: Date) -> Bool {
+    func isTimeExistInPunchInOut(start: Date, end: Date? = nil) -> (Bool, String?, String?) {
         let nStart = start.millisecondsSince1970+Int64(TimeZone.current.secondsFromGMT())
-        let nEnd = end.millisecondsSince1970+Int64(TimeZone.current.secondsFromGMT())
+        var nEnd: Int64?
+        if nil != end {
+            nEnd = end!.millisecondsSince1970+Int64(TimeZone.current.secondsFromGMT())
+        }
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Punch_in_out_time")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "punch_in_time", ascending: false)]
@@ -264,31 +267,44 @@ class PunchInOutCDController {
             for i in 0..<nsMContext.count {
                 let nsMObject = nsMContext[i] as! NSManagedObject
                 let nPunchIn = nsMObject.value(forKey: "punch_in_time") as! Int64
+                let nStartTime = nsMObject.value(forKey: "punch_in_time") as! Int64
+                let datePunchIn = Date(milliseconds:
+                    (nStartTime - Int64(TimeZone.current.secondsFromGMT())))
                 
                 // If date is today check only punch in.
                 let strDate = getStrDateTime(date: start)
                 if strDate == getCurrentDate()
                     && nil == nsMObject.value(forKey: "punch_out_time") as? Int64 {
                     if nPunchIn <= nStart {
-                        return true
+                        return (true, nil, nil)
                     }
                     else {
-                        return false
+                        return (false, datePunchIn.getStrTime(), nil)
                     }
                 }
                 
+                let punchInDate = datePunchIn.getStrDate()
                 // Check other day.
-                if let nPunchOut = nsMObject.value(forKey: "punch_out_time") as? Int64 {
-                    if nPunchIn <= nStart && nPunchOut >= nEnd {
-                        return true
+                if let nPunchOut = nsMObject.value(forKey: "punch_out_time") as? Int64
+                    , getStrDateTime(date: start) == punchInDate {
+                    let datePunchOut = Date(milliseconds:
+                        (nPunchOut - Int64(TimeZone.current.secondsFromGMT())))
+                    if nil == nEnd && nPunchIn <= nStart && nPunchOut >= nStart {
+                        return (true, nil, nil)
+                    }
+                    else if nPunchIn <= nStart && nPunchOut >= nEnd! {
+                        return (true, nil, nil)
+                    }
+                    else {
+                        return (false, datePunchIn.getStrTime(), datePunchOut.getStrTime())
                     }
                 }
             }
-            return false
+            return (false, nil, nil)
         }
         catch {
             print("Error while fetching..!")
-            return false
+            return (false, nil, nil)
         }
     }
     
