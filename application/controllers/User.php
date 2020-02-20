@@ -378,11 +378,11 @@ class User extends CI_Controller
             if(!empty($this->input->post('time'))){
                 $data['timings'] = $this->input->post('time');                
             }
-            $punch_in_time = $this->user_model->get_punch_in_time($user_id);
+            /*$punch_in_time = $this->user_model->get_punch_in_time($user_id);
             $punch_time = strtotime($punch_in_time);
             $punch_date = date('Y-m-d',$punch_time);
             $punch_in_compare = strtotime($punch_date);
-            $current_date = date('Y-m-d');
+            $current_date = date('Y-m-d');*/
             /*** Validate Date, Start Time and End Time Inputs ***/
             /*foreach($data['timings'] AS $time){
                 if ($time['date'] == '' || $time['date'] == 'Invalid da' || !(preg_match('/\d{4}-\d{2}-\d{2}/', $time['date']))) {
