@@ -360,7 +360,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	}
 	
 	// Requires when overlap scenario occur
-	func drawDayDetailsGraph() {
+	func drawDayDetailsGraph(startPoint: Int, endPoint: Int) {
 		var dictDrawnPoints = Dictionary<Int, Array<Array<Int>>>()
 		var i = 0
 		
@@ -382,6 +382,14 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 				task2.strDate)
 		}
 		
+		// Get start label for the given time.
+		let remTimeStart = startPoint%7200 // 7200 is equal to 2hr's seconds.
+		let startLabel = (startPoint-remTimeStart)
+		// Get end label for the given time.
+		let remTimeEnd = endPoint%7200 // 7200 is equal to 2hr's seconds.
+		let remAdderTime = 7200 - remTimeEnd // To get next timeline.
+		let endLabel = (endPoint+remAdderTime)-startLabel
+		
 		var delay = 0.0
 		for cTaskDetails in arrReverseSort {
 			let startTime = cTaskDetails.nStartTime!
@@ -390,11 +398,11 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			
 			let totalTime = endTime - startTime
 			let strTotTime = getSecondsToHoursMinutesSeconds(seconds: totalTime, format: .hm)
-			// Calculation based on total work time from 8AM to 8PM
-			// 28800sec = 8AM
-			// 43200sec = 8PM
-			let startX = (CGFloat(startTime - 28800) * (barChartView.bounds.width) / 43200)
-			let endX = (CGFloat(endTime - 28800) * (barChartView.bounds.width) / 43200)
+
+			
+			// Calculation based on total work time.
+			let startX = (CGFloat(startTime - startLabel) * (barChartView.bounds.width) / CGFloat(endLabel))
+			let endX = (CGFloat(endTime - startLabel) * (barChartView.bounds.width) / CGFloat(endLabel))
 			
 			// Get y position for drawing.
 			let minY = findMinYforDayBtnGraph(start: startTime, end: endTime, minY: 70,
@@ -447,7 +455,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			UIView.animate(withDuration: 0.5, delay: delay, options: [], animations: {
 				self.arrBtnsDayTask.last!.frame.size = cgSize
 			})
-			delay += 0.2
+			delay += 0.1
 			i += 1
 			
 			// Update graph height.
@@ -609,14 +617,12 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 					if let msgView = self.viewWithTag(tag) as? MsgView {
 						msgView.layer.zPosition = 1
 						msgView.showView()
-						print("1")
 					}
 				}
 				else {
 					if let msgView = self.viewWithTag(tag) as? MsgView {
 						msgView.layer.zPosition = 1
 						msgView.hideView()
-						print("32")
 					}
 				}
 			}
@@ -628,15 +634,12 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 					let msgView = arrMsgViewWeek[i]
 						msgView.layer.zPosition = 1
 						msgView.showView()
-						print("1")
 					
 				}
 				else {
 					let msgView = arrMsgViewWeek[i]
 						msgView.layer.zPosition = 1
 						msgView.hideView()
-						print("32")
-					
 				}
 			}
 		}
@@ -706,7 +709,24 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			
 			nCell = arrCTaskTimeDetails.count
 			tblActivities.reloadDataWithAnimation()
-			drawDayDetailsGraph()
+			
+			// Setup labels.
+			let frameView = UIScreen.main.bounds
+			let startPoint = CGPoint(x: 0, y: 5)
+			let endPoint = CGPoint(x: frameView.maxX-40 , y: 5)
+			let startTime = arrCTaskTimeDetails.last!.nStartTime
+			
+			var endTime = 0
+			// Get max end Time. (Since, end time is not in sorted order)
+			arrCTaskTimeDetails.forEach({
+				if $0.nEndTime > endTime {
+					endTime = $0.nEndTime
+				}
+			})
+			
+			viewGraphXAxis.drawXAxisForDay(start: startPoint, toPoint: endPoint, ofColor: .lightGray,
+										   lineWidth: 1.0, startTime: startTime!, endTime: endTime)
+			drawDayDetailsGraph(startPoint: startTime!, endPoint: endTime)
 			
 			let strDate = Date().getStrDate(from: arrIntDate[indexSelDate]) // Initial setup for current date.
 			lblDate.text = getDayWeekMonthInString(strDate: strDate)
@@ -722,6 +742,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			00m
 			"""
 		}
+		
 		checkArrowAlpha()
 		// Minimum height set for a day graph.
 		nsLBarChartViewTop.constant = minHeightChart
@@ -836,15 +857,10 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		// If day view.
         if nSliderView == 0 {
 			// Draw a x axis values from following constraints.
-			let frameView = UIScreen.main.bounds
-			let startPoint = CGPoint(x: 0, y: 5)
-			let endPoint = CGPoint(x: frameView.maxX-40 , y: 5)
-			let cgRect = CGRect(x: 0, y: 80, width: frameView.maxX-40, height: 20)
+			let cgRect = CGRect(x: 0, y: 80, width: UIScreen.main.bounds.maxX-40, height: 20)
 			viewGraphXAxis = UIView(frame: cgRect)
 			viewGraphXAxis.isHidden = true
 			viewGraphXAxis.backgroundColor = g_colorMode.defaultColor()
-			viewGraphXAxis.drawXAxisForDay(start: startPoint, toPoint: endPoint, ofColor: .lightGray,
-												lineWidth: 1.0)
 			barChartView.addSubview(viewGraphXAxis)
 			
 			arrMsgViewDay = []
@@ -901,13 +917,12 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			lblDate.text = strMonth
 			nSelectedIndexMonth = 0
 			calendarView.backgroundColor = .clear
-			self.updateMonthDataSource()
 			self.setupMonthView()
 		}
     }
 	
-	/// To update month data source.
-	func updateMonthDataSource() {
+	// Setup month view.
+	func setupMonthView() {
 		arrDictMonthData = tasksCDCtrlr.getMonthWiseDetails(arrProj: arrSelectedProj)
 		if nil != arrSelectedProj {
 			calendarView.selectedProjects = arrSelectedProj!
@@ -926,10 +941,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			}
 		}
 		calendarView.bIsUserTap = true
-	}
-	
-	// Setup month view.
-	func setupMonthView() {
+		
 		if nil == arrSelectedProj {
 			viewFilterIndicator.isHidden = true
 		}
@@ -1056,7 +1068,6 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		}
 		else {
 			delegate?.refreshData(completion: {
-				self.updateMonthDataSource()
 				self.refreshControl.endRefreshing()
 				self.setupMonthView()
 				self.tblActivities.scrollToTop()
@@ -1458,16 +1469,41 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 extension UIView {
 	// Draw x axis label for day view graph.
 	func drawXAxisForDay(start : CGPoint, toPoint end:CGPoint, ofColor lineColor: UIColor,
-                   lineWidth: CGFloat) {
+						 lineWidth: CGFloat, startTime: Int, endTime: Int) {
+		
+		// Remove older layers.
+		for item in self.layer.sublayers ?? [] {
+			if item.name == "label" {
+				item.removeFromSuperlayer()
+				item.removeAllAnimations()
+			}
+		}
+		// Remove if labels availbale.
+		for i in 0...12 {
+			if let lbl = viewWithTag(i*2) as? UILabel {
+				lbl.removeFromSuperview()
+			}
+		}
+		
 		// Draw a line
 		let path = UIBezierPath()
         path.move(to: start)
         path.addLine(to: end)
 		
-        let width = end.x - start.x
-        let gap: CGFloat = width / 6 // Gap 6: from 8AM to 8PM(3hr gap)
-        for i in 0..<7 {
-			// Draw vertical line of height 4 (Divider).
+		
+		// Get start label for the given time.
+		let remTimeStart = startTime%7200 // 7200 is equal to 2hr's seconds.
+		let startLabel = (startTime-remTimeStart)/3600
+		
+		// Get end label for the given time.
+		let remTimeEnd = endTime%7200 // 7200 is equal to 2hr's seconds.
+		let remAdderTime = 7200 - remTimeEnd // To get next timeline.
+		let endLabel = (endTime+remAdderTime)/3600
+		
+		let width = end.x - start.x
+		let gap: CGFloat = width / CGFloat(((endLabel-startLabel)/2)) // Gap : 2hr gap
+
+		for i in 0...(endLabel-startLabel)/2 {
             let x = gap * CGFloat(i)
             let startPoint = CGPoint(x: x, y: start.y)
             let endPoint = CGPoint(x: x, y: start.y + 4)
@@ -1477,17 +1513,18 @@ extension UIView {
 			// Setup label for time.
             let frame = CGRect(x: x - 15, y: start.y + 10, width: 30, height: 30)
             let label = UILabel (frame: frame)
-            if i < 2 {
-                label.text = "\(8 + i * 2)\nAM"
+            if startLabel+i*2 < 12 {
+                label.text = "\(startLabel+i*2)\nAM"
             }
-            else if i == 2 {
+            else if startLabel+i*2 == 12 {
                 label.text = "12\nPM"
             }
             else {
-                label.text = "\((i-2) * 2)\nPM"
+                label.text = "\((startLabel+i*2-12))\nPM"
             }
             label.font = label.font.withSize(12)
             label.numberOfLines = 2
+			label.tag = startLabel+i*2
             label.textColor = g_colorMode.lineColor()
             label.textAlignment = .center
             self.addSubview(label)
@@ -1495,6 +1532,7 @@ extension UIView {
         // Design path in layer
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = path.cgPath
+		shapeLayer.name = "label"
 		shapeLayer.strokeColor = lineColor.cgColor.copy(alpha: 0.4)
         shapeLayer.lineWidth = lineWidth
         layer.addSublayer(shapeLayer)

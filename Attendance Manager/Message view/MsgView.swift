@@ -98,7 +98,6 @@ class MsgView: UIView {
     
     // Drawing background view.
     override func draw(_ rect: CGRect) {
-        super.draw(rect)
         let arrowXOffset: CGFloat = rect.midX - 10
         let cornerRadius: CGFloat = 8
         let arrowHeight: CGFloat = 10
@@ -131,6 +130,10 @@ class MsgView: UIView {
         
         path.addLine(to: rightTopPoint)
         path.close()
+
+        if layer.sublayers?[0] is CAShapeLayer {
+            layer.sublayers?.remove(at: 0)
+        }
         
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = path.cgPath

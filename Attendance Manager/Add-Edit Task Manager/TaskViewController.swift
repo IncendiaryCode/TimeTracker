@@ -1762,10 +1762,9 @@ UIGestureRecognizerDelegate {
     }
     
     @IBAction func viewPressed(_ sender: Any) {
-        if nil != selectedCell {
-//            editDateTimeCompleted()
-        }
         self.view.endEditing(true)
+        setCellToConstantPosition()
+        updateTextDescription()
     }
     
     deinit {

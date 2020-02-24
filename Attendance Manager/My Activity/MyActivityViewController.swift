@@ -176,7 +176,6 @@ class MyActivityViewController: UIViewController, ActivityViewDelagate, BarChart
             self.viewSelection.frame.origin = cgPoint
         }
         // Update task timings.
-        arrActView[2].updateMonthDataSource()
         arrActView[2].setupMonthView()
     }
     
@@ -273,7 +272,6 @@ class MyActivityViewController: UIViewController, ActivityViewDelagate, BarChart
             arrActView[1].setupWeekView()
         }
         else {
-            arrActView[2].updateMonthDataSource()
             arrActView[2].setupMonthView()
         }
     }

@@ -779,13 +779,12 @@
                                 </connections>
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IBu-GN-uBP">
-                                <rect key="frame" x="20" y="36" width="60" height="44"/>
+                                <rect key="frame" x="20" y="44" width="60" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="2wH-RW-F7i"/>
                                     <constraint firstAttribute="width" constant="60" id="Htf-aT-69C"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="5"/>
                                 <state key="normal" title="Cancel">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -794,13 +793,12 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IDl-6Z-hX9">
-                                <rect key="frame" x="311" y="36" width="44" height="44"/>
+                                <rect key="frame" x="311" y="44" width="44" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="66k-T6-9Gm"/>
                                     <constraint firstAttribute="height" constant="44" id="BEG-Mv-wDE"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="5"/>
                                 <inset key="imageEdgeInsets" minX="15" minY="5" maxX="5" maxY="15"/>
                                 <state key="normal" title="Edit">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1086,7 +1084,7 @@
                             <constraint firstItem="Fam-7A-1h9" firstAttribute="top" secondItem="OLZ-qf-Hwj" secondAttribute="bottom" constant="30" id="3tF-9X-BDz"/>
                             <constraint firstItem="S9Z-nV-dmi" firstAttribute="trailing" secondItem="qIg-WC-d0s" secondAttribute="trailing" id="3xc-Ku-D9b"/>
                             <constraint firstItem="IBu-GN-uBP" firstAttribute="centerY" secondItem="IDl-6Z-hX9" secondAttribute="centerY" id="Djc-hu-TnT"/>
-                            <constraint firstItem="S9Z-nV-dmi" firstAttribute="top" secondItem="IDl-6Z-hX9" secondAttribute="top" constant="8" id="Izx-8Y-7Gv"/>
+                            <constraint firstItem="S9Z-nV-dmi" firstAttribute="top" secondItem="IDl-6Z-hX9" secondAttribute="top" id="Izx-8Y-7Gv"/>
                             <constraint firstItem="IBu-GN-uBP" firstAttribute="leading" secondItem="S9Z-nV-dmi" secondAttribute="leading" constant="20" id="Oar-hA-bbO"/>
                             <constraint firstItem="WQb-LL-F9W" firstAttribute="top" secondItem="lrv-Ws-ytI" secondAttribute="top" constant="44" id="Q5n-fi-8cd"/>
                             <constraint firstItem="OLZ-qf-Hwj" firstAttribute="top" secondItem="AVc-9Q-FgA" secondAttribute="bottom" id="SSQ-zO-eQG"/>
@@ -1335,14 +1333,13 @@
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BAy-8y-hm1">
-                                <rect key="frame" x="299" y="39" width="60" height="44"/>
+                                <rect key="frame" x="299" y="44" width="60" height="44"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="VXZ-7J-SiJ"/>
                                     <constraint firstAttribute="width" constant="60" id="waF-Hg-WkQ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="10"/>
                                 <state key="normal" title="✚ Task">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -1391,7 +1388,7 @@
                                 </constraints>
                             </pageControl>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Punch in" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JME-Ui-P8A">
-                                <rect key="frame" x="110" y="34" width="155" height="44"/>
+                                <rect key="frame" x="110" y="44" width="155" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="155" id="RKD-6s-8FA"/>
                                     <constraint firstAttribute="height" constant="44" id="YwS-sE-alw"/>
@@ -1427,11 +1424,11 @@
                             <constraint firstItem="2ht-XY-pP2" firstAttribute="top" secondItem="P3b-8h-DSU" secondAttribute="top" id="6Xy-4B-7op"/>
                             <constraint firstItem="j96-ax-fZH" firstAttribute="leading" secondItem="iVX-Sz-fHK" secondAttribute="leading" id="BJu-oa-eZb"/>
                             <constraint firstItem="2V1-Ns-Db7" firstAttribute="top" secondItem="iVX-Sz-fHK" secondAttribute="top" constant="40" id="HRJ-fh-Mt3"/>
-                            <constraint firstItem="BAy-8y-hm1" firstAttribute="top" secondItem="iVX-Sz-fHK" secondAttribute="top" constant="-5" id="S6j-rY-T73"/>
+                            <constraint firstItem="BAy-8y-hm1" firstAttribute="top" secondItem="iVX-Sz-fHK" secondAttribute="top" id="S6j-rY-T73"/>
                             <constraint firstItem="j96-ax-fZH" firstAttribute="top" secondItem="P3b-8h-DSU" secondAttribute="bottom" constant="-40" id="Wmw-u2-lH4"/>
                             <constraint firstItem="dRP-3h-8qH" firstAttribute="top" secondItem="2V1-Ns-Db7" secondAttribute="bottom" constant="-37" id="bXC-64-yBZ"/>
                             <constraint firstItem="2V1-Ns-Db7" firstAttribute="centerX" secondItem="iVX-Sz-fHK" secondAttribute="centerX" id="chG-4E-bCA"/>
-                            <constraint firstItem="JME-Ui-P8A" firstAttribute="centerY" secondItem="BAy-8y-hm1" secondAttribute="centerY" constant="-5" id="coZ-cU-lsS"/>
+                            <constraint firstItem="JME-Ui-P8A" firstAttribute="centerY" secondItem="BAy-8y-hm1" secondAttribute="centerY" id="coZ-cU-lsS"/>
                             <constraint firstItem="dRP-3h-8qH" firstAttribute="centerX" secondItem="2V1-Ns-Db7" secondAttribute="centerX" id="cqd-Zq-2Iu"/>
                             <constraint firstItem="P3b-8h-DSU" firstAttribute="top" secondItem="2V1-Ns-Db7" secondAttribute="bottom" constant="10" id="eqQ-mi-VHE"/>
                             <constraint firstItem="P3b-8h-DSU" firstAttribute="centerX" secondItem="j96-ax-fZH" secondAttribute="centerX" id="gEC-K1-rfl"/>

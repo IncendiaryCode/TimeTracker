@@ -333,7 +333,11 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         
         alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
         
-        self.present(alert, animated: true, completion: nil)
+        if let button = sender as? UIButton {
+            alert.popoverPresentationController?.sourceView = button
+            alert.popoverPresentationController?.sourceRect = button.bounds
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     @IBAction func btnEditProfilePressed(_ sender: Any) {
@@ -384,7 +388,6 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
             actIndicatorProfile.startAnimating()
             hideProfileEdit()
             if let imgData = imgVProfile.image?.jpegData(compressionQuality: 1.0) {
-                print(imgData)
                 APIResponseHandler.updateUserProfile(name: strName, phone: phone, imgData: imgData
                     , completion: {
                     status, msg in
