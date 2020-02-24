@@ -710,24 +710,25 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			nCell = arrCTaskTimeDetails.count
 			tblActivities.reloadDataWithAnimation()
 			
-			// Setup labels.
-			let frameView = UIScreen.main.bounds
-			let startPoint = CGPoint(x: 0, y: 5)
-			let endPoint = CGPoint(x: frameView.maxX-40 , y: 5)
-			let startTime = arrCTaskTimeDetails.last!.nStartTime
-			
-			var endTime = 0
-			// Get max end Time. (Since, end time is not in sorted order)
-			arrCTaskTimeDetails.forEach({
-				if $0.nEndTime > endTime {
-					endTime = $0.nEndTime
-				}
-			})
-			
-			viewGraphXAxis.drawXAxisForDay(start: startPoint, toPoint: endPoint, ofColor: .lightGray,
-										   lineWidth: 1.0, startTime: startTime!, endTime: endTime)
-			drawDayDetailsGraph(startPoint: startTime!, endPoint: endTime)
-			
+			if arrCTaskTimeDetails.count > 0 {
+				// Setup labels.
+				let frameView = UIScreen.main.bounds
+				let startPoint = CGPoint(x: 0, y: 5)
+				let endPoint = CGPoint(x: frameView.maxX-40 , y: 5)
+				let startTime = arrCTaskTimeDetails.last!.nStartTime
+				
+				var endTime = 0
+				// Get max end Time. (Since, end time is not in sorted order)
+				arrCTaskTimeDetails.forEach({
+					if $0.nEndTime > endTime {
+						endTime = $0.nEndTime
+					}
+				})
+				
+				viewGraphXAxis.drawXAxisForDay(start: startPoint, toPoint: endPoint, ofColor: .lightGray,
+											   lineWidth: 1.0, startTime: startTime!, endTime: endTime)
+				drawDayDetailsGraph(startPoint: startTime!, endPoint: endTime)
+			}
 			let strDate = Date().getStrDate(from: arrIntDate[indexSelDate]) // Initial setup for current date.
 			lblDate.text = getDayWeekMonthInString(strDate: strDate)
 			
