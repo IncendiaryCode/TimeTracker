@@ -292,7 +292,9 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
             imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
-            self.present(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: {
+                self.actIndicator.stopAnimating()
+            })
         }
         else
         {
@@ -311,12 +313,10 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
             self.btnEditSave.isUserInteractionEnabled = true
         }
         picker.dismiss(animated: true, completion: nil)
-        self.actIndicator.stopAnimating()
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
-        self.actIndicator.stopAnimating()
     }
     
     @IBAction func btnChangeImagePressed(_ sender: Any) {

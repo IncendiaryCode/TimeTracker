@@ -60,9 +60,8 @@ class MsgView: UIView {
         let cgRect = CGRect(origin: .zero, size: CGSize(width: frame.width, height: 30))
         lblMsg = UILabel(frame: cgRect)
         lblMsg.center = CGPoint(x: bounds.midX, y: bounds.midY-4)
-        
+        lblMsg.textColor = g_colorMode.defaultColor()
         addSubview(lblMsg)
-        lblMsg.textColor = .white
         lblMsg.textAlignment = .center
         lblMsg.font = lblMsg.font.withSize(12)
     }

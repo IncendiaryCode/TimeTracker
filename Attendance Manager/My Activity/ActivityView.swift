@@ -226,11 +226,11 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			let cgRect = CGRect(x: 0, y: 0, width: 150, height: 20)
 			lblStartEndTime = UILabel(frame: cgRect)
 			lblStartEndTime.layer.masksToBounds = true
-			lblStartEndTime.backgroundColor = .gray
+			lblStartEndTime.backgroundColor = g_colorMode.invertColor()
 			lblStartEndTime.layer.cornerRadius = 10
 			lblStartEndTime.font = lblStartEndTime.font.withSize(12)
 			lblStartEndTime.textAlignment = .center
-			lblStartEndTime.textColor = .white
+			lblStartEndTime.textColor = g_colorMode.defaultColor()
 			addSubview(lblStartEndTime)
 			lblStartEndTime.isHidden = true
 		}
@@ -495,6 +495,7 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		}
 		if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
 			lblStartEndTime.isHidden = true
+			lblStartEndTime.text = ""
 			// Remove drawn lines
 			_ = layer.sublayers?.popLast()
 		}
@@ -562,10 +563,10 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 		
 		// Render to view.
 		line.path = linePath.cgPath
-		line.strokeColor = g_colorMode.lineColor().cgColor
+		line.strokeColor = g_colorMode.invertColor().cgColor
 		line.lineWidth = 2
 		line.lineJoin = CAShapeLayerLineJoin.round
-		line.fillColor = g_colorMode.lineColor().cgColor
+		line.fillColor = g_colorMode.invertColor().cgColor
 		layer.addSublayer(line)
 		
 		// Apply animation while drawing.
@@ -584,7 +585,10 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 			// Setup label center.
 			let cgRect = CGRect(x: pointX - 75, y: pointY-5, width: 150, height: 0)
 			self.lblStartEndTime.frame = cgRect
-			self.lblStartEndTime.isHidden = false
+			// Incase before completion touch gets cancelled.
+			if self.lblStartEndTime.text != "" {
+				self.lblStartEndTime.isHidden = false
+			}
 			
 			// Animation while showing label
 			UIView.animate(withDuration: 0.1) {
@@ -1482,8 +1486,8 @@ extension UIView {
 			}
 		}
 		// Remove if labels availbale.
-		for i in 0...12 {
-			if let lbl = viewWithTag(i*2) as? UILabel {
+		for i in 1...13 {
+			if let lbl = viewWithTag(i) as? UILabel {
 				lbl.removeFromSuperview()
 			}
 		}
@@ -1531,7 +1535,7 @@ extension UIView {
             }
             label.font = label.font.withSize(12)
             label.numberOfLines = 2
-			label.tag = startLabel+i*2
+			label.tag = i+1
             label.textColor = g_colorMode.lineColor()
             label.textAlignment = .center
             self.addSubview(label)
