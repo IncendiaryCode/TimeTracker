@@ -57,7 +57,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <form id="loginForm" class="login-form" method="post" action="<?= base_url(); ?>login/login_process?" novalidate>
                         <div class="form-group">
                             <div class="input-group">
-                                <input type="email" class="form-control logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light" id="username" name="username" placeholder="Email">
+                                <input type="email" class="form-control logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light" id="username" name="username" placeholder="Email" value="<?=set_value('username')?>">
                             </div>
                         </div>
                         <p class="error" id="username-error"></p>

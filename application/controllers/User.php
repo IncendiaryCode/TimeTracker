@@ -27,25 +27,22 @@ class User extends CI_Controller
     
     public function index()
     {
-        $this->load->view('user/header');
+        $userid = $this->session->userdata('userid');
         $task_details['task_info'] = $this->user_model->task_status(); //get details about login time, running tasks
         $task_details['project_list'] = $this->user_model->get_project_name();
-        $this->load->view('user/user_dashboard', $task_details);
-        $this->load->view('user/footer');
+        $this->load->template('user/user_dashboard',$task_details);
     }
 
     //start the login timer manually in user dashboard page
     public function save_login_time(){
-        $result = $this->user_model->start_login_timer(); //to start the login timer
         $res = array();
+        $result = $this->user_model->start_login_timer(); //to start the login timer
         if($result == FALSE){
             //$res['flag'] = 0;
             $res['msg'] = 'Failed to start login timer.';
-            $this->load->view('user/header');
             $res['task_info'] = $this->user_model->task_status();
             $res['project_list'] = $this->user_model->get_project_name();
-            $this->load->view('user/user_dashboard', $res);
-            $this->load->view('user/footer');
+            $this->load->template('user/user_dashboard', $res);
         }else{
             redirect('user');
         }
@@ -223,29 +220,23 @@ class User extends CI_Controller
             if ($task_id == '') { //if task id is not sent through get request, send failure message
                 $output_result['status'] = FALSE;
                 $output_result['msg'] = "Bad request, parameter missing.";
-                $this->load->view('user/header');
                 $output_result['task_info'] = $this->user_model->task_status();
                 $output_result['project_list'] = $this->user_model->get_project_name();
-                $this->load->view('user/user_dashboard', $output_result);
-                $this->load->view('user/footer');
+                $this->load->template('user/user_dashboard', $output_result);
             } else { //if id is sent through get request, go to stop timer function
                 $this->form_validation->set_rules('time','Time','required|trim|callback_validate_time');
                 if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to the form
-                    $this->load->view('user/header');
                     $output_result['task_info'] = $this->user_model->task_status();
                     $output_result['project_list'] = $this->user_model->get_project_name();
-                    $this->load->view('user/user_dashboard', $output_result);
-                    $this->load->view('user/footer');
+                    $this->load->template('user/user_dashboard', $output_result);
                 }else{
                     $result = $this->user_model->stop_timer($data);
                     if ($result == FALSE) {
                         $output_result['status'] = $result;
                         $output_result['msg']    = "Something went wrong.";
-                        $this->load->view('user/header');
                         $output_result['task_info'] = $this->user_model->task_status();
                         $output_result['project_list'] = $this->user_model->get_project_name();
-                        $this->load->view('user/user_dashboard', $output_result);
-                        $this->load->view('user/footer');
+                        $this->load->template('user/user_dashboard', $output_result);
                     } else if ($result == TRUE) {
                         redirect('user');
                     }
@@ -261,9 +252,7 @@ class User extends CI_Controller
     public function load_employee_activities()
     {
         $GLOBALS['page_title'] = 'My Activities';
-        $this->load->view('user/header');
-        $this->load->view('user/employee_activities');
-        $this->load->view('user/footer');
+        $this->load->template('user/employee_activities');
     }
 
     //Show daily,weekly,monthly activity chart of the user(employee activities page)
@@ -306,20 +295,20 @@ class User extends CI_Controller
     //load add task page OR edit task page
     public function load_add_task()
     {
-        $loggedin_userid = $this->session->userdata('userid');
         if (isset($_GET['t_id'])) {//if task id is sent, load edit task page
             $GLOBALS['page_title'] = 'Edit Task';
             $t_id = $this->input->get('t_id', TRUE);
             $task_data = $this->user_model->get_task_info($t_id); //get task details for the requested task id
-            $this->load->view('user/header');
-            $this->load->view('user/add_task', $task_data);
-            $this->load->view('user/footer');
+            if($task_data == NULL){
+                //show_error("You don't have a Task with the requested task-id.");
+                $this->session->set_flashdata('failure', "You don't have a Task for this id.");
+            }
+            $this->load->template('user/add_task', $task_data);
+
         } else {//if task id is not sent, load add task page
             $GLOBALS['page_title'] = 'Add Task';
-            $this->load->view('user/header');
             $data['result'] = $this->user_model->get_project_name();
-            $this->load->view('user/add_task', $data);
-            $this->load->view('user/footer');
+            $this->load->template('user/add_task', $data);
         }
     }
 
@@ -332,10 +321,8 @@ class User extends CI_Controller
         $this->form_validation->set_rules('project', 'Project name', 'required');
         if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to add task page
             $GLOBALS['page_title'] = 'Add Task';
-            $this->load->view('user/header');
             $data['result'] = $this->user_model->get_project_name();
-            $this->load->view('user/add_task', $data);
-            $this->load->view('user/footer');
+            $this->load->template('user/add_task', $data);
         } else { //if inputs are valid, insert task information into db
             $data['userid'] = $this->session->userdata('userid');
             $data['project_module'] = $this->input->post('project_module');
@@ -362,11 +349,9 @@ class User extends CI_Controller
         $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|xss_clean');
         if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to edit task page
             $GLOBALS['page_title'] = 'Edit Task';
-            $this->load->view('user/header');
             $t_id = $this->input->post('task_id', TRUE);
             $task_data = $this->user_model->get_task_info($t_id);
-            $this->load->view('user/add_task', $task_data);
-            $this->load->view('user/footer');
+            $this->load->template('user/add_task', $task_data);
         } else { //if inputs are valid, update and/or insert task information into db
             $data['action'] = 'edit';
             $data['userid'] = $this->session->userdata('userid');
@@ -523,14 +508,10 @@ class User extends CI_Controller
         $userid = $this->session->userdata('userid');
         $data['res']           = $this->user_model->my_profile($userid); //get user profile details
         if ($data['res'] != NULL) {
-            $this->load->view('user/header');
-            $this->load->view('user/profile', $data);
-            $this->load->view('user/footer');
+            $this->load->template('user/profile', $data);
         } else {
             $data['res'] = 'No profile Data present.';
-            $this->load->view('user/header');
-            $this->load->view('user/profile', $data);
-            $this->load->view('user/footer');
+            $this->load->template('user/profile', $data);
         }
     }
 
@@ -583,17 +564,13 @@ class User extends CI_Controller
         $this->form_validation->set_rules('psw11', 'New Password', 'trim|required|min_length[3]|max_length[100]|trim|xss_clean');
         $this->form_validation->set_rules('psw22', 'Confirm Password', 'trim|required|matches[psw11]|min_length[3]|max_length[100]|trim|xss_clean');
         if ($this->form_validation->run() == FALSE) { //if inputs are invalid,load change password page with validation error message
-            $this->load->view('user/header');
-            $this->load->view('user/change_password');
-            $this->load->view('user/footer');
+            $this->load->template('user/change_password');
         } else { //if inputs are valid, go to change_password method
             $result = $this->user_model->change_password();
             if (!$result) {
                 //if change_password method is unsuccessful, redirect with failure message
                 $this->session->set_flashdata('err_msg', 'Passwords do not match..');
-                $this->load->view('user/header');
-                $this->load->view('user/change_password');
-                $this->load->view('user/footer');
+                $this->load->template('user/change_password');
             } else {
                 //if change_password is successful, redirect with success message
                 $this->session->set_flashdata('success', 'Successfully Changed.');
@@ -620,13 +597,19 @@ class User extends CI_Controller
         }else{
             $userid = $this->session->userdata('userid');
             $punchout_time = $this->input->post('punch_out_time');
-            $result = $this->user_model->update_logout_time_web($userid,$punchout_time);
-            if($result == TRUE){
-                $res['status'] = TRUE;
-                $res['msg'] = 'Punchout successful.';
-            }else{
+            $running_tasks_result = $this->user_model->running_tasks_today();
+            if($running_tasks_result == TRUE){
                 $res['status'] = FALSE;
-                $res['msg'] = 'Punchout unsuccessful.';
+                $res['msg'] = "Please stop today's tasks before Punch-out.";
+            }else{
+                $result = $this->user_model->update_logout_time_web($userid,$punchout_time);
+                if($result == TRUE){
+                    $res['status'] = TRUE;
+                    $res['msg'] = 'Punchout successful.';
+                }else{
+                    $res['status'] = FALSE;
+                    $res['msg'] = 'Punchout unsuccessful.';
+                }
             }
         }
         echo json_encode($res);    

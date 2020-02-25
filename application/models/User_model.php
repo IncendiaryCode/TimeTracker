@@ -129,14 +129,17 @@ class User_model extends CI_Model {
      */
     public function get_task_details($sort_type, $date = '', $filter_type = '', $filter_value = '') {
         $userid = $this->session->userdata('userid');
-        $this->db->select('p.name,IFNULL(d.start_time,t.created_on) AS started,d.start_time,p.image_name,t.task_name,t.id AS task_id');
+        $this->db->select('p.name,IFNULL(d.start_time,t.created_on) AS started,d.start_time,p.image_name,p.color_code,t.task_name,t.id AS task_id');
         $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task", FALSE); //get running tasks of the user
         $this->db->select('IF(t.complete_task=1,1,0) AS completed', FALSE); //get completed tasks of the user
         $this->db->from('task AS t');
-        $this->db->join('time_details AS d', 'd.task_id = t.id');
+        $this->db->join('time_details AS d', 'd.task_id = t.id','LEFT');
         $this->db->join('project AS p', 'p.id = t.project_id');
         $this->db->join('project_module AS m', 'm.id = t.module_id');
         $this->db->join('task_assignee AS ta', 'ta.task_id = t.id','LEFT');
+        if($this->input->post('date_filter')){
+            $this->db->where('task_date',date('Y-m-d'));
+        }
         if($filter_type == 'proj_filter'){
             if(!empty($filter_value))
             $this->db->where_in('t.project_id',$filter_value);
@@ -276,37 +279,48 @@ class User_model extends CI_Model {
     public function get_task_info($task_id) {
         $userid = $this->session->userdata('userid');
         $details = array();
-        $this->db->select('d.id,p.name,p.id AS project_id,m.id AS module_id,m.name AS module_name,d.task_date,t.task_name,d.task_description,d.start_time,d.end_time,t.description,t.id AS task_id');
-        $this->db->from('task AS t');
-        $this->db->join('task_assignee AS ta', 't.id = ta.task_id');
-        $this->db->join('time_details AS d', 't.id = d.task_id', 'left');
-        $this->db->join('project AS p', 'p.id = t.project_id');
-        $this->db->join('project_module AS m', 'm.id = t.module_id');
-        $this->db->where(array('t.id' => $task_id, 'ta.user_id' => $userid));
-        $this->db->order_by('d.task_date','desc');
-        $query = $this->db->get();
-        $data = $query->result_array();
-        foreach($data as $d){
-            if (!isset($details['task_data'])) {
-                $details['task_data'] = array('task_name'=>$d['task_name'],'project_name'=>$d['name'],'project_id'=>$d['project_id'],'description'=>$d['description'],'task_id'=>$d['task_id'],'module_name'=>$d['module_name'],'module_id'=>$d['module_id']);
-            }
-            if($d['start_time']){
-                $start = $this->convert_date($d['start_time']);
-            }
-            else
-                $start = '';
-            if($d['end_time'])
-                $end = $this->convert_date($d['end_time']);
-            else
-                $end = '';
-            $details['timeline_data'][] = array('table_id'=>$d['id'],'task_date'=>($d['task_date'])?$d['task_date']:date('Y-m-d'),'start_time'=>$start,'end_time'=>$end,'task_description'=>($d['task_description'])?$d['task_description']:null);
-        }
 
-        //send list of project module to edit task page
-        if(isset($details['task_data'])){
-            $details['project_module_list'] = $this->get_module_name($d['project_id']);
-            return $details;
+        //check whether the task id is valid
+        $this->db->select('t.id,ta.user_id');
+        $this->db->from('task AS t');
+        $this->db->join('task_assignee AS ta','ta.task_id = t.id');
+        $this->db->where(array('t.id'=>$task_id,'ta.user_id'=>$userid));
+        $check_task_query = $this->db->get();
+        if($check_task_query->num_rows() > 0){
+            $this->db->select('d.id,p.name,p.id AS project_id,m.id AS module_id,m.name AS module_name,d.task_date,t.task_name,d.task_description,d.start_time,d.end_time,t.description,t.id AS task_id');
+            $this->db->from('task AS t');
+            $this->db->join('task_assignee AS ta', 't.id = ta.task_id');
+            $this->db->join('time_details AS d', 't.id = d.task_id', 'left');
+            $this->db->join('project AS p', 'p.id = t.project_id');
+            $this->db->join('project_module AS m', 'm.id = t.module_id');
+            $this->db->where(array('t.id' => $task_id, 'ta.user_id' => $userid));
+            $this->db->order_by('d.task_date','desc');
+            $query = $this->db->get();
+            $data = $query->result_array();
+            foreach($data as $d){
+                if (!isset($details['task_data'])) {
+                    $details['task_data'] = array('task_name'=>$d['task_name'],'project_name'=>$d['name'],'project_id'=>$d['project_id'],'description'=>$d['description'],'task_id'=>$d['task_id'],'module_name'=>$d['module_name'],'module_id'=>$d['module_id']);
+                }
+                if($d['start_time']){
+                    $start = $this->convert_date($d['start_time']);
+                }
+                else
+                    $start = '';
+                if($d['end_time'])
+                    $end = $this->convert_date($d['end_time']);
+                else
+                    $end = '';
+                $details['timeline_data'][] = array('table_id'=>$d['id'],'task_date'=>($d['task_date'])?$d['task_date']:date('Y-m-d'),'start_time'=>$start,'end_time'=>$end,'task_description'=>($d['task_description'])?$d['task_description']:null);
+            }
+
+            //send list of project module to edit task page
+            if(isset($details['task_data'])){
+                $details['project_module_list'] = $this->get_module_name($d['project_id']);
+            }
+        }else{
+            $details = '';
         }
+        return $details;
     }
 
     /**
@@ -493,6 +507,7 @@ class User_model extends CI_Model {
             $this->db->where('d.end_time IS NOT NULL'); //tasks that are not running
             $this->db->where(array('d.user_id' => $userid, 'd.task_date' => $taskdate));
             $this->db->group_by('d.id');
+            $this->db->order_by('d.start_time','asc');
             $query = $this->db->get();
             $data = $query->result_array();
             if ($query->num_rows() > 0) {
@@ -1504,6 +1519,38 @@ class User_model extends CI_Model {
             $data = $query->row_array();
             $data['profile_pic'] = base_url().USER_UPLOAD_PATH.$data['profile'];
             return $data;
+        }else{
+            return false;
+        }
+    }
+
+
+    //Get today's running tasks for punchout popup
+    public function running_tasks_today(){
+        $userid = $this->session->userdata('userid');
+        $this->db->select('id');
+        $this->db->from('time_details');
+        $this->db->where('end_time IS NULL');
+        $this->db->where('user_id',$userid);
+        $running_tasks = $this->db->get();
+        if($running_tasks->num_rows() > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    //check whether user punched out or not
+    public function check_user_punchout(){
+        $userid = $this->session->userdata('userid');
+        $this->db->select('id');
+        $this->db->from('login_details');
+        $this->db->where('end_time IS NOT NULL');
+        $this->db->where(array('task_date'=>date('Y-m-d'),'user_id'=>$userid));
+        $punch_in_check = $this->db->get();
+        if($punch_in_check->num_rows() > 0){
+            return true;
         }else{
             return false;
         }

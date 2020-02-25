@@ -19,8 +19,15 @@ if ($this->input->get('t_id')) { ?>
                     <?php
                     if (validation_errors()) { ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                             <?php echo validation_errors();
-                             echo (!empty($this->session->flashdata('failure'))) ? $this->session->flashdata('failure') : ''; ?>
+                             <?php echo validation_errors(); ?>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <?php } ?>
+                    <?php if (!empty($this->session->flashdata('failure'))) { ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo (!empty($this->session->flashdata('failure'))) ? $this->session->flashdata('failure') : ''; ?>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -59,7 +66,7 @@ if ($this->input->get('t_id')) { ?>
                             <div class="form-group">
                                 <label for="task-name ">Write the task name</label>
                                 <?php if ($this->input->get('t_id')) { ?>
-                                    <input type="text" class="form-control" name="task_name" id="Taskname" value="<?= $task_data['task_name'] ?>">
+                                    <input type="text" class="form-control" name="task_name" id="Taskname" value="<?= isset($task_data['task_name'])?$task_data['task_name']:'' ?>">
                                 <?php } else { ?>
                                     <input type="text" class="form-control" name="task_name" id="Taskname">
                                 <?php } ?>
@@ -67,7 +74,7 @@ if ($this->input->get('t_id')) { ?>
                             <div class="form-group">
                                 <label for="description">Write a small description</label>
                                 <?php if ($this->input->get('t_id')) { ?>
-                                    <textarea class="form-control" id="description" name="task_desc" rows="4" value="<?= $task_data['description'] ?>"><?= $task_data['description'] ?></textarea>
+                                    <textarea class="form-control" id="description" name="task_desc" rows="4" value="<?= isset($task_data['description'])?$task_data['description']:'' ?>"><?= isset($task_data['description'])?$task_data['description']:'' ?></textarea>
                                 <?php } else { ?>
                                     <textarea class="form-control" id="description" name="task_desc" rows="4"></textarea> <?php } ?>
                             </div>
@@ -75,12 +82,12 @@ if ($this->input->get('t_id')) { ?>
                                 <label for="choose-project">Choose a project</label>
                                 <?php if ($this->input->get('t_id')) { ?>
                                     <select readonly="" type="number" class="form-control" id="choose-project" name="project">
-                                        <option selected value=<?php echo $task_data['project_id'] ?>>
-                                            <?= $task_data['project_name']; ?>
+                                        <option selected value=<?php echo isset($task_data['project_id'])?$task_data['project_id']:'' ?>>
+                                            <?= isset($task_data['project_name'])?$task_data['project_name']:''; ?>
                                         </option>
                                     </select>
                                 <?php } else { ?>
-                                    <select type="text" class="form-control project_name" id="choose-project" name="project" value="<?=$task_data['project_name']?>">
+                                    <select type="text" class="form-control project_name" id="choose-project" name="project" value="<?=isset($task_data['project_name'])?$task_data['project_name']:''?>">
                                         <option>Select Project</option>
                                         <?php
                                         foreach ($result as $p) { ?>
@@ -95,7 +102,8 @@ if ($this->input->get('t_id')) { ?>
                                 <label for="choose-module">Choose project module</label>
                                 <?php if ($this->input->get('t_id')) { ?>
                                 <select type="text"  class="form-control" id="choose-module" name="project_module">
-                                    <?php foreach($project_module_list AS $module){ ?>
+                                    <?php if(isset($project_module_list)){
+                                        foreach($project_module_list AS $module){ ?>
                                         <?php if($task_data['module_id'] == $module->id){ ?>
                                             <option value="<?=$module->id;?>" selected><?=$module->name;?></option>
                                         <?php  }else{ ?>
@@ -103,7 +111,7 @@ if ($this->input->get('t_id')) { ?>
                                     <?php } ?>
                                     <!-- <option value=<?=$task_data['module_name']?>><?=$task_data['module_name']?></option> -->
                                 <?php } ?></select>
-                                <?php } else { ?>
+                                <?php } }else { ?>
                                     <select type="text" class="form-control" id="choose-module" name="project_module" value="<?= $task_data['module_name'] ?>">
                                         <option>Select module</option>
                                     <?php } ?>
@@ -126,11 +134,12 @@ if ($this->input->get('t_id')) { ?>
                                 </div>
                                 <?php if ($this->input->get('t_id')) { ?>
 
-                                    <input type="hidden" id="task-len" value="<?= sizeof($timeline_data) ?>">
+                                    <input type="hidden" id="task-len" value="<?= isset($timeline_data)?sizeof($timeline_data):'' ?>">
                                     <!-- Add time: EDIT case  -->
                                     <div id="task-add-time">
                                         <div class="primary-wrap">
                                             <?php $tnum = 0;
+                                            if(isset($timeline_data)){
                                             foreach ($timeline_data as $key => $task) {
                                             ?>
                                                 <div class="time-section pt-3 pb-4">
@@ -186,7 +195,7 @@ if ($this->input->get('t_id')) { ?>
                                                     </div>
                                                 </div>
                                             <?php $tnum = $tnum + 2;
-                                            } ?>
+                                            } }?>
                                         </div>
                                         <?php if ($this->input->get('t_id')) { ?>
                                             <div class="text-right pr-2">
@@ -208,7 +217,7 @@ if ($this->input->get('t_id')) { ?>
                                                         <input type="text" class="date-utc form-control datepicker " name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-0">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">
-                                                                <button type="button" class="btn fa fa-calendar p-0"></button>
+                                                                <button type="button" class="btn fa fa-calendar datepicker-icon p-0"></button>
                                                             </span>
                                                         </div>
                                                     </div>
@@ -251,4 +260,23 @@ if ($this->input->get('t_id')) { ?>
                     <p class="text-center ">Copyright © 2020 Printgreener.com</p>
                 </footer>
             </div>
+
+            <div class="modal fade" id="alert_for_delete" tabindex="-1" role="dialog" aria-labelledby="alert_for_deleteLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="alert_for_deleteLabel">Do you want to delete this task?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-primary" id= "alert_for_delete_true">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </main>

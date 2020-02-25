@@ -50,8 +50,11 @@ class Login extends CI_Controller
                 //$this->session->set_userdata('logged_in', TRUE);
                 redirect('/user', 'refresh');
             } else {
+                $header_data['email'] = $this->input->post('username');
+                $header_data = array();
+                $header_data["title"] = "Login";
                 $this->session->set_flashdata('err_message', 'Wrong Email/Password');
-                redirect('/login', 'refresh');
+                $this->load->view('login' ,$header_data);
             }
         }
     }
