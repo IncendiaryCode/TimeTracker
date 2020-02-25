@@ -24,6 +24,7 @@
         <attribute name="is_synched" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="is_work_in_progress" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="module_id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="page_no" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="project_id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="start_time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="task_description" optional="YES" attributeType="String"/>
@@ -42,7 +43,7 @@
         <element name="Modules" positionX="72" positionY="9" width="128" height="88"/>
         <element name="Projects" positionX="-123.61328125" positionY="29.96484375" width="128" height="148"/>
         <element name="Punch_in_out_time" positionX="-85.55078125" positionY="-136.72265625" width="128" height="73"/>
-        <element name="Tasks" positionX="159.6796875" positionY="76.484375" width="128" height="193"/>
+        <element name="Tasks" positionX="159.6796875" positionY="76.484375" width="128" height="208"/>
         <element name="Tasks_time" positionX="438.546875" positionY="-65.546875" width="128" height="133"/>
     </elements>
 </model>

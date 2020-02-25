@@ -205,10 +205,10 @@ class MyActivityViewController: UIViewController, ActivityViewDelagate, BarChart
         self.present(alert, animated: true, completion: nil)
     }
     
-    func cellSwipeToStop(taskId: Int) {
+    func cellSwipeToStop(taskId: Int, pageNo: Int) {
         //If user tries to logout ihn the break time shows alert.
         if let userActivtyVC = tabBarController?.viewControllers?[1] as? UserActivityVC {
-            userActivtyVC.stopTask(taskId: taskId) {
+            userActivtyVC.stopTask(taskId: taskId, pageNo: pageNo) {
                 // Refresh history views.
                 self.arrActView[0].setupDayView()
                 self.arrActView[1].resetWeekBar()

@@ -276,7 +276,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     /// Updates task details to core data and view.
-    func updateTask(requireAll: Bool? = true) {
+    func updateTask(requireAll: Bool? = true, pageNo: Int? = nil) {
         if requireAll! {
             let dispatchGroup = DispatchGroup()
             for pageNo in 1...g_taskPageNo {
@@ -328,6 +328,15 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                     self.updateView()
                 }
             }
+        }
+        // To update given page no tasks data.
+        else if nil != pageNo {
+            APIResponseHandler.loadTaskDetails(pageNo: pageNo!, completion: {
+                status in
+                if status {
+                    self.updateView()
+                }
+            })
         }
         else {
             APIResponseHandler.loadTaskDetails(pageNo: g_taskPageNo, completion: {
@@ -526,6 +535,11 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 indexShift - arrCTaskDetails.count)
         }
         
+        // Running task move to top.
+//        arrCTaskDetails.sort { (task1, task2) -> Bool in
+//            return task1.bIsRunning! && !task2.bIsRunning!
+//        }
+        
         if arrCTaskDetails.count == 0 {
             lblEmpty.isHidden = false
             btnAddTaskNoData.isHidden = false
@@ -577,6 +591,11 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             arrCTaskDetails = arrCTaskDetails.shift(withDistance:
                 indexShift - arrCTaskDetails.count)
         }
+        
+        // Running task move to top.
+//        arrCTaskDetails.sort { (task1, task2) -> Bool in
+//            return task1.bIsRunning! && !task2.bIsRunning!
+//        }
         
         if arrCTaskDetails.count == 0 {
             lblEmpty.isHidden = false
@@ -1002,7 +1021,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     /// Start task.
-    func startTask(taskId: Int) {
+    func startTask(taskId: Int, pageNo: Int?) {
         tasksCDController.startTask(taskId: taskId, completion: {
             status in
             if status {
@@ -1017,13 +1036,20 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 , self.arrRunningTask.count-1]) as? TimerCell {
                 cellPrevRunTask.withCurrentTime = false
             }
-            self.updateProject()
             
+            // Refresh only page no reffered to task.
+            if nil != pageNo {
+                self.updateTask(requireAll: false, pageNo: pageNo)
+            }
+            // Only update first page.
+            else {
+                self.updateTask()
+            }
         })
     }
     
     /// To stop task.
-    func stopTask(taskId: Int, completion: @escaping (() -> Void) = {}) {
+    func stopTask(taskId: Int, pageNo: Int?, completion: @escaping (() -> Void) = {}) {
         tasksCDController.stopTask(taskId: taskId, completion: {
             status in
             if status {
@@ -1037,7 +1063,14 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 print("Error while starting task..!")
             }
             self.btnState.isUserInteractionEnabled = true
-            self.updateProject()
+
+            // Refresh only page no reffered to task.
+            if nil != pageNo {
+                self.updateTask(requireAll: false, pageNo: pageNo)
+            }
+            else {
+                self.updateTask()
+            }
             completion()
         })
     }
@@ -1090,9 +1123,10 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
             if cTaskDetails.bIsRunning! {
                 // Stop running task.
                 cTaskDetails.bIsRunning = false
+                let pageNo = cTaskDetails.pageNo
                 cell.lblTotalDuration.text = "Stoping"
                 reloadCollection()
-                stopTask(taskId: taskId!)
+                stopTask(taskId: taskId!, pageNo: pageNo)
             }
             else {
                 // Check for already time exists.
@@ -1103,11 +1137,16 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                     return
                 }
                 
+                // Move running task to top.
+//                tblUserDetails.moveRow(at: indxPath, to: [0, arrRunningTask.count])
+//                tblUserDetails.scrollToRow(at: [0, arrRunningTask.count], at: .middle
+//                    , animated: true)
                 // Start task.
                 cTaskDetails.bIsRunning = true
+                let pageNo = cTaskDetails.pageNo
                 cell.lblTotalDuration.text = "Synching"
                 reloadCollection(withCurrentTime: true)
-                startTask(taskId: taskId!)
+                startTask(taskId: taskId!, pageNo: pageNo)
             }
             cell.imgTimer.image = #imageLiteral(resourceName: "synch")
             cell.isUserInteractionEnabled = false
@@ -1125,6 +1164,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                 
                 let indexPath = IndexPath(row: indexArray, section: 0)
                 let cTaskDetails = arrCTaskDetails[indexPath.row]
+                let pageNo = cTaskDetails.pageNo
                 if let cell = tblUserDetails.cellForRow(at: indexPath) as? UserTaskInfoCell {
                     animateCellPosition(indexPath: indexPath)
                     
@@ -1135,7 +1175,7 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
                     cell.lblTotalDuration.text = "Stoping"
                 }
                 reloadCollection()
-                stopTask(taskId: taskId)
+                stopTask(taskId: taskId, pageNo: pageNo)
             }
             else {
                 // Provide alert message when there is no task id top start task.

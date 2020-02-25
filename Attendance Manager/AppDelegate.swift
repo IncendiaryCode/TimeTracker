@@ -39,9 +39,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     , body: "Good morning, Remainder to punch in for the day")
                 self.setUpNotification(hour: 17, minute: 55, title: "Remainder"
                     , body: "Good evening, Remainder to punch out for the day")
-                print("Permission granted")
             } else {
-                print("Permission denied")
+                print("Permission denied to notifications")
             }
         }
         return true
@@ -129,6 +128,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // set up the time
         fireComponents.hour = hour
         fireComponents.minute = minute
+        fireComponents.second = 0
         
         // Check for weekends.(1 for sunday and 7 for saturday)
         guard fireComponents.weekday != 1 || fireComponents.weekday != 7 else {
@@ -143,7 +143,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         content.body = body
         content.sound = UNNotificationSound.default
 
-        let trigger = UNCalendarNotificationTrigger(dateMatching: fireComponents, repeats: false)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: fireComponents, repeats: true)
         
         // Create request
         let uniqueID = UUID().uuidString // Keep a record of this if necessary

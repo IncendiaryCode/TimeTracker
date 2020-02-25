@@ -217,7 +217,7 @@ class APIResponseHandler {
                                 taskCDController.addOrUpdateTaskDetails(taskId: taskId!, taskName:
                                     taskName, taskDesc: taskDesc, projId: projId!, moduleId:
                                         modId!, bIsWorking: bIsWorking, startTime: nStartDate,
-                                            endTime: nEndDate)
+                                                endTime: nEndDate, pageNo: pageNo)
                                 
                                 // Load task timings.
                                 loadTaskTimings(taskId: taskId!, arrDictValues: arrDictTaskTimings)

@@ -1277,15 +1277,16 @@ UIGestureRecognizerDelegate {
         }
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange,
-                   replacementString string: String) -> Bool {
-        let currentCharacterCount = textField.text?.count ?? 0
-        if range.length + range.location > currentCharacterCount {
-            return false
-        }
-        let newLength = currentCharacterCount + string.count - range.length
-        return newLength <= 50
-    }
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange,
+//                   replacementString string: String) -> Bool {
+          // To restrict task name less tan 50 char
+//        let currentCharacterCount = textField.text?.count ?? 0
+//        if range.length + range.location > currentCharacterCount {
+//            return false
+//        }
+//        let newLength = currentCharacterCount + string.count - range.length
+//        return newLength <= 50
+//    }
     
     // Update view and database while moving to activity view.
     func updateActivityView() {
@@ -1307,7 +1308,15 @@ UIGestureRecognizerDelegate {
 //                        viewActivity.updateView()
 //                    }
 //                    else {
-                        viewActivity.updateProject()
+                        
+                        // Update based on page no.
+                        if let id = taskId, id > 0 {
+                            let pageNo = tasksCDController.getPageNoAPI(taskId: taskId!)
+                            viewActivity.updateTask(requireAll: false, pageNo: pageNo)
+                        }
+                        else {
+                            viewActivity.updateProject()
+                        }
                         viewActivity.sortAndRefreshData()
                         viewActivity.arrRunningTask = viewActivity.getRunningTaskId()
                         // If no task running draw play icon or stop icon.
@@ -1318,9 +1327,26 @@ UIGestureRecognizerDelegate {
                     self.navigationController?.popToRootViewController(animated: true)
                 }
             }
-            else {
                 // Iniialise from task history VC.
-                APIResponseHandler.loadTaskDetails(pageNo: g_taskPageNo, completion: {
+            else {
+                // Update based on page no.
+                var pageNo: Int!
+                if let id = taskId, id > 0 {
+                    pageNo = tasksCDController.getPageNoAPI(taskId: taskId!)
+                    // Update in dashboard too.
+                    if let tabBarController = (self.presentingViewController
+                        as! UINavigationController).viewControllers[0] as? TabBarController {
+                        if let viewActivity = tabBarController.viewControllers![0]
+                            as? UserActivityVC {
+                            viewActivity.updateTask(requireAll: false, pageNo: pageNo)
+                        }
+                    }
+                }
+                else {
+                    pageNo = g_taskPageNo
+                }
+                
+                APIResponseHandler.loadTaskDetails(pageNo: pageNo, completion: {
                     status in
                     if status {
                         // Refresh dashboard.
@@ -1427,7 +1453,7 @@ UIGestureRecognizerDelegate {
                 }
                 taskId = tasksCDController.addNewTask(projectId: selectedProjId, taskName:
                     txtTaskName.text!, taskDesc: strTaskDescr, moduleId: selectedModId
-                    ,isSynched: false, isRunning: isRunning, startTime: nStartTime)
+                    ,isSynched: false, isRunning: isRunning, startTime: nStartTime, pageNo: 0)
             }
             else {
                 // Editing selected task.
@@ -1443,7 +1469,7 @@ UIGestureRecognizerDelegate {
                 tasksCDController.updateTaskNameDescrAndProject(taskId: taskId!, moduleId: selectedModId,
                     strTaskName: txtTaskName.text!, strDescr: txtVTaskDescr.text, projectId:
                     selectedProjId, isWorking: false, startTime: startTime, isSynched: false, deleted:
-                arrDeletaedTimeId)
+                    arrDeletaedTimeId, pageNo: 0)
             }
             let taskTimeCDCtrl = TasksTimeCDController()
             if arrTaskTimeDetails.count > 0 {

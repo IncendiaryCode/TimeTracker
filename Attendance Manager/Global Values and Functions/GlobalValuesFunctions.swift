@@ -537,6 +537,8 @@ class TaskDetails {
     var nStartTime: Int64?
     /// End time in time since 1970
     var nEndTime: Int64?
+    /// Page no provided by API. (Usefull when re-fetch task data)
+    var pageNo: Int!
     /// Is running.
     var bIsRunning: Bool?
     /// Total task timings.
@@ -548,7 +550,7 @@ class TaskDetails {
     }()
     
     init(taskId: Int, taskName: String, taskDescr: String?, projId: Int, modId: Int, nTotalTime:
-        Int, nStartTime: Int64?, nEndTime: Int64?, isRunnung: Bool?) {
+        Int, nStartTime: Int64?, nEndTime: Int64?, isRunnung: Bool?, pageNo: Int) {
         self.taskId = taskId
         self.taskName = taskName
         if let strTaskDescr = taskDescr {
@@ -557,6 +559,7 @@ class TaskDetails {
         self.projId = projId
         self.moduleId = modId
         self.nTotalTime = nTotalTime
+        self.pageNo = pageNo
         if 0 != nStartTime {
             self.nStartTime = nStartTime!
         }

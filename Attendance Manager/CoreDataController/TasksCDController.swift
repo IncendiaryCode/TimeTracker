@@ -31,7 +31,7 @@ class TasksCDController {
     
     /// Creates a new task with name, description and project id.
     func addNewTask(projectId: Int, taskName: String, taskDesc: String, moduleId: Int, isSynched:
-        Bool, isRunning: Bool, startTime: Int64 = 0) -> Int {
+        Bool, isRunning: Bool, startTime: Int64 = 0, pageNo: Int) -> Int {
         let userEntity = NSEntityDescription.entity(forEntityName: "Tasks", in: nsManagedContext)!
         nsMOForUserTimes = NSManagedObject(entity: userEntity, insertInto: nsManagedContext)
         var taskId: Int!
@@ -55,7 +55,8 @@ class TasksCDController {
         }
         nsMOForUserTimes.setValuesForKeys(["task_id": taskId!, "project_id": projectId
             , "module_id": moduleId, "task_name": taskName, "task_description": taskDesc
-            , "is_work_in_progress": isRunning,"is_synched": isSynched, "start_time": startTime])
+            , "is_work_in_progress": isRunning,"is_synched": isSynched, "start_time": startTime
+            , "page_no": pageNo])
         saveContext()
         return taskId
     }
@@ -70,7 +71,7 @@ class TasksCDController {
     
     /// Add task details.
     func addOrUpdateTaskDetails(taskId: Int, taskName: String, taskDesc: String, projId: Int
-        , moduleId: Int, bIsWorking: Bool, startTime: Int64, endTime: Int64?) {
+        , moduleId: Int, bIsWorking: Bool, startTime: Int64, endTime: Int64?, pageNo: Int) {
         // If task id not exists add details.
         if !isTaskExist(taskId: taskId) {
             let userEntity = NSEntityDescription.entity(forEntityName: "Tasks", in:
@@ -79,19 +80,20 @@ class TasksCDController {
             if nil == endTime {
                 nsMOForUserTimes.setValuesForKeys(["task_id": taskId, "project_id": projId,
                     "module_id": moduleId, "task_name": taskName, "task_description": taskDesc,
-                    "is_work_in_progress": bIsWorking, "start_time": startTime, "is_synched": true])
+                    "is_work_in_progress": bIsWorking, "start_time": startTime, "is_synched": true
+                    ,"page_no": pageNo])
             }
             else {
                 nsMOForUserTimes.setValuesForKeys(["task_id": taskId, "project_id": projId,
-                    "module_id": moduleId, "task_name": taskName, "task_description": taskDesc,
-                        "is_work_in_progress": bIsWorking, "start_time": startTime,
-                                                   "end_time": endTime!, "is_synched": true])
+                    "module_id": moduleId, "task_name": taskName, "task_description": taskDesc
+                    , "is_work_in_progress": bIsWorking, "start_time": startTime
+                    , "end_time": endTime!, "is_synched": true, "page_no": pageNo])
             }
         }
         else {
             updateTaskNameDescrAndProject(taskId: taskId, moduleId: moduleId, strTaskName: taskName
                 , strDescr: taskDesc, projectId: projId, isWorking: bIsWorking, startTime: startTime
-                , endTime: endTime, isSynched: nil, deleted: [])
+                , endTime: endTime, isSynched: nil, deleted: [], pageNo: pageNo)
         }
         saveContext()
     }
@@ -292,7 +294,7 @@ class TasksCDController {
     /// Any changes in task details updated to given task id.
     func updateTaskNameDescrAndProject(taskId: Int, moduleId: Int, strTaskName: String, strDescr:
         String, projectId: Int, isWorking: Bool, startTime: Int64 = 0, endTime: Int64? = 0,
-                isSynched: Bool?, deleted: Array<String>) {
+                isSynched: Bool?, deleted: Array<String>, pageNo: Int) {
         var deletedRange = ""
         for str in deleted {
             deletedRange += "\(str),"
@@ -315,6 +317,7 @@ class TasksCDController {
             nsMObject.setValue(isWorking, forKey: "is_work_in_progress")
             nsMObject.setValue(startTime, forKey: "start_time")
             nsMObject.setValue(deletedRange, forKey: "deleted_time_range")
+            nsMObject.setValue(pageNo, forKey: "page_no")
             if nil == isSynched {
                 let isSynched = nsMObject.value(forKey: "is_synched") as! Bool
                 nsMObject.setValue(isSynched, forKey: "is_synched")
@@ -387,12 +390,26 @@ class TasksCDController {
             let projId = nsMObject.value(forKey: "project_id") as! Int
             let startIntDateTime = nsMObject.value(forKey: "start_time") as! Int64
             let modId = nsMObject.value(forKey: "module_id") as! Int
+            let pageNo = nsMObject.value(forKey: "page_no") as! Int
              
             cTaskDetails = TaskDetails(taskId: taskId, taskName: taskName, taskDescr: nil, projId:
                 projId, modId: modId, nTotalTime: nTotTime, nStartTime: startIntDateTime, nEndTime: nil,
-                        isRunnung: nil)
+                        isRunnung: nil, pageNo: pageNo)
         }
         return cTaskDetails
+    }
+    
+    /// Get page no of task id.
+    func getPageNoAPI(taskId: Int) -> Int {
+        var pageNo: Int!
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Tasks")
+        fetchRequest.predicate = NSPredicate(format: "task_id = %d",taskId)
+        let res = try! nsManagedContext.fetch(fetchRequest)
+        if res.count > 0 {
+            let nsMObject = res[0] as! NSManagedObject
+            pageNo = nsMObject.value(forKey: "page_no") as? Int
+        }
+        return pageNo
     }
     
     /// Returns task name.
@@ -583,6 +600,7 @@ class TasksCDController {
                         let startDateTime = nsMObject.value(forKey: "start_time") as! Int64
                         let bWorking = nsMObject.value(forKey: "is_work_in_progress") as! Bool
                         let endTime = nsMObject.value(forKey: "end_time") as! Int64
+                        let pageNo = nsMObject.value(forKey: "page_no") as! Int
                         
                         // Check for onlyTodays applies.
                         if onlyTodays {
@@ -602,7 +620,7 @@ class TasksCDController {
                         
                         cTaskDetails = TaskDetails(taskId: taskId, taskName: taskName, taskDescr:
                             taskDesc, projId: projId, modId: modId, nTotalTime: totalTime, nStartTime:
-                            startDateTime, nEndTime: endTime, isRunnung: bWorking)
+                            startDateTime, nEndTime: endTime, isRunnung: bWorking, pageNo: pageNo)
                         arrCTaskDetails.append(cTaskDetails)
                     }}
             }
@@ -824,10 +842,12 @@ class TasksCDController {
 
                     let nStartDateTime = nsMObject.value(forKey: "start_time") as! Int64
                     let nEndDateTime = nsMObject.value(forKey: "end_time") as! Int64
+                    let pageNo = nsMObject.value(forKey: "page_no") as! Int
                     
                     let cTaskDetails = TaskDetails(taskId: taskId, taskName: taskName, taskDescr:
                         taskDesc, projId: projId, modId: modId, nTotalTime: totalTime
-                        , nStartTime: nStartDateTime, nEndTime: nEndDateTime, isRunnung: bWorking)
+                        , nStartTime: nStartDateTime, nEndTime: nEndDateTime, isRunnung: bWorking
+                        , pageNo: pageNo)
                     
                     arrDetails.append(cTaskDetails)
                 }
@@ -916,10 +936,12 @@ class TasksCDController {
                     
                     let nStartDateTime = nsMObject.value(forKey: "start_time") as! Int64
                     let nEndDateTime = nsMObject.value(forKey: "end_time") as! Int64
+                    let pageNo = nsMObject.value(forKey: "page_no") as! Int
                     
                     let cTaskDetails = TaskDetails(taskId: taskId, taskName: taskName, taskDescr:
-                        taskDesc, projId: projId, modId: modId, nTotalTime: totalTime,
-                            nStartTime: nStartDateTime, nEndTime: nEndDateTime, isRunnung: bWorking)
+                        taskDesc, projId: projId, modId: modId, nTotalTime: totalTime
+                        , nStartTime: nStartDateTime, nEndTime: nEndDateTime
+                        , isRunnung: bWorking, pageNo: pageNo)
                     
                     arrTaskDetails.append(cTaskDetails)
                 }

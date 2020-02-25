@@ -16,7 +16,7 @@ protocol ActivityViewDelagate {
 	/// Delegate sends selected cell's task id.
 	func cellSelected(taskId: Int)
 	/// When swipe action performed to cell and that cell belongs to running task.
-	func cellSwipeToStop(taskId: Int)
+	func cellSwipeToStop(taskId: Int, pageNo: Int)
 	/// Show intro page in day view.
 	func showIntroPageDayView()
 	/// Show intro page in week view.
@@ -1180,21 +1180,23 @@ class ActivityView: UIView, UITableViewDelegate, UITableViewDataSource, Calendar
 	func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) ->
 		[UITableViewRowAction]? {
 			var taskId: Int!
+			var pageNo: Int!
 			if nSliderView == 0 {
 				let cTaskTimeDetails = self.arrCTaskTimeDetails[indexPath.row]
 				taskId = cTaskTimeDetails.taskId!
+				pageNo = tasksCDCtrlr.getPageNoAPI(taskId: taskId)
 			}
 			else {
 				// Tap to move edit page.
 				let cTaskTimeDetails = arrCTaskDetails[indexPath.row]
 				taskId = cTaskTimeDetails.taskId!
-				
+				pageNo = tasksCDCtrlr.getPageNoAPI(taskId: taskId)
 			}
 			
 			// Setup stop action.
 			let stopAction = UITableViewRowAction(style: .default, title: "Stop" , handler: {
 				(action:UITableViewRowAction, indexPath: IndexPath) -> Void in
-				self.delegate?.cellSwipeToStop(taskId: taskId)
+				self.delegate?.cellSwipeToStop(taskId: taskId, pageNo: pageNo)
 			})
 			stopAction.backgroundColor =  g_colorMode.midColor()
 			
@@ -1514,7 +1516,11 @@ extension UIView {
 			// Setup label for time.
             let frame = CGRect(x: x - 15, y: start.y + 10, width: 30, height: 30)
             let label = UILabel (frame: frame)
-            if startLabel+i*2 < 12 {
+			
+			if startLabel+i*2 == 0 || startLabel+i*2-12 == 12 {
+				label.text = "12\nAM"
+			}
+            else if startLabel+i*2 < 12 {
                 label.text = "\(startLabel+i*2)\nAM"
             }
             else if startLabel+i*2 == 12 {
