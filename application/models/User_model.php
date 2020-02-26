@@ -276,8 +276,8 @@ class User_model extends CI_Model {
      * 
      * returns $task_data
      */
-    public function get_task_info($task_id) {
-        $userid = $this->session->userdata('userid');
+    public function get_task_info($task_id,$userid) {
+        
         $details = array();
 
         //check whether the task id is valid
