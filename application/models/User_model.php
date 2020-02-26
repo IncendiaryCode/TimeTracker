@@ -493,9 +493,8 @@ class User_model extends CI_Model {
      * returns $chart_data if data is present
      * returns $status if no data is present
      */
-    public function get_activity($chart_type, $date) {
+    public function get_activity($chart_type, $date,$userid) {
         //get task activities
-        $userid = $this->session->userdata('userid');
         $taskdate = $date;
         $total_minutes = 0;
         if ($chart_type == "daily_chart") {

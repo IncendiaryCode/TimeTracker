@@ -262,8 +262,8 @@ class User extends CI_Controller
         if (isset($_POST['chart_type']) && isset($_POST['date'])) {
             $date = $_POST['date'];
             $chart_type = $_POST['chart_type'];
-
-            $chart_data = $this->user_model->get_activity($chart_type, $date); //get activity of the user for given arguments
+            $userid = $this->session->userdata('userid');
+            $chart_data = $this->user_model->get_activity($chart_type, $date, $userid); //get activity of the user for given arguments
             echo json_encode($chart_data);
         }
         else
