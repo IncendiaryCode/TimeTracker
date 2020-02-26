@@ -250,5 +250,25 @@ class Task extends REST_Controller {
             $this->response($verify_data, REST_Controller::HTTP_OK);
         }
     }
+    // api to fetch task details
+    public function task_detail_post(){
+        $headers = $this->input->request_headers();
+        $verify_data = $this->verify->verify_request($headers);
+        if(isset($verify_data->username))
+        {
+            $post = $this->input->post();
+            if(!empty($post['userid']) && !empty($post['taskid'])){
+                $task_data = $this->user_model->get_task_info($post['taskid'],$post['userid']);
+                $data['success'] = 1;
+                $data['task'] = $task_data;
+            }else{
+                $data['success'] = 0;
+                $data['msg'] = 'Parameters error!';
+            }
+            $this->response($data, REST_Controller::HTTP_OK);
+        }else{
+            $this->response($verify_data, REST_Controller::HTTP_OK);
+        }
+    }
     	
 }
