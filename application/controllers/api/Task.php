@@ -270,5 +270,27 @@ class Task extends REST_Controller {
             $this->response($verify_data, REST_Controller::HTTP_OK);
         }
     }
-    	
+    
+    public function activity_post(){
+        $headers = $this->input->request_headers();
+        $verify_data = $this->verify->verify_request($headers);
+        if(isset($verify_data->username))
+        {
+            $post = $this->input->post();
+            if(!empty($post['userid']) && !empty($post['chart_type']) && !empty($post['date'])){
+                //daily chart  2020-02-26 ,weekly chart 2020-Feb-23~2020-Feb-29, monthly 02 2020
+                $date = $post['date'];
+                $chart_type = $post['chart_type'];
+                $chart_data = $this->user_model->get_activity($chart_type, $date, $post['userid']);
+                $data['success'] = 1;
+                $data['data'] = $chart_data;
+            }else{
+                $data['success'] = 0;
+                $data['msg'] = 'Parameters error!';
+            }
+            $this->response($data, REST_Controller::HTTP_OK);
+        }else{
+            $this->response($verify_data, REST_Controller::HTTP_OK);
+        }
+    }	
 }
