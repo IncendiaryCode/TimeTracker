@@ -1,8 +1,16 @@
 //This file is used commonly on all pages through out the application
 
+// var check_punchIn = not_logged;
+// var check_punchOut = stopped;
 function check_for_punchIn() {
-	if (document.getElementById('stop-time') == null) {
-		return true;
+	if (check_fr_punchIn == 0) {
+		$('#alert-punchin').modal('show');
+		document.getElementById('start-login-time').value = moment().format('HH:mm');
+		return false;
+	}
+	if (check_fr_punchOut == 1) {
+		$('#play-timer').modal('show');
+		return false;
 	}
 	if (document.getElementById('stop-time')) {
 		if (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play') {
@@ -20,7 +28,6 @@ function check_for_punchIn() {
 		}
 	}
 }
-
 $('#alert-for-punchin').click(function() {
 	$('#play-timer').modal('show');
 });
@@ -28,7 +35,6 @@ $('#alert-for-punchin').click(function() {
 $(function() {
 	//sticky header on scroll
 	$(window).on('scroll', function(e) {
-		// console.log($(window).scrollTop());
 		if ($(window).scrollTop() > $('header.main-header').outerHeight() - 60) {
 			$('header.main-header').addClass('main-header-sticky');
 		} else {
@@ -57,7 +63,7 @@ $(function() {
 		format: 'HH:MM',
 		useCurrent: false
 	});
-	document.getElementById('timerpicker-punchout').value = moment().format("HH:mm");
+	document.getElementById('timerpicker-punchout').value = moment().format('HH:mm');
 	if (document.getElementById('punch-out-action')) {
 		var punch_out = document.getElementById('punch-out-action');
 		var __element = document.getElementById('punch-out-action');
@@ -67,7 +73,7 @@ $(function() {
 				document.getElementById('punch-out-err').innerHTML = 'enter valid punch out time. ';
 				return false;
 			} else {
-				var serverDate = moment(moment().format("YYYY-MM-DD") + ' ' + punch_out).tz('utc').format('YYYY-MM-DD H:mm:ss');
+				var serverDate = moment(moment().format('YYYY-MM-DD') + ' ' + punch_out).tz('utc').format('YYYY-MM-DD H:mm:ss');
 				document.getElementById('timerpicker-punchout').value = serverDate;
 				if (typeof parseInt(serverDate.slice(0, 2)) == 'string') {
 					document.getElementById('punch-out-err').innerHTML = 'enter valid punch out time. ';
@@ -86,5 +92,10 @@ $(function() {
 		format: 'yyyy',
 		todayHighlight: true,
 		autoclose: true
+	});
+	$('.timerpicker-c').timepicker({
+		mode: '24hr',
+		format: 'HH:MM',
+		uiLibrary: 'bootstrap4'
 	});
 });

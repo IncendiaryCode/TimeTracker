@@ -59,6 +59,12 @@ header {
 	line-height: normal;
 }
 
+@media (max-width: 970px) {
+	#dashboard-stats .card .card-body .fas {
+		font-size: 60px;
+		line-height: normal;
+	}
+}
 #dashboard-stats .card h1 {
 	font-size: 60px;
 	font-weight: 600;
@@ -198,7 +204,10 @@ header.main-header h1 {
 		font-size: 24px;
 		margin-bottom: 5%;
 	}
-
+	.user-name
+	{
+		padding-right: 77%;
+	}
 	#stopTime {
 		position: relative;
 		text-align: center;
@@ -414,13 +423,51 @@ table.dataTable
 {
 	float: right;
 }
-.module-append button
+.module-append button, .module-append a
 {
 	color: #e383fb;
 	border-color: #e383fb;
 }
-.module-append button:hover
+.module-append button:hover, .module-append a:hover
 {
 	color: #7077ff;
 	border-color: #7077ff;
+}
+.module-append p
+{
+	position: absolute;
+    top: 90px;
+}
+.user-append button, .user-append a
+{
+	color: #e383fb;
+	border-color: #e383fb;
+}
+.user-append button:hover, .user-append a:hover
+{
+	color: #7077ff;
+	border-color: #7077ff;
+}
+.user-append p
+{
+	position: absolute;
+    top: 90px;
+}
+.scroll-module
+{
+	overflow-y: scroll;
+	height: 431px;
+}
+#module-edit .modal-header, .modal-footer
+{
+	border: none;
+}
+#module-delete .modal-header, .modal-footer
+{
+	border: none;
+}
+#append-list
+{
+	z-index: 1;
+	cursor: default;
 }

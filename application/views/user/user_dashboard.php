@@ -26,8 +26,6 @@ $not_logged = 1;
 }else{
 $not_logged = 0;
 }
-
-
 if (isset($task_info['login_status'])) {
     if ($task_info['login_status']['end_time'] == NULL) {
         $timerClass = 'fa-stop';
@@ -121,13 +119,21 @@ if (!empty($task_info['login_run'])) { ?>
                 <div class="col-6">
                     <h5 class="font-weight-light text-left recent-activites">Recent Activities</h5>
                 </div>
-                <div class="col-6">                
+                <div class="col-6 text-right">
                     <ul class="nav float-right">
-                        <li class="nav-item" id="clear-filter">
-                            <a class="nav-link" href="#"><i class="far fa-times-circle"></i> Clear filter</a>
-                        </li>                        
+                        <li class="nav-item" id="today-filter">
+                            <span class="pt-2">today</span>
+                            <label class="switch switch-default switch-pill switch-primary mr-2">
+                                <input type="checkbox" class="switch-input" id="today-input">
+                                <span class="switch-label"></span>
+                                <span class="switch-handle"></span>
+                            </label>
+                        </li>
+                        <li class="nav-item " id="clear-filter">
+                            <a class="nav-link pt-0" href="#"><i class="far fa-times-circle"></i> Clear filter</a>
+                        </li>                       
                         <li class="nav-item">
-                            <a class="nav-link" id="action-filter" href="#navbarToggleExternalContent" data-toggle="collapse" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle Filter">
+                            <a class="nav-link pt-0" id="action-filter" href="#navbarToggleExternalContent" data-toggle="collapse" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle Filter">
                                 <i class="fas fa-sliders-h"></i>
                             </a>
                         </li>
@@ -141,26 +147,26 @@ if (!empty($task_info['login_run'])) { ?>
                                         <div class="col-4" id="sorting">
                                             <h5 class="pb-2">Sort by</h5>
                                             <div class="form-check">
-                                                <input class="form-check-input" data-type="name" type="radio" name="exampleRadios" id="exampleRadios1" value="date" checked>
-                                                <label class="form-check-label" for="exampleRadios1">
+                                                <input class="form-check-input" data-type="name" type="radio" name="exampleRadios" id="date-radio" value="date" checked>
+                                                <label class="form-check-label" for="date-radio">
                                                     Date
                                                 </label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" data-type="name" type="radio" name="exampleRadios" id="exampleRadios1" value="task">
-                                                <label class="form-check-label" for="exampleRadios1">
+                                                <input class="form-check-input" data-type="name" type="radio" name="exampleRadios" id="task-radio" value="task">
+                                                <label class="form-check-label" for="task-radio">
                                                     Task
                                                 </label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" data-type="project" type="radio" name="exampleRadios" id="exampleRadios2" value="project">
-                                                <label class="form-check-label" for="exampleRadios2">
+                                                <input class="form-check-input" data-type="project" type="radio" name="exampleRadios" id="project-radio" value="project">
+                                                <label class="form-check-label" for="project-radio">
                                                     Project
                                                 </label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" data-type="duration" type="radio" name="exampleRadios" id="exampleRadios3" value="duration">
-                                                <label class="form-check-label" for="exampleRadios3">
+                                                <input class="form-check-input" data-type="duration" type="radio" name="exampleRadios" id="duration-radio" value="duration">
+                                                <label class="form-check-label" for="duration-radio">
                                                     Duration
                                                 </label>
                                             </div>
@@ -168,12 +174,12 @@ if (!empty($task_info['login_run'])) { ?>
                                         <div class="col-4" id="filtering">
                                             <h5 class="pb-2">Filter by</h5>
                                             <?php
-                                                for($p=0; $p<sizeof($project_list); $p++) { ?>                                            
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox">
-                                                    <input type="hidden" value=<?=$project_list[$p]['id'] ?>>
-                                                    <label class="form-check-label" for="defaultCheck1">
-                                                    <?=$project_list[$p]['name'] ?>
+                                                for($p=0; $p<sizeof($project_list); $p++) { ?>                                        
+                                                <div class="form-check custom-control custom-checkbox">
+                                                    <input class="form-check-input " type="checkbox" id="check-<?=$p?>">
+                                                        <input type="hidden" class="custom-control-input" value=<?=$project_list[$p]['id'] ?>>
+                                                        <label class="form-check-label" for="check-<?=$p?>">
+                                                        <?=$project_list[$p]['name'] ?>
                                                     </label>
                                                 </div>
                                             <?php } ?>
@@ -290,43 +296,5 @@ if (!empty($task_info['login_run'])) { ?>
         </div>
 <?php } ?>
 
-        <div class="modal" id="alert-punchin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <form action="<?= base_url(); ?>index.php/user/save_login_time" id="starting-timer" method="post">
-                        <div class="modal-header ">
-                            <button type="button" class="close text-danger" data-dismiss="modal">×</button>
-                        </div>
-                        <div class="modal-body ">
-                            <h4 class="pb-3">You have not punched in for the day</h4>
-                            <input type="text" class="check-for-utc form-control  timerpicker-c" name="start-login-time" id="start-login-time" placeholder="hh:mm">
-                            <div class="input-group-addon">
-                                <span class="glyphicon glyphicon-th"></span>
-                            </div>
-                        </div>
-                        <p class="text-danger text-center" id="stop-timer-error"></p>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" id="start-punchIn">Punch In</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="play-timer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close text-danger" data-dismiss="modal">×</button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <div>
-                            <h4>You have already punched out for the day!!!</h4>
-                        </div>
-                    </div>
-                    <p class="text-danger" id="stop-timer-error"></p>
-                </div>
-            </div>
-        </div>
-    </div>
+        
 </main>

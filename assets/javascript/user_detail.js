@@ -83,10 +83,6 @@ var configs = {
                     beginAtZero: true,
                     stacked: true
                 },
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Time in hours',
-                }
             }]
         },
     }

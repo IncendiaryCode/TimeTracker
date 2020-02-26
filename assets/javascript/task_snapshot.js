@@ -112,7 +112,6 @@ function callTaskTableData(start_date, end_date, project, user) {
 				{
 					targets: 0,
 					render: function(data, type, row, meta) {
-						console.log("row",row);
 						return row[0];
 					}
 				},

@@ -5,9 +5,22 @@ $theme_mode = "theme-light";
 if(!empty($GLOBALS['dark_mode']) && $GLOBALS['dark_mode'] == 1){
     $theme_mode = "theme-dark";
 }
+$punchout = 0;
+$punch_in = 1;
+if(isset($punchout_status) && $punchout_status == TRUE){
+    $punchout = 1;
+}
+else if(!empty($punch_in_time)){
+    $punch_in = 1;
+}else{
+    $punch_in = 0;
+}
 ?>
+<script type="text/javascript">
+    var check_fr_punchOut = "<?=$punchout ?>";
+    var check_fr_punchIn = "<?=$punch_in ?>";
+</script>
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -73,5 +86,45 @@ if(!empty($GLOBALS['dark_mode']) && $GLOBALS['dark_mode'] == 1){
                 </p>
             </div>
         <?php } ?>
+        </div>
+    </div>
+
+    <div class="modal" id="alert-punchin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="<?= base_url(); ?>index.php/user/save_login_time" id="starting-timer" method="post">
+                        <div class="modal-header ">
+                            <button type="button" class="close text-danger" data-dismiss="modal">×</button>
+                        </div>
+                        <div class="modal-body ">
+                            <h4 class="pb-3">You have not punched in for the day</h4>
+                            <input type="text" class="check-for-utc form-control  timerpicker-c" name="start-login-time" id="start-login-time" placeholder="hh:mm">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                        <p class="text-danger text-center" id="stop-timer-error"></p>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" id="start-punchIn">Punch In</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="play-timer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close text-danger" data-dismiss="modal">×</button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div>
+                            <h4>You have already punched out for the day!!!</h4>
+                        </div>
+                    </div>
+                    <p class="text-danger" id="stop-timer-error"></p>
+                </div>
+            </div>
         </div>
     </div>

@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <div class="container">
     <div class="row mt-5" id="dashboard-stats">
-        <div class="col-sm-4 col-12">
+        <div class="col-md-4 col-12">
             <div class="card card-theme-a">
                 <div class="card-body">
                     <div class="row">
@@ -29,7 +29,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
             </div>
         </div>
-        <div class="col-sm-4 col-12">
+        <div class="col-md-4 col-12">
             <div class="card card-theme-b">
                 <div class="card-body">
                     <div class="row">
@@ -56,7 +56,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
             </div>
         </div>
-        <div class="col-sm-4 col-12">
+        <div class="col-md-4 col-12">
             <div class="card card-theme-c">
                 <div class="card-body">
                     <div class="row">
@@ -84,10 +84,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
     <hr class="separator-hr" />
     <div class="row">
-        <div class="col-9">
+        <div class="col-6">
             <h1 class="display-heading">Project Chart</h1>
         </div>
-        <div class="col-3">
+        <div class="col-6 col-md-3 offset-md-3">
             <div class="input-group">
                 <input type="text" class="form-control" id="dash-prj-dtpicker" value="<?= date('F Y'); ?>">
                 <div class="input-group-append">

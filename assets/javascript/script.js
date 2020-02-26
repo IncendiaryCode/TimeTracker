@@ -1,56 +1,5 @@
 var user_email;
-$(document).ready(function () {
-	$("#forgot").click(function () {
-		$("#form2").show();
-		$("#loginForm").hide();
-		$("#form2").css("background-color", "white");
-	});
-	var forgotPsw = document.getElementById("forgotPassword");
-	if (forgotPsw) {
-		forgotPsw.onsubmit = function (e) {
-			user_email = document.getElementById("Uname").value;
-			var validateForm = new Validation(e.currentTarget);
-			var finalValue = validateForm.correctCheck();
-		return true;
-		};
-	}
-	if(typeof email != "undefined" && (email != '' ))
-	{
-		document.getElementById("Uname").value = email;
-		$("#enter-otp").show();
-		$("#enter-email").hide();
-	}
-	var formPsw = document.getElementById("reEnterPsw");
-	if(formPsw)
-	{
-		formPsw.onsubmit = function (e) {
-			var psw1 = document.getElementById("psw1").value;
-			var psw2 = document.getElementById("psw2").value;
-			if (psw1 == "" || psw1 == " ") {
-				document.getElementById("cnfrmPsw").innerHTML = "Empty Password";
-				return false;
-			}
-			if (psw1 === psw2) {
-				$.ajax({
-					type: "POST",
-					url: "../login/change_pass",
-					data: { mail: document.getElementById("user-email").value, psw11: psw1, psw22: psw2 },
-					success: function (data) { }
-				});
-				return true;
-			} else {
-				document.getElementById("cnfrmPsw").innerHTML =
-					"Enter correct Password!!!";
-				return false;
-			}
-		};
-	}
 
-	$('#getOTP1').click(function()
-	{
-		$('.resend-otp-spinner').css("display","block");
-	})
-});
 
 var Validation = function (e) {
 	this.isValid = false;
@@ -100,8 +49,8 @@ Validation.prototype.isValidateEmail = function (e) {
 	if (e.type == "email") {
 		var emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		if (!emailRegEx.test(e.value)) {
-			document.getElementById(e.id + "-error").innerHTML =
-				"Email format is not correct.";
+			// document.getElementById(e.id + "-error").innerHTML =
+			// 	"Email format is not correct.";
 			this.errorCount++;
 			e.focus();
 			this.isValid = false;
@@ -189,7 +138,7 @@ function sendOTP() {
 				var data = JSON.parse(data);
 				if(data["status"] == false)
 				{
-					document.getElementById("email-error").innerHTML = "Entered email address is not available";
+					document.getElementById("email-error").innerHTML = "Could not able to find user.";
 					$('.send-otp-spinner').css("display", "none");
 					return false;
 				}
@@ -197,18 +146,10 @@ function sendOTP() {
 				$("#enter-otp").show();
 				$("#enter-email").hide();
 				$('#fill-otp').click(function () {
-					var validate = validateOtp();
-					if (validate) {
-						forgotPsw.onsubmit = function (e) {
-							return true;
-						}
-
+					document.getElementById("forgotPassword").onsubmit = function (e) {
+						return true;
 					}
-					else
-					{
-						$("#enter-otp").show();
-						$("#enter-email").hide();
-					}
+					return true;
 				});
 			}
 		});
@@ -231,7 +172,7 @@ function resendOTP() {
 				$('#fill-otp').click(function () {
 					var validate = validateOtp();
 					if (validate) {
-						forgotPsw.onsubmit = function (e) {
+						document.getElementById("forgotPassword").onsubmit = function (e) {
 							return true;
 						}
 
@@ -241,3 +182,77 @@ function resendOTP() {
 		});
 	}
 }
+
+
+$(document).ready(function () {
+	$("#forgot").click(function () {
+		$("#form2").show();
+		$("#loginForm").hide();
+		$("#form2").css("background-color", "white");
+	});
+	var forgotPsw = document.getElementById("forgotPassword");
+	if (forgotPsw) {
+		forgotPsw.onsubmit = function (e) {
+			user_email = document.getElementById("Uname").value;
+			var validateForm = new Validation(e.currentTarget);
+			var finalValue = validateForm.correctCheck();
+			console.log("dsrfdsfsd", finalValue['isValid']);
+			if(finalValue['isValid'] == false)
+			{
+				document.getElementById("email-error").innerHTML = "Email format is not correct.";
+				return false;
+			}
+			$.ajax({
+				type: "POST",
+				url: timeTrackerBaseURL + "login/send_otp",
+				data: { email: user_email },
+				success: function (data) {
+				var data = JSON.parse(data);
+					if(data["status"] == false)
+					{
+						document.getElementById("email-error").innerHTML = "Could not able to find user.";
+						return false;
+					}
+				}
+			});
+			sendOTP();
+		return false;
+		};
+	}
+	if(typeof email != "undefined" && (email != '' ))
+	{
+		document.getElementById("Uname").value = email;
+		$("#enter-otp").show();
+		$("#enter-email").hide();
+	}
+	var formPsw = document.getElementById("reEnterPsw");
+	if(formPsw)
+	{
+		formPsw.onsubmit = function (e) {
+			var psw1 = document.getElementById("psw1").value;
+			var psw2 = document.getElementById("psw2").value;
+			if (psw1 == "" || psw1 == " ") {
+				document.getElementById("cnfrmPsw").innerHTML = "Empty Password";
+				return false;
+			}
+			if (psw1 === psw2) {
+				$.ajax({
+					type: "POST",
+					url: "../login/change_pass",
+					data: { mail: document.getElementById("user-email").value, psw11: psw1, psw22: psw2 },
+					success: function (data) { }
+				});
+				return true;
+			} else {
+				document.getElementById("cnfrmPsw").innerHTML =
+					"Enter correct Password!!!";
+				return false;
+			}
+		};
+	}
+
+	$('#getOTP1').click(function()
+	{
+		$('.resend-otp-spinner').css("display","block");
+	})
+});

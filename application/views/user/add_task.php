@@ -145,8 +145,8 @@ if ($this->input->get('t_id')) { ?>
                                                 <div class="time-section pt-3 pb-4">
                                                     <div class="row">
                                                         <div class="col-4 col-md-5">
-                                                            <div class="input-group mb-3">
-                                                                <input type="text" class="date-utc form-control datepicker" id="date-picker-<?= ($key+1) ?>" name="time[<?= ($key+1) ?>][date]" data-date-format="yyyy-mm-dd" value="<?= $task['task_date']; ?>">
+                                                            <div class="input-group date mb-3">
+                                                                <input type="text" class="date-utc form-control datepicker pl-3" id="date-picker-<?= ($key+1) ?>" name="time[<?= ($key+1) ?>][date]" data-date-format="yyyy-mm-dd" value="<?= $task['task_date']; ?>">
                                                                 <div class="input-group-append">
                                                                     <span class="input-group-text">
                                                                         <button type="button" class="btn fa fa-calendar p-0"></button>
@@ -155,7 +155,7 @@ if ($this->input->get('t_id')) { ?>
                                                             </div>
                                                         </div>
                                                         <div class="col-4 col-md-3 mb-3">
-                                                            <div class="input-group date">
+                                                            <div class="input-group">
                                                                 <!-- converting utc start time to local time -->
 
                                                                 <?php
@@ -169,7 +169,7 @@ if ($this->input->get('t_id')) { ?>
                                                             </div>
                                                         </div>
                                                         <div class="col-4 col-md-3 mb-3">
-                                                            <div class="input-group date">
+                                                            <div class="input-group">
                                                                 <!-- converting utc end time to local time -->
 
                                                                 <?php
@@ -213,8 +213,8 @@ if ($this->input->get('t_id')) { ?>
                                         <div class="primary-wrap">
                                             <div class="row">
                                                 <div class="col-4 col-md-5">
-                                                    <div class="input-group mb-3">
-                                                        <input type="text" class="date-utc form-control datepicker " name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-0">
+                                                    <div class="input-group date mb-3">
+                                                        <input type="text" class="date-utc form-control datepicker pl-3" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-0">
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">
                                                                 <button type="button" class="btn fa fa-calendar datepicker-icon p-0"></button>
@@ -223,12 +223,12 @@ if ($this->input->get('t_id')) { ?>
                                                     </div>
                                                 </div>
                                                 <div class="col-4 col-md-3">
-                                                    <div class="input-group date">
+                                                    <div class="input-group">
                                                         <input id="start-time-0" class="date-utc form-control timepicker-a" name="time[0][start]" placeholder="hh:mm" />
                                                     </div>
                                                 </div>
                                                 <div class="col-4 col-md-3">
-                                                    <div class="input-group date">
+                                                    <div class="input-group">
                                                         <input id="end-time-0" class="date-utc form-control timepicker-b" name="time[0][end]" placeholder="hh:mm" />
                                                     </div>
                                                 </div>

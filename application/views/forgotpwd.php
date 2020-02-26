@@ -47,8 +47,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="alert alert-danger"><?php echo $this->session->flashdata('err_msg'); ?>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button>
-                            
+                    </button>  
                 </div>
             <?php }  ?>
             <div class="form-group" id="enter-email">
@@ -78,7 +77,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                     <div class="col-4">
                         <button class="btn btn-primary btn-block login-color ml-4" id="fill-otp" type="submit" name="submit"> Submit </button>
-                        <!-- <button class="btn btn-primary login-color" onclick="resendOTP()" type="button" id="getOTP1">Resend OTP</button> -->
                     </div>
                 </div>
             </div>

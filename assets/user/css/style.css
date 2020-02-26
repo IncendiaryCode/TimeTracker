@@ -384,8 +384,12 @@ a:hover {
 	border-style: solid;
 }
 #attach-card {
-	min-height: 200px;
+	min-height: 330px;
 	position: relative;
+}
+#attachPanels
+{
+	min-height: 330px;
 }
 
 #attach-card .section-loader {
@@ -473,7 +477,7 @@ a:hover {
 }
 .card-col:hover .card-action-overlay {
 	opacity: 1;
-	right: -70%;
+	right: -78%;
 }
 @media (max-width: 400px) {
 	.card-col:hover .card-action-overlay {
@@ -671,7 +675,8 @@ a:hover {
 	margin-top: 130px;
 }
 .cust_daily_chart {
-	padding-top: 80px;
+	position: relative;
+	border-top: 1px solid #ccc;
 }
 @media (max-width: 700px) {
 	.cust_daily_chart {
@@ -877,12 +882,45 @@ a#action-filter {
 a#action-filter:hover {
 	color: #666;
 }
+/* for filters in my activities page */
+#activity-filter .form-check {
+	padding-bottom: 5px;
+}
+
+#activity-clear-filter {
+	display: none;
+}
+
+a#activity-action-filter {
+	font-size: 24px;
+	line-height: 24px;
+	color: #999;
+}
+
+a#activity-action-filter:hover {
+	color: #666;
+}
+
+
 .monthly-action {
 	cursor: pointer;
 }
 .monthly-action:hover + span {
-	border: 1px #3208ee solid;
+	border: 1px #333 solid;
 }
 #week_y {
 	display: none;
+}
+#print-chart
+{
+	position: relative;
+	height: 50px;
+	max-height: 350px;
+    width: 101.69%;
+}
+.positon-chart
+{
+	position: absolute;
+	height:10px;
+	border-radius:3px;
 }

@@ -56,11 +56,12 @@ Validation.prototype.isValidateEmail = function (e) {
     if (e.type == 'email') {
         var emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!emailRegEx.test(e.value)) {
-            document.getElementById(e.id + "-error").innerHTML = "Email format is not correct.";
+            alert("dfhdhv");
+            document.getElementById(e.id + "-error").innerHTML = "Email format is not correctaaa.";
             this.errorCount++;
             e.focus();
             this.isValid = false;
-            return this.isValid;
+            return false;
         } else {
             document.getElementById(e.id + "-error").innerHTML = " ";
             this.isValid = true;
@@ -90,10 +91,13 @@ if (loginForm) {
 }
 
 var forgotPsw = document.getElementById('forgotPassword');
+console.log("forgotPsw", forgotPsw);
 forgotPsw.onsubmit = function (e) {
+   alert("safddsfs");
     user_email = document.getElementById('Uname').value;
     var validateForm = new Validation(e.currentTarget);
     var finalValue = validateForm.correctCheck();
+    console.log(finalValue);
     if (finalValue.isValid == true) {
         var formPsw = document.getElementById('reEnterPsw');
         $('#enter-otp').show();
@@ -102,7 +106,6 @@ forgotPsw.onsubmit = function (e) {
         var valid = validateOtp();
         if (valid) {
             formPsw.onsubmit = function (e) {
-
                 document.getElementById('user-email').value = user_email;
 
                 var psw1 = document.getElementById('psw1').value;

@@ -6,7 +6,78 @@
     <div class="main-container container">
         <div class="main-container-inner mt-3">
             <div class="au-card au-card--no-shadow au-card--no-pad mb-2">
+            <div class="row pt-4">
+                <div class="col-12 text-right">
+                    <ul class="nav float-right">
+                        <li class="nav-item " id="activity-clear-filter">
+                            <a class="nav-link pt-0" href="#"><i class="far fa-times-circle"></i> Clear filter</a>
+                        </li>                       
+                        <!-- <li class="nav-item">
+                            <a class="nav-link pt-0" id="activity-action-filter" href="#navBarActivityFilter" data-toggle="collapse" aria-controls="navBarActivityFilter" aria-expanded="false" aria-label="Toggle Filter">
+                                <i class="fas fa-sliders-h"></i>
+                            </a>
+                        </li> -->
+                    </ul>                    
+                </div>
+                <div class="col-12">
+                        <div class="collapse" id="navBarActivityFilter">
+                            <div class="bg-light- p-4">
+                                <form action="#" id="activity-filter">
+                                    <div class="row">
+                                        <div class="col-4" id="activity-sorting">
+                                            <h5 class="pb-2">Sort by</h5>
+                                            <div class="form-check">
+                                                <input class="form-check-input" data-type="name" type="radio" name="exampleRadios" id="activity-date-radio" value="date" checked>
+                                                <label class="form-check-label" for="date-radio">
+                                                    Date
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" data-type="name" type="radio" name="exampleRadios" id="activity-task-radio" value="task">
+                                                <label class="form-check-label" for="task-radio">
+                                                    Task
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" data-type="project" type="radio" name="exampleRadios" id="activity-project-radio" value="project">
+                                                <label class="form-check-label" for="project-radio">
+                                                    Project
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" data-type="duration" type="radio" name="exampleRadios" id="activity-duration-radio" value="duration">
+                                                <label class="form-check-label" for="duration-radio">
+                                                    Duration
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-4" id="activity-filtering">
+                                            <h5 class="pb-2">Filter by</h5>
+                                            <?php
+                                                for($p=0; $p<sizeof($project_list); $p++) { ?>                                        
+                                                <div class="form-check custom-control custom-checkbox">
+                                                    <input class="form-check-input " type="checkbox" id="activity-check-<?=$p?>">
+                                                        <input type="hidden" class="custom-control-input" value=<?=$project_list[$p]['id'] ?>>
+                                                        <label class="form-check-label" for="activity-check-<?=$p?>">
+                                                        <?=$project_list[$p]['name'] ?>
+                                                    </label>
+                                                </div>
+                                            <?php } ?>
+                                        </div>
+                                        <div class="col-4 text-right">
+                                            <button type="submit" class="btn btn-primary">Apply </button>
+                                        </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <p id="alarmmsg" class="text-center"></p>
+                </div>
+                </div>
                 <div class="au-card-title pt-5">
+
                     <ul class="nav nav-tabs" id="chart-navigation" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active text-center" id="daily-view-tab" data-toggle="tab" href="#daily-view" role="tab" aria-controls="daily-view" aria-selected="true">Daily</a>
@@ -35,18 +106,18 @@
                                         <a href="#" class="arrow-style" id="next-date"><i class="fas fa-angle-right"></i></a>
                                     </div>
                                     <div class="col-12">
-                                        <p class="task-detail" id="task-detail"></p>
+                                        <div class="task-detail" id="task-detail"></div>
                                     </div>
                                 </div>
                             </div>
                             <p id="daily-error"class="text-center"></p>
                             <div id="daily">
-                                <div><p id="print-chart"></p></div>
-                                <p class="cust_daily_chart" id="cust_daily_chart"><hr>
+                                <div id="print-chart"></div>
+                                <p class="cust_daily_chart" id="cust_daily_chart">
                                 <span id="chart-labels"><span class="">8AM</span>
                                     <span class="cust_chart">9AM</span>
                                     <span class="cust_chart">10AM</span>
-                                    <span class="cust_chart">11AM</span>            
+                                    <span class="cust_chart">11AM</span>
                                     <span class="cust_chart">12AM</span>
                                     <span class="cust_chart">1PM</span>
                                     <span class="cust_chart">2PM</span>

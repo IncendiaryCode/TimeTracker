@@ -3,8 +3,7 @@ function drawProjectChart() {
 	$.ajax({
 		type: 'POST',
 		url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
-		type: 'POST',
-		data: { type: 'get_user' },
+		data : {"type":"get_project_graph"},
 		success: function(res) {
 			if (JSON.parse(res)['status'] == false) {
 				$('#chart_div').hide();
@@ -18,7 +17,6 @@ function drawProjectChart() {
 					}
 				}
 				result = result['result'];
-
 				var x = 10;
 				var y = 10;
 				var data = google.visualization.arrayToDataTable([ [ 'ID', 'Time spent in hrs', 'Percentage of time spent', 'radius', 'Time spent' ], [ '', 0, 0, 0, 0 ] ]);

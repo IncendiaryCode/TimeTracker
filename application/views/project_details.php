@@ -13,8 +13,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="text-center"><span class="project-details"><?= $data['users'] ?></span>
                             <p class="display-5">Total users</p><input type="hidden" id="project_id" value="<?= $data['project_id'] ?>">
                         </div>
-                        <div class="text-center "><i class="fas fa-plus icon-plus text-white" data-target="#add-user" data-toggle='modal'></i>
-                        </div>
+                        <!-- <div class="text-center "><i class="fas fa-plus icon-plus text-white" data-target="#add-user" data-toggle='modal'></i>
+                        </div> -->
                     </div>
                 </div>
             </div>
