@@ -45,7 +45,8 @@ class ModuleCDController {
         }
         else {
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Modules")
-            fetchRequest.predicate = NSPredicate(format: "module_id = %d", modId)
+            fetchRequest.predicate = NSPredicate(format: "module_id = %d and project_id = %d"
+                , modId, projId)
             let res = try! nsManagedContext.fetch(fetchRequest)
             if res.count > 0 {
                 let nsMObject = res[0] as! NSManagedObject

@@ -146,7 +146,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let trigger = UNCalendarNotificationTrigger(dateMatching: fireComponents, repeats: true)
         
         // Create request
-        let uniqueID = UUID().uuidString // Keep a record of this if necessary
+        let uniqueID = "time:\(hour)\(minute)" // Keep a record of this to avoid duplicate requests.
         let request = UNNotificationRequest(identifier: uniqueID, content: content, trigger: trigger)
         center.add(request) // Add the notification request
     }
