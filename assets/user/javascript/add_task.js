@@ -5,6 +5,23 @@ var addTime = {
 	addBtn: null,
 	array_of_timings: [],
 	layout: function(date, start_time, end_time, descri) {
+
+		if(start_time == undefined)
+		{
+			start_time = moment().format('HH:mm');
+		}
+		if(end_time == undefined)
+		{
+			end_time =  "";
+		}
+		if(descri == undefined)
+		{
+			descri =  "";
+		}
+		if(date == undefined)
+		{
+			date =  moment().format('YYYY-MM-DD');;
+		}
 		var section = $('<div class="time-section pt-3 pb-5" />');
 		var row = $('<div class="row" />');
 		var id = this.id;
@@ -13,6 +30,10 @@ var addTime = {
 			localStorage.setItem('first_entry', 0);
 		} else {
 			id = this.id;
+		}
+		if(edit == 0  && document.getElementById('date-picker-0') == null)
+		{
+			id = 0;
 		}
 		var array_of_timings = this.array_of_timings;
 		var colDate = $(
@@ -65,10 +86,10 @@ var addTime = {
 
 		section.append(row);
 		if (edit == 0) {
-			document.getElementById('date-picker-0').value = moment().format('YYYY-MM-DD');
-			document.getElementById('start-time-0').value = moment().format('HH:mm');
-			document.getElementById('end-time-0').value = '';
-			this.ele.find('.primary-wrap').prepend(section);
+				this.ele.find('.primary-wrap').prepend(section);
+				document.getElementById('date-picker-0').value = moment().format('YYYY-MM-DD');
+				
+				document.getElementById('start-time-0').value = moment().format('HH:mm');
 		} else {
 			if (document.getElementById('date-picker-0') == null) {
 				this.ele.find('.primary-wrap').append(section);
@@ -106,7 +127,7 @@ var addTime = {
 
 			var __start_seconds = parseInt(start_time.slice(0, 2)) * 60 + parseInt(start_time.slice(3, 5));
 			var __end_seconds = parseInt(end_time.slice(0, 2)) * 60 + parseInt(end_time.slice(3, 5));
-			if (endtimeValidation && date != '') {
+			if (endtimeValidation) {
 				if (start_time == '' || start_time == ' ' || end_time == '' || end_time == ' ') {
 					document.getElementById('taskError').innerHTML = 'Please enter valid time';
 					return false;
@@ -121,11 +142,6 @@ var addTime = {
 					return false;
 				}
 			} else {
-				if (date == '' && start_time == '' && end_time == '') {
-					//document.getElementById('taskError').innerHTML = 'Please enter valid details...';
-
-					return true;
-				}
 				if (start_time == '' || start_time == ' ') {
 					document.getElementById('taskError').innerHTML = 'Please enter start time';
 					return false;
@@ -234,6 +250,11 @@ var addTime = {
 		var _this = this;
 		this.addBtn.on('click', function(e) {
 			e.preventDefault();
+			if(document.getElementById('date-picker-0') == null && edit == 0)
+			{
+				_this.layout();
+				document.getElementById('taskError').innerHTML = "";
+			}
 			if (_this.validate(true)) {
 				// validate the timing details
 				_this.id++;
@@ -330,6 +351,16 @@ $(document).ready(function() {
 	if (document.getElementById('task-add-time')) {
 		addTime.init('#task-add-time');
 	}
+	$('#remove-time-0').click(function()
+	{
+		$('#alert_for_delete').modal('show');
+			$('#alert_for_delete_true').click(function()
+			{
+				$('#alert_for_delete').modal('hide');
+				document.getElementById('taskError').innerHTML = "";
+				$('.remove-first-timeline').remove();
+		});
+	})
 	var addTask = document.getElementById('addTask');
 	if (addTask) {
 		var m = new Date();
@@ -437,7 +468,6 @@ $(document).ready(function() {
 						}
 						if (input_elements[k].value != '' && input_elements[k + 2].value != '') {
 							var serverEndDate = moment(input_elements[k].value + ' ' + input_elements[k + 2].value).tz('utc').format('Y-MM-DD HH:mm:ss');
-							console.log(serverEndDate, input_elements[k+2].value);
 							if (serverEndDate == 'Invalid date') {
 								document.getElementById('taskError').innerHTML = 'Please enter valid time';
 								return false;

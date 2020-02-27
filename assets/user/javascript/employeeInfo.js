@@ -82,8 +82,9 @@ function drawCards(data) {
 						$('.alert-box').show();
 					}
 				}
-				if (data[x][y].start_time == null) {
+				if (data[x][y].start_time == "") {
 					cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>Not yet started.</div>');
+					$('.vertical-line').css("color",data[x][y].project_color);
 				} else {
 					var date = data[x][y].start_time.slice(0, 10);
 					var start_time = data[x][y].start_time;
@@ -91,6 +92,7 @@ function drawCards(data) {
 					var serverDate1 = moment(start_time_utc).format('YYYY-MM-DD hh:mm a');
 					if (serverDate1 != 'Invalid date') {
 						cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + serverDate1 + '</div>');
+						$('.vertical-line').css("color",data[x][y].project_color);
 					} else {
 						cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
 						$('.vertical-line').css("color",data[x][y].project_color);
@@ -386,8 +388,18 @@ $(document).ready(function() {
 					filterBy.push(user_filtering[i + 1].value);
 				}
 			}
-			$('#clear-filter').show();
-			loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) });
+			if(filterBy.length != 0)
+			{
+				$('#clear-filter').show();
+			}
+
+			if(document.getElementById('today-input').checked == true)
+			{
+				loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) , filter:"today" });
+			}
+			else{
+				loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) });
+			}
 			$('#navbarToggleExternalContent').collapse('toggle');
 			return false;
 		};
@@ -395,16 +407,44 @@ $(document).ready(function() {
 	$('#today-filter').click(function(e)
 	{
 		e.preventDefault();
+		var user_sorting = document.getElementById('sorting').getElementsByTagName('input');
+			var user_filtering = document.getElementById('filtering').getElementsByTagName('input');
+			var sortBy = 'date';
+			var filterBy = [];
+			for (var i = 0; i < user_sorting.length; i++) {
+				if (user_sorting[i].checked == true) {
+					sortBy = user_sorting[i].value;
+				}
+			}
+			for (var i = 0; i < user_filtering.length; i++) {
+				if (user_filtering[i].checked == true) {
+					filterBy.push(user_filtering[i + 1].value);
+				}
+			}
 		if(document.getElementById('today-input').checked == false)
-		{
-			document.getElementById('today-input').checked = true;
-			loadTaskActivities({ filter:"today" });
-		}
-		else{
-			document.getElementById('today-input').checked = false;
-			loadTaskActivities({ type: 'date' });
-		}
-	});
+			{
+				if(sortBy != "date" && filterBy.length != 0)
+				{
+					loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) , filter:"today" });
+				}
+				else{
+					loadTaskActivities({ type: 'date', filter:"today" });
+				}
+				document.getElementById('today-input').checked = true;
+			}
+			else{
+				if(sortBy != "date" && filterBy.length != 0)
+				{
+					loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) });
+					$('#clear-filter').show();
+				}
+				else{
+					loadTaskActivities({ type: 'date' });
+				}
+				
+				document.getElementById('today-input').checked = false;
+			}
+		});
 	$('#clear-filter').click(function(e) {
 		e.preventDefault();
 		for (var i = 0; i < document.getElementById('navbarToggleExternalContent').getElementsByTagName('input').length; i++) {

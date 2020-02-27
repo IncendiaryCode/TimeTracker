@@ -924,3 +924,7 @@ a#activity-action-filter:hover {
 	height:10px;
 	border-radius:3px;
 }
+.space_right
+{
+	padding-right: 23px;
+}

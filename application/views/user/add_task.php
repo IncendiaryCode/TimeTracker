@@ -211,7 +211,7 @@ if ($this->input->get('t_id')) { ?>
                                     <!-- Add time: New Case -->
                                     <div id="task-add-time">
                                         <div class="primary-wrap">
-                                            <div class="row">
+                                            <div class="row remove-first-timeline">
                                                 <div class="col-4 col-md-5">
                                                     <div class="input-group date mb-3">
                                                         <input type="text" class="date-utc form-control datepicker pl-3" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-0">
@@ -237,7 +237,14 @@ if ($this->input->get('t_id')) { ?>
                                                 </div>
 
                                                 <div class="col-2 col-md-1 text-center">
-                                                    <a href="javascript:void(0);"  class="ml-0" id="add-new-time" title="Add">
+                                                    <a href="javascript:void(0);"  class="ml-0" id="remove-time-0" title="Add">
+                                                        <i class="fas fa-minus pt-2 icon-plus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 text-right mt-5 space_right">
+                                                    <a href="javascript:void(0);" id="add-new-time" title="Add">
                                                         <i class="fas fa-plus pt-2 icon-plus"></i>
                                                     </a>
                                                 </div>

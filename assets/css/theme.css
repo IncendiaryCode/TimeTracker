@@ -5620,7 +5620,7 @@ section {
 }
 
 .switch-primary > .switch-input:checked ~ .switch-handle {
-    border-color: #2858be;
+    /* border-color: #2858be; */
 }
 
 .switch-primary-outline > .switch-input:checked ~ .switch-label {
