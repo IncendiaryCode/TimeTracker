@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		031E866023FC172E00BA258B /* MsgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031E865F23FC172E00BA258B /* MsgView.swift */; };
 		0330C4BB23DEA98F0081AA1C /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0330C4BA23DEA98F0081AA1C /* AccountViewController.swift */; };
 		033DDF8F237060F50066B7E9 /* ProjectsCDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033DDF8E237060F50066B7E9 /* ProjectsCDController.swift */; };
 		033DDF91237065F60066B7E9 /* TaskTimeCDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033DDF90237065F60066B7E9 /* TaskTimeCDController.swift */; };
@@ -54,6 +55,7 @@
 		036B9147239A7C3B00E056A9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036B9146239A7C3B00E056A9 /* SceneDelegate.swift */; };
 		0379438B239E795000F87291 /* ModuleCDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0379438A239E795000F87291 /* ModuleCDController.swift */; };
 		03851EB02372AC5600C484C7 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03851EAF2372AC5600C484C7 /* TabBarController.swift */; };
+		03A8925E2406911D007AC9AC /* TTView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A8925D2406911D007AC9AC /* TTView.swift */; };
 		03C30AF2233DCA260078BD85 /* RequestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C30AF1233DCA260078BD85 /* RequestController.swift */; };
 		03C693882319347E005F385B /* ForgetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C693872319347E005F385B /* ForgetPasswordVC.swift */; };
 		03CB940B23703271004E1E57 /* MyActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CB940A23703271004E1E57 /* MyActivityViewController.swift */; };
@@ -82,6 +84,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		031E865F23FC172E00BA258B /* MsgView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MsgView.swift; sourceTree = "<group>"; };
 		0330C4BA23DEA98F0081AA1C /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		033DDF8E237060F50066B7E9 /* ProjectsCDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsCDController.swift; sourceTree = "<group>"; };
 		033DDF90237065F60066B7E9 /* TaskTimeCDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTimeCDController.swift; sourceTree = "<group>"; };
@@ -136,6 +139,7 @@
 		036B9146239A7C3B00E056A9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		0379438A239E795000F87291 /* ModuleCDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleCDController.swift; sourceTree = "<group>"; };
 		03851EAF2372AC5600C484C7 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		03A8925D2406911D007AC9AC /* TTView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TTView.swift; sourceTree = "<group>"; };
 		03C30AF1233DCA260078BD85 /* RequestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestController.swift; sourceTree = "<group>"; };
 		03C693872319347E005F385B /* ForgetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgetPasswordVC.swift; sourceTree = "<group>"; };
 		03CB940A23703271004E1E57 /* MyActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyActivityViewController.swift; sourceTree = "<group>"; };
@@ -175,6 +179,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		031E865E23FC170E00BA258B /* Message view */ = {
+			isa = PBXGroup;
+			children = (
+				031E865F23FC172E00BA258B /* MsgView.swift */,
+			);
+			path = "Message view";
+			sourceTree = "<group>";
+		};
 		033F535C23CD9BEF0079F8A4 /* About App */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,13 +220,11 @@
 		0340F04A2317B83D001FFB29 /* Attendance Manager */ = {
 			isa = PBXGroup;
 			children = (
-				03DA9A4823B4C333004F03C0 /* Prev Day Details */,
-				0360E3EE23B1E7DC0014D027 /* In App Notification */,
-				03495D0D23A788E80076AC02 /* User Guide */,
 				0340F04B2317B83D001FFB29 /* AppDelegate.swift */,
 				036B9146239A7C3B00E056A9 /* SceneDelegate.swift */,
 				0340F04F2317B83D001FFB29 /* Main.storyboard */,
 				0340F0522317B848001FFB29 /* Assets.xcassets */,
+				03A8925B240690A7007AC9AC /* Custom views */,
 				03FA47052366CFB10032EF82 /* Extensions */,
 				03FA47022366CED30032EF82 /* Global Values and Functions */,
 				03EAD8E0231F9A910008023C /* Login Controllers */,
@@ -347,6 +357,26 @@
 				03851EAF2372AC5600C484C7 /* TabBarController.swift */,
 			);
 			path = "Tab Bar Controller";
+			sourceTree = "<group>";
+		};
+		03A8925B240690A7007AC9AC /* Custom views */ = {
+			isa = PBXGroup;
+			children = (
+				03A8925C24069103007AC9AC /* TT View */,
+				031E865E23FC170E00BA258B /* Message view */,
+				03DA9A4823B4C333004F03C0 /* Prev Day Details */,
+				0360E3EE23B1E7DC0014D027 /* In App Notification */,
+				03495D0D23A788E80076AC02 /* User Guide */,
+			);
+			path = "Custom views";
+			sourceTree = "<group>";
+		};
+		03A8925C24069103007AC9AC /* TT View */ = {
+			isa = PBXGroup;
+			children = (
+				03A8925D2406911D007AC9AC /* TTView.swift */,
+			);
+			path = "TT View";
 			sourceTree = "<group>";
 		};
 		03C30AF0233DC9E80078BD85 /* Web Module */ = {
@@ -651,9 +681,11 @@
 				034708BC235F0F9A00867132 /* CalendarDayCell.swift in Sources */,
 				033DDF91237065F60066B7E9 /* TaskTimeCDController.swift in Sources */,
 				034708C1235F0F9A00867132 /* CalendarView.swift in Sources */,
+				031E866023FC172E00BA258B /* MsgView.swift in Sources */,
 				035BBC9123B0819F00891053 /* ResetPWVC.swift in Sources */,
 				034708C0235F0F9A00867132 /* CalendarView+DataSource.swift in Sources */,
 				03FA47042366CF150032EF82 /* GlobalValuesFunctions.swift in Sources */,
+				03A8925E2406911D007AC9AC /* TTView.swift in Sources */,
 				0340F04E2317B83D001FFB29 /* LoginViewController.swift in Sources */,
 				034708BE235F0F9A00867132 /* CalendarView+Delegate.swift in Sources */,
 				03851EB02372AC5600C484C7 /* TabBarController.swift in Sources */,
@@ -849,14 +881,14 @@
 				CODE_SIGN_ENTITLEMENTS = "Attendance Manager/Attendance Manager.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = JWZBAK4D4R;
+				DEVELOPMENT_TEAM = 8PFVF7GTA9;
 				INFOPLIST_FILE = "Attendance Manager/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.incendiary.timelogger;
+				PRODUCT_BUNDLE_IDENTIFIER = com.incendiary.smarttime;
 				PRODUCT_NAME = "Attendance Manager";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -872,14 +904,14 @@
 				CODE_SIGN_ENTITLEMENTS = "Attendance Manager/Attendance Manager.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = JWZBAK4D4R;
+				DEVELOPMENT_TEAM = 8PFVF7GTA9;
 				INFOPLIST_FILE = "Attendance Manager/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.incendiary.timelogger;
+				PRODUCT_BUNDLE_IDENTIFIER = com.incendiary.smarttime;
 				PRODUCT_NAME = "Attendance Manager";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
