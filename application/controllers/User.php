@@ -47,6 +47,7 @@ class User extends CI_Controller
             redirect('user');
         }
     }
+    
     public function dark(){
         $GLOBALS['dark_mode'] = 0;
         $this->form_validation->set_rules('dark-mode', 'Check box', 'required');
@@ -64,29 +65,32 @@ class User extends CI_Controller
             $this->load->view('user/footer');*/
             redirect('user/load_my_profile');
     }
+
     public function load_task_data() //Load task data to user dashboard
     {
         if ($this->input->post('type',TRUE)) {
             //load task data into user dashboard page
+
             $sort_type = $this->input->post('type', TRUE);
             $date = '';
+            $today_filter = '';
+            $filter_type = '';
+            $filter = '';
             if($this->input->post('project_filter')){
                 $filter_type = 'proj_filter';
                 $filter = json_decode($this->input->post('project_filter'));
+            }if($this->input->post('filter')){
+                $today_filter = 'today';
             }
-            else{
-                $filter_type = '';
-                $filter = '';
-            }
-            $task_details['data'] = $this->user_model->get_task_details($sort_type,$date,$filter_type,$filter); //get task data
+            $task_details['data'] = $this->user_model->get_task_details($sort_type,$date,$filter_type,$filter,$today_filter); //get task data
             if($task_details['data'] == NULL){ //if no data, send failure message
                 $task_details['status'] = FALSE;
                 $task_details['data'] = NULL;
                 $task_details['msg'] = "No activity in this date.";
             }else{ //if data is present, send the data
-                $task_details['status'] = TRUE;
-                echo json_encode($task_details);
+                $task_details['status'] = TRUE; 
             }
+            echo json_encode($task_details);
         }else if(!empty($this->input->post('chart_type'))){
             //load task data into employee activities page
             $date = $this->input->post('date');
@@ -94,28 +98,36 @@ class User extends CI_Controller
             $task_details['data'] = $this->user_model->get_task_details($chart_type,$date); //get task data
             if($task_details['data'] == NULL){ //if no data, send failure message
                     $task_details['status'] = FALSE;
-                    $task_details['data'] = NULL;
+                    $task_details['data'] = array();
                     $task_details['msg'] = "No activity in this date.";
             }else{ //if data is present, send the data
                 $task_details['status'] = TRUE;
             }
             echo json_encode($task_details);
         }
-        else
-        {
-            $task_details['status'] = FALSE;
-            $task_details['data'] = NULL;
-            $task_details['msg'] = "Invalid input format.";
+        /*else if($this->input->post('filter') == 'today'){
+            $filter_type = 'today';
+            $filter = '';
+            $date = '';
+            $sort_type = '';
+            $task_details['data'] = $this->user_model->get_task_details($sort_type,$date,$filter_type,$filter); //get task data
+            if($task_details['data'] == NULL){ //if no data, send failure message
+                $task_details['status'] = FALSE;
+                $task_details['data'] = array();
+                $task_details['msg'] = "No activity in this date.";
+            }else{ //if data is present, send the data
+                $task_details['status'] = TRUE;
+                $task_details['data'] = $task_details['data'];
+            }
             echo json_encode($task_details);
-        }
-        
+        }*/
     }
 
     //stop the old task by updating end time(in user dashboard page)
     public function get_running_task()
     {
         $result['data'] = $this->user_model->running_task_data();
-        if($result['data'] == NULL){
+        if($result['data']['login_data'] == NULL && $result['data']['task_data'] == NULL){
             $result['status'] = FALSE;
             $result['msg'] = 'No running tasks found.';
         }else{

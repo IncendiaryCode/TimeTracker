@@ -127,26 +127,27 @@ class User_model extends CI_Model {
      * 
      * returns $data
      */
-    public function get_task_details($sort_type, $date = '', $filter_type = '', $filter_value = '') {
+    public function get_task_details($sort_type, $date = '', $filter_type = '', $filter_value = '', $today_filter = '') {
         $userid = $this->session->userdata('userid');
+        
         $this->db->select('p.name,IFNULL(d.start_time,t.created_on) AS started,d.start_time,p.image_name,p.color_code,t.task_name,t.id AS task_id');
         $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task", FALSE); //get running tasks of the user
-        $this->db->select('IF(t.complete_task=1,1,0) AS completed', FALSE); //get completed tasks of the user
+        //$this->db->select('IF(t.complete_task=1,1,0) AS completed', FALSE); //get completed tasks of the user
         $this->db->from('task AS t');
-        $this->db->join('time_details AS d', 'd.task_id = t.id','LEFT');
+        $this->db->join('task_assignee AS ta', 'ta.task_id = t.id');
+        $this->db->join('time_details AS d', 'd.task_id = t.id AND d.user_id =ta.user_id','LEFT');
         $this->db->join('project AS p', 'p.id = t.project_id');
-        $this->db->join('project_module AS m', 'm.id = t.module_id');
-        $this->db->join('task_assignee AS ta', 'ta.task_id = t.id','LEFT');
-        if($this->input->post('date_filter')){
+        
+        if($today_filter == 'today'){
             $this->db->where('task_date',date('Y-m-d'));
         }
         if($filter_type == 'proj_filter'){
             if(!empty($filter_value))
-            $this->db->where_in('t.project_id',$filter_value);
+                $this->db->where_in('t.project_id',$filter_value);
         }
-        if ($date == '') {
+        if($date == ''){
             $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
-            $this->db->where('ta.user_id', $userid);
+            $this->db->where('ta.user_id',$userid);
             $this->db->group_by('t.id');
         } else {
             if ($sort_type == 'daily_chart') {
@@ -165,7 +166,7 @@ class User_model extends CI_Model {
                 $this->db->where(array('d.user_id' => $userid));
                 $this->db->where('d.end_time IS NOT NULL');
                 $this->db->where('d.task_date BETWEEN "' .$start_date. '" and "' .$end_date. '"');
-                $this->db->group_by('d.task_id');
+                $this->db->group_by('d.task_date,d.task_id');
                 $this->db->order_by('started','desc');
             } else {
                 //for monthly chart
@@ -178,7 +179,7 @@ class User_model extends CI_Model {
                 $this->db->where(array('d.user_id' => $userid));
                 $this->db->where('d.end_time IS NOT NULL');
                 $this->db->where('d.task_date BETWEEN "' . $first . '" and "' . $last . '"');
-                $this->db->group_by('d.task_date');
+                $this->db->group_by('d.task_date,d.task_id');
                 $this->db->order_by('started','desc');
             }
         }
@@ -195,7 +196,7 @@ class User_model extends CI_Model {
         if ($query->num_rows() > 0) {
             $dataa = $query->result_array();
             foreach ($dataa as $d) {
-                $data[] = array('image_name' => ($d['image_name'] != NULL) ? (base_url() . UPLOAD_PATH . $d['image_name']) : NULL, 'project' => $d['name'], 'task_name' => $d['task_name'], 'running_task' => $d['running_task'], 'completed' => $d['completed'], 'start_time' => ($d['start_time'] != NULL) ? $d['start_time']: '', 't_minutes' => ($d['t_minutes'] !=NULL) ? $d['t_minutes']:'0', 'id' => $d['task_id']);
+                $data[] = array('image_name' => ($d['image_name'] != NULL) ? (base_url() . UPLOAD_PATH . $d['image_name']) : NULL, 'project' => $d['name'], 'project_color'=>$d['color_code'], 'task_name' => $d['task_name'], 'running_task' => $d['running_task'], 'start_time' => ($d['start_time'] != NULL) ? $d['start_time']: '', 't_minutes' => ($d['t_minutes'] !=NULL) ? $d['t_minutes']:'0', 'id' => $d['task_id']);
             }
         } else {
             $data = NULL;
@@ -294,7 +295,7 @@ class User_model extends CI_Model {
             $this->db->join('project AS p', 'p.id = t.project_id');
             $this->db->join('project_module AS m', 'm.id = t.module_id');
             $this->db->where(array('t.id' => $task_id, 'ta.user_id' => $userid));
-            $this->db->order_by('d.task_date','desc');
+            $this->db->order_by('d.task_date,d.start_time','desc');
             $query = $this->db->get();
             $data = $query->result_array();
             foreach($data as $d){
@@ -369,6 +370,7 @@ class User_model extends CI_Model {
         $this->db->from('login_details');
         $this->db->where('task_date !=',date('Y-m-d'));
         $this->db->where('user_id',$userid);
+        $this->db->where('end_time IS NULL');
         $login_check = $this->db->get();
         if($login_check->num_rows() > 0){
             $data['login_data'] = $login_check->row_array();
