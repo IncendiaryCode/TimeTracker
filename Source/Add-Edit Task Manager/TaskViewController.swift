@@ -121,28 +121,7 @@ UIGestureRecognizerDelegate {
         // Height for pop up table view and date picker.
         cgFHeightForPopup = UIScreen.main.bounds.height * 0.5
         
-        tblviewTimings.backgroundColor = g_colorMode.defaultColor()
-        tblForProjAndMod.backgroundColor = g_colorMode.defaultColor()
-        dateTimePicker.backgroundColor = g_colorMode.defaultColor()
-        txtTaskName.useUnderline(uiColor: UIColor.lightGray.withAlphaComponent(0.3))
-        txtVTaskDescr.useUnderline(uiColor: UIColor.lightGray.withAlphaComponent(0.3))
-        txtVTaskDescr.layer.borderColor = UIColor.clear.cgColor
-        lblSelectProject.useUnderline(uiColor: UIColor.lightGray.withAlphaComponent(0.3))
-        lblSelectModule.useUnderline(uiColor: UIColor.lightGray.withAlphaComponent(0.3))
-        tblForProjAndMod.layer.borderColor = UIColor.lightGray.cgColor
-        tblviewTimings.tableHeaderView?.backgroundColor = .clear
-        btnDatePickDone.setTitleColor(.white, for: .normal)
-        let cgPStart = CGPoint(x: 0, y: 0.25)
-        let cgPEnd = CGPoint(x: 1, y: 0.75)
-        btnDatePickDone.addGradient(cgPStart: cgPStart, cgPEnd: cgPEnd, cgFRadius: 15)
-        txtVTaskDescr.textColor = g_colorMode.midText()
-        txtTaskName.textColor = g_colorMode.textColor()
-        viewMain.backgroundColor = g_colorMode.defaultColor()
-        scrollView.layer.masksToBounds = true
-        scrollView.layer.cornerRadius = 35
-        scrollView.backgroundColor = g_colorMode.defaultColor()
-        scrollView.layer.borderColor = g_colorMode.lineColor().cgColor
-        scrollView.layer.borderWidth = 0.3
+        updateView()
         
         arrTaskTimeDetails = Array<TaskTimeDetails>()
         arrDeletaedTimeId = Array<String>()
@@ -228,6 +207,32 @@ UIGestureRecognizerDelegate {
             // Set empty cells to zero.
             nEmptyRow = 0
         }
+    }
+    
+    func updateView() {
+        tblviewTimings.backgroundColor = g_colorMode.defaultColor()
+        tblForProjAndMod.backgroundColor = g_colorMode.defaultColor()
+        dateTimePicker.backgroundColor = g_colorMode.defaultColor()
+        txtTaskName.useUnderline(uiColor: UIColor.lightGray.withAlphaComponent(0.3))
+        txtVTaskDescr.useUnderline(uiColor: UIColor.lightGray.withAlphaComponent(0.3))
+        txtVTaskDescr.layer.borderColor = UIColor.clear.cgColor
+        lblSelectProject.useUnderline(uiColor: UIColor.lightGray.withAlphaComponent(0.3))
+        lblSelectModule.useUnderline(uiColor: UIColor.lightGray.withAlphaComponent(0.3))
+        tblForProjAndMod.layer.borderColor = UIColor.lightGray.cgColor
+        tblviewTimings.tableHeaderView?.backgroundColor = .clear
+        btnDatePickDone.setTitleColor(.white, for: .normal)
+        let cgPStart = CGPoint(x: 0, y: 0.25)
+        let cgPEnd = CGPoint(x: 1, y: 0.75)
+        btnDatePickDone.addGradient(cgPStart: cgPStart, cgPEnd: cgPEnd, cgFRadius: 15)
+        txtVTaskDescr.textColor = g_colorMode.midText()
+        txtTaskName.textColor = g_colorMode.textColor()
+        viewMain.backgroundColor = g_colorMode.defaultColor()
+        scrollView.layer.masksToBounds = true
+        scrollView.layer.cornerRadius = 35
+        scrollView.backgroundColor = g_colorMode.defaultColor()
+        scrollView.layer.borderColor = g_colorMode.lineColor().cgColor
+        scrollView.layer.borderWidth = 0.3
+        tblviewTimings.backgroundColor = g_colorMode.defaultColor()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -1796,12 +1801,6 @@ UIGestureRecognizerDelegate {
         }
         
         if #available(iOS 12.0, *) {
-            if self.traitCollection.userInterfaceStyle == .light {
-                UserDefaults.standard.setValue(1, forKey: "colorMode")
-            }
-            else {
-                UserDefaults.standard.setValue(2, forKey: "colorMode")
-            }
             // Remove old gradients.
             self.view.layer.sublayers?.removeFirst()
             self.btnStart.layer.sublayers?.removeFirst()
@@ -1818,8 +1817,19 @@ UIGestureRecognizerDelegate {
         
         view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.3))
         btnStart.addGradient(cgFRadius: 22)
-        tblviewTimings.backgroundColor = g_colorMode.defaultColor()
         view.layer.needsLayout()
+        updateView()
+        tblviewTimings.reloadData()
+        if nil != taskId {
+            lblSelectProject.textColor = g_colorMode.textColor()
+            lblSelectModule.textColor = g_colorMode.textColor()
+        }
+        if txtVTaskDescr.text.isEmpty {
+            txtVTaskDescr.textColor = g_colorMode.midText()
+        }
+        else {
+            txtVTaskDescr.textColor = g_colorMode.textColor()
+        }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {

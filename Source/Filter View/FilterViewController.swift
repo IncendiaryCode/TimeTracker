@@ -333,12 +333,6 @@ class FilterViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
         if #available(iOS 12.0, *) {
-            if self.traitCollection.userInterfaceStyle == .light {
-                UserDefaults.standard.setValue(1, forKey: "colorMode")
-            }
-            else {
-                UserDefaults.standard.setValue(2, forKey: "colorMode")
-            }
             setColorMode()
         }
     }

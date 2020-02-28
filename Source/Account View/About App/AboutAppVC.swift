@@ -52,4 +52,28 @@ class AboutAppVC: UIViewController {
     @IBAction func btnBackPressed(_ sender: Any) {
         self.navigationController?.popToRootViewController(animated: true)
     }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        guard UIApplication.shared.applicationState == .inactive else {
+            return
+        }
+        
+        if #available(iOS 12.0, *) {
+            // Remove old gradients.
+            self.view.layer.sublayers?.removeFirst()
+            
+            setColorMode()
+            updateGradient()
+        }
+    }
+    
+    func updateGradient() {
+        self.view.addGradient()
+        view.layer.needsLayout()
+        if let tabController = self.navigationController?.viewControllers[0] as? TabBarController {
+            tabController.updateAllViewCtrlrs()
+        }
+    }
 }

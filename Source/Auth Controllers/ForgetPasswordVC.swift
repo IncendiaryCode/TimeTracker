@@ -226,12 +226,6 @@ class ForgetPasswordVC: UIViewController {
         }
         
         if #available(iOS 12.0, *) {
-            if self.traitCollection.userInterfaceStyle == .light {
-                UserDefaults.standard.setValue(1, forKey: "colorMode")
-            }
-            else {
-                UserDefaults.standard.setValue(2, forKey: "colorMode")
-            }
             // Remove old gradients.
             self.view.layer.sublayers?.removeFirst()
             self.btnEmailSubmit.layer.sublayers?.removeFirst()
@@ -250,6 +244,9 @@ class ForgetPasswordVC: UIViewController {
         self.btnEmailSubmit.addGradient(cgPStart: cgPStart, cgPEnd: cgPEnd, cgFRadius: 15)
         self.btnOtpSubmit.addGradient(cgPStart: cgPStart, cgPEnd: cgPEnd, cgFRadius: 15)
         view.layer.needsLayout()
+        if let loginVC = self.navigationController?.viewControllers[0] as? LoginViewController {
+            loginVC.updateGradient()
+        }
     }
 }
 

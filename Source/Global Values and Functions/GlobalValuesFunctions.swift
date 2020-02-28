@@ -18,7 +18,7 @@ import CoreData
 
 /// Base url of time tracker project API request (brightlightventures.com/timetracker/index.php/api).
 let g_baseURL = "http://www.brightlightventures.com"
-let g_subUrl = "/timetracker/dev/index.php/api"
+let g_subUrl = "/timetracker/index.php/api"
 /// Request punch in/out details using page no.
 var g_loginPageNo = 1
 /// User profile picture.
@@ -417,8 +417,8 @@ func setColorMode() {
                         window.overrideUserInterfaceStyle = .dark
                 
                     case .auto :
-                        window.overrideUserInterfaceStyle = UIScreen.main.traitCollection
-                            .userInterfaceStyle
+                        window.overrideUserInterfaceStyle = .unspecified
+                    break
                     
                     default:
                         window.overrideUserInterfaceStyle = .unspecified
@@ -431,7 +431,6 @@ func setColorMode() {
 /// Updates dictionary projectdetails
 /// Call when log in is success
 func updateProjectDetails() {
-    let container = NSPersistentContainer(name: "UserTaskDetails")
     let projectCDCtrlr = ProjectsCDController()
     g_dictProjectDetails = projectCDCtrlr.getAllProjectDetails()
 }

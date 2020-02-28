@@ -55,6 +55,10 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         }
         
         if #available(iOS 12.0, *) {
+            guard UserDefaults.standard.value(forKey: "colorMode") as? Int != 0 else {
+                updateAllViewCtrlrs()
+                return
+            }
             if self.traitCollection.userInterfaceStyle == .light {
                 UserDefaults.standard.setValue(1, forKey: "colorMode")
             }

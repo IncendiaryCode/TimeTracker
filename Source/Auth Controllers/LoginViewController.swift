@@ -165,9 +165,6 @@ class LoginViewController: UIViewController {
     
     @IBAction func btnLoginPressed(_ sender: Any) {
         
-//        txtFEmail.text = "sachin@printgreener.com"
-//        txtFPassword.text = "123456"
-        
         self.view.endEditing(true)
         self.lblErrorValidator.isHidden = true
         let container = NSPersistentContainer(name: "UserTaskDetails")
@@ -257,14 +254,6 @@ class LoginViewController: UIViewController {
         }
         
         if #available(iOS 12.0, *) {
-            if self.traitCollection.userInterfaceStyle == .light {
-                g_colorMode = .light
-                UserDefaults.standard.setValue(1, forKey: "colorMode")
-            }
-            else {
-                g_colorMode = .dark
-                UserDefaults.standard.setValue(2, forKey: "colorMode")
-            }
             setColorMode()
             updateGradient()
         }

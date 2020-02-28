@@ -55,6 +55,7 @@ class MyActivityViewController: UIViewController, ActivityViewDelagate, BarChart
     
     func updateViewsAndColor() {
         self.view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.3))
+        self.view.layoutIfNeeded()
     }
     
     override func viewDidAppear(_ animated: Bool) {

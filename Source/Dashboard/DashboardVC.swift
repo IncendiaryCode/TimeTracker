@@ -1353,7 +1353,6 @@ UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSourc
     
     @IBAction func btnAddTaskPressed(_ sender: Any) {
         segueToAddTask()
-        let container = NSPersistentContainer(name: "UserTaskDetails")
     }
     
     func segueToAddTask() {

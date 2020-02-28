@@ -126,12 +126,6 @@ class ResetPasswordVC: UIViewController {
         }
         
         if #available(iOS 12.0, *) {
-            if self.traitCollection.userInterfaceStyle == .light {
-                UserDefaults.standard.setValue(1, forKey: "colorMode")
-            }
-            else {
-                UserDefaults.standard.setValue(2, forKey: "colorMode")
-            }
             // Remove old gradients.
             self.view.layer.sublayers?.removeFirst()
             self.btnCancel.layer.sublayers?.removeFirst()
@@ -150,5 +144,8 @@ class ResetPasswordVC: UIViewController {
         self.btnCancel.addGradient(cgPStart: cgPStart, cgPEnd: cgPEnd, cgFRadius: 15)
         self.btnReset.addGradient(cgPStart: cgPStart, cgPEnd: cgPEnd, cgFRadius: 15)
         view.layer.needsLayout()
+        if let forgotPswdVC = self.navigationController?.viewControllers[1] as? ForgetPasswordVC {
+            forgotPswdVC.updateGradient()
+        }
     }
 }

@@ -936,6 +936,9 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         }
         
         if #available(iOS 12.0, *) {
+            guard UserDefaults.standard.value(forKey: "colorMode") as? Int != 0 else {
+                return
+            }
             if self.traitCollection.userInterfaceStyle == .light {
                 UserDefaults.standard.setValue(1, forKey: "colorMode")
             }

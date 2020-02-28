@@ -144,12 +144,6 @@ class ResetPWVC: UIViewController {
         }
         
         if #available(iOS 12.0, *) {
-            if self.traitCollection.userInterfaceStyle == .light {
-                UserDefaults.standard.setValue(1, forKey: "colorMode")
-            }
-            else {
-                UserDefaults.standard.setValue(2, forKey: "colorMode")
-            }
             // Remove old gradients.
             view.layer.sublayers?.removeFirst()
             btnChangePW.layer.sublayers?.removeFirst()
@@ -168,6 +162,7 @@ class ResetPWVC: UIViewController {
         let cgPEnd = CGPoint(x: 1, y: 0.75)
         view.addGradient(cgPStart: CGPoint(x: 0, y: 0), cgPEnd: CGPoint(x: 1, y: 0.3))
         btnChangePW.addGradient(cgPStart: cgPStart, cgPEnd: cgPEnd, cgFRadius: 15)
+        viewMain.backgroundColor = g_colorMode.defaultColor()
         view.layer.needsLayout()
     }
 }
