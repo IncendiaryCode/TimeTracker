@@ -517,7 +517,7 @@ $(document).ready(function() {
 	if (_day.toString().length == 1) {
 		_day = '0' + _day.toString();
 	}
-	if (edit != undefined || edit != null) {
+	if (typeof(edit) != 'undefined') {
 		if (edit == 0) {
 			var date = dateObj.getFullYear() + '-' + _month + '-' + _day;
 			if (document.getElementById('date-picker-0')) {

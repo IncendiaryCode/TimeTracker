@@ -80,7 +80,10 @@ function autocomplete(inp, arr) {
 	}
 }
 
-autocomplete(document.getElementById('user-assigned'), usr_arr);
+if(typeof(usr_arr ) != 'undefined')
+{
+	autocomplete(document.getElementById('user-assigned'), usr_arr);
+}
 
 $(document).ready(function() {
 	$('#append-module').click(function() {

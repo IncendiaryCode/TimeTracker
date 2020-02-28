@@ -19,14 +19,30 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
 
 <div class="container">
     <h1 class="text-center display-heading mt-3">Edit project</h1>
+    <?php if (!empty($this->session->flashdata('error'))) { ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?php echo (!empty($this->session->flashdata('error'))) ? $this->session->flashdata('error') : ''; ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php } ?>
+    <?php if (!empty($this->session->flashdata('success'))) { ?>
+        <div class="alert alert-success mb-5">
+            <?php echo (!empty($this->session->flashdata('success'))) ? $this->session->flashdata('success') : ''; ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php } ?>
     <form method="post" action="<?= base_url(); ?>index.php/admin/edit_project">
         <div class="row">
             <div class="col-12">
                 <div class="pb-4">
-                    Name:<input type="text" class="form-control" name = "project-name" class="form-control" placeholder="Project name" value = <?=$project_data['project']['project_name'] ?>>
+                    Name:<input type="text" class="form-control" name = "project-name" class="form-control" placeholder="Project name" value = "<?=$project_data['project']['project_name'] ?>">
                 </div>
             </div>
-            <input type = "hidden" id= "edit_project_id" name = "edit_project_id" value = <?=$project_data['project']['project_id'] ?> >
+            <input type = "hidden" id= "edit_project_id" name = "edit_project_id" value = "<?=$project_data['project']['project_id'] ?>" >
             <!-- <div class="col-12">
                 <div class="pb-4">
                     Description:<input type="text" class="form-control" name = "meta-data" class="form-control" placeholder="Description" value = <?=$project_data['meta_data'] ?>>
@@ -34,12 +50,12 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
             </div> -->
             <div class="col-5">
                 <div class="pb-4">
-                    Logo: <input type="file" name="project-icon" class="form-control" placeholder="Project logo" value = <?=base_url().UPLOAD_PATH.$project_data['project']['project_image'];?>>
+                    Logo: <input type="file" name="project-icon" class="form-control" placeholder="Project logo" value = "<?=base_url().UPLOAD_PATH.$project_data['project']['project_image'];?>">
                 </div>
             </div> 
             <div class="col-5">
                 <div class="pb-4">
-                    Color: <input type="color" class="form-control" placeholder="Project color" value = <?=$project_data['project']['project_color'] ?>>
+                    Color: <input type="color" class="form-control" name="project-color" placeholder="Project color" value = "<?=$project_data['project']['project_color'] ?>">
                 </div>
             </div>
             <div class="col-2 pt-4 text-right">
@@ -60,13 +76,13 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
             <p class="text-danger" id="module-error"></p>
             <ul class="list-group module-lists pt-5">
             <?php if(!empty($project_data['module'])) { ?>
-                <?php foreach(($project_data['module']) as $module) { ?>
+                <?php foreach($project_data['module'] as $module) { ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <?=$module['module_name']; ?>
                         <span><a href="#module-edit" data-toggle="modal" class = "module-edit">
                         <i class="fas fa-pencil-alt">
-                            <input type = "hidden" value = <?=$module['module_id'] ?> ></i></a>
-                            <a href="#module-delete" data-toggle="modal" data=<?=$module['module_id'] ?> class = "module-delete"><i class="fas fa-trash pl-3"></i></a>
+                            <input type="hidden" value ="<?=$module['module_id']?>" ></i></a>
+                            <a href="#module-delete" data-toggle="modal" data="<?=$module['module_id'];?>" class ="module-delete"><i class="fas fa-trash pl-3"></i></a>
                         </span>
                     </li>
                     <?php } ?>
@@ -89,7 +105,7 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                     <?php if(!empty($user['profile_photo'])) { ?>
                         <img src="<?= base_url() . UPLOAD_PATH . $user['profile_photo']; ?>" width="30px;"> <?php  } ?><span class ="user-name"><?=$user['user_name']; ?></span>
-                        <span><a href="#user-delete" data-toggle="modal" data=<?=$user['user_id']; ?> class = "user-delete"><i class="fas fa-trash pl-3">
+                        <span><a href="#user-delete" data-toggle="modal" data="<?=$user['user_id']; ?>" class = "user-delete"><i class="fas fa-trash pl-3">
                         <input type = "hidden" value = <?=$user['user_id'] ?> >
                         </i></a></span>
                     </li>

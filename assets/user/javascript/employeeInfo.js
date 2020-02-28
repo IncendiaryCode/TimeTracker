@@ -454,7 +454,11 @@ $(document).ready(function() {
 			}
 		}
 		document.getElementById('sorting').getElementsByTagName('input')[0].checked = true;
-		loadTaskActivities({ type: 'date' });
+		if(document.getElementById('today-input').checked == true)
+		{
+			loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) , filter:"today" });
+		}
+		else loadTaskActivities({ type: 'date' });
 	});
 
 	for (var i = 0; i < document.getElementById('filtering').getElementsByTagName('input').length; i++) {

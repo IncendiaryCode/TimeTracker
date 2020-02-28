@@ -1,5 +1,6 @@
 var panel_id = 0;
 var graph_id = 0;
+var weeklyOrMonthlyDuration = 0;
 Date.prototype.getWeek = function() {
 	var onejan = new Date(this.getFullYear(), 0, 1);
 	return Math.ceil(((this - onejan) / 86400000 + onejan.getDay() + 1) / 7);
@@ -19,10 +20,10 @@ var weekly_chart;
 
 function draw_chart_cards(data, type) {
 	var timings = [];
-	if (data['data'].length != undefined || data['data'].length != null) {
+	if (data['data'].length > 0) {
 		var x = data['data'].length;
+		var date = data['data'][0].start_time.split(' ')[0];
 		for (var y = 0; y < x; y++) {
-			
 			var cardHeader = $('<div class="card-header card-header" />');
 			var cardHeaderRow = $('<div class="row pt-2" />');
 			var today = getTime();
@@ -36,23 +37,24 @@ function draw_chart_cards(data, type) {
 				cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>Not yet started.</div>');
 				$('.vertical-line').css('color', data['data'][y].project_color);
 			} else {
-				var timeZone = moment.tz.guess();
-				var date = data['data'][y].start_time.slice(0, 10);
 				var start_time = data['data'][y].start_time;
 				var start_time_utc = moment.utc(start_time).toDate();
 				var serverDate = moment(start_time_utc).format('YYYY-MM-DD hh:mm a');
 				if (serverDate != 'Invalid date') {
 					cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + serverDate + '</div>');
 					$('.vertical-line').css('color', data['data'][y].project_color);
-
 					var __time_for_duration = moment(start_time_utc).format('YYYY-MM-DD HH:mm');
-
-					timings.push([parseInt((__time_for_duration.split(" ")[1]).split(':')[0])*60+parseInt((__time_for_duration.split(" ")[1]).split(':')[1]), data['data'][y].t_minutes]);
+					if (date == data['data'][y].start_time.split(' ')[0]) {
+						timings.push([ parseInt(__time_for_duration.split(' ')[1].split(':')[0]) * 60 + parseInt(__time_for_duration.split(' ')[1].split(':')[1]), data['data'][y].t_minutes ]);
+					} else {
+						store_and_calculate_duration(timings, type);
+						date = data['data'][y].start_time.split(' ')[0];
+						timings = [];
+						timings.push([ parseInt(__time_for_duration.split(' ')[1].split(':')[0]) * 60 + parseInt(__time_for_duration.split(' ')[1].split(':')[1]), data['data'][y].t_minutes ]);
+					}
 				} else {
 					cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data['data'][y].start_time + '</div>');
 					$('.vertical-line').css('color', data['data'][y].project_color);
-
-
 				}
 			}
 
@@ -100,7 +102,7 @@ function draw_chart_cards(data, type) {
 			var cardActions = $("<div class='card-action-overlay' />");
 			cardActions.append(footerRight);
 			cardInner.append(cardActions);
-			var cardCol = $("<div class='col-lg-6 mb-4 card-col animated card-count" + panel_id + "' />");
+			var cardCol = $("<div class='col-lg-6 mb-4 card-col animated ' id = card-count" + panel_id + ' />');
 			cardCol.append(cardInner);
 
 			$('#attachPanels').append(cardCol);
@@ -118,103 +120,109 @@ function draw_chart_cards(data, type) {
 				document.getElementsByClassName('title').innerText += data['data'][y].task_name;
 			}
 		}
-	}
-	if(type == "daily_chart")
-	{
-		var duration = __calculate_duration(timings);
-		var hr = parseInt(duration/60);
-		var min = duration%60;
-		if(hr.toString().length == 1)
-		{
-			hr = '0'+hr;
+
+		if (type == 'daily_chart') {
+			var duration = __calculate_duration(timings);
+			var hr = parseInt(duration / 60);
+			var min = duration % 60;
+			if (hr.toString().length == 1) {
+				hr = '0' + hr;
+			}
+			if (min.toString().length == 1) {
+				min = '0' + min;
+			}
+			document.getElementById('daily-duration').innerHTML = hr + ':' + min;
+			//console.log(hr + ':' + min);
+		} else {
+			store_and_calculate_duration(timings, type);
 		}
-		if(min.toString().length == 1)
-		{
-			min = '0'+min;
-		}
-		//document.getElementById('daily-duration').innerHTML = hr+":"+min;
 	}
 }
-function bubbleSort(arr){
+
+function store_and_calculate_duration(timings, type) {
+	var time = __calculate_duration(timings);
+	weeklyOrMonthlyDuration = weeklyOrMonthlyDuration + time;
+}
+
+function bubbleSort(arr) {
 	var len = arr.length;
-	for (var i = len-1; i>=0; i--){
-	  for(var j = 1; j<=i; j++){
-		if(arr[j-1][0]>arr[j][0]){
-			var temp = arr[j-1][0];
-			var temp1 = arr[j-1][1];
+	for (var i = len - 1; i >= 0; i--) {
+		for (var j = 1; j <= i; j++) {
+			if (arr[j - 1][0] > arr[j][0]) {
+				var temp = arr[j - 1][0];
+				var temp1 = arr[j - 1][1];
 
-			arr[j-1][0] = arr[j][0];
-			arr[j-1][1] = arr[j][1];
+				arr[j - 1][0] = arr[j][0];
+				arr[j - 1][1] = arr[j][1];
 
-			arr[j][0] = temp;
-			arr[j][1] = temp1;
-		 }
-	  }
-	}
-	return arr;
- }
-function __calculate_duration(timings)
-{	
-	var timings = bubbleSort(timings);
-	var total_duration = 0;
-	var store_Min_Temp = [];
-	var store_Start_Temp = [];
-	if(store_Min_Temp.length == 0)
-	{
-		store_Min_Temp.push(parseInt(timings[0][1]));
-		store_Start_Temp.push(parseInt(timings[0][0]));
-		total_duration = parseInt(store_Min_Temp[0]);
-	}
-	for(var i=1; i<timings.length; i++)
-	{	
-		var flag = 0;
-		for(var j=0; j<store_Min_Temp.length; j++)
-		{
-			timings[i][0] = parseInt(timings[i][0]);
-			timings[i][1] = parseInt(timings[i][1]);
-			if((timings[i][0] == store_Start_Temp[j]) && (timings[i][0] == (store_Start_Temp[j]+store_Min_Temp[j])))
-			{
-				break;
-			}
-			else if((timings[i][0] > store_Start_Temp[j]) && (timings[i][0] < (store_Start_Temp[j]+store_Min_Temp[j])))
-			{
-				total_duration = total_duration+((timings[i][0]+timings[i][1])-(store_Start_Temp[j]+store_Min_Temp[j]));
-				break;
-			}
-			else if(timings[i][0] < (store_Start_Temp[j]) && ((timings[i][0]+timings[i][1]) > (store_Start_Temp[j]+store_Min_Temp[j])))
-			{
-				total_duration = total_duration+((store_Start_Temp[j]+store_Min_Temp[j])-timings[i][0]);
-				break;
-			}
-			else if ((store_Start_Temp[j] < timings[i][0]) && ((store_Start_Temp[j]+store_Min_Temp[j])>(timings[i][0]+timings[i][1])))
-			{
-				total_duration = total_duration+((store_Start_Temp[j]+store_Min_Temp[j]));
-				break;
-			}
-			else if((store_Start_Temp[j] > timings[i][0]) && ((store_Start_Temp[j]+store_Min_Temp[j])< (timings[i][0]+timings[i][1])))
-			{
-				total_duration = total_duration+(timings[i][0]+timings[i][1]);
-				break;
-			}
-			else if(((timings[i][0]>(store_Start_Temp[j]+store_Min_Temp[j])) && ((timings[i][1]+timings[i][0]) > (store_Start_Temp[j]+store_Min_Temp[j]))) || ((timings[i][0]<store_Start_Temp[j])&& ((timings[i][1]+timings[i][0]) < (store_Start_Temp[j]+store_Min_Temp[j])))){
-
-				total_duration = total_duration+parseInt(timings[i][1]);
-				break;
-			}
-			else{
-				if(((timings[i][0]>(store_Start_Temp[j]+store_Min_Temp[j])) && ((timings[i][1]+timings[i][0]) > (store_Start_Temp[j]+store_Min_Temp[j]))) || ((timings[i][0]<store_Start_Temp[j])&& ((timings[i][1]+timings[i][0]) < (store_Start_Temp[j]+store_Min_Temp[j])))){
-					flag++;
-				}
-				continue;
+				arr[j][0] = temp;
+				arr[j][1] = temp1;
 			}
 		}
-		// if(flag == timings.length-1)
-		// {
-		// 	total_duration = total_duration+parseInt(timings[i][1]);
-		// }
-		store_Start_Temp.push(parseInt(timings[i][0]));
-		store_Min_Temp.push(parseInt(timings[i][1]));
 	}
+	return arr;
+}
+function __calculate_duration(timeArr) {
+	// var timings = bubbleSort(timeArr);
+	var timings = timeArr.sort();
+	var total_duration = 0;
+	var store_Min_Temp = 0;
+	var store_Start_Temp = 0;
+	if (store_Min_Temp == 0) {
+		store_Start_Temp = parseInt(timings[0][0]);
+		store_Min_Temp = parseInt(timings[0][1]);
+		total_duration = parseInt(store_Min_Temp);
+	}
+
+	for (var i = 1; i < timings.length; i++) {
+		timings[i][0] = parseInt(timings[i][0]);
+		timings[i][1] = parseInt(timings[i][1]);
+
+		if (timings[i][0] == store_Start_Temp && timings[i][1] == store_Start_Temp + store_Min_Temp) {
+			store_Start_Temp = parseInt(timings[i][0]);
+			store_Min_Temp = parseInt(timings[i][1]);
+			continue;
+		} else if (timings[i][0] > store_Start_Temp && timings[i][0] < store_Start_Temp + store_Min_Temp && timings[i][0] + timings[i][1] > store_Start_Temp + store_Min_Temp) {
+			// check for end time overlaped tasks
+			total_duration = total_duration + (timings[i][0] + timings[i][1] - (store_Start_Temp + store_Min_Temp));
+			store_Start_Temp = parseInt(timings[i][0]);
+			store_Min_Temp = parseInt(timings[i][1]);
+			continue;
+		} else if (timings[i][0] < store_Start_Temp && timings[i][0] + timings[i][1] > store_Start_Temp + store_Min_Temp) {
+			// check for start time overlaped tasks
+			total_duration = total_duration + (store_Start_Temp - timings[i][0]);
+			store_Start_Temp = parseInt(timings[i][0]);
+			store_Min_Temp = parseInt(timings[i][1]);
+			continue;
+		} else if (store_Start_Temp < timings[i][0] && store_Start_Temp + store_Min_Temp > timings[i][0] + timings[i][1]) {
+			// check for fully overlaped tasks
+			continue;
+		} else if (store_Start_Temp > timings[i][0] && store_Start_Temp + store_Min_Temp < timings[i][0] + timings[i]) {
+			// check for middile of time overlaped tasks
+			total_duration = total_duration + (timings[i][0] + timings[i][1]);
+			store_Start_Temp = parseInt(timings[i][0]);
+			store_Min_Temp = parseInt(timings[i][1]);
+			continue;
+		} else if ((timings[i][0] > store_Start_Temp + store_Min_Temp && timings[i][1] + timings[i][0] > store_Start_Temp + store_Min_Temp) || (timings[i][0] < store_Start_Temp && timings[i][1] + timings[i][0] < store_Start_Temp + store_Min_Temp)) {
+			// check for not overlaped tasks
+			total_duration = total_duration + parseInt(timings[i][1]);
+			store_Start_Temp = parseInt(timings[i][0]);
+			store_Min_Temp = parseInt(timings[i][1]);
+			continue;
+		} else {
+			if (store_Start_Temp + store_Min_Temp == timings[i][0]) {
+				// check for end time equal to start time tasks
+				total_duration = total_duration + parseInt(timings[i][1]);
+				store_Start_Temp = parseInt(timings[i][0]);
+				store_Min_Temp = parseInt(timings[i][1]);
+				continue;
+			}
+			continue;
+		}
+	}
+
+	//flushing the array
+	timings = [];
 	return total_duration;
 }
 function loadTask(type, date) {
@@ -226,12 +234,23 @@ function loadTask(type, date) {
 		success: function(values) {
 			if (values == 'No activity in this date.') {
 				$('#attachPanels').empty();
-
 				$('#attachPanels').empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
 			} else {
 				var data = JSON.parse(values);
 				$('#attachPanels').empty();
 				draw_chart_cards(data, type);
+
+				var duration = weeklyOrMonthlyDuration;
+				var hr = parseInt(duration / 60);
+				var min = duration % 60;
+				if (hr.toString().length == 1) {
+					hr = '0' + hr;
+				}
+				if (min.toString().length == 1) {
+					min = '0' + min;
+				}
+				if (type == 'weekly_chart') document.getElementById('weekly-duration').innerHTML = hr + ':' + min;
+				if (type == 'monthly_chart') document.getElementById('monthly-duration').innerHTML = hr + ':' + min;
 			}
 		}
 	});
@@ -344,7 +363,9 @@ function drawChart(type, res, date) {
 					var d_time = moment(month + '-' + day + '-' + year.innerHTML.split('-')[0]);
 					document.getElementById('current-date').innerHTML = d_time.format('dddd MMMM DD');
 					document.getElementById('daily-chart').value = d_time.format('YYYY-MM-DD');
-					$('#chart-navigation a[href="#daily-view"]').tab('show');
+					if (document.getElementById('daily-chart').value != 'Invalid date') {
+						$('#chart-navigation a[href="#daily-view"]').tab('show');
+					}
 				},
 				responsive: true,
 				scales: {
@@ -355,21 +376,20 @@ function drawChart(type, res, date) {
 								display: false,
 								drawBorder: true
 							}
-						},
-						
+						}
 					],
 					yAxes: [
 						{
 							ticks: {
 								//stepSize:10,
-								scaleStepWidth : 60,
-								},
+								scaleStepWidth: 60
+							},
 							stacked: true,
 							scaleLabel: {
-									display: true,
-									labelString: 'hrs'
+								display: true,
+								labelString: 'hrs'
 							}
-						},
+						}
 					]
 				}
 			}
@@ -418,18 +438,14 @@ function dateFromDay(year, day) {
 	return new Date(date.setDate(day)); // add the number of days
 }
 function draw_customized_chart(res) {
-	var element = document.getElementById('daily');
 	var pixel = [];
-
 	var pixels_print = [];
-
-	var top = 11;
+	var top = 21;
 	var margin_top = 0;
 	var top1 = top;
 	var window_width = $('.cust_daily_chart').width();
-
 	if (window_width < 633) {
-		margin_top = 11;
+		margin_top = 21;
 	}
 	var daily_hr = parseInt(res['total_minutes'] / 60);
 	var daily_min = res['total_minutes'] % 60;
@@ -444,7 +460,7 @@ function draw_customized_chart(res) {
 
 	var p_left = parseInt(window_width) / 12;
 	if (res['data'] != 'No activity in this date.') {
-		var v = 11;
+		var v = 21;
 		var count = 0;
 		for (var i = 0; i < res['data'][1].length; i++) {
 			var start_time_utc = moment.utc(res['data'][1][i]['start_time']).toDate();
@@ -471,7 +487,6 @@ function draw_customized_chart(res) {
 
 			for (var k = 0; k < pixel.length; k++) {
 				if (parseInt(start_time_pixel) >= parseInt(pixel[k][0]) && parseInt(start_time_pixel) <= parseInt(pixel[k][1])) {
-
 					count++;
 					break;
 				} else if (parseInt(start_time_pixel) <= parseInt(pixel[k][0]) && parseInt(start_time_pixel) <= parseInt(pixel[k][1])) {
@@ -500,7 +515,6 @@ var last_index;
 var last_task_name = [];
 var same_task = 0;
 var same_task_count = 0;
-
 function printChart(start, width, top, task_name, id, start_time, end_time, color) {
 	if (top > 75) {
 		$('#print-chart').css('height', top + 25);
@@ -516,34 +530,30 @@ function printChart(start, width, top, task_name, id, start_time, end_time, colo
 	$(row).css('width', width);
 	$(row).css('backgroundColor', color);
 	$('#print-chart').append(row);
-	$('#new-daily-chart' + graph_id).mousedown(function() {
+	$('#new-daily-chart' + graph_id).mouseover(function() {
 		document.getElementById('task-detail').innerHTML = start_time + ' - ' + end_time;
 		$('#task-detail').css('display', 'block');
-		$('#task-detail').css('margin-left', start + 10);
+		$('#task-detail').css('left', start + 10);
 		$('#task-detail').css('z-index', 1);
 		var str = this.id;
 		var matches = str.match(/(\d+)/);
-		var card = document.getElementsByClassName('card-count' + matches[0])[0];
+		var card = document.getElementById('card-count' + matches[0]);
 		card.className += ' shake';
 	});
 
-	$('#new-daily-chart' + graph_id).mouseup(function() {
+	$('#new-daily-chart' + graph_id).mouseout(function() {
 		document.getElementById('task-detail').innerHTML = ' ';
 		$('#task-detail').css('display', 'none');
 		var str = this.id;
 		var matches = str.match(/(\d+)/);
-		var card = document.getElementsByClassName('card-count' + matches[0])[0];
+		var card = document.getElementById('card-count' + matches[0]);
 		card.classList.remove('shake');
 	});
 
 	$('#new-daily-chart' + graph_id).click(function() {
-		var ele = document.getElementById(this.id);
-		var index = parseInt(ele.childNodes[1].value) + 4;
-		if (last_index) {
-			$('.panel' + last_index).css('backgroundColor', '#ffffff');
-		}
-		last_index = id;
-		var elmnt = document.getElementsByClassName('card-count' + index);
+		var classIndex = this.id.match(/(\d+)/);
+		var elmnt = document.getElementById('card-count' + classIndex[0]);
+		elmnt.scrollIntoView({ behavior: 'smooth' });
 	});
 
 	graph_id++;
@@ -627,6 +637,7 @@ function __get_date(w, y) {
 	return new Date(y, 0, d);
 }
 function next() {
+	weeklyOrMonthlyDuration = 0;
 	var currentYear = parseInt(document.getElementById('monthly-chart').value.split(' ')[1]);
 	var currentMonth = parseInt(document.getElementById('monthly-chart').value.split(' ')[0]);
 	var cur_MY = new Date().getMonth() + ' ' + new Date().getFullYear();
@@ -642,6 +653,7 @@ function next() {
 	}
 }
 function previous() {
+	weeklyOrMonthlyDuration = 0;
 	var currentYear = parseInt(document.getElementById('monthly-chart').value.split(' ')[1]);
 	var currentMonth = parseInt(document.getElementById('monthly-chart').value.split(' ')[0]);
 	currentYear = currentMonth === 0 ? currentYear - 1 : currentYear;
@@ -813,6 +825,7 @@ function loadCalendarChart() {
 }
 $(document).ready(function() {
 	//Tab Change
+	weeklyOrMonthlyDuration = 0;
 	$('#task-detail').css('display', 'none');
 	$('#weekly-chart').hide();
 
@@ -855,6 +868,7 @@ $(document).ready(function() {
 		$('#next-date').css('color', '#ccc');
 	}
 	$('#next-date').unbind().click(function() {
+		weeklyOrMonthlyDuration = 0;
 		var daily_chart_date = document.getElementById('daily-chart').value;
 		var day = new Date(daily_chart_date);
 		var nextDay = new Date(day);
@@ -875,6 +889,7 @@ $(document).ready(function() {
 	});
 
 	$('#previous-date').unbind().click(function() {
+		weeklyOrMonthlyDuration = 0;
 		var daily_chart_date = document.getElementById('daily-chart').value;
 		var day = new Date(daily_chart_date);
 		var nextDay = new Date(day);
@@ -887,7 +902,7 @@ $(document).ready(function() {
 
 	var t_day = new Date();
 	var day = parseInt(moment(t_day).format('E'));
-	t_day.setDate(t_day.getDate() - 2);
+	t_day.setDate(t_day.getDate() - (day - 1));
 	var s_date = moment(t_day).format('MMM DD');
 	t_day.setDate(t_day.getDate() + 6);
 	var e_date = moment(t_day).format('MMM DD');
@@ -905,6 +920,7 @@ $(document).ready(function() {
 		daily_chart_date1 = document.getElementById('weekly-chart').value;
 	}
 	$('#next-week').unbind().click(function() {
+		weeklyOrMonthlyDuration = 0;
 		var daily_chart_date1 = document.getElementById('weekly-chart').value;
 		var week_no = parseInt(daily_chart_date1.slice(6, 8));
 		var c_week = moment(new Date()).format('W');
@@ -932,6 +948,7 @@ $(document).ready(function() {
 		}
 	});
 	$('#previous-week').unbind().click(function() {
+		weeklyOrMonthlyDuration = 0;
 		var daily_chart_date1 = document.getElementById('weekly-chart').value;
 		var week_no = parseInt(daily_chart_date1.slice(6, 8));
 
@@ -976,14 +993,17 @@ $(document).ready(function() {
 		var y = $(event.relatedTarget); // previous tab
 		if (x == '#daily-view') {
 			var date = document.getElementById('daily-chart').value;
+			weeklyOrMonthlyDuration = 0;
 			loadDailyChart();
 		}
 		if (x == '#weekly-view') {
+			weeklyOrMonthlyDuration = 0;
 			loadWeeklyChart();
 			var date = document.getElementById('weekly-chart').value;
 			//loadTask('weekly_chart', date);
 		}
 		if (x == '#monthly-view') {
+			weeklyOrMonthlyDuration = 0;
 			loadCalendarChart();
 		}
 	});
