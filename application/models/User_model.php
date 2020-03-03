@@ -486,7 +486,30 @@ class User_model extends CI_Model {
             return false;
         }
     }
-    
+    /**
+     * Function to get Activity Chart Data for daily chart
+     * 
+     * @params $userid and $taskdate
+     * 
+     * returns $data
+     */
+    public function get_daily_activity($userid,$taskdate){
+        $data = array();
+        $this->db->select('d.*,d.id AS table_id,p.color_code,t.task_name,t.id AS task_id');
+        $this->db->from('time_details AS d');
+        $this->db->join('task AS t', 't.id = d.task_id');
+        $this->db->join('project AS p','p.id = t.project_id');
+        $this->db->where('d.end_time IS NOT NULL'); //tasks that are not running
+        $this->db->where(array('d.user_id' => $userid, 'd.task_date' => $taskdate));
+        $this->db->group_by('d.id');
+        $this->db->order_by('d.start_time','asc');
+        $query = $this->db->get();
+        $data = $query->result_array();
+        if ($query->num_rows() > 0) {
+            $data = $query->result_array();
+        }
+        return $data;
+    }
     /**
      * Function to get Activity Chart Data
      * 
@@ -500,49 +523,27 @@ class User_model extends CI_Model {
         $taskdate = $date;
         $total_minutes = 0;
         if ($chart_type == "daily_chart") {
-            $this->db->select('d.*,d.id AS table_id,p.color_code,t.task_name,t.id AS task_id');
-            //$this->db->select('*,count(t.task_name) as tasks');
-            $this->db->from('time_details AS d');
-            $this->db->join('task AS t', 't.id = d.task_id');
-            $this->db->join('project AS p','p.id = t.project_id');
-            $this->db->where('d.end_time IS NOT NULL'); //tasks that are not running
-            $this->db->where(array('d.user_id' => $userid, 'd.task_date' => $taskdate));
-            $this->db->group_by('d.id');
-            $this->db->order_by('d.start_time','asc');
-            $query = $this->db->get();
-            $data = $query->result_array();
-            if ($query->num_rows() > 0) {
-                $data = $query->result_array();
+            $data = $this->get_daily_activity($userid,$taskdate);
+            if(!empty($data)){
                 foreach ($data as $d) {
                     $table_id[] = $d['table_id'];
                     $task_id[] = $d['task_id'];
                     $task_name[] = $d['task_name'];
                     $project_color[] = $d['color_code'];
+                    $object = new stdClass();
+                    $object->start_time = $d['start_time'];
+                    $object->end_time = $d['end_time'];
+                    $object->total_minutes = $d['total_minutes'];
+                    $timing[] = $object;
                 }
-                /*$tasks = array_count_values($task_id);
-                foreach ($tasks as $key => $count) {
-                    if ($count >= 1) {
-                        $task_ids[] = $key;
-                    }
-                }*/ 
-                foreach ($data as $t) {
-                    $this->db->select('d.start_time,d.end_time,d.total_minutes');
-                    $this->db->from('time_details AS d');
-                    $this->db->join('task AS t', 't.id = d.task_id');
-                    $this->db->where('d.end_time IS NOT NULL'); //tasks that are not running
-                    $this->db->where(array('d.user_id' => $userid, 'd.id' => $t['table_id'], 'd.task_date' => $taskdate));
-                    $query = $this->db->get();
-                    $timing[] = $query->row_array();
-                }
-                foreach($timing AS $time){
-                    $total_minutes += $time['total_minutes'];
+                foreach($timing as $time){
+                    $total_minutes += $time->total_minutes;
                 }
                 $chart_data = array('daily_chart', "status" => TRUE,
-                //"labels"=> $week_days,
-                "data" => array($task_id, $timing, $task_name, $project_color),
-                "total_minutes" => $total_minutes);
-            
-            } else {
+                    //"labels"=> $week_days,
+                    "data" => array($task_id, $timing, $task_name, $project_color),
+                    "total_minutes" => $total_minutes);
+            }else {
                 $chart_data = array('daily_chart', 'status' => FALSE, 'data' => "No activity in this date.",'total_minutes' => '0');
             }
             return $chart_data;
