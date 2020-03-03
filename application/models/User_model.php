@@ -511,6 +511,31 @@ class User_model extends CI_Model {
         return $data;
     }
     /**
+     * Function to get Activity Chart Data for daily chart
+     * 
+     * @params $userid and $taskdate
+     * 
+     * returns $data
+     */
+    public function get_weekly_activity($userid,$start_date,$end_date){
+        $data = array();
+        $query = $this->db->query("SELECT t.id AS task_id,t.task_name,p.name,p.color_code,d.task_id, d.start_time, d.end_time, d.task_description,d.task_date, SUM(`d`.`total_minutes`) AS `minutes` FROM `task` AS `t` JOIN `project` AS `p` ON `p`.`id` = `t`.`project_id` LEFT JOIN `task_assignee` AS `ta` ON ta.task_id = t.id JOIN `time_details` AS `d` ON d.task_id = t.id WHERE `d`.`task_date` BETWEEN '".$start_date."' AND '".$end_date."' AND d.end_time IS NOT NULL AND d.user_id = '".$userid."' GROUP BY t.id");
+        if($query->num_rows() > 0){
+            $data = $query->result_array();
+        }
+        return $data;
+    }
+
+    public function get_total_time_on_date($userid,$task_id,$task_date){
+        $timeline_data = array();
+        $select_task_data = $this->db->query("SELECT SUM(d.total_minutes) AS t_minutes FROM time_details AS d WHERE `d`.`task_date` = '".$task_date."' AND d.end_time IS NOT NULL AND d.task_id='".$task_id."' AND d.user_id=".$userid);
+        if($select_task_data->num_rows() > 0){
+            $timeline_data = $select_task_data->result_array();
+        }
+        return $timeline_data;
+
+    }
+    /**
      * Function to get Activity Chart Data
      * 
      * @params $chart_type and $date
@@ -555,25 +580,24 @@ class User_model extends CI_Model {
             $start_date = isset($split_week[0]) ? date('Y-m-d',strtotime($split_week[0])) : date('Y-m-d');
             $end_date = isset($split_week[1]) ? date('Y-m-d',strtotime($split_week[1])) : date('Y-m-d',strtotime("+1 week"));
 
+
             $date_range = $this->get_dates_from_range($start_date, $end_date); //week days(Sun-Sat) in date format(Y-m-d)
 
-            $query = $this->db->query("SELECT t.id AS task_id,t.task_name,p.name,p.color_code,d.task_id, d.start_time, d.end_time, d.task_description,d.task_date, SUM(`d`.`total_minutes`) AS `minutes` FROM `task` AS `t` JOIN `project` AS `p` ON `p`.`id` = `t`.`project_id` LEFT JOIN `task_assignee` AS `ta` ON ta.task_id = t.id JOIN `time_details` AS `d` ON d.task_id = t.id WHERE `d`.`task_date` BETWEEN '".$start_date."' AND '".$end_date."' AND d.end_time IS NOT NULL AND d.user_id = '".$userid."' GROUP BY t.id");
-            if($query->num_rows() > 0){
-                $data = $query->result_array();
+            $data = $this->get_weekly_activity($userid,$start_date,$end_date);
+            if(!empty($data)){
                 for($i=0;$i<count($data);$i++) {
                     $k=0;
                     foreach($date_range AS $r_day){
-                        $select_task_data = $this->db->query("SELECT SUM(d.total_minutes) AS t_minutes FROM time_details AS d WHERE `d`.`task_date` = '".$r_day."' AND d.end_time IS NOT NULL AND d.task_id='".$data[$i]['task_id']."' AND d.user_id=".$userid);
-                        if($select_task_data->num_rows() > 0){
-                            $timeline_data = $select_task_data->result_array();
+                        $timeline_data = $this->get_total_time_on_date($userid,$data[$i]['task_id'],$r_day);
+                        if(!empty($timeline_data)){
                             foreach($timeline_data AS $time){
                                 $total_mins += $time['t_minutes'];
-                                $hours[$k] = round(($time['t_minutes']/60),2);
+                                //$hours[$k] = round(($time['t_minutes']/60),2);
                                 $format_hours[$k] = sprintf('%02d.%02d',floor($time['t_minutes'] / 60),($time['t_minutes']%60));
                             }
-                        }else{
+                        }/*else{
                             $hours[$k] = '0';
-                        }
+                        }*/
                         $k=$k+1;
                     }
                     $send_data[$i] = array('task_name'=>$data[$i]['task_name'],'time'=>$format_hours,'project_color'=>$data[$i]['color_code']);
