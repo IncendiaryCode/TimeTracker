@@ -511,7 +511,7 @@ class User_model extends CI_Model {
         return $data;
     }
     /**
-     * Function to get Activity Chart Data for daily chart
+     * Function to get Activity Chart Data for weekly chart
      * 
      * @params $userid and $taskdate
      * 
@@ -525,7 +525,13 @@ class User_model extends CI_Model {
         }
         return $data;
     }
-
+    /**
+     * Function to get total time for the timeline data
+     * 
+     * @params $userid,$task_id,$task_date
+     * 
+     * returns $data
+     */
     public function get_total_time_on_date($userid,$task_id,$task_date){
         $timeline_data = array();
         $select_task_data = $this->db->query("SELECT SUM(d.total_minutes) AS t_minutes FROM time_details AS d WHERE `d`.`task_date` = '".$task_date."' AND d.end_time IS NOT NULL AND d.task_id='".$task_id."' AND d.user_id=".$userid);
@@ -535,6 +541,23 @@ class User_model extends CI_Model {
         return $timeline_data;
 
     }
+
+    /**
+     * Function to get Activity Chart Data for monthly chart
+     * 
+     * @params $userid,$start_date,$end_date
+     * 
+     * returns $data
+     */
+    public function get_monthly_activity($userid,$start_date,$end_date){
+        $data = array();
+        $query = $this->db->query("SELECT `td`.`task_date`, `t`.`task_name`, `td`.`task_id`, `p`.`color_code`,td.t_minutes FROM `project` AS `p` JOIN `task` AS `t` ON `t`.`project_id` = `p`.`id` JOIN (SELECT d.task_id,d.task_date,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `time_details` AS `d` WHERE `d`.`user_id` = ".$userid." AND `d`.`end_time` IS NOT NULL AND `d`.`task_date` BETWEEN '".$start_date."' and '".$end_date."' GROUP BY d.task_date) AS td ON td.task_id = t.id GROUP BY td.task_date");
+        if ($query->num_rows() > 0) {
+                $data = $query->result_array();
+        }
+        return $data;
+    }
+
     /**
      * Function to get Activity Chart Data
      * 
@@ -625,11 +648,8 @@ class User_model extends CI_Model {
             $year_value = $month_array[1];
             $first = date($year_value . '-' . $month_value . '-' . '01');
             $last = date($year_value . '-' . $month_value . '-' . 't');
-            /*$month_start = date('Y-m-1', strtotime($date));
-            $month_end = date('Y-m-t', strtotime($month_start));*/
-            $query = $this->db->query("SELECT `td`.`task_date`, `t`.`task_name`, `td`.`task_id`, `p`.`color_code`,td.t_minutes FROM `project` AS `p` JOIN `task` AS `t` ON `t`.`project_id` = `p`.`id` JOIN (SELECT d.task_id,d.task_date,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `time_details` AS `d` WHERE `d`.`user_id` = {$userid} AND `d`.`end_time` IS NOT NULL AND `d`.`task_date` BETWEEN '".$first."' and '".$last."' GROUP BY d.task_date) AS td ON td.task_id = t.id GROUP BY td.task_date");
-            if ($query->num_rows() > 0) {
-                $data = $query->result_array();
+            $data = $this->get_monthly_activity($userid,$first,$last);
+            if(!empty($data)){
                 foreach ($data as $d) {
                     $format_hours = sprintf('%02d.%02d',floor($d['t_minutes'] / 60),($d['t_minutes']%60));
                     $values[] = array(date('Y-m-d', strtotime($d['task_date'])), $format_hours, $d['color_code']);
