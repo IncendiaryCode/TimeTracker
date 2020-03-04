@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="18F132" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Modules" representedClassName="Modules" syncable="YES" codeGenerationType="class">
+    <entity name="Modules" representedClassName=".Modules" syncable="YES" codeGenerationType="class">
         <attribute name="module_id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="project_id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
-    <entity name="Projects" representedClassName=".Projects" syncable="YES">
+    <entity name="Projects" representedClassName=".Projects" syncable="YES" codeGenerationType="class">
         <attribute name="percentage_finished" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="project_color" optional="YES" attributeType="String"/>
         <attribute name="project_icon_url" optional="YES" attributeType="String"/>
@@ -14,11 +14,11 @@
         <attribute name="start_date" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="total_time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
-    <entity name="Punch_in_out_time" representedClassName=".UserTimes" syncable="YES">
+    <entity name="Punch_in_out_time" representedClassName=".UserTimes" syncable="YES" codeGenerationType="class">
         <attribute name="punch_in_time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="punch_out_time" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
     </entity>
-    <entity name="Tasks" representedClassName=".Tasks" syncable="YES">
+    <entity name="Tasks" representedClassName=".Tasks" syncable="YES" codeGenerationType="class">
         <attribute name="deleted_time_range" optional="YES" attributeType="String"/>
         <attribute name="end_time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="is_synched" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -31,7 +31,7 @@
         <attribute name="task_id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="task_name" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="Tasks_time" representedClassName=".Tasks_time" syncable="YES">
+    <entity name="Tasks_time" representedClassName=".Tasks_time" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="String"/>
         <attribute name="end_time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="start_time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>

@@ -13,6 +13,7 @@
  //////////////////////////////////////////////////////////////////////////// */
 
 import UIKit
+import AVFoundation
 
 class AccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
 UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
@@ -49,6 +50,8 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
     @IBOutlet weak var btnCancel: UIButton!
     @IBOutlet weak var lblErrorName: UILabel!
     
+    /// Profile picture picker. (Camera/Image pickrer)
+    var imagePicker = UIImagePickerController()
     var prevImage: UIImage?
     var cgFTableDisHeight: CGFloat!
     var punchInOutCDController: PunchInOutCDController!
@@ -263,15 +266,58 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         performSegue(withIdentifier: "SegueToResetPw", sender: nil)
     }
     
+    func checkCameraAccess() {
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+            case .denied:
+                print("Denied, request permission from settings")
+                presentCameraSettings()
+            case .restricted:
+                print("Restricted, device owner must approve")
+            case .authorized:
+                print("Authorized, proceed")
+            case .notDetermined:
+                AVCaptureDevice.requestAccess(for: .video) { success in
+                    if success {
+                        print("Permission granted, proceed")
+                    } else {
+                        print("Permission denied")
+                    }
+            }
+            @unknown default:
+            break
+        }
+    }
+    
+    func presentCameraSettings() {
+        let alertController = UIAlertController(title: "Unable to access the Camera"
+            , message: "Camera access required to capture your profile picture"
+            , preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel) {
+            _ in
+            self.imagePicker.isNavigationBarHidden = false
+            self.imagePicker.dismiss(animated: true, completion: nil)
+        })
+        alertController.addAction(UIAlertAction(title: "Settings", style: .default) { _ in
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url, options: [:], completionHandler: { _ in
+                    self.imagePicker.isNavigationBarHidden = false
+                    self.imagePicker.dismiss(animated: true, completion: nil)
+                })
+            }
+        })
+        imagePicker.present(alertController, animated: true)
+    }
+    
     func openCamera()
     {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType
             .camera) {
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
             imagePicker.sourceType = UIImagePickerController.SourceType.camera
+            imagePicker.delegate = self
             imagePicker.allowsEditing = true
-            self.present(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: {
+                self.checkCameraAccess()
+            })
         }
         else
         {
@@ -288,7 +334,6 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType
             .photoLibrary){
             actIndicator.startAnimating()
-            let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
             imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
@@ -316,6 +361,7 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.isNavigationBarHidden = false
         picker.dismiss(animated: true, completion: nil)
     }
     
@@ -333,11 +379,16 @@ UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerContro
         
         alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
         
-        if let button = sender as? UIButton {
-            alert.popoverPresentationController?.sourceView = button
-            alert.popoverPresentationController?.sourceRect = button.bounds
-            self.present(alert, animated: true, completion: nil)
+        switch UIDevice.current.userInterfaceIdiom {
+            case .pad:
+                alert.popoverPresentationController?.sourceView = sender as? UIButton
+                alert.popoverPresentationController?.sourceRect = (sender as? UIButton)!.bounds
+                alert.popoverPresentationController?.permittedArrowDirections = .up
+            default:
+                break
         }
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func btnEditProfilePressed(_ sender: Any) {

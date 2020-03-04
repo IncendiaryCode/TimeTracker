@@ -40,6 +40,9 @@ class ResetPWVC: UIViewController {
         txFCurrentPW.useUnderline(uiColor: UIColor.lightGray.withAlphaComponent(0.3))
         txFNewPW.useUnderline(uiColor: UIColor.lightGray.withAlphaComponent(0.3))
         txFReNewPW.useUnderline(uiColor: UIColor.lightGray.withAlphaComponent(0.3))
+        txFCurrentPW.tintColor = g_colorMode.tintColor()
+        txFNewPW.tintColor = g_colorMode.tintColor()
+        txFReNewPW.tintColor = g_colorMode.tintColor()
         
         viewMain.layer.masksToBounds = true
         viewMain.layer.cornerRadius = 35

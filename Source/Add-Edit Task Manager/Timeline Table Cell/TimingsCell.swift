@@ -57,6 +57,7 @@ class TimingsCell: UITableViewCell {
         
         lblDate.addRightSideLine()
         lblStartTime.addRightSideLine()
+        txtFDescription.tintColor = g_colorMode.tintColor()
         txtFDescription.addLine(rect: CGRect(x: 0, y: txtFDescription.bounds.maxY+2
             , width: txtFDescription.bounds.width, height: 1))
         btnRemoveConfirm.setTitleColor(g_colorMode.textColor(), for: .normal)

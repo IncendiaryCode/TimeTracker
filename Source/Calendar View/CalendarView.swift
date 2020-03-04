@@ -260,8 +260,7 @@ public class CalendarView: UIView {
                         // Get total work time.
                         let date = dateFromIndexPath(indexPath)
                         let taskTimeController = TasksTimeCDController()
-                        let intDate = date!.millisecondsSince1970 - Int64(TimeZone.current
-                            .secondsFromGMT())
+                        let intDate = date!.millisecondsSince1970
                         let totalTime = taskTimeController.getTotalWorkTime(intDate: intDate)
                         let strTotTime = getSecondsToHoursMinutesSeconds(seconds: totalTime
                             , format: .hm)

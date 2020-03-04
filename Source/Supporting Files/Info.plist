@@ -30,7 +30,7 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>To upload your profile picture</string>
+	<string>Time Tracker requires access to your phone’s camera.</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
@@ -57,9 +57,6 @@
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 </dict>
 </plist>

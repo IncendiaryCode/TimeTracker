@@ -32,7 +32,7 @@ UIGestureRecognizerDelegate {
     @IBOutlet weak var tblForProjAndMod: UITableView!
     @IBOutlet weak var nsLTblProjAndModHeight: NSLayoutConstraint!
     @IBOutlet weak var btnDatePickDone: UIButton!
-//    @IBOutlet weak var btnDatePickCancel: UIButton!
+    //    @IBOutlet weak var btnDatePickCancel: UIButton!
     @IBOutlet weak var lblSelectProject: UILabel!
     @IBOutlet weak var lblSelectModule: UILabel!
     @IBOutlet weak var actIndicator: UIActivityIndicatorView!
@@ -45,6 +45,8 @@ UIGestureRecognizerDelegate {
     @IBOutlet weak var lblHintDate: UILabel!
     @IBOutlet weak var nsLTblTimingsHeight: NSLayoutConstraint!
     @IBOutlet weak var viewdateHeader: UIView!
+    @IBOutlet weak var btnAddTimeline: UIButton!
+    @IBOutlet weak var imgAddTimeline: UIImageView!
     
     /// Selection type .
     enum SelectionType {
@@ -86,7 +88,8 @@ UIGestureRecognizerDelegate {
     var selectedCell: TimingsCell! // Selected cell (Initialise only in delagate from Timings cell).
     /// Classify which row selected. (Date=0, Start Time=1 or End Time=2)
     var selectedRow: Int!
-    var nEmptyRow: Int!
+    /// Variable indicates how many add time labels added to the timeline.
+    var nEmptyRow: Int! = 0
     var selectedType: SelectionType!
     /// tableview, Date Picker Height.
     var cgFHeightForPopup: CGFloat!
@@ -165,7 +168,7 @@ UIGestureRecognizerDelegate {
         panGesture = UIPanGestureRecognizer(target: self, action:#selector(self
             .panToDatePickerTop(panGesture:)))
         viewdateHeader.addGestureRecognizer(panGesture)
-
+        
         txtVTaskDescr.delegate = self
         txtTaskName.delegate = self
         
@@ -198,14 +201,14 @@ UIGestureRecognizerDelegate {
             selectedModId = cTaskDetails.moduleId
             let cProjDetails = g_dictProjectDetails[selectedProjId]!
             lblSelectModule.text = cProjDetails.dictModules[selectedModId]
+            // Set empty cells to zero.
+            nEmptyRow = 0
             
             // Get task timings.
             arrTaskTimeDetails = cTaskDetails.arrTaskTimings
             sortAndDisplayTimings()
             lblAddTask.text = "Edit Task"
             
-            // Set empty cells to zero.
-            nEmptyRow = 0
         }
     }
     
@@ -225,7 +228,9 @@ UIGestureRecognizerDelegate {
         let cgPEnd = CGPoint(x: 1, y: 0.75)
         btnDatePickDone.addGradient(cgPStart: cgPStart, cgPEnd: cgPEnd, cgFRadius: 15)
         txtVTaskDescr.textColor = g_colorMode.midText()
+        txtVTaskDescr.tintColor = g_colorMode.tintColor()
         txtTaskName.textColor = g_colorMode.textColor()
+        txtTaskName.tintColor = g_colorMode.tintColor()
         viewMain.backgroundColor = g_colorMode.defaultColor()
         scrollView.layer.masksToBounds = true
         scrollView.layer.cornerRadius = 35
@@ -233,6 +238,7 @@ UIGestureRecognizerDelegate {
         scrollView.layer.borderColor = g_colorMode.lineColor().cgColor
         scrollView.layer.borderWidth = 0.3
         tblviewTimings.backgroundColor = g_colorMode.defaultColor()
+        btnAddTimeline.setTitleColor(g_colorMode.textColor(), for: .normal)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -253,10 +259,10 @@ UIGestureRecognizerDelegate {
         // Sort array timings.
         if arrTaskTimeDetails.count > 0 {
             let sortedArrayTime = arrTaskTimeDetails.sorted(by: {
-                ($0.nStartTime) < ($1.nStartTime)
+                ($0.nStartTime) > ($1.nStartTime)
             })
             let sortedArrayDate = sortedArrayTime.sorted (by: {
-                getDateFromString(strDate: ($0.strDate)) < getDateFromString(strDate:
+                getDateFromString(strDate: ($0.strDate)) > getDateFromString(strDate:
                     ($1.strDate))
             })
             arrTaskTimeDetails = sortedArrayDate
@@ -293,7 +299,8 @@ UIGestureRecognizerDelegate {
         if panGesture.state == .ended || panGesture.state == .cancelled ||
             panGesture.state == .failed {
             // If table moved below to more than half of its height.
-            if nsLTblProjAndModHeight.constant < cgFHeightForPopup/2 || panGesture.velocity(in: viewMain).y > 500 {
+            if nsLTblProjAndModHeight.constant < cgFHeightForPopup/2 || panGesture.velocity(in:
+                viewMain).y > 500 {
                 // Dismiss view.
                 nsLTblProjAndModHeight.constant = 0
                 UIView.animate(withDuration: g_nAnimatnDuratn+0.1, animations: {
@@ -423,8 +430,8 @@ UIGestureRecognizerDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == tblviewTimings {
             // Set timings height.
-            nsLTblTimingsHeight.constant = (CGFloat(arrTaskTimeDetails.count)*cellHeight)+(CGFloat(nEmptyRow)*cellHeight)+44.0+30.0+20 // (44 - add time label, 30 - header, 20 - Hide scroll view border rad)
-            return arrTaskTimeDetails.count + nEmptyRow + 1 // +1 is for add time label.
+            nsLTblTimingsHeight.constant = (CGFloat(arrTaskTimeDetails.count)*cellHeight)+(CGFloat(nEmptyRow)*cellHeight)+44+30+20 // (44 - add time label, 30 - header, 20 - Hide scroll view border rad)
+            return arrTaskTimeDetails.count + nEmptyRow // +1 is for add time label.
         }
         else {
             switch selectedType {
@@ -433,7 +440,7 @@ UIGestureRecognizerDelegate {
                 case .module:
                     if nil != arrModules {
                         return arrModules.count
-                }
+                    }
                     else {
                         return 0
                 }
@@ -450,15 +457,27 @@ UIGestureRecognizerDelegate {
             cell.delegate = self
             cell.indexPath = indexPath
             cell.contentView.backgroundColor = g_colorMode.defaultColor()
-            if indexPath.row < arrTaskTimeDetails.count {
+            // If first cell.
+            if nEmptyRow == 1 && indexPath.row == 0 {
+                setupRemoveEmptyButton(cell: cell)
+                // If first cell.
+                if indexPath.row == 0 {
+                    // First entry prefill.
+                    // cell.btnRemoveAdd.isHidden = true
+                    cell.lblDate.text = Date().getStrDate()
+                    cell.lblStartTime.text = Date().getStrTime()
+                }
+            }
+                // When timings cell added but, timings not set.
+            else if indexPath.row < arrTaskTimeDetails.count+nEmptyRow {
                 // If edit field cell.
-                let cTaskTimeDetails = arrTaskTimeDetails[indexPath.row]
+                let cTaskTimeDetails = arrTaskTimeDetails[indexPath.row-nEmptyRow]
                 cell.timeId = cTaskTimeDetails.timeId
                 cell.txtFDescription.text = cTaskTimeDetails.description
                 cell.lblDate.text = cTaskTimeDetails.strDate
                 // If indexpath row not equals 0 and previos cell date is same the hide date label.
                 if 0 != indexPath.row && cTaskTimeDetails.strDate ==
-                arrTaskTimeDetails[indexPath.row-1].strDate {
+                    arrTaskTimeDetails[indexPath.row-1].strDate {
                     cell.lblDate.isHidden = true
                     cell.viewSeparator.isHidden = true
                 }
@@ -488,17 +507,6 @@ UIGestureRecognizerDelegate {
                 cell.txtFDescription.isHidden = false
                 
             }
-            // When timings cell added but, timings not set.
-            else if nEmptyRow == 1 && indexPath.row != arrTaskTimeDetails.count + nEmptyRow {
-                setupRemoveEmptyButton(cell: cell)
-                // If first cell.
-                if indexPath.row == 0 {
-                    // First entry prefill.
-//                    cell.btnRemoveAdd.isHidden = true
-                    cell.lblDate.text = Date().getStrDate()
-                    cell.lblStartTime.text = Date().getStrTime()
-                }
-            }
             else {
                 // If add time cell.
                 cell.lblDate.isUserInteractionEnabled = true
@@ -507,7 +515,7 @@ UIGestureRecognizerDelegate {
                 cell.viewSeparator.isHidden = false
                 cell.lblStartTime.isHidden = true
                 cell.lblEndTime.isHidden = true
-                cell.txtFDescription.isHidden = true
+                //                cell.txtFDescription.isHidden = true
                 
                 // remove right border line
                 cell.lblStartTime.layer.masksToBounds = true
@@ -542,7 +550,7 @@ UIGestureRecognizerDelegate {
                     imgProj.image = arrProjects[indexPath.row].imgProjIcon
                     if nil != selectedProjId && arrProjects[indexPath.row].projId == selectedProjId {
                         imgSelected.isHidden = false
-                    }
+                }
                 case .module:
                     lblTitle.text = arrModules[indexPath.row]
                     imgProj.image = nil
@@ -550,9 +558,9 @@ UIGestureRecognizerDelegate {
                         .dictModules.getKey(forValue: arrModules[indexPath.row])
                     if nil != selectedModId && modId == selectedModId {
                         imgSelected.isHidden = false
-                    }
+                }
                 default:
-                break
+                    break
             }
             return cell
         }
@@ -560,7 +568,7 @@ UIGestureRecognizerDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == tblviewTimings {
-
+            
         }
         else {
             switch selectedType {
@@ -578,7 +586,7 @@ UIGestureRecognizerDelegate {
                         .dictModules.getKey(forValue: strModule)
                     lblSelectModule.text = strModule
                 default:
-                break
+                    break
             }
             
             // Change font color of label project and module.
@@ -602,20 +610,43 @@ UIGestureRecognizerDelegate {
     
     /// When date time picker value changed called.
     @objc func datePickerChanged(picker: UIDatePicker) {
-//        let date = picker.date
-//        if selectedRow == 0 {
-//            let strDate = date.getStrDate()
-//            selectedCell.lblDate.text = strDate
-//        }
-//        else if selectedRow == 1 {
-//            let strStartTime = date.getStrTime()
-//            selectedCell.lblStartTime.text = strStartTime
-//        }
-//        else {
-//            let strStartTime = date.getStrTime()
-//            selectedCell.lblEndTime.text = strStartTime
-//        }
+        //        let date = picker.date
+        //        if selectedRow == 0 {
+        //            let strDate = date.getStrDate()
+        //            selectedCell.lblDate.text = strDate
+        //        }
+        //        else if selectedRow == 1 {
+        //            let strStartTime = date.getStrTime()
+        //            selectedCell.lblStartTime.text = strStartTime
+        //        }
+        //        else {
+        //            let strStartTime = date.getStrTime()
+        //            selectedCell.lblEndTime.text = strStartTime
+        //        }
     }
+    
+    @IBAction func btnAddTimelinePressed(_ sender: Any) {
+        if nEmptyRow == 0 {
+            let index = IndexPath(row: 0, section: 0)
+            nEmptyRow = 1
+//        setupRemoveEmptyButton(cell: cell)
+            CATransaction.begin()
+            tblviewTimings.insertRows(at: [index], with: .fade)
+            CATransaction.setCompletionBlock({
+                let cell = self.tblviewTimings.cellForRow(at: [0,0])!
+                let cgRect = CGRect(origin: CGPoint(x: cell.frame.minX, y: cell.frame.maxY+self.tblviewTimings.frame.minY), size: cell.frame.size)
+                self.scrollView.scrollRectToVisible(cgRect, animated: true)
+            })
+            CATransaction.commit()
+        }
+        else {
+            let toast = ToastView(msg: "Please complete previous time")
+            self.view.addSubview(toast)
+            toast.showMessage()
+//            errorMessage(msg: "Please complete previous time")
+        }
+    }
+    
     
     func removeAddSelected(indexPath: IndexPath) {
         lblError.isHidden = true
@@ -630,22 +661,9 @@ UIGestureRecognizerDelegate {
             })
             
             //Desable touch to selected cell while remove action performed.
-//            cell.lblDate.isUserInteractionEnabled = false
-//            cell.lblStartTime.isUserInteractionEnabled = false
-//            cell.lblEndTime.isUserInteractionEnabled = false
-        }
-        // If selected add time.
-        else if nEmptyRow == 0 {
-            let index = IndexPath(row: arrTaskTimeDetails.count+1, section: 0)
-            nEmptyRow = 1
-            setupRemoveEmptyButton(cell: cell)
-            CATransaction.begin()
-            tblviewTimings.insertRows(at: [index], with: .fade)
-            CATransaction.setCompletionBlock({self.scrollView.scrollToBottom()})
-            CATransaction.commit()
-        }
-        else {
-            errorMessage(msg: "Please complete previous time")
+            //            cell.lblDate.isUserInteractionEnabled = false
+            //            cell.lblStartTime.isUserInteractionEnabled = false
+            //            cell.lblEndTime.isUserInteractionEnabled = false
         }
     }
     
@@ -695,7 +713,6 @@ UIGestureRecognizerDelegate {
     func addNewCellTimings() {
         if .updatable == checkTimeUpdatable().0 {
             addArrayTimings()
-            sortAndDisplayTimings()
         }
     }
     
@@ -745,11 +762,11 @@ UIGestureRecognizerDelegate {
         
         
         /// Date and time is greater than current time.
-//        if date == Date().getStrDate() {
-//            if (start-60) > getTimeInSec() || (end-60) > getTimeInSec() {
-//                return .futureTime
-//            }
-//        }
+        //        if date == Date().getStrDate() {
+        //            if (start-60) > getTimeInSec() || (end-60) > getTimeInSec() {
+        //                return .futureTime
+        //            }
+        //        }
         
         for i in 0..<arrTaskTimeDetails.count {
             let cTaskTimeDetails = arrTaskTimeDetails[i]
@@ -769,11 +786,11 @@ UIGestureRecognizerDelegate {
                     if nStartTime <= start && nEndTime > start {
                         return (.timeExist, nil, nil)
                     }
-                    // When end time in between any other start and end time.
+                        // When end time in between any other start and end time.
                     else if end > nStartTime && end < nEndTime {
                         return (.timeExist, nil, nil)
                     }
-                    // When start time less than and end time greater than any other timings.
+                        // When start time less than and end time greater than any other timings.
                     else if start < nStartTime && end > nEndTime {
                         return (.timeExist, nil, nil)
                     }
@@ -807,10 +824,10 @@ UIGestureRecognizerDelegate {
             }
             else {
                 dateTimePicker.setDate(Date(), animated: true)
-//                cell.lblDate.text = Date().getStrDate()
+                //                cell.lblDate.text = Date().getStrDate()
             }
             
-//            tblviewTimings.scrollToRow(at: indexPath, at: .bottom, animated: false)
+            //            tblviewTimings.scrollToRow(at: indexPath, at: .bottom, animated: false)
         }
         else {
             // If last index. (i.e. add new add time cell)
@@ -837,9 +854,9 @@ UIGestureRecognizerDelegate {
         }
         else {
             setTimePickerView(dateTime: Date())
-//            cell.lblStartTime.text = Date().getStrTime()
+            //            cell.lblStartTime.text = Date().getStrTime()
         }
-//        tblviewTimings.scrollToRow(at: indexPath, at: .bottom, animated: false)
+        //        tblviewTimings.scrollToRow(at: indexPath, at: .bottom, animated: false)
         // Hide hint.
         lblHintDate.isHidden = true
         imgHintDate.isHidden = true
@@ -861,9 +878,9 @@ UIGestureRecognizerDelegate {
         }
         else {
             setTimePickerView(dateTime: Date())
-//            cell.lblEndTime.text = Date().getStrTime()
+            //            cell.lblEndTime.text = Date().getStrTime()
         }
-//        tblviewTimings.scrollToRow(at: indexPath, at: .bottom, animated: false)
+        //        tblviewTimings.scrollToRow(at: indexPath, at: .bottom, animated: false)
         // Hide hint.
         lblHintDate.isHidden = true
         imgHintDate.isHidden = true
@@ -890,7 +907,7 @@ UIGestureRecognizerDelegate {
         if let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
             self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight
                 , right: 0)
-//            nsLTblTimingsHeight.constant -= keyboardHeight
+            //            nsLTblTimingsHeight.constant -= keyboardHeight
         }
     }
     
@@ -899,24 +916,24 @@ UIGestureRecognizerDelegate {
         if let _ = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?
             .cgRectValue.height {
             self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//            nsLTblTimingsHeight.constant += keyboardHeight
+            //            nsLTblTimingsHeight.constant += keyboardHeight
         }
     }
     
     /// Setup time picker.(Maximum and Minimum time)
     func setTimePickerView(dateTime: Date) {
         dateTimePicker.datePickerMode = .time
-//        let calendar = Calendar.current
-//        var components = DateComponents()
-//        components.day = dateTime.day
-//        components.month = dateTime.mon
-//        components.year = dateTime.year
-//        components.hour = 8 // Minimum time from 6 AM
-//        components.minute = 00
-//        let minTime = calendar.date(from: components)!
+        //        let calendar = Calendar.current
+        //        var components = DateComponents()
+        //        components.day = dateTime.day
+        //        components.month = dateTime.mon
+        //        components.year = dateTime.year
+        //        components.hour = 8 // Minimum time from 6 AM
+        //        components.minute = 00
+        //        let minTime = calendar.date(from: components)!
         dateTimePicker.minimumDate = nil
-//        components.hour = 20 // // Max time to 8 PM
-//        let maxTime = calendar.date(from: components)!
+        //        components.hour = 20 // // Max time to 8 PM
+        //        let maxTime = calendar.date(from: components)!
         dateTimePicker.maximumDate = nil
         dateTimePicker.setDate(dateTime, animated: true)
     }
@@ -1023,14 +1040,14 @@ UIGestureRecognizerDelegate {
                 }
             }
             // Edit Action.
-            if selectedCell.indexPath.row < arrTaskTimeDetails.count {
+            if selectedCell.indexPath.row == 0 && nEmptyRow == 1 {
+                // If selected cell type is adding new date.
+                addNewCellTimings()
+            }
+            else {
                 // If selected cell is edit time.
                 // Update timings in array also.
                 updateArrayTimings()
-            }
-            else {
-                // If selected cell type is adding new date.
-                addNewCellTimings()
             }
         }
         else {
@@ -1069,7 +1086,7 @@ UIGestureRecognizerDelegate {
         sortArrayTimings()
         tblviewTimings.reloadData()
     }
-
+    
     /// Update timings in array.
     func removeArrayTimings() {
         var isEmptyCell = true
@@ -1124,9 +1141,9 @@ UIGestureRecognizerDelegate {
                                                end: endTime, descr: strDescr)
         
         arrTaskTimeDetails.append(cTaskTimeDetails)
-        sortAndDisplayTimings()
         // After adding new row, empty filled rows are zero.
         nEmptyRow = 0
+        sortAndDisplayTimings()
     }
     
     /// To show date time picker with animation
@@ -1170,7 +1187,7 @@ UIGestureRecognizerDelegate {
                 strError = "Time you have entered is already exists"
             case .punchedout:
                 strError =
-                "Since you are punched out, You will be not able to start a task, please enter end time if you want to update the timings"
+            "Since you are punched out, You will be not able to start a task, please enter end time if you want to update the timings"
             case .punchin:
                 strError =
             "Since you are not punched in, You will be not able to start a task, please enter end time if you want to update the timings"
@@ -1182,7 +1199,7 @@ UIGestureRecognizerDelegate {
                 else {
                     strError =
                     "Date you have entered does not contain your punch in/out data"
-                }
+            }
             default:
                 strError = "Enter valid time"
         }
@@ -1190,7 +1207,7 @@ UIGestureRecognizerDelegate {
             strError, preferredStyle:
             UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { _ in
-                // If updation failed set end field empty
+            // If updation failed set end field empty
             if nil != self.selectedCell {
                 self.selectedCell.lblEndTime.text = ""
             }
@@ -1206,7 +1223,7 @@ UIGestureRecognizerDelegate {
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: {
             _ in
             self.sortAndDisplayTimings()
-            }
+        }
         ))
         self.present(alert, animated: true, completion: nil)
     }
@@ -1227,7 +1244,7 @@ UIGestureRecognizerDelegate {
     @objc func viewBGPressed(sender: UITapGestureRecognizer) {
         if nsLDatePickerHeight.constant == cgFHeightForPopup {
             // Update date to the table cell and validate.
-//            editDateTimeCompleted()
+            //            editDateTimeCompleted()
             if arrTaskTimeDetails.count > selectedCell.indexPath.row {
                 arrTaskTimeDetails[selectedCell.indexPath.row].description =
                     selectedCell.txtFDescription.text
@@ -1262,7 +1279,9 @@ UIGestureRecognizerDelegate {
         // If indexpath is for add time cell.
         if tblviewTimings == tableView {
             if tableView.numberOfRows(inSection: 0)-1 == indexPath.row {
-                return 44
+                //                return 44
+                // Commented since, add time line to top.
+                return cellHeight
             }
             else {
                 return cellHeight
@@ -1273,16 +1292,16 @@ UIGestureRecognizerDelegate {
         }
     }
     
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange,
-//                   replacementString string: String) -> Bool {
-          // To restrict task name less tan 50 char
-//        let currentCharacterCount = textField.text?.count ?? 0
-//        if range.length + range.location > currentCharacterCount {
-//            return false
-//        }
-//        let newLength = currentCharacterCount + string.count - range.length
-//        return newLength <= 50
-//    }
+    //    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange,
+    //                   replacementString string: String) -> Bool {
+    // To restrict task name less tan 50 char
+    //        let currentCharacterCount = textField.text?.count ?? 0
+    //        if range.length + range.location > currentCharacterCount {
+    //            return false
+    //        }
+    //        let newLength = currentCharacterCount + string.count - range.length
+    //        return newLength <= 50
+    //    }
     
     // Update view and database while moving to activity view.
     func updateActivityView() {
@@ -1300,26 +1319,26 @@ UIGestureRecognizerDelegate {
             if let tabBarController = self.navigationController?.viewControllers[0]
                 as? TabBarController {
                 if let viewActivity = tabBarController.selectedViewController as? DashboardVC {
-//                    if !(RequestController.shared.reachabilityManager?.isReachable)! {
-//                        viewActivity.updateView()
-//                    }
-//                    else {
-                        
-                        // Update based on page no.
-                        if let id = taskId, id > 0 {
-                            let pageNo = tasksCDController.getPageNoAPI(taskId: taskId!)
-                            viewActivity.updateTask(requireAll: false, pageNo: pageNo)
-                        }
-                        else {
-                            viewActivity.updateProject()
-                        }
-                        viewActivity.sortAndRefreshData()
-                        viewActivity.arrRunningTask = viewActivity.getRunningTaskId()
-                        // If no task running draw play icon or stop icon.
-                        viewActivity.drawTaskState()
-                        //                    viewActivity.splitMergeStateAndFinishBtn()
-                        viewActivity.collectionTimer.reloadData()
-//                    }
+                    //                    if !(RequestController.shared.reachabilityManager?.isReachable)! {
+                    //                        viewActivity.updateView()
+                    //                    }
+                    //                    else {
+                    
+                    // Update based on page no.
+                    if let id = taskId, id > 0 {
+                        let pageNo = tasksCDController.getPageNoAPI(taskId: taskId!)
+                        viewActivity.updateTask(requireAll: false, pageNo: pageNo)
+                    }
+                    else {
+                        viewActivity.updateProject()
+                    }
+                    viewActivity.sortAndRefreshData()
+                    viewActivity.arrRunningTask = viewActivity.getRunningTaskId()
+                    // If no task running draw play icon or stop icon.
+                    viewActivity.drawTaskState()
+                    //                    viewActivity.splitMergeStateAndFinishBtn()
+                    viewActivity.collectionTimer.reloadData()
+                    //                    }
                     self.navigationController?.popToRootViewController(animated: true)
                 }
             }
@@ -1378,7 +1397,7 @@ UIGestureRecognizerDelegate {
         // If device connected to internet.
         if (RequestController.shared.reachabilityManager?.isReachable)! {
             actIndicator.startAnimating()
-
+            
             // Add news task.
             APIResponseHandler.addTask(params: getParameter(), completion: {
                 (status, id, msg) in
@@ -1388,7 +1407,7 @@ UIGestureRecognizerDelegate {
                         let taskTimeCDCtrlr = TasksTimeCDController()
                         taskTimeCDCtrlr.deleteTaskTime(timeId: Int(timeId)!)
                     }
-
+                    
                     // Start task if start button action.
                     if startTask {
                         APIResponseHandler.startTaskOrPunchIn(taskId: "\(id)",completion: {
@@ -1463,7 +1482,7 @@ UIGestureRecognizerDelegate {
                     startTime = dateStart.millisecondsSince1970
                 }
                 tasksCDController.updateTaskNameDescrAndProject(taskId: taskId!, moduleId: selectedModId,
-                    strTaskName: txtTaskName.text!, strDescr: txtVTaskDescr.text, projectId:
+                                                                strTaskName: txtTaskName.text!, strDescr: txtVTaskDescr.text, projectId:
                     selectedProjId, isWorking: false, startTime: startTime, isSynched: false, deleted:
                     arrDeletaedTimeId, pageNo: 0)
             }
@@ -1524,72 +1543,72 @@ UIGestureRecognizerDelegate {
         dictParams.updateValue("\(selectedModId!)", forKey: "project_module")
         
         var arrDictTimings = Array<Any>()
-            for cTaskTimeDetails in arrTaskTimeDetails {
-                let strDate = cTaskTimeDetails.strDate!
-                
-                let nStartTime = cTaskTimeDetails.nStartTime!
-                let nEndTime = cTaskTimeDetails.nEndTime!
-                let strStartTime = getSecondsToHoursMinutesSeconds(seconds: nStartTime)
-                
-                let strDateToAPI = convertLocalDateToUTC(strDate: "\(strDate) \(strStartTime)"
-                    , format: "dd/MM/yyyy HH:mm:ss")
-                let strStartDateTime = convertLocalTimeToUTC(strDateTime: "\(strDate) \(strStartTime)")
-                
-                var strEndDateTime: String!
-                // When last field of end timw set to zero. to start task.
-                if nEndTime == 0 {
-                    strEndDateTime = ""
-                }
-                else {
-                    let strEndTime = getSecondsToHoursMinutesSeconds(seconds: nEndTime)
-                    strEndDateTime = convertLocalTimeToUTC(strDateTime: "\(strDate) \(strEndTime)")
-                }
-                let descriptn = cTaskTimeDetails.description!
-                
-                var dictTimings: Dictionary<String, Any>!
-                if cTaskTimeDetails.timeId > 0 {
-                    // If time id id from server DB.
-                    // Edit task timings.
-                    dictTimings = ["date":strDateToAPI, "start": strStartDateTime,
-                                       "end": strEndDateTime!,"task_description": descriptn,
-                    "table_id": "\(cTaskTimeDetails.timeId!)"]
-                }
-                else {
-                    // Otherwise, append new task time to server db.
-                    dictTimings = ["date": strDateToAPI, "start": strStartDateTime, "end"
-                        : strEndDateTime!, "task_description": descriptn]
-                }
-                arrDictTimings.append(dictTimings!)
-            }
+        for cTaskTimeDetails in arrTaskTimeDetails.reversed() {
+            let strDate = cTaskTimeDetails.strDate!
             
-            // Check for last field filled with date and start time
-            // To indicate the task should start.
-            if nEmptyRow == 1 {
-                let lastCell = tblviewTimings.cellForRow(at: [0, arrDictTimings.count]) as! TimingsCell
-                let strDate = lastCell.lblDate.text!
-                var strStartTime = lastCell.lblStartTime.text!
-                let strEndTime = lastCell.lblEndTime.text!
-                if "" == strEndTime && "" != strDate && "" != strStartTime {
+            let nStartTime = cTaskTimeDetails.nStartTime!
+            let nEndTime = cTaskTimeDetails.nEndTime!
+            let strStartTime = getSecondsToHoursMinutesSeconds(seconds: nStartTime)
+            
+            let strDateToAPI = convertLocalDateToUTC(strDate: "\(strDate) \(strStartTime)"
+                , format: "dd/MM/yyyy HH:mm:ss")
+            let strStartDateTime = convertLocalTimeToUTC(strDateTime: "\(strDate) \(strStartTime)")
+            
+            var strEndDateTime: String!
+            // When last field of end timw set to zero. to start task.
+            if nEndTime == 0 {
+                strEndDateTime = ""
+            }
+            else {
+                let strEndTime = getSecondsToHoursMinutesSeconds(seconds: nEndTime)
+                strEndDateTime = convertLocalTimeToUTC(strDateTime: "\(strDate) \(strEndTime)")
+            }
+            let descriptn = cTaskTimeDetails.description!
+            
+            var dictTimings: Dictionary<String, Any>!
+            if cTaskTimeDetails.timeId > 0 {
+                // If time id id from server DB.
+                // Edit task timings.
+                dictTimings = ["date":strDateToAPI, "start": strStartDateTime,
+                               "end": strEndDateTime!,"task_description": descriptn,
+                               "table_id": "\(cTaskTimeDetails.timeId!)"]
+            }
+            else {
+                // Otherwise, append new task time to server db.
+                dictTimings = ["date": strDateToAPI, "start": strStartDateTime, "end"
+                    : strEndDateTime!, "task_description": descriptn]
+            }
+            arrDictTimings.append(dictTimings!)
+        }
+        
+        // Check for last field filled with date and start time
+        // To indicate the task should start.
+        if nEmptyRow == 1 {
+            let lastCell = tblviewTimings.cellForRow(at: [0, 0]) as! TimingsCell
+            let strDate = lastCell.lblDate.text!
+            var strStartTime = lastCell.lblStartTime.text!
+            let strEndTime = lastCell.lblEndTime.text!
+            if "" == strEndTime && "" != strDate && "" != strStartTime {
+                
+                // Convert to valid format.
+                let nStartTime = getSecondCount(strTime: strStartTime)
+                strStartTime = getSecondsToHoursMinutesSeconds(seconds: nStartTime)
+                
+                let strCurrentDate = getCurrentDateTime()
+                // Check for valid time.
+                if Date(strDateTime: strCurrentDate) >=
+                    Date(strDateTime: "\(strDate) \(strStartTime)") {
+                    let strDateToAPI = convertLocalDateToUTC(strDate: "\(strDate) \(strStartTime)"
+                        , format: "dd/MM/yyyy HH:mm:ss")
+                    let strStartDateTime = convertLocalTimeToUTC(strDateTime: "\(strDate) \(strStartTime)")
+                    let descriptn = lastCell.txtFDescription.text!
                     
-                    // Convert to valid format.
-                    let nStartTime = getSecondCount(strTime: strStartTime)
-                    strStartTime = getSecondsToHoursMinutesSeconds(seconds: nStartTime)
-                    
-                    let strCurrentDate = getCurrentDateTime()
-                    // Check for valid time.
-                    if Date(strDateTime: strCurrentDate) >=
-                            Date(strDateTime: "\(strDate) \(strStartTime)") {
-                        let strDateToAPI = convertLocalDateToUTC(strDate: "\(strDate) \(strStartTime)"
-                            , format: "dd/MM/yyyy HH:mm:ss")
-                        let strStartDateTime = convertLocalTimeToUTC(strDateTime: "\(strDate) \(strStartTime)")
-                        let descriptn = lastCell.txtFDescription.text!
-                        
-                        let dictTimings = ["date": strDateToAPI, "start": strStartDateTime, "end"
-                            : "", "task_description": descriptn]
-                        arrDictTimings.append(dictTimings)
-                    }
+                    let dictTimings = ["date": strDateToAPI, "start": strStartDateTime, "end"
+                        : "", "task_description": descriptn]
+                    arrDictTimings.append(dictTimings)
                 }
             }
+        }
         
         // Add task id if it is edit case.
         if let id = taskId {
@@ -1604,7 +1623,7 @@ UIGestureRecognizerDelegate {
             dictParams.updateValue(arrDelTimeId, forKey: "deleted_time_range")
         }
         dictParams.updateValue(arrDictTimings, forKey: "time_range")
-
+        
         return dictParams
     }
     
@@ -1627,13 +1646,15 @@ UIGestureRecognizerDelegate {
     
     // Check all the cell fields are filled except last row.
     func checkAllTimingsFilled() -> Bool {
-        let lastIndex = nEmptyRow == 1 ? arrTaskTimeDetails.count : arrTaskTimeDetails.count - 1
-        if lastIndex >= 0 {
-            for index in 0..<lastIndex {
+        if arrTaskTimeDetails.count > 0 {
+            for index in nEmptyRow..<arrTaskTimeDetails.count {
                 let cell = tblviewTimings.cellForRow(at: [0, index]) as! TimingsCell
                 if cell.lblDate.text == "" || cell.lblStartTime.text == "" ||
                     cell.lblEndTime.text == "" {
-                    errorMessage(msg: "Enter timings")
+                    let toast = ToastView(msg: "Enter valid timelines")
+                    self.view.addSubview(toast)
+                    toast.showMessage()
+//                    errorMessage(msg: "Enter timings")
                     return false
                 }
             }
@@ -1641,11 +1662,39 @@ UIGestureRecognizerDelegate {
         return true
     }
     
+    // Check when end time blank and validate timings.
+    func checkStartTimeExistance(date: String, time: Int) -> Bool {
+        var isExist: Bool!
+        // Store started and ended time of that day.
+        var (startTime, endTime) = (999999, 0)
+        for taskTimeDetail in arrTaskTimeDetails {
+            if taskTimeDetail.strDate == date {
+                if taskTimeDetail.nStartTime < startTime {
+                    startTime = taskTimeDetail.nStartTime
+                }
+                if taskTimeDetail.nEndTime > endTime {
+                    endTime = taskTimeDetail.nEndTime
+                }
+            }
+        }
+        // Check time comes b/w start and end time.
+        if time >= startTime && time < endTime {
+            isExist = true
+        }
+        else {
+            isExist = false
+        }
+        return isExist
+    }
+    
     @IBAction func btnSavePressed(_ sender: Any) {
         guard !(txtTaskName.text == "") && nil != selectedProjId && nil != selectedModId
             && checkAllTimingsFilled() else {
-                    errorMessage(msg: "Fill all the fields")
-                    return
+                let toast = ToastView(msg: "Fill all the fields")
+                self.view.addSubview(toast)
+                toast.showMessage()
+//                errorMessage(msg: "Fill all the fields")
+                return
         }
         
         updateTextDescription()
@@ -1653,12 +1702,15 @@ UIGestureRecognizerDelegate {
         // Check for empty cell is filled with date and start time.
         let lastIndex = nEmptyRow == 1 ? arrTaskTimeDetails.count : arrTaskTimeDetails.count - 1
         if lastIndex >= 0 {
-            let cell = tblviewTimings.cellForRow(at: [0, lastIndex]) as! TimingsCell
+            let cell = tblviewTimings.cellForRow(at: [0, 0]) as! TimingsCell
             if cell.lblDate.text == "" || cell.lblStartTime.text == "" {
-                errorMessage(msg: "Fill date and start time")
+                let toast = ToastView(msg: "Fill date and start time")
+                self.view.addSubview(toast)
+                toast.showMessage()
+//                errorMessage(msg: "Fill date and start time")
                 return
             }
-            // Check for punch in/out time if end time not mentioned.
+                // Check for punch in/out time if end time not mentioned.
             else if cell.lblEndTime.text == "" {
                 let strDate = cell.lblDate.text
                 let strTime = cell.lblStartTime.text
@@ -1670,17 +1722,26 @@ UIGestureRecognizerDelegate {
                 let punchInOutCDCtrlr = PunchInOutCDController()
                 let (isOutOfrange, strStart, strEnd) = punchInOutCDCtrlr
                     .isTimeExistInPunchInOut(start:
-                    startDate)
+                        startDate)
                 if !isOutOfrange {
                     return alertUnableToChangeDate(type: .outOfWorkTime, startTime: strStart
                         , endTime: strEnd)
+                }
+                
+                // Check already start time exists.
+                if checkStartTimeExistance(date: strDate!, time: getSecondCount(strTime:
+                    cell.lblStartTime.text!)) {
+                    return alertUnableToChangeDate(type: .timeExist)
                 }
             }
             
             // Check for future time entered with end time blank.
             if cell.lblEndTime.text == "" && cell.lblDate.text == getCurrentDate()
                 && getTimeInSec() < getSecondCount(strTime: cell.lblStartTime.text!) {
-                errorMessage(msg: "Start time cannot be future time")
+                let toast = ToastView(msg: "Start time cannot be future time")
+                self.view.addSubview(toast)
+                toast.showMessage()
+//                errorMessage(msg: "Start time cannot be future time")
                 return
             }
             
