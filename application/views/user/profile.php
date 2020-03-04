@@ -99,7 +99,6 @@ $this->load->helper('url_helper');
                     <div class="row">
                     <div class="text-right input-group col-md-3 offset-md-9 pt-4 ">
                         <!-- chart that shows monthly activities -->
-                        
                         <div class="input-group mb-3">
                             <input type="year" class="year-chart" id="year-chart" max =<?=date('YYYY');?>>
                             <div class="input-group-append">

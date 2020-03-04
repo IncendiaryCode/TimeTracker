@@ -80,12 +80,19 @@ function autocomplete(inp, arr) {
 	}
 }
 
-if(typeof(usr_arr ) != 'undefined')
-{
+if (typeof usr_arr != 'undefined') {
 	autocomplete(document.getElementById('user-assigned'), usr_arr);
 }
 
 $(document).ready(function() {
+	if (document.getElementById('module-edit')) {
+		var pre_edit = document.getElementById('pre-edit-module');
+		pre_edit.onsubmit = function() {
+			var module_name = document.getElementById('append-module-id').getAttribute('data-item');
+			document.getElementById('mdl_id').value = module_name;
+			return true;
+		};
+	}
 	$('#append-module').click(function() {
 		if (this.parentNode.parentNode.childNodes[1].value != '') {
 			document.getElementById('module-error').innerHTML = ' ';
@@ -99,7 +106,9 @@ $(document).ready(function() {
 					$('.module-lists').append(
 						'<li class="list-group-item d-flex justify-content-between align-items-center">' +
 							this.parentNode.parentNode.childNodes[1].value +
-							'<span><a href="#module-edit" data-toggle="modal" data = '+res['module_id']+' class = "module-edit"><i class="fas fa-pencil-alt"></i></a><a href="#module-delete" data-toggle="modal" class = "module-delete"><i class="fas fa-trash pl-3"></i></a></span></li>'
+							'<span><a href="#module-edit" data-toggle="modal" data = ' +
+							res['module_id'] +
+							' class = "module-edit"><i class="fas fa-pencil-alt"></i></a><a href="#module-delete" data-toggle="modal" class = "module-delete"><i class="fas fa-trash pl-3"></i></a></span></li>'
 					);
 					this.parentNode.parentNode.childNodes[1].value = '';
 				}
@@ -126,7 +135,9 @@ $(document).ready(function() {
 						$('.user-lists').append(
 							'<li class="list-group-item d-flex justify-content-between align-items-center">' +
 								this.parentNode.parentNode.childNodes[1].value +
-								'<span><a href="#user-delete" data-toggle="modal" data = '+usr_id[this.parentNode.parentNode.childNodes[1].value]+' class = "user-delete"><i class="fas fa-trash pl-3"><input type = "hidden" value = ' +
+								'<span><a href="#user-delete" data-toggle="modal" data = ' +
+								usr_id[this.parentNode.parentNode.childNodes[1].value] +
+								' class = "user-delete"><i class="fas fa-trash pl-3"><input type = "hidden" value = ' +
 								usr_id[this.parentNode.parentNode.childNodes[1].value] +
 								' ></i></a></span></li>'
 						);
@@ -171,7 +182,7 @@ $(document).ready(function() {
 		$('#delete-user').click(function() {
 			$.ajax({
 				type: 'POST',
-				url: timeTrackerBaseURL + 'admin/user_module',
+				url: timeTrackerBaseURL + 'admin/unassign_user',
 				data: { user_name: this.parentNode.parentNode.childNodes[1].value, project_id: document.getElementById('edit_project_id').value, user_id: user_id },
 				dataType: 'json',
 				success: function(res) {

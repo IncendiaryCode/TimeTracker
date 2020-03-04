@@ -466,6 +466,10 @@ table.dataTable
 {
 	border: none;
 }
+#user-delete .modal-header, .modal-footer
+{
+	border: none;
+}
 #append-list
 {
 	z-index: 1;

@@ -29,8 +29,6 @@ else if(!empty($punch_in_time)){
     <!-- //User Dashboard assets -->
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500&display=swap">
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
     <link rel="stylesheet" type="text/css" href="//use.fontawesome.com/releases/v5.11.0/css/all.css">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/plugins/bxslider/css/jquery.bxslider.min.css?v=<?=VERSION?>">
     <link rel="stylesheet" type="text/css" href="//www.jqueryscript.net/css/jquerysctipttop.css">    
@@ -68,8 +66,8 @@ else if(!empty($punch_in_time)){
                         <li class="nav-item ml-3">
                             <a class="nav-link btn btn-primary" href="<?= base_url(); ?>user/load_add_task" onclick="return check_for_punchIn()"><i class="fas fa-plus icon-White "></i> Task</a>
                         </li>
-                        <li class="nav-item ml-3">
-                            <a class="nav-link h4 mb-0" href="#change-profile" data-toggle="modal" data-placement="top" title="User Profile"><i class="fas fa-bars figure"></i></a>                                          
+                        <li class="nav-item  ml-3">
+                            <a class="nav-link h4 mb-0 user-profile" href="#change-profile" data-toggle="modal" data-placement="top" title="Profile"><i class="fas fa-bars figure"></i></a>                                          
                         </li>
                     </ul>
                 </nav>

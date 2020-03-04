@@ -21,7 +21,7 @@ $name = $this->session->userdata('username');
         </div>
     </div>
 </div>
-<div class="modal" id="changeimage" data-backdrop="false">
+<div class="modal fade" id="changeimage" tabindex="-1" role="dialog" aria-labelledby="changeimageLabel" aria-hidden="true">
     <!-- to change the profile picture of user-->
     <div class="modal-dialog animated">
         <div class="modal-content text-center">
@@ -30,7 +30,8 @@ $name = $this->session->userdata('username');
             </div>
             <div class="modal-body">
                 <form id="upload-image" method="post" action="<?= base_url(); ?>index.php/user/upload_profile" enctype="multipart/form-data">
-                    <p><input type="file" name="change_img" placeholder="Upload image" id="image"></p>
+                    <input type="file" class="form-control" name="change_img" placeholder="Upload image" id="image">
+                    <p class='text-left mt-4'> Formates allowed: gif, jpg, png, jpeg.</p>
                     <p class="text-danger" id="imageerror"></p>
                     <button type="submit" class="btn btn-primary" id="submit-profile-pic">Upload</button>
                 </form>
@@ -134,6 +135,10 @@ $name = $this->session->userdata('username');
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//www.gstatic.com/charts/loader.js" type="text/javascript"></script>
 <script src="//momentjs.com/downloads/moment.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+
 <script src="//momentjs.com/downloads/moment-timezone.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="//unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>

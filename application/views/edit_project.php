@@ -42,7 +42,7 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
                     Name:<input type="text" class="form-control" name = "project-name" class="form-control" placeholder="Project name" value = "<?=$project_data['project']['project_name'] ?>">
                 </div>
             </div>
-            <input type = "hidden" id= "edit_project_id" name = "edit_project_id" value = "<?=$project_data['project']['project_id'] ?>" >
+            <input type = "hidden" id= "edit_project_id" name = "project_id" value = "<?=$project_data['project']['project_id'] ?>" >
             <!-- <div class="col-12">
                 <div class="pb-4">
                     Description:<input type="text" class="form-control" name = "meta-data" class="form-control" placeholder="Description" value = <?=$project_data['meta_data'] ?>>
@@ -79,9 +79,9 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
                 <?php foreach($project_data['module'] as $module) { ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <?=$module['module_name']; ?>
-                        <span><a href="#module-edit" data-toggle="modal" class = "module-edit">
+                        <span><a href="#module-edit" data-toggle="modal" id="append-module-id" class = "module-edit" data-item = "<?=$module['module_id']?>">
                         <i class="fas fa-pencil-alt">
-                            <input type="hidden" value ="<?=$module['module_id']?>" ></i></a>
+                            <input type="hidden" name = "module_id" value ="<?=$module['module_id']?>" ></i></a>
                             <a href="#module-delete" data-toggle="modal" data="<?=$module['module_id'];?>" class ="module-delete"><i class="fas fa-trash pl-3"></i></a>
                         </span>
                     </li>
@@ -102,12 +102,15 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
             <ul class="list-group user-lists pt-5">
             <?php if(!empty($project_data['users'])) { ?>
                 <?php foreach(($project_data['users']) as $user) { ?>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item d-flex-">
                     <?php if(!empty($user['profile_photo'])) { ?>
                         <img src="<?= base_url() . UPLOAD_PATH . $user['profile_photo']; ?>" width="30px;"> <?php  } ?><span class ="user-name"><?=$user['user_name']; ?></span>
-                        <span><a href="#user-delete" data-toggle="modal" data="<?=$user['user_id']; ?>" class = "user-delete"><i class="fas fa-trash pl-3">
-                        <input type = "hidden" value = <?=$user['user_id'] ?> >
-                        </i></a></span>
+                        <span>
+                            <a href="#user-delete" data-toggle="modal" data="<?=$user['user_id']; ?>" class = "user-delete float-right"><i class="fas fa-trash pl-3">
+                                <input type = "hidden" value = <?=$user['user_id'] ?> >
+                                </i>
+                            </a>
+                        </span>
                     </li>
                 <?php } ?>
             <?php } ?>
@@ -119,7 +122,7 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
 <div class="modal fade" id="module-edit" tabindex="-1" role="dialog" aria-labelledby="module-editLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-        <form method="post" action="<?= base_url(); ?>index.php/admin/edit_module">
+        <form method="post" action="<?= base_url(); ?>index.php/admin/edit_project" id = "pre-edit-module">
             <div class="modal-header">
                 <h5 class="modal-title" id="module-editLabel">Edit module name</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -128,7 +131,8 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
             </div>
             <div class="modal-body">
                 <input type = "hidden" id= "proj_id" name = "project_id" value = <?=$project_data['project']['project_id'] ?> >
-                <input class="form-control" type = "text" id = "module-name" name = "edit_module">
+                <input type = "hidden" id='mdl_id' name = "module_id" >
+                <input class="form-control" type = "text" id = "module-name" name = "module_name">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -147,6 +151,11 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
+        <p class="pl-2">On deleting this module,</p>
+        <div class="ml-2 modal-body"><ul>
+        <li>All tasks under this module will be deleted  and un assigned from the user.</li>
+            </ul>
+        </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
             <button type="button" class="btn btn-primary" id = "delete-module">Yes</button>
@@ -164,6 +173,9 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
+        <p class="pl-2">On deleting this user,</p>
+        <div class="ml-2 modal-body"><ul><li>
+            All timelines of tasks under this user will be deleted.</li></ul></div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
             <button type="button" class="btn btn-primary" id= "delete-user">Yes</button>

@@ -98,4 +98,5 @@ $(function() {
 		format: 'HH:MM',
 		uiLibrary: 'bootstrap4'
 	});
+	$('.user-profile').tooltip('enable');	
 });

@@ -85,7 +85,7 @@ if (!empty($task_info['login_run'])) { ?>
                         $timer_start = $datetime2->getTimestamp();
                         $task_start = strtotime($timer);
                         $task_id = $taskinfo['task_id'];
-                ?>
+                        ?>
                         <div id="slider<?= $task_id ?>">
                             <!-- slider for all task -->
                             <div class="section-slider task-slider" id="login-timer-details<?= $id ?>">
@@ -116,10 +116,10 @@ if (!empty($task_info['login_run'])) { ?>
         </div>
         <div class="container">
             <div class="row mb-3 pt-2">
-                <div class="col-6">
+                <div class="col-md-6 col-3">
                     <h5 class="font-weight-light text-left recent-activites">Recent Activities</h5>
                 </div>
-                <div class="col-6 text-right">
+                <div class="col-md-6 col-9 text-right">
                     <ul class="nav float-right">
                         <li class="nav-item" id="today-filter">
                             <span class="pt-2">today</span>

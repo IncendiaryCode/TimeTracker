@@ -106,7 +106,7 @@ function draw_chart_cards(data, type) {
 			cardCol.append(cardInner);
 
 			$('#attachPanels').append(cardCol);
-
+			$('.fa-pencil-alt').tooltip('enable');
 			if (type == 'daily_chart') {
 				panel_id++;
 			}
@@ -360,9 +360,9 @@ function drawChart(type, res, date) {
 					}
 					var day = parseInt(document.getElementById('current-week').innerHTML.split('-')[0].split(' ')[1]) + parseInt(myBar.getElementsAtEvent(event)[0]['_index']);
 					var year = document.getElementById('week_y');
-					var d_time = moment(month + '-' + day + '-' + year.innerHTML.split('-')[0]);
-					document.getElementById('current-date').innerHTML = d_time.format('dddd MMMM DD');
-					document.getElementById('daily-chart').value = d_time.format('YYYY-MM-DD');
+					var d_time = moment(day +'-'+ month + '-' + year.innerHTML.split('-')[0]);
+					document.getElementById('current-date').innerHTML = moment(year.innerHTML.split('-')[0]+'-'+month +'-'+ day).format('dddd MMMM DD');
+					document.getElementById('daily-chart').value = year.innerHTML.split('-')[0]+'-'+month + '-' + day;
 					if (document.getElementById('daily-chart').value != 'Invalid date') {
 						$('#chart-navigation a[href="#daily-view"]').tab('show');
 					}
@@ -440,12 +440,12 @@ function dateFromDay(year, day) {
 function draw_customized_chart(res) {
 	var pixel = [];
 	var pixels_print = [];
-	var top = 21;
+	var top = 15;
 	var margin_top = 0;
 	var top1 = top;
 	var window_width = $('.cust_daily_chart').width();
 	if (window_width < 633) {
-		margin_top = 21;
+		margin_top = 15;
 	}
 	var daily_hr = parseInt(res['total_minutes'] / 60);
 	var daily_min = res['total_minutes'] % 60;
@@ -460,7 +460,7 @@ function draw_customized_chart(res) {
 
 	var p_left = parseInt(window_width) / 12;
 	if (res['data'] != 'No activity in this date.') {
-		var v = 21;
+		var v = 15;
 		var count = 0;
 		for (var i = 0; i < res['data'][1].length; i++) {
 			var start_time_utc = moment.utc(res['data'][1][i]['start_time']).toDate();
@@ -521,7 +521,7 @@ function printChart(start, width, top, task_name, id, start_time, end_time, colo
 	} else {
 		$('#print-chart').css('height', 50);
 	}
-	var row = $("<span class='positon-chart animated fadeInLeft print-chart-row " + id + "'  data-toggle='tooltip' data-placement='top' title=" + task_name + " id='new-daily-chart" + graph_id + "'><input type = 'hidden' value = " + graph_id + '></span>');
+	var row = $("<span class='positon-chart animated fadeInLeft print-chart-row " + id + "' data-html='true' data-toggle='tooltip' data-placement='top' title='"+start_time + ' - ' + end_time+"<br> Task name: "+ task_name + "' id='new-daily-chart" + graph_id + "'><input type = 'hidden' value = " + graph_id + '></span>');
 	$(row).css('margin-left', start);
 	if (top > 350) {
 		$(row).css('display', 'none');
@@ -531,19 +531,12 @@ function printChart(start, width, top, task_name, id, start_time, end_time, colo
 	$(row).css('backgroundColor', color);
 	$('#print-chart').append(row);
 	$('#new-daily-chart' + graph_id).mouseover(function() {
-		document.getElementById('task-detail').innerHTML = start_time + ' - ' + end_time;
-		$('#task-detail').css('display', 'block');
-		$('#task-detail').css('left', start + 10);
-		$('#task-detail').css('z-index', 1);
 		var str = this.id;
 		var matches = str.match(/(\d+)/);
 		var card = document.getElementById('card-count' + matches[0]);
 		card.className += ' shake';
 	});
-
 	$('#new-daily-chart' + graph_id).mouseout(function() {
-		document.getElementById('task-detail').innerHTML = ' ';
-		$('#task-detail').css('display', 'none');
 		var str = this.id;
 		var matches = str.match(/(\d+)/);
 		var card = document.getElementById('card-count' + matches[0]);
@@ -555,7 +548,7 @@ function printChart(start, width, top, task_name, id, start_time, end_time, colo
 		var elmnt = document.getElementById('card-count' + classIndex[0]);
 		elmnt.scrollIntoView({ behavior: 'smooth' });
 	});
-
+	$('.positon-chart').tooltip('enable');
 	graph_id++;
 	last_task_name.push({ task_name, color });
 }
@@ -786,7 +779,7 @@ function showCalendar(month, year) {
 						cal_date[j].appendChild(innerSpan);
 
 						innerSpan.appendChild(cellText1);
-
+						$('.monthly-action').tooltip('enable');
 						cal_date[j].appendChild(innerCell);
 						$(innerSpan).click(function() {
 							var date = year + '-' + (month + 1) + '-' + this.innerText;
@@ -1043,9 +1036,9 @@ $(document).ready(function() {
 		loadTask({ type: 'date' });
 	});
 
-	for (var i = 0; i < document.getElementById('activity-filtering').getElementsByTagName('input').length; i++) {
-		if (document.getElementById('activity-filtering').getElementsByTagName('input')[i].checked == true) {
-			$('#activity-clear-filter').show();
-		}
-	}
+	// for (var i = 0; i < document.getElementById('activity-filtering').getElementsByTagName('input').length; i++) {
+	// 	if (document.getElementById('activity-filtering').getElementsByTagName('input')[i].checked == true) {
+	// 		$('#activity-clear-filter').show();
+	// 	}
+	// }
 });

@@ -199,7 +199,7 @@ if ($this->input->get('t_id')) { ?>
                                         </div>
                                         <?php if ($this->input->get('t_id')) { ?>
                                             <div class="text-right pr-2">
-                                                <a href="javascript:void(0);" class="ml-0" id="add-new-time" title="Add">
+                                                <a href="javascript:void(0);" class="ml-0 add-timeline" id="add-new-time" title="Add">
                                                     <i class="fas fa-plus icon-plus"></i>
                                                 </a>
                                             </div>
@@ -237,14 +237,14 @@ if ($this->input->get('t_id')) { ?>
                                                 </div>
 
                                                 <div class="col-2 col-md-1 text-center">
-                                                    <a href="javascript:void(0);"  class="ml-0" id="remove-time-0" title="Add">
+                                                    <a href="javascript:void(0);"  class="ml-0 remove-timeline" id="remove-time-0" title="remove">
                                                         <i class="fas fa-minus pt-2 icon-plus"></i>
                                                     </a>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-12 text-right mt-5 space_right">
-                                                    <a href="javascript:void(0);" id="add-new-time" title="Add">
+                                                    <a href="javascript:void(0);" class="add-timeline" data-tooltip="tooltip" id="add-new-time" title="Add">
                                                         <i class="fas fa-plus pt-2 icon-plus"></i>
                                                     </a>
                                                 </div>
@@ -272,7 +272,7 @@ if ($this->input->get('t_id')) { ?>
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="alert_for_deleteLabel">Do you want to delete this task?</h5>
+                            <h5 class="modal-title" id="alert_for_deleteLabel">Do you want to delete this timeline?</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>

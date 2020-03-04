@@ -86,17 +86,18 @@ function drawCards(data) {
 					cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>Not yet started.</div>');
 					$('.vertical-line').css("color",data[x][y].project_color);
 				} else {
-					var date = data[x][y].start_time.slice(0, 10);
-					var start_time = data[x][y].start_time;
-					var start_time_utc = moment.utc(start_time).toDate();
-					var serverDate1 = moment(start_time_utc).format('YYYY-MM-DD hh:mm a');
-					if (serverDate1 != 'Invalid date') {
-						cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + serverDate1 + '</div>');
-						$('.vertical-line').css("color",data[x][y].project_color);
-					} else {
-						cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
-						$('.vertical-line').css("color",data[x][y].project_color);
-					}
+					
+						var date = data[x][y].start_time.slice(0,10);
+						var start_time = data[x][y].start_time;
+						var start_time_utc = moment.utc(start_time).toDate();
+						var serverDate1 = moment(start_time_utc).format('YYYY-MM-DD hh:mm a');
+						if (serverDate1 != 'Invalid date') {
+							cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + serverDate1 + '</div>');
+							$('.vertical-line').css("color",data[x][y].project_color);
+						} else {
+							cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
+							$('.vertical-line').css("color",data[x][y].project_color);
+						}
 				}
 				var stopCol = $('<div class="col-6 text-right"  id="btn-stop' + data[x][y].id + '" />');
 				if (data[x][y].running_task == 0) {
@@ -140,7 +141,6 @@ function drawCards(data) {
 				actionStop.append('<i class="fas action-edit fa-stop"></i>');
 				footerRight.append(actionPlay);
 				footerRight.append(actionStop);
-
 				if (data[x][y].running_task == 0) {
 					$(actionStop).hide();
 				} else {
@@ -263,6 +263,8 @@ function drawCards(data) {
 				cardCol.append(cardInner);
 
 				$('#attach-card #activites-result').append(cardCol);
+				$('.fa-pencil-alt').tooltip('enable');
+				$('.card-action').tooltip('enable');
 				if (data[x][y].running_task == 1 && data[x][y].start_time != null) {
 					//change background of current running task entries.
 					cardInner.css('background-image', 'linear-gradient(to right, #fff, #f4f4f8, #f0f1f6)');

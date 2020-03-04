@@ -105,9 +105,9 @@
                                     <div class="col-3 text-left">
                                         <a href="#" class="arrow-style" id="next-date"><i class="fas fa-angle-right"></i></a>
                                     </div>
-                                    <div class="col-12">
+                                    <!-- <div class="col-12">
                                         <div class="task-detail" id="task-detail"></div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <p id="daily-error"class="text-center"></p>

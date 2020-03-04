@@ -282,7 +282,7 @@ h1 span {
 
 		height: 100px;
 		width: 100px;
-		margin-left: 45%;
+		margin-left: 45.5%;
 		border-radius: 50%;
 		top: -47px;
 		z-index: 1;
@@ -598,6 +598,7 @@ a:hover {
 .display-none {
 	display: none;
 }
+
 .timer-slider .bx-wrapper {
 	background: transparent;
 	border: none;
@@ -605,6 +606,20 @@ a:hover {
 	min-height: 150px;
 	margin-bottom: 100px;
 }
+@media (max-width: 700px) {
+	.timer-slider .bx-wrapper {
+		margin-bottom: 30px;
+	}
+	.taskName
+	{
+		padding-top: 0px;
+	}
+	.bx-viewport
+	{
+		height: 0px;
+	}
+}
+
 .bx-wrapper .bx-pager.bx-default-pager a.active {
 	background: white;
 	border-radius: 100%;
@@ -921,7 +936,7 @@ a#activity-action-filter:hover {
 .positon-chart
 {
 	position: absolute;
-	height:20px;
+	height:13px;
 	border-radius:3px;
 }
 .space_right
