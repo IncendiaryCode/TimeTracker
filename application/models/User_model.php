@@ -1639,11 +1639,11 @@ class User_model extends CI_Model {
 
             $data = $this->get_weekly_activity($userid,$start_date,$end_date);
             if(!empty($data)){
+                $format_hours = array();
                 for($i=0;$i<count($data);$i++) {
                     $k=0;
                     foreach($date_range AS $r_day){
                         $timeline_data = $this->get_total_time_on_date($userid,$data[$i]['task_id'],$r_day);
-                        $format_hours = array();
                         if(!empty($timeline_data)){
                             foreach($timeline_data AS $time){
                                 $total_mins += $time['t_minutes'];
@@ -1660,7 +1660,7 @@ class User_model extends CI_Model {
                     $object->color_code = $data[$i]['color_code'];
                     $object->start_time = $data[$i]['start_time'];
                     $object->end_time = $data[$i]['end_time'];
-                    $object->total_minutes = $d['total_minutes'];
+                    //$object->total_minutes = $data[$i]['total_minutes'];
                     $object->format_hours = $format_hours;
                     $chart_data[] = $object;
                 }    
