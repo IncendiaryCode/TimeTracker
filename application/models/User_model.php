@@ -1601,5 +1601,95 @@ class User_model extends CI_Model {
             return false;
         }
     }
+    /**
+     * Function to get Activity Chart Data for devices
+     * 
+     * @params $chart_type,$taskdate,$userid
+     * 
+     * returns $chart_data
+     */
+    public function get_activity_device($chart_type,$taskdate,$userid){
+        $chart_data = array();
+        if($chart_type == "daily"){
+            $data = $this->get_daily_activity($userid,$taskdate);
+            if(!empty($data)){
+                foreach ($data as $d) {
+                    $object = new stdClass();
+                    //$object->table_id = $d['table_id'];
+                    $object->task_id = $d['task_id'];
+                    $object->task_name = $d['task_name'];
+                    $object->color_code = $d['color_code'];
+                    $object->start_time = $d['start_time'];
+                    $object->end_time = $d['end_time'];
+                    $object->total_minutes = $d['total_minutes'];
+                    $chart_data[] = $object;
+                }
+                return $chart_data;
+            }
+        }
+        if($chart_type == "weekly"){
+            $total_mins=0;
+            $hours = array();
+            $split_week = explode('~', $taskdate);
+            $start_date = isset($split_week[0]) ? date('Y-m-d',strtotime($split_week[0])) : date('Y-m-d');
+            $end_date = isset($split_week[1]) ? date('Y-m-d',strtotime($split_week[1])) : date('Y-m-d',strtotime("+1 week"));
+
+
+            $date_range = $this->get_dates_from_range($start_date, $end_date); //week days(Sun-Sat) in date format(Y-m-d)
+
+            $data = $this->get_weekly_activity($userid,$start_date,$end_date);
+            if(!empty($data)){
+                for($i=0;$i<count($data);$i++) {
+                    $k=0;
+                    foreach($date_range AS $r_day){
+                        $timeline_data = $this->get_total_time_on_date($userid,$data[$i]['task_id'],$r_day);
+                        $format_hours = array();
+                        if(!empty($timeline_data)){
+                            foreach($timeline_data AS $time){
+                                $total_mins += $time['t_minutes'];
+                                $format_hours[$k]['hours'] = sprintf('%02d.%02d',floor($time['t_minutes'] / 60),($time['t_minutes']%60));
+                                $format_hours[$k]['date'] = $r_day;
+                            }
+                        }
+                        $k=$k+1;
+                    }
+                    $object = new stdClass();
+                    //$object->table_id = $data[$i]['table_id'];
+                    $object->task_id = $data[$i]['task_id'];
+                    $object->task_name = $data[$i]['task_name'];
+                    $object->color_code = $data[$i]['color_code'];
+                    $object->start_time = $data[$i]['start_time'];
+                    $object->end_time = $data[$i]['end_time'];
+                    $object->total_minutes = $d['total_minutes'];
+                    $object->format_hours = $format_hours;
+                    $chart_data[] = $object;
+                }    
+            }
+            return $chart_data;
+        }
+        if($chart_type == "monthly"){
+            $month_array = explode(' ',$taskdate);
+            $month_value = $month_array[0];
+            $year_value = $month_array[1];
+            $first = date($year_value . '-' . $month_value . '-' . '01');
+            $last = date($year_value . '-' . $month_value . '-' . 't');
+            $data = $this->get_monthly_activity($userid,$first,$last);
+            if(!empty($data)){
+                foreach ($data as $d) {
+                    $object = new stdClass();
+                    //$object->table_id = $d['table_id'];
+                    $object->task_id = $d['task_id'];
+                    $object->task_name = $d['task_name'];
+                    $object->color_code = $d['color_code'];
+                    $object->task_date = date('Y-m-d', strtotime($d['task_date']));
+                    $format_hours = sprintf('%02d.%02d',floor($d['t_minutes'] / 60),($d['t_minutes']%60));
+                    $object->hours = $format_hours;
+                    $chart_data[] = $object;
+                    
+                }
+            }
+            return $chart_data;
+        }
+    }
 }
 ?>

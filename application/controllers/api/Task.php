@@ -281,9 +281,13 @@ class Task extends REST_Controller {
                 //daily chart  2020-02-26 ,weekly chart 2020-Feb-23~2020-Feb-29, monthly 02 2020
                 $date = $post['date'];
                 $chart_type = $post['chart_type'];
-                $chart_data = $this->user_model->get_activity($chart_type, $date, $post['userid']);
+                $chart_data = $this->user_model->get_activity_device($chart_type, $date, $post['userid']);
                 $data['success'] = 1;
                 $data['data'] = $chart_data;
+                if(empty($chart_data)){
+                    $data['msg'] = 'No activity in this date.';
+                }
+               
             }else{
                 $data['success'] = 0;
                 $data['msg'] = 'Parameters error!';
