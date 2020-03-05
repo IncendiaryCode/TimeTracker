@@ -16,15 +16,6 @@ if ($this->input->get('t_id')) { ?>
         <div class="main-container-inner">
             <div class="row">
                 <div class="col-sm-10 offset-sm-1 mt-5">
-                    <?php
-                    if (validation_errors()) { ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                             <?php echo validation_errors(); ?>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    <?php } ?>
                     <?php if (!empty($this->session->flashdata('failure'))) { ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <?php echo (!empty($this->session->flashdata('failure'))) ? $this->session->flashdata('failure') : ''; ?>
@@ -81,10 +72,18 @@ if ($this->input->get('t_id')) { ?>
                             <div class="form-group">
                                 <label for="choose-project">Choose a project</label>
                                 <?php if ($this->input->get('t_id')) { ?>
-                                    <select readonly="" type="number" class="form-control" id="choose-project" name="project">
-                                        <option selected value=<?php echo isset($task_data['project_id'])?$task_data['project_id']:'' ?>>
+                                    <select type="number" class="form-control project_name" id="choose-project" name="project">
+                                        <option value=<?php echo isset($task_data['project_id'])?$task_data['project_id']:'' ?>>
                                             <?= isset($task_data['project_name'])?$task_data['project_name']:''; ?>
                                         </option>
+                                        <?php
+                                        foreach ($project_list as $project) {
+                                            if(($project['name'] != $task_data['project_name'])) {
+                                            ?>
+                                            <option value=<?php echo $project['id'] ?>>
+                                                <?php echo $project['name']; ?>
+                                            </option>
+                                        <?php } } ?>
                                     </select>
                                 <?php } else { ?>
                                     <select type="text" class="form-control project_name" id="choose-project" name="project" value="<?=isset($task_data['project_name'])?$task_data['project_name']:''?>">
@@ -117,8 +116,22 @@ if ($this->input->get('t_id')) { ?>
                                     <?php } ?>
                                 </select>
                             </div>
-                            <p class="display-5 pt-4"><strong>Timeline</strong></p>
+                            
+                            
                             <div id="task-times">
+                            <div class="row pt-4">
+                                <div class="col-6 text-left">
+                                    <p class="display-5"><strong>Timeline</strong></p>
+                                </div>
+                                <div class="col-6 text-right space_right">
+                                    <a href="javascript:void(0);" class="add-new-time" data-tooltip="tooltip" id="add-new-time">
+                                        <i class="fas fa-plus pt-2 icon-plus"></i>
+                                    </a>
+                                </div>
+                                <div class="col-12">
+                                    <p id="taskError" class="text-danger"></p>
+                                </div>
+                            </div><hr>
                                 <div id="show_list">
                                     <div class="row">
                                         <div class="col-4 col-md-5">
@@ -133,7 +146,6 @@ if ($this->input->get('t_id')) { ?>
                                     </div>
                                 </div>
                                 <?php if ($this->input->get('t_id')) { ?>
-
                                     <input type="hidden" id="task-len" value="<?= isset($timeline_data)?sizeof($timeline_data):'' ?>">
                                     <!-- Add time: EDIT case  -->
                                     <div id="task-add-time">
@@ -142,7 +154,7 @@ if ($this->input->get('t_id')) { ?>
                                             if(isset($timeline_data)){
                                             foreach ($timeline_data as $key => $task) {
                                             ?>
-                                                <div class="time-section pt-3 pb-4">
+                                                <div class="time-section pt-3 pb-3">
                                                     <div class="row">
                                                         <div class="col-4 col-md-5">
                                                             <div class="input-group date mb-3">
@@ -199,9 +211,9 @@ if ($this->input->get('t_id')) { ?>
                                         </div>
                                         <?php if ($this->input->get('t_id')) { ?>
                                             <div class="text-right pr-2">
-                                                <a href="javascript:void(0);" class="ml-0 add-timeline" id="add-new-time" title="Add">
+                                                <!-- <a href="javascript:void(0);" class="ml-0 add-timeline" id="add-new-time">
                                                     <i class="fas fa-plus icon-plus"></i>
-                                                </a>
+                                                </a> -->
                                             </div>
                                         <?php } ?>
                                     </div>
@@ -237,15 +249,8 @@ if ($this->input->get('t_id')) { ?>
                                                 </div>
 
                                                 <div class="col-2 col-md-1 text-center">
-                                                    <a href="javascript:void(0);"  class="ml-0 remove-timeline" id="remove-time-0" title="remove">
+                                                    <a href="javascript:void(0);"  class="ml-0 remove-timeline" id="remove-time-0">
                                                         <i class="fas fa-minus pt-2 icon-plus"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12 text-right mt-5 space_right">
-                                                    <a href="javascript:void(0);" class="add-timeline" data-tooltip="tooltip" id="add-new-time" title="Add">
-                                                        <i class="fas fa-plus pt-2 icon-plus"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -254,7 +259,6 @@ if ($this->input->get('t_id')) { ?>
                                     <!-- END: Add time  -->
                                 <?php } ?>
                             </div>
-                            <p id="taskError" class=" text-danger pt-4"></p>
                             <p>&nbsp;</p>
                             <div class="text-right">
                                 <button type="submit" class="btn btn-primary save-task" id="save-tasks">Save Task</button><!-- to store the task entry. -->
@@ -284,6 +288,4 @@ if ($this->input->get('t_id')) { ?>
                     </div>
                 </div>
             </div>
-
-
         </main>

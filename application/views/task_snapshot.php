@@ -5,20 +5,17 @@
  <!-- UI for task snapshot -->
  
  <div class="container">
-     <!-- <div class="input-group">
-         <div class="text-right form">
-             <input type="month" class="border p-1" id="curr-month" name="cur_month">
-         </div>
-     </div> -->
      <div class="row  pt-3">
         <div class="col-6">
             <h1 class="display-heading text-left">Task snapshot</h1>
         </div>
-        <div class="col-3 offset-3">
-            <div class="input-group">
-                <input type="text" class="form-control" id="curr-month" name="cur_month" value="<?= date('F Y'); ?>">
+        <div class="col-3 offset-3" id="select-month">
+            <div class="input-group date">
+                <input type="text" class="form-control datepicker" id="curr-month" name="cur_month" data-date-format="yyyy-mm-dd" placeholder="form" value="<?= date('F Y'); ?>" >
                 <div class="input-group-append">
-                    <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                    <span class="input-group-text">
+                        <button type="button" class="btn fa fa-calendar p-0"></button>
+                    </span>
                 </div>
             </div>
         </div>
@@ -32,9 +29,27 @@
             <div class="row pb-3 task-filters">
                 <div class="col-md-3 col-6">
                     <div id="baseDateControl">
-                        <div class="dateControlBlock pb-3">
-                            Between <input type="text" name="dateStart" id="dateStart" class="datepicker p-0 border border-secondary" size="8" /> and
-                            <input type="text" name="dateEnd" id="dateEnd" class="datepicker p-0 border border-secondary" size="8"/>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="input-group date">
+                                    <input type="text" class="form-control datepicker" id="dateStart" name="dateStart" data-date-format="yyyy-mm-dd" placeholder="form" >
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <button type="button" class="btn fa fa-calendar p-0"></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                            <div class="input-group date">
+                                    <input type="text" class="form-control datepicker" id="dateEnd" name="dateEnd" data-date-format="yyyy-mm-dd" placeholder="to">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <button type="button" class="btn fa fa-calendar p-0"></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -58,7 +73,7 @@
                             foreach($users as $usr) { ?>
                                 <option value=<?=$usr['id']?> ><?=$usr['name']?></option>
                             <?php }
-                        }   ?> 
+                        }   ?>
                     </select>
                 </div>
                 <div class="col-md-2 col-3 text-right">

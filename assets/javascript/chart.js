@@ -87,11 +87,11 @@ $(document).ready(function() {
 
 	//default load current month
 	loadDashProjectChart();
-
 	//initialize date picker
-	var dashPrjDtPicker = $("#dash-prj-dtpicker").datepicker({
+	var dashPrjDtPicker = $('#dash-prj-dtpicker .input-group.date').datepicker({
 		minViewMode: 1,
 		autoclose: true,
+		format: "MM yyyy"
 	});
 
 	//change event

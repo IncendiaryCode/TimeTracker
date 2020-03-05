@@ -146,11 +146,14 @@ $(document).ready(function() {
 
     $('#project-list').change(function() {
         var p_name = document.getElementById('project-list').value;
+        var form_graph_data = '';
+        if(p_name != "All projects")
+        form_graph_data = { 'project_name': p_name };
         //call for list of  project data on change of project name.
         $.ajax({
             type: 'POST',
             url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',
-            data: { 'project_name': p_name },
+            data: form_graph_data,
             success: function(res) {
                 var result = JSON.parse(res);
                 __draw_user_chart(result);

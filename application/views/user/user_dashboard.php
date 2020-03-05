@@ -122,7 +122,7 @@ if (!empty($task_info['login_run'])) { ?>
                 <div class="col-md-6 col-9 text-right">
                     <ul class="nav float-right">
                         <li class="nav-item" id="today-filter">
-                            <span class="pt-2">today</span>
+                            <span class="pt-2">Today</span>
                             <label class="switch switch-default switch-pill switch-primary mr-2">
                                 <input type="checkbox" class="switch-input" id="today-input">
                                 <span class="switch-label"></span>
@@ -140,56 +140,56 @@ if (!empty($task_info['login_run'])) { ?>
                     </ul>                    
                 </div>
                 <div class="col-12">
-                        <div class="collapse" id="navbarToggleExternalContent">
-                            <div class="bg-light- p-4">
-                                <form action="#" id="dashboard-filter">
-                                    <div class="row">
-                                        <div class="col-4" id="sorting">
-                                            <h5 class="pb-2">Sort by</h5>
-                                            <div class="form-check">
-                                                <input class="form-check-input" data-type="name" type="radio" name="exampleRadios" id="date-radio" value="date" checked>
-                                                <label class="form-check-label" for="date-radio">
-                                                    Date
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" data-type="name" type="radio" name="exampleRadios" id="task-radio" value="task">
-                                                <label class="form-check-label" for="task-radio">
-                                                    Task
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" data-type="project" type="radio" name="exampleRadios" id="project-radio" value="project">
-                                                <label class="form-check-label" for="project-radio">
-                                                    Project
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" data-type="duration" type="radio" name="exampleRadios" id="duration-radio" value="duration">
-                                                <label class="form-check-label" for="duration-radio">
-                                                    Duration
-                                                </label>
-                                            </div>
+                    <div class="collapse" id="navbarToggleExternalContent">
+                        <div class="bg-light- p-4">
+                            <form action="#" id="dashboard-filter">
+                                <div class="row">
+                                    <div class="col-4" id="sorting">
+                                        <h5 class="pb-2">Sort by</h5>
+                                        <div class="form-check">
+                                            <input class="form-check-input" data-type="name" type="radio" name="exampleRadios" id="date-radio" value="date" checked>
+                                            <label class="form-check-label" for="date-radio">
+                                                Date
+                                            </label>
                                         </div>
-                                        <div class="col-4" id="filtering">
-                                            <h5 class="pb-2">Filter by</h5>
-                                            <?php
-                                                for($p=0; $p<sizeof($project_list); $p++) { ?>                                        
-                                                <div class="form-check custom-control custom-checkbox">
-                                                    <input class="form-check-input " type="checkbox" id="check-<?=$p?>">
-                                                        <input type="hidden" class="custom-control-input" value=<?=$project_list[$p]['id'] ?>>
-                                                        <label class="form-check-label" for="check-<?=$p?>">
-                                                        <?=$project_list[$p]['name'] ?>
-                                                    </label>
-                                                </div>
-                                            <?php } ?>
+                                        <div class="form-check">
+                                            <input class="form-check-input" data-type="name" type="radio" name="exampleRadios" id="task-radio" value="task">
+                                            <label class="form-check-label" for="task-radio">
+                                                Task
+                                            </label>
                                         </div>
-                                        <div class="col-4 text-right">
-                                            <button type="submit" class="btn btn-primary">Apply </button>
+                                        <div class="form-check">
+                                            <input class="form-check-input" data-type="project" type="radio" name="exampleRadios" id="project-radio" value="project">
+                                            <label class="form-check-label" for="project-radio">
+                                                Project
+                                            </label>
                                         </div>
-                                </form>
-                            </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" data-type="duration" type="radio" name="exampleRadios" id="duration-radio" value="duration">
+                                            <label class="form-check-label" for="duration-radio">
+                                                Duration
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-4" id="filtering">
+                                        <h5 class="pb-2">Filter by</h5>
+                                        <?php
+                                            for($p=0; $p<sizeof($project_list); $p++) { ?>                                        
+                                            <div class="form-check custom-control custom-checkbox">
+                                                <input class="form-check-input " type="checkbox" id="check-<?=$p?>">
+                                                    <input type="hidden" class="custom-control-input" value=<?=$project_list[$p]['id'] ?>>
+                                                    <label class="form-check-label" for="check-<?=$p?>">
+                                                    <?=$project_list[$p]['name'] ?>
+                                                </label>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <button type="submit" class="btn btn-primary">Apply </button>
+                                    </div>
+                            </form>
                         </div>
+                    </div>
                     </div>
                 </div>
                 <div class="col-12">
@@ -199,6 +199,13 @@ if (!empty($task_info['login_run'])) { ?>
 
             <div class='mb-5' id="attach-card">
                 <div class="row" id="activites-result"></div>
+                <div class="row" id="no-data">
+                    <div class="col-12 text-center no-data">
+                        <img src="https://github.com/IncendiaryCode/TimeTracker/blob/dev_web_ci/assets/images/no-data.png?raw=true" class="img-fluid">
+                        <h3>No task available for today. <a class="" href="<?= base_url(); ?>user/load_add_task" onclick="return check_for_punchIn()">Add a task</a></h3>
+                    </div>
+                </div>
+
                 <div class="text-center section-loader" id="section-loader">
                     <div class="loader-inner"><i class="fas fa-circle-notch fa-spin"></i> Loading...</div>
                 </div>

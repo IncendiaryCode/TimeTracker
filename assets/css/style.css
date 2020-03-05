@@ -475,3 +475,21 @@ table.dataTable
 	z-index: 1;
 	cursor: default;
 }
+@media(max-width : 990px)
+{
+	#dashboard-stats .card h1
+	{
+		font-size: 25px;
+	}
+	#dashboard-stats .card i
+	{
+		font-size: 10px;
+	}
+}
+@media(max-width : 750px)
+{
+	#dashboard-stats .card h1
+	{
+		font-size: 60px;
+	}
+}

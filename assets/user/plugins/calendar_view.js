@@ -294,12 +294,16 @@ function loadWeeklyChart() {
 
 function drawChart(type, res, date) {
 	if (res['status'] == false) {
-		document.getElementById('week-error').innerHTML = 'No activity in this week.';
+		//document.getElementById('week-error').innerHTML = 'No activity in this week.';
+		$('.no-activities').show();
+		$('#attachPanels').hide();
 		window.myBar.destroy();
-		$('#weekly').hide();
+		$('#weekly').css("height",'0px');
 		document.getElementById('weekly-duration').innerHTML = '00:00';
 		$('#attachPanels').empty();
 	} else {
+		$('.no-activities').hide();
+		$('#attachPanels').show();
 		var weekly_hr = parseInt(res['total_minutes'] / 60);
 		var weekly_min = res['total_minutes'] % 60;
 		if (weekly_hr.toString().length == 1) {
@@ -444,9 +448,6 @@ function draw_customized_chart(res) {
 	var margin_top = 0;
 	var top1 = top;
 	var window_width = $('.cust_daily_chart').width();
-	if (window_width < 633) {
-		margin_top = 15;
-	}
 	var daily_hr = parseInt(res['total_minutes'] / 60);
 	var daily_min = res['total_minutes'] % 60;
 	if (daily_hr.toString().length == 1) {
@@ -457,9 +458,12 @@ function draw_customized_chart(res) {
 	}
 
 	document.getElementById('daily-duration').innerHTML = daily_hr + ':' + daily_min;
+	var p_left = parseInt(window_width) / 6;
 
-	var p_left = parseInt(window_width) / 12;
 	if (res['data'] != 'No activity in this date.') {
+		$('.no-activities').hide();
+		$('#attachPanels').show();
+		$('.cust_daily_chart').show();
 		var v = 15;
 		var count = 0;
 		for (var i = 0; i < res['data'][1].length; i++) {
@@ -470,20 +474,16 @@ function draw_customized_chart(res) {
 
 			var start_time = start_time_local.slice(10, 16);
 			var end_time = end_time_local.slice(10, 16);
-
 			var start_time_min = start_time.slice(0, 3) * 60 + parseInt(start_time.slice(4, 6));
 			var end_time_min = end_time.slice(0, 3) * 60 + parseInt(end_time.slice(4, 6));
 			//calculate width for the graph.
 			var interval = res['data'][1][i]['total_minutes'];
 			var task_name = res['data'][2][i];
 			var color = res['data'][3][i];
-			var width = interval / 60 * p_left;
-			if (start_time_min < 480) {
-				// graph less than 8 am is not shown
-				start_time_min = 480;
-			}
-			var start_time_pixel = (start_time_min / 60 - 8) * p_left;
-			var end_time_pixel = (end_time_min / 60 - 8) * p_left;
+			var width = interval / 240 * p_left;
+			
+			var start_time_pixel = (start_time_min / 240) * p_left;
+			var end_time_pixel = (end_time_min /240) * p_left;
 
 			for (var k = 0; k < pixel.length; k++) {
 				if (parseInt(start_time_pixel) >= parseInt(pixel[k][0]) && parseInt(start_time_pixel) <= parseInt(pixel[k][1])) {
@@ -494,10 +494,10 @@ function draw_customized_chart(res) {
 					break;
 				}
 			}
-			if (start_time_pixel + width >= window_width) {
+			if ((start_time_pixel + width) >= window_width) {
 				width = window_width - start_time_pixel;
 			}
-			pixels_print.push([ start_time_pixel, width, margin_top + v * count, task_name, res['data'][0][i], moment(start_time_local).format('hh:mm a'), moment(end_time_local).format('hh:mm a'), color ]);
+			pixels_print.push([ start_time_pixel, width, margin_top + v * count, task_name, res['data'][0][i], moment(start_time_local).format('hh:mm'), moment(end_time_local).format('hh:mm'), color ]);
 
 			pixel.push([ start_time_pixel, end_time_pixel ]);
 			if (pixel.length == 0) {
@@ -507,6 +507,13 @@ function draw_customized_chart(res) {
 		for (var j = 0; j < pixels_print.length; j++) {
 			printChart(pixels_print[j][0], pixels_print[j][1], pixels_print[j][2], pixels_print[j][3], pixels_print[j][4], pixels_print[j][5], pixels_print[j][6], pixels_print[j][7]);
 		}
+	}
+	else
+	{
+		$('.no-activities').show();
+		$('#attachPanels').hide();
+		$('.cust_daily_chart').hide();
+		$('#print-chart').css('height','0px');
 	}
 	width = 0;
 	start_time_pixel = 0;
@@ -521,7 +528,7 @@ function printChart(start, width, top, task_name, id, start_time, end_time, colo
 	} else {
 		$('#print-chart').css('height', 50);
 	}
-	var row = $("<span class='positon-chart animated fadeInLeft print-chart-row " + id + "' data-html='true' data-toggle='tooltip' data-placement='top' title='"+start_time + ' - ' + end_time+"<br> Task name: "+ task_name + "' id='new-daily-chart" + graph_id + "'><input type = 'hidden' value = " + graph_id + '></span>');
+	var row = $("<span class='positon-chart animated fadeInLeft print-chart-row " + id + "' data-html='true' data-toggle='tooltip' data-placement='top' title='"+"<b>"+start_time + ' - ' + end_time+"</b><br>"+ task_name + "' id='new-daily-chart" + graph_id + "'><input type = 'hidden' value = " + graph_id + '></span>');
 	$(row).css('margin-left', start);
 	if (top > 350) {
 		$(row).css('display', 'none');
@@ -706,8 +713,12 @@ function showCalendar(month, year) {
 		success: function(result) {
 			$('.card').show();
 			if (result['status'] == false) {
-				document.getElementById('monthly-chart-error').innerHTML = 'No activities in this month';
+				$('.no-activities').show();
+				$('#attachPanels').hide();
+				//document.getElementById('monthly-chart-error').innerHTML = 'No activities in this month';
 			} else {
+				$('.no-activities').hide();
+				$('#attachPanels').show();
 				document.getElementById('monthly-chart-error').innerHTML = ' ';
 			}
 			var monthly_hr = parseInt(result['total_minutes'] / 60);
@@ -829,9 +840,28 @@ $(document).ready(function() {
 		document.getElementById('monthly-chart').value = currentMonth + ' ' + currentYear;
 	}
 
+	/*daily_value.*/
 	var win_width = $('.cust_daily_chart').width();
-	var p_l = parseInt(win_width) / 23;
+	var p_l = parseInt(win_width) / 6-50;
 	$('.cust_chart').css('padding-left', p_l);
+	
+	// if (win_width < 400) {
+	// 	document.getElementById('chart-labels').remove();
+	// 	var new_lebels = $(
+	// 		'<p class="cust_daily_chart"><span class="">12AM</span><span class="cust_chart">4AM</span><span class="cust_chart">8AM</span><span class="cust_chart">12PM</span><span class="cust_chart">4PM</span><span class="cust_chart">8PM</span><span class="cust_chart">12AM</span></p>'
+	// 	);
+	// 	$('#daily').append(new_lebels);
+	// 	var p_l = parseInt(win_width) / 24;
+	// 	$('.cust_chart').css('padding-left', p_l);
+	// }
+	// if (win_width < 1080 && win_width > 400) {
+	// 	document.getElementById('chart-labels').remove();
+	// 	//document.getElementById('chart-labels').css('display', 'none');
+	// 	var new_lebels = $('<p class="cust_daily_chart"><span class="">12AM</span><span class="cust_chart">4AM</span><span class="cust_chart">8AM</span><span class="cust_chart">12PM</span><span class="cust_chart">4PM</span><span class="cust_chart">8PM</span><span class="cust_chart">12AM</span></p>');
+	// 	$('#daily').append(new_lebels);
+	// 	var p_l = parseInt(win_width) / 12;
+	// 	$('.cust_chart').css('padding-left', p_l);
+	// }
 
 	$('#daily-chart').change(function() {
 		loadDailyChart();
@@ -963,23 +993,7 @@ $(document).ready(function() {
 			loadWeeklyChart();
 		}
 	});
-	/*daily_value.*/
-	if (win_width < 400) {
-		document.getElementById('chart-labels').remove();
-		var new_lebels = $(
-			'<p class="cust_daily_chart" ><span class="">8AM</span><span class="cust_chart">10AM</span><span class="cust_chart">12AM</span><span class="cust_chart">2PM</span><span class="cust_chart">4PM</span><span class="cust_chart">6PM</span><span class="cust_chart">8PM</span></p>'
-		);
-		$('#daily').append(new_lebels);
-		var p_l = parseInt(win_width) / 24;
-		$('.cust_chart').css('padding-left', p_l);
-	}
-	if (win_width < 1000 && win_width > 400) {
-		document.getElementById('chart-labels').css('display', 'none');
-		var new_lebels = $('<p class="cust_daily_chart"><span class="">8AM</span><span class="cust_chart">10AM</span><span class="cust_chart">12AM</span><span class="cust_chart">2PM</span><span class="cust_chart">4PM</span><span class="cust_chart">6PM</span><span class="cust_chart">8PM</span></p>');
-		$('#daily').append(new_lebels);
-		var p_l = parseInt(win_width) / 10;
-		$('.cust_chart').css('padding-left', p_l);
-	}
+	
 
 	$('#chart-navigation a').on('shown.bs.tab', function(event) {
 		var x = $(event.target).attr('href'); // active tab

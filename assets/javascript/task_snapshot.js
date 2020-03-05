@@ -182,12 +182,21 @@ function callTaskTableData(start_date, end_date, project, user) {
 	});
 }
 $(document).ready(function() {
-	//rendering datatable
 	//initialize date picker
-	var dashPrjDtPicker1 = $('#curr-month').datepicker({
+	$('#select-month .input-group.date').datepicker({
 		minViewMode: 1,
-		todayHighlight: true
+		autoclose: true,
+		format: "MM yyyy"
 	});
+	
+	$('#baseDateControl .input-group.date').datepicker({
+		weekStart: 1,
+		autoclose: true,
+		format: 'yyyy-mm-dd',
+		todayHighlight: true,
+	});
+	
+	
 	if (document.getElementById('task-chart')) {
 		if (document.getElementById('curr-month').value == '' || document.getElementById('curr-month').value == ' ') {
 			var month_no = (new Date().getMonth() + 1).toString();
@@ -240,15 +249,6 @@ $(document).ready(function() {
 		att.value = 'border';
 		search.setAttributeNode(att);
 	}
-
-	$('.datepicker').datepicker({
-		showOn: 'button',
-		buttonImage: 'assets/images/calendar.gif',
-		buttonImageOnly: true,
-		autoclose: true,
-		format: 'yyyy-mm-dd'
-	});
-
     $('.clear-filter').click(function(e)
     {
         e.preventDefault();
@@ -292,5 +292,7 @@ $(document).ready(function() {
 				$('.clear-filter').show();
 			}
 		}
-    });
+	});
+	
+
 });

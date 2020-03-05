@@ -68,9 +68,9 @@ function formatAMPM(date) {
 
 function drawCards(data) {
 	if (data['data'] == null) {
-		document.getElementById('alarmmsg').innerHTML = 'No data available';
+		$('.no-data').show();
 	} else {
-		document.getElementById('alarmmsg').innerHTML = " ";
+		$('.no-data').hide();
 		for (x in data) {
 			for (var y = 0; y < data[x].length; y++) {
 				var cardHeader = $('<div class="card-header card-header" />');
@@ -83,7 +83,7 @@ function drawCards(data) {
 					}
 				}
 				if (data[x][y].start_time == "") {
-					cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>Not yet started.</div>');
+					cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>Yet to start.</div>');
 					$('.vertical-line').css("color",data[x][y].project_color);
 				} else {
 					
@@ -369,8 +369,11 @@ $(document).ready(function() {
 			keyboard: false
 		});
 	}
-	if (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play') {
-		document.getElementById('login-time').innerHTML = 'Punch in at 00:00:00';
+	if(document.getElementById('stop-time'))
+	{
+		if (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play') {
+			document.getElementById('login-time').innerHTML = 'Punch in at 00:00:00';
+		}
 	}
 
 	if (document.getElementById('dashboard-filter')) {
@@ -463,12 +466,14 @@ $(document).ready(function() {
 		else loadTaskActivities({ type: 'date' });
 	});
 
-	for (var i = 0; i < document.getElementById('filtering').getElementsByTagName('input').length; i++) {
-		if (document.getElementById('filtering').getElementsByTagName('input')[i].checked == true) {
-			$('#clear-filter').show();
+	if(document.getElementById('filtering'))
+	{
+		for (var i = 0; i < document.getElementById('filtering').getElementsByTagName('input').length; i++) {
+			if (document.getElementById('filtering').getElementsByTagName('input')[i].checked == true) {
+				$('#clear-filter').show();
+			}
 		}
 	}
-
 	$('#stop-time').click(function() {
 		if (stopped == 1) {
 			$('#play-timer').modal('show');

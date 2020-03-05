@@ -114,19 +114,19 @@
                             <div id="daily">
                                 <div id="print-chart"></div>
                                 <p class="cust_daily_chart" id="cust_daily_chart">
-                                <span id="chart-labels"><span class="">8AM</span>
-                                    <span class="cust_chart">9AM</span>
-                                    <span class="cust_chart">10AM</span>
-                                    <span class="cust_chart">11AM</span>
-                                    <span class="cust_chart">12AM</span>
-                                    <span class="cust_chart">1PM</span>
-                                    <span class="cust_chart">2PM</span>
-                                    <span class="cust_chart">3PM</span>
+                                <span id="chart-labels"><span class="">12AM</span>
+                                    <!-- <span class="cust_chart">2AM</span> -->
+                                    <span class="cust_chart">4AM</span>
+                                    <!-- <span class="cust_chart">6AM</span> -->
+                                    <span class="cust_chart">8AM</span>
+                                    <!-- span class="cust_chart">10AM</span> -->
+                                    <span class="cust_chart">12PM</span>
+                                    <!-- <span class="cust_chart">2PM</span> -->
                                     <span class="cust_chart">4PM</span>
-                                    <span class="cust_chart">5PM</span>
-                                    <span class="cust_chart">6PM</span>
-                                    <span class="cust_chart">7PM</span>
+                                    <!-- <span class="cust_chart">6PM</span> -->
                                     <span class="cust_chart">8PM</span>
+                                    <!-- <span class="cust_chart">10PM</span> -->
+                                    <span class="cust_chart">12AM</span>
                                 </span>
                                 </p>
                             </div>
@@ -197,6 +197,12 @@
                     <div class="au-task__item au-task__item--danger">
                         <div class="row au-task__item-inner attach  m-1 pt-4" id="attachPanels">
                             <!-- Loading in js-->                            
+                        </div>
+                        <div class="row" id="no-activities">
+                            <div class="col-12 text-center no-activities">
+                                <img src="https://github.com/IncendiaryCode/TimeTracker/blob/dev_web_ci/assets/images/no-data.png?raw=true" class="img-fluid">
+                                <h3>No task available. <a class="" href="<?= base_url(); ?>user/load_add_task" onclick="return check_for_punchIn()">Add a task</a></h3>
+                            </div>
                         </div>
                     </div>
                 </div>

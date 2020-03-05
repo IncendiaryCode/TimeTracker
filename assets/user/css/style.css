@@ -577,7 +577,7 @@ a:hover {
 	opacity: 0.89;
 }
 .footer {
-	padding: 30px 0px 15px 0px;
+	padding: 27px 0px 13px 0px;
 	border-top: 1px solid;
 	color: #ccc;
 }
@@ -758,6 +758,32 @@ a:hover {
 	color: #b3b3b3;
 	font-size: 24px;
 }
+.no-data
+{
+	display: none;
+}
+.no-data h3
+{
+	color: #b3b3b3;
+}
+.no-data a
+{
+	color: #bd76c8;
+}
+
+.no-activities
+{
+	display: none;
+}
+.no-activities h3
+{
+	color: #b3b3b3;
+}
+.no-activities a
+{
+	color: #bd76c8;
+}
+
 .filtter {
 	float: right;
 }
@@ -937,9 +963,13 @@ a#activity-action-filter:hover {
 {
 	position: absolute;
 	height:13px;
-	border-radius:3px;
+	border-radius:2px;
 }
 .space_right
 {
 	padding-right: 23px;
+}
+#taskError
+{
+	position: absolute;
 }

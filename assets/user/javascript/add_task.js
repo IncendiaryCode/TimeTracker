@@ -17,7 +17,7 @@ var addTime = {
 		if (date == undefined) {
 			date = moment().format('YYYY-MM-DD');
 		}
-		var section = $('<div class="time-section pt-3 pb-5" />');
+		var section = $('<div class="time-section pt-3 pb-3" />');
 		var row = $('<div class="row" />');
 		var id = this.id;
 		if (edit == 1 && localStorage.getItem('first_entry') == 1) {
@@ -63,7 +63,7 @@ var addTime = {
 		var colDescri = $('<div class="col-11">' + '<div class="input-group">' + '<input id="description-' + id + '"  class="form-control"  name="time[' + id + '][task_description]" value="' + descri + '" placeholder="description" />' + '</div>' + '</div>');
 		colDescri.appendTo(row);
 
-		var removeBtn = $('<div class="col-1 text-center">' + '<a href="javascript:void(0);" class="ml-0 remove-timeline" title="Remove" id="remove-time-' + id + '">' + '<i class="fas fa-minus icon-plus text-white"></i>' + '</a>' + '</div><hr>');
+		var removeBtn = $('<div class="col-1 text-center">' + '<a href="javascript:void(0);" class="ml-0 remove-timeline" id="remove-time-' + id + '">' + '<i class="fas fa-minus icon-plus text-white"></i>' + '</a>' + '</div><hr>');
 		removeBtn.on('click', function() {
 			//remove the row
 			__this_new = this;
@@ -79,22 +79,22 @@ var addTime = {
 
 		section.append(row);
 		if (edit == 0) {
-			this.ele.find('.primary-wrap').prepend(section);
+			this.ele.find('.primary-wrap').append(section);
 			document.getElementById('date-picker-0').value = moment().format('YYYY-MM-DD');
 			document.getElementById('start-time-0').value = moment().format('HH:mm');
 			document.getElementById('end-time-0').value = '';
 		} else {
 			if (document.getElementById('date-picker-0') == null) {
-				this.ele.find('.primary-wrap').append(section);
+				this.ele.find('.primary-wrap').prepend(section);
 			} else {
-				var prnt_node = document.getElementById('date-picker-0');
-				$(prnt_node.parentNode.parentNode.parentNode.parentNode).prepend(section);
+				// var prnt_node = document.getElementById('date-picker-0');
+				// $(prnt_node.parentNode.parentNode.parentNode.parentNode).prepend(section);
+				this.ele.find('.primary-wrap').append(section);
 			}
 			document.getElementById('date-picker-0').value = moment().format('YYYY-MM-DD');
 			document.getElementById('start-time-0').value = moment().format('HH:mm');
 			document.getElementById('end-time-0').value = '';
 		}
-		$('.remove-timeline').tooltip('enable');
 		section.find('.timepicker').timepicker({
 			mode: '24hr',
 			format: 'HH:MM',
@@ -160,7 +160,7 @@ var addTime = {
 			var validate_interval = __this.check_for_timeintervals(__start_seconds, __end_seconds, date);
 			var check_for_date = __this.check_date(date);
 			if (check_for_date) {
-				document.getElementById('taskError').innerHTML = 'Enter valid date';
+				document.getElementById('taskError').innerHTML = 'You cannot add future task';
 				return false;
 			}
 			var validate_greater_time = __this.check_for_greatertime(date, start_time, end_time);
@@ -341,11 +341,11 @@ var addTime = {
 };
 
 $(document).ready(function() {
-	if (document.getElementById('task-add-time')) {
-		addTime.init('#task-add-time');
+	if (document.getElementById('task-times')) {
+
+		//addTime.init('#task-add-time');
+		addTime.init('#task-times');
 	}
-	$('.add-timeline').tooltip('enable');
-	$('.remove-timeline').tooltip('enable');
 
 	$('#remove-time-0').click(function() {
 		$('#alert_for_delete').modal('show');
@@ -478,11 +478,17 @@ $(document).ready(function() {
 							document.getElementById('taskError').innerHTML = 'Start time cannot greater than end time';
 							return false;
 						}
-
-						var date = input_elements[k].value;
-						var start_time = input_elements[k + 1].value;
-						var end_time = input_elements[k + 2].value;
-						addTime.array_of_timings.push({ date, start_time, end_time });
+						
+						if(addTime.check_date(input_elements[k].value))
+						{
+							document.getElementById('taskError').innerHTML = 'You cannot add future task';
+							return false;
+						}else{
+							var date = input_elements[k].value;
+							var start_time = input_elements[k + 1].value;
+							var end_time = input_elements[k + 2].value;
+							addTime.array_of_timings.push({ date, start_time, end_time });
+						}
 						k = k + 3;
 					}
 
@@ -498,12 +504,12 @@ $(document).ready(function() {
 							addTime.array_of_timings = [];
 							return false;
 						} else if (cur_end_time == 'NaN') {
-							if (initial_end_min > cur_start_min && cur_date == initial_date) {
+							if ((initial_end_min > cur_start_min) && (cur_date == initial_date)) {
 								document.getElementById('taskError').innerHTML = 'Already same task is done in this interval.';
 								addTime.array_of_timings = [];
 								return false;
 							}
-						} else {
+						}else {
 							initial_start_min = cur_start_min;
 							initial_end_min = cur_end_time;
 							initial_date = cur_date;

@@ -87,13 +87,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="col-6">
             <h1 class="display-heading">Project Chart</h1>
         </div>
-        <div class="col-6 col-md-3 offset-md-3">
-            <div class="input-group">
-                <input type="text" class="form-control" id="dash-prj-dtpicker" value="<?= date('F Y'); ?>">
+        <div class="col-6 col-md-3 offset-md-3" id="dash-prj-dtpicker">
+            <!-- <div class="input-group">
+                <input type="text" class="form-control"  value="<?= date('F Y'); ?>">
                 <div class="input-group-append">
                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                 </div>
+            </div> -->
+
+            <div class="input-group date">
+                <input type="text" class="form-control datepicker" name="cur_month" id="update-prj-dtpicker" value="<?= date('F Y'); ?>" >
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <button type="button" class="btn fa fa-calendar p-0"></button>
+                    </span>
+                </div>
             </div>
+
         </div>
     </div>
     <div class="row">
