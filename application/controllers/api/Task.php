@@ -87,9 +87,15 @@ class Task extends REST_Controller {
                         $data['success'] = 0;
                         $data['msg'] = 'Failed to add task!';
                     }else{
-                        $data['success'] = 1;
-                        $data['task_id'] = $result;
-                        $data['msg'] = 'Task Added Successfully!';
+                        if($result == -1){
+                            $data['success'] = 0;
+                            $data['msg'] = 'Task already present!';
+                        }else{
+                            $data['success'] = 1;
+                            $data['task_id'] = $result;
+                            $data['msg'] = 'Task Added Successfully!';
+                        }
+                        
                     }
                 }
             }else{
