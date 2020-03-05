@@ -370,10 +370,6 @@ $(document).ready(function() {
 				return false;
 			}
 			document.getElementById('taskError').innerHTML = ' ';
-			var date = document.getElementById('date-picker-0').value;
-			var start_time = document.getElementById('start-time-0').value;
-			var end_time = document.getElementById('end-time-0').value;
-
 			var flag = false;
 			flag = addTime.validate(false);
 
