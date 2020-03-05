@@ -311,10 +311,13 @@ class User extends CI_Controller
             $GLOBALS['page_title'] = 'Edit Task';
             $t_id = $this->input->get('t_id', TRUE);
             $userid = $this->session->userdata('userid');
-            $task_data = $this->user_model->get_task_info($t_id,$userid); //get task details for the requested task id
-            if($task_data == NULL){
+            $valid_task_id = $this->user_model->validate_task_id($t_id,$userid);
+            if($valid_task_id == TRUE){
+                $task_data = $this->user_model->get_task_info($t_id,$userid); //get task details for the requested task id
+            }else{
                 //show_error("You don't have a Task with the requested task-id.");
                 $this->session->set_flashdata('failure', "You don't have a Task for this id.");
+                $task_data = NULL;
             }
             $this->load->template('user/add_task', $task_data);
 
@@ -328,6 +331,7 @@ class User extends CI_Controller
     //Add task option to users
     public function add_tasks()
     {
+        $std ='';
         $data['action'] = 'add_task';
         //form inputs validation
         $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|callback_task_exists|xss_clean');
@@ -335,7 +339,9 @@ class User extends CI_Controller
         if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to add task page
             $GLOBALS['page_title'] = 'Add Task';
             $data['result'] = $this->user_model->get_project_name();
-            $this->load->template('user/add_task', $data);
+            $std = validation_errors();
+            $this->session->set_flashdata('failure', $std);
+            redirect('user/load_add_task');
         } else { //if inputs are valid, insert task information into db
             $data['userid'] = $this->session->userdata('userid');
             $data['project_module'] = $this->input->post('project_module');
@@ -358,6 +364,7 @@ class User extends CI_Controller
     public function edit_task()
     {
         //form inputs validation
+        $std ='';
         $user_id = $this->session->userdata('userid');
         $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|xss_clean');
         if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to edit task page
@@ -365,7 +372,10 @@ class User extends CI_Controller
             $t_id = $this->input->post('task_id', TRUE);
             $userid = $this->session->userdata('userid');
             $task_data = $this->user_model->get_task_info($t_id,$userid);
-            $this->load->template('user/add_task', $task_data);
+            $std = validation_errors();
+            $this->session->set_flashdata('failure', $std);
+            redirect('user/load_add_task?t_id='.$t_id);
+            //$this->load->template('user/add_task', $task_data);
         } else { //if inputs are valid, update and/or insert task information into db
             $data['action'] = 'edit';
             $data['userid'] = $this->session->userdata('userid');

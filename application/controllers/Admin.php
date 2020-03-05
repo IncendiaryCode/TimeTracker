@@ -52,6 +52,7 @@
 			if($type == 'user'){  //load user snapshot page
 				// $this->load->view('header');
 				$result['data'] = $this->dashboard_model->get_task_details($type); //get user information
+				$result['projects'] = $this->dashboard_model->get_project_name();
 		        $this->load->view('user_snapshot',$result);
 		        $this->load->view('footer');
 			}
@@ -75,7 +76,7 @@
 					            "status" => TRUE,
 					            "recordsTotal" => $total_data,
 					            "recordsFiltered" => $total_data,
-					            "data" => $result['data']
+					            "data" => isset($result['data']['final_data'])?$result['data']['final_data']:''
 					        );
 				}
 		        echo json_encode($final_result); //send response data to ajax call
@@ -93,6 +94,7 @@
 				$header_data['profile'] = $this->session->userdata('user_profile');
 				$this->load->view('header', $header_data);
 				$get_project_data['project_data'] = $this->dashboard_model->load_edit_project_data($project_id);
+				$get_project_data['all_users'] = $this->dashboard_model->get_usernames();
 				$this->load->view('edit_project',$get_project_data);
 				$this->load->view('footer');
 			}
@@ -104,11 +106,11 @@
 			$user_id = $this->input->post('assigning-user-name');
 			$project_id = $this->input->post('project-id');
 			$result = $this->dashboard_model->assign_user($user_id,$project_id); //assign user to the project
-			if($result == TRUE){ //if assign is successful, send success message
-				$this->session->set_flashdata('success','User Assigned Successfully.');
+			if($result['status'] == TRUE){ //if assign is successful, send success message
+				$this->session->set_flashdata('success',$result['message']);
 				redirect('admin/load_project_detail?project_id='.$project_id,'refresh');
 			}else{ //if already assigned or assign method fails, send failure message
-				$this->session->set_flashdata('error','Unable to assign the user!');
+				$this->session->set_flashdata('error',$result['message']);
 				redirect('admin/load_project_detail?project_id='.$project_id,'refresh');
 			}
 		}
@@ -243,25 +245,35 @@
 				if($this->input->post('type') == 'get_graph_data'){ //request is to get graph data for dashboard page
 					$data['result'] = $this->dashboard_model->dashboard_graph();//graph data in admin dashboard page
 					if($data['result'] == NULL){
-						$data['status'] = FALSE;
-						$data['result'] = NULL;
+						$final_data['status'] = FALSE;
+						$final_data['result'] = NULL;
 					}else{
-						$data['status'] = TRUE;
-					}
+						$final_data['status'] = TRUE;
+						$final_data['result'] = $data['result'];
+ 					}
 				}else if($this->input->post('type') == 'get_user'){ //request is to get project list in user_snapshot page
 					$data['result'] = $this->dashboard_model->get_project_name(); //Project list(Select Project option for users chart in user_snapshot page)
 					if($data['result'] == FALSE){
-						$data['status'] = FALSE;
-						$data['result'] = NULL;
+						$final_data['status'] = FALSE;
+						$final_data['result'] = NULL;
 					}else{
-						$data['status'] = TRUE;
+						$final_data['status'] = TRUE;
 					}
+				}else if($this->input->post('type') == 'get_project_graph'){
+		            $data['project_data'] = $this->dashboard_model->get_project_graph_data();//graph data into project_snapshot page
+		            if($data['project_data'] == FALSE){
+		                $final_data['status'] = FALSE;
+		                $final_data['result'] = NULL;
+		            }else{
+		                $final_data['status'] = TRUE;
+		                $final_data['result'] = $data['project_data'];//contains project data and time spent for each project
+		            }
 				}
 			}else{
-				$data['result'] = NULL;
-				$data['status'] = FALSE;
+				$final_data['result'] = NULL;
+				$final_data['status'] = FALSE;
 			}
-			echo json_encode($data);
+			echo json_encode($final_data);
 		}
 
 		//contains graph data(in user_snapshot page)
@@ -595,4 +607,157 @@
 	            }
 	        }
 		}
+
+		//edit project function AND/OR Edit module data
+		public function edit_project(){
+			$post_data = array();
+			$add_info = '';
+			$post_data = $this->input->post();
+			//project-id validation
+			$check_proj_id = $this->dashboard_model->check_project_id($post_data['project_id']);
+			if($check_proj_id == FALSE){
+				$this->session->set_flashdata("error","Project doesn't Exist.");
+				redirect('admin/load_edit_project?project_id='.$post_data['project_id']);
+			}else{
+				//IF Valid Project id
+
+				if(isset($post_data['module_id'])){
+					/*** Edit module case ***/
+					if($post_data['module_id'] != 1){ //if module name is not General
+						$validate_module_id = $this->dashboard_model->valid_module_id($post_data);//validate module-id
+						if($validate_module_id == FALSE){ //invalid module-id
+							$this->session->set_flashdata("error","Invalid module id.");
+							redirect('admin/load_edit_project?project_id='.$post_data['project_id']);
+						}else{ //valid module-id
+							$mod_name_exists = $this->dashboard_model->module_exists($post_data);//check whether module name exists
+							if($mod_name_exists == TRUE){
+								$this->session->set_flashdata("error","This Module name already Exists.");
+								redirect('admin/load_edit_project?project_id='.$post_data['project_id']);
+							}else{
+								$result = $this->dashboard_model->add_module_data($post_data); //Edit module data
+								$add_info = "Module";
+							}
+						}
+					}else{ //if the module is General
+						$this->session->set_flashdata("error","You cannot Edit General module.");
+						redirect('admin/load_edit_project?project_id='.$post_data['project_id']);
+					}		
+					/** End Edit Module **/
+				}else{
+					/*** Edit project Start***/
+					$result = $this->dashboard_model->edit_project($post_data); //edit project data
+					$add_info = "Project";
+					/** End Edit project **/
+				}
+				if($result == FALSE){
+					$this->session->set_flashdata("error","Unable to edit ".$add_info);
+					redirect('admin/load_edit_project?project_id='.$post_data['project_id']);
+				}else{
+					$this->session->set_flashdata("success",$add_info." Edited.");
+					redirect('admin/load_edit_project?project_id='.$post_data['project_id']);
+				}
+			}
+		}
+
+		//add user function
+		public function add_user_to_project(){
+			$user_id = $this->input->post('user_id');
+			$project_id = $this->input->post('project_id');
+			$result = $this->dashboard_model->assign_user($user_id,$project_id); //assign user to the project
+			if($result['status'] == TRUE){ //if assign is successful, send success message
+				$final_result['status'] = TRUE;
+				$final_result['msg'] = $result['message'];
+			}else{ //if already assigned or assign method fails, send failure message
+				$final_result['status'] = FALSE;
+				$final_result['msg'] = $result['message'];
+			}
+			echo json_encode($final_result);
+		}
+
+		//add module function
+		public function add_module(){
+			$module_data = array();
+			$module_data = $this->input->post();
+			$check_proj_id = $this->dashboard_model->check_project_id($module_data['project_id']);//validate project-id
+			if($check_proj_id == FALSE){ //if invalid project-id
+				$final_result['status'] = FALSE;
+				$final_result['msg'] = "Project doesn't Exist.";
+			}else{ //if valid project-id
+				$mod_name_exists = $this->dashboard_model->module_exists($module_data);//check whether module name exists
+				if($mod_name_exists == TRUE){ //if module name exists
+					$final_result['status'] = FALSE;
+					$final_result['msg'] = "This Module name already Exists.";
+				}else{ //if module name is different(doesn't exists)
+					$result = $this->dashboard_model->add_module_data($module_data);//add new module
+					if($result == TRUE){
+						$final_result['status'] = TRUE;
+						$final_result['msg'] = "Module added.";
+					}else{
+						$final_result['status'] = FALSE;
+						$final_result['msg'] = "Unable to add module.";
+					}
+				}
+			}
+			echo json_encode($final_result);
+		}
+
+		//To delete module
+		public function delete_module(){
+			$module_data = array();
+			$module_data = $this->input->post();
+			$check_proj_id = $this->dashboard_model->check_project_id($module_data['project_id']);//validate project-id
+			if($check_proj_id == FALSE){ //if invalid project-id
+				$final_result['status'] = FALSE;
+				$final_result['msg'] = "Project doesn't Exist.";
+			}else{ //valid project-id
+				if($module_data['module_id'] != 1){ //if module is not a General module
+					$validate_module_id = $this->dashboard_model->valid_module_id($module_data); //validate module-id
+					if($validate_module_id == FALSE){ //if invalid module-id
+						$final_result['status'] = FALSE;
+						$final_result['msg'] = "Invalid Module id.";
+					}else{ //valid module-id
+						$result = $this->dashboard_model->delete_module($module_data);//delete module
+						if($result == TRUE){
+							$final_result['status'] = TRUE;
+							$final_result['msg'] = "Module deleted.";
+						}else{
+							$final_result['status'] = FALSE;
+							$final_result['msg'] = "Unable to delete module.";
+						}
+					}
+				}else{ //if module is a General module
+					$final_result['status'] = FALSE;
+					$final_result['msg'] = "You cannot delete General module.";
+				}
+			}
+			echo json_encode($final_result);
+		}
+
+		//To un-assign the User from Project
+		public function unassign_user(){
+			$user_data = array();
+			$user_data = $this->input->post();
+			$check_proj_id = $this->dashboard_model->check_project_id($user_data['project_id']);//validate project-id
+			if($check_proj_id == FALSE){ //invalid project-id
+				$final_result['status'] = FALSE;
+				$final_result['msg'] = "Project doesn't Exist.";
+			}else{ //valid project-id
+				$user_exists = $this->dashboard_model->check_user($user_data); //check whether the user is assigned to the project
+				if($user_exists == TRUE){//if user is assigned
+					$result = $this->dashboard_model->remove_user_from_project($user_data); //un-assign the user from project
+					if($result == TRUE){
+						$final_result['status'] = TRUE;
+						$final_result['msg'] = "User Un-assigned.";
+					}else{
+						$final_result['status'] = FALSE;
+						$final_result['msg'] = "Unable to un-assign the user.";
+					}
+				}else{ //if user is not assigned to the project
+					$final_result['status'] = TRUE;
+					$final_result['msg'] = "This user is not assigned.";
+				}
+			}
+			echo json_encode($final_result);
+		}
 	}
+?>

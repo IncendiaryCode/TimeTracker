@@ -133,6 +133,7 @@ class User_model extends CI_Model {
         $this->db->select('p.name,IFNULL(d.start_time,t.created_on) AS started,d.start_time,p.image_name,p.color_code,t.task_name,t.id AS task_id');
         $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task", FALSE); //get running tasks of the user
         //$this->db->select('IF(t.complete_task=1,1,0) AS completed', FALSE); //get completed tasks of the user
+        $this->db->select('CASE WHEN d.start_time IS NULL THEN 0 WHEN d.start_time IS NOT NULL THEN 1 END AS start',FALSE);//sort case
         $this->db->from('task AS t');
         $this->db->join('task_assignee AS ta', 'ta.task_id = t.id');
         $this->db->join('time_details AS d', 'd.task_id = t.id AND d.user_id =ta.user_id','LEFT');
@@ -140,6 +141,7 @@ class User_model extends CI_Model {
         
         if($today_filter == 'today'){
             $this->db->where('task_date',date('Y-m-d'));
+            $this->db->or_where('task_date IS NULL');
         }
         if($filter_type == 'proj_filter'){
             if(!empty($filter_value))
@@ -156,6 +158,7 @@ class User_model extends CI_Model {
                 $this->db->where('d.end_time IS NOT NULL');
                 $this->db->where('d.user_id', $userid);
                 $this->db->group_by('d.id');
+                $this->db->order_by('d.start_time','asc');
             } else if ($sort_type == 'weekly_chart') {
                 
                 $split_week = explode('~', $date);
@@ -186,7 +189,12 @@ class User_model extends CI_Model {
         if ($sort_type == 'task') {
             $this->db->order_by("t.task_name", "asc"); //sort by task name
         } else if ($sort_type == 'date') {
-            $this->db->order_by("started", "desc"); //default - sort by task date
+            if('start' == 0){
+                $this->db->order_by('start','asc');
+            }/*else if ('start' == 1){
+                $this->db->order_by("start_time",'desc'); //default - sort by task date
+            }*/
+            $this->db->order_by("started",'desc'); //default - sort by task date
         } else if ($sort_type == 'project') {
             $this->db->order_by('p.name','asc'); //sort by project name
         } else if ($sort_type == 'duration') {
@@ -271,9 +279,9 @@ class User_model extends CI_Model {
 
 
     /**
-     * Function to get task details to edit task
+     * Function to get task details to edit task page
      * 
-     * @param $id
+     * @param $task_id and $userid
      * 
      * returns $task_data
      */
@@ -282,44 +290,32 @@ class User_model extends CI_Model {
         $details = array();
 
         //check whether the task id is valid
-        $this->db->select('t.id,ta.user_id');
+        $this->db->select('ta.user_id,p.name,p.id AS project_id,m.id AS module_id,m.name AS module_name,t.task_name,t.description,t.id AS task_id');
         $this->db->from('task AS t');
         $this->db->join('task_assignee AS ta','ta.task_id = t.id');
+        $this->db->join('project AS p', 'p.id = t.project_id');
+        $this->db->join('project_module AS m', 'm.id = t.module_id');
         $this->db->where(array('t.id'=>$task_id,'ta.user_id'=>$userid));
-        $check_task_query = $this->db->get();
-        if($check_task_query->num_rows() > 0){
-            $this->db->select('d.id,p.name,p.id AS project_id,m.id AS module_id,m.name AS module_name,d.task_date,t.task_name,d.task_description,d.start_time,d.end_time,t.description,t.id AS task_id');
-            $this->db->from('task AS t');
-            $this->db->join('task_assignee AS ta', 't.id = ta.task_id');
-            $this->db->join('time_details AS d', 't.id = d.task_id', 'left');
-            $this->db->join('project AS p', 'p.id = t.project_id');
-            $this->db->join('project_module AS m', 'm.id = t.module_id');
-            $this->db->where(array('t.id' => $task_id, 'ta.user_id' => $userid));
-            $this->db->order_by('d.task_date,d.start_time','desc');
+        $task_data = $this->db->get()->row_array();//get task,project and module info
+
+        //check whether there is a timeline data for the task
+        $check_timeline = $this->db->get_where('time_details',array('task_id'=>$task_id,'user_id'=>$userid));
+        if($check_timeline->num_rows() > 0){//if there is a timeline data
+            $this->db->select('id,task_date,start_time,end_time,task_description');
+            $this->db->from('time_details');
+            $this->db->where(array('task_id' => $task_id, 'user_id' => $userid));
+            $this->db->order_by('task_date,start_time','desc');
             $query = $this->db->get();
             $data = $query->result_array();
             foreach($data as $d){
-                if (!isset($details['task_data'])) {
-                    $details['task_data'] = array('task_name'=>$d['task_name'],'project_name'=>$d['name'],'project_id'=>$d['project_id'],'description'=>$d['description'],'task_id'=>$d['task_id'],'module_name'=>$d['module_name'],'module_id'=>$d['module_id']);
-                }
-                if($d['start_time']){
-                    $start = $this->convert_date($d['start_time']);
-                }
-                else
-                    $start = '';
-                if($d['end_time'])
-                    $end = $this->convert_date($d['end_time']);
-                else
-                    $end = '';
-                $details['timeline_data'][] = array('table_id'=>$d['id'],'task_date'=>($d['task_date'])?$d['task_date']:date('Y-m-d'),'start_time'=>$start,'end_time'=>$end,'task_description'=>($d['task_description'])?$d['task_description']:null);
+                $details['timeline_data'][] = array('table_id'=>$d['id'],'task_date'=>($d['task_date'])?$d['task_date']:date('Y-m-d'),'start_time'=>isset($d['start_time'])?$this->convert_date($d['start_time']):'','end_time'=>isset($d['end_time'])?$this->convert_date($d['end_time']):'','task_description'=>($d['task_description'])?$d['task_description']:null);
             }
+        }//if there is no timeline data, send only the task information to edit task page
+        $details['task_data'] = array('task_name'=>$task_data['task_name'],'project_name'=>$task_data['name'],'project_id'=>$task_data['project_id'],'description'=>$task_data['description'],'task_id'=>$task_data['task_id'],'module_name'=>$task_data['module_name'],'module_id'=>$task_data['module_id']);
 
-            //send list of project module to edit task page
-            if(isset($details['task_data'])){
-                $details['project_module_list'] = $this->get_module_name($d['project_id']);
-            }
-        }else{
-            $details = '';
+        //send list of project module to edit task page
+        if(isset($details['task_data'])){
+            $details['project_module_list'] = $this->get_module_name($task_data['project_id']);
         }
         return $details;
     }
@@ -454,7 +450,7 @@ class User_model extends CI_Model {
                 $update_time = $data['task_date'] . " " . date('H:i:s');
             }
             $diff = (strtotime($update_time) - strtotime($data['start_time']));
-            $t_minutes = (($diff / 60) < 1) ? ceil(abs($diff / 60)) : abs($diff / 60);
+            $t_minutes = (($diff / 60) < 1) ? ceil(abs($diff / 60)) : round(abs($diff / 60),2);
             $hours = round(abs($diff / (60 * 60)));
             $this->db->where(array('id' => $data['id']));
             $query2 = $this->db->update('time_details', array('task_description' => $req_data['task_desc'], 'end_time' => $update_time, 'total_hours' => $hours, 'total_minutes' => $t_minutes, 'modified_on' => date('Y-m-d H:i:s')));
@@ -943,26 +939,26 @@ class User_model extends CI_Model {
                         }
                         if(sizeof($date_value) >= 1)
                         {
-                            for ($i = 0;$i <= (sizeof($date_value)-1);$i++)
+                            foreach ($date_value AS $value)
                             {
-                                if(($date_value[$i]['start']) == '' || ($date_value[$i]['start'] == null))
-                                    $start = $date_value[$i]['date'] . ' ' . '00:00:00';
+                                if(($value['start']) == '' || ($value['start'] == null))
+                                    $start = $value['date'] . ' ' . '00:00:00';
                                 else{
-                                    $start_time = strtotime($date_value[$i]['start']);
+                                    $start_time = strtotime($value['start']);
                                     //$start = $date_value[$i]['date'] . ' ' . date('H:i:s', $start_time);
-                                    $start = $date_value[$i]['start'];
-                                    if($date_value[$i]['end'] == '' || ($date_value[$i]['end'] == null) || ($date_value[$i]['end'] == ' ') || empty($date_value[$i]['end'])){
+                                    $start = $value['start'];
+                                    if($value['end'] == '' || ($value['end'] == null) || ($value['end'] == ' ') || empty($value['end'])){
                                         $end = null;
                                     }
                                     else{
-                                        $end_time = strtotime($date_value[$i]['end']);
+                                        $end_time = strtotime($value['end']);
                                         //$end = $date_value[$i]['date'].' '.date('H:i:s',$end_time);
-                                        $end = $date_value[$i]['end'];
+                                        $end = $value['end'];
                                     }
                                 }
                                 $task_description = "";
-                                if (isset($date_value[$i]['task_description'])) {
-                                    $task_description = $date_value[$i]['task_description'];
+                                if (isset($value['task_description'])) {
+                                    $task_description = $value['task_description'];
                                 }
                                 $diff = 0;
                                 $hours = 0;
@@ -973,7 +969,7 @@ class User_model extends CI_Model {
                                     $minutes = $diff / 60;
                                     $total_mins = ($minutes < 1) ? ceil(abs($minutes)) : abs($minutes);
                                 }
-                                $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'task_date'=>$date_value[$i]['date'],'start_time'=>$start,'end_time'=>$end,'task_description'=>$task_description,'total_hours'=>$hours,'total_minutes'=>$total_mins,'created_on'=>date('Y-m-d H:i:s'));
+                                $array = array('user_id'=>$userid,'task_id'=>$last_insert_id,'task_date'=>$value['date'],'start_time'=>$start,'end_time'=>$end,'task_description'=>$task_description,'total_hours'=>$hours,'total_minutes'=>$total_mins,'created_on'=>date('Y-m-d H:i:s'));
                                 $this->db->set($array);
                                 $query = $this->db->insert('time_details',$array);      
                             }
@@ -1699,6 +1695,14 @@ class User_model extends CI_Model {
                 }
             }
             return $chart_data;
+        }
+    }
+ public function validate_task_id($task_id,$user_id){
+        $task_id_check = $this->db->get_where('task_assignee',array('task_id'=>$task_id,'user_id'=>$user_id));
+        if($task_id_check->num_rows() > 0){
+            return true;
+        }else{
+            return false;
         }
     }
 }

@@ -10,6 +10,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="col-3">
             <select class="project-names form-control" id="project-list">
                 <option>All projects</option>
+                <?php if(!empty($projects)){
+                    foreach($projects AS $proj){
+                ?>
+                <option><?=$proj['project_name'];?></option>
+            <?php } } ?>
             </select>
         </div>
     </div>
