@@ -547,7 +547,8 @@ class User_model extends CI_Model {
      */
     public function get_monthly_activity($userid,$start_date,$end_date){
         $data = array();
-        $query = $this->db->query("SELECT `td`.`task_date`, `t`.`task_name`, `t`.`created_on`, `td`.`task_id`, `p`.`id` as project_id, `p`.`name`,`p`.`color_code`,td.t_minutes FROM `project` AS `p` JOIN `task` AS `t` ON `t`.`project_id` = `p`.`id` JOIN (SELECT d.task_id,d.task_date,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `time_details` AS `d` WHERE `d`.`user_id` = ".$userid." AND `d`.`end_time` IS NOT NULL AND `d`.`task_date` BETWEEN '".$start_date."' and '".$end_date."' GROUP BY d.task_date) AS td ON td.task_id = t.id GROUP BY td.task_date");
+        /*$query = $this->db->query("SELECT `td`.`task_date`, `t`.`task_name`, `t`.`created_on`, `td`.`task_id`, `p`.`id` as project_id, `p`.`name`,`p`.`color_code`,td.t_minutes FROM `project` AS `p` JOIN `task` AS `t` ON `t`.`project_id` = `p`.`id` JOIN (SELECT d.task_id,d.task_date,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `time_details` AS `d` WHERE `d`.`user_id` = ".$userid." AND `d`.`end_time` IS NOT NULL AND `d`.`task_date` BETWEEN '".$start_date."' and '".$end_date."' GROUP BY d.task_date) AS td ON td.task_id = t.id GROUP BY td.task_date");*/
+        $query = $this->db->query("SELECT `d`.`task_date`, `t`.`task_name`,t.created_on,d.task_id,d.task_date,p.name,p.id as project_id, p.color_code,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `time_details` AS `d` join task as t on d.task_id=t.id join project as p on t.project_id=p.id WHERE `d`.`user_id` = ".$userid." AND `d`.`end_time` IS NOT NULL AND `d`.`task_date` BETWEEN '".$start_date."' and '".$end_date."' GROUP BY  d.task_date");
         if ($query->num_rows() > 0) {
                 $data = $query->result_array();
         }
