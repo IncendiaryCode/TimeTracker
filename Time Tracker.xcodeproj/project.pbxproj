@@ -45,7 +45,6 @@
 		032E9AA12408F2DD004F72D8 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032E9A5F2408F2DD004F72D8 /* Extension.swift */; };
 		032E9AA22408F2DD004F72D8 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032E9A612408F2DD004F72D8 /* TabBarController.swift */; };
 		032E9AA32408F2DD004F72D8 /* TimingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 032E9A632408F2DD004F72D8 /* TimingsCell.xib */; };
-		032E9AA42408F2DD004F72D8 /* TaskViewControllerOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032E9A642408F2DD004F72D8 /* TaskViewControllerOld.swift */; };
 		032E9AA52408F2DD004F72D8 /* TimingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032E9A652408F2DD004F72D8 /* TimingsCell.swift */; };
 		032E9AA62408F2DD004F72D8 /* GlobalValuesFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032E9A672408F2DD004F72D8 /* GlobalValuesFunctions.swift */; };
 		032E9AA72408F2DD004F72D8 /* ProgressCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032E9A692408F2DD004F72D8 /* ProgressCircle.swift */; };
@@ -123,7 +122,6 @@
 		032E9A5F2408F2DD004F72D8 /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		032E9A612408F2DD004F72D8 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		032E9A632408F2DD004F72D8 /* TimingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimingsCell.xib; sourceTree = "<group>"; };
-		032E9A642408F2DD004F72D8 /* TaskViewControllerOld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewControllerOld.swift; sourceTree = "<group>"; };
 		032E9A652408F2DD004F72D8 /* TimingsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimingsCell.swift; sourceTree = "<group>"; };
 		032E9A672408F2DD004F72D8 /* GlobalValuesFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalValuesFunctions.swift; sourceTree = "<group>"; };
 		032E9A692408F2DD004F72D8 /* ProgressCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressCircle.swift; sourceTree = "<group>"; };
@@ -311,7 +309,6 @@
 		032E9A622408F2DD004F72D8 /* Add-Edit Task Manager */ = {
 			isa = PBXGroup;
 			children = (
-				032E9A642408F2DD004F72D8 /* TaskViewControllerOld.swift */,
 				0321124E240E60A1007990D1 /* TaskViewController.swift */,
 				032E9ABB24090287004F72D8 /* Timeline Table Cell */,
 			);
@@ -732,7 +729,6 @@
 				032E9A9A2408F2DD004F72D8 /* CalendarView.swift in Sources */,
 				032E9A952408F2DD004F72D8 /* CalendarDayCell.swift in Sources */,
 				032E9A8B2408F2DD004F72D8 /* ProjectsCDController.swift in Sources */,
-				032E9AA42408F2DD004F72D8 /* TaskViewControllerOld.swift in Sources */,
 				032E9AB02408F2DD004F72D8 /* TTView.swift in Sources */,
 				032E9AA72408F2DD004F72D8 /* ProgressCircle.swift in Sources */,
 				03ED7C09240F7FC000A79E5E /* ToastView.swift in Sources */,
