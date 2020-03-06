@@ -1726,7 +1726,7 @@ class User_model extends CI_Model {
      */
     public function get_monthly_activity_detail($userid,$start_date,$end_date){
         $data = array();
-        $query = $this->db->query("SELECT `d`.`task_date`, `t`.`task_name`,t.created_on,d.task_id,d.task_date,p.name,p.id as project_id, p.color_code,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `time_details` AS `d` join task as t on d.task_id=t.id join project as p on t.project_id=p.id WHERE `d`.`user_id` = ".$userid." AND `d`.`end_time` IS NOT NULL AND `d`.`task_date` BETWEEN '".$start_date."' and '".$end_date."' GROUP BY  d.task_id");
+        $query = $this->db->query("SELECT `d`.`task_date`, `t`.`task_name`,t.created_on,d.task_id,d.task_date,p.name,p.id as project_id, p.color_code,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `time_details` AS `d` join task as t on d.task_id=t.id join project as p on t.project_id=p.id WHERE `d`.`user_id` = ".$userid." AND `d`.`end_time` IS NOT NULL AND `d`.`task_date` BETWEEN '".$start_date."' and '".$end_date."' GROUP BY  d.task_id,d.taskdate");
         if ($query->num_rows() > 0) {
                 $data = $query->result_array();
         }
