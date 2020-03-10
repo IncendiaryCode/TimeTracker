@@ -35,6 +35,31 @@ function __draw_project_chart(res) {
 			]
 		},
 		options: {
+			tooltips: {
+				callbacks: {
+					label: function(tooltipItem, data) {
+						var label = data.datasets[tooltipItem.datasetIndex].label || '';
+						var value = "";
+						if((tooltipItem['value'].split('.')[1]/100*60).toString() != "NaN")
+						{
+						value = tooltipItem['value'].split('.')[1]/100*60;
+						}
+						if (label) {
+							label.split('.')[0] += ':'+value;
+						}
+						var minutes = parseInt(value);
+						if(parseInt(value).toString() == "NaN")
+						{
+							minutes = 0;
+						}
+						if(minutes.toString().length == 1)
+						{
+							minutes = '0'+minutes;
+						}
+						return ("time spent in hrs "+tooltipItem['value'].split('.')[0]+':'+minutes);
+					}
+				}
+			},
 			title: {
 				text: "task snapshot"
 			},

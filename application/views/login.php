@@ -60,7 +60,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input type="email" class="form-control logo-space has-email-validation has-empty-validation  border-top-0 border-left-0 border-right-0 space-top font-weight-light" id="username" name="username" placeholder="Email" value="<?=set_value('username')?>">
                             </div>
                         </div>
-                        <p class="error" id="username-error"></p>
+                        <p class="text-danger" id="username-error"></p>
                         <div class="form-group">
                             <div class="input-group ">
                                 <input type="password" class="form-control top-space has-empty-validation border-top-0 border-left-0 border-right-0 font-weight-light" id="password" name="password" placeholder="Password">
@@ -74,7 +74,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             var timeZone = moment.tz.guess();
                             document.getElementById('time-zone').value = timeZone;
                         </script>
-                        <p class="error" id="password-error"></p>
+                        <p class="text-danger" id="password-error"></p>
                         <div class="row top-space" style="width: 100%; padding-top: 30px">
                             <a href="<?= base_url(); ?>login/forgot_pwd" class="col-6 forgot-color" id="forgot-pwd">Forgot password?</a>
                             <button type="submit" class=" col-3 offset-3 login-color" id="submit">Login</button>

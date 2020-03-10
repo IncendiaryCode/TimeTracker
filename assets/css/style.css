@@ -493,3 +493,14 @@ table.dataTable
 		font-size: 60px;
 	}
 }
+@media(min-width : 750px)
+{
+.btn-primary
+{
+	min-width: 85px;
+}
+.btn-secondary
+{
+	min-width: 85px;
+}
+}

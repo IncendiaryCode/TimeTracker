@@ -103,15 +103,17 @@ function validateOtp() {
 				{
 					$("#enter-email").hide();
 					$("#enter-otp").show();
-					document.getElementById("email-error").innerHTML = "Wrong OTP.";
+					//document.getElementById("email-error").innerHTML = "Wrong OTP.";
 					return false;
 				}
 				 else {
 					return true;
 				}
+				return true;
 			}
 		});
 	}
+	return true;
 }
 
 function sendOTP() {
@@ -145,12 +147,6 @@ function sendOTP() {
 				document.getElementById("email-error").innerHTML = " ";
 				$("#enter-otp").show();
 				$("#enter-email").hide();
-				$('#fill-otp').click(function () {
-					document.getElementById("forgotPassword").onsubmit = function (e) {
-						return true;
-					}
-					return true;
-				});
 			}
 		});
 	}
@@ -169,15 +165,7 @@ function resendOTP() {
 				document.getElementById("email-error").innerHTML = " ";
 				document.getElementById("resent-otp").innerHTML = "Otp sent successfully";
 				$('.resend-otp-spinner').css("display", "none");
-				$('#fill-otp').click(function () {
-					var validate = validateOtp();
-					if (validate) {
-						document.getElementById("forgotPassword").onsubmit = function (e) {
-							return true;
-						}
-
-					}
-				});
+				
 			}
 		});
 	}
@@ -196,7 +184,6 @@ $(document).ready(function () {
 			user_email = document.getElementById("Uname").value;
 			var validateForm = new Validation(e.currentTarget);
 			var finalValue = validateForm.correctCheck();
-			console.log("dsrfdsfsd", finalValue['isValid']);
 			if(finalValue['isValid'] == false)
 			{
 				document.getElementById("email-error").innerHTML = "Email format is not correct.";
@@ -219,6 +206,21 @@ $(document).ready(function () {
 		return false;
 		};
 	}
+
+	$('#fill-otp').click(function () {
+		var validate = validateOtp();
+		if(validate == false)
+		{
+			document.getElementById("otp-error").innerHTML = " Enter OTP ";
+		}
+		if (validate) {
+			document.getElementById("forgotPassword").onsubmit = function (e) {
+				return true;
+			}
+
+		}
+	});
+
 	if(typeof email != "undefined" && (email != '' ))
 	{
 		document.getElementById("Uname").value = email;

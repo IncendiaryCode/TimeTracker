@@ -137,7 +137,7 @@ $name = $this->session->userdata('username');
 <script src="//momentjs.com/downloads/moment.js"></script>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
 
 <script src="//momentjs.com/downloads/moment-timezone.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>

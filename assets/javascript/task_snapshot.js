@@ -37,8 +37,8 @@ function __draw_task_chart(res) {
 			options: {
 				title: {
 					text: 'task snapshot'
-                },
-                legend: {
+				},
+				legend: {
 					display: false
 				},
 				hover: {
@@ -95,7 +95,7 @@ function callTaskTableData(start_date, end_date, project, user) {
 			ajax: {
 				url: timeTrackerBaseURL + 'index.php/admin/load_snapshot',
 				type: 'POST',
-				data: { "type": 'task',"start_date": start_date, "end_date": end_date, "project_id":project, "user_id":user },
+				data: { type: 'task', start_date: start_date, end_date: end_date, project_id: project, user_id: user },
 				dataSrc: function(json) {
 					//Make your callback here.
 					if (json['status'] == false) {
@@ -186,17 +186,16 @@ $(document).ready(function() {
 	$('#select-month .input-group.date').datepicker({
 		minViewMode: 1,
 		autoclose: true,
-		format: "MM yyyy"
+		format: 'MM yyyy'
 	});
-	
+
 	$('#baseDateControl .input-group.date').datepicker({
 		weekStart: 1,
 		autoclose: true,
 		format: 'yyyy-mm-dd',
-		todayHighlight: true,
+		todayHighlight: true
 	});
-	
-	
+
 	if (document.getElementById('task-chart')) {
 		if (document.getElementById('curr-month').value == '' || document.getElementById('curr-month').value == ' ') {
 			var month_no = (new Date().getMonth() + 1).toString();
@@ -249,50 +248,63 @@ $(document).ready(function() {
 		att.value = 'border';
 		search.setAttributeNode(att);
 	}
-    $('.clear-filter').click(function(e)
-    {
-        e.preventDefault();
-        document.getElementById('dateStart').value = "";
-        document.getElementById('dateEnd').value = "";
-        document.getElementById('select-prt').value = "Select project";
-        document.getElementById('select-user').value = "Select user";
-        $(this).hide();
-        callTaskTableData();
-    });
-    $('#task-snapshot-filter').click(function(e)
-    {
-        e.preventDefault();
-        var start_date = document.getElementById('dateStart').value;
-        var end_date = document.getElementById('dateEnd').value;
+	$('.clear-filter').click(function(e) {
+		e.preventDefault();
+		document.getElementById('dateStart').value = '';
+		document.getElementById('dateEnd').value = '';
+		document.getElementById('select-prt').value = 'Select project';
+		document.getElementById('select-user').value = 'Select user';
+		$(this).hide();
+		document.getElementById('task-filter-error').innerHTML =  '';
+		callTaskTableData();
+	});
+	$('#task-snapshot-filter').click(function(e) {
+		e.preventDefault();
+		var start_date = document.getElementById('dateStart').value;
+		var end_date = document.getElementById('dateEnd').value;
 		var project = "";
 		var user = "";
-		if((end_date == " "|| end_date == "") && (start_date != ""))
+
+
+		var check_dates = moment(start_date).isAfter(end_date);
+		var check_start_date = moment(end_date).isAfter(moment());
+		var check_end_date = moment(start_date).isAfter(moment());
+
+		if ((start_date == '' || start_date == '') && (end_date == '' || end_date == '') && document.getElementById('select-prt').value == 'Select project' && document.getElementById('select-user').value == 'Select user') {
+			document.getElementById('task-filter-error').innerHTML = 'Apply some filters..';
+		}
+		else if(check_dates)
 		{
+			document.getElementById('task-filter-error').innerHTML = 'Start date cannot be greater than end date';
+		}
+		else if(check_start_date)
+		{
+			document.getElementById('task-filter-error').innerHTML = 'Start date cannot be greater than today';
+		}
+		else if(check_end_date)
+		{
+			document.getElementById('task-filter-error').innerHTML = 'Start date cannot be greater than today';
+		}
+		else if ((end_date == ' ' || end_date == '') && start_date != '') {
 			document.getElementById('dateEnd').value = moment().format('YYYY-MM-DD');
+			callTaskTableData(start_date, document.getElementById('dateEnd').value, project, user);
+			document.getElementById('task-filter-error').innerHTML = ' ';
+			$('.clear-filter').show();
 		}
-		if(start_date == " "|| start_date == "" && (end_date != ""))
-		{
-			document.getElementById('task-filter-error').innerHTML = "Please enter start date";
+		else if (start_date == ' ' || (start_date == '' && end_date != '')) {
+			document.getElementById('task-filter-error').innerHTML = 'Please enter start date';
 		}
-		else{
-						if(document.getElementById('select-prt').value != "Select project")
-			{   
+		else {
+			if (document.getElementById('select-prt').value != 'Select project') {
 				project = document.getElementById('select-prt').value;
 			}
-			if(document.getElementById('select-user').value != "Select user")
-			{
+			if (document.getElementById('select-user').value != 'Select user') {
 				user = document.getElementById('select-user').value;
 			}
-			if((start_date == '' || start_date == '') && (end_date== ''|| end_date== '') && (project =='') && (user==''))
-			{
-				document.getElementById('task-filter-error').innerHTML = "Apply some filters..";
-			}else{
-				callTaskTableData(start_date,end_date,project,user);
-				document.getElementById('task-filter-error').innerHTML = " ";
+			
+				callTaskTableData(start_date, end_date, project, user);
+				document.getElementById('task-filter-error').innerHTML = ' ';
 				$('.clear-filter').show();
-			}
 		}
 	});
-	
-
 });

@@ -1,5 +1,8 @@
 var projectChart;
 function __project_details(res) {
+	if(document.getElementById("main-chart"))
+	{
+		
 	var ctx = document.getElementById("main-chart").getContext("2d");
 	gradient = ctx.createLinearGradient(0, 0, 0, 600);
 	gradient.addColorStop(0, "#7077ff");
@@ -61,11 +64,13 @@ function __project_details(res) {
 				]
 			}
 		}
-	};
+	};	
+
+
 	if (projectChart) projectChart.destroy();
 	projectChart = new Chart(ctx, config);
 }
-
+}
 $(document).ready(function() {
 	var loadDashProjectChart = function(dateStr) {
 		var dateObj = dateStr;

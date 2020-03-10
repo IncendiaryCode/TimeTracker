@@ -36,10 +36,7 @@ $this->load->helper('url_helper');
                                 <p class="text-center display-5 mt-4">Change password</p>
                                 <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>
                                 <?php 
-                        if(validation_errors()) { ?>
-                            <div class="alert alert-danger"><?php echo validation_errors(); ?></div>
-                        <?php } 
-                        else if($this->session->flashdata('err_msg')){ ?>
+                            if($this->session->flashdata('err_msg')){ ?>
                                 <div class = "alert alert-danger">
                                     <?php echo $this->session->flashdata('err_msg'); ?>
                                 </div>

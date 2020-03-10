@@ -12,15 +12,6 @@ $this->load->library('form_validation');
                     <div class="row mt-2">
                         <div class="col-md-6 offset-md-3">
                             <?php 
-                            if(validation_errors()) { ?>
-                                <div class="alert alert-danger">
-                                    <?php 
-                                        echo validation_errors(); ?>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                </div>
-                            <?php } 
                             if($this->session->flashdata('true')){ ?>
                                 <div class="alert alert-success">
                                     <?php  

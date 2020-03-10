@@ -137,11 +137,11 @@ if (!empty($task_info['login_run'])) { ?>
                                 <i class="fas fa-sliders-h"></i>
                             </a>
                         </li>
-                    </ul>                    
+                    </ul>
                 </div>
                 <div class="col-12">
                     <div class="collapse" id="navbarToggleExternalContent">
-                        <div class="bg-light- p-4">
+                        <div class="p-4">
                             <form action="#" id="dashboard-filter">
                                 <div class="row">
                                     <div class="col-4" id="sorting">
@@ -172,7 +172,7 @@ if (!empty($task_info['login_run'])) { ?>
                                         </div>
                                     </div>
                                     <div class="col-4" id="filtering">
-                                        <h5 class="pb-2">Filter by</h5>
+                                        <h5 class="pb-2">Projects</h5>
                                         <?php
                                             for($p=0; $p<sizeof($project_list); $p++) { ?>                                        
                                             <div class="form-check custom-control custom-checkbox">

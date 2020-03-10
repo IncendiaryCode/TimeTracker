@@ -82,22 +82,21 @@ function drawCards(data) {
 						$('.alert-box').show();
 					}
 				}
-				if (data[x][y].start_time == "") {
+				if (data[x][y].start_time == '') {
 					cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>Yet to start.</div>');
-					$('.vertical-line').css("color",data[x][y].project_color);
+					$('.vertical-line').css('color', data[x][y].project_color);
 				} else {
-					
-						var date = data[x][y].start_time.slice(0,10);
-						var start_time = data[x][y].start_time;
-						var start_time_utc = moment.utc(start_time).toDate();
-						var serverDate1 = moment(start_time_utc).format('YYYY-MM-DD hh:mm a');
-						if (serverDate1 != 'Invalid date') {
-							cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + serverDate1 + '</div>');
-							$('.vertical-line').css("color",data[x][y].project_color);
-						} else {
-							cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
-							$('.vertical-line').css("color",data[x][y].project_color);
-						}
+					var date = data[x][y].start_time.slice(0, 10);
+					var start_time = data[x][y].start_time;
+					var start_time_utc = moment.utc(start_time).toDate();
+					var serverDate1 = moment(start_time_utc).format('YYYY-MM-DD hh:mm a');
+					if (serverDate1 != 'Invalid date') {
+						cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + serverDate1 + '</div>');
+						$('.vertical-line').css('color', data[x][y].project_color);
+					} else {
+						cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
+						$('.vertical-line').css('color', data[x][y].project_color);
+					}
 				}
 				var stopCol = $('<div class="col-6 text-right"  id="btn-stop' + data[x][y].id + '" />');
 				if (data[x][y].running_task == 0) {
@@ -369,13 +368,11 @@ $(document).ready(function() {
 			keyboard: false
 		});
 	}
-	if(document.getElementById('stop-time'))
-	{
+	if (document.getElementById('stop-time')) {
 		if (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play') {
 			document.getElementById('login-time').innerHTML = 'Punch in at 00:00:00';
 		}
 	}
-
 	if (document.getElementById('dashboard-filter')) {
 		var filter_form = document.getElementById('dashboard-filter');
 		filter_form.onsubmit = function() {
@@ -393,81 +390,73 @@ $(document).ready(function() {
 					filterBy.push(user_filtering[i + 1].value);
 				}
 			}
-			if(filterBy.length != 0)
-			{
+			if (filterBy.length != 0) {
 				$('#clear-filter').show();
 			}
-
-			if(document.getElementById('today-input').checked == true)
-			{
-				loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) , filter:"today" });
-			}
-			else{
+			if (document.getElementById('today-input').checked == true) {
+				loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy), filter: 'today' });
+			} else {
 				loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) });
 			}
 			$('#navbarToggleExternalContent').collapse('toggle');
 			return false;
 		};
 	}
-	$('#today-filter').click(function(e)
-	{
+	$('#today-filter').click(function(e) {
 		e.preventDefault();
 		var user_sorting = document.getElementById('sorting').getElementsByTagName('input');
-			var user_filtering = document.getElementById('filtering').getElementsByTagName('input');
-			var sortBy = 'date';
-			var filterBy = [];
-			for (var i = 0; i < user_sorting.length; i++) {
-				if (user_sorting[i].checked == true) {
-					sortBy = user_sorting[i].value;
-				}
+		var user_filtering = document.getElementById('filtering').getElementsByTagName('input');
+		var sortBy = 'date';
+		var filterBy = [];
+		for (var i = 0; i < user_sorting.length; i++) {
+			if (user_sorting[i].checked == true) {
+				sortBy = user_sorting[i].value;
 			}
-			for (var i = 0; i < user_filtering.length; i++) {
-				if (user_filtering[i].checked == true) {
-					filterBy.push(user_filtering[i + 1].value);
-				}
+		}
+		for (var i = 0; i < user_filtering.length; i++) {
+			if (user_filtering[i].checked == true) {
+				filterBy.push(user_filtering[i + 1].value);
 			}
-		if(document.getElementById('today-input').checked == false)
-			{
-				if(sortBy != "date" && filterBy.length != 0)
-				{
-					loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) , filter:"today" });
-				}
-				else{
-					loadTaskActivities({ type: 'date', filter:"today" });
-				}
-				document.getElementById('today-input').checked = true;
+		}
+		if (document.getElementById('today-input').checked == false) {
+			if (filterBy.length != 0) {
+				loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy), filter: 'today' });
+			} else {
+				loadTaskActivities({ type: sortBy, filter: 'today' });
 			}
-			else{
-				if(sortBy != "date" && filterBy.length != 0)
-				{
-					loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) });
-					$('#clear-filter').show();
-				}
-				else{
-					loadTaskActivities({ type: 'date' });
-				}
-				
-				document.getElementById('today-input').checked = false;
+			document.getElementById('today-input').checked = true;
+		} else {
+			if (filterBy.length != 0) {
+				loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) });
+				$('#clear-filter').show();
+			} else {
+				loadTaskActivities({ type: sortBy });
 			}
-		});
+
+			document.getElementById('today-input').checked = false;
+		}
+	});
 	$('#clear-filter').click(function(e) {
 		e.preventDefault();
-		for (var i = 0; i < document.getElementById('navbarToggleExternalContent').getElementsByTagName('input').length; i++) {
-			if (document.getElementById('navbarToggleExternalContent').getElementsByTagName('input')[i].checked == true) {
-				document.getElementById('navbarToggleExternalContent').getElementsByTagName('input')[i].checked = false;
-				$('#clear-filter').hide();
+		var sorting_element = '';
+		for (var i = 0; i < document.getElementById('sorting').getElementsByTagName('input').length; i++) {
+			if (document.getElementById('sorting').getElementsByTagName('input')[i].checked == true) {
+				sorting_element = document.getElementById('sorting').getElementsByTagName('input')[i].value;
 			}
 		}
-		document.getElementById('sorting').getElementsByTagName('input')[0].checked = true;
+		for (var i = 0; i < document.getElementById('filtering').getElementsByTagName('input').length; i++) {
+			if (document.getElementById('filtering').getElementsByTagName('input')[i].checked == true) {
+				document.getElementById('filtering').getElementsByTagName('input')[i].checked = false;
+			}
+		}
 		if(document.getElementById('today-input').checked == true)
 		{
-			loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) , filter:"today" });
-		}
-		else loadTaskActivities({ type: 'date' });
+			loadTaskActivities({ type: sorting_element, filter: 'today' });
+		}else loadTaskActivities({ type: sorting_element });
+		$('#clear-filter').hide();
 	});
 
-	if(document.getElementById('filtering'))
-	{
+	if (document.getElementById('filtering')) {
 		for (var i = 0; i < document.getElementById('filtering').getElementsByTagName('input').length; i++) {
 			if (document.getElementById('filtering').getElementsByTagName('input')[i].checked == true) {
 				$('#clear-filter').show();
@@ -740,16 +729,13 @@ $(document).ready(function() {
 		};
 	}
 	$('#punch-out').click(function() {
-		if(document.getElementById('timerpicker-punchout').value == "")
-		{
-			document.getElementById('punch-out-invalid').innerHTML = "Please enter punch out time"
-		}
-		else{
+		if (document.getElementById('timerpicker-punchout').value == '') {
+			document.getElementById('punch-out-invalid').innerHTML = 'Please enter punch out time';
+		} else {
 			var pounchOutTime = moment(moment().format('YYYY-MM-DD') + ' ' + document.getElementById('timerpicker-punchout').value);
-			if(pounchOutTime.format('Y-MM-DD H:mm:ss') == 'Invalid date')
-			{
-				document.getElementById('punch-out-invalid').innerHTML = "Please enter valid time"
-			}else{
+			if (pounchOutTime.format('Y-MM-DD H:mm:ss') == 'Invalid date') {
+				document.getElementById('punch-out-invalid').innerHTML = 'Please enter valid time';
+			} else {
 				$.ajax({
 					type: 'POST',
 					url: timeTrackerBaseURL + 'user/update_end_time',

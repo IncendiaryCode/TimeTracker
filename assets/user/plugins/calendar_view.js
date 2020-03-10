@@ -225,12 +225,12 @@ function __calculate_duration(timeArr) {
 	timings = [];
 	return total_duration;
 }
-function loadTask(type, date) {
+function loadTask(type, date, filterBy) {
 	$('#attachPanels').empty().html('<div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div> Loading...</div>');
 	$.ajax({
 		type: 'POST',
 		url: timeTrackerBaseURL + 'index.php/user/load_task_data',
-		data: { chart_type: type, date: date },
+		data: { chart_type: type, date: date, project_filter: JSON.stringify(filterBy) },
 		success: function(values) {
 			if (values == 'No activity in this date.') {
 				$('#attachPanels').empty();
@@ -256,7 +256,7 @@ function loadTask(type, date) {
 	});
 }
 
-function loadDailyChart() {
+function loadDailyChart(filterBy) {
 	var date = '';
 	if (document.getElementById('daily-chart')) {
 		date = document.getElementById('daily-chart').value;
@@ -270,14 +270,13 @@ function loadDailyChart() {
 
 			date = document.getElementById('daily-chart').value;
 
-			retrieveChartData('daily_chart', date);
+			retrieveChartData('daily_chart', date, filterBy);
 		} else {
-			retrieveChartData('daily_chart', date);
+			retrieveChartData('daily_chart', date, filterBy);
 		}
 	}
 }
-
-function loadWeeklyChart() {
+function loadWeeklyChart(filterBy) {
 	if (document.getElementById('weekly-chart')) {
 		var weekControl = document.querySelector('input[type="week"]');
 		var week = document.getElementById('weekly-chart').value;
@@ -286,24 +285,30 @@ function loadWeeklyChart() {
 			day_range = document.getElementById('current-week').innerHTML;
 
 			var year = document.getElementById('week_y').innerHTML.split('-')[0];
-			day_range = year + '-' + day_range.split(' ')[0] + '-' + day_range.split(' ')[1] + '~' + moment().format('YYYY') + '-' + day_range.split(' ')[3] + '-' + day_range.split(' ')[4];
-			retrieveChartData('weekly_chart', day_range);
+			if (moment(year + day_range.split('-')[0]).format('MMM') == 'Dec' && parseInt(moment(year + day_range.split('-')[0]).format('DD')) > 24) {
+				day_range = year + '-' + day_range.split(' ')[0] + '-' + day_range.split(' ')[1] + '~' + (parseInt(year) + 1) + '-' + day_range.split(' ')[3] + '-' + day_range.split(' ')[4];
+			} else {
+				day_range = year + '-' + day_range.split(' ')[0] + '-' + day_range.split(' ')[1] + '~' + year + '-' + day_range.split(' ')[3] + '-' + day_range.split(' ')[4];
+			}
+			retrieveChartData('weekly_chart', day_range, filterBy);
 		}
 	}
 }
 
 function drawChart(type, res, date) {
 	if (res['status'] == false) {
-		//document.getElementById('week-error').innerHTML = 'No activity in this week.';
 		$('.no-activities').show();
 		$('#attachPanels').hide();
-		window.myBar.destroy();
-		$('#weekly').css("height",'0px');
+		if (window.myBar != undefined) {
+			window.myBar.destroy();
+		}
+		$('#weekly').css('height', '0px');
 		document.getElementById('weekly-duration').innerHTML = '00:00';
 		$('#attachPanels').empty();
 	} else {
 		$('.no-activities').hide();
 		$('#attachPanels').show();
+		$('#weekly').css('height', '400px');
 		var weekly_hr = parseInt(res['total_minutes'] / 60);
 		var weekly_min = res['total_minutes'] % 60;
 		if (weekly_hr.toString().length == 1) {
@@ -364,9 +369,9 @@ function drawChart(type, res, date) {
 					}
 					var day = parseInt(document.getElementById('current-week').innerHTML.split('-')[0].split(' ')[1]) + parseInt(myBar.getElementsAtEvent(event)[0]['_index']);
 					var year = document.getElementById('week_y');
-					var d_time = moment(day +'-'+ month + '-' + year.innerHTML.split('-')[0]);
-					document.getElementById('current-date').innerHTML = moment(year.innerHTML.split('-')[0]+'-'+month +'-'+ day).format('dddd MMMM DD');
-					document.getElementById('daily-chart').value = year.innerHTML.split('-')[0]+'-'+month + '-' + day;
+					var d_time = moment(day + '-' + month + '-' + year.innerHTML.split('-')[0]);
+					document.getElementById('current-date').innerHTML = moment(year.innerHTML.split('-')[0] + '-' + month + '-' + day).format('dddd MMMM DD');
+					document.getElementById('daily-chart').value = year.innerHTML.split('-')[0] + '-' + month + '-' + day;
 					if (document.getElementById('daily-chart').value != 'Invalid date') {
 						$('#chart-navigation a[href="#daily-view"]').tab('show');
 					}
@@ -401,12 +406,12 @@ function drawChart(type, res, date) {
 	}
 	// window.myBar = new Chart(ctx, window.myBar);
 }
-function retrieveChartData(type, date) {
+function retrieveChartData(type, date, filterBy) {
 	$('#print-chart').empty();
 	$.ajax({
 		type: 'POST',
 		url: timeTrackerBaseURL + 'index.php/user/activity_chart',
-		data: { chart_type: type, date: date },
+		data: { chart_type: type, date: date, project_filter: JSON.stringify(filterBy) },
 		dataType: 'json',
 		success: function(res) {
 			if (res['msg'] == 'No activity in this date.') {
@@ -422,13 +427,13 @@ function retrieveChartData(type, date) {
 				}
 			} else {
 				if (type == 'weekly_chart') {
-					loadTask(type, date);
+					loadTask(type, date, filterBy);
 					document.getElementById('week-error').innerHTML = ' ';
 					drawChart(type, res, date);
 					$('#weekly').show();
 				}
 				if (type == 'daily_chart') {
-					loadTask(type, date);
+					loadTask(type, date, filterBy);
 					document.getElementById('daily-error').innerHTML = ' ';
 					draw_customized_chart(res);
 				}
@@ -481,9 +486,9 @@ function draw_customized_chart(res) {
 			var task_name = res['data'][2][i];
 			var color = res['data'][3][i];
 			var width = interval / 240 * p_left;
-			
-			var start_time_pixel = (start_time_min / 240) * p_left;
-			var end_time_pixel = (end_time_min /240) * p_left;
+
+			var start_time_pixel = start_time_min / 240 * p_left;
+			var end_time_pixel = end_time_min / 240 * p_left;
 
 			for (var k = 0; k < pixel.length; k++) {
 				if (parseInt(start_time_pixel) >= parseInt(pixel[k][0]) && parseInt(start_time_pixel) <= parseInt(pixel[k][1])) {
@@ -494,7 +499,7 @@ function draw_customized_chart(res) {
 					break;
 				}
 			}
-			if ((start_time_pixel + width) >= window_width) {
+			if (start_time_pixel + width >= window_width) {
 				width = window_width - start_time_pixel;
 			}
 			pixels_print.push([ start_time_pixel, width, margin_top + v * count, task_name, res['data'][0][i], moment(start_time_local).format('hh:mm'), moment(end_time_local).format('hh:mm'), color ]);
@@ -507,13 +512,11 @@ function draw_customized_chart(res) {
 		for (var j = 0; j < pixels_print.length; j++) {
 			printChart(pixels_print[j][0], pixels_print[j][1], pixels_print[j][2], pixels_print[j][3], pixels_print[j][4], pixels_print[j][5], pixels_print[j][6], pixels_print[j][7]);
 		}
-	}
-	else
-	{
+	} else {
 		$('.no-activities').show();
 		$('#attachPanels').hide();
 		$('.cust_daily_chart').hide();
-		$('#print-chart').css('height','0px');
+		$('#print-chart').css('height', '0px');
 	}
 	width = 0;
 	start_time_pixel = 0;
@@ -528,7 +531,22 @@ function printChart(start, width, top, task_name, id, start_time, end_time, colo
 	} else {
 		$('#print-chart').css('height', 50);
 	}
-	var row = $("<span class='positon-chart animated fadeInLeft print-chart-row " + id + "' data-html='true' data-toggle='tooltip' data-placement='top' title='"+"<b>"+start_time + ' - ' + end_time+"</b><br>"+ task_name + "' id='new-daily-chart" + graph_id + "'><input type = 'hidden' value = " + graph_id + '></span>');
+	var row = $(
+		"<span class='positon-chart animated fadeInLeft print-chart-row " +
+			id +
+			"' data-html='true' data-toggle='tooltip' data-placement='top' title='" +
+			'<b>' +
+			start_time +
+			' - ' +
+			end_time +
+			'</b><br>' +
+			task_name +
+			"' id='new-daily-chart" +
+			graph_id +
+			"'><input type = 'hidden' value = " +
+			graph_id +
+			'></span>'
+	);
 	$(row).css('margin-left', start);
 	if (top > 350) {
 		$(row).css('display', 'none');
@@ -637,6 +655,7 @@ function __get_date(w, y) {
 	return new Date(y, 0, d);
 }
 function next() {
+	var filterBy = get_filterElement();
 	weeklyOrMonthlyDuration = 0;
 	var currentYear = parseInt(document.getElementById('monthly-chart').value.split(' ')[1]);
 	var currentMonth = parseInt(document.getElementById('monthly-chart').value.split(' ')[0]);
@@ -648,11 +667,12 @@ function next() {
 		currentYear = currentMonth === 11 ? currentYear + 1 : currentYear;
 		currentMonth = (currentMonth + 1) % 12;
 		document.getElementById('monthly-chart').value = currentMonth + ' ' + currentYear;
-		//$('#next-year').css('color', '#666');
-		showCalendar(currentMonth, currentYear);
+		if (filterBy.length > 0) showCalendar(currentMonth, currentYear, filterBy);
+		else showCalendar(currentMonth, currentYear);
 	}
 }
 function previous() {
+	var filterBy = get_filterElement();
 	weeklyOrMonthlyDuration = 0;
 	var currentYear = parseInt(document.getElementById('monthly-chart').value.split(' ')[1]);
 	var currentMonth = parseInt(document.getElementById('monthly-chart').value.split(' ')[0]);
@@ -660,7 +680,8 @@ function previous() {
 	currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
 	document.getElementById('monthly-chart').value = currentMonth + ' ' + currentYear;
 	$('#next-year').css('color', '#666');
-	showCalendar(currentMonth, currentYear);
+	if (filterBy.length > 0) showCalendar(currentMonth, currentYear, filterBy);
+	else showCalendar(currentMonth, currentYear);
 }
 function hexToRgb(hex) {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -673,7 +694,7 @@ function hexToRgb(hex) {
 		: null;
 }
 
-function showCalendar(month, year) {
+function showCalendar(month, year, filterBy) {
 	let months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 	let firstDay = new Date(year, month).getDay();
 	let daysInMonth = 32 - new Date(year, month, 32).getDate();
@@ -708,14 +729,13 @@ function showCalendar(month, year) {
 	$.ajax({
 		type: 'POST',
 		url: timeTrackerBaseURL + 'index.php/user/activity_chart',
-		data: { chart_type: 'monthly_chart', date: month + 1 + ' ' + year },
+		data: { chart_type: 'monthly_chart', date: month + 1 + ' ' + year, project_filter: JSON.stringify(filterBy) },
 		dataType: 'json',
 		success: function(result) {
 			$('.card').show();
 			if (result['status'] == false) {
 				$('.no-activities').show();
 				$('#attachPanels').hide();
-				//document.getElementById('monthly-chart-error').innerHTML = 'No activities in this month';
 			} else {
 				$('.no-activities').hide();
 				$('#attachPanels').show();
@@ -799,7 +819,8 @@ function showCalendar(month, year) {
 								url: timeTrackerBaseURL + 'index.php/user/load_task_data',
 								data: {
 									chart_type: 'daily_chart',
-									data: date
+									data: date,
+									project_filter: JSON.stringify(filterBy)
 								},
 								success: function(values) {
 									if (JSON.parse(values)['status'] == true) {
@@ -813,19 +834,32 @@ function showCalendar(month, year) {
 					}
 				}
 			}
-			loadTask('monthly-chart', month + 1 + ' ' + year);
+			loadTask('monthly-chart', month + 1 + ' ' + year, filterBy);
 		}
 	});
 }
-function loadCalendarChart() {
+function loadCalendarChart(filterBy) {
 	if (document.getElementById('monthly-chart')) {
-		showCalendar(parseInt(document.getElementById('monthly-chart').value.split(' ')[0]), parseInt(document.getElementById('monthly-chart').value.split(' ')[1]));
+		showCalendar(parseInt(document.getElementById('monthly-chart').value.split(' ')[0]), parseInt(document.getElementById('monthly-chart').value.split(' ')[1]), filterBy);
 	} else {
 		let today = new Date();
 		let currentMonth = today.getMonth();
 		let currentYear = today.getFullYear();
-		showCalendar(currentMonth, currentYear);
+		showCalendar(currentMonth, currentYear, filterBy);
 	}
+}
+
+function get_filterElement() {
+	var filterBy = [];
+	if (document.getElementById('activity-filtering')) {
+		var user_filtering = document.getElementById('activity-filtering').getElementsByTagName('input');
+		for (var i = 0; i < user_filtering.length; i++) {
+			if (user_filtering[i].checked == true) {
+				filterBy.push(user_filtering[i + 1].value);
+			}
+		}
+	}
+	return filterBy;
 }
 $(document).ready(function() {
 	//Tab Change
@@ -833,36 +867,62 @@ $(document).ready(function() {
 	$('#task-detail').css('display', 'none');
 	$('#weekly-chart').hide();
 
+	// if (document.getElementById('chart-navigation')) window.location.hash = 'daily-tab';
+	var currentTab = '';
+	$('#chart-navigation a').on('shown.bs.tab', function(event) {
+		event.preventDefault();
+		currentTab = $(event.target).attr('href'); // active tab
+		var y = $(event.relatedTarget); // previous tab
+		
+		// window.location.hash = this.id;
+		var filterBy = [];
+		if (document.getElementById('activity-filtering')) {
+			var user_filtering = document.getElementById('activity-filtering').getElementsByTagName('input');
+			for (var i = 0; i < user_filtering.length; i++) {
+				if (user_filtering[i].checked == true) {
+					filterBy.push(user_filtering[i + 1].value);
+				}
+			}
+		}
+		if (filterBy.length > 0) {
+			if (currentTab == '#daily-view') {
+				weeklyOrMonthlyDuration = 0;
+				loadDailyChart(filterBy);
+			}
+			if (currentTab == '#weekly-view') {
+				weeklyOrMonthlyDuration = 0;
+				loadWeeklyChart(filterBy);
+			}
+			if (currentTab == '#monthly-view') {
+				weeklyOrMonthlyDuration = 0;
+				loadCalendarChart(filterBy);
+			}
+		} else {
+			if (currentTab == '#daily-view') {
+				weeklyOrMonthlyDuration = 0;
+				loadDailyChart();
+			}
+			if (currentTab == '#weekly-view') {
+				weeklyOrMonthlyDuration = 0;
+				loadWeeklyChart();
+			}
+			if (currentTab == '#monthly-view') {
+				weeklyOrMonthlyDuration = 0;
+				loadCalendarChart();
+			}
+		}
+	});
+
 	let today = new Date();
 	let currentMonth = today.getMonth();
 	let currentYear = today.getFullYear();
 	if (document.getElementById('monthly-chart')) {
 		document.getElementById('monthly-chart').value = currentMonth + ' ' + currentYear;
 	}
-
 	/*daily_value.*/
 	var win_width = $('.cust_daily_chart').width();
-	var p_l = parseInt(win_width) / 6-50;
+	var p_l = parseInt(win_width) / 6 - 50;
 	$('.cust_chart').css('padding-left', p_l);
-	
-	// if (win_width < 400) {
-	// 	document.getElementById('chart-labels').remove();
-	// 	var new_lebels = $(
-	// 		'<p class="cust_daily_chart"><span class="">12AM</span><span class="cust_chart">4AM</span><span class="cust_chart">8AM</span><span class="cust_chart">12PM</span><span class="cust_chart">4PM</span><span class="cust_chart">8PM</span><span class="cust_chart">12AM</span></p>'
-	// 	);
-	// 	$('#daily').append(new_lebels);
-	// 	var p_l = parseInt(win_width) / 24;
-	// 	$('.cust_chart').css('padding-left', p_l);
-	// }
-	// if (win_width < 1080 && win_width > 400) {
-	// 	document.getElementById('chart-labels').remove();
-	// 	//document.getElementById('chart-labels').css('display', 'none');
-	// 	var new_lebels = $('<p class="cust_daily_chart"><span class="">12AM</span><span class="cust_chart">4AM</span><span class="cust_chart">8AM</span><span class="cust_chart">12PM</span><span class="cust_chart">4PM</span><span class="cust_chart">8PM</span><span class="cust_chart">12AM</span></p>');
-	// 	$('#daily').append(new_lebels);
-	// 	var p_l = parseInt(win_width) / 12;
-	// 	$('.cust_chart').css('padding-left', p_l);
-	// }
-
 	$('#daily-chart').change(function() {
 		loadDailyChart();
 	});
@@ -883,6 +943,7 @@ $(document).ready(function() {
 	if (document.getElementById('daily-chart')) {
 		daily_chart_date = document.getElementById('daily-chart').value;
 	}
+
 	loadDailyChart();
 	var day = new Date(daily_chart_date);
 	var nextDay = new Date(day);
@@ -891,6 +952,7 @@ $(document).ready(function() {
 		$('#next-date').css('color', '#ccc');
 	}
 	$('#next-date').unbind().click(function() {
+		var filterBy = get_filterElement();
 		weeklyOrMonthlyDuration = 0;
 		var daily_chart_date = document.getElementById('daily-chart').value;
 		var day = new Date(daily_chart_date);
@@ -902,7 +964,8 @@ $(document).ready(function() {
 			$('#next-date').css('color', '#a280fc');
 			document.getElementById('daily-chart').value = moment(nextDay).format('YYYY-MM-DD');
 			document.getElementById('current-date').innerHTML = moment(nextDay).format('dddd MMMM DD');
-			loadDailyChart();
+			if (filterBy.length > 0) loadDailyChart(filterBy);
+			else loadDailyChart();
 		}
 		var check_for_ancher = nextDay;
 		check_for_ancher.setDate(day.getDate() + 2);
@@ -912,6 +975,7 @@ $(document).ready(function() {
 	});
 
 	$('#previous-date').unbind().click(function() {
+		var filterBy = get_filterElement();
 		weeklyOrMonthlyDuration = 0;
 		var daily_chart_date = document.getElementById('daily-chart').value;
 		var day = new Date(daily_chart_date);
@@ -920,7 +984,8 @@ $(document).ready(function() {
 		nextDay.setDate(day.getDate() - 1);
 		document.getElementById('daily-chart').value = moment(nextDay).format('YYYY-MM-DD');
 		document.getElementById('current-date').innerHTML = moment(nextDay).format('dddd MMMM DD');
-		loadDailyChart();
+		if (filterBy.length > 0) loadDailyChart(filterBy);
+		else loadDailyChart();
 	});
 
 	var t_day = new Date();
@@ -936,13 +1001,14 @@ $(document).ready(function() {
 	if (document.getElementById('current-week')) document.getElementById('current-week').innerHTML = s_date + ' - ' + e_date;
 	if (document.getElementById('week_y')) document.getElementById('week_y').innerHTML = moment(t_day).format('YYYY-MM-DD');
 
-	if (document.getElementById('weekly-chart')) document.getElementById('weekly-chart').value = moment(t_day).format('YYYY') + '-W' + (parseInt(moment(t_day).format('W')) + 1); //format 2020-W05
+	if (document.getElementById('weekly-chart')) document.getElementById('weekly-chart').value = moment(t_day).format('YYYY') + '-W' + (parseInt(moment(t_day).format('W')) + 1);
 
 	var daily_chart_date1 = '';
 	if (document.getElementById('weekly-chart')) {
 		daily_chart_date1 = document.getElementById('weekly-chart').value;
 	}
 	$('#next-week').unbind().click(function() {
+		var filterBy = get_filterElement();
 		weeklyOrMonthlyDuration = 0;
 		var daily_chart_date1 = document.getElementById('weekly-chart').value;
 		var week_no = parseInt(daily_chart_date1.slice(6, 8));
@@ -965,12 +1031,14 @@ $(document).ready(function() {
 			var e_date = moment(t_day).format('MMM DD');
 			t_day.setDate(t_day.getDate() - 6);
 			document.getElementById('current-week').innerHTML = s_date + ' - ' + e_date;
-			loadWeeklyChart();
+			if (filterBy.length > 0) loadWeeklyChart(filterBy);
+			else loadWeeklyChart();
 		} else {
 			$('#next-week').css('color', '#ccc');
 		}
 	});
 	$('#previous-week').unbind().click(function() {
+		var filterBy = get_filterElement();
 		weeklyOrMonthlyDuration = 0;
 		var daily_chart_date1 = document.getElementById('weekly-chart').value;
 		var week_no = parseInt(daily_chart_date1.slice(6, 8));
@@ -990,69 +1058,70 @@ $(document).ready(function() {
 			t_day.setDate(t_day.getDate() - 6);
 			var s_date = moment(t_day).format('MMM DD');
 			document.getElementById('current-week').innerHTML = s_date + ' - ' + e_date;
-			loadWeeklyChart();
-		}
-	});
-	
-
-	$('#chart-navigation a').on('shown.bs.tab', function(event) {
-		var x = $(event.target).attr('href'); // active tab
-		var y = $(event.relatedTarget); // previous tab
-		if (x == '#daily-view') {
-			var date = document.getElementById('daily-chart').value;
-			weeklyOrMonthlyDuration = 0;
-			loadDailyChart();
-		}
-		if (x == '#weekly-view') {
-			weeklyOrMonthlyDuration = 0;
-			loadWeeklyChart();
-			var date = document.getElementById('weekly-chart').value;
-			//loadTask('weekly_chart', date);
-		}
-		if (x == '#monthly-view') {
-			weeklyOrMonthlyDuration = 0;
-			loadCalendarChart();
+			if (filterBy.length > 0) loadWeeklyChart(filterBy);
+			else loadWeeklyChart();
 		}
 	});
 
 	if (document.getElementById('activity-filter')) {
 		var filter_form = document.getElementById('activity-filter');
 		filter_form.onsubmit = function() {
-			var user_sorting = document.getElementById('activity-sorting').getElementsByTagName('input');
+			weeklyOrMonthlyDuration = 0;
 			var user_filtering = document.getElementById('activity-filtering').getElementsByTagName('input');
-			var sortBy = 'date';
 			var filterBy = [];
-			for (var i = 0; i < user_sorting.length; i++) {
-				if (user_sorting[i].checked == true) {
-					sortBy = user_sorting[i].value;
-				}
-			}
 			for (var i = 0; i < user_filtering.length; i++) {
 				if (user_filtering[i].checked == true) {
 					filterBy.push(user_filtering[i + 1].value);
 				}
 			}
-			$('#activity-clear-filter').show();
-			loadTask({ type: sortBy, project_filter: JSON.stringify(filterBy) });
-			$('#navBarActivityFilter').collapse('toggle');
+			if (filterBy.length > 0) {
+				if (currentTab == '' || currentTab == '#daily-view') {
+					loadDailyChart(filterBy);
+				} else if (currentTab == '#weekly-view') {
+					loadWeeklyChart(filterBy);
+				} else if (currentTab == '#monthly-view') {
+					loadCalendarChart(filterBy);
+				}
+				$('.alert-filter').show();
+			} else {
+				if (currentTab == '' || currentTab == '#daily-view') {
+					loadDailyChart();
+				} else if (currentTab == '#weekly-view') {
+					loadWeeklyChart();
+				} else if (currentTab == '#monthly-view') {
+					loadCalendarChart();
+				}
+				$('.alert-filter').hide();
+			}
+			$('.activity-filter').hide();
+			$('.close-filters').css("opacity","0");
+			document.getElementsByClassName('project-filtering')[0].classList.add('fadeIn');
 			return false;
 		};
 	}
-	$('#activity-clear-filter').click(function(e) {
-		e.preventDefault();
-		for (var i = 0; i < document.getElementById('navBarActivityFilter').getElementsByTagName('input').length; i++) {
-			if (document.getElementById('navBarActivityFilter').getElementsByTagName('input')[i].checked == true) {
-				document.getElementById('navBarActivityFilter').getElementsByTagName('input')[i].checked = false;
-				$('#activity-clear-filter').hide();
+
+	if (document.getElementById('activity-filtering')) {
+		var user_filtering = document.getElementById('activity-filtering').getElementsByTagName('input');
+		for (var i = 0; i < user_filtering.length; i++) {
+			if (user_filtering[i].checked == true) {
+				$('.alert-filter').show();
 			}
 		}
-		document.getElementById('activity-sorting').getElementsByTagName('input')[0].checked = true;
-		loadTask({ type: 'date' });
+	}
+	$('.alert-filter').click(function() {
+		document.getElementsByClassName('project-filtering')[0].classList.remove('fadeIn');
+		$('.activity-filter').show();
 	});
-
-	// for (var i = 0; i < document.getElementById('activity-filtering').getElementsByTagName('input').length; i++) {
-	// 	if (document.getElementById('activity-filtering').getElementsByTagName('input')[i].checked == true) {
-	// 		$('#activity-clear-filter').show();
-	// 	}
-	// }
+	$('#project-filtering').click(function() {
+		$('.activity-filter').show();
+		document.getElementsByClassName('project-filtering')[0].classList.remove('fadeIn');
+		setTimeout(function(){ 
+			$('.close-filters').css("opacity","0.7");
+		 }, 800);
+	});
+	$('.close-filters').click(function() {
+		$('.close-filters').css("opacity","0");
+		$('.activity-filter').hide();
+		document.getElementsByClassName('project-filtering')[0].classList.add('fadeIn');
+	});
 });

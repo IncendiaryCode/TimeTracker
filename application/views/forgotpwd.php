@@ -65,6 +65,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
             </div>
             <div class="form-group otp email-input" id="enter-otp">
+                <p class="text-danger" id="otp-error"></p>
                 <div class="input-group mb-3">
                     <input type="text" class="form-control font-weight-light border-top-0 border-left-0 border-right-0" id="otp1" name="otp" placeholder="Enter verification code">
                     <div class="spinner-border resend-otp-spinner" id="send-otp-spinner"></div>

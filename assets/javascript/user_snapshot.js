@@ -54,15 +54,15 @@ var configs = {
     },
     options: {
         tooltips: {
-                enabled: true,
                 callbacks: {
                     label: function (tooltipItem, data) {
-                        var item = tooltipItem.xLabel;
-                        $('#user_chart').unbind().click(function()
+                        var item = tooltipItem.yLabel;
+                        $("#user-chart").click(function()
                         {
-                            var elmnt = document.getElementById(item);
-                            elmnt.scrollIntoView();
+                            var elmnt = document.getElementById(tooltipItem.xLabel);
+                            elmnt.scrollIntoView({ behavior: 'smooth' });
                         });
+                        return item;
                     }
                 }
                 },
@@ -116,24 +116,6 @@ if (user_detail_chart) user_detail_chart.destroy();
 $(document).ready(function() {
     if(document.getElementById('user-chart'))
     {
-    $.ajax({
-        type: 'POST',
-        url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
-        data: { 'type': "get_user" },
-        success: function(res) {
-            var result = JSON.parse(res);
-            usernames = result['result'];
-            for (var j = 0; j < usernames.length; j++) {
-                if((usernames[j]["project_name"] != undefined) && (usernames[j]["project_name"] != null))
-                {
-                    var option = $('<option>' + usernames[j]["project_name"] + '</option>');
-                    $('.project-names').append(option);
-                }
-                }
-            }
-    	});
-    
-
     $.ajax({
         type: 'POST',
             url: timeTrackerBaseURL + 'index.php/admin/get_graph_data',

@@ -3,7 +3,7 @@ html {
 	font-family: "Roboto", sans-serif;
 }
 
-body {
+body.theme-light {
 	font-family: "Roboto", sans-serif;
 	font-size: 16px;
 	background-color: #fff;
@@ -87,8 +87,7 @@ header.main-header h1 {
 	height: 100%;
 	background-image: linear-gradient(rgba(255, 255, 255, 0) 20%, #ffffff 45%);
 }
-#timerpicker-punchout
-{
+#timerpicker-punchout {
 	width: 260%;
 }
 .gj-timepicker-md [role="right-icon"] {
@@ -387,8 +386,7 @@ a:hover {
 	min-height: 330px;
 	position: relative;
 }
-#attachPanels
-{
+#attachPanels {
 	min-height: 330px;
 }
 
@@ -610,12 +608,10 @@ a:hover {
 	.timer-slider .bx-wrapper {
 		margin-bottom: 30px;
 	}
-	.taskName
-	{
+	.taskName {
 		padding-top: 0px;
 	}
-	.bx-viewport
-	{
+	.bx-viewport {
 		height: 0px;
 	}
 }
@@ -758,29 +754,23 @@ a:hover {
 	color: #b3b3b3;
 	font-size: 24px;
 }
-.no-data
-{
+.no-data {
 	display: none;
 }
-.no-data h3
-{
+.no-data h3 {
 	color: #b3b3b3;
 }
-.no-data a
-{
+.no-data a {
 	color: #bd76c8;
 }
 
-.no-activities
-{
+.no-activities {
 	display: none;
 }
-.no-activities h3
-{
+.no-activities h3 {
 	color: #b3b3b3;
 }
-.no-activities a
-{
+.no-activities a {
 	color: #bd76c8;
 }
 
@@ -924,14 +914,6 @@ a#action-filter:hover {
 	color: #666;
 }
 /* for filters in my activities page */
-#activity-filter .form-check {
-	padding-bottom: 5px;
-}
-
-#activity-clear-filter {
-	display: none;
-}
-
 a#activity-action-filter {
 	font-size: 24px;
 	line-height: 24px;
@@ -942,7 +924,6 @@ a#activity-action-filter:hover {
 	color: #666;
 }
 
-
 .monthly-action {
 	cursor: pointer;
 }
@@ -952,24 +933,136 @@ a#activity-action-filter:hover {
 #week_y {
 	display: none;
 }
-#print-chart
-{
+#print-chart {
 	position: relative;
 	height: 50px;
 	max-height: 350px;
-    width: 101.69%;
+	width: 101.69%;
 }
-.positon-chart
-{
+.positon-chart {
 	position: absolute;
-	height:13px;
-	border-radius:2px;
+	height: 13px;
+	border-radius: 2px;
 }
-.space_right
-{
+.space_right {
 	padding-right: 23px;
 }
-#taskError
-{
+#taskError {
 	position: absolute;
+}
+
+button#project-filtering.focus,
+button#project-filtering:focus {
+	outline: 0;
+	box-shadow: none;
+}
+
+.filter-parent {
+	position: absolute;
+	top: 150px;
+	right: 0px;
+	height: 55px;
+	border-radius: 100px 0px 0px 100px;
+	width: 68px;
+	background: #db83fb;
+	z-index: 1;
+}
+
+.alert-filter {
+	display: none;
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	background-color: #ffee23;
+	font-size: 100px;
+	z-index: 1;
+	width: 16px;
+	height: 16px;
+	border-radius: 100px;
+	cursor: pointer;
+	border: 3px solid #db82fb;
+	z-index: 2;
+}
+
+.activity-filter {
+	display: none;
+	position: absolute;
+	right: 0;
+	top: 0;
+	border-radius: 20px 0px 0px 20px;
+	border-left: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	padding: 10px 0px 20px 20px;
+	box-shadow: -3px 7px 15px #ccc;
+	z-index: 2;
+	background-color: #fff;
+	width: 300px;
+	overflow: hidden;
+}
+
+.project-filtering {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	height: 55px;
+	border-radius: 100px 0px 0px 100px;
+	width: 68px;
+	background: #db83fb;
+	z-index: 1;
+}
+
+.project-filtering i {
+	font-size: 25px;
+	padding-left: 6px;
+	color: #fff;
+}
+
+.activity-filter i .fa-times-circle {
+	background-color: #ccc;
+}
+
+.activity-filter i {
+	opacity: 0;
+	font-size: 25px;
+}
+
+.activity-filter i:hover {
+	opacity: 1 !important;
+}
+
+.activity-filter .close-filters {
+	position: absolute;
+	top: 0px;
+	right: 24px;
+}
+
+.close-alert {
+	padding-left: 168px;
+	cursor: pointer;
+}
+
+#animate-right {
+	animation: slidein 1s;
+}
+
+@keyframes slidein {
+	from {
+		width: 0px;
+	}
+	to {
+		width: 300px;
+	}
+}
+
+@media (max-width: 400px) {
+	.project-filtering {
+		position: fixed;
+	}
+}
+
+@media (max-width: 400px) {
+	.project-filtering {
+		position: fixed;
+	}
 }

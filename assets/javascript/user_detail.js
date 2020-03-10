@@ -7,17 +7,8 @@ gradient = user_chart.createLinearGradient(0, 0, 0, 600);
 
 gradient.addColorStop(0, '#4b5bf0');
 gradient.addColorStop(1, '#ea4776');
-
-    var user_data = [];
-
-    var task_labels = [];
-    var user_labels = [];
-
-    var task_time_value = [];
-    var user_time_value = [];
-
-    var chart_color = "000000";
-
+var task_labels = [];
+var task_time_value = [];
 var data = JSON.parse(res);
 data  = data['data'];
 for(var i=0; i<data.length; i++)
@@ -30,7 +21,7 @@ for(var ind=0; ind<task_time_value.length; ind++)
 {
     var task_time_dec = task_time_value[ind] - Math.floor(task_time_value[ind]);
     task_time_dec = task_time_dec.toString().slice(0,4);
-    var total_time = Math.floor(task_time_value[ind]) + parseFloat(task_time_dec);
+    var total_time = Math.floor(task_time_value[ind]) + (parseFloat(task_time_dec));
     task_time_value[ind] = total_time;
 }
 var configs = {
@@ -47,8 +38,30 @@ var configs = {
     },
     options: {
         tooltips: {
-                enabled: true,
-                },
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                    var value = "";
+                    if((tooltipItem['value'].split('.')[1]/100*60).toString() != "NaN")
+                    {
+                    value = tooltipItem['value'].split('.')[1]/100*60;
+                    }
+                    if (label) {
+                        label.split('.')[0] += ':'+value;
+                    }
+                    var minutes = parseInt(value);
+                    if(parseInt(value).toString() == "NaN")
+                    {
+                        minutes = 0;
+                    }
+                    if(minutes.toString().length == 1)
+                    {
+                        minutes = '0'+minutes;
+                    }
+                    return ("time spent in hrs "+tooltipItem['value'].split('.')[0]+':'+minutes);
+                }
+            }
+        },
         title: {
             text: 'User snapshot',
         },
@@ -70,7 +83,7 @@ var configs = {
                     stacked: true
                 },
                 scaleLabel: {
-                    display: true,//labelString: 'Users',
+                    display: true,
                 }
             }],
             yAxes: [{
@@ -123,7 +136,6 @@ if(document.getElementById('user-id') != null)
                 if(json["status"] ==  false)
                 {
                 document.getElementById('search-error').innerHTML = "No results found";
-                    console.log(document.getElementById('user-task-datatable'));
                     $('#user-task-datatable_processing').hide();
                 }
                 else{
@@ -161,7 +173,7 @@ if(document.getElementById('user-id') != null)
             type: "POST",
             "data": {"type":"user_project", 'user_id': user_id},
              "dataSrc": function ( json ) {
-                //Make your callback here.
+                //call for datatable
                 if(json["status"] ==  false)
                 {
                 document.getElementById('user-project-error').innerHTML = "No results found";

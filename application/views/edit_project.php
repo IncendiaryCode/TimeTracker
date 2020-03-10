@@ -18,7 +18,7 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
 <?php } ?>
 
 <div class="container">
-    <h1 class="text-center display-heading mt-3">Edit project</h1>
+    <h1 class="text-center display-heading mt-3">Edit Project</h1>
     <?php if (!empty($this->session->flashdata('error'))) { ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <?php echo (!empty($this->session->flashdata('error'))) ? $this->session->flashdata('error') : ''; ?>
@@ -43,11 +43,6 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
                 </div>
             </div>
             <input type = "hidden" id= "edit_project_id" name = "project_id" value = "<?=$project_data['project']['project_id'] ?>" >
-            <!-- <div class="col-12">
-                <div class="pb-4">
-                    Description:<input type="text" class="form-control" name = "meta-data" class="form-control" placeholder="Description" value = <?=$project_data['meta_data'] ?>>
-                </div>
-            </div> -->
             <div class="col-5">
                 <div class="pb-4">
                     Logo: <input type="file" name="project-icon" class="form-control" placeholder="Project logo" value = "<?=base_url().UPLOAD_PATH.$project_data['project']['project_image'];?>">
@@ -153,7 +148,7 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
         </div>
         <p class="pl-2">On deleting this module,</p>
         <div class="ml-2 modal-body"><ul>
-        <li>All tasks under this module will be deleted  and un assigned from the user.</li>
+        <li>All tasks under this module will be deleted  and unassigned from the user.</li>
             </ul>
         </div>
         <div class="modal-footer">

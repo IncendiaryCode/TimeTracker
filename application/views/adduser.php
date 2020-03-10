@@ -9,15 +9,6 @@ $profile = $this->session->userdata('user_profile');
                 <div class="row mt-2">
                     <div class="col-md-6 offset-md-3">
                         <?php 
-                            if(validation_errors()) { ?>
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <?php 
-                                    echo validation_errors('<span>', '</span>'); ?>    
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            <?php }
                             if($this->session->flashdata('true')){ ?>
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                                    <span><?= $this->session->flashdata('true'); ?> </span>

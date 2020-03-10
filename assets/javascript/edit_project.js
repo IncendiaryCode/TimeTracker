@@ -15,6 +15,7 @@ function autocomplete(inp, arr) {
 		a.setAttribute('class', 'autocomplete-items');
 		//this.parentNode.parentNode.parentNode.parentNode.appendChild(a);
 		$('#append-list').append(a);
+		document.getElementById('user-error').innerHTML = '';
 		for (i = 0; i < arr.length; i++) {
 			if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
 				b = document.createElement('DIV');
@@ -90,6 +91,7 @@ $(document).ready(function() {
 		pre_edit.onsubmit = function() {
 			var module_name = document.getElementById('append-module-id').getAttribute('data-item');
 			document.getElementById('mdl_id').value = module_name;
+			window.location.reload();
 			return true;
 		};
 	}
@@ -103,15 +105,22 @@ $(document).ready(function() {
 				data: { module_name: this.parentNode.parentNode.childNodes[1].value, project_id: document.getElementById('edit_project_id').value },
 				dataType: 'json',
 				success: function(res) {
-					$('.module-lists').append(
-						'<li class="list-group-item d-flex justify-content-between align-items-center">' +
-							this.parentNode.parentNode.childNodes[1].value +
-							'<span><a href="#module-edit" data-toggle="modal" data = ' +
-							res['module_id'] +
-							' class = "module-edit"><i class="fas fa-pencil-alt"></i></a><a href="#module-delete" data-toggle="modal" class = "module-delete"><i class="fas fa-trash pl-3"></i></a></span></li>'
-					);
-					this.parentNode.parentNode.childNodes[1].value = '';
-				}
+					if(res['status'] == true)
+					{
+						$('.module-lists').append(
+							'<li class="list-group-item d-flex justify-content-between align-items-center">' +
+							document.getElementById("append-module").parentNode.parentNode.childNodes[1].value +
+								'<span><a href="#module-edit" data-toggle="modal" data = ' +
+								res['module_id'] +
+								' class = "module-edit"><i class="fas fa-pencil-alt"></i></a><a href="#module-delete" data-toggle="modal" class = "module-delete"><i class="fas fa-trash pl-3"></i></a></span></li>'
+						);
+						document.getElementById("append-module").parentNode.parentNode.childNodes[1].value = '';
+						window.location.reload();
+					}
+					else{
+						document.getElementById('module-error').innerHTML = res['msg'];
+					}
+			}
 			});
 		} else {
 			document.getElementById('module-error').innerHTML = 'Please enter module name';
@@ -132,19 +141,30 @@ $(document).ready(function() {
 					data: { user_id: usr_id[this.parentNode.parentNode.childNodes[1].value], project_id: document.getElementById('edit_project_id').value },
 					dataType: 'json',
 					success: function(res) {
+						if(res['status'] == true)
+						{
 						$('.user-lists').append(
 							'<li class="list-group-item d-flex justify-content-between align-items-center">' +
-								this.parentNode.parentNode.childNodes[1].value +
+								document.getElementById("append-user").parentNode.parentNode.childNodes[1].value +
 								'<span><a href="#user-delete" data-toggle="modal" data = ' +
-								usr_id[this.parentNode.parentNode.childNodes[1].value] +
+								usr_id[document.getElementById("append-user").parentNode.parentNode.childNodes[1].value] +
 								' class = "user-delete"><i class="fas fa-trash pl-3"><input type = "hidden" value = ' +
-								usr_id[this.parentNode.parentNode.childNodes[1].value] +
+								usr_id[document.getElementById("append-user").parentNode.parentNode.childNodes[1].value] +
 								' ></i></a></span></li>'
 						);
-						this.parentNode.parentNode.childNodes[1].value = '';
+						document.getElementById("append-user").parentNode.parentNode.childNodes[1].value = '';
+						window.location.reload();
 					}
+					else{
+					document.getElementById('user-error').innerHTML = res['msg'];
+					$('#append-list').empty();
+					}
+				}
 				});
-			} else document.getElementById('user-error').innerHTML = 'Please select existing user';
+			} else{
+				document.getElementById('user-error').innerHTML = 'Please select existing user';
+				$('#append-list').empty();
+			} 
 		} else {
 			document.getElementById('user-error').innerHTML = 'Please enter user name';
 		}
@@ -153,25 +173,28 @@ $(document).ready(function() {
 		document.getElementById('module-name').value = this.parentNode.parentNode.innerText;
 	});
 
-	document.getElementById('user-assigned').addEventListener('click', function(e) {
-		closeAllLists(e.target);
-	});
+	if(document.getElementById('user-assigned'))
+	{
+		document.getElementById('user-assigned').addEventListener('click', function(e) {
+			closeAllLists(e.target);
+		});
+	}
 
 	$('.module-delete').click(function() {
 		var module_id = this.getAttribute('data');
+		var list_element = this.parentNode.parentNode;
 		$('#delete-module').click(function() {
 			$.ajax({
 				type: 'POST',
 				url: timeTrackerBaseURL + 'admin/delete_module',
-				data: { module_name: this.parentNode.parentNode.childNodes[1].value, project_id: document.getElementById('edit_project_id').value, module_id: module_id },
+				data: { project_id: document.getElementById('edit_project_id').value, module_id: module_id },
 				dataType: 'json',
 				success: function(res) {
-					$('.module-lists').append(
-						'<li class="list-group-item d-flex justify-content-between align-items-center">' +
-							this.parentNode.parentNode.childNodes[1].value +
-							'<span><a href="#module-edit" data-toggle="modal" class = "module-edit"><i class="fas fa-pencil-alt"></i></a><a href="#module-delete" data-toggle="modal" class = "module-delete"><i class="fas fa-trash pl-3"></i></a></span></li>'
-					);
-					this.parentNode.parentNode.childNodes[1].value = '';
+					if(res["status"] == true)
+					{
+						$(list_element).remove();
+						$('#module-delete').modal('hide')
+					}
 				}
 			});
 		});
@@ -179,19 +202,19 @@ $(document).ready(function() {
 
 	$('.user-delete').click(function() {
 		var user_id = this.getAttribute('data');
+		var list_element = this.parentNode.parentNode;
 		$('#delete-user').click(function() {
 			$.ajax({
 				type: 'POST',
 				url: timeTrackerBaseURL + 'admin/unassign_user',
-				data: { user_name: this.parentNode.parentNode.childNodes[1].value, project_id: document.getElementById('edit_project_id').value, user_id: user_id },
+				data: { project_id: document.getElementById('edit_project_id').value, user_id: user_id },
 				dataType: 'json',
 				success: function(res) {
-					$('.module-lists').append(
-						'<li class="list-group-item d-flex justify-content-between align-items-center">' +
-							this.parentNode.parentNode.childNodes[1].value +
-							'<span><a href="#module-edit" data-toggle="modal" class = "module-edit"><i class="fas fa-pencil-alt"></i></a><a href="#user-delete" data-toggle="modal" class = "user-delete"><i class="fas fa-trash pl-3"></i></a></span></li>'
-					);
-					this.parentNode.parentNode.childNodes[1].value = '';
+					if(res["status"] == true)
+					{
+						$(list_element).remove();
+						$('#user-delete').modal('hide')
+					}
 				}
 			});
 		});

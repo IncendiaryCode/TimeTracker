@@ -1,26 +1,31 @@
 
 $(document).ready(function () {
-
-    /*   addUser.init("#append-new-user");*/
-
     $("#chooseProject").change(function () {
-        var project_id = $(this).children("option:selected").val();
-        $.ajax({
-            type: 'POST',
-            url: timeTrackerBaseURL + 'index.php/admin/get_project_module',
-            data: { 'project_id': project_id },
-            success: function (res) {
-                var result = JSON.parse(res);
-                var array = result['result'];
-                $("#module").empty();
-                for (var i = 0; i < array.length; i++) {
-                    var module_name = $('<option value=' + array[i]["id"] + '>' + array[i]["name"] + '</option>');
-                    $("#module").append(module_name);
+        if(this.value == "Select Project")
+        {
+            $("#module").empty();
+        }
+        else{
+            var project_id = $(this).children("option:selected").val();
+            $.ajax({
+                type: 'POST',
+                url: timeTrackerBaseURL + 'index.php/admin/get_project_module',
+                data: { 'project_id': project_id },
+                success: function (res) {
+                    var result = JSON.parse(res);
+                    if(result['status'] == true)
+                    {
+                        var array = result['result'];
+                        $("#module").empty();
+                        for (var i = 0; i < array.length; i++) {
+                            var module_name = $('<option value=' + array[i]["id"] + '>' + array[i]["name"] + '</option>');
+                            $("#module").append(module_name);
+                        }
+                    }                    
                 }
-            }
-        });
+            });
+        }
     });
-
     var addTask = document.getElementById('addTask');
     if (addTask) {
         addTask.onsubmit = function (e) {
