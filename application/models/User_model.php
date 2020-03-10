@@ -1645,24 +1645,12 @@ class User_model extends CI_Model {
             $end_date = isset($split_week[1]) ? date('Y-m-d',strtotime($split_week[1])) : date('Y-m-d',strtotime("+1 week"));
 
 
-            $date_range = $this->get_dates_from_range($start_date, $end_date); //week days(Sun-Sat) in date format(Y-m-d)
+            //$date_range = $this->get_dates_from_range($start_date, $end_date); //week days(Sun-Sat) in date format(Y-m-d)
 
-            $data = $this->get_weekly_activity($userid,$start_date,$end_date);
+            $data = $this->get_weekly_activity_detail($userid,$start_date,$end_date);
             if(!empty($data)){
                 $format_hours = array();
                 for($i=0;$i<count($data);$i++) {
-                    $k=0;
-                    foreach($date_range AS $r_day){
-                        $timeline_data = $this->get_total_time_on_date($userid,$data[$i]['task_id'],$r_day);
-                        if(!empty($timeline_data)){
-                            foreach($timeline_data AS $time){
-                                $total_mins += $time['t_minutes'];
-                                $format_hours[$k]['hours'] = sprintf('%02d.%02d',floor($time['t_minutes'] / 60),($time['t_minutes']%60));
-                                $format_hours[$k]['date'] = $r_day;
-                            }
-                        }
-                        $k=$k+1;
-                    }
                     $object = new stdClass();
                     //$object->table_id = $data[$i]['table_id'];
                     $object->task_id = $data[$i]['task_id'];
@@ -1673,9 +1661,6 @@ class User_model extends CI_Model {
                     $object->color_code = $data[$i]['color_code'];
                     $object->start_time = $data[$i]['start_time'];
                     $object->end_time = $data[$i]['end_time'];
-                    
-                    //$object->total_minutes = $data[$i]['total_minutes'];
-                    $object->format_hours = $format_hours;
                     $chart_data[] = $object;
                 }    
             }
@@ -1707,6 +1692,22 @@ class User_model extends CI_Model {
             }
             return $chart_data;
         }
+    }
+    /**
+     * Function to get Activity Chart Data for weekly chart
+     * 
+     * @params $userid and $taskdate
+     * 
+     * returns $data
+     */
+    public function get_weekly_activity_detail($userid,$start_date,$end_date){
+        $data = array();
+        $query = $this->db->query("SELECT t.id AS task_id,t.task_name,t.created_on,p.id as project_id,p.name,p.color_code,d.task_id, d.start_time, d.end_time, d.task_description,d.task_date, SUM(`d`.`total_minutes`) AS `minutes` FROM `task` AS `t` JOIN `project` AS `p` ON `p`.`id` = `t`.`project_id` LEFT JOIN `task_assignee` AS `ta` ON ta.task_id = t.id JOIN `time_details` AS `d` ON d.task_id = t.id WHERE `d`.`task_date` BETWEEN '".$start_date."' AND '".$end_date."' AND d.end_time IS NOT NULL AND d.user_id = '".$userid."' group by d.id");
+
+        if($query->num_rows() > 0){
+            $data = $query->result_array();
+        }
+        return $data;
     }
  public function validate_task_id($task_id,$user_id){
         $task_id_check = $this->db->get_where('task_assignee',array('task_id'=>$task_id,'user_id'=>$user_id));
