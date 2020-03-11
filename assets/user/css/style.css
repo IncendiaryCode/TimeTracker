@@ -883,6 +883,11 @@ a:hover {
 .table th {
 	border-top: 0px;
 }
+.card table td
+{
+	position: relative;
+	z-index: 0;
+}
 .monthly-chart .card {
 	border: none;
 }

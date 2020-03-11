@@ -210,7 +210,7 @@ if (!empty($task_info['login_run'])) { ?>
                     <div class="loader-inner"><i class="fas fa-circle-notch fa-spin"></i> Loading...</div>
                 </div>
             </div>
-        </div>
+        
         <footer class="footer">
             <p class="text-center pt-2 ">Copyright © <?= Date('Y') ?> Printgreener.com</p>
         </footer>
@@ -302,6 +302,5 @@ if (!empty($task_info['login_run'])) { ?>
             </div>
         </div>
 <?php } ?>
-
-        
+    </div>
 </main>

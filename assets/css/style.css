@@ -504,3 +504,17 @@ table.dataTable
 	min-width: 85px;
 }
 }
+.animate-admin-profile {
+	animation: slidein 0.08s;
+}
+
+@keyframes slidein {
+	from {
+		width: 0px;
+		height: 50px;
+	}
+	to {
+		width: 250px;
+		height: 70px;
+	}
+}

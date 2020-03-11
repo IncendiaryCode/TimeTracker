@@ -33,7 +33,11 @@ $name = $this->session->userdata('username');
                     <input type="file" class="form-control" name="change_img" placeholder="Upload image" id="image">
                     <p class='text-left mt-4'> Formates allowed: gif, jpg, png, jpeg.</p>
                     <p class="text-danger" id="imageerror"></p>
-                    <button type="submit" class="btn btn-primary" id="submit-profile-pic">Upload</button>
+                    <div class="row">
+                        <div class="col-12 text-right">
+                        <button type="submit" class="btn btn-primary" id="submit-profile-pic">Upload</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

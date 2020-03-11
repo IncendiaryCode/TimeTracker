@@ -97,14 +97,25 @@ $this->load->helper('url_helper');
             <div class="row">
                 <div class="col-12">
                     <div class="row">
-                    <div class="text-right input-group col-md-3 offset-md-9 pt-4 ">
+                    <div class="text-right input-group col-md-3 offset-md-9 pt-4 " id = "year-picker">
                         <!-- chart that shows monthly activities -->
-                        <div class="input-group mb-3">
+                        <!-- <div class="input-group mb-3">
                             <input type="year" class="year-chart" id="year-chart" max =<?=date('YYYY');?>>
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                             </div>
+                        </div> -->
+
+                        <div class="input-group date">
+                            <input type="text" class="form-control datepicker year-chart" id="year-chart" max =<?=date('YYYY');?> >
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <button type="button" class="btn fa fa-calendar p-0"></button>
+                                </span>
+                            </div>
                         </div>
+
+
                     </div>
                 </div>
                 </div>

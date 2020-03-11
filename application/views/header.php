@@ -31,16 +31,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
     <header id="main-navbar">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a href="<?=base_url()?>index.php/admin"><img src="<?= base_url() . UPLOAD_PATH ?>logo-white.png" height="40px;"></a>
+            <a href="<?=base_url()?>index.php/admin"><img src="<?=base_url();?>assets/images/logo-white.png" height="40px;"></a>
             <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon "></span>
             </button>
             <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
                 <div class="navbar-nav ml-auto flex-column-reverse flex-lg-row">
                     <div class="nav-item nav-link">
-                        <div class="dropdown dropdown-toggle" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
+                        <div class="dropdown dropdown-toggle-" data-toggle="dropdown" aria-expanded="false" x-placement="bottom-start">
                             <a href="#" class="text-white"><img src="<?= base_url() . UPLOAD_PATH . $profile; ?>" height="60px" width="60px" class="rounded-circle"></a>
-                            <div class="dropdown-menu dropdown-menu-right">
+                            <div class="dropdown-menu dropdown-menu-right animate-admin-profile">
                                 <div>
                                     <p class="items"><a href="#" onclick='window.location.href="<?= base_url(); ?>index.php/admin/load_profile"' class="text-display pl-2"> Profile</a></p>
                                     <p class="items"><a href="#" onclick='window.location.href="<?= base_url(); ?>index.php/login/logout"' class="text-display pl-2"> <i class="fas fa-power-off"></i> Logout</a></p>

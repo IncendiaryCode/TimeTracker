@@ -396,27 +396,26 @@
 	        }
 	        else
 	        {
-	        	if (!empty($_FILES['project-logo']['name'])) { //if project logo is given, the upload it and insert project logo into db.
-
-		            $config['upload_path']   = UPLOAD_PATH;
+	        	if (!empty($_FILES['project_icon']['name'])) { //if project logo is given, the upload it and insert project logo into db.
+		            $config['upload_path']   = UPLOAD_PATH_PROJECT;
 		            $config['allowed_types'] = 'gif|jpg|png|jpeg';
 		            $config['overwrite']     = FALSE;
 		           // $config['encrypt_name']  = TRUE;
 		            $config['remove_spaces'] = TRUE;
-		            $config['file_name']     = $_FILES['project-logo']['name'];
+		            $config['file_name']     = $_FILES['project_icon']['name'];
 		            $this->load->library('upload', $config);
 		            $this->upload->initialize($config);
-		            if ($this->upload->do_upload('project-logo')) { //upload project logo
+		            if ($this->upload->do_upload('project_icon')) { //upload project logo
 		                $uploadData = $this->upload->data();
 		                $picture    = $uploadData['file_name']; //to insert project logo into db
 		            } else {
 		                //if upload is not successful, print upload errors
 		                echo $this->upload->display_errors();
-		                $picture = 'project.png';
+		                $picture = 'default.png';
 		            }
 		        }
 		        else {
-		            $picture = 'project.png';
+		            $picture = 'default.png';
 		        }
 	            $result=$this->dashboard_model->add_projects($picture); //insert project into db
 	            if($result == FALSE){ //if not added, redirect to add project page with error message
@@ -620,7 +619,6 @@
 				redirect('admin/load_edit_project?project_id='.$post_data['project_id']);
 			}else{
 				//IF Valid Project id
-
 				if(isset($post_data['module_id'])){
 					/*** Edit module case ***/
 					if($post_data['module_id'] != 1){ //if module name is not General
@@ -645,6 +643,35 @@
 					/** End Edit Module **/
 				}else{
 					/*** Edit project Start***/
+					if (!empty($_FILES['project_icon']['name'])) { //if project logo is given, the upload it and insert project logo into db.
+						$config['upload_path']   = UPLOAD_PATH_PROJECT;
+						$config['allowed_types'] = 'gif|jpg|png|jpeg';
+						$config['overwrite']     = FALSE;
+					   // $config['encrypt_name']  = TRUE;
+						$config['remove_spaces'] = TRUE;
+						// $config['file_name']     = $_FILES['project_icon']['name'];
+						$config['file_name']     = str_replace(' ', '', $post_data['project-name']) .'_'. time();
+						$this->load->library('upload', $config);
+						$this->upload->initialize($config);
+						if ($this->upload->do_upload('project_icon')) { //upload project logo
+							$uploadData = $this->upload->data();
+							$picture = $uploadData['file_name']; //to insert project logo into db
+							//---------------------------------
+							//TODO: delete the existing picture
+							//---------------------------------							
+						} else {
+							//if upload is not successful, print upload errors
+							echo $this->upload->display_errors();
+							$picture = 'default.png';
+						}
+					}
+					else {
+						$picture = 'default.png';
+					}
+
+					//add file name into post data
+					$post_data['project_icon'] = $picture;
+
 					$result = $this->dashboard_model->edit_project($post_data); //edit project data
 					$add_info = "Project";
 					/** End Edit project **/

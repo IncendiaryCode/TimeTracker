@@ -640,7 +640,7 @@ $(document).ready(function() {
 			var pre_punchIn_sec = parseInt(pre_punchIn[0]) * 60 + parseInt(pre_punchIn[1]);
 			var punchOut_sec = parseInt(stop_now.split(':')[0]) * 60 + parseInt(stop_now.split(':')[1]);
 			if (pre_punchIn_sec >= punchOut_sec) {
-				document.getElementById('punchout-error').innerHTML = 'Punch out time cannot be greater than punch in time';
+				document.getElementById('punchout-error').innerHTML = 'Punch out time cannot be lesser than punch in time';
 				return false;
 			}
 			if (stop_now == ' ' || stop_now == '') {

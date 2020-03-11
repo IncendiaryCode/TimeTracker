@@ -1635,7 +1635,7 @@ class Dashboard_model extends CI_Model
      */
     public function edit_project($proj_data){
         $update_values = array();
-        $update_values = array('name'=>$proj_data['project-name'],'image_name'=>($proj_data['project-icon'])?$proj_data['project-icon']:'project.png','color_code'=>$proj_data['project-color']);
+        $update_values = array('name'=>$proj_data['project-name'],'image_name'=>($proj_data['project_icon'])?$proj_data['project_icon']:'default.png','color_code'=>$proj_data['project-color']);
         $this->db->where('id',$proj_data['project_id']);
         $this->db->set($update_values);
         $update_project = $this->db->update('project',$update_values); //edit "project" table

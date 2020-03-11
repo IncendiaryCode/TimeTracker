@@ -87,11 +87,10 @@ $(function() {
 			}
 		};
 	}
-	$('.year-chart').datepicker({
+	$('#year-picker .input-group.date').datepicker({
 		minViewMode: 2,
-		format: 'yyyy',
-		todayHighlight: true,
-		autoclose: true
+		autoclose: true,
+		format: "yyyy"
 	});
 	$('.timerpicker-c').timepicker({
 		mode: '24hr',

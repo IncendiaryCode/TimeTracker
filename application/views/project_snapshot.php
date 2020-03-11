@@ -39,7 +39,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <?php
                         if ($proj['project_icon'] != '') {
                         ?>
-                            <img src="<?= base_url() . UPLOAD_PATH . $proj['project_icon']; ?>" width="30px;">
+                            <img src="<?= base_url() . UPLOAD_PATH_PROJECT . $proj['project_icon']; ?>" width="30px;">
                             <input type="hidden" id="project-id" name="" value="<?= $proj['project_id'] ?>">
                         <?php
                         } ?>

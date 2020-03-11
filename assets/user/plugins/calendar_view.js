@@ -777,7 +777,7 @@ function showCalendar(month, year, filterBy) {
 						var rgb = hexToRgb(result['data'][i][2]);
 						var rgb_color = 'rgb(' + rgb['r'] + ',' + rgb['g'] + ',' + rgb['b'] + ',' + opacity + ')';
 						cal_date[j].innerText = '';
-						$(cal_date[j]).css('position', 'relative');
+						// $(cal_date[j]).css('position', 'relative');
 						let innerCell = document.createElement('span');
 						$(innerCell).css('border-radius', '100%');
 						$(innerCell).css('background-color', rgb_color);
@@ -873,7 +873,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		currentTab = $(event.target).attr('href'); // active tab
 		var y = $(event.relatedTarget); // previous tab
-		
+
 		// window.location.hash = this.id;
 		var filterBy = [];
 		if (document.getElementById('activity-filtering')) {
@@ -923,15 +923,6 @@ $(document).ready(function() {
 	var win_width = $('.cust_daily_chart').width();
 	var p_l = parseInt(win_width) / 6 - 50;
 	$('.cust_chart').css('padding-left', p_l);
-	$('#daily-chart').change(function() {
-		loadDailyChart();
-	});
-	$('#weekly-chart').change(function() {
-		loadWeeklyChart();
-	});
-	$('#monthly-chart').change(function() {
-		loadCalendarChart();
-	});
 	var tday = moment(new Date());
 	if (document.getElementById('current-date')) {
 		document.getElementById('current-date').innerHTML = moment(tday).format('dddd MMMM DD');
@@ -1094,7 +1085,7 @@ $(document).ready(function() {
 				$('.alert-filter').hide();
 			}
 			$('.activity-filter').hide();
-			$('.close-filters').css("opacity","0");
+			$('.close-filters').css('opacity', '0');
 			document.getElementsByClassName('project-filtering')[0].classList.add('fadeIn');
 			return false;
 		};
@@ -1115,12 +1106,12 @@ $(document).ready(function() {
 	$('#project-filtering').click(function() {
 		$('.activity-filter').show();
 		document.getElementsByClassName('project-filtering')[0].classList.remove('fadeIn');
-		setTimeout(function(){ 
-			$('.close-filters').css("opacity","0.7");
-		 }, 800);
+		setTimeout(function() {
+			$('.close-filters').css('opacity', '0.7');
+		}, 800);
 	});
 	$('.close-filters').click(function() {
-		$('.close-filters').css("opacity","0");
+		$('.close-filters').css('opacity', '0');
 		$('.activity-filter').hide();
 		document.getElementsByClassName('project-filtering')[0].classList.add('fadeIn');
 	});

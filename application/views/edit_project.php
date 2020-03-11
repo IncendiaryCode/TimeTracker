@@ -35,32 +35,40 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
             </button>
         </div>
     <?php } ?>
-    <form method="post" action="<?= base_url(); ?>index.php/admin/edit_project">
+    <form method="post" action="<?= base_url(); ?>index.php/admin/edit_project" enctype="multipart/form-data">
         <div class="row">
-            <div class="col-12">
-                <div class="pb-4">
-                    Name:<input type="text" class="form-control" name = "project-name" class="form-control" placeholder="Project name" value = "<?=$project_data['project']['project_name'] ?>">
+            <div class="col-3">
+                <img src="<?=base_url().UPLOAD_PATH_PROJECT.$project_data['project']['project_image'];?>" alt="" class="img-fluid">
+            </div>
+            <div class="col-9">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="pb-4">
+                            Name:<input type="text" class="form-control" name = "project-name" class="form-control" placeholder="Project name" value = "<?=$project_data['project']['project_name'] ?>">
+                        </div>
+                    </div>
+                    <input type = "hidden" id= "edit_project_id" name = "project_id" value = "<?=$project_data['project']['project_id'] ?>" >
+                    <div class="col-5">
+                        <div class="pb-4">
+                            Logo: <input type="file" name="project_icon" class="form-control" placeholder="Project logo" >
+                        </div>
+                    </div> 
+                    <div class="col-5">
+                        <div class="pb-4">
+                            Color: <input type="color" class="form-control" name="project-color" placeholder="Project color" value = "<?=$project_data['project']['project_color'] ?>">
+                        </div>
+                    </div>
+                    <div class="col-2 pt-4 text-right">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
                 </div>
             </div>
-            <input type = "hidden" id= "edit_project_id" name = "project_id" value = "<?=$project_data['project']['project_id'] ?>" >
-            <div class="col-5">
-                <div class="pb-4">
-                    Logo: <input type="file" name="project-icon" class="form-control" placeholder="Project logo" value = "<?=base_url().UPLOAD_PATH.$project_data['project']['project_image'];?>">
-                </div>
-            </div> 
-            <div class="col-5">
-                <div class="pb-4">
-                    Color: <input type="color" class="form-control" name="project-color" placeholder="Project color" value = "<?=$project_data['project']['project_color'] ?>">
-                </div>
-            </div>
-            <div class="col-2 pt-4 text-right">
-                    <button type="submit" class="btn btn-primary">Save</button>
-            </div>                
+                            
         </div>
     </form>
     <hr class="mt-5">
     <div class="row scroll-module">
-        <div class="col-6 module-append">
+        <div class="col-md-6 module-append">
             <h3 class="text-center">Modules</h3>
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="module name" aria-describedby="basic-addon2">
@@ -84,7 +92,7 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
                 <?php } ?>
             </ul>
         </div>
-        <div class="col-6 user-append">
+        <div class="col-md-6 user-append">
             <h3 class="text-center">Users</h3>
                 <div class="input-group">
                     <input type="text" class="form-control" id="user-assigned" placeholder="user name" aria-describedby="basic-addon2">
