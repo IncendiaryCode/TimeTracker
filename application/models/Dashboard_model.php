@@ -73,7 +73,7 @@ class Dashboard_model extends CI_Model
      */
     public function get_top_users(){
         $final_data = array();
-        $this->db->select('u.id AS user_id,u.name AS user_name');
+        $this->db->select('u.id AS user_id,u.name AS user_name,u.profile');
         $this->db->select_sum('d.total_minutes','t_minutes');
         $this->db->from('time_details AS d');
         $this->db->join('users AS u','u.id = d.user_id');
@@ -191,7 +191,7 @@ class Dashboard_model extends CI_Model
             //load user information into user_snapshot page
 
                 //get all the project details along with time taken by the user on each project
-            $sql = $this->db->query("SELECT GROUP_CONCAT(CONCAT_WS('~',p.name,p.id,p.image_name,p.color_code,p.t_minutes)) AS proj, `u`.`name` AS `user_name`, `u`.`id` AS `user_id`, SUM(t_minutes) AS `tt_minutes` FROM `users` AS `u` LEFT JOIN `project_assignee` AS `a` ON a.user_id = u.id LEFT JOIN (SELECT ps.name,ps.id,ps.image_name,ps.color_code,t.id AS task_id,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `project` AS `ps` LEFT JOIN `task` AS `t` ON `t`.`project_id` = `ps`.`id` LEFT JOIN task_assignee AS ta ON ta.task_id = t.id LEFT JOIN `time_details` AS `d` ON d.task_id = ta.task_id GROUP BY ps.id) AS p ON p.id = a.project_id WHERE `u`.`id` IN (SELECT `u`.`id` AS `user_id` FROM `users` AS `u` WHERE `u`.`type` = 'user') GROUP BY u.id");
+            $sql = $this->db->query("SELECT GROUP_CONCAT(CONCAT_WS('~',p.name,p.id,p.image_name,p.color_code,p.t_minutes)) AS proj, `u`.`name` AS `user_name`, `u`.`id` AS `user_id`, SUM(t_minutes) AS `tt_minutes` FROM users AS u LEFT JOIN (SELECT ps.name,ps.id,ps.image_name,ps.color_code,t.id AS task_id,SUM(`d`.`total_minutes`) AS `t_minutes`,pa.user_id FROM `project` AS `ps` JOIN project_assignee AS pa ON pa.project_id =ps.id LEFT JOIN `task` AS `t` ON `t`.`project_id` = `pa`.`project_id` LEFT JOIN `time_details` AS `d` ON (d.task_id = t.id AND d.user_id = pa.user_id) GROUP BY pa.project_id,pa.user_id) AS p ON p.user_id = u.id WHERE u.type = 'user' GROUP BY u.id");
             $sql_result = $sql->result_array();
             /*echo "<pre>";
             print_r($sql_result);*/
@@ -282,12 +282,12 @@ class Dashboard_model extends CI_Model
             }
             $valid_columns = array(
                 0=>'t.task_name',
-                1=>'t.description',
+                1=>'d.task_description',
                 2=>'p.name',
                 3=>'u.name',
-                4=>'d.start_time',
-                5=>'d.end_time',
-                6=>'d.total_minutes',
+                4=>'start_time',
+                5=>'end_time',
+                6=>'t_minutes',
             );
             if(!isset($valid_columns[$col]))
             {
@@ -305,19 +305,20 @@ class Dashboard_model extends CI_Model
             if(!empty($search))
             {
                 $this->db->like('t.task_name',$search);
-                $this->db->or_like('t.description',$search);
+                $this->db->or_like('d.task_description',$search);
+                $this->db->or_like('p.name',$search);
+                $this->db->or_like('u.name',$search);
             }
             $this->db->select('d.id AS table_id, t.id AS task_id, t.task_name,d.task_description,p.name AS project_name, p.id AS project_id,u.id AS user_id, u.name AS user_name,d.start_time,d.end_time');
-            $this->db->select_sum('d.total_minutes','t_minutes');
-            $this->db->from('project AS p');
-            $this->db->join('task AS t','t.project_id = p.id');
-            $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
-            $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
-            $this->db->join('users AS u','u.id = ta.user_id','LEFT');
+          $this->db->select_sum('d.total_minutes','t_minutes');
+          $this->db->from('project AS p');
+          $this->db->join('task AS t','t.project_id = p.id');
+          $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
+           $this->db->join('time_details AS d','(d.task_id = t.id AND d.user_id = ta.user_id)','LEFT');
+           $this->db->join('users AS u','u.id = ta.user_id','LEFT');
             
             if(!empty($post_data['project_id'])){
                 $this->db->where('p.id',$post_data['project_id']);
-                //$where_condition['p.id'] = $post_data['project_id'];
             }
             if(!empty($post_data['user_id'])){
                 $this->db->where('u.id',$post_data['user_id']);
@@ -326,27 +327,29 @@ class Dashboard_model extends CI_Model
             if(!empty($post_data['start_date']) && !empty($post_data['end_date'])){
                 $this->db->where('d.task_date BETWEEN "'.$post_data['start_date'].'" AND "'.$post_data['end_date'].'"');
             }
-            
-            $this->db->group_by('t.id,d.id');
+            $this->db->group_by('ta.id,d.id');
             $this->db->limit($length,$start);
             $tasks_data = $this->db->get()->result();
             $this->load->model('user_model');
+            $total_time_used = 0;
             foreach($tasks_data as $rows)
             {
+               // $total_time_used = $total_time_used + $rows->t_minutes;
                 $total_time_format = $this->format_time($rows->t_minutes);
                 $username = '<a href=../admin/load_userdetails_page?user_id='.$rows->user_id.'">'.$rows->user_name.'</a>';
                 $data['final_data'][]= array(
-    	            $rows->task_name,
-    	            ($rows->task_description)?$rows->task_description:'--',
-    	            $rows->project_name,
-    	            isset($rows->start_time)?$this->user_model->convert_date($rows->start_time):'--',
-    	            isset($rows->end_time)?$this->user_model->convert_date($rows->end_time):'--',
-    	            isset($rows->t_minutes)?$total_time_format:'--',
-    	            $rows->table_id,
-    	            $rows->project_id,
-    	            $user_name = !empty($username) ? $username : '--'
-	           );     
+                    $rows->task_name,
+                    ($rows->task_description)?$rows->task_description:'--',
+                    $rows->project_name,
+                    isset($rows->start_time)?$this->user_model->convert_date($rows->start_time):'--',
+                    isset($rows->end_time)?$this->user_model->convert_date($rows->end_time):'--',
+                    isset($rows->t_minutes)?$total_time_format:'--',
+                    $rows->table_id,
+                    $rows->project_id,
+                    $user_name = !empty($username) ? $username : '--'
+               );
             }
+            //$data['total_time_used'] = $this->format_time($total_time_used);
             return $data;
         }
     }
@@ -362,9 +365,10 @@ class Dashboard_model extends CI_Model
      */
     public function user_graph_data(){
         $data = array();
+        $task_count = array();
         if($this->input->post('month')){
             if(!empty($this->input->post('month'))){
-                $start_date = date('Y-m-d',strtotime($this->input->post('month')));
+                $start_date = date('Y-m-01',strtotime($this->input->post('month')));
                 $end_date = date('Y-m-t',strtotime($start_date));
                 $this->db->select('d.task_date,count(distinct t.id) AS tasks_count');
                 $this->db->from('task AS t');
@@ -373,7 +377,18 @@ class Dashboard_model extends CI_Model
                 $this->db->group_by('d.task_date');
                 $graph_data = $this->db->get();
                 if($graph_data->num_rows() > 0){
-                    $data = $graph_data->result_array();
+                    $t_data = $graph_data->result_array();
+                    $this->load->model('user_model');
+                    $date_range = $this->user_model->get_dates_from_range($start_date,$end_date);
+                    for ($j=0;$j<sizeof($date_range);$j++) {
+                        $task_count[$j] = '';
+                        foreach($t_data AS $d){
+                            if($date_range[$j] == $d['task_date']){
+                                $task_count[$j] = $d['tasks_count'];
+                            }
+                        }
+                        $data[$j] = array('task_date'=>$date_range[$j],'tasks_count'=>$task_count[$j]);
+                    }
                 }else{
                     $data = '';
                 }
@@ -385,7 +400,7 @@ class Dashboard_model extends CI_Model
                 $get_project_id = $this->db->get_where('project',array('name'=>$project_name));
                 $project_id = $get_project_id->row_array()['id'];
 
-                $query = $this->db->query("SELECT `u`.`name`, `u`.`id`,td.t_minutes  FROM `users` AS `u` JOIN (SELECT SUM(`d`.`total_minutes`) AS `t_minutes`,d.user_id FROM `time_details` AS `d`  JOIN `task` AS `t` ON `t`.`id` = `d`.`task_id` WHERE `t`.`project_id` = {$project_id} GROUP BY d.user_id) AS td ON td.user_id = u.id WHERE `u`.`type` = 'user' GROUP BY `u`.`id`");
+                $query = $this->db->query("SELECT `u`.`name`, `u`.`id`,td.t_minutes  FROM `users` AS `u` LEFT JOIN project_assignee AS pa ON pa.user_id= u.id LEFT JOIN (SELECT SUM(`d`.`total_minutes`) AS `t_minutes`,d.user_id FROM `time_details` AS `d`  JOIN `task` AS `t` ON `t`.`id` = `d`.`task_id` WHERE `t`.`project_id` = {$project_id} GROUP BY d.user_id) AS td ON td.user_id = u.id WHERE `u`.`type` = 'user' AND pa.project_id = {$project_id} GROUP BY `u`.`id`");
                 if($query->num_rows() > 0){
                     $users = $query->result_array();
                     foreach($users as $u){
@@ -458,7 +473,7 @@ class Dashboard_model extends CI_Model
             $this->db->where('p.id',$project_id);
             $this->db->group_by('d.task_date');
         }
-        
+
         $result = $this->db->get();
         if($result->num_rows() > 0){
             $data = $result->result_array();
@@ -1476,63 +1491,70 @@ class Dashboard_model extends CI_Model
             $this->db->from('project AS p');
             $this->db->join('task AS t','t.project_id = p.id');
             $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
-            $this->db->join('time_details AS d','d.task_id = t.id','LEFT');
+            $this->db->join('time_details AS d','(d.task_id = ta.task_id AND d.user_id = ta.user_id)','LEFT');
             $this->db->join('users AS u','u.id = ta.user_id','LEFT');
             //get all the filter data
-
             if (!empty($search)) {
                $this->db->like('t.task_name',$search);
                 $this->db->or_like('t.description',$search);
             }
-
             if(!empty($post_data['project_id'])){
                 $this->db->where('p.id',$post_data['project_id']);
-                //$where_condition['p.id'] = $post_data['project_id'];
             }
             if(!empty($post_data['user_id'])){
                 $this->db->where('u.id',$post_data['user_id']);
-                //$where_condition['u.id'] = $post_data['user_id'];
             }
             if(!empty($post_data['start_date']) && !empty($post_data['end_date'])){
                 $this->db->where('d.task_date BETWEEN "'.$post_data['start_date'].'" AND "'.$post_data['end_date'].'"');
             }
-            $this->db->group_by('t.id,d.id');
+            $this->db->group_by('ta.id,d.id');
             $records = $this->db->get()->num_rows();
-            
             return $records;
         }else if($type == 'project_user'){
-            /*$this->db->select('count(u.id) AS user_data_count');
-            $this->db->from('project_assignee AS a');
-            $this->db->join('users AS u','u.id = a.user_id');
-            $this->db->where('a.project_id',$id);
-            $users = $this->db->get()->row();*/
-            $project_user_data = $this->db->query("SELECT count(u.id) AS user_data_count FROM `project_assignee` AS `a` JOIN `users` AS `u` ON `u`.`id` = `a`.`user_id` WHERE `a`.`project_id` = {$id}");
+            $search= $this->input->post("search");
+            $search = $search['value'];
+            $where = "WHERE `a`.`project_id` = {$id}";
+            if(!empty($search))
+            {
+                $where = "WHERE `a`.`project_id` = {$id} AND u.name LIKE '%{$search}%'";
+            }
+            $project_user_data = $this->db->query("SELECT count(u.id) AS user_data_count FROM `project_assignee` AS `a` JOIN `users` AS `u` ON `u`.`id` = `a`.`user_id` ".$where);
             $project_data = $project_user_data->row();
             return $project_data->user_data_count;
         }else if($type == 'project_task'){
-            /*$this->db->select('count(t.id) AS task_data_count');
-            $this->db->from('task AS t');
-            $this->db->where('t.project_id',$id);
-            $tasks = $this->db->get()->row();*/
-            $project_tasks_data = $this->db->query("SELECT count(t.id) AS task_data_count FROM `task` AS `t` WHERE `t`.`project_id` = {$id}");
+            $search= $this->input->post("search");
+            $search = $search['value'];
+            $where = "WHERE `t`.`project_id` = {$id}";
+            if(!empty($search))
+            {
+                $where = "WHERE `t`.`project_id` = {$id} AND t.task_name LIKE '%{$search}%'";
+            }
+            $project_tasks_data = $this->db->query("SELECT count(t.id) AS task_data_count FROM `task` AS `t` ".$where);
             $tasks_data = $project_tasks_data->row();
             return $tasks_data->task_data_count;
         }else if($type == 'user_task'){
-            /*$this->db->select('count(t.id) AS task_count');
-            $this->db->from('task AS t');
-            $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
-            $this->db->where('ta.user_id',$id);
-            $users_taskdata_count = $this->db->get()->row();*/
-            $user_tasks = $this->db->query("SELECT count(t.id) AS task_count FROM `task` AS `t` LEFT JOIN `task_assignee` AS `ta` ON `ta`.`task_id` = `t`.`id` WHERE `ta`.`user_id` = {$id}");
+
+            $search= $this->input->post("search");
+            $search = $search['value'];
+            $where = "WHERE `ta`.`user_id` = ".$id;
+            if(!empty($search))
+            {
+                $where = "WHERE `ta`.`user_id` = {$id} AND t.task_name LIKE '%{$search}%'";
+            }
+            $user_tasks = $this->db->query("SELECT count(t.id) AS task_count FROM `task` AS `t` LEFT JOIN `task_assignee` AS `ta` ON `ta`.`task_id` = `t`.`id` ".$where);
             $tasks = $user_tasks->row();
             return $tasks->task_count;
         }else if($type == 'user_project'){
-            $proj_count = $this->db->query("SELECT count(a.project_id) AS project_count FROM `project_assignee` AS `a` WHERE `a`.`user_id` = {$id}");
+
+            $search= $this->input->post("search");
+            $search = $search['value'];
+            $where = "WHERE `a`.`user_id` = {$id}";
+            if(!empty($search))
+            {
+                $where = "WHERE `a`.`user_id` = {$id} AND p.name LIKE '%{$search}%'";
+            }
+            $proj_count = $this->db->query("SELECT count(a.project_id) AS project_count FROM `project_assignee` AS `a` JOIN project AS p ON p.id = a.project_id ".$where);
             $projects = $proj_count->row();
-            /*$this->db->select('count(a.project_id) AS project_count');
-            $this->db->from('project_assignee AS a');
-            $this->db->where('a.user_id',$id);
-            $projects = $this->db->get()->row();*/
             return $projects->project_count;
         }
     }
@@ -1634,8 +1656,14 @@ class Dashboard_model extends CI_Model
      * returns TRUE/FALSE
      */
     public function edit_project($proj_data){
+        $get_project_image = $this->db->get_where('project',array('id'=>$proj_data['project_id']));
+        if($get_project_image->num_rows() > 0){
+            $project_logo = $get_project_image->row()->image_name;
+        }else{
+            $project_logo = 'default.png';
+        }
         $update_values = array();
-        $update_values = array('name'=>$proj_data['project-name'],'image_name'=>($proj_data['project_icon'])?$proj_data['project_icon']:'default.png','color_code'=>$proj_data['project-color']);
+        $update_values = array('name'=>$proj_data['project-name'],'image_name'=>($proj_data['project_icon'])?$proj_data['project_icon']:$project_logo,'color_code'=>$proj_data['project-color']);
         $this->db->where('id',$proj_data['project_id']);
         $this->db->set($update_values);
         $update_project = $this->db->update('project',$update_values); //edit "project" table
@@ -1790,6 +1818,16 @@ class Dashboard_model extends CI_Model
         //if there is no task under the given prject, delete user data from project_assingee table
         $this->db->delete('project_assignee',array('user_id'=>$user_data['user_id'],'project_id'=>$user_data['project_id']));
         if($this->db->affected_rows() > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function task_name_exists($task_data){
+        $check_task = $this->db->get_where('task',array('task_name'=>$task_data['task_name'],'project_id'=>$task_data['chooseProject']));
+        if($check_task->num_rows() > 0){
+            $this->form_validation->set_message('task_exists', 'This Task Already Exists.');
             return true;
         }else{
             return false;

@@ -2,11 +2,13 @@
 	defined('BASEPATH') OR exit('No direct script access allowed');
 
 	class Admin extends CI_Controller {
-
 		//Admin panel contructor
+
+		public $login_type;
 		public function __construct()
-		{	
+		{
 		    parent::__construct();
+		    $this->login_type = 'admin';
 		    $this->load->model('dashboard_model');
 	        $this->load->helper('url_helper');
 	        $this->load->library('session');
@@ -21,16 +23,12 @@
 
 		public function index()
 		{
-			$header_data = array();
-			$header_data['profile'] = $this->session->userdata('user_profile');
-			$this->load->view('header', $header_data);
 			$data['total_users'] = $this->dashboard_model->get_users();
 			$data['total_tasks'] = $this->dashboard_model->get_tasks();
 			$data['total_projects'] = $this->dashboard_model->get_projects();
 			$data['top_users'] = $this->dashboard_model->get_top_users();
 			$data['top_projects'] = $this->dashboard_model->get_top_projects();
-			$this->load->view('dashboard',$data);
-			$this->load->view('footer');
+			$this->load->template('dashboard',$data,$this->login_type);
 		}
 
 		//Load user analytics page
@@ -43,24 +41,14 @@
 			}else{
 				$type = $this->input->post('type',TRUE);
 			}
-
-			if ($type != 'task') {
-				$header_data = array();
-				$header_data['profile'] = $this->session->userdata('user_profile');
-				$this->load->view('header', $header_data);
-			}
 			if($type == 'user'){  //load user snapshot page
-				// $this->load->view('header');
 				$result['data'] = $this->dashboard_model->get_task_details($type); //get user information
 				$result['projects'] = $this->dashboard_model->get_project_name();
-		        $this->load->view('user_snapshot',$result);
-		        $this->load->view('footer');
+		        $this->load->template('user_snapshot',$result,$this->login_type);
 			}
 			else if($type == 'project'){ //load project snapshot page
-				// $this->load->view('header');
 				$result['data'] = $this->dashboard_model->get_task_details($type); //get project information
-		        $this->load->view('project_snapshot',$result);
-		        $this->load->view('footer');
+		        $this->load->template('project_snapshot',$result,$this->login_type);
 			}
 			else if($type == 'task'){
 				$draw = intval($this->input->post("draw"));
@@ -85,18 +73,14 @@
 
 		//load edit project page
 		public function load_edit_project(){
-			$header_data = array();
 			$project_id = $this->input->get('project_id');
 			$check_proj_id = $this->dashboard_model->check_project_id($project_id);
 			if($check_proj_id == FALSE){
 				show_error("Project doesn't exist.");
 			}else{
-				$header_data['profile'] = $this->session->userdata('user_profile');
-				$this->load->view('header', $header_data);
 				$get_project_data['project_data'] = $this->dashboard_model->load_edit_project_data($project_id);
 				$get_project_data['all_users'] = $this->dashboard_model->get_usernames();
-				$this->load->view('edit_project',$get_project_data);
-				$this->load->view('footer');
+				$this->load->template('edit_project',$get_project_data,$this->login_type);
 			}
 		}
 
@@ -115,51 +99,41 @@
 			}
 		}
 		
-		/*load user details page
-			Page has the data about the opted project
-			Contains :
-				*Tasks assigned to the project
-				*Personal info
-				*Time spent by the user on the project
-				*Time spent by the user on each task of the project */
+		/** load user details page
+		* Page has the data about the opted project
+		* Contains :
+			- Tasks assigned to the project
+			- Personal info
+			- Time spent by the user on the project
+			- Time spent by the user on each task of the project
+		**/
 		public function load_userdetails_page()
 		{
-			$header_data = array();
-			$header_data['profile'] = $this->session->userdata('user_profile');
-			$this->load->view('header', $header_data);
 			$result['data'] = $this->dashboard_model->get_user_data(); //get project details of a chosen user
-			$this->load->view('user_detail',$result);
-			$this->load->view('footer');
+			$this->load->template('user_detail',$result,$this->login_type);
 		}
 
-		/*load project details page
-			Page has the data about the opted project
-			Contains :
-				*Users assigned to the project
-				*Tasks in the project
-				*Time spent for the project
-				*Time spent by the user on the project
-				*Time spent by each task of the project */	
+		/** load project details page
+		* Page has the data about the opted project
+		* Contains :
+			- Users assigned to the project
+			- Tasks in the project
+			- Time spent for the project
+			- Time spent by the user on the project
+			- Time spent by each task of the project
+		**/
 		public function load_project_detail()
 		{
-			$header_data = array();
-			$header_data['profile'] = $this->session->userdata('user_profile');
-			$this->load->view('header', $header_data);
 			$result['data'] = $this->dashboard_model->get_project_data($this->input->get('project_id')); //get project details of a chosen project
 			$result['user_names'] = $this->dashboard_model->get_usernames(); //get usernames list to assign project.
-			$this->load->view('project_details',$result);
-			$this->load->view('footer');
+			$this->load->template('project_details',$result,$this->login_type);
 		}
 
 		public function load_task_snapshot()
 		{
-			$header_data = array();
-			$header_data['profile'] = $this->session->userdata('user_profile');
 			$load_data['users'] = $this->dashboard_model->get_usernames();
 			$load_data['projects'] = $this->dashboard_model->get_project_name();
-			$this->load->view('header', $header_data);
-			$this->load->view('task_snapshot',$load_data); //contains task information(chart,table containing dat about all tasks)
-			$this->load->view('footer');
+			$this->load->template('task_snapshot',$load_data,$this->login_type); //contains task information(chart,table containing dat about all tasks)
 		}
 
 		//get user gragh data (in user_detail.php)
@@ -293,47 +267,31 @@
 	    public function load_add_user()
 	    {
 	    	//Admin can add new user here..
-			$header_data = array();
-			$header_data['profile'] = $this->session->userdata('user_profile');
-			$this->load->view('header', $header_data);
-			$this->load->view('adduser');
-			$this->load->view('footer');
+			$this->load->template('adduser','',$this->login_type);
 	    }
 
 		//Function to load add project page
 		public function load_add_project()
 		{
 			//Admin can add new project here..
-			$header_data = array();
-			$header_data['profile'] = $this->session->userdata('user_profile');
-			$this->load->view('header', $header_data);
 			$data['names'] = $this->dashboard_model->get_usernames(); //to get the list of usernames to assign the project
-			$this->load->view('addproject',$data);
-			$this->load->view('footer');
+			$this->load->template('addproject',$data,$this->login_type);
 		}
 
 		//Load add task page
 	    public function load_add_task()
 	    {
 	    	//Admin can add task in this page
-			$header_data = array();
-			$header_data['profile'] = $this->session->userdata('user_profile');
-			$this->load->view('header', $header_data);
 			$data['names'] = $this->dashboard_model->get_usernames(); //to get the list of usernames to assign the task
 			$data['result'] = $this->dashboard_model->get_project_name(); //to get the list of projects to add the task to it
-			$this->load->view('addtask',$data);
-			$this->load->view('footer');
+			$this->load->template('addtask',$data,$this->login_type);
 	    }
 
 	    //To load admin profile
 		public function load_profile()
 		{
-			$header_data = array();
-			$header_data['profile'] = $this->session->userdata('user_profile');
-			$this->load->view('header', $header_data);
-			$data['res']           = $this->dashboard_model->my_profile(); //Contains profile information of the admin
-			$this->load->view('admin_profile',$data);
-			$this->load->view('footer');
+			$data['res'] = $this->dashboard_model->my_profile(); //Contains profile information of the admin
+			$this->load->template('admin_profile',$data,$this->login_type);
 		}
 
 		//While adding project, check whether Project exists
@@ -386,13 +344,9 @@
 			if ($this->form_validation->run() == FALSE) //if inputs are not valid, return validation error to add project page
 			{
 				//load add project page
-				$header_data = array();
-				$header_data['profile'] = $this->session->userdata('user_profile');
-				$this->load->view('header', $header_data);
-				$data['names'] = $this->dashboard_model->get_usernames();
-				$this->load->view('addproject',$data);
-				$this->load->view('footer');
-				//redirect('admin/load_add_project');
+				$error_msg = validation_errors();
+				$this->session->set_flashdata('err', $error_msg);
+				redirect('admin/load_add_project');
 	        }
 	        else
 	        {
@@ -410,12 +364,13 @@
 		                $picture    = $uploadData['file_name']; //to insert project logo into db
 		            } else {
 		                //if upload is not successful, print upload errors
-		                echo $this->upload->display_errors();
-		                $picture = 'default.png';
+		                $this->session->set_flashdata('err', $this->upload->display_errors());
+		                redirect('admin/load_add_project');
 		            }
 		        }
 		        else {
-		            $picture = 'default.png';
+		        //if image file is not present, assign default image to $picture variable
+		            $picture = 'project.png';
 		        }
 	            $result=$this->dashboard_model->add_projects($picture); //insert project into db
 	            if($result == FALSE){ //if not added, redirect to add project page with error message
@@ -437,11 +392,9 @@
 	        $this->form_validation->set_rules('user_email','Email','trim|required|valid_email');
 	        if ($this->form_validation->run() == FALSE)//if inputs are not valid, return validation error to add users page
 			{
-				$header_data = array();
-				$header_data['profile'] = $this->session->userdata('user_profile');
-				$this->load->view('header', $header_data);
-				$this->load->view('adduser');
-				$this->load->view('footer');
+				$error_msg = validation_errors();
+				$this->session->set_flashdata('err', $error_msg);
+				redirect('admin/load_add_user');
 	        }
 	        else
 	        { //if inputs are valid, insert user information into db
@@ -466,34 +419,34 @@
 	    //get project module list to add task page 
 	    public function get_project_module()
 	    {
-	    	$projectid      = $this->input->post('project_id');
-	        $data['result'] = $this->dashboard_model->get_module_name($projectid);
-	        if($data['result'] == FALSE){
-	        	$data['result'] = NULL;
-	        	$data['status'] = FALSE;
-	        }else{
-	        	$data['status'] = TRUE;
-	        }
-	        echo json_encode($data);
+			$projectid      = $this->input->post('project_id');
+			if($projectid == "Select Project"){
+				$data['result'] = NULL;
+				$data['status'] = FALSE;
+			}else{
+				$data['result'] = $this->dashboard_model->get_module_name($projectid);
+				if($data['result'] == FALSE){
+					$data['result'] = NULL;
+					$data['status'] = FALSE;
+				}else{
+					$data['status'] = TRUE;
+				}
+			}
+			echo json_encode($data);
 	    }
 
 	    //Assign tasks to users
 		public function add_tasks()
 		{
 			//form inputs validation
-	        $this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|xss_clean');
+	        $this->form_validation->set_rules('task_name','Task Name','trim|required|max_length[100]|callback_task_exists|xss_clean');
 	        $this->form_validation->set_rules('chooseProject','Project name','required');
 
 	        if ($this->form_validation->run() == FALSE)//if inputs are not valid, return validation error to add task page
 			{
-				//redirect('admin/load_add_task');
-				$header_data = array();
-				$header_data['profile'] = $this->session->userdata('user_profile');
-				$this->load->view('header', $header_data);
-			    $data['names'] = $this->dashboard_model->get_usernames();
-			    $data['result'] = $this->dashboard_model->get_project_name();
-				$this->load->view('addtask',$data);
-				$this->load->view('footer');
+				$error_msg = validation_errors();
+				$this->session->set_flashdata('err', $error_msg);
+				redirect('admin/load_add_task');
 	        }
 	        else
 	        { //if inputs are valid, insert task information into db
@@ -555,12 +508,12 @@
 	                $picture = $uploadData['file_name'];//to update profile in db
 	            }else{
 					//if image is not uploaded, print error message
-					echo $this->upload->display_errors();
-	                $picture = 'icons8-admin-settings-male-100.png';
+					$this->session->set_flashdata('err_msg', $this->upload->display_errors());
+					redirect('admin/load_profile');
 	            }
 	        }else{
 				//if image file is not present, assign default image to $picture variable
-	            $picture = 'icons8-admin-settings-male-100.png';
+	            redirect('admin/load_profile');
 	        }
 			$this->dashboard_model->submit_profile($picture); //update profile photo into db
 			if($this->dashboard_model->submit_profile($picture) == TRUE){
@@ -585,11 +538,9 @@
 			if ($this->form_validation->run() == FALSE) //if inputs are invalid
 			{
 				//load admin profile with validation error message
-				$header_data = array();
-				$header_data['profile'] = $this->session->userdata('user_profile');
-				$this->load->view('header', $header_data);
-				$this->load->view('admin_profile');
-				$this->load->view('footer');
+				$error_msg = validation_errors();
+				$this->session->set_flashdata('err_msg', $error_msg);
+				redirect('admin/load_profile');
 	        }
 	        else
 	        {
@@ -661,16 +612,12 @@
 							//---------------------------------							
 						} else {
 							//if upload is not successful, print upload errors
-							echo $this->upload->display_errors();
-							$picture = 'default.png';
+							$this->session->set_flashdata("error",$this->upload->display_errors());
+							redirect('admin/load_edit_project?project_id='.$post_data['project_id']);
 						}
+						//add file name into post data
+						$post_data['project_icon'] = $picture;
 					}
-					else {
-						$picture = 'default.png';
-					}
-
-					//add file name into post data
-					$post_data['project_icon'] = $picture;
 
 					$result = $this->dashboard_model->edit_project($post_data); //edit project data
 					$add_info = "Project";
@@ -785,6 +732,17 @@
 				}
 			}
 			echo json_encode($final_result);
+		}
+
+		//To check whether task exists
+		public function task_exists(){
+			$post_data = $this->input->post();
+			$check_task = $this->dashboard_model->task_name_exists($post_data);
+			if($check_task == TRUE){
+				return false;
+			}else{
+				return true;
+			}
 		}
 	}
 ?>

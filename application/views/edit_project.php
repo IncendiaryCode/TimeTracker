@@ -107,7 +107,7 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
                 <?php foreach(($project_data['users']) as $user) { ?>
                     <li class="list-group-item d-flex-">
                     <?php if(!empty($user['profile_photo'])) { ?>
-                        <img src="<?= base_url() . UPLOAD_PATH . $user['profile_photo']; ?>" width="30px;"> <?php  } ?><span class ="user-name"><?=$user['user_name']; ?></span>
+                        <img src="<?= base_url() . USER_UPLOAD_PATH . $user['profile_photo']; ?>" width="30px;"> <?php  } ?><span class ="user-name"><?=$user['user_name']; ?></span>
                         <span>
                             <a href="#user-delete" data-toggle="modal" data="<?=$user['user_id']; ?>" class = "user-delete float-right"><i class="fas fa-trash pl-3">
                                 <input type = "hidden" value = <?=$user['user_id'] ?> >

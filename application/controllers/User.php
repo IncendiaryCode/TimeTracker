@@ -68,18 +68,18 @@ class User extends CI_Controller
 
     public function load_task_data() //Load task data to user dashboard
     {
+        $today_filter = '';
+        $filter_type = '';
+        $filter = '';
+        if($this->input->post('project_filter')){
+            $filter_type = 'proj_filter';
+            $filter = json_decode($this->input->post('project_filter'));
+        }
         if ($this->input->post('type',TRUE)) {
             //load task data into user dashboard page
-
             $sort_type = $this->input->post('type', TRUE);
             $date = '';
-            $today_filter = '';
-            $filter_type = '';
-            $filter = '';
-            if($this->input->post('project_filter')){
-                $filter_type = 'proj_filter';
-                $filter = json_decode($this->input->post('project_filter'));
-            }if($this->input->post('filter')){
+            if($this->input->post('filter')){
                 $today_filter = 'today';
             }
             $task_details['data'] = $this->user_model->get_task_details($sort_type,$date,$filter_type,$filter,$today_filter); //get task data
@@ -95,7 +95,7 @@ class User extends CI_Controller
             //load task data into employee activities page
             $date = $this->input->post('date');
             $chart_type = $this->input->post('chart_type');
-            $task_details['data'] = $this->user_model->get_task_details($chart_type,$date); //get task data
+            $task_details['data'] = $this->user_model->get_task_details($chart_type,$date,$filter_type,$filter); //get task data
             if($task_details['data'] == NULL){ //if no data, send failure message
                     $task_details['status'] = FALSE;
                     $task_details['data'] = array();
@@ -105,22 +105,6 @@ class User extends CI_Controller
             }
             echo json_encode($task_details);
         }
-        /*else if($this->input->post('filter') == 'today'){
-            $filter_type = 'today';
-            $filter = '';
-            $date = '';
-            $sort_type = '';
-            $task_details['data'] = $this->user_model->get_task_details($sort_type,$date,$filter_type,$filter); //get task data
-            if($task_details['data'] == NULL){ //if no data, send failure message
-                $task_details['status'] = FALSE;
-                $task_details['data'] = array();
-                $task_details['msg'] = "No activity in this date.";
-            }else{ //if data is present, send the data
-                $task_details['status'] = TRUE;
-                $task_details['data'] = $task_details['data'];
-            }
-            echo json_encode($task_details);
-        }*/
     }
 
     //stop the old task by updating end time(in user dashboard page)
@@ -264,7 +248,8 @@ class User extends CI_Controller
     public function load_employee_activities()
     {
         $GLOBALS['page_title'] = 'My Activities';
-        $this->load->template('user/employee_activities');
+        $data['project_list'] = $this->user_model->get_project_name();
+        $this->load->template('user/employee_activities',$data);
     }
 
     //Show daily,weekly,monthly activity chart of the user(employee activities page)
@@ -275,7 +260,11 @@ class User extends CI_Controller
             $date = $_POST['date'];
             $chart_type = $_POST['chart_type'];
             $userid = $this->session->userdata('userid');
-            $chart_data = $this->user_model->get_activity($chart_type, $date, $userid); //get activity of the user for given arguments
+            $filter = array();
+            if($this->input->post('project_filter')){
+                $filter = json_decode($this->input->post('project_filter'));
+            }
+            $chart_data = $this->user_model->get_activity($chart_type, $date, $userid, $filter); //get activity of the user for given arguments
             echo json_encode($chart_data);
         }
         else
@@ -337,8 +326,6 @@ class User extends CI_Controller
         $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|callback_task_exists|xss_clean');
         $this->form_validation->set_rules('project', 'Project name', 'required');
         if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to add task page
-            $GLOBALS['page_title'] = 'Add Task';
-            $data['result'] = $this->user_model->get_project_name();
             $std = validation_errors();
             $this->session->set_flashdata('failure', $std);
             redirect('user/load_add_task');
@@ -368,10 +355,7 @@ class User extends CI_Controller
         $user_id = $this->session->userdata('userid');
         $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|xss_clean');
         if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to edit task page
-            $GLOBALS['page_title'] = 'Edit Task';
             $t_id = $this->input->post('task_id', TRUE);
-            $userid = $this->session->userdata('userid');
-            $task_data = $this->user_model->get_task_info($t_id,$userid);
             $std = validation_errors();
             $this->session->set_flashdata('failure', $std);
             redirect('user/load_add_task?t_id='.$t_id);
@@ -509,8 +493,7 @@ class User extends CI_Controller
                 redirect('user/load_my_profile','refresh');
             }
         } else {
-            //if image file is not present, assign default image to $picture variable
-            //$picture = 'images.png';
+            //if image file is not present, redirect to profile page
             redirect('user/load_my_profile','refresh');
         }
         $this->user_model->submit_profile($picture);

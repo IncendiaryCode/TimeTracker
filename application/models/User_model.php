@@ -138,14 +138,21 @@ class User_model extends CI_Model {
         $this->db->join('task_assignee AS ta', 'ta.task_id = t.id');
         $this->db->join('time_details AS d', 'd.task_id = t.id AND d.user_id =ta.user_id','LEFT');
         $this->db->join('project AS p', 'p.id = t.project_id');
-        
+
+        if($filter_type == 'proj_filter'){
+            if(!empty($filter_value)){
+                $this->db->where_in('t.project_id',$filter_value);
+            }
+        }
         if($today_filter == 'today'){
+            $this->db->where('ta.user_id',$userid);
             $this->db->where('task_date',date('Y-m-d'));
             $this->db->or_where('task_date IS NULL');
-        }
-        if($filter_type == 'proj_filter'){
-            if(!empty($filter_value))
-                $this->db->where_in('t.project_id',$filter_value);
+            if($filter_type == 'proj_filter'){
+                if(!empty($filter_value)){
+                    $this->db->where_in('t.project_id',$filter_value);
+                }
+            }
         }
         if($date == ''){
             $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
@@ -204,7 +211,7 @@ class User_model extends CI_Model {
         if ($query->num_rows() > 0) {
             $dataa = $query->result_array();
             foreach ($dataa as $d) {
-                $data[] = array('image_name' => ($d['image_name'] != NULL) ? (base_url() . UPLOAD_PATH . $d['image_name']) : NULL, 'project' => $d['name'], 'project_color'=>$d['color_code'], 'task_name' => $d['task_name'], 'running_task' => $d['running_task'], 'start_time' => ($d['start_time'] != NULL) ? $d['start_time']: '', 't_minutes' => ($d['t_minutes'] !=NULL) ? $d['t_minutes']:'0', 'id' => $d['task_id']);
+                $data[] = array('image_name' => ($d['image_name'] != NULL) ? (base_url() . UPLOAD_PATH_PROJECT . $d['image_name']) : NULL, 'project' => $d['name'], 'project_color'=>$d['color_code'], 'task_name' => $d['task_name'], 'running_task' => $d['running_task'], 'start_time' => ($d['start_time'] != NULL) ? $d['start_time']: '', 't_minutes' => ($d['t_minutes'] !=NULL) ? $d['t_minutes']:'0', 'id' => $d['task_id']);
             }
         } else {
             $data = NULL;
@@ -315,6 +322,7 @@ class User_model extends CI_Model {
 
         //send list of project module to edit task page
         if(isset($details['task_data'])){
+            $details['project_list'] = $this->get_project_name();
             $details['project_module_list'] = $this->get_module_name($task_data['project_id']);
         }
         return $details;
@@ -489,7 +497,7 @@ class User_model extends CI_Model {
      * 
      * returns $data
      */
-    public function get_daily_activity($userid,$taskdate){
+    public function get_daily_activity($userid,$taskdate,$project_id = array()){
         $data = array();
         $this->db->select('d.*,d.id AS table_id,p.id as project_id,p.name,p.color_code,t.task_name,t.id AS task_id,t.created_on');
         $this->db->from('time_details AS d');
@@ -497,6 +505,9 @@ class User_model extends CI_Model {
         $this->db->join('project AS p','p.id = t.project_id');
         $this->db->where('d.end_time IS NOT NULL'); //tasks that are not running
         $this->db->where(array('d.user_id' => $userid, 'd.task_date' => $taskdate));
+        if(!empty($project_id)){
+            $this->db->where_in('t.project_id',$project_id);
+        }
         $this->db->group_by('d.id');
         $this->db->order_by('d.start_time','asc');
         $query = $this->db->get();
@@ -513,9 +524,14 @@ class User_model extends CI_Model {
      * 
      * returns $data
      */
-    public function get_weekly_activity($userid,$start_date,$end_date){
+    public function get_weekly_activity($userid,$start_date,$end_date,$project_id = array()){
         $data = array();
-        $query = $this->db->query("SELECT t.id AS task_id,t.task_name,t.created_on,p.id as project_id,p.name,p.color_code,d.task_id, d.start_time, d.end_time, d.task_description,d.task_date, SUM(`d`.`total_minutes`) AS `minutes` FROM `task` AS `t` JOIN `project` AS `p` ON `p`.`id` = `t`.`project_id` LEFT JOIN `task_assignee` AS `ta` ON ta.task_id = t.id JOIN `time_details` AS `d` ON d.task_id = t.id WHERE `d`.`task_date` BETWEEN '".$start_date."' AND '".$end_date."' AND d.end_time IS NOT NULL AND d.user_id = '".$userid."' GROUP BY t.id");
+        $where = "WHERE `d`.`task_date` BETWEEN '".$start_date."' AND '".$end_date."' AND d.end_time IS NOT NULL AND d.user_id = '".$userid."'";
+        if(!empty($project_id)){
+            $project_filter = implode(',',array_values($project_id));
+            $where = "WHERE `d`.`task_date` BETWEEN '".$start_date."' AND '".$end_date."' AND d.end_time IS NOT NULL AND d.user_id = '".$userid."' AND t.project_id IN ($project_filter)";
+        }
+        $query = $this->db->query("SELECT t.id AS task_id,t.task_name,t.created_on,p.id as project_id,p.name,p.color_code,d.task_id, d.start_time, d.end_time, d.task_description,d.task_date, SUM(`d`.`total_minutes`) AS `minutes` FROM `task` AS `t` JOIN `project` AS `p` ON `p`.`id` = `t`.`project_id` LEFT JOIN `task_assignee` AS `ta` ON ta.task_id = t.id JOIN `time_details` AS `d` ON d.task_id = t.id $where GROUP BY t.id");
         if($query->num_rows() > 0){
             $data = $query->result_array();
         }
@@ -545,10 +561,14 @@ class User_model extends CI_Model {
      * 
      * returns $data
      */
-    public function get_monthly_activity($userid,$start_date,$end_date){
+    public function get_monthly_activity($userid,$start_date,$end_date,$project_id = array()){
         $data = array();
-        /*$query = $this->db->query("SELECT `td`.`task_date`, `t`.`task_name`, `t`.`created_on`, `td`.`task_id`, `p`.`id` as project_id, `p`.`name`,`p`.`color_code`,td.t_minutes FROM `project` AS `p` JOIN `task` AS `t` ON `t`.`project_id` = `p`.`id` JOIN (SELECT d.task_id,d.task_date,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `time_details` AS `d` WHERE `d`.`user_id` = ".$userid." AND `d`.`end_time` IS NOT NULL AND `d`.`task_date` BETWEEN '".$start_date."' and '".$end_date."' GROUP BY d.task_date) AS td ON td.task_id = t.id GROUP BY td.task_date");*/
-        $query = $this->db->query("SELECT `d`.`task_date`, `t`.`task_name`,t.created_on,d.task_id,d.task_date,p.name,p.id as project_id, p.color_code,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `time_details` AS `d` join task as t on d.task_id=t.id join project as p on t.project_id=p.id WHERE `d`.`user_id` = ".$userid." AND `d`.`end_time` IS NOT NULL AND `d`.`task_date` BETWEEN '".$start_date."' and '".$end_date."' GROUP BY  d.task_date");
+        $where = "WHERE `d`.`user_id` = ".$userid." AND `d`.`end_time` IS NOT NULL AND `d`.`task_date` BETWEEN '".$start_date."' and '".$end_date."'";
+        if(!empty($project_id)){
+            $project_filter = implode(',',array_values($project_id));
+            $where = "WHERE `d`.`user_id` = ".$userid." AND `d`.`end_time` IS NOT NULL AND `d`.`task_date` BETWEEN '".$start_date."' and '".$end_date."' AND t.project_id IN ($project_filter)";
+        }
+        $query = $this->db->query("SELECT `d`.`task_date`, `t`.`task_name`,t.created_on,d.task_id,d.task_date,p.name,p.id as project_id, p.color_code,SUM(`d`.`total_minutes`) AS `t_minutes` FROM `time_details` AS `d` join task as t on d.task_id=t.id join project as p on t.project_id=p.id $where GROUP BY  d.task_date");
         if ($query->num_rows() > 0) {
                 $data = $query->result_array();
         }
@@ -563,12 +583,12 @@ class User_model extends CI_Model {
      * returns $chart_data if data is present
      * returns $status if no data is present
      */
-    public function get_activity($chart_type, $date,$userid) {
+    public function get_activity($chart_type, $date, $userid, $filter_value = array()) {
         //get task activities
         $taskdate = $date;
         $total_minutes = 0;
         if ($chart_type == "daily_chart") {
-            $data = $this->get_daily_activity($userid,$taskdate);
+            $data = $this->get_daily_activity($userid,$taskdate,$filter_value);
             if(!empty($data)){
                 foreach ($data as $d) {
                     $table_id[] = $d['table_id'];
@@ -603,7 +623,7 @@ class User_model extends CI_Model {
 
             $date_range = $this->get_dates_from_range($start_date, $end_date); //week days(Sun-Sat) in date format(Y-m-d)
 
-            $data = $this->get_weekly_activity($userid,$start_date,$end_date);
+            $data = $this->get_weekly_activity($userid,$start_date,$end_date,$filter_value);
             if(!empty($data)){
                 for($i=0;$i<count($data);$i++) {
                     $k=0;
@@ -645,7 +665,7 @@ class User_model extends CI_Model {
             $year_value = $month_array[1];
             $first = date($year_value . '-' . $month_value . '-' . '01');
             $last = date($year_value . '-' . $month_value . '-' . 't');
-            $data = $this->get_monthly_activity($userid,$first,$last);
+            $data = $this->get_monthly_activity($userid,$first,$last,$filter_value);
             if(!empty($data)){
                 foreach ($data as $d) {
                     $format_hours = sprintf('%02d.%02d',floor($d['t_minutes'] / 60),($d['t_minutes']%60));
@@ -658,7 +678,7 @@ class User_model extends CI_Model {
                 "data" => $values,
                 "total_minutes" => $total_minutes);
             } else {
-                $chart_data = array('monthly_chart', "status" => FALSE, "data" => '0','total_minutes' => '0');
+                $chart_data = array('monthly_chart', "status" => FALSE, "data" => array(),'total_minutes' => '0');
             }
             return $chart_data;
         }
@@ -774,6 +794,7 @@ class User_model extends CI_Model {
      * returns $result
      */
     public function get_project_name() {
+        $result = array();
         $userid = $this->session->userdata('userid');
         $this->db->select('p.id,p.name');
         $this->db->from('project AS p');
@@ -782,8 +803,6 @@ class User_model extends CI_Model {
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             $result = $query->result_array();
-        } else {
-            $result = '';
         }
         return $result;
     }
@@ -1090,8 +1109,8 @@ class User_model extends CI_Model {
      */
     public function user_chart_data($year) {
         $userid = $this->session->userdata('userid');
-        $year_start = date('Y-1-1',strtotime(date($year.'-01-01')));
-        $year_end = date('Y-12-t',strtotime($year.'-12-31'));
+        $year_start = date($year.'-01-01');
+        $year_end = date($year.'-12-31');
         $this->db->select('*');
         $this->db->select_sum('total_minutes', 't_minutes');
         $this->db->from('time_details');
@@ -1107,8 +1126,8 @@ class User_model extends CI_Model {
             $months[$i] = date($year . "-" . $i . '');
         }
         foreach ($months as $month) {
-            $start = date('Y-m-d', strtotime(date($month . '-01')));
-            $end = date('Y-m-d', strtotime(date($month . '-31')));
+            $start = date($month.'-01');
+            $end = date($month.'-t');
             $this->db->select('*');
             $this->db->select_sum('total_minutes', 't_minutes');
             $this->db->from('time_details');
@@ -1118,7 +1137,7 @@ class User_model extends CI_Model {
             $query = $this->db->get();
             $data = $query->result_array();
             foreach ($data as $d) {
-                $values[] = round(($d['t_minutes'] / 60), 2);
+                $values[] = sprintf('%02d.%02d',floor($d['t_minutes']/60),($d['t_minutes']%60));
             }
         }
         return $values;

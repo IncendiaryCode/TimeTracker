@@ -12,16 +12,14 @@ class MY_Loader extends CI_Loader
     public function template($template_name, $vars = array(), $type ='user', $return = FALSE)
     {
     	$this->CI =& get_instance();
+        $this->CI->load->library('session');
+        $header_data = Array();
     	if ($type == 'user') {
     		$header_path = 'user/header';
     		$footer_path = 'user/footer';
-
-    		//fetch punchin / punchout data
-    		$header_data = Array();
     		//$this->model('user_model');
     		//print_r($l_model); exit();
     		//$l_model = new User_model();
-    		$this->CI->load->library('session');
     		$this->CI->load->model('user_model');
     		$userid = $this->CI->session->userdata('userid');
     		$header_data['punch_in_time'] = $this->CI->user_model->get_punch_in_time($userid,date('Y-m-d'));
@@ -31,6 +29,7 @@ class MY_Loader extends CI_Loader
     	{
     		$header_path = 'header';
     		$footer_path = 'footer';
+            $header_data['profile'] = $this->CI->session->userdata('user_profile');
     	}
 
         if($return)

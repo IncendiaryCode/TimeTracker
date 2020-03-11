@@ -128,7 +128,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     if ($project['image_name'] != '') {
 
                                     ?>
-                                        <img src="<?= base_url() . UPLOAD_PATH . $project['image_name']; ?>" width="30px;">
+                                        <img src="<?= base_url() . UPLOAD_PATH_PROJECT . $project['image_name']; ?>" width="30px;">
                                     <?php
                                     } ?>
                                     <?php echo $project["project_name"]; ?>
@@ -171,6 +171,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="row">
                             <div class="col-6">
                                 <a href="<?= base_url(); ?>index.php/admin/load_userdetails_page?user_id=<?= $user['user_id']; ?>">
+                                    <?php if ($user['profile'] != ''){ ?>
+                                        <img class="rounded-circle" src="<?= base_url() . USER_UPLOAD_PATH . $user['profile']; ?>" width="30px;" height="30px;">
+                                  <?php  } ?>
                                     <?php echo $user["user_name"]; ?>
                                 </a>
                             </div>

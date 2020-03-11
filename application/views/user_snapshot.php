@@ -59,7 +59,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <?php
                                 if ($d['image_name'] != '') {
                                 ?>
-                                    <img src="<?= base_url() . UPLOAD_PATH . $d['image_name'] ?>" height="15px;" width="18px;">
+                                    <img src="<?= base_url() . UPLOAD_PATH_PROJECT . $d['image_name'] ?>" height="15px;" width="18px;">
                                 <?php
                                 }
                                 echo $d['project_name']; ?>
