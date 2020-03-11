@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-define('VERSION','1.0.5');
-define('UPLOAD_PATH','assets/images/');
+define('VERSION','1.0.6');
+define('UPLOAD_PATH','assets/uploads/user_profiles/admin/');
+define('UPLOAD_PATH_PROJECT','assets/uploads/project_avatar/');
 define('USER_UPLOAD_PATH','assets/user/images/user_profiles/');
 //define('IMAGE_PREVIEW_PATH',base_url().'assets/user/images/user_profiles/');
 /*
