@@ -56,7 +56,7 @@ $name = $this->session->userdata('username');
                     <li>Do you want to punch out?</li>
                 </ul>
                 <div class="input-group date">
-                    <input id="timerpicker-punchout" class="form-control timerpicker-punchout check-for-utc" name="punch_out_time" placeholder="hh:mm" />
+                    <input type="text" class="timerpicker-punchout check-for-utc form-control" id="timerpicker-punchout" name="punch_out_time" placeholder="hh:mm">
                 </div>
             </div>
                 <p id="punch-out-invalid" class="text-danger"></p>
@@ -108,27 +108,20 @@ $name = $this->session->userdata('username');
         </div>
     </div>
 </div>
-<div class="modal" id="timestopmodal" tabindex="-1">
-    <!-- Modal Timer to Stop or Confirm -->
-    <div class="modal-dialog modal-lg">
+
+<div class="modal fade" id="cropImagePop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="timestopmodalLabel">Confirm Timer Action</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
             </div>
             <div class="modal-body">
-                <h3>Would you like to stop or complete the task?</h3>
-                <p class="mt-4 mb-1">Note:</p>
-                <ul class="text-muted">
-                    <li>Stopping task will pause the timer but not complete the task.</li>
-                    <li>Completing task ends the task and not editable again.</li>
-                </ul>
+                <div id="upload-demo" class="center-block"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="timestopmodal-complete-task" class="btn btn-danger">Complete Task</button>
-                <button type="button" id="timestopmodal-stop-task" class="btn btn-primary">Stop Timer</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="cropImageBtn" class="btn btn-primary">Crop</button>
             </div>
         </div>
     </div>
@@ -137,25 +130,26 @@ $name = $this->session->userdata('username');
 <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//www.gstatic.com/charts/loader.js" type="text/javascript"></script>
-<script src="//momentjs.com/downloads/moment.js"></script>
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
-
-<script src="//momentjs.com/downloads/moment-timezone.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="//unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
-<script src="<?= base_url(); ?>assets/user/plugins/calendar_view.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/plugins/bxslider/js/jquery.bxslider.min.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/momet_copy.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/user/javascript/croppie.min.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/user/javascript/utils.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/moment_zone.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/employeeInfo.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/add_task.js?v=<?= VERSION ?>"></script>
-<script src="<?= base_url(); ?>assets/user/javascript/utils.js?v=<?= VERSION ?>"></script>
-<script src="<?= base_url(); ?>assets/user/javascript/change_password.js?v=<?= VERSION ?>"></script>
-<script src="<?= base_url(); ?>assets/plugins/bxslider/js/jquery.bxslider.min.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/user/plugins/calendar_view.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/employee_profile.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/user/javascript/change_password.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/app.js?v=<?= VERSION ?>"></script>
+<script>
+$('.timerpicker-punchout').timepicker({
+		mode: '24hr',
+		format: 'HH:MM',
+		uiLibrary: 'bootstrap4'
+	});
+</script>
 </body>
 </html>

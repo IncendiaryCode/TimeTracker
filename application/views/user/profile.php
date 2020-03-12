@@ -28,14 +28,20 @@ $this->load->helper('url_helper');
                 <?php } ?>
             </div>
             </div>
-                <form method="post" action="<?= base_url(); ?>user/edit_profile" id="edit-profile">
+                <form method="post" action="<?= base_url(); ?>user/edit_profile" id="edit-profile" enctype="multipart/form-data">
                     <div class="row pt-5 pb-5">
                         <div class="col-md-2 offset-md-2 col-6 offset-3 text-center">
-                            <img src="<?=base_url().USER_UPLOAD_PATH.$res['profile'];?>"  class="rounded-circle text-center" width="200px;" height="200px;">
+                            <label class="cabinet center-block">
+                                <figure>
+                                    <img src="<?=base_url().USER_UPLOAD_PATH.$res['profile'];?>" class="rounded-circle text-center gambar img-thumbnail" id="item-img-output" width="200px;" height="200px;" />
+                                    <figcaption><i class="fa fa-camera img-icon"></i></figcaption>
+                                </figure>
+                                <input type="file" class="item-img file center-block" name="change_img" />
+                            </label>
                             <div class="edit">
-                                <div class="img-icon">
+                                <!-- <div class="img-icon">
                                     <a href="#" class="text-white m-0"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#changeimage"></i></a>
-                                </div>
+                                </div> -->
                             </div>
                             
                         </div>
@@ -97,27 +103,17 @@ $this->load->helper('url_helper');
             <div class="row">
                 <div class="col-12">
                     <div class="row">
-                    <div class="text-right input-group col-md-3 offset-md-9 pt-4 " id = "year-picker">
-                        <!-- chart that shows monthly activities -->
-                        <!-- <div class="input-group mb-3">
-                            <input type="year" class="year-chart" id="year-chart" max =<?=date('YYYY');?>>
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                            </div>
-                        </div> -->
-
-                        <div class="input-group date">
-                            <input type="text" class="form-control datepicker year-chart" id="year-chart" max =<?=date('YYYY');?> >
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                    <button type="button" class="btn fa fa-calendar p-0"></button>
-                                </span>
+                        <div class="text-right input-group col-md-3 offset-md-9 pt-4 " id = "year-picker">
+                            <div class="input-group date">
+                                <input type="text" class="form-control datepicker year-chart" id="year-chart" max =<?=date('YYYY');?> >
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <button type="button" class="btn fa fa-calendar p-0"></button>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-
-
                     </div>
-                </div>
                 </div>
                     <div class="col-md-10 offset-md-1">
                         <canvas id="user_prof_chart" height="100px;" class="mb-5"></canvas>
@@ -125,6 +121,12 @@ $this->load->helper('url_helper');
                     </div>
                 </div>
             </div>
+
+
+            
+            
+                        
+                        
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <?php
         if(!empty($GLOBALS['dark_mode'])){
@@ -141,4 +143,6 @@ $this->load->helper('url_helper');
             <p class="text-center pt-2 ">Copyright © 2020 Printgreener.com</p>
         </footer>
     </div>
+
+
 </main>

@@ -162,7 +162,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </div>
                                 <div class="row" id="no-activities">
                                     <div class="col-12 text-center no-activities">
-                                        <img src="https://github.com/IncendiaryCode/TimeTracker/blob/dev_web_ci/assets/images/no-data.png?raw=true" class="img-fluid animated fadeIn">
+                                        <img src="<?=base_url()?>/assets/images/no-data.png?raw=true" class="img-fluid animated fadeIn">
                                         <h3 class="pb-3">No task available.</h3>
                                     </div>
                                 </div>
