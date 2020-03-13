@@ -84,14 +84,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <div class="modal fade" id="delete-entry" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content text-center">
-            <div class="modal-header ">
-                <span>Do you want to delete? </span>
-                <button type="button" class="close text-danger" data-dismiss="modal">×</button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete confirmation</h3>
+                <button type="button" class="close" data-dismiss="modal">×</button>
             </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this user?</p>
+                <h6 class="text-muted font-weight-light">This action can't be undone.</h6>
+             </div>
             <div class="modal-footer text-center">
-                <button type="button" class="btn btn-secondary" id="cancel-delete" data-dismiss="modal">No</button>
-                <button type="button" class="btn btn-primary" id="delete-user">Yes</button>
+                <button type="button" class="btn btn-secondary col-6" id="cancel-delete" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary col-6" id="delete-user">Yes</button>
             </div>
         </div>
     </div>

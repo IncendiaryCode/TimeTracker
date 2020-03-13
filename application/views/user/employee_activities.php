@@ -33,7 +33,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <h5 class="pb-2">Projects</h5>
-                                                        <i class="far fa-times-circle close-filters"></i>
                                                     </div>                                                    
                                                 </div>
                                                 <?php for($p=0; $p<sizeof($project_list); $p++) { ?>

@@ -1,8 +1,7 @@
 var user_detail_chart;
 function __draw_user_chart(res) {
 	var user_chart = document.getElementById('user-chart').getContext('2d');
-	var color = Chart.helpers.color;
-	gradient = user_chart.createLinearGradient(0, 0, 0, 600);
+	gradient = user_chart.createLinearGradient(0, 0, 0, 300);
 	gradient.addColorStop(0, '#4b5bf0');
 	gradient.addColorStop(1, '#ea4776');
 	if (res['status'] == false) {
@@ -12,16 +11,8 @@ function __draw_user_chart(res) {
 	} else {
 		$('#user_chart').show();
 		document.getElementById('user-chart-error').innerHTML = ' ';
-		var user_data = [];
-
 		var task_labels = [];
-		var user_labels = [];
-
 		var task_time_value = [];
-		var user_time_value = [];
-
-		var chart_color = '000000';
-
 		for (var i = 0; i < res['result'].length; i++) {
 			task_labels[i] = res['result'][i]['user_name'];
 			task_time_value[i] = res['result'][i]['time_used'] / 60;
@@ -52,12 +43,31 @@ function __draw_user_chart(res) {
 				tooltips: {
 					callbacks: {
 						label: function(tooltipItem, data) {
-							var item = tooltipItem.yLabel;
+							var label = data.datasets[tooltipItem.datasetIndex].label || '';
+							var value = "";
+							if((tooltipItem['value'].split('.')[1]/100*60).toString() != "NaN")
+							{
+							value = tooltipItem['value'].split('.')[1]/100*60;
+							}
+							if (label) {
+								label.split('.')[0] += ':'+value;
+							}
+							var minutes = parseInt(value);
+							if(parseInt(value).toString() == "NaN")
+							{
+								minutes = 0;
+							}
+							if(minutes.toString().length == 1)
+							{
+								minutes = '0'+minutes;
+							}
+							minutes = minutes.toString().slice(0,2);
 							$('#user-chart').click(function() {
 								var elmnt = document.getElementById(tooltipItem.xLabel);
 								elmnt.scrollIntoView({ behavior: 'smooth' });
 							});
-							return item;
+
+							return ("time spent in hrs "+tooltipItem['value'].split('.')[0]+':'+minutes);
 						}
 					}
 				},
@@ -106,7 +116,7 @@ function __draw_user_chart(res) {
 					]
 				}
 			}
-		};
+		}; 
 		if (user_detail_chart) user_detail_chart.destroy();
 		user_detail_chart = new Chart(user_chart, configs);
 	}

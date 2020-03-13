@@ -276,14 +276,18 @@ if ($this->input->get('t_id')) { ?>
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="alert_for_deleteLabel">Do you want to delete this timeline?</h5>
+                            <h2 class="modal-title" id="alert_for_deleteLabel">Delete confirmation</h2>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                                <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this timeline?</p>
+                            <h6 class="text-muted font-weight-light">This action can't be undone.</h6>
+                        </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                            <button type="button" class="btn btn-primary" id= "alert_for_delete_true">Yes</button>
+                            <button type="button" class="btn btn-secondary col-6" data-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-primary col-6" id= "alert_for_delete_true">Yes</button>
                         </div>
                     </div>
                 </div>

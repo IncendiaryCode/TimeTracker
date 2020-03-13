@@ -3,7 +3,7 @@ function __draw_chart(res)
 {
 var user_chart = document.getElementById('user_time_chart').getContext('2d');
 var color = Chart.helpers.color;
-gradient = user_chart.createLinearGradient(0, 0, 0, 600);
+gradient = user_chart.createLinearGradient(0, 0, 0, 300);
 
 gradient.addColorStop(0, '#4b5bf0');
 gradient.addColorStop(1, '#ea4776');
@@ -58,6 +58,7 @@ var configs = {
                     {
                         minutes = '0'+minutes;
                     }
+                    minutes = minutes.toString().slice(0,2);
                     return ("time spent in hrs "+tooltipItem['value'].split('.')[0]+':'+minutes);
                 }
             }

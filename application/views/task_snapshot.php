@@ -105,15 +105,19 @@
      </div>
  </div>
  <div class="modal" id="delete-task-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-     <div class="modal-dialog">
-         <div class="modal-content text-center">
-             <div class="modal-header ">
-                 <span>Do you want to delete? </span></p>
+     <div class="modal-dialog modal-dialog-centered-">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h3>Delete confirmation</h3>
                  <button type="button" class="close text-danger" data-dismiss="modal">×</button>
              </div>
+             <div class="modal-body">
+                <p>Are you sure you want to delete this task?</p>
+                <h6 class="text-muted font-weight-light">This action can't be undone.</h6>
+             </div>
              <div class="modal-footer text-center">
-                 <button type="button" class="btn btn-secondary" id="cancel-delete" data-dismiss="modal">No</button>
-                 <button type="button" class="btn btn-primary" id="delete-task"><input type="hidden" id="task" name=""> Yes</button>
+                 <button type="button" class="btn btn-secondary col-6" id="cancel-delete" data-dismiss="modal">No</button>
+                 <button type="button" class="btn btn-primary col-6" id="delete-task"><input type="hidden" id="task" name=""> Yes</button>
              </div>
          </div>
      </div>

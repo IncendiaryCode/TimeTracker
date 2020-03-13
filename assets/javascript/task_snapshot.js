@@ -3,7 +3,7 @@ var table;
 function __draw_task_chart(res) {
 	var result = res['result'];
 	var task_chart = document.getElementById('task-chart').getContext('2d');
-	gradient = task_chart.createLinearGradient(0, 0, 0, 600);
+	gradient = task_chart.createLinearGradient(0, 0, 0, 300);
 	gradient.addColorStop(0, '#7077ff');
 	gradient.addColorStop(0.5, '#e485fb');
 	gradient.addColorStop(1, '#e484fb');

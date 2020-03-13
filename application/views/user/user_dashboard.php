@@ -254,8 +254,8 @@ if (!empty($task_info['login_run'])) { ?>
                             </div>
                         </div>
                         <p class="text-danger text-center" id="stop-now-error"></p>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Next</button>
+                        <div class="modal-footer text-center">
+                            <button type="submit" class="btn btn-primary col-4">Next</button>
                         </div>
                     </form>
                 </div>

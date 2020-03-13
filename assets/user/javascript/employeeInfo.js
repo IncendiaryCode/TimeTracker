@@ -84,7 +84,6 @@ function drawCards(data) {
 				}
 				if (data[x][y].start_time == '') {
 					cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>Yet to start.</div>');
-					$('.vertical-line').css('color', data[x][y].project_color);
 				} else {
 					var date = data[x][y].start_time.slice(0, 10);
 					var start_time = data[x][y].start_time;
@@ -92,10 +91,9 @@ function drawCards(data) {
 					var serverDate1 = moment(start_time_utc).format('YYYY-MM-DD hh:mm a');
 					if (serverDate1 != 'Invalid date') {
 						cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + serverDate1 + '</div>');
-						$('.vertical-line').css('color', data[x][y].project_color);
+						$(cardHeaderRow[0].childNodes[0].childNodes[0]).css("color",data['data'][y].project_color);
 					} else {
 						cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data[x][y].start_time + '</div>');
-						$('.vertical-line').css('color', data[x][y].project_color);
 					}
 				}
 				var stopCol = $('<div class="col-6 text-right"  id="btn-stop' + data[x][y].id + '" />');
@@ -304,6 +302,7 @@ function setTaskTime(startTime, id) {
 
 	var formattedTime = hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 	$('#task-timer' + id).html(formattedTime);
+	if(document.getElementById('running-task-' + id))
 	document.getElementById('running-task-' + id).innerHTML = formattedTime;
 	$('.title').html(formattedTime);
 }

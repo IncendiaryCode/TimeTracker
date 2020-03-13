@@ -18,7 +18,7 @@ var addTime = {
 			date = moment().format('YYYY-MM-DD');
 		}
 		var section = $('<div class="time-section pt-3 pb-3" />');
-		var row = $('<div class="row" />');
+		var row = $('<div class="row animated fadeIn" />');
 		var id = this.id;
 		if (edit == 1 && localStorage.getItem('first_entry') == 1) {
 			id = 0;

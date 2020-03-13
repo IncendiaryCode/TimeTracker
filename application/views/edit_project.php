@@ -123,7 +123,7 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
 </div>
 <!-- Modal -->
 <div class="modal fade" id="module-edit" tabindex="-1" role="dialog" aria-labelledby="module-editLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
         <form method="post" action="<?= base_url(); ?>index.php/admin/edit_project" id = "pre-edit-module">
             <div class="modal-header">
@@ -138,18 +138,18 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
                 <input class="form-control" type = "text" id = "module-name" name = "module_name">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary col-6" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary col-6">Save changes</button>
             </div>
         </form>
     </div>
   </div>
 </div>
 <div class="modal fade" id="module-delete" tabindex="-1" role="dialog" aria-labelledby="module-deleteLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="module-deleteLabel">Do you want to delete this module?</h5>
+            <h5 class="modal-title" id="module-deleteLabel">Delete confirmation</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -160,18 +160,18 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
             </ul>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-            <button type="button" class="btn btn-primary" id = "delete-module">Yes</button>
+            <button type="button" class="btn btn-secondary col-6" data-dismiss="modal">No</button>
+            <button type="button" class="btn btn-primary col-6" id = "delete-module">Yes</button>
         </div>
     </div>
   </div>
 </div>
 
 <div class="modal fade" id="user-delete" tabindex="-1" role="dialog" aria-labelledby="user-deleteLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="user-deleteLabel">Do you want to delete this user?</h5>
+            <h5 class="modal-title" id="user-deleteLabel">Delete confirmation</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -180,8 +180,8 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
         <div class="ml-2 modal-body"><ul><li>
             All timelines of tasks under this user will be deleted.</li></ul></div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-            <button type="button" class="btn btn-primary" id= "delete-user">Yes</button>
+            <button type="button" class="btn btn-secondary col-6" data-dismiss="modal">No</button>
+            <button type="button" class="btn btn-primary col-6" id= "delete-user">Yes</button>
         </div>
     </div>
   </div>

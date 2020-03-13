@@ -35,14 +35,14 @@ function draw_chart_cards(data, type) {
 			}
 			if (data['data'][y].start_time == null) {
 				cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>Not yet started.</div>');
-				$('.vertical-line').css('color', data['data'][y].project_color);
 			} else {
 				var start_time = data['data'][y].start_time;
 				var start_time_utc = moment.utc(start_time).toDate();
 				var serverDate = moment(start_time_utc).format('YYYY-MM-DD hh:mm a');
 				if (serverDate != 'Invalid date') {
 					cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + serverDate + '</div>');
-					$('.vertical-line').css('color', data['data'][y].project_color);
+					
+					$(cardHeaderRow[0].childNodes[0].childNodes[0]).css("color",data['data'][y].project_color);
 					var __time_for_duration = moment(start_time_utc).format('YYYY-MM-DD HH:mm');
 					if (date == data['data'][y].start_time.split(' ')[0]) {
 						timings.push([ parseInt(__time_for_duration.split(' ')[1].split(':')[0]) * 60 + parseInt(__time_for_duration.split(' ')[1].split(':')[1]), data['data'][y].t_minutes ]);
@@ -54,12 +54,10 @@ function draw_chart_cards(data, type) {
 					}
 				} else {
 					cardHeaderRow.append('<div class="col-6 text-left"><span class="vertical-line"></span>' + ' ' + data['data'][y].start_time + '</div>');
-					$('.vertical-line').css('color', data['data'][y].project_color);
 				}
 			}
-
 			var stopCol = $('<div class="col-6 text-right"  id="btn-stop' + data['data'][y].id + '" />');
-
+			
 			if (data['data'][y].running_task == 0) {
 				/*check whether task is ended or not*/
 				var timeUsed = minutesToTime(data['data'][y].t_minutes);
@@ -71,7 +69,6 @@ function draw_chart_cards(data, type) {
 				}
 				stopCol.append(stopButton);
 			}
-
 			cardHeaderRow.append(stopCol);
 			cardHeader.append(cardHeaderRow);
 
@@ -358,7 +355,10 @@ function drawChart(type, res, date) {
 						label: function(tooltipItem, data) {
 							var label = data.datasets[tooltipItem.datasetIndex].label || '';
 							if (data.datasets[tooltipItem.datasetIndex]['data'][myBar.getElementsAtEvent(event)[0]['_index']] == '00.00') return false;
-							return label + ' ' + data.datasets[tooltipItem.datasetIndex]['data'][myBar.getElementsAtEvent(event)[0]['_index']];
+							if (label.length > 40) {
+								label = label.slice(0, 40) + '...';
+							}
+							return label + ' ' + data.datasets[tooltipItem.datasetIndex]['data'][myBar.getElementsAtEvent(event)[0]['_index']] + ' hrs';
 						}
 					}
 				},
@@ -502,7 +502,7 @@ function draw_customized_chart(res) {
 			if (start_time_pixel + width >= window_width) {
 				width = window_width - start_time_pixel;
 			}
-			pixels_print.push([ start_time_pixel, width, margin_top + v * count, task_name, res['data'][0][i], moment(start_time_local).format('hh:mm'), moment(end_time_local).format('hh:mm'), color ]);
+			pixels_print.push([ start_time_pixel, width, margin_top + v * count, task_name, res['data'][0][i], moment(start_time_local).format('hh:mm a'), moment(end_time_local).format('hh:mm a'), color ]);
 
 			pixel.push([ start_time_pixel, end_time_pixel ]);
 			if (pixel.length == 0) {
@@ -1054,6 +1054,7 @@ $(document).ready(function() {
 		}
 	});
 
+	var toggleFilter = 0;
 	if (document.getElementById('activity-filter')) {
 		var filter_form = document.getElementById('activity-filter');
 		filter_form.onsubmit = function() {
@@ -1084,9 +1085,12 @@ $(document).ready(function() {
 				}
 				$('.alert-filter').hide();
 			}
+
 			$('.activity-filter').hide();
-			$('.close-filters').css('opacity', '0');
-			document.getElementsByClassName('project-filtering')[0].classList.add('fadeIn');
+			toggleFilter = 0;
+			document.getElementById('project-filtering').childNodes[1].classList.add('fa-sliders-h');
+			document.getElementById('project-filtering').childNodes[1].classList.remove('fa-times-circle');
+			document.getElementById('project-filtering').classList.add('fadeIn');
 			return false;
 		};
 	}
@@ -1100,19 +1104,33 @@ $(document).ready(function() {
 		}
 	}
 	$('.alert-filter').click(function() {
-		document.getElementsByClassName('project-filtering')[0].classList.remove('fadeIn');
-		$('.activity-filter').show();
+		if (toggleFilter == 0) {
+			$('.activity-filter').show();
+			toggleFilter = 1;
+			document.getElementById('project-filtering').childNodes[1].classList.remove('fa-sliders-h');
+			document.getElementById('project-filtering').childNodes[1].classList.add('fa-times-circle');
+			document.getElementById('project-filtering').classList.add('fadeIn');
+		} else {
+			$('.activity-filter').hide();
+			toggleFilter = 0;
+			document.getElementById('project-filtering').childNodes[1].classList.add('fa-sliders-h');
+			document.getElementById('project-filtering').childNodes[1].classList.remove('fa-times-circle');
+			document.getElementById('project-filtering').classList.add('fadeIn');
+		}
 	});
 	$('#project-filtering').click(function() {
-		$('.activity-filter').show();
-		document.getElementsByClassName('project-filtering')[0].classList.remove('fadeIn');
-		setTimeout(function() {
-			$('.close-filters').css('opacity', '0.7');
-		}, 800);
-	});
-	$('.close-filters').click(function() {
-		$('.close-filters').css('opacity', '0');
-		$('.activity-filter').hide();
-		document.getElementsByClassName('project-filtering')[0].classList.add('fadeIn');
+		if (toggleFilter == 0) {
+			$('.activity-filter').show();
+			toggleFilter = 1;
+			document.getElementById('project-filtering').childNodes[1].classList.remove('fa-sliders-h');
+			document.getElementById('project-filtering').childNodes[1].classList.add('fa-times-circle');
+			document.getElementById('project-filtering').classList.add('fadeIn');
+		} else {
+			$('.activity-filter').hide();
+			toggleFilter = 0;
+			document.getElementById('project-filtering').childNodes[1].classList.add('fa-sliders-h');
+			document.getElementById('project-filtering').childNodes[1].classList.remove('fa-times-circle');
+			document.getElementById('project-filtering').classList.add('fadeIn');
+		}
 	});
 });

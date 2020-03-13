@@ -9,11 +9,11 @@ $this->load->helper('url_helper');
                 <div class="row pt-5">
                     <div class="container">
                         <?php if(!empty($this->session->flashdata('success'))){ ?>
-                        <div class="alert-success">
-                        <?php echo (!empty($this->session->flashdata('success')))?$this->session->flashdata('success'):''; ?>
-                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <div class="alert alert-success alert-dismissible fade show">
+                            <?php echo (!empty($this->session->flashdata('success')))?$this->session->flashdata('success'):''; ?>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                     <?php } if(!empty($this->session->flashdata('failure'))){?>
                         <div class="alert-danger">
@@ -31,7 +31,7 @@ $this->load->helper('url_helper');
                                     </div>
                                 </div> 
                         </div>
-                        <div class="col-md-6 offset-md-3">   
+                        <div class="col-md-6 offset-md-3">
                             <form action="<?=base_url();?>index.php/admin/change_password" id="changePsw" method="post">
                                 <p class="text-center display-5 mt-4">Change password</p>
                                 <div class="alert-success"><?php echo isset($success)?$success:""; ?></div>

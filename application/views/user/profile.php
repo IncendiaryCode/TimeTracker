@@ -33,17 +33,12 @@ $this->load->helper('url_helper');
                         <div class="col-md-2 offset-md-2 col-6 offset-3 text-center">
                             <label class="cabinet center-block">
                                 <figure>
-                                    <img src="<?=base_url().USER_UPLOAD_PATH.$res['profile'];?>" class="rounded-circle text-center gambar img-thumbnail" id="item-img-output" width="200px;" height="200px;" />
+                                    <img src="<?=base_url().USER_UPLOAD_PATH.$res['profile'];?>" class="rounded-circle text-center gambar img-thumbnail" id="item-img-output"  />
                                     <figcaption><i class="fa fa-camera img-icon"></i></figcaption>
                                 </figure>
-                                <input type="file" class="item-img file center-block" name="change_img" />
-                            </label>
-                            <div class="edit">
-                                <!-- <div class="img-icon">
-                                    <a href="#" class="text-white m-0"><i class="change-image fas fa-camera" data-toggle="modal" data-target="#changeimage"></i></a>
-                                </div> -->
-                            </div>
-                            
+                                <input type="file" class="item-img file center-block" name="change_img" id = "change-img" />
+                                <input type="hidden" name="croped_pointed" id = "cropped-pointed" />
+                            </label>                          
                         </div>
                         <div class="col-md-6 offset-md-2">
                             <div class="row mr-5">
@@ -100,33 +95,40 @@ $this->load->helper('url_helper');
                     </div>
                 </div>
             </div><hr>
-            <div class="row">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="text-right input-group col-md-3 offset-md-9 pt-4 " id = "year-picker">
-                            <div class="input-group date">
-                                <input type="text" class="form-control datepicker year-chart" id="year-chart" max =<?=date('YYYY');?> >
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <button type="button" class="btn fa fa-calendar p-0"></button>
-                                    </span>
+            <div class="row profile-chart">
+            <div class="col-md-6 offset-md-1 col-12 text-left">
+                        <span class="text-right input-group col-md-3 offset-md-9" id = "year-picker">
+                                <div class="input-group date">Time spent for the year
+                                    <input readonly="" type="text" class="ml-2 mb-2 p-0 datepicker year-chart border-0 text-primary" id="year-chart" max =<?=date('YYYY');?> >
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i type="button" class="btn p-0 fas fa-angle-down text-primary"></i>
+                                        </span>
+                                    </div>
                                 </div>
+                        </span>
+                </div>
+                <!-- <div class="col-12">
+                    <div class="text-right input-group col-md-3 offset-md-9 pt-4 " id = "year-picker">
+                        <div class="input-group date">
+                            <input type="text" class="form-control datepicker year-chart" id="year-chart" max =<?=date('YYYY');?> >
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <button type="button" class="btn fa fa-calendar p-0"></button>
+                                </span>
                             </div>
                         </div>
                     </div>
-                </div>
-                    <div class="col-md-10 offset-md-1">
-                        <canvas id="user_prof_chart" height="100px;" class="mb-5"></canvas>
-                        <p class="text-center" id="profile-chart-error"></p>
-                    </div>
+                </div> -->
+                <div class="col-md-10 offset-md-1">
+                    <canvas id="user_prof_chart" height="100px;" class="mb-5"></canvas>
+                    <div class="col-12  text-center profile-chart-nodata">
+                        <img src="http://www.timetracker.com//assets/images/no-data.png?raw=true" class="img-fluid animated fadeIn">
+                    </div> 
+                    <h5  class="text-center font-weight-normal" id="profile-chart-error"></h5>
                 </div>
             </div>
-
-
-            
-            
-                        
-                        
+        </div>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <?php
         if(!empty($GLOBALS['dark_mode'])){

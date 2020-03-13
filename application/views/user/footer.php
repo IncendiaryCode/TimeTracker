@@ -61,8 +61,8 @@ $name = $this->session->userdata('username');
             </div>
                 <p id="punch-out-invalid" class="text-danger"></p>
             <div class="modal-footer text-center">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <button type="submit" class="btn btn-primary" id="punch-out">Yes</button>
+                <button type="button" class="btn btn-secondary col-6" data-dismiss="modal">No</button>
+                <button type="submit" class="btn btn-primary col-6" id="punch-out">Yes</button>
             </div>
         </div>
     </div>
@@ -101,8 +101,8 @@ $name = $this->session->userdata('username');
                     <p class="text-center text-danger" id="old-date-error"></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary stop-now-modal" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary stop-now-modal" id="save-changes">Save changes</button>
+                    <button type="button" class="btn btn-primary  col-6 stop-now-modal" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary col-6 stop-now-modal" id="save-changes">Save changes</button>
                 </div>
             </form>
         </div>
@@ -120,8 +120,8 @@ $name = $this->session->userdata('username');
                 <div id="upload-demo" class="center-block"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" id="cropImageBtn" class="btn btn-primary">Crop</button>
+                <button type="button" class="btn btn-secondary col-6" data-dismiss="modal">Close</button>
+                <button type="button" id="cropImageBtn" class="btn btn-primary col-6">Done</button>
             </div>
         </div>
     </div>
