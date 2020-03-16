@@ -22,7 +22,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <a href="<?= base_url(); ?>index.php/admin/add_users" class="btn btn-primary btn-block"><i class="fas fa-plus"></i> User</a>
                         </div>
                         <div class="col-6">
-                            <a href="<?= base_url(); ?>index.php/admin/load_snapshot?type=user" class="btn btn-primary btn-block">Details</a>
+                            <a href="<?= base_url(); ?>index.php/admin/load_snapshot?type=user" class="btn btn-primary btn-block details">Details</a>
                         </div>
                     </div>
                 </div>
@@ -49,7 +49,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <a href="<?= base_url(); ?>index.php/admin/add_projects" class="btn btn-primary btn-block"><i class="fas fa-plus"></i> Project</a>
                         </div>
                         <div class="col-6">
-                            <a href="<?= base_url(); ?>index.php/admin/load_snapshot?type=project" class="btn btn-primary btn-block">Details</a>
+                            <a href="<?= base_url(); ?>index.php/admin/load_snapshot?type=project" class="btn btn-primary btn-block details">Details</a>
                         </div>
                     </div>
                 </div>
@@ -74,7 +74,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <a href="<?= base_url(); ?>index.php/admin/load_add_task" class="btn btn-primary btn-block"><i class="fas fa-plus"></i> Task</a>
                         </div>
                         <div class="col-6">
-                            <a href="<?= base_url(); ?>index.php/admin/load_task_snapshot" class="btn btn-primary btn-block">Details</a>
+                            <a href="<?= base_url(); ?>index.php/admin/load_task_snapshot" class="btn btn-primary btn-block details">Details</a>
                         </div>
                     </div>
                 </div>

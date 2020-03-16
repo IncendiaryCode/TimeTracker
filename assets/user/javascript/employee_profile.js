@@ -1,4 +1,5 @@
 var user_profile_chart;
+var table;
 function __draw_profile_chart(res) {
 	var user_chart = document.getElementById('user_prof_chart').getContext('2d');
 	gradient = user_chart.createLinearGradient(0, 0, 0, 300);
@@ -105,10 +106,121 @@ function load_year_chart() {
 	});
 }
 
+function callLoginTableData(start_date, end_date) {
+	table = $('#login-lists-datatable').DataTable({
+		processing: true,
+		serverSide: true,
+		responsive: true,
+		bDestroy: true,
+		"searching": false,
+		ajax: {
+			url: timeTrackerBaseURL + 'index.php/user/user_login_data',
+			type: 'POST',
+			data: { from: start_date, to: end_date },
+			dataSrc: function(res) {
+				if (res['status'] == false) {
+					$('#login-lists-datatable').empty();
+					document.getElementById('login-tabel-error').innerHTML = 'No results found';
+				} else {
+					document.getElementById('login-tabel-error').innerHTML = ' ';
+				}
+				return res.log_data;
+			}
+		},
+		order: [ [ 0, 'desc' ] ],
+		columnDefs: [
+			{
+				targets: 0,
+				render: function(data, type, row, meta) {
+					return row['login_date'];
+				}
+			},
+			{
+				targets: 1,
+				render: function(data, type, row, meta) {
+					return row['login_time'];
+				}
+			},
+			{
+				targets: 2,
+				render: function(data, type, row, meta) {
+					if (row['logout_time'] != '--') return row['logout_time'].split(' ')[1];
+					else {
+						return 'Not ended';
+					}
+				}
+			},
+			{
+				targets: 3,
+				render: function(data, type, row, meta) {
+					return row['total_time'];
+				}
+			}
+		]
+	});
+	var filteredData = table.columns([ 0, 1 ]).data().flatten().filter(function(value, index) {
+		return value > 20 ? true : false;
+	});
+}
+
+function validate_login_filters() {
+	var check_dates = moment(document.getElementById('dateStart').value).isAfter(document.getElementById('dateEnd').value);
+	var check_end_date = moment(document.getElementById('dateEnd').value).isAfter(moment());
+	var check_start_date = moment(document.getElementById('dateStart').value).isAfter(moment());
+
+	document.getElementById('dateEnd').value = moment().format('YYYY-MM-DD');
+	document.getElementById('start-time-error').innerHTML = '';
+
+	if (check_dates) {
+		return 'Start date cannot be greater than end date';
+	} else if (check_start_date) {
+		return 'Start date cannot be greater than today';
+	} else if (check_end_date) {
+		return 'End date cannot be greater than today';
+	} else {
+		return true;
+	}
+}
+
 $(document).ready(function() {
 	$('#year-chart').change(function() {
 		load_year_chart();
 	});
+
+	// data table for login_activtities
+	callLoginTableData();
+	$('#login-date-filter .input-group.date').datepicker({
+		weekStart: 1,
+		autoclose: true,
+		format: 'yyyy-mm-dd',
+		todayHighlight: true
+	});
+
+	if (document.getElementById('dateStart')) {
+		$('#dateStart').change(function() {
+			var validate_filter = validate_login_filters();
+			if (validate_filter != true) {
+				document.getElementById('start-time-error').innerHTML = validate_filter;
+			} else {
+				document.getElementById('start-time-error').innerHTML = '';
+				callLoginTableData(document.getElementById('dateStart').value, document.getElementById('dateEnd').value);
+			}
+		});
+		$('#dateEnd').change(function() {
+			if (document.getElementById('dateStart').value == '') {
+				document.getElementById('start-time-error').innerHTML = 'Please enter Start date';
+			} else {
+				var validate_filter_e = validate_login_filters();
+				if (validate_filter_e != true) {
+					document.getElementById('start-time-error').innerHTML = validate_filter_e;
+				} else {
+					document.getElementById('start-time-error').innerHTML = '';
+					callLoginTableData(document.getElementById('dateStart').value, document.getElementById('dateEnd').value);
+				}
+			}
+		});
+	}
+
 	var emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 	if (document.getElementById('profile-error')) document.getElementById('profile-error').innerHTML = ' ';
@@ -118,7 +230,6 @@ $(document).ready(function() {
 	}
 
 	// Start upload preview image
-	// TODO
 	var $uploadCrop, tempFilename, rawImg, imageId, cropped_points;
 	function readFile(input) {
 		if (input.files && input.files[0]) {
@@ -160,11 +271,11 @@ $(document).ready(function() {
 		$('#cancelCropBtn').data('id', imageId);
 		readFile(this);
 	});
-	
+
 	$('#cropImagePop').on('update.croppie', function(ev, cropData) {
 		cropped_points = cropData['points'];
 	});
-	
+
 	$('#cropImageBtn').on('click', function(ev) {
 		$uploadCrop
 			.croppie('result', {
@@ -194,7 +305,7 @@ $(document).ready(function() {
 				}
 			}
 			document.getElementById('profile-error').innerHTML = ' ';
-			document.getElementById('croped-pointed').value = cropped_points;
+			document.getElementById('cropped-points').value = cropped_points;
 			return true;
 		};
 	}

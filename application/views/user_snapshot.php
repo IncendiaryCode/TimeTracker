@@ -81,7 +81,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <?php } ?>
     </div>
 </div>
-
 <div class="modal fade" id="delete-entry" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

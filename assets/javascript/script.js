@@ -70,13 +70,15 @@ if (loginForm) {
 		var validateForm = new Validation(e.currentTarget);
 		var finalValue = validateForm.correctCheck();
 		if (finalValue.isValid == true) {
-			
-			if(document.getElementById("Username").value != undefined)
+			if(document.getElementById("Username"))
 			{
-			var id = document.getElementById("Username").value;
+				if(document.getElementById("Username").value != undefined)
+				{
+					var id = document.getElementById("Username").value;
+				}
+				localStorage.setItem("id", id);
+				document.getElementById("Username-error").value = " ";
 			}
-			localStorage.setItem("id", id);
-			document.getElementById("Username-error").value = " ";
 			return true;
 		} else return false;
 	};

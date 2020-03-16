@@ -37,7 +37,7 @@ $this->load->helper('url_helper');
                                     <figcaption><i class="fa fa-camera img-icon"></i></figcaption>
                                 </figure>
                                 <input type="file" class="item-img file center-block" name="change_img" id = "change-img" />
-                                <input type="hidden" name="croped_pointed" id = "cropped-pointed" />
+                                <input type="hidden" name="croped_pointed" id = "cropped-points" />
                             </label>                          
                         </div>
                         <div class="col-md-6 offset-md-2">
@@ -48,7 +48,7 @@ $this->load->helper('url_helper');
                                 <div class="col-8">
                                     <h4 class="employee-name">
                                         <input type="text" class="form-control-file border-top-0 border-left-0 border-right-0" name="profile-name" id="profile-name" value = "<?php echo $res['name'];?>">
-                                    </h4>  
+                                    </h4>
                                 </div>
                                 <div class="col-4 pt-3">
                                     <p class="profile-entry">Email</p>

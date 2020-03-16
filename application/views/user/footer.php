@@ -15,7 +15,7 @@ $name = $this->session->userdata('username');
             <ul class="text-center">
                 <!-- profile options -->
                 <li id="empplyee-profile"><a href="<?= base_url(); ?>index.php/user/load_my_profile">My profile</a></li>
-                <li><a href="<?= base_url(); ?>user/load_employee_activities">My activities</a></li>
+                <li><a href="<?= base_url(); ?>user/login_activity">Login activities</a></li>
                 <li><a href="<?= base_url(); ?>login/logout">Logout</a></li>
             </ul>
         </div>
@@ -133,6 +133,7 @@ $name = $this->session->userdata('username');
 <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="//unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+<script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script src="<?= base_url(); ?>assets/plugins/bxslider/js/jquery.bxslider.min.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/momet_copy.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/croppie.min.js?v=<?= VERSION ?>"></script>

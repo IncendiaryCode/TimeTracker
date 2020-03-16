@@ -510,6 +510,10 @@ function draw_customized_chart(res) {
 			}
 		}
 		for (var j = 0; j < pixels_print.length; j++) {
+			if(pixels_print[j][3].length > 40)
+			{
+				pixels_print[j][3] = pixels_print[j][3].slice(0,40)+'...';
+			}
 			printChart(pixels_print[j][0], pixels_print[j][1], pixels_print[j][2], pixels_print[j][3], pixels_print[j][4], pixels_print[j][5], pixels_print[j][6], pixels_print[j][7]);
 		}
 	} else {

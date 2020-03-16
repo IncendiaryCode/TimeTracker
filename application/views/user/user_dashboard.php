@@ -268,7 +268,7 @@ if (!empty($task_info['login_run'])) { ?>
                     <form action="" id="update-punch-in" method="post">
                         <input type="hidden" id="login-id" name="" value="<?= $task_info['login_run']['id'] ?>"><!-- keep value as login id -->
                         <div class="modal-header text-center">
-                            <h5 class="modal-title">Punch out</h5>
+                            <h5 class="modal-title">Previous punch out</h5>
                         </div>
                         <div class="modal-body ">
                             <div class="input-group">
@@ -286,7 +286,7 @@ if (!empty($task_info['login_run'])) { ?>
                                     </div>
 
                                 <?php  } ?>
-                                <input class="check-for-utc form-control timerpicker-stop-now" type="text" name="time" id="punchout-time" placeholder="HH:MM">
+                                <input class="check-for-utc form-control timerpicker-stop-now" type="text" name="time" id="punchout-time" placeholder="HH:mm">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
                                 </div>

@@ -49,6 +49,23 @@ header {
 	color: #fff;
 	border: none;
 }
+#dashboard-stats .card-footer a {
+	background: none;
+	border-width: 1px;
+	border-style: solid;
+	border-color: rgba(255, 255, 255, 0.2);
+	line-height: 1.2;
+}
+
+#dashboard-stats .details {
+	border-color: rgba(255, 255, 255, 0.65) !important;
+	box-shadow: 1px 1px 2px #999;
+}
+
+#dashboard-stats .details:hover {
+	border-color: rgba(255, 255, 255, 1) !important;
+}
+
 
 #dashboard-stats .card .card-body {
 	padding: 2.25rem;
@@ -74,14 +91,6 @@ header {
 
 #dashboard-stats .card .card-footer {
 	padding: 1.25rem 2rem;
-}
-
-#dashboard-stats .card-footer a {
-	background: none;
-	border-width: 1px;
-	border-style: solid;
-	border-color: rgba(255, 255, 255, 0.2);
-	line-height: 1.2;
 }
 
 #dashboard-stats .card-footer a:hover {
@@ -325,7 +334,20 @@ header.main-header h1 {
 	color: black;
 	padding: 12px;
 	position: absolute;
-    top: -50px;
+	top: -50px;
+	border: 1px solid #ccc;
+}
+.img-icon {
+	position: absolute;
+	top: 31%;
+	left: 53%;
+	opacity: 1;
+	z-index: 1;
+}
+#profile-pic
+{
+	border: 1px solid #ccc;
+	border-color: #ccc;
 }
 
 .items:hover {
@@ -362,14 +384,6 @@ header.main-header h1 {
 
 #main-navbar .navbar {
 	padding: 1rem;
-}
-
-.img-icon {
-	position: absolute;
-	top: 31%;
-	left: 52%;
-	opacity: 1;
-	z-index: 1;
 }
 @media (max-width: 700px) {
 	.img-icon {
@@ -517,4 +531,11 @@ table.dataTable
 		width: 250px;
 		height: 70px;
 	}
+}
+table.dataTable thead th, table.dataTable thead td
+{
+	border: 2px solid #666;
+}
+table.dataTable.no-footer {
+    border-bottom: none;
 }

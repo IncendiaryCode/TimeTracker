@@ -112,7 +112,7 @@ function callTaskTableData(start_date, end_date, project, user) {
 				{
 					targets: 0,
 					render: function(data, type, row, meta) {
-						return row[0];
+						return '<a href="../admin/task_details_page?task_id=' + row[9] + '">' + row[0] + '</a>';
 					}
 				},
 				{
@@ -252,8 +252,8 @@ $(document).ready(function() {
 		e.preventDefault();
 		document.getElementById('dateStart').value = '';
 		document.getElementById('dateEnd').value = '';
-		document.getElementById('select-prt').value = 'Select project';
-		document.getElementById('select-user').value = 'Select user';
+		document.getElementById('select-prt').value = 'All projects';
+		document.getElementById('select-user').value = 'All users';
 		$(this).hide();
 		document.getElementById('task-filter-error').innerHTML =  '';
 		callTaskTableData();
@@ -267,10 +267,10 @@ $(document).ready(function() {
 
 
 		var check_dates = moment(start_date).isAfter(end_date);
-		var check_start_date = moment(end_date).isAfter(moment());
-		var check_end_date = moment(start_date).isAfter(moment());
+		var  check_start_date = moment(start_date).isAfter(moment());
+		var check_end_date = moment(end_date).isAfter(moment());
 
-		if ((start_date == '' || start_date == '') && (end_date == '' || end_date == '') && document.getElementById('select-prt').value == 'Select project' && document.getElementById('select-user').value == 'Select user') {
+		if ((start_date == '' || start_date == '') && (end_date == '' || end_date == '') && document.getElementById('select-prt').value == 'All projects' && document.getElementById('select-user').value == 'All users') {
 			document.getElementById('task-filter-error').innerHTML = 'Apply some filters..';
 		}
 		else if(check_dates)
@@ -283,7 +283,7 @@ $(document).ready(function() {
 		}
 		else if(check_end_date)
 		{
-			document.getElementById('task-filter-error').innerHTML = 'Start date cannot be greater than today';
+			document.getElementById('task-filter-error').innerHTML = 'End date cannot be greater than today';
 		}
 		else if ((end_date == ' ' || end_date == '') && start_date != '') {
 			document.getElementById('dateEnd').value = moment().format('YYYY-MM-DD');
@@ -295,16 +295,15 @@ $(document).ready(function() {
 			document.getElementById('task-filter-error').innerHTML = 'Please enter start date';
 		}
 		else {
-			if (document.getElementById('select-prt').value != 'Select project') {
+			if (document.getElementById('select-prt').value != 'All projects') {
 				project = document.getElementById('select-prt').value;
 			}
-			if (document.getElementById('select-user').value != 'Select user') {
+			if (document.getElementById('select-user').value != 'All users') {
 				user = document.getElementById('select-user').value;
 			}
-			
-				callTaskTableData(start_date, end_date, project, user);
-				document.getElementById('task-filter-error').innerHTML = ' ';
-				$('.clear-filter').show();
+			callTaskTableData(start_date, end_date, project, user);
+			document.getElementById('task-filter-error').innerHTML = ' ';
+			$('.clear-filter').show();
 		}
 	});
 });

@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-md-3 col-6">
                     <select class="custom-select" id="select-prt">
-                        <option selected>Select project</option>
+                        <option selected>All projects</option>
                     <?php 
                     if(!empty($projects))
                     {
@@ -67,7 +67,7 @@
                 </div>
                 <div class="col-md-3 col-6">
                     <select class="custom-select" id ="select-user">
-                        <option selected>Select user</option>
+                        <option selected>All users</option>
                         <?php 
                         if(!empty($users)) {
                             foreach($users as $usr) { ?>
@@ -104,7 +104,7 @@
          </div>
      </div>
  </div>
- <div class="modal" id="delete-task-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+ <div class="modal fade" id="delete-task-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
      <div class="modal-dialog modal-dialog-centered-">
          <div class="modal-content">
              <div class="modal-header">
