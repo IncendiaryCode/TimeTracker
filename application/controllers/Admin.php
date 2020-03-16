@@ -370,7 +370,7 @@
 		        }
 		        else {
 		        //if image file is not present, assign default image to $picture variable
-		            $picture = 'project.png';
+		            $picture = 'default.png';
 		        }
 	            $result=$this->dashboard_model->add_projects($picture); //insert project into db
 	            if($result == FALSE){ //if not added, redirect to add project page with error message
@@ -743,6 +743,13 @@
 			}else{
 				return true;
 			}
+		}
+
+		//Load task details page to display details of selected task
+		public function task_details_page(){
+			$task_id = $this->input->get('task_id');
+			$task_data = $this->dashboard_model->get_task_data($task_id);
+			$this->load->template('task_details',$task_data,$this->login_type);
 		}
 	}
 ?>

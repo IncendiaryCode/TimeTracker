@@ -14,7 +14,6 @@ class User_model extends CI_Model {
         $this->load->database();
         $this->load->helper('url');
         $this->load->library('session');
-        $userid = $this->session->userdata('userid');
     }
 
     /**
@@ -27,13 +26,13 @@ class User_model extends CI_Model {
      */
     public function start_login_timer(){
         //check whether login data already present in logindetails table
-        $this->db->where(array('task_date' => date('Y-m-d'),'user_id' => $this->session->userdata('userid')));
+        $this->db->where(array('task_date' => date('Y-m-d'),'user_id' => $this->userid));
         $query_check = $this->db->get('login_details');
         if ($query_check->num_rows() > 0) { //if present, update the login timings
             $result = $query_check->row_array();
             return TRUE;
         }else{ //if login data is not present, insert a new row into login details table
-            $login_data = array('user_id'=>$this->session->userdata('userid'),
+            $login_data = array('user_id'=>$this->userid,
                         'task_date'=>date('Y-m-d'),
                         'start_time'=>date('Y-m-d H:i:s',strtotime($this->input->post('start-login-time'))),
                         'created_on'=>date('Y-m-d H:i:s')
@@ -58,10 +57,10 @@ class User_model extends CI_Model {
      */
     public function task_status() {
         $details =array();
-        $userid = $this->session->userdata('userid');
+        $userid = $this->userid;
 
         //send task details to user dashboard
-        $this->db->select('*');
+        $this->db->select('d.start_time');
         $this->db->from('time_details AS d');
         $this->db->join('task AS t', 't.id = d.task_id');
         $this->db->where(array('d.user_id' => $userid, 'd.total_minutes' => '0'));
@@ -114,6 +113,16 @@ class User_model extends CI_Model {
             $details['login_run'] = $login_check->row_array();
             $r_start = $this->convert_date($details['login_run']['start_time']);
             $details['login_run']['start_time'] = ($r_start) ? $r_start : $details['login_run']['start_time'];
+            if($details['task_run'] == ''){
+                $this->db->select_max('end_time');
+                $this->db->from('time_details');
+                $this->db->where('task_date',date('Y-m-d', strtotime("-1 days")));
+                $this->db->where('user_id',$userid);
+                $get_task_end_time = $this->db->get();
+                if($get_task_end_time->num_rows() > 0){
+                    $details['task_end_time'] = $this->convert_date($get_task_end_time->row()->end_time);
+                }
+            }
         }else{
             $details['login_run'] = '';
         }
@@ -128,7 +137,7 @@ class User_model extends CI_Model {
      * returns $data
      */
     public function get_task_details($sort_type, $date = '', $filter_type = '', $filter_value = '', $today_filter = '') {
-        $userid = $this->session->userdata('userid');
+        $userid = $this->userid;
         
         $this->db->select('p.name,IFNULL(d.start_time,t.created_on) AS started,d.start_time,p.image_name,p.color_code,t.task_name,t.id AS task_id');
         $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task", FALSE); //get running tasks of the user
@@ -356,7 +365,7 @@ class User_model extends CI_Model {
      * returns $tasks
      */
     public function running_task_data() {
-        $userid = $this->session->userdata('userid');
+        $userid = $this->userid;
         $this->db->select('d.task_id,d.start_time,t.task_name,t.description');
         //$this->db->select('count(IF(d.total_minutes=0,1,0)) AS running_task_count');
         $this->db->from('time_details AS d');
@@ -439,7 +448,7 @@ class User_model extends CI_Model {
      * returns $result
      */
     public function stop_timer($req_data) {
-        $this->db->select('*');
+        $this->db->select('id,task_date,start_time');
         $this->db->from('time_details');
         $this->db->where(array('task_id' => $req_data['task_id'], 'user_id' => $req_data['userid'], 'total_minutes' => '0'));
         $this->db->order_by("id", "desc");
@@ -490,6 +499,7 @@ class User_model extends CI_Model {
             return false;
         }
     }
+
     /**
      * Function to get Activity Chart Data for daily chart
      * 
@@ -761,32 +771,6 @@ class User_model extends CI_Model {
     }
 
     /**
-     * Function to update profile picture
-     * 
-     * @param $picture
-     * 
-     * returns TRUE/FALSE
-     */
-    public function submit_profile($picture) {
-        $useremail = $this->session->userdata('email');
-        $this->db->where('email', $useremail);
-        $query = $this->db->update('users', array('profile'=>$picture));
-        if (!$query) {
-            return false;
-        } else {
-            $this->db->where('email', $useremail);
-            $query2 = $this->db->get('users');
-            if ($query2->num_rows() > 0) {
-                $row = $query2->row();
-                $this->session->set_userdata('user_profile', $row->profile);
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
-    /**
      * Function to get project name into the add task page
      * 
      * @param void
@@ -795,11 +779,10 @@ class User_model extends CI_Model {
      */
     public function get_project_name() {
         $result = array();
-        $userid = $this->session->userdata('userid');
         $this->db->select('p.id,p.name');
         $this->db->from('project AS p');
         $this->db->join('project_assignee AS ps', 'ps.project_id = p.id');
-        $this->db->where(array('ps.user_id' => $userid));
+        $this->db->where(array('ps.user_id' => $this->userid));
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             $result = $query->result_array();
@@ -816,7 +799,7 @@ class User_model extends CI_Model {
      */
     public function get_module_name($project_id) {
         $p_id = $project_id;
-        $query = $this->db->query("SELECT * FROM project_module WHERE project_id = {$p_id} OR project_id = 0");
+        $query = $this->db->query("SELECT id,name FROM project_module WHERE project_id = {$p_id} OR project_id = 0");
         $result = $query->result();
         return $result;
     }
@@ -829,12 +812,11 @@ class User_model extends CI_Model {
      * returns TRUE/FALSE
      */
     public function task_exists() {
-        $userid = $this->session->userdata('userid');
         $task_name = $this->input->post('task_name');
         $this->db->select('t.task_name');
         $this->db->from('task As t');
         $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
-        $this->db->where(array('t.task_name' => $task_name, 'ta.user_id' => $userid, 't.project_id' => $this->input->post('project')));
+        $this->db->where(array('t.task_name' => $task_name, 'ta.user_id' => $this->userid, 't.project_id' => $this->input->post('project')));
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             $this->form_validation->set_message('task_exists', 'Task name exists.');
@@ -1060,7 +1042,7 @@ class User_model extends CI_Model {
      * returns $profile_data
      */
     public function my_profile($userid) {
-        $this->db->select('*');
+        $this->db->select('u.name,u.phone,u.email,u.profile');
         $this->db->select_sum('d.total_minutes', 'total_time');
         $this->db->from('users AS u');
         $this->db->join('time_details AS d', 'd.user_id = u.id');
@@ -1088,11 +1070,28 @@ class User_model extends CI_Model {
      * returns TRUE/FALSE
      */
     public function edit_profile($data){
-        $this->db->where('id',$this->session->userdata('userid'));
-        $update = $this->db->update('users',array('phone'=>$data['phone'],'name'=>$data['name']));
-        if ($this->db->affected_rows() == 1) {
+        $userid = $this->userid;
+
+        //set value for profile column
+        if(isset($data['profile_photo'])){
+            $profile_pic = $data['profile_photo'];
+        }else{
+            $get_profile_image = $this->db->get_where('users',array('id'=>$userid));
+            if($get_profile_image->num_rows() > 0){
+                $profile_pic = $get_profile_image->row()->profile;
+            }else{
+                $profile_pic = 'default.png';
+            }
+        }
+
+        //update user profile data
+        $this->db->where('id',$userid);
+        $update = $this->db->update('users',array('phone'=>$data['phone'],'name'=>$data['name'],'profile'=>$profile_pic,'modified_on'=>date('Y-m-d H:i:s')));
+        if ($update) {
             $this->session->unset_userdata('username');
+            $this->session->unset_userdata('user_profile');
             $this->session->set_userdata('username',$data['name']);
+            $this->session->set_userdata('user_profile',$profile_pic);
             return true;
         } else {
             return false;
@@ -1108,11 +1107,10 @@ class User_model extends CI_Model {
      * returns $values, if data is present in the given year
      */
     public function user_chart_data($year) {
-        $userid = $this->session->userdata('userid');
+        $userid = $this->userid;
         $year_start = date($year.'-01-01');
         $year_end = date($year.'-12-31');
-        $this->db->select('*');
-        $this->db->select_sum('total_minutes', 't_minutes');
+        $this->db->select('id');
         $this->db->from('time_details');
         $this->db->where(array('user_id' => $userid));
         $this->db->where('end_time IS NOT NULL');
@@ -1128,7 +1126,6 @@ class User_model extends CI_Model {
         foreach ($months as $month) {
             $start = date($month.'-01');
             $end = date($month.'-t');
-            $this->db->select('*');
             $this->db->select_sum('total_minutes', 't_minutes');
             $this->db->from('time_details');
             $this->db->where(array('user_id' => $userid));
@@ -1526,6 +1523,15 @@ class User_model extends CI_Model {
         }
     }
 
+    /**
+     * Function to convert UTC time to LOCAL time
+     *
+     * @param $datetime
+     *
+     * returns converted datetime IF, $datetime exists
+     *
+     * returns FALSE IF $datetime is empty
+     */
     public function convert_date($date)
     {
         if (($this->session->userdata('user_tz') != NULL)) {
@@ -1545,7 +1551,13 @@ class User_model extends CI_Model {
         return FALSE;
     }
 
-    //validate time format
+    /**
+     * Function to validate time format
+     *
+     * @param $input_time
+     *
+     * returns TRUE/FALSE
+     */
     public function validate_time($str){
         if($str == 'Invalid date'){
             return FALSE;
@@ -1571,6 +1583,13 @@ class User_model extends CI_Model {
         }
     }
 
+    /**
+     * Function to update user details
+     *
+     * @params $userid and $data
+     *
+     * returns TRUE/FALSE
+     */
     public function update_user_details($userid,$data){
         $this->db->where(array('id' => $userid));
         $query = $this->db->update('users',$data);
@@ -1581,6 +1600,15 @@ class User_model extends CI_Model {
         }
     }
 
+    /**
+     * Function to get user details
+     *
+     * @param $userid
+     *
+     * returns $data IF, user-data exists
+     *
+     * returns FALSE IF data does not exist
+     */
     public function get_user_details($userid){
 
         $this->db->select('name,phone,profile');
@@ -1596,14 +1624,18 @@ class User_model extends CI_Model {
         }
     }
 
-
-    //Get today's running tasks for punchout popup
+    /**
+     * Function to get today's running tasks for punchout popup
+     *
+     * @param void
+     *
+     * returns TRUE/FALSE
+     */
     public function running_tasks_today(){
-        $userid = $this->session->userdata('userid');
         $this->db->select('id');
         $this->db->from('time_details');
         $this->db->where('end_time IS NULL');
-        $this->db->where('user_id',$userid);
+        $this->db->where('user_id',$this->userid);
         $running_tasks = $this->db->get();
         if($running_tasks->num_rows() > 0){
             return true;
@@ -1612,14 +1644,18 @@ class User_model extends CI_Model {
         }
     }
 
-
-    //check whether user punched out or not
+    /**
+     * Function to check whether user punched out or not
+     *
+     * @param void
+     *
+     * returns TRUE/FALSE
+     */
     public function check_user_punchout(){
-        $userid = $this->session->userdata('userid');
         $this->db->select('id');
         $this->db->from('login_details');
         $this->db->where('end_time IS NOT NULL');
-        $this->db->where(array('task_date'=>date('Y-m-d'),'user_id'=>$userid));
+        $this->db->where(array('task_date'=>date('Y-m-d'),'user_id'=>$this->userid));
         $punch_in_check = $this->db->get();
         if($punch_in_check->num_rows() > 0){
             return true;
@@ -1627,6 +1663,7 @@ class User_model extends CI_Model {
             return false;
         }
     }
+
     /**
      * Function to get Activity Chart Data for devices
      * 
@@ -1714,6 +1751,7 @@ class User_model extends CI_Model {
             return $chart_data;
         }
     }
+
     /**
      * Function to get Activity Chart Data for weekly chart
      * 
@@ -1730,7 +1768,17 @@ class User_model extends CI_Model {
         }
         return $data;
     }
- public function validate_task_id($task_id,$user_id){
+
+    /**
+     * To validate task-id while loading edit task page
+     *
+     * Task-id is the id present in the url of loading edit task page
+     *
+     * @params $task_id and $user_id
+     *
+     * returns TRUE/FALSE
+     */
+    public function validate_task_id($task_id,$user_id){
         $task_id_check = $this->db->get_where('task_assignee',array('task_id'=>$task_id,'user_id'=>$user_id));
         if($task_id_check->num_rows() > 0){
             return true;
@@ -1754,5 +1802,80 @@ class User_model extends CI_Model {
         }
         return $data;
     }
+
+    public function login_data($user_data){
+        $draw = intval($user_data["draw"]);
+        $start = intval($user_data["start"]);
+        $length = intval($user_data["length"]);
+        $order = $user_data["order"];
+        $col = 0;
+        $dir = "";
+        if(!empty($order))
+        {
+            foreach($order as $o)
+            {
+                $col = $o['column'];
+                $dir= $o['dir'];
+            }
+        }
+
+        if($dir != "asc" && $dir != "desc")
+        {
+            $dir = "desc";
+        }
+        $valid_columns = array(
+            0=>'task_date',
+            1=>'start_time',
+            2=>'end_time'
+        );
+        if(!isset($valid_columns[$col]))
+        {
+            $order = null;
+        }
+        else
+        {
+            $order = $valid_columns[$col];
+        }
+        if($order !=null)
+        {
+                $this->db->order_by($order, $dir);
+        }
+        $this->db->select('task_date,start_time,end_time');
+        $this->db->from('login_details');
+        $this->db->where(array('user_id'=>$this->userid));
+        if(!empty($user_data['from']) && !empty($user_data['to'])){
+            $this->db->where('task_date BETWEEN "'.$user_data['from'].'" AND "'.$user_data['to'].'"');
+        }
+        $this->db->limit($length,$start);
+        $login_data = $this->db->get();
+        if($login_data->num_rows() > 0){
+            $login_details = $login_data->result_array();
+            $this->load->model('dashboard_model');
+            foreach($login_details AS $l_detail){
+                if($l_detail['end_time'] != ''){
+                    $time_elapsed = strtotime($l_detail['end_time']) - strtotime($l_detail['start_time']);
+                    $total_minutes = abs($time_elapsed)/60;
+                    $format_time = $this->dashboard_model->format_time($total_minutes);
+                }
+                $log_data[] = array('login_date'=>$l_detail['task_date'],'login_time'=>$this->convert_date($l_detail['start_time']),'logout_time'=>($l_detail['end_time'])?$this->convert_date($l_detail['end_time']):'--','total_time'=>($total_minutes)?$format_time:'--');
+            }
+        }
+        else{
+            $log_data = '';
+        }
+        return $log_data;
+    }
+
+    public function total_data_count($user_data){
+        $this->db->select('task_date,start_time,end_time');
+        $this->db->from('login_details');
+        $this->db->where(array('user_id'=>$this->userid));
+        if(!empty($user_data['from']) && !empty($user_data['to'])){
+            $this->db->where('task_date BETWEEN "'.$user_data['from'].'" AND "'.$user_data['to'].'"');
+        }
+        return $this->db->get()->num_rows();
+
+    }
+
 }
 ?>

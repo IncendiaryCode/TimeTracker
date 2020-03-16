@@ -2,16 +2,17 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class User extends CI_Controller
 {
+    public $userid;
     //User panel constructor
     public function __construct()
     {
         parent::__construct();
+        $this->load->library('session');
+        $this->userid = $this->session->userdata('userid');
         $this->load->model('user_model');
         $this->load->helper('url');
         $this->load->helper('url_helper');
         //$this->load->driver('session');
-        $this->load->library('session');
-
         if($this->session->userdata('logged_in') == FALSE || $this->session->userdata('user_type') == 'admin'){ //login check
             redirect('login/index','refresh'); //if not logged in, move to login page
         }
@@ -23,11 +24,11 @@ class User extends CI_Controller
         $this->load->library('form_validation');
         $this->load->helper('security');
         $this->load->library('upload');
+        $this->load->library('image_lib');
     }
     
     public function index()
     {
-        $userid = $this->session->userdata('userid');
         $task_details['task_info'] = $this->user_model->task_status(); //get details about login time, running tasks
         $task_details['project_list'] = $this->user_model->get_project_name();
         $this->load->template('user/user_dashboard',$task_details);
@@ -138,7 +139,7 @@ class User extends CI_Controller
     public function start_timer()
     {
         // $task_type   = $this->input->post('id');
-        $data['userid'] = $this->session->userdata('userid');
+        $data['userid'] = $this->userid;
 
         if($this->input->post('id')){
             $data['task_id'] = $this->input->post('id'); //task id is sent through ajax call
@@ -191,7 +192,7 @@ class User extends CI_Controller
     {
         $post_data = $this->input->post();
         //$end_time = (!empty($post_data['stop-end-time'])) ? $post_data['stop-end-time'] : '';//set end time if end time is sent
-        $data['userid'] = $this->session->userdata('userid');
+        $data['userid'] = $this->userid;
         $data['end_time'] = (isset($post_data['time']))?$post_data['time']:date('Y:m:d H:i:s');
         $data['task_desc'] = isset($post_data['task-description']) ? $post_data['task-description'] : '';//get task description if sent
         $data['flag'] = isset($post_data['flag']) ? $post_data['flag'] : '';//set flag if flag is sent
@@ -207,7 +208,7 @@ class User extends CI_Controller
             } else {
                 $output_result['flag']   = $result;
                 $output_result['status'] = TRUE;
-                $output_result['msg']    = "Timer stop.";
+                $output_result['msg']    = "Timer stopped.";
             }
             echo json_encode($output_result);
         } else {
@@ -259,12 +260,11 @@ class User extends CI_Controller
         if (isset($_POST['chart_type']) && isset($_POST['date'])) {
             $date = $_POST['date'];
             $chart_type = $_POST['chart_type'];
-            $userid = $this->session->userdata('userid');
             $filter = array();
             if($this->input->post('project_filter')){
                 $filter = json_decode($this->input->post('project_filter'));
             }
-            $chart_data = $this->user_model->get_activity($chart_type, $date, $userid, $filter); //get activity of the user for given arguments
+            $chart_data = $this->user_model->get_activity($chart_type, $date, $this->userid, $filter); //get activity of the user for given arguments
             echo json_encode($chart_data);
         }
         else
@@ -299,7 +299,7 @@ class User extends CI_Controller
         if (isset($_GET['t_id'])) {//if task id is sent, load edit task page
             $GLOBALS['page_title'] = 'Edit Task';
             $t_id = $this->input->get('t_id', TRUE);
-            $userid = $this->session->userdata('userid');
+            $userid = $this->userid;
             $valid_task_id = $this->user_model->validate_task_id($t_id,$userid);
             if($valid_task_id == TRUE){
                 $task_data = $this->user_model->get_task_info($t_id,$userid); //get task details for the requested task id
@@ -330,7 +330,7 @@ class User extends CI_Controller
             $this->session->set_flashdata('failure', $std);
             redirect('user/load_add_task');
         } else { //if inputs are valid, insert task information into db
-            $data['userid'] = $this->session->userdata('userid');
+            $data['userid'] = $this->userid;
             $data['project_module'] = $this->input->post('project_module');
             $data['project_id'] = $this->input->post('project');
             $data['task_name'] = $this->input->post('task_name');
@@ -352,7 +352,7 @@ class User extends CI_Controller
     {
         //form inputs validation
         $std ='';
-        $user_id = $this->session->userdata('userid');
+        $user_id = $this->userid;
         $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|xss_clean');
         if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to edit task page
             $t_id = $this->input->post('task_id', TRUE);
@@ -472,48 +472,11 @@ class User extends CI_Controller
         }
     }
 
-    //Upload profile
-    public function upload_profile()
-    {
-        if (!empty($_FILES['change_img']['name'])) { //if image file present, upload image file
-            $config['upload_path']   = USER_UPLOAD_PATH;
-            $config['allowed_types'] = 'gif|jpg|png|jpeg';
-            $config['overwrite']     = FALSE;
-            // $config['encrypt_name']  = TRUE;
-            $config['remove_spaces'] = TRUE;
-            $config['file_name']     = $_FILES['change_img']['name'];
-            $this->load->library('upload', $config);
-            $this->upload->initialize($config);
-            if ($this->upload->do_upload('change_img')) {
-                $uploadData = $this->upload->data();
-                $picture    = $uploadData['file_name']; //to update profile in db
-            } else {
-                //if image is not uploaded, print error message
-                $this->session->set_flashdata('failure', $this->upload->display_errors());
-                redirect('user/load_my_profile','refresh');
-            }
-        } else {
-            //if image file is not present, redirect to profile page
-            redirect('user/load_my_profile','refresh');
-        }
-        $this->user_model->submit_profile($picture);
-        if ($this->user_model->submit_profile($picture) == TRUE) {
-        //if update successful, redirect to profile page with success message
-            $this->session->set_flashdata('success', 'Profile picture updated successfully.');
-            redirect('user/load_my_profile','refresh');
-        }else{
-            //if update is unsuccessful, redirect with error message
-            $this->session->set_flashdata('failure', 'Profile picture not updated.');
-            redirect('user/load_my_profile','refresh');
-        }
-    }
-
     //Display User Profile Page
     public function load_my_profile()
     {
         $GLOBALS['page_title'] = 'My Profile';
-        $userid = $this->session->userdata('userid');
-        $data['res']           = $this->user_model->my_profile($userid); //get user profile details
+        $data['res']           = $this->user_model->my_profile($this->userid); //get user profile details
         if ($data['res'] != NULL) {
             $this->load->template('user/profile', $data);
         } else {
@@ -525,14 +488,62 @@ class User extends CI_Controller
     //Edit profile function to edit User name and phone number
     public function edit_profile()
     {
+        $cropped_points = $this->input->post('cropped-points');
+        $c_points = explode(',',$cropped_points);
+        $x_axis = $c_points[0];
+        $y_axis = $c_points[1];
         $user_data['name'] = $this->input->post('profile-name');
         $user_data['phone'] = $this->input->post('profile-ph');
+        if (!empty($_FILES['change_img']['name'])) { //if image file present, upload image file
+            $config['upload_path']   = USER_UPLOAD_PATH;
+            $config['allowed_types'] = 'gif|jpg|png|jpeg';
+            $config['overwrite']     = FALSE;
+            // $config['encrypt_name']  = TRUE;
+            $config['remove_spaces'] = TRUE;
+            $config['file_name']     = $_FILES['change_img']['name'];
+            $this->load->library('upload', $config);
+            /*if(!is_dir($config['upload_path'])){
+                mkdir($config['upload_path'], 0755, TRUE);
+            }*/
+            $this->upload->initialize($config);
+            if ($this->upload->do_upload('change_img')) {
+                $uploadData = $this->upload->data();
+                $picture    = $uploadData['file_name']; //to update profile in db
+                $user_data['profile_photo'] = $picture;
+                //print_r($uploadData);exit;
+
+                $config['image_library'] = 'gd2';
+                $config['source_image'] = $uploadData['full_path'];
+                $config['maintain_ratio'] = TRUE;
+                $config['x_axis'] = $x_axis;
+                $config['y_axis'] = $y_axis;
+                $img_dim = getimagesize($uploadData['full_path']);
+                $config['width'] = $img_dim[0];
+                $config['height'] = $img_dim[1];
+                $croped_image = base64_decode($_FILES['change_img']['name']);
+                $this->load->library('image_lib',$config);
+                $this->image_lib->initialize($config);
+                $this->image_lib->crop();
+
+                if(!($this->image_lib->crop())){
+                    $this->session->set_flashdata('failure', $this->image_lib->display_errors());
+                    redirect('user/load_my_profile','refresh');
+                }else{
+                    $user_data['profile_photo'] = $picture;
+                }
+            } else {
+                //if image is not uploaded, print error message
+                $this->session->set_flashdata('failure', $this->upload->display_errors());
+                redirect('user/load_my_profile','refresh');
+            }
+            
+        }
         $result = $this->user_model->edit_profile($user_data);
         if($result == TRUE){
             $this->session->set_flashdata('success', 'Profile data updated.');
             redirect('user/load_my_profile');
         } else {
-            $this->session->set_flashdata('err_msg', 'Unable to update profile data.');
+            $this->session->set_flashdata('failure', 'Unable to update profile data.');
             redirect('user/load_my_profile');
         }
     }
@@ -602,14 +613,13 @@ class User extends CI_Controller
                 $res['msg'] = "Unable to punchout the previous day punch in.";
             }
         }else{
-            $userid = $this->session->userdata('userid');
             $punchout_time = $this->input->post('punch_out_time');
             $running_tasks_result = $this->user_model->running_tasks_today();
             if($running_tasks_result == TRUE){
                 $res['status'] = FALSE;
                 $res['msg'] = "Please stop today's tasks before Punch-out.";
             }else{
-                $result = $this->user_model->update_logout_time_web($userid,$punchout_time);
+                $result = $this->user_model->update_logout_time_web($this->userid,$punchout_time);
                 if($result == TRUE){
                     $res['status'] = TRUE;
                     $res['msg'] = 'Punchout successful.';
@@ -625,9 +635,8 @@ class User extends CI_Controller
     public function delete_task_data()
     {
         //delete option
-        $user_rid = $this->session->userdata('userid');
         $table_id = $this->input->post('id');
-        $result = $this->user_model->delete_task_data($user_rid, $table_id);
+        $result = $this->user_model->delete_task_data($this->userid, $table_id);
         if($result == TRUE){
             $res['status'] = TRUE;
             $res['msg'] = 'Delete successful.';
@@ -636,6 +645,28 @@ class User extends CI_Controller
             $res['msg'] = 'Delete unsuccessful.';
         }
         echo json_encode($res);
+    }
+
+    public function login_activity(){
+        $GLOBALS['page_title'] = 'Login Activities';
+        $this->load->template('user/login_activities');
+    }
+
+    public function user_login_data(){
+        $user_data = $this->input->post();
+        $login_details = $this->user_model->login_data($user_data);
+        if($login_details == NULL){
+            $result['status'] = FALSE;
+            $result['log_data'] = array();
+        }else{
+            $total_data = $this->user_model->total_data_count($user_data);
+            $result = array("draw" => $user_data['draw'],
+            "status" => TRUE,
+            "recordsTotal" => $total_data,
+            "recordsFiltered" => $total_data,
+            "log_data" => $login_details);
+        }
+        echo json_encode($result);
     }
 }
 ?>
