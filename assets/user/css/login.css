@@ -2,6 +2,7 @@ body,
 html {
     height: 100%;
     width: 100%;
+    background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #edbffd);
 }
 
 .bg {

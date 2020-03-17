@@ -50,7 +50,8 @@ $this->load->helper('url_helper');
                                 <div class="form-group mt-5">
                                     <input type="password" class="form-control border-top-0 border-left-0 border-right-0" name="confirm-pass" id="confirm-pass" placeholder="Confirm password">
                                 </div>
-                                <p class="text-success pt-3" id="psw-error"></p>
+                                <p class="text-danger pt-3" id="psw-error"></p>
+                                <p class="text-success pt-3" id="psw-success"></p>
                                 <div class="text-right">
                                     <button class="btn btn-primary " type="submit">Submit</button>
                                 </div>

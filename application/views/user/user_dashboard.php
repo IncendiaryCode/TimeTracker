@@ -212,7 +212,7 @@ if (!empty($task_info['login_run'])) { ?>
             </div>
         
         <footer class="footer">
-            <p class="text-center pt-2 ">Copyright © <?= Date('Y') ?> Printgreener.com</p>
+            <p class="text-center pt-2 ">Copyright ©  <?=date("Y") ?> | TimeTracker.com</p>
         </footer>
         <!-- modal form for tasks that started onprevious date -->
         <?php if(!empty($task_info['task_run'])) { ?>

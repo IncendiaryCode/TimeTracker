@@ -172,8 +172,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
         </div>
         <footer class="footer">
-            <p class="text-center pt-2 ">Copyright ©
-                <?=date("Y") ?> Printgreener.com</p>
+            <p class="text-center pt-2 ">Copyright ©  <?=date("Y") ?> | TimeTracker.com</p>
         </footer>
     </div>
 </main>

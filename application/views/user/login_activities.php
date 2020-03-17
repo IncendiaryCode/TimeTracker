@@ -88,7 +88,7 @@ $this->load->helper('url_helper');
         </script>
         <?php }} ?>
         <footer class="footer">
-            <p class="text-center pt-2 ">Copyright © 2020 Printgreener.com</p>
+            <p class="text-center pt-2 ">Copyright ©  <?=date("Y") ?> | TimeTracker.com</p>
         </footer>
     </div>
 

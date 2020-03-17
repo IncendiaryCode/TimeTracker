@@ -1899,9 +1899,6 @@ a#activity-action-filter:hover {
 .space_right {
 	padding-right: 23px;
 }
-#taskError {
-	position: absolute;
-}
 
 button#project-filtering.focus,
 button#project-filtering:focus {
@@ -1940,7 +1937,7 @@ button#project-filtering:focus {
 	display: none;
 	position: absolute;
 	right: 0;
-	top: 0;
+	top: 54px;
 	border-radius: 20px 0px 0px 20px;
 	border-left: 1px solid #ccc;
 	border-top: 1px solid #ccc;

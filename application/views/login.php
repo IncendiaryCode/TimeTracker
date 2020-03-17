@@ -91,5 +91,4 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="<?= base_url(); ?>assets/javascript/script.js?v=<?= VERSION ?>"></script>
 </body>
-
 </html>

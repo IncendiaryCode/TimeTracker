@@ -115,5 +115,5 @@ $profile = $this->session->userdata('user_profile');
     </div>
     <hr>
     <footer>
-        <p class="text-center p-3 ">Copyright © 2019 Printgreener.com</ p>
+        <p class="text-center p-3 ">Copyright ©  <?=date("Y") ?> | TimeTracker.com</ p>
     </footer>

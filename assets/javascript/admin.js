@@ -16,7 +16,7 @@ $(document).ready(function() {
 				document.getElementById('psw-error').innerHTML = 'Passowrd is not matching..';
 				return false;
 			} else {
-				document.getElementById('psw-error').innerHTML = 'Password changed successfully!!!';
+				document.getElementById('psw-success').innerHTML = 'Password changed successfully!!!';
 				return true;
 			}
 			return false;

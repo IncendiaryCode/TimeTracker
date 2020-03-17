@@ -138,14 +138,14 @@ function callLoginTableData(start_date, end_date) {
 			{
 				targets: 1,
 				render: function(data, type, row, meta) {
-					return row['login_time'];
+					return row['login_time'].split(' ')[1];
 				}
 			},
 			{
 				targets: 2,
 				render: function(data, type, row, meta) {
 					if (row['logout_time'] != '--') return row['logout_time'].split(' ')[1];
-					else {
+					else {	
 						return 'Not ended';
 					}
 				}
