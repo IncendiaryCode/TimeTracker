@@ -969,7 +969,7 @@ UIGestureRecognizerDelegate {
                     selectedCell.lblDate.text = strDate
                     
                     // If selected time line is from existing times.
-                    if let timeId = selectedCell.timeId, timeId > 0 {
+                    if let timeId = selectedCell.timeId, arrTaskTimeDetails.count > 0, timeId > 0 {
                         arrTaskTimeDetails[selectedCell.indexPath.row].strDate = strDate
                     }
                 }
@@ -978,7 +978,7 @@ UIGestureRecognizerDelegate {
                     selectedCell.lblStartTime.text = strStartTime
                     
                     // If selected time line is from existing times.
-                    if let timeId = selectedCell.timeId, timeId > 0 {
+                    if let timeId = selectedCell.timeId, arrTaskTimeDetails.count > 0, timeId > 0 {
                         let startTime = getSecondCount(strTime: strStartTime)
                         arrTaskTimeDetails[selectedCell.indexPath.row].nStartTime = startTime
                     }
@@ -988,7 +988,7 @@ UIGestureRecognizerDelegate {
                     selectedCell.lblEndTime.text = strEndTime
                     
                     // If selected time line is from existing times.
-                    if let timeId = selectedCell.timeId, timeId > 0 {
+                    if let timeId = selectedCell.timeId, arrTaskTimeDetails.count > 0, timeId > 0 {
                         let endTime = getSecondCount(strTime: strEndTime)
                         arrTaskTimeDetails[selectedCell.indexPath.row].nStartTime = endTime
                     }
@@ -1028,7 +1028,7 @@ UIGestureRecognizerDelegate {
                 selectedCell.lblEndTime.text = strEndTime
                 
                 // If selected time line is from existing times.
-                if let timeId = selectedCell.timeId, timeId > 0 {
+                if let timeId = selectedCell.timeId, arrTaskTimeDetails.count > 0, timeId > 0 {
                     let endTime = getSecondCount(strTime: strEndTime)
                     arrTaskTimeDetails[selectedCell.indexPath.row].nEndTime = endTime
                 }
