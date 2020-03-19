@@ -1842,7 +1842,7 @@ class Dashboard_model extends CI_Model
         $this->db->join('task_assignee AS ta','ta.task_id = t.id');
         $this->db->join('project AS p', 'p.id = t.project_id');
         $this->db->join('project_module AS m', 'm.id = t.module_id');
-        $this->db->join('users','u.id = ta.user_id');
+        $this->db->join('users AS u','u.id = ta.user_id');
         $this->db->where(array('t.id'=>$task_id));
         $task_data = $this->db->get()->row_array();//get task,project and module info
 

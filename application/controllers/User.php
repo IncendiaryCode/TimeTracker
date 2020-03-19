@@ -29,8 +29,9 @@ class User extends CI_Controller
     
     public function index()
     {
-        $task_details['task_info'] = $this->user_model->task_status(); //get details about login time, running tasks
+        $task_details['task_info'] = $this->user_model->task_status();//get details about login time, running tasks
         $task_details['project_list'] = $this->user_model->get_project_name();
+        $task_details['tasks_list'] = $this->user_model->get_tasks_name($this->userid);
         $this->load->template('user/user_dashboard',$task_details);
     }
 
@@ -72,6 +73,12 @@ class User extends CI_Controller
         $today_filter = '';
         $filter_type = '';
         $filter = '';
+        $search_id = '';
+        $sort_type = '';
+        $date = '';
+        if($this->input->post('search_id')){
+            $search_id = $this->input->post('search_id');
+        }
         if($this->input->post('project_filter')){
             $filter_type = 'proj_filter';
             $filter = json_decode($this->input->post('project_filter'));
@@ -79,11 +86,10 @@ class User extends CI_Controller
         if ($this->input->post('type',TRUE)) {
             //load task data into user dashboard page
             $sort_type = $this->input->post('type', TRUE);
-            $date = '';
             if($this->input->post('filter')){
                 $today_filter = 'today';
             }
-            $task_details['data'] = $this->user_model->get_task_details($sort_type,$date,$filter_type,$filter,$today_filter); //get task data
+            $task_details['data'] = $this->user_model->get_task_details($sort_type,$date,$filter_type,$filter,$today_filter,$search_id); //get task data
             if($task_details['data'] == NULL){ //if no data, send failure message
                 $task_details['status'] = FALSE;
                 $task_details['data'] = NULL;

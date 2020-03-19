@@ -136,9 +136,8 @@ class User_model extends CI_Model {
      * 
      * returns $data
      */
-    public function get_task_details($sort_type, $date = '', $filter_type = '', $filter_value = '', $today_filter = '') {
+    public function get_task_details($sort_type, $date = '', $filter_type = '', $filter_value = '', $today_filter = '',$search_id = '') {
         $userid = $this->userid;
-        
         $this->db->select('p.name,IFNULL(d.start_time,t.created_on) AS started,d.start_time,p.image_name,p.color_code,t.task_name,t.id AS task_id');
         $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task", FALSE); //get running tasks of the user
         //$this->db->select('IF(t.complete_task=1,1,0) AS completed', FALSE); //get completed tasks of the user
@@ -162,6 +161,9 @@ class User_model extends CI_Model {
                     $this->db->where_in('t.project_id',$filter_value);
                 }
             }
+        }
+        if($search_id != ''){
+            $this->db->where('t.id',$search_id);
         }
         if($date == ''){
             $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
@@ -1849,6 +1851,7 @@ class User_model extends CI_Model {
         $this->db->limit($length,$start);
         $login_data = $this->db->get();
         if($login_data->num_rows() > 0){
+            $total_minutes = 0;
             $login_details = $login_data->result_array();
             $this->load->model('dashboard_model');
             foreach($login_details AS $l_detail){
@@ -1857,7 +1860,7 @@ class User_model extends CI_Model {
                     $total_minutes = abs($time_elapsed)/60;
                     $format_time = $this->dashboard_model->format_time($total_minutes);
                 }
-                $log_data[] = array('login_date'=>$l_detail['task_date'],'login_time'=>$this->convert_date($l_detail['start_time']),'logout_time'=>($l_detail['end_time'])?$this->convert_date($l_detail['end_time']):'--','total_time'=>($total_minutes)?$format_time:'--');
+                $log_data[] = array('login_date'=>$l_detail['task_date'],'login_time'=>$this->convert_date($l_detail['start_time']),'logout_time'=>($l_detail['end_time'])?$this->convert_date($l_detail['end_time']):'--','total_time'=>($total_minutes != 0)?$format_time:'--');
             }
         }
         else{
@@ -1877,5 +1880,18 @@ class User_model extends CI_Model {
 
     }
 
+    public function get_tasks_name($userid){
+        $this->db->select('t.id,t.task_name');
+        $this->db->from('task AS t');
+        $this->db->join('task_assignee AS ta','ta.task_id = t.id');
+        $this->db->where('ta.user_id',$userid);
+        $tasks = $this->db->get();
+        if($tasks->num_rows() > 0){
+            $tasks_list = $tasks->result_array();
+        }else{
+            $tasks_list = '';
+        }
+        return $tasks_list;
+    }
 }
 ?>
