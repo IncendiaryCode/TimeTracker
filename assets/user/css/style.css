@@ -54,6 +54,7 @@ header.main-header .navbar .nav .nav-item .nav-link {
 }
 .modal {
 	margin-top: 50px;
+	/*background-color: rgba(0,0,0,.54118);*/
 }
 .gj-modal .selected {
 	color: #d583fb;
@@ -83,24 +84,11 @@ header.main-header h1 {
 	z-index: 0;
 }
 
-.body-bg-gradient:after {
-	height: 100%;
-	background-image: linear-gradient(rgba(255, 255, 255, 0) 20%, #ffffff 45%);
-}
-.gj-timepicker-md [role="right-icon"] {
-	cursor: pointer;
-	position: absolute;
-	left: 245%;
-	top: 7px;
-	font-size: 24px;
-}
-.gj-textbox-md {
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	display: block;
-	padding: 10px 0;
-	width: 225%;
-}
+.body-bg-gradient:after { height: 100%; background-image:
+linear-gradient(rgba(255, 255, 255, 0) 20%, #ffffff 45%); } .gj-timepicker-md
+[role="right-icon"] { cursor: pointer; position: absolute; left: 245%; top:
+7px; font-size: 24px; } .gj-textbox-md { border: 1px solid #ccc;
+border-radius: 5px; display: block; padding: 10px 0; width: 225%; }
 
 .profile-icon {
 	font-size: 25px;
@@ -113,6 +101,15 @@ header.main-header h1 {
 	border: 1px solid;
 	border-radius: 100%;
 	opacity: 1;
+}
+.profile-chart .date
+{
+	font-size: 20px;
+}
+
+.year-chart
+{
+    width: 50px;
 }
 
 .profile-entry {
@@ -203,6 +200,37 @@ h1 span {
 	color: white;
 	background-image: linear-gradient(to bottom right, #9263f4, #b981fa, #d798fe);
 	margin-top: 15%;
+}
+
+@media (max-width: 1020px) {
+	.stop-time {
+	position: relative;
+	text-align: center;
+	height: 90px;
+	width: 90px;
+	margin-left: 45%;
+	border-radius: 50%;
+	top: -50px;
+	z-index: 1;
+	color: white;
+	background-image: linear-gradient(to bottom right, #9263f4, #b981fa, #d798fe);
+	margin-top: 0%;
+}
+}
+@media (max-width: 400px) {
+	.stop-time {
+	position: relative;
+	text-align: center;
+	height: 90px;
+	width: 90px;
+	margin-left: 36%;
+	border-radius: 50%;
+	top: -50px;
+	z-index: 1;
+	color: white;
+	background-image: linear-gradient(to bottom right, #9263f4, #b981fa, #d798fe);
+	margin-top: 0%;
+}
 }
 .start-time {
 	position: absolute;
@@ -333,6 +361,17 @@ h1 span {
 .btn-primary {
 	color: white;
 	background-image: linear-gradient(150deg, #8b5ff4, #dd9dfe);
+	border-style: none;
+	border-radius: 5px;
+	opacity: 1;
+	z-index: 0;
+	box-shadow: 2px 2px 7px #8b5ff4;
+}
+
+
+.btn-secondary
+{
+	color: white;
 	border-style: none;
 	border-radius: 5px;
 	opacity: 1;
@@ -565,9 +604,7 @@ a:hover {
 .stop {
 	display: none;
 }
-.modal-backdrop.show {
-	opacity: 0;
-}
+
 #newModal {
 	opacity: 0.89;
 }
@@ -752,6 +789,10 @@ a:hover {
 	font-size: 24px;
 }
 
+#show-loader
+{
+	display: none;
+}
 
 .switch.switch-default {
     position: relative;
@@ -2020,10 +2061,14 @@ button#project-filtering:focus {
 {
 	display: none;
 }
+#edit-profile figure
+{
+	position: relative;
+}
 .img-icon
 {
 	position: absolute;
-	padding: 10px;
-	top: 121px;
-	left: 132px;
+    padding: 10px;
+    top: 70%;
+    left: 80%;
 }

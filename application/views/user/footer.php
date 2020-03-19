@@ -44,8 +44,8 @@ $name = $this->session->userdata('username');
     </div>
 </div>
 
-<div class="modal" id="pause-action" data-backdrop="false">
-    <div class="modal-dialog">
+<div class="modal fade" id="pause-action" tabindex="-1" role="dialog" aria-labelledby="pause-actionLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content text-center">
             <div class="modal-header">
                 <h4>Punch Out</h4>
@@ -53,7 +53,8 @@ $name = $this->session->userdata('username');
             <div class="modal-body text-left">
                 <ul class="text-muted">
                     <li>Hope all your task are done for today...!</li>
-                    <li>Do you want to punch out?</li>
+                    <li>Hope all your task are done for today...!</li>
+                    <li>You can't punch for the dsay after punch out.</li>
                 </ul>
                 <div class="input-group date">
                     <input type="text" class="timerpicker-punchout check-for-utc form-control" id="timerpicker-punchout" name="punch_out_time" placeholder="hh:mm">

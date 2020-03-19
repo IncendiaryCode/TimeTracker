@@ -16,6 +16,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <link rel="stylesheet" type="text/css" href="//use.fontawesome.com/releases/v5.7.0/css/all.css">
     <link rel="stylesheet" type="text/css" href="//unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/croppie.css?v=<?=VERSION?>">
+
     <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/user/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css?v=<?= VERSION ?>">
     <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.7.0/css/all.css">
     <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/css/style.css?v=<?= VERSION ?>">

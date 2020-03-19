@@ -251,8 +251,8 @@ $(document).ready(function() {
 			type: 'circle'
 		},
 		boundary: {
-			width: 300,
-			height: 300
+			width: 200,
+			height: 200
 		},
 		enforceBoundary: false,
 		enableExif: true

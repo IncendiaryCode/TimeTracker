@@ -174,8 +174,6 @@ var assign = {
 
 $(document).ready(function () {
     if (document.getElementById("new-project")) {
-        /*var new_project = document.getElementById("new-project").checked;
-        var old_project = document.getElementById("old-project").checked;*/
         if (old_project == true) {
             document.getElementById("new-project").checked = false;
             $('#new-project-input').hide();
@@ -195,6 +193,70 @@ $(document).ready(function () {
             });
         }
     }
+
+
+    // Start upload preview image
+    var $uploadCrop, tempFilename, rawImg, imageId, cropped_points;
+    function readFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('.upload-demo').addClass('ready');
+                $('#cropImagePop').modal('show');
+                rawImg = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            swal("Sorry - you're browser doesn't support the FileReader API");
+        }
+    }
+    $uploadCrop = $('#upload-demo').croppie({
+        viewport: {
+            width: 200,
+            height: 200,
+            type: 'circle'
+        },
+        boundary: {
+            width: 300,
+            height: 300
+        },
+        enforceBoundary: false,
+        enableExif: true
+    });
+    $('#cropImagePop').on('shown.bs.modal', function() {
+        $uploadCrop
+            .croppie('bind', {
+                url: rawImg
+            })
+            .then(function() {});
+    });
+
+    $('.item-img').on('change', function() {
+
+        imageId = $(this).data('id'); 
+        tempFilename = $(this).val();
+        $('#cancelCropBtn').data('id', imageId);
+        readFile(this);
+    });
+
+    $('#cropImagePop').on('update.croppie', function(ev, cropData) {
+        cropped_points = cropData['points'];
+    });
+
+    $('#cropImageBtn').on('click', function(ev) {
+        $uploadCrop
+            .croppie('result', {
+                type: 'base64',
+                format: 'jpeg',
+                size: { width: 200, height: 200 }
+            })
+            .then(function(resp) {
+                $('#item-img-output').attr('src', resp);
+                $('#cropImagePop').modal('hide');
+            });
+    });
+
+    
 
     if (document.getElementById('old-project-input')) {
         $('#old-project-input').show();
@@ -223,6 +285,7 @@ $(document).ready(function () {
     var addProject = document.getElementById('add-project');
     if (addProject != null) {
         addProject.onsubmit = function (e) {
+            document.getElementById('cropped-points').value = cropped_points;
             var project_title = document.getElementById('project-name').value;
             if ((project_title == "" || project_title == " ")) {
                 document.getElementById('module-error').innerHTML = "Enter Project name";

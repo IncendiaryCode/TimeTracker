@@ -27,7 +27,7 @@ $this->load->helper('url_helper');
                                 </div>
                             <?php } ?>
                             <h1 class="text-center display-heading">Add Project</h1>
-                        <form action="<?php echo base_url();?>index.php/admin/add_projects" id="add-project" method="post" enctype="multipart/form-data">
+                        <form action="<?php echo base_url();?>index.php/admin/add_projects" id="add-project" method="post" >
                             <div class="form-group mt-3" id="new-project-input">
                                 <label for="task-name ">Project name:<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control " name="project-name" id="project-name" placeholder="">  
@@ -37,7 +37,7 @@ $this->load->helper('url_helper');
                                 <label for="new-module0">Module name:</label>
                                 <div class="row">
                                     <div class="col-10 assign-module0">
-                                        <input class="form-control user"  id="new-module0" name="new-module[0][module]" placeholder="General">     
+                                        <input class="form-control user"  id="new-module0" name="new-module[0][module]" placeholder="General">
                                     </div>
                                     <div class="col-2 assign-module0">
                                         <a href="#" id="add-new-module" >
@@ -59,22 +59,16 @@ $this->load->helper('url_helper');
                             </div>
                             <div class="form-group mt-3">
                                 <label for="task-name ">Choose logo:</label>
-                                <input type="file" class="form-control" name="project-logo" id="Project-logo">
+                                <input type="file" class="form-control item-img file center-block" name="project-logo" id="Project-logo">
+                                <label class="cabinet center-block">
+                                    <input type="hidden" name="croped_pointed"  id= "cropped-points" />
+                                </label>
                             </div>
 
                             <div class="form-group mt-3">
                                 <label for="task-name ">Choose color:</label>
                                 <input type="color"  value="#e384fb" class="form-control" name="project-color" id="Project-color">
                             </div>
-                            <!-- <div class="form-group mt-3">
-                                <label for="task-name ">Start date:</label>
-                                <input type="text" class="form-control edit-date" name="start-date" id="start-date">
-                            </div>
-
-                            <div class="form-group mt-3">
-                                <label for="task-name ">End date:</label>
-                                <input type="text" class="form-control edit-date" name="end-date" id="end-date">
-                            </div> -->
                             <p id="module-error" class="text-danger"></p>
                             <div class="text-right"><button type="submit" class="btn btn-primary text-right">Add Project</button></div>
                         </form>
@@ -83,3 +77,21 @@ $this->load->helper('url_helper');
             </div>
         </div>
     </main>
+
+<div class="modal fade" id="cropImagePop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <div id="upload-demo" class="center-block"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary col-6" data-dismiss="modal">Close</button>
+                <button type="button" id="cropImageBtn" class="btn btn-primary col-6">Done</button>
+            </div>
+        </div>
+    </div>
+</div>

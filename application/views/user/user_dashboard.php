@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 //Login timer
+// print_r($tasks_list);
 $this->load->helper('date');
 if (isset($task_info['login_status'])) {
     $login_time = $task_info['login_status']['start_time'];
@@ -54,6 +55,8 @@ if (!empty($task_info['login_run'])) { ?>
     var __timeTrackerLoginTime = "<?= $logintime ?>"; /*start date and time of the task.*/
     var stopped = "<?= $already_logged ?>"; /*to check for punch out action*/
     var not_logged = "<?= $not_logged ?>"; /*to check for punch in action*/
+    var task_arr =  JSON.parse('<?php echo json_encode($tasks_list) ?>');
+
 </script>
 <!-- new scoll for task -->
 <div class="container timer-slider">
@@ -139,11 +142,14 @@ if (!empty($task_info['login_run'])) { ?>
                         </li>
                     </ul>
                 </div>
+
+                
                 <div class="col-12">
                     <div class="collapse" id="navbarToggleExternalContent">
                         <div class="p-4">
                             <form action="#" id="dashboard-filter">
                                 <div class="row">
+                                    
                                     <div class="col-4" id="sorting">
                                         <h5 class="pb-2">Sort by</h5>
                                         <div class="form-check">
@@ -191,6 +197,16 @@ if (!empty($task_info['login_run'])) { ?>
                         </div>
                     </div>
                     </div>
+                </div>
+                 <div class="col-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="search-task" placeholder="search">
+                        <div class="input-group-append" id="show-loader">
+                            <div class="col text-center"><div class="spinner-border" role="status" aria-hidden="true"></div></div> 
+                        </div>
+                    </div>
+                    <div id="append-search-results"></div>
+                    <p id="search-error"></p>
                 </div>
                 <div class="col-12">
                     <p id="alarmmsg" class="text-center"></p>

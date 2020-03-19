@@ -76,7 +76,7 @@ header {
 	line-height: normal;
 }
 
-@media (max-width: 970px) {
+@media (max-width: 1000px) {
 	#dashboard-stats .card .card-body .fas {
 		font-size: 60px;
 		line-height: normal;
@@ -364,13 +364,11 @@ header.main-header h1 {
 	}
 }
 .display-heading {
-	/* font-size: 54px; */
 	font-weight: 500;
 }
 
 
 .separator-hr {
-    /* margin-top: 3rem; */
     margin-bottom: 3rem;
 }
 

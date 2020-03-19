@@ -32,10 +32,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card card-theme-b">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-6 text-right">
+                        <div class="col-5 text-right">
                             <i class="fas fa-chalkboard"></i>
                         </div>
-                        <div class="col-6">
+                        <div class="col-7 pl-4">
                             <h1>
                                 <?php echo $total_projects; ?>
                             </h1>
@@ -59,10 +59,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card card-theme-c">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-6 text-right">
+                        <div class="col-5 text-right">
                             <i class="fas fa-tasks"></i>
                         </div>
-                        <div class="col-6">
+                        <div class="col-7 pl-4">
                             <h1><?php echo $total_tasks; ?></h1>
                             <p class="card-text">Total tasks</p>
                         </div>
@@ -83,10 +83,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
     <hr class="separator-hr" />
     <div class="row">
-        <div class="col-6">
+        <div class="col-5">
             <h1 class="display-heading">Project Chart</h1>
         </div>
-        <div class="col-6 col-md-3 offset-md-3" id="dash-prj-dtpicker">
+        <div class="col-7 pl-4 col-md-3 offset-md-3" id="dash-prj-dtpicker">
             <div class="input-group date">
                 <input type="text" class="form-control datepicker" name="cur_month" id="update-prj-dtpicker" value="<?= date('F Y'); ?>" >
                 <div class="input-group-append">
