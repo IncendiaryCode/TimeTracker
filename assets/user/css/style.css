@@ -56,6 +56,11 @@ header.main-header .navbar .nav .nav-item .nav-link {
 	margin-top: 50px;
 	/*background-color: rgba(0,0,0,.54118);*/
 }
+
+.modal .modal-header span
+{
+	font-weight: 400;
+}
 .gj-modal .selected {
 	color: #d583fb;
 }
@@ -787,6 +792,28 @@ a:hover {
 .recent-activites {
 	color: #b3b3b3;
 	font-size: 24px;
+}
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.search-hint
+{
+    color: #ccc !important;
+	font-size: 14px;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
 }
 
 #show-loader
@@ -2071,4 +2098,12 @@ button#project-filtering:focus {
     padding: 10px;
     top: 70%;
     left: 80%;
+}
+.clear-daterange
+{
+	display: none;
+}
+.modal button
+{
+	font-weight:400;
 }

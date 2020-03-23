@@ -1,111 +1,121 @@
 var user_Chart;
 function __draw_chart(res)
 {
-var user_chart = document.getElementById('user_time_chart').getContext('2d');
-var color = Chart.helpers.color;
-gradient = user_chart.createLinearGradient(0, 0, 0, 300);
 
-gradient.addColorStop(0, '#4b5bf0');
-gradient.addColorStop(1, '#ea4776');
-var task_labels = [];
-var task_time_value = [];
-var data = JSON.parse(res);
-data  = data['data'];
-for(var i=0; i<data.length; i++)
-{
-task_labels[i] = data[i]['task_date'];
-task_time_value[i] = data[i]['t_minutes']/60;
-}
 
-for(var ind=0; ind<task_time_value.length; ind++)
+if(res['status'] == "false")
 {
-    var task_time_dec = task_time_value[ind] - Math.floor(task_time_value[ind]);
-    task_time_dec = task_time_dec.toString().slice(0,4);
-    var total_time = Math.floor(task_time_value[ind]) + (parseFloat(task_time_dec));
-    task_time_value[ind] = total_time;
+     if (user_Chart) user_Chart.destroy();
 }
-var configs = {
-    type: 'bar',
-    data: {
-        labels: task_labels,
-        datasets : [{
-        label:"time spent in hrs",
-        backgroundColor: gradient,
-        borderColor:window.chartColors.green,
-        fill: false,
-        data: task_time_value
-    }],
-    },
-    options: {
-        tooltips: {
-            callbacks: {
-                label: function(tooltipItem, data) {
-                    var label = data.datasets[tooltipItem.datasetIndex].label || '';
-                    var value = "";
-                    if((tooltipItem['value'].split('.')[1]/100*60).toString() != "NaN")
-                    {
-                    value = tooltipItem['value'].split('.')[1]/100*60;
-                    }
-                    if (label) {
-                        label.split('.')[0] += ':'+value;
-                    }
-                    var minutes = parseInt(value);
-                    if(parseInt(value).toString() == "NaN")
-                    {
-                        minutes = 0;
-                    }
-                    if(minutes.toString().length == 1)
-                    {
-                        minutes = '0'+minutes;
-                    }
-                    minutes = minutes.toString().slice(0,2);
-                    return ("time spent in hrs "+tooltipItem['value'].split('.')[0]+':'+minutes);
-                }
-            }
-        },
-        title: {
-            text: 'User snapshot',
-        },
-        legend: {
-            display: false
-        },
-        hover: {
-                mode: "nearest"
-            },
-        scales: {
-            xAxes: [{
-                gridLines: {
-                    display: false,
-                    beginAtZero: true,
-                },
-                ticks: {
-                    display: true,
-                    beginAtZero: true,
-                    stacked: true
-                },
-                scaleLabel: {
-                    display: true,
-                }
-            }],
-            yAxes: [{
-                gridLines: {
-                    display: true,
-                    drawBorder: true
-                },
-                ticks: {
-                    display: true,
-                    beginAtZero: true,
-                    stacked: true
-                },
-            }]
-        },
+else
+{
+    $("#user_time_chart").show();
+    var user_chart = document.getElementById('user_time_chart').getContext('2d');
+    var color = Chart.helpers.color;
+    gradient = user_chart.createLinearGradient(0, 0, 0, 300);
+
+
+    gradient.addColorStop(0, '#4b5bf0');
+    gradient.addColorStop(1, '#ea4776');
+    var task_labels = [];
+    var task_time_value = [];
+    var data = JSON.parse(res);
+    data  = data['data'];
+    for(var i=0; i<data.length; i++)
+    {
+    task_labels[i] = data[i]['task_date'];
+    task_time_value[i] = data[i]['t_minutes']/60;
     }
-};
-if (user_Chart) user_Chart.destroy();
- user_Chart = new Chart(user_chart, configs);
-    
-}
 
+    for(var ind=0; ind<task_time_value.length; ind++)
+    {
+        var task_time_dec = task_time_value[ind] - Math.floor(task_time_value[ind]);
+        task_time_dec = task_time_dec.toString().slice(0,4);
+        var total_time = Math.floor(task_time_value[ind]) + (parseFloat(task_time_dec));
+        task_time_value[ind] = total_time;
+    }
+    var configs = {
+        type: 'bar',
+        data: {
+            labels: task_labels,
+            datasets : [{
+            label:"time spent in hrs",
+            backgroundColor: gradient,
+            borderColor:window.chartColors.green,
+            fill: false,
+            data: task_time_value
+        }],
+        },
+        options: {
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        var value = "";
+                        if((tooltipItem['value'].split('.')[1]/100*60).toString() != "NaN")
+                        {
+                        value = tooltipItem['value'].split('.')[1]/100*60;
+                        }
+                        if (label) {
+                            label.split('.')[0] += ':'+value;
+                        }
+                        var minutes = parseInt(value);
+                        if(parseInt(value).toString() == "NaN")
+                        {
+                            minutes = 0;
+                        }
+                        if(minutes.toString().length == 1)
+                        {
+                            minutes = '0'+minutes;
+                        }
+                        minutes = minutes.toString().slice(0,2);
+                        return ("time spent "+tooltipItem['value'].split('.')[0]+':'+minutes+" hrs");
+                    }
+                }
+            },
+            title: {
+                text: 'User snapshot',
+            },
+            legend: {
+                display: false
+            },
+            hover: {
+                    mode: "nearest"
+                },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        display: false,
+                        beginAtZero: true,
+                    },
+                    ticks: {
+                        display: true,
+                        beginAtZero: true,
+                        stacked: true
+                    },
+                    scaleLabel: {
+                        display: true,
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        display: true,
+                        drawBorder: true
+                    },
+                    ticks: {
+                        display: true,
+                        beginAtZero: true,
+                        stacked: true
+                    },
+                }]
+            },
+        }
+    };
+    if (user_Chart) user_Chart.destroy();
+     user_Chart = new Chart(user_chart, configs);
+        
+    }
+}
 $(document).ready(function() {
 if(document.getElementById('user-id') != null)
 {

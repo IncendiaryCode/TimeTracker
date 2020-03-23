@@ -57,7 +57,7 @@ function __draw_project_chart(res) {
 							minutes = '0'+minutes;
 						}
 						minutes = minutes.toString().slice(0,2);
-						return ("time spent in hrs "+tooltipItem['value'].split('.')[0]+':'+minutes);
+						return ("time spent "+tooltipItem['value'].split('.')[0]+':'+minutes+" hrs");
 					}
 				}
 			},

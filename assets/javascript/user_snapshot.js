@@ -67,7 +67,7 @@ function __draw_user_chart(res) {
 								elmnt.scrollIntoView({ behavior: 'smooth' });
 							});
 
-							return ("time spent in hrs "+tooltipItem['value'].split('.')[0]+':'+minutes);
+							return ("time spent "+tooltipItem['value'].split('.')[0]+':'+minutes+" hrs");
 						}
 					}
 				},

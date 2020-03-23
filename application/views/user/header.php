@@ -34,7 +34,6 @@ else if(!empty($punch_in_time)){
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/plugins/bxslider/css/jquery.bxslider.min.css?v=<?=VERSION?>">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" />
-    <!-- <link rel="stylesheet" type="text/css" href="//www.jqueryscript.net/css/jquerysctipttop.css">     -->
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/animation.css?v=<?=VERSION?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/user/css/croppie.css?v=<?=VERSION?>">
     <?php
@@ -74,54 +73,15 @@ else if(!empty($punch_in_time)){
         </div>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <?php if(!empty($GLOBALS['page_title'])) { ?>
-            <div class="col-12">
-                <p class="display-heading pt-3 text-center text-white">
-                    <?php  echo $GLOBALS['page_title'];  ?>
-                </p>
-            </div>
-        <?php } ?>
-        </div>
-    </div>
-
-    <div class="modal" id="alert-punchin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <form action="<?= base_url(); ?>index.php/user/save_login_time" id="starting-timer" method="post">
-                        <div class="modal-header ">
-                            <button type="button" class="close text-danger" data-dismiss="modal">×</button>
-                        </div>
-                        <div class="modal-body ">
-                            <h4 class="pb-3">You have not punched in for the day</h4>
-                            <input type="text" class="check-for-utc form-control  timerpicker-c" name="start-login-time" id="start-login-time" placeholder="hh:mm">
-                            <div class="input-group-addon">
-                                <span class="glyphicon glyphicon-th"></span>
-                            </div>
-                        </div>
-                        <p class="text-danger text-center" id="stop-timer-error"></p>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" id="start-punchIn">Punch In</button>
-                        </div>
-                    </form>
+        <div class="container">
+            <div class="row">
+                <?php if(!empty($GLOBALS['page_title'])) { ?>
+                <div class="col-12">
+                    <p class="display-heading pt-3 text-center text-white">
+                        <?php  echo $GLOBALS['page_title'];  ?>
+                    </p>
                 </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="play-timer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close text-danger" data-dismiss="modal">×</button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <div>
-                            <h4>You have already punched out for the day!!!</h4>
-                        </div>
-                    </div>
-                    <p class="text-danger" id="stop-timer-error"></p>
-                </div>
+            <?php } ?>
             </div>
         </div>
     </div>

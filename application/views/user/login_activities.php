@@ -36,7 +36,7 @@ $this->load->helper('url_helper');
                         </div>
                         <div col-6 text-right>
                             <div class="row">
-                            <div class="col-5  offset-md-1">
+                            <div class="col-4  offset-md-1">
                             <div class="input-group date">
                                 <input type="text" class="form-control datepicker" id="dateStart" name="dateStart" data-date-format="yyyy-mm-dd" >
                                 <div class="input-group-append">
@@ -47,7 +47,7 @@ $this->load->helper('url_helper');
                             </div>
                         </div>
                         <span>To</span>
-                        <div class="col-5">
+                        <div class="col-4">
                             <div class="input-group date">
                                 <input type="text" class="form-control datepicker" id="dateEnd" name="dateEnd" data-date-format="yyyy-mm-dd" >
                                 <div class="input-group-append">
@@ -56,6 +56,9 @@ $this->load->helper('url_helper');
                                     </span>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-2 pt-1 clear-daterange">
+                                <a href="#"><i class="fas fa-trash-alt text-danger"></i></a>
                         </div>
                     </div>
                 </div>

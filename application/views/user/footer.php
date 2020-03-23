@@ -54,7 +54,7 @@ $name = $this->session->userdata('username');
                 <ul class="text-muted">
                     <li>Hope all your task are done for today...!</li>
                     <li>Hope all your task are done for today...!</li>
-                    <li>You can't punch for the dsay after punch out.</li>
+                    <li>You can't punch for the day after punch out.</li>
                 </ul>
                 <div class="input-group date">
                     <input type="text" class="timerpicker-punchout check-for-utc form-control" id="timerpicker-punchout" name="punch_out_time" placeholder="hh:mm">
@@ -121,7 +121,7 @@ $name = $this->session->userdata('username');
                 <div id="upload-demo" class="center-block"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary col-6" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary col-6" data-dismiss="modal">Cancel</button>
                 <button type="button" id="cropImageBtn" class="btn btn-primary col-6">Done</button>
             </div>
         </div>

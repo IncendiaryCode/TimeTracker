@@ -147,7 +147,9 @@ function drawCards(data) {
 					var stop_time = moment().tz('utc').format('Y-MM-DD H:mm:ss');
 					var t_id = $(this).data('id');
 					if (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play') {
-						$('#play-timer').modal('show');
+						// $('#play-timer').modal('show');
+						check_for_punchIn();
+
 					} else {
 						$.ajax({
 							type: 'POST',
@@ -353,128 +355,19 @@ timerSlider = {
 	}
 };
 
-
-function autocomplete(inp, arr) {
-	var currentFocus;
-	inp.addEventListener('input', function(e) {
-		var a,
-			b,
-			i,
-			val = this.value;
-		closeAllLists();
-		if (!val) {
-			return false;
-		}
-		currentFocus = -1;
-		a = document.createElement('DIV');
-		a.setAttribute('id', this.id + 'autocomplete-list');
-		a.setAttribute('class', 'autocomplete-items');
-		//this.parentNode.parentNode.parentNode.parentNode.appendChild(a);
-
-		$('#append-search-results').append(a);
-
-		document.getElementById('search-error').innerHTML = '';
-		for (i = 0; i < arr.length; i++) {
-			if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-				b = document.createElement('DIV');
-				b.innerHTML = '<strong>' + arr[i].substr(0, val.length) + '</strong>';
-				b.innerHTML += arr[i].substr(val.length);
-				b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-				b.addEventListener('click', function(e) {
-					inp.value = this.getElementsByTagName('input')[0].value;
-					closeAllLists();
-				});
-				a.appendChild(b);
-			}
-		}
-
-		$(a).click(function()
-			{
-				$('#show-loader').show();
-				for(var i=0;i<task_arr.length; i++)
-					{
-						if(task_arr[i]['task_name'] == document.getElementById("search-task").value)
-						{
-
-							$('#show-loader').hide();
-							loadTaskActivities({ "type":"date", "search_id": task_arr[i]['id'] });
-							
-							for (var i = 0; i < document.getElementById('filtering').getElementsByTagName('input').length; i++) {
-								if (document.getElementById('filtering').getElementsByTagName('input')[i].checked == true) {
-									document.getElementById('filtering').getElementsByTagName('input')[i].checked = false;
-								}
-							}
-							if (document.getElementById('today-input').checked == true) {
-								document.getElementById('today-input').checked == false;
-							}
-							$('#clear-filter').show();
-							break;
-						}
-					}
-			})
-
-	});
-	/*execute a function presses a key on the keyboard:*/
-	inp.addEventListener('keydown', function(e) {
-		var x = document.getElementById(this.id + 'autocomplete-list');
-		if (x) x = x.getElementsByTagName('div');
-		if (e.keyCode == 40) {
-			/*If the arrow DOWN key is pressed,
-        increase the currentFocus variable:*/
-			currentFocus++;
-			/*and and make the current item more visible:*/
-			addActive(x);
-		} else if (e.keyCode == 38) {
-			//up
-			currentFocus--;
-			/*and and make the current item more visible:*/
-			addActive(x);
-		} else if (e.keyCode == 13) {
-			/*If the ENTER key is pressed, prevent the form from being submitted,*/
-			e.preventDefault();
-			if (currentFocus > -1) {
-				/*and simulate a click on the "active" item:*/
-				if (x) x[currentFocus].click();
-			}
-		}
-	});
-	function addActive(x) {
-		if (!x) return false;
-		/*start by removing the "active" class on all items:*/
-		removeActive(x);
-
-		if (currentFocus >= x.length) currentFocus = 0;
-		if (currentFocus < 0) currentFocus = x.length - 1;
-		/*add class "autocomplete-active":*/
-		x[currentFocus].classList.add('autocomplete-active');
-	}
-	function removeActive(x) {
-		/*a function to remove the "active" class from all autocomplete items:*/
-		for (var i = 0; i < x.length; i++) {
-			x[i].classList.remove('autocomplete-active');
-		}
-	}
-	function closeAllLists(elmnt) {
-		var x = document.getElementsByClassName('autocomplete-items');
-		for (var i = 0; i < x.length; i++) {
-			if (elmnt != x[i] && elmnt != inp) {
-				x[i].parentNode.removeChild(x[i]);
-			}
-		}
-	}
-}
-
-if (typeof task_arr != 'undefined') {
-	var task_name_array = [];
-	var task_id_array = [];
-	for(var i=0;i<task_arr.length; i++)
-	{
-  		task_name_array[i] = task_arr[i]["task_name"];
-	}
-	autocomplete(document.getElementById('search-task'), task_name_array);
-}
-
 $(document).ready(function() {
+
+	//check for existing running tasks
+	$.ajax({
+		type: 'POST',
+		url: timeTrackerBaseURL + 'index.php/user/get_running_task',
+		dataType: 'json',
+		success: function(res) {
+			$('#stop-now').modal('show');
+		}
+	});
+
+
 	if (document.getElementById('start-login-time')) {
 		document.getElementById('start-login-time').value = moment().format('HH:mm a');
 		$('#stop-now').modal({
@@ -491,6 +384,7 @@ $(document).ready(function() {
 			document.getElementById('login-time').innerHTML = 'Punch in at 00:00:00';
 		}
 	}
+
 	if (document.getElementById('dashboard-filter')) {
 		var filter_form = document.getElementById('dashboard-filter');
 		filter_form.onsubmit = function() {
@@ -499,7 +393,7 @@ $(document).ready(function() {
 			var sortBy = 'date';
 			var filterBy = [];
 
-			document.getElementById('search-task').value = "";
+
 			for (var i = 0; i < user_sorting.length; i++) {
 				if (user_sorting[i].checked == true) {
 					sortBy = user_sorting[i].value;
@@ -513,15 +407,50 @@ $(document).ready(function() {
 			if (filterBy.length != 0) {
 				$('#clear-filter').show();
 			}
-			if (document.getElementById('today-input').checked == true) {
-				loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy), filter: 'today' });
-			} else {
-				loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) });
+			if(document.getElementById("search-task").value != "" && document.getElementById("search-task").value != " ") 
+			{
+				document.getElementById("search-error").innerHTML = "";	
+				if (document.getElementById('today-input').checked == true) {
+					$('#navbarToggleExternalContent').collapse('toggle');
+					if(filterBy.length > 0)
+					loadTaskActivities({ "search_string": document.getElementById("search-task").value, type: sortBy, project_filter: JSON.stringify(filterBy), filter: 'today' });
+					else loadTaskActivities({ "search_string": document.getElementById("search-task").value, type: sortBy, filter: 'today' });
+					$('#clear-filter').show();
+					return false;
+				} else
+					{
+					$('#navbarToggleExternalContent').collapse('toggle');
+
+					if(filterBy.length > 0)
+					loadTaskActivities({ "search_string": document.getElementById("search-task").value, type: sortBy, project_filter: JSON.stringify(filterBy) });
+					else loadTaskActivities({ "search_string": document.getElementById("search-task").value, type: sortBy });
+					$('#clear-filter').show();
+					return false;
+					}
+				}
+			else
+			{
+				document.getElementById("search-error").innerHTML = "";
+				if (document.getElementById('today-input').checked == true) {
+					$('#navbarToggleExternalContent').collapse('toggle');
+					if(filterBy.length > 0)
+					loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy), filter: 'today' });
+					else loadTaskActivities({ type: sortBy, filter: 'today' });
+					return false;
+				} else {
+					$('#navbarToggleExternalContent').collapse('toggle');
+
+					if(filterBy.length > 0)
+					loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) });
+					else loadTaskActivities({ type: sortBy });
+					return false;
+				}
 			}
-			$('#navbarToggleExternalContent').collapse('toggle');
+
 			return false;
-		};
-	}
+			};
+		}
+
 	$('#today-filter').click(function(e) {
 		e.preventDefault();
 		var user_sorting = document.getElementById('sorting').getElementsByTagName('input');
@@ -871,22 +800,4 @@ $(document).ready(function() {
 			}
 		}
 	});
-
-	//check for existing running tasks
-	$.ajax({
-		type: 'POST',
-		url: timeTrackerBaseURL + 'index.php/user/get_running_task',
-		dataType: 'json',
-		success: function(res) {
-			$('#stop-now').modal('show');
-		}
-	});
-
-
-	if(document.getElementById('search-task'))
-	{
-		document.getElementById('search-task').addEventListener('click', function(e) {
-			closeAllLists(e.target);
-		});
-	}
 });

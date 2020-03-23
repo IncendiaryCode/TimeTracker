@@ -138,13 +138,13 @@ function callLoginTableData(start_date, end_date) {
 			{
 				targets: 1,
 				render: function(data, type, row, meta) {
-					return row['login_time'].split(' ')[1];
+					return moment(row['login_time']).format("hh:mm a");
 				}
 			},
 			{
 				targets: 2,
 				render: function(data, type, row, meta) {
-					if (row['logout_time'] != '--') return row['logout_time'].split(' ')[1];
+					if (row['logout_time'] != '--') return moment(row['logout_time']).format("hh:mm a");
 					else {	
 						return 'Not ended';
 					}
@@ -198,6 +198,7 @@ $(document).ready(function() {
 
 	if (document.getElementById('dateStart')) {
 		$('#dateStart').change(function() {
+			$(".clear-daterange").show();
 			var validate_filter = validate_login_filters();
 			if (validate_filter != true) {
 				document.getElementById('start-time-error').innerHTML = validate_filter;
@@ -207,6 +208,7 @@ $(document).ready(function() {
 			}
 		});
 		$('#dateEnd').change(function() {
+			$(".clear-daterange").show();
 			if (document.getElementById('dateStart').value == '') {
 				document.getElementById('start-time-error').innerHTML = 'Please enter Start date';
 			} else {
@@ -309,4 +311,12 @@ $(document).ready(function() {
 			return true;
 		};
 	}
+
+	$('.clear-daterange').click(function()
+	{
+		document.getElementById('dateEnd').value = "";
+		document.getElementById('dateStart').value = "";
+		$('.clear-daterange').hide();
+		callLoginTableData();
+	});
 });

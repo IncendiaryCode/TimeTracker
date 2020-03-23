@@ -1,5 +1,6 @@
 <?php
     defined('BASEPATH') or exit('No direct script access allowed');
+    // print_r($task_data);
 ?>
 
 <div class="container">
@@ -8,7 +9,7 @@
     		<h1>Task Details</h1>
     	</div>
         <div class="col-12 col-md-10 offset-md-1">
-    		<!-- <h6>User: <span>vinay</span></h6> -->
+    		<h4 class="mb-4">User name: <span><?= $task_data['user_name'] ?></span></h4>
     		<div class="pb-2">
            Task name: <input type="text" class="form-control" readonly="" name="task-name" value="<?=$task_data["task_name"] ?>">
     		</div>
@@ -45,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                                                        <!-- Add time: New Case -->
+            <!-- Add time: New Case -->
          	<?php foreach ($timeline_data as $task_timeline) { ?>
                     <div class="pb-5">
                         <div class="primary-wrap">
