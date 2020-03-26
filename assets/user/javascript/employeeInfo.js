@@ -90,7 +90,17 @@ function drawCards(data) {
 
 			var next_page = $('<li class=" "><a class="pagination__next" href=""><span><i class="fa fa-angle-double-right" aria-hidden="true"></i></span></a></li>');
 			$('.page-number').append(next_page);
-			
+			if (parseInt($('.page_active')[0].innerText) == 1) {
+				$('.pagination__pre').css("color","#ccc");
+			}
+			if (parseInt($('.page_active')[0].innerText) == (parseInt(offset_cards/50)+1)) {
+				$('.pagination__next').css("color","#ccc");
+			}
+			if(Math.ceil(offset_cards/50) == 1)
+			{
+				console.log(Math.ceil(offset_cards/50) == 1);
+				$('#pagination-links').hide();
+			}
 		$(next_page).click(function(e)
 		{
 			var p_no = $('.page-number').find(".page_active");
@@ -101,15 +111,6 @@ function drawCards(data) {
 			var filterBy = [];
 
 			var check_page = parseInt(p_no[0].parentNode.parentNode.childNodes[parseInt(p_no[0].text)+1].innerText).toString();
-			if (check_page == 'NaN' || check_page == "undefined") {
-					document.getElementsByClassName('pagination__next').disabled = true;
-					$('.pagination__next').css("color","#ccc");
-			}else
-			{
-				document.getElementsByClassName('pagination__next').disabled = false;
-				$('.pagination__next').css("color","#e388f7");
-			}
-
 			if(parseInt(p_no[0].parentNode.parentNode.childNodes[parseInt(p_no[0].text)+1].innerText).toString() != 'NaN')
 			{
 				p_no[0].classList.remove("page_active");
@@ -150,19 +151,10 @@ function drawCards(data) {
 
 			var p_no = $('.page-number').find(".page_active");
 			var check_page = parseInt(p_no[0].parentNode.parentNode.childNodes[parseInt(p_no[0].text)-1].innerText).toString();
-			if (check_page == 'NaN' || check_page == "undefined") {
-					document.getElementsByClassName('pagination__pre').disabled = true;
-					$('.pagination__pre').css("color","#ccc");
-			}else
-			{
-				document.getElementsByClassName('pagination__pre').disabled = false;
-				$('.pagination__pre').css("color","#e388f7");
-			}
-
+			
 			if(parseInt(p_no[0].parentNode.parentNode.childNodes[parseInt(p_no[0].text)-1].innerText).toString() != 'NaN')
 			{
 				p_no[0].classList.remove("page_active");
-				// p_no[0].parentNode.parentNode.childNodes[parseInt(p_no[0].text)-1].childNodes[0].className += " page_active";
 				for (var i = 0; i < user_sorting.length; i++) {
 					if (user_sorting[i].checked == true) {
 						sortBy = user_sorting[i].value;

@@ -213,7 +213,7 @@ if (!empty($task_info['login_run'])) { ?>
                 <div class="row article-feed" id="activites-result"></div>
                 <div class="row">
                     
-                    <div class="col-12">
+                    <div class="col-12" id="pagination-links">
                         <nav aria-label="Page navigation example">
                           <ul class="pagination page-number justify-content-center">
                             
