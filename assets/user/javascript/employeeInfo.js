@@ -98,8 +98,11 @@ function drawCards(data) {
 			}
 			if(Math.ceil(offset_cards/50) == 1)
 			{
-				console.log(Math.ceil(offset_cards/50) == 1);
 				$('#pagination-links').hide();
+			}
+			else
+			{
+				$('#pagination-links').show();
 			}
 		$(next_page).click(function(e)
 		{
@@ -301,9 +304,7 @@ function drawCards(data) {
 					var stop_time = moment().tz('utc').format('Y-MM-DD H:mm:ss');
 					var t_id = $(this).data('id');
 					if (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play') {
-						// $('#play-timer').modal('show');
 						check_for_punchIn();
-
 					} else {
 						$.ajax({
 							type: 'POST',
