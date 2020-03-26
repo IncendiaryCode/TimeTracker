@@ -71,16 +71,18 @@ class User extends CI_Controller
     public function load_task_data() //Load task data to user dashboard
     {
         $today_filter = '';
-        $filter_type = '';
         $filter = '';
-        $search_id = '';
+        $search_string = '';
         $sort_type = '';
         $date = '';
-        if($this->input->post('search_id')){
-            $search_id = $this->input->post('search_id');
+        $offset = 0;
+        if($this->input->post('offset')){
+            $offset = $this->input->post('offset');
+        }
+        if($this->input->post('search_string')){
+            $search_string = $this->input->post('search_string');
         }
         if($this->input->post('project_filter')){
-            $filter_type = 'proj_filter';
             $filter = json_decode($this->input->post('project_filter'));
         }
         if ($this->input->post('type',TRUE)) {
@@ -89,20 +91,22 @@ class User extends CI_Controller
             if($this->input->post('filter')){
                 $today_filter = 'today';
             }
-            $task_details['data'] = $this->user_model->get_task_details($sort_type,$date,$filter_type,$filter,$today_filter,$search_id); //get task data
+            $task_details['data'] = $this->user_model->get_task_details($sort_type,$date,$filter,$today_filter,$search_string,$offset); //get task data
             if($task_details['data'] == NULL){ //if no data, send failure message
                 $task_details['status'] = FALSE;
                 $task_details['data'] = NULL;
                 $task_details['msg'] = "No activity in this date.";
             }else{ //if data is present, send the data
-                $task_details['status'] = TRUE; 
+                $task_details['status'] = TRUE;
+                $task_details['count'] = $this->user_model->load_task_count($filter,$today_filter,$search_string);
+                $task_details['offset'] = $offset;
             }
             echo json_encode($task_details);
         }else if(!empty($this->input->post('chart_type'))){
             //load task data into employee activities page
             $date = $this->input->post('date');
             $chart_type = $this->input->post('chart_type');
-            $task_details['data'] = $this->user_model->get_task_details($chart_type,$date,$filter_type,$filter); //get task data
+            $task_details['data'] = $this->user_model->get_task_details($chart_type,$date,$filter); //get task data
             if($task_details['data'] == NULL){ //if no data, send failure message
                     $task_details['status'] = FALSE;
                     $task_details['data'] = array();
@@ -348,7 +352,7 @@ class User extends CI_Controller
                 redirect('user/load_add_task');
             } else { //if add method is successful, redirect with success message
                 $this->session->set_flashdata('success', 'A new Task is added.');
-                redirect('user');
+                redirect('user/index');
             } 
         }
     }

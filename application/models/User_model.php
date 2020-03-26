@@ -60,7 +60,7 @@ class User_model extends CI_Model {
         $userid = $this->userid;
 
         //send task details to user dashboard
-        $this->db->select('d.start_time');
+        $this->db->select('d.start_time,d.task_id,t.task_name');
         $this->db->from('time_details AS d');
         $this->db->join('task AS t', 't.id = d.task_id');
         $this->db->where(array('d.user_id' => $userid, 'd.total_minutes' => '0'));
@@ -136,7 +136,7 @@ class User_model extends CI_Model {
      * 
      * returns $data
      */
-    public function get_task_details($sort_type, $date = '', $filter_type = '', $filter_value = '', $today_filter = '',$search_id = '') {
+    public function get_task_details($sort_type, $date = '', $filter_value = '', $today_filter = '',$search_string = '',$offset=0) {
         $userid = $this->userid;
         $this->db->select('p.name,IFNULL(d.start_time,t.created_on) AS started,d.start_time,p.image_name,p.color_code,t.task_name,t.id AS task_id');
         $this->db->select("SUM(IF(d.total_minutes=0,1,0)) AS running_task", FALSE); //get running tasks of the user
@@ -147,28 +147,28 @@ class User_model extends CI_Model {
         $this->db->join('time_details AS d', 'd.task_id = t.id AND d.user_id =ta.user_id','LEFT');
         $this->db->join('project AS p', 'p.id = t.project_id');
 
-        if($filter_type == 'proj_filter'){
-            if(!empty($filter_value)){
-                $this->db->where_in('t.project_id',$filter_value);
-            }
+        if(!empty($filter_value)){
+            $this->db->where_in('t.project_id',$filter_value);
+        }
+        if($search_string != ''){
+            $this->db->like('t.task_name',$search_string);
         }
         if($today_filter == 'today'){
             $this->db->where('ta.user_id',$userid);
             $this->db->where('task_date',date('Y-m-d'));
             $this->db->or_where('task_date IS NULL');
-            if($filter_type == 'proj_filter'){
-                if(!empty($filter_value)){
-                    $this->db->where_in('t.project_id',$filter_value);
-                }
+            if(!empty($filter_value)){
+                $this->db->where_in('t.project_id',$filter_value);
             }
-        }
-        if($search_id != ''){
-            $this->db->where('t.id',$search_id);
+            if($search_string != ''){
+                $this->db->like('t.task_name',$search_string);
+            }
         }
         if($date == ''){
             $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
             $this->db->where('ta.user_id',$userid);
             $this->db->group_by('t.id');
+            $this->db->limit(50,$offset);
         } else {
             if ($sort_type == 'daily_chart') {
                 $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
@@ -1827,8 +1827,9 @@ class User_model extends CI_Model {
         }
         $valid_columns = array(
             0=>'task_date',
-            1=>'start_time',
-            2=>'end_time'
+            1=>'start',
+            2=>'end',
+            3=>'total_seconds'
         );
         if(!isset($valid_columns[$col]))
         {
@@ -1843,6 +1844,8 @@ class User_model extends CI_Model {
                 $this->db->order_by($order, $dir);
         }
         $this->db->select('task_date,start_time,end_time');
+        $this->db->select('TIME_TO_SEC(TIMEDIFF(end_time,start_time)) AS total_seconds');
+        $this->db->select('TIME(start_time) AS start,TIME(end_time) AS end');
         $this->db->from('login_details');
         $this->db->where(array('user_id'=>$this->userid));
         if(!empty($user_data['from']) && !empty($user_data['to'])){
@@ -1856,8 +1859,7 @@ class User_model extends CI_Model {
             $this->load->model('dashboard_model');
             foreach($login_details AS $l_detail){
                 if($l_detail['end_time'] != ''){
-                    $time_elapsed = strtotime($l_detail['end_time']) - strtotime($l_detail['start_time']);
-                    $total_minutes = abs($time_elapsed)/60;
+                    $total_minutes = abs($l_detail['total_seconds'])/60;
                     $format_time = $this->dashboard_model->format_time($total_minutes);
                 }
                 $log_data[] = array('login_date'=>$l_detail['task_date'],'login_time'=>$this->convert_date($l_detail['start_time']),'logout_time'=>($l_detail['end_time'])?$this->convert_date($l_detail['end_time']):'--','total_time'=>($total_minutes != 0)?$format_time:'--');
@@ -1892,6 +1894,35 @@ class User_model extends CI_Model {
             $tasks_list = '';
         }
         return $tasks_list;
+    }
+
+    public function load_task_count($filter_value,$today_filter,$search_string){
+        $this->db->select('count(t.id) AS tasks_count');
+        $this->db->from('task AS t');
+        $this->db->join('task_assignee AS ta', 'ta.task_id = t.id');
+        $this->db->join('time_details AS d', 'd.task_id = t.id AND d.user_id =ta.user_id','LEFT');
+        $this->db->join('project AS p', 'p.id = t.project_id');
+        $this->db->where('ta.user_id',$this->userid);
+        if(!empty($filter_value)){
+            $this->db->where_in('t.project_id',$filter_value);
+        }
+        if($search_string != ''){
+            $this->db->like('t.task_name',$search_string);
+        }
+        if($today_filter == 'today'){
+            $this->db->where('ta.user_id',$this->userid);
+            $this->db->where('task_date',date('Y-m-d'));
+            $this->db->or_where('task_date IS NULL');
+            if(!empty($filter_value)){
+                $this->db->where_in('t.project_id',$filter_value);
+            }
+            if($search_string != ''){
+                $this->db->like('t.task_name',$search_string);
+            }
+        }
+        $this->db->group_by('t.id');
+        $query = $this->db->get();
+        return $query->num_rows();
     }
 }
 ?>
