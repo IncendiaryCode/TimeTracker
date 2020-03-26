@@ -2107,3 +2107,42 @@ button#project-filtering:focus {
 {
 	font-weight:400;
 }
+
+/*pagination*/
+
+
+
+.pagination
+{
+    padding-top: 40px;
+}
+.pagination li a
+{
+	position: relative;
+	border: 1px solid #ccc;
+    margin: 10px;
+    color: #e388f7;
+
+	height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.pagination span
+{
+	position: absolute;
+    left: 36%;
+    top: 18%;
+    font-size: 20px;
+}
+
+.pagination li a:hover
+{
+	background-color: #eee;
+}
+.page_active
+{
+    background-color: #e388f7;
+    border: 1px solid #e388f7;
+    color: #fff !important;
+}

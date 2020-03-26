@@ -135,8 +135,10 @@ $name = $this->session->userdata('username');
 <script src="//unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
 <script src="<?= base_url(); ?>assets/plugins/bxslider/js/jquery.bxslider.min.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/momet_copy.js?v=<?= VERSION ?>"></script>
+<script src="<?= base_url(); ?>assets/user/javascript/infinite_scroll.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/croppie.min.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/utils.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/moment_zone.js?v=<?= VERSION ?>"></script>

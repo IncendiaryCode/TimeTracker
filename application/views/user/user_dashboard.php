@@ -210,10 +210,21 @@ if (!empty($task_info['login_run'])) { ?>
             </div>
 
             <div class='mb-5' id="attach-card">
-                <div class="row" id="activites-result"></div>
+                <div class="row article-feed" id="activites-result"></div>
+                <div class="row">
+                    
+                    <div class="col-12">
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination page-number justify-content-center">
+                            
+                          </ul>
+                        </nav>
+                    </div>
+                </div>
+
                 <div class="row" id="no-data">
                     <div class="col-12 text-center no-data">
-                        <img src="https://github.com/IncendiaryCode/TimeTracker/blob/dev_web_ci/assets/images/no-data.png?raw=true" class="img-fluid">
+                        <img src="<?= base_url(); ?>/assets/images/no-data.png" class="img-fluid animated fadeIn">
                         <!-- todo.. -->
                         <h3>No task available for today. <a class="" href="<?= base_url(); ?>user/load_add_task" onclick="return check_for_punchIn()">Add a task</a></h3>
                     </div>
@@ -356,7 +367,4 @@ if (!empty($task_info['login_run'])) { ?>
                 </div>
             </div>
         </div>
-
-
-
 </main>

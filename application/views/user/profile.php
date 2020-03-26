@@ -111,7 +111,7 @@ $this->load->helper('url_helper');
             <div class="col-md-10 offset-md-1">
                 <canvas id="user_prof_chart" height="100px;" class="mb-5"></canvas>
                 <div class="col-12  text-center profile-chart-nodata">
-                    <img src="http://www.timetracker.com//assets/images/no-data.png?raw=true" class="img-fluid animated fadeIn">
+                     <img src="<?= base_url(); ?>/assets/images/no-data.png" class="img-fluid animated fadeIn">
                 </div> 
                     <h5  class="text-center font-weight-normal" id="profile-chart-error"></h5>
                 </div>

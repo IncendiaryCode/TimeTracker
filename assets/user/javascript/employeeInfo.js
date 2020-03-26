@@ -1,5 +1,7 @@
 //main timer interval for login
 var mainTimerInterval;
+var offset_cards = 0;
+var offset_count = 0;
 function startTimer(startTime) {
 	if (startTime === 'stop') {
 		//clear the existing interval
@@ -69,6 +71,166 @@ function drawCards(data) {
 	if (data['data'] == null) {
 		$('.no-data').show();
 	} else {
+		offset_cards = data['count'];
+		var user_filter = document.getElementById('filtering').getElementsByTagName('input');
+			$('.page-number').empty();
+			var pre_page = $('<li class=""><a class="pagination__pre" href="" tabindex="-1"><span><i class="fa fa-angle-double-left" aria-hidden="true"></i></span></a></li>');
+			$('.page-number').append(pre_page);
+			for(var i=0; i<parseInt(Math.ceil(offset_cards/50)); i++)
+			{
+				if (i == 0) {
+					var new_page = $('<li class="page-item"><a href=""><span>'+(i+1)+'</span></a></li>');
+				}
+				else { var new_page = $('<li class="page-item"><a href=""><span>'+(i+1)+'</span></a></li>'); }
+				$('.page-number').append(new_page);
+			}
+
+			var p_no = document.getElementsByClassName('page-number')[0].childNodes[(data["offset"]/50)+1];
+			p_no.childNodes[0].className += " page_active";
+
+			var next_page = $('<li class=" "><a class="pagination__next" href=""><span><i class="fa fa-angle-double-right" aria-hidden="true"></i></span></a></li>');
+			$('.page-number').append(next_page);
+			
+		$(next_page).click(function(e)
+		{
+			var p_no = $('.page-number').find(".page_active");
+			e.preventDefault();
+			var user_sorting = document.getElementById('sorting').getElementsByTagName('input');
+			var user_filtering = document.getElementById('filtering').getElementsByTagName('input');
+			var sortBy = 'date';
+			var filterBy = [];
+
+			var check_page = parseInt(p_no[0].parentNode.parentNode.childNodes[parseInt(p_no[0].text)+1].innerText).toString();
+			if (check_page == 'NaN' || check_page == "undefined") {
+					document.getElementsByClassName('pagination__next').disabled = true;
+					$('.pagination__next').css("color","#ccc");
+			}else
+			{
+				document.getElementsByClassName('pagination__next').disabled = false;
+				$('.pagination__next').css("color","#e388f7");
+			}
+
+			if(parseInt(p_no[0].parentNode.parentNode.childNodes[parseInt(p_no[0].text)+1].innerText).toString() != 'NaN')
+			{
+				p_no[0].classList.remove("page_active");
+				for (var i = 0; i < user_sorting.length; i++) {
+					if (user_sorting[i].checked == true) {
+						sortBy = user_sorting[i].value;
+					}
+				}
+				for (var i = 0; i < user_filtering.length; i++) {
+					if (user_filtering[i].checked == true) {
+						filterBy.push(user_filtering[i + 1].value);
+					}
+				}
+				if (document.getElementById('today-input').checked == true) {
+					if (filterBy.length != 0) {
+						loadTaskActivities({ "offset":(p_no[0].text*50), type: sortBy, project_filter: JSON.stringify(filterBy), filter: 'today', 'search_string': document.getElementById('search-task').value });
+					} else {
+						loadTaskActivities({ "offset":(p_no[0].text*50), type: sortBy, filter: 'today',  'search_string': document.getElementById('search-task').value });
+					}
+				} else {
+					if (filterBy.length != 0) {
+						loadTaskActivities({ "offset":(p_no[0].text*50), type: sortBy, project_filter: JSON.stringify(filterBy),  'search_string': document.getElementById('search-task').value });
+						$('#clear-filter').show();
+					} else {
+						loadTaskActivities({ "offset":(p_no[0].text*50), type: sortBy, 'search_string': document.getElementById('search-task').value});
+					}
+				}
+			}
+		});
+
+		$(pre_page).click(function(e)
+		{
+			e.preventDefault();
+			var user_sorting = document.getElementById('sorting').getElementsByTagName('input');
+			var user_filtering = document.getElementById('filtering').getElementsByTagName('input');
+			var sortBy = 'date';
+			var filterBy = [];
+
+			var p_no = $('.page-number').find(".page_active");
+			var check_page = parseInt(p_no[0].parentNode.parentNode.childNodes[parseInt(p_no[0].text)-1].innerText).toString();
+			if (check_page == 'NaN' || check_page == "undefined") {
+					document.getElementsByClassName('pagination__pre').disabled = true;
+					$('.pagination__pre').css("color","#ccc");
+			}else
+			{
+				document.getElementsByClassName('pagination__pre').disabled = false;
+				$('.pagination__pre').css("color","#e388f7");
+			}
+
+			if(parseInt(p_no[0].parentNode.parentNode.childNodes[parseInt(p_no[0].text)-1].innerText).toString() != 'NaN')
+			{
+				p_no[0].classList.remove("page_active");
+				// p_no[0].parentNode.parentNode.childNodes[parseInt(p_no[0].text)-1].childNodes[0].className += " page_active";
+				for (var i = 0; i < user_sorting.length; i++) {
+					if (user_sorting[i].checked == true) {
+						sortBy = user_sorting[i].value;
+					}
+				}
+				for (var i = 0; i < user_filtering.length; i++) {
+					if (user_filtering[i].checked == true) {
+						filterBy.push(user_filtering[i + 1].value);
+					}
+				}
+				if (document.getElementById('today-input').checked == true) {
+					if (filterBy.length != 0) {
+						loadTaskActivities({ "offset":((p_no[0].text-2)*50), type: sortBy, project_filter: JSON.stringify(filterBy), filter: 'today', 'search_string': document.getElementById('search-task').value });
+					} else {
+						loadTaskActivities({ "offset":((p_no[0].text-2)*50), type: sortBy, filter: 'today',  'search_string': document.getElementById('search-task').value });
+					}
+				} else {
+					if (filterBy.length != 0) {
+						loadTaskActivities({ "offset":((p_no[0].text-2)*50), type: sortBy, project_filter: JSON.stringify(filterBy),  'search_string': document.getElementById('search-task').value });
+						$('#clear-filter').show();
+					} else {
+						loadTaskActivities({ "offset":((p_no[0].text-2)	*50), type: sortBy, 'search_string': document.getElementById('search-task').value});
+					}
+				}
+			}
+		});
+
+		$('.page-item').click(function(e)
+		{
+			e.preventDefault();
+			if(this.childNodes[0].classList[1] != "page_active")
+			{
+				var user_sorting = document.getElementById('sorting').getElementsByTagName('input');
+				var user_filtering = document.getElementById('filtering').getElementsByTagName('input');
+				var sortBy = 'date';
+				var filterBy = [];
+
+				var p_no = $('.page-number').find(".page_active");
+				p_no[0].parentNode.parentNode.childNodes[parseInt(p_no[0].text)].childNodes[0].classList.remove("page_active");
+				// this.childNodes[0].className += " page_active";
+
+				for (var i = 0; i < user_sorting.length; i++) {
+					if (user_sorting[i].checked == true) {
+						sortBy = user_sorting[i].value;
+					}
+				}
+				for (var i = 0; i < user_filtering.length; i++) {
+					if (user_filtering[i].checked == true) {
+						filterBy.push(user_filtering[i + 1].value);
+					}
+				}
+				if (document.getElementById('today-input').checked == true) {
+					if (filterBy.length != 0) {
+						loadTaskActivities({ "offset":((this.innerText-1)*50), type: sortBy, project_filter: JSON.stringify(filterBy), filter: 'today', 'search_string': document.getElementById('search-task').value });
+					} else {
+						loadTaskActivities({ "offset":((this.innerText-1)*50), type: sortBy, filter: 'today',  'search_string': document.getElementById('search-task').value });
+					}
+				} else {
+					if (filterBy.length != 0) {
+						loadTaskActivities({ "offset":((this.innerText-1)*50), type: sortBy, project_filter: JSON.stringify(filterBy),  'search_string': document.getElementById('search-task').value });
+						$('#clear-filter').show();
+					} else {
+						loadTaskActivities({ "offset":((this.innerText-1)*50), type: sortBy, 'search_string': document.getElementById('search-task').value});
+					}
+				}
+			}
+		})
+
 		$('.no-data').hide();
 		for (x in data) {
 			for (var y = 0; y < data[x].length; y++) {
@@ -272,6 +434,7 @@ function drawCards(data) {
 				}
 			}
 		}
+		$('.pagination').show();
 	}
 }
 
@@ -409,7 +572,6 @@ $(document).ready(function() {
 			}
 			if(document.getElementById("search-task").value != "" && document.getElementById("search-task").value != " ") 
 			{
-				document.getElementById("search-error").innerHTML = "";	
 				if (document.getElementById('today-input').checked == true) {
 					$('#navbarToggleExternalContent').collapse('toggle');
 					if(filterBy.length > 0)
@@ -430,7 +592,6 @@ $(document).ready(function() {
 				}
 			else
 			{
-				document.getElementById("search-error").innerHTML = "";
 				if (document.getElementById('today-input').checked == true) {
 					$('#navbarToggleExternalContent').collapse('toggle');
 					if(filterBy.length > 0)
@@ -439,7 +600,6 @@ $(document).ready(function() {
 					return false;
 				} else {
 					$('#navbarToggleExternalContent').collapse('toggle');
-
 					if(filterBy.length > 0)
 					loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) });
 					else loadTaskActivities({ type: sortBy });
@@ -457,6 +617,7 @@ $(document).ready(function() {
 		var user_filtering = document.getElementById('filtering').getElementsByTagName('input');
 		var sortBy = 'date';
 		var filterBy = [];
+
 		for (var i = 0; i < user_sorting.length; i++) {
 			if (user_sorting[i].checked == true) {
 				sortBy = user_sorting[i].value;
@@ -469,22 +630,22 @@ $(document).ready(function() {
 		}
 		if (document.getElementById('today-input').checked == false) {
 			if (filterBy.length != 0) {
-				loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy), filter: 'today' });
+				loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy), filter: 'today', 'search_string': document.getElementById('search-task').value });
 			} else {
-				loadTaskActivities({ type: sortBy, filter: 'today' });
+				loadTaskActivities({ type: sortBy, filter: 'today',  'search_string': document.getElementById('search-task').value });
 			}
 			document.getElementById('today-input').checked = true;
 		} else {
 			if (filterBy.length != 0) {
-				loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy) });
+				loadTaskActivities({ type: sortBy, project_filter: JSON.stringify(filterBy),  'search_string': document.getElementById('search-task').value });
 				$('#clear-filter').show();
 			} else {
-				loadTaskActivities({ type: sortBy });
+				loadTaskActivities({ type: sortBy, 'search_string': document.getElementById('search-task').value});
 			}
-
 			document.getElementById('today-input').checked = false;
 		}
 	});
+
 	$('#clear-filter').click(function(e) {
 		e.preventDefault();
 		var sorting_element = '';
