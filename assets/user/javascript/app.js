@@ -1,7 +1,5 @@
 //This file is used commonly on all pages through out the application
 
-// var check_punchIn = not_logged;
-// var check_punchOut = stopped;
 function check_for_punchIn() {
 	if (check_fr_punchIn == 0) {
 		$('#alert-punchin').modal('show');
@@ -97,5 +95,7 @@ $(function() {
 		format: 'HH:MM',
 		uiLibrary: 'bootstrap4'
 	});
-	$('.user-profile').tooltip('enable');	
+	$('.user-profile').tooltip('enable');
+	var picker_footer = $('.gj-picker')[0].childNodes[2].childNodes[0];
+	$(picker_footer).css("background-image", "linear-gradient(to bottom right, #666, #666, #666)");
 });

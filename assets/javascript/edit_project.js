@@ -86,6 +86,88 @@ if (typeof usr_arr != 'undefined') {
 }
 
 $(document).ready(function() {
+
+
+
+    // Start upload preview image
+    var $uploadCrop, tempFilename, rawImg, imageId, cropped_points;
+    function readFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('.upload-demo1').addClass('ready');
+                $('#maintainAsectRatio').modal('show');
+                rawImg = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            swal("Sorry - you're browser doesn't support the FileReader API");
+        }
+    }
+    $uploadCrop = $('#upload-demo1').croppie({
+        viewport: {
+            width: 200,
+            height: 200,
+            type: 'circle'
+        },
+        boundary: {
+            width: 250,
+            height: 250
+        },
+        enforceBoundary: false,
+        enableExif: true
+    });
+    $('#maintainAsectRatio').on('shown.bs.modal', function() {
+        $uploadCrop
+            .croppie('bind', {
+                url: rawImg
+            })
+            .then(function() {});
+    });
+
+    $('.item-img').on('change', function() {
+        imageId = $(this).data('id'); 
+        tempFilename = $(this).val();
+        $('#cancelCropBtn').data('id', imageId);
+        readFile(this);
+    });
+
+    $('#maintainAsectRatio').on('update.croppie', function(ev, cropData) {
+        cropped_points = cropData['points'];
+    });
+
+    $('#cropImageBtn1').on('click', function(ev) {
+        $uploadCrop
+            .croppie('result', {
+                type: 'base64',
+                format: 'jpeg',
+                size: { width: 200, height: 200 }
+            })
+            .then(function(resp) {
+                $('#item-img-output').attr('src', resp);
+                $('#maintainAsectRatio').modal('hide');
+            });
+    });
+
+    if(document.getElementById('modify-project'))
+    {
+    	var modify_project = document.getElementById('modify-project');
+    	modify_project.onsubmit = function()
+    	{
+    		if (cropped_points == undefined) {
+    			document.getElementById('edit-project-error').innerHTML = "Please select logo for the project.";
+    			return false;
+    		}
+    		else
+    		{
+    			document.getElementById('edit-project-error').innerHTML = "";
+	    		document.getElementById('cropped-icon-points').value = cropped_points;
+	    		return true;
+    		}
+    	};
+    }
+
+
 	if (document.getElementById('module-edit')) {
 		var pre_edit = document.getElementById('pre-edit-module');
 		pre_edit.onsubmit = function() {

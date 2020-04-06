@@ -37,7 +37,7 @@ $this->load->helper('url_helper');
                                 <label for="new-module0">Module name:</label>
                                 <div class="row">
                                     <div class="col-10 assign-module0">
-                                        <input class="form-control user"  id="new-module0" name="new-module[0][module]" placeholder="General">
+                                        <input class="form-control user"  id="new-module0" name="new_module[0][module]" placeholder="General">
                                     </div>
                                     <div class="col-2 assign-module0">
                                         <a href="#" id="add-new-module" >
@@ -49,7 +49,7 @@ $this->load->helper('url_helper');
                             <div class="form-group mt-3 row " id="assign-new-user">
                                 <div class="col-12">
                                     <label for="assign-name">Name:</label>
-                                    <select class="form-control user"  id="assign-name0" multiple="" name="assign-name[0][name]">
+                                    <select class="form-control user"  id="assign-name0" multiple="" name="assign_name[]">
                                         <?php $i=1;
                                             foreach($names as $name){ ?>
                                             <option name="assign-name[$i++][name]"><?php echo $name['name']; ?></option>
@@ -61,10 +61,9 @@ $this->load->helper('url_helper');
                                 <label for="task-name ">Choose logo:</label>
                                 <input type="file" class="form-control item-img file center-block" name="project-logo" id="Project-logo">
                                 <label class="cabinet center-block">
-                                    <input type="hidden" name="croped_pointed"  id= "cropped-points" />
+                                    <input type="hidden" name="cropped_icon_points"  id= "cropped-points" />
                                 </label>
                             </div>
-
                             <div class="form-group mt-3">
                                 <label for="task-name ">Choose color:</label>
                                 <input type="color"  value="#e384fb" class="form-control" name="project-color" id="Project-color">
@@ -90,7 +89,7 @@ $this->load->helper('url_helper');
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary col-6" data-dismiss="modal">Close</button>
-                <button type="button" id="cropImageBtn" class="btn btn-primary col-6">Done</button>
+                <button type="button" id="cropImageBtn" class="btn btn-primary col-6 ml-0">Done</button>
             </div>
         </div>
     </div>

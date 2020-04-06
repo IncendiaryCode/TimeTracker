@@ -55,7 +55,6 @@ if (!empty($task_info['login_run'])) { ?>
     var __timeTrackerLoginTime = "<?= $logintime ?>"; /*start date and time of the task.*/
     var stopped = "<?= $already_logged ?>"; /*to check for punch out action*/
     var not_logged = "<?= $not_logged ?>"; /*to check for punch in action*/
-    var task_arr =  JSON.parse('<?php echo json_encode($tasks_list) ?>');
 
 </script>
 <!-- new scoll for task -->
@@ -112,6 +111,8 @@ if (!empty($task_info['login_run'])) { ?>
         </div>
     </div>
 </div>
+
+<!-- Start of Recent Activities -->
 <main class="container-fluid-main">
     <div class="md main-container-employee container timer">
         <div class="text-center shadow-lg topWidth stop-time" id="stop-time" data-tasktype="<?= $task_type ?>" data-id="<?= $task_id ?>">
@@ -279,7 +280,7 @@ if (!empty($task_info['login_run'])) { ?>
                         </div>
                         <p class="text-danger text-center" id="stop-now-error"></p>
                         <div class="modal-footer text-center">
-                            <button type="submit" class="btn btn-primary col-4">Next</button>
+                            <button type="submit" class="btn btn-primary col-4">Update</button>
                         </div>
                     </form>
                 </div>
@@ -326,10 +327,12 @@ if (!empty($task_info['login_run'])) { ?>
             </div>
         </div>
 <?php } ?>
+
+<!-- End of Recent Activities -->
     </div>
 
 
-        <div class="modal " id="alert-punchin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-backdrop="false">
+        <div class="modal fade" id="alert-punchin" tabindex="-1" role="dialog" aria-labelledby="lert-punchinLabel" aria-hidden="false" data-backdrop="false">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <form action="<?= base_url(); ?>index.php/user/save_login_time" id="starting-timer" method="post">
@@ -358,13 +361,14 @@ if (!empty($task_info['login_run'])) { ?>
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">×</button>
                     </div>
-                    <div class="modal-body text-center">
+                    <div class="modal-body">
                         <div>
-                            <h4>You have already punched out for the day!!!</h4>
+                            <h4 class=" text-center-">You have already punched out for the day!!!</h4>
+                            <p class="text-muted"><i class="fas fa-exclamation-triangle"></i> You cannot run task for the day.</p>
                         </div>
                     </div>
                     <p class="text-danger" id="stop-timer-error"></p>
                 </div>
             </div>
         </div>
-</main>
+    </main>

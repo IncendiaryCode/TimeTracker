@@ -173,27 +173,6 @@ var assign = {
 }
 
 $(document).ready(function () {
-    if (document.getElementById("new-project")) {
-        if (old_project == true) {
-            document.getElementById("new-project").checked = false;
-            $('#new-project-input').hide();
-
-            $.ajax({
-                type: 'POST',
-                url: timeTrackerBaseURL + 'index.php/admin/get_project_list',
-                data: { 'type': "get_user" },
-                success: function (res) {
-                    var result = JSON.parse(res);
-                    usernames = result['result'];
-                    for (var j = 0; j < usernames.length; j++) {
-                        var option = $('<option>' + usernames[j]["name"] + '</option>');
-                        $('.project-list').append(option);
-                    }
-                }
-            });
-        }
-    }
-
 
     // Start upload preview image
     var $uploadCrop, tempFilename, rawImg, imageId, cropped_points;

@@ -51,7 +51,7 @@
                     <div class="pb-5">
                         <div class="primary-wrap">
                             <div class="row remove-first-timeline">
-                                <div class="col-4 col-md-5">
+                                <div class="col-4">
                                     <div class="input-group date mb-3">
                                         <input type="text" class="date-utc form-control datepicker pl-3" readonly="" name="time[0][date]" data-date-format="yyyy-mm-dd" id="date-picker-0" value="<?=$task_timeline["task_date"]; ?>" >
                                         <div class="input-group-append">
@@ -61,7 +61,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-4 col-md-3">
+                                <div class="col-4">
                                     <div class="input-group">
                                         <div role="wrapper" class="gj-timepicker gj-timepicker-bootstrap gj-unselectable input-group">
                                         	<input id="start-time-0"  readonly="" class="date-utc form-control timepicker-a border" name="time[0][start]" placeholder="hh:mm" data-type="timepicker" data-guid="7854e58d-85a9-1b4f-2825-6ed567aed58b" data-timepicker="true" role="input" value="<?=$task_timeline["start_time"]; ?>">
@@ -72,7 +72,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-4 col-md-3">
+                                <div class="col-4">
                                     <div class="input-group">
                                         <div role="wrapper" class="gj-timepicker gj-timepicker-bootstrap gj-unselectable input-group">
                                         	<input id="end-time-0" readonly="" class="date-utc form-control timepicker-b border" name="time[0][end]" placeholder="hh:mm" data-type="timepicker" data-guid="dfd4c7fa-8792-be1b-6697-240e12210168" data-timepicker="true" role="input" value="<?=$task_timeline["end_time"]; ?>">
@@ -83,7 +83,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-10 col-md-11 text-center">
+                                <div class="col-12 text-center">
                                     <input id="description-0"  readonly="" class="form-control" name="time[0][task_description]" placeholder="description" value="<?=$task_timeline["task_description"]; ?>"	>
                                 </div>
                             </div>

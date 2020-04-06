@@ -37,13 +37,14 @@ $this->load->helper('url_helper');
                                     <figcaption><i class="fa fa-camera img-icon"></i></figcaption>
                                 </figure>
                                 <input type="file" class="item-img file center-block" name="change_img" id = "change-img" />
-                                <input type="hidden" name="croped_pointed" id = "cropped-points" />
+                                <input type="hidden" name="cropped_points" id = "cropped-points" />
                             </label>                          
                         </div>
                         <div class="col-md-6 offset-md-2">
+                            <!-- Profile information -->
                             <div class="row mr-5">
                                 <div class="col-4">
-                                    <p class="profile-entry">Name</p>
+                                    <p class="profile-entry"><i class="fas fa-user"></i> Name</p>
                                 </div>
                                 <div class="col-8">
                                     <h4 class="employee-name">
@@ -51,13 +52,13 @@ $this->load->helper('url_helper');
                                     </h4>
                                 </div>
                                 <div class="col-4 pt-3">
-                                    <p class="profile-entry">Email</p>
+                                    <p class="profile-entry"><i class="far fa-envelope"></i> Email</p>
                                 </div>
                                 <div class="col-8 pt-3">
                                     <?=$res['email'];?>
                                 </div>
                                 <div class="col-4 pt-3">
-                                    <p class="profile-entry">Mobile</p>
+                                    <p class="profile-entry"><i class="fas fa-phone-alt"></i> Mobile</p>
                                 </div>
                                 <div class="col-8 pt-3">
                                         <input type="text" class="form-control-file  border-top-0 border-left-0 border-right-0" name="profile-ph" id="profile-ph" value = "<?php echo ($res['phone'] != 0)?$res['phone']:'';?>">

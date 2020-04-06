@@ -471,7 +471,7 @@ $(document).ready(function() {
 						var total_start_sec = parseInt(input_elements[k + 1].value.split(':')[0] * 60) + parseInt(input_elements[k + 1].value.split(':')[1]);
 						var total_end_sec = parseInt(input_elements[k + 2].value.split(':')[0] * 60) + parseInt(input_elements[k + 2].value.split(':')[1]);
 						if (total_start_sec >= total_end_sec) {
-							document.getElementById('taskError').innerHTML = 'Start time cannot greater than end time';
+							document.getElementById('taskError').innerHTML = 'Start time cannot greater than or equal to end time';
 							return false;
 						}
 						

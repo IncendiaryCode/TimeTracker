@@ -56,7 +56,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <input type="password" class="form-control  font-weight-light border-top-0 border-left-0 border-right-0" id="psw2" name="psw22" placeholder="Confirm password">
                 </div>
             </div>
-            <p class="error" id="cnfrmPsw"></p>
+            <p class="text-danger" id="cnfrmPsw"></p>
 
             <div class="row email-input" style="width: 100%;">
                 <a href="<?= base_url(); ?>index.php/login" class="col-6 forgot-color"><i class="fas fa-arrow-left"> </i>back to login</a>

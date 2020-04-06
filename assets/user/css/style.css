@@ -99,6 +99,8 @@ border-radius: 5px; display: block; padding: 10px 0; width: 225%; }
 	font-size: 25px;
 	align-content: center;
 }
+
+
 .img-icon {
 	position: absolute;
 	top: 145px;
@@ -141,6 +143,10 @@ h1 span {
 	background-color: #e485fb;
 }
 
+.gj-modal button
+{
+    min-width: 50%;
+}
 .btn-primary:not(:disabled):not(.disabled):active,
 .show > .btn-primary.dropdown-toggle {
 	color: #fff;
@@ -550,6 +556,15 @@ a:hover {
 	border: 1px;
 	border-radius: 100%;
 }
+#previous-punch-in
+{
+	z-index: 1049;
+}
+
+.alert-running-tasks
+{
+	display: none;
+}
 .modal-transparent {
 	background-image: linear-gradient(to bottom right, rgb(111, 121, 253, 0.95), rgb(215, 136, 251, 0.95), rgb(250, 223, 253, 0.95));
 }
@@ -592,9 +607,20 @@ a:hover {
 	padding-bottom: 1rem;
 	border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
+#alert-punchin
+{
+	background-color: rgba(0,0,0,.54118);
+}
+#play-timer
+{
+	background-color: rgba(0,0,0,.54118);
+}
 #alert-punchin .modal-header {
 	border: none;
 	padding: 0.75rem;
+}
+#alert-punchin .modal-header, .modal-footer {
+	border: none;
 }
 .hr {
 	margin-top: 1rem;
@@ -2108,9 +2134,16 @@ button#project-filtering:focus {
 	font-weight:400;
 }
 
+#pause-action h4
+{
+	font-size: 21px;
+}
+.warining-text
+{
+	font-size: 14px;
+}
+
 /*pagination*/
-
-
 
 .pagination
 {

@@ -21,6 +21,11 @@ html {
     border-style: solid;
 }
 
+.gj-modal button
+{
+    min-width: 50%;
+}
+
 .login-color {
     background-image: linear-gradient(to bottom right, #6f79fd, #d788fb, #edbffd);
     border-radius: 5px;

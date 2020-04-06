@@ -67,7 +67,7 @@ $this->load->helper('url_helper');
     <div class="modal-dialog animated">
         <div class="modal-content text-center">
             <div class="modal-header ">Upload image
-                <button type="button" class="close text-danger" data-dismiss="modal">×</button>
+                <button type="button" class="close" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body upload-image">
                 <form id="uploadImage" method="post" action="<?=base_url();?>index.php/admin/upload_profile" enctype="multipart/form-data">

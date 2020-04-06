@@ -43,18 +43,13 @@ $this->load->library('form_validation');
                                 <div class="form-group mt-5 row " id="append-new-user">
                                     <div class="col-12">
                                         <label for="user-name ">Choose users </label>
-                                        <select class="form-control user" id="select-users" multiple="" name="user-name[0][name]">
+                                        <select class="form-control user" id="select-users" multiple="" name="user_name[]">
                                             <?php
                                                 foreach($names as $name){ ?>
                                                 <option ><?php echo $name['name']; ?></option>
                                             <?php } ?>
                                         </select>
                                     </div>
-                                <!-- <div class="col-2 pt-4">
-                                        <a href="javascript:void(0);" id="add-new-user" title="Add">
-                                            <i class="fas fa-plus icon-plus text-success" ></i>
-                                        </a>
-                                    </div> -->
                                 </div>
                                 <div class="row assign-user pb-3"></div>
                                 <div>

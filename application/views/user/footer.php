@@ -48,22 +48,39 @@ $name = $this->session->userdata('username');
     <div class="modal-dialog" role="document">
         <div class="modal-content text-center">
             <div class="modal-header">
-                <h4>Punch Out</h4>
+                <h3>Punch Out</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body text-left">
-                <ul class="text-muted">
-                    <li>Hope all your task are done for today...!</li>
-                    <li>Hope all your task are done for today...!</li>
-                    <li>You can't punch for the day after punch out.</li>
-                </ul>
-                <div class="input-group date">
+                <h4 class="text-muted mt-3">Are you sure you want to punch out for the day?</h4>
+                <p class="text-muted warining-text"><i class="fas fa-exclamation-triangle"></i> You can not add a task for the day once you punched out.</p>
+                <div class="input-group date pt-4">
                     <input type="text" class="timerpicker-punchout check-for-utc form-control" id="timerpicker-punchout" name="punch_out_time" placeholder="hh:mm">
                 </div>
             </div>
                 <p id="punch-out-invalid" class="text-danger"></p>
             <div class="modal-footer text-center">
                 <button type="button" class="btn btn-secondary col-6" data-dismiss="modal">No</button>
-                <button type="submit" class="btn btn-primary col-6" id="punch-out">Yes</button>
+                <button type="submit" class="btn btn-primary col-6 ml-1" id="punch-out">Punch Out</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="alert-running-task" tabindex="-1" role="dialog" aria-labelledby="pause-actionLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <h3>Punch Out</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-left">
+                <h4 class="text-muted mt-2">You have <span id="task-count"></span> still running!</h4>
+                <p class="text-muted warining-text"><i class="fas fa-exclamation-triangle"></i> You must close all tasks before punch out.</p>
             </div>
         </div>
     </div>
@@ -122,7 +139,7 @@ $name = $this->session->userdata('username');
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary col-6" data-dismiss="modal">Cancel</button>
-                <button type="button" id="cropImageBtn" class="btn btn-primary col-6">Done</button>
+                <button type="button" id="cropImageBtn" class="btn btn-primary col-6 ml-0">Done</button>
             </div>
         </div>
     </div>
@@ -135,10 +152,8 @@ $name = $this->session->userdata('username');
 <script src="//unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-
 <script src="<?= base_url(); ?>assets/plugins/bxslider/js/jquery.bxslider.min.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/momet_copy.js?v=<?= VERSION ?>"></script>
-<script src="<?= base_url(); ?>assets/user/javascript/infinite_scroll.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/croppie.min.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/utils.js?v=<?= VERSION ?>"></script>
 <script src="<?= base_url(); ?>assets/user/javascript/moment_zone.js?v=<?= VERSION ?>"></script>

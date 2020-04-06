@@ -47,11 +47,11 @@ html {
 	right: 0%;
 }
 .email-input {
-	padding-top: 50px;
+	padding-top: 25px;
 }
 #form1 {
 	position: absolute;
-	top: 0%;
+	top: -13%;
 	margin-top: 350px;
 	width: 50%;
 	float: right;
@@ -60,7 +60,7 @@ html {
 
 #form2 {
 	position: absolute;
-	top: 0%;
+	top: -8%;
 	margin-top: 350px;
 	width: 50%;
 	float: right;
@@ -69,7 +69,7 @@ html {
 
 #formPsw {
 	position: absolute;
-	top: 0%;
+	top: -20%;
 	margin-top: 350px;
 	width: 50%;
 	float: right;

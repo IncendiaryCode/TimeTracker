@@ -72,7 +72,6 @@ function drawCards(data) {
 		$('.no-data').show();
 	} else {
 		offset_cards = data['count'];
-		var user_filter = document.getElementById('filtering').getElementsByTagName('input');
 			$('.page-number').empty();
 			var pre_page = $('<li class=""><a class="pagination__pre" href="" tabindex="-1"><span><i class="fa fa-angle-double-left" aria-hidden="true"></i></span></a></li>');
 			$('.page-number').append(pre_page);
@@ -84,25 +83,27 @@ function drawCards(data) {
 				else { var new_page = $('<li class="page-item"><a href=""><span>'+(i+1)+'</span></a></li>'); }
 				$('.page-number').append(new_page);
 			}
-
+			if (document.getElementsByClassName('page-number')[0]) {
 			var p_no = document.getElementsByClassName('page-number')[0].childNodes[(data["offset"]/50)+1];
 			p_no.childNodes[0].className += " page_active";
-
+			}
 			var next_page = $('<li class=" "><a class="pagination__next" href=""><span><i class="fa fa-angle-double-right" aria-hidden="true"></i></span></a></li>');
 			$('.page-number').append(next_page);
-			if (parseInt($('.page_active')[0].innerText) == 1) {
-				$('.pagination__pre').css("color","#ccc");
-			}
-			if (parseInt($('.page_active')[0].innerText) == (parseInt(offset_cards/50)+1)) {
-				$('.pagination__next').css("color","#ccc");
-			}
-			if(Math.ceil(offset_cards/50) == 1)
-			{
-				$('#pagination-links').hide();
-			}
-			else
-			{
-				$('#pagination-links').show();
+			if (typeof($('.page_active')[0]) != "undefined") {
+				if (parseInt($('.page_active')[0].innerText) == 1) {
+					$('.pagination__pre').css("color","#ccc");
+				}
+				if (parseInt($('.page_active')[0].innerText) == (parseInt(offset_cards/50)+1)) {
+					$('.pagination__next').css("color","#ccc");
+				}
+				if(Math.ceil(offset_cards/50) == 1)
+				{
+					$('#pagination-links').hide();
+				}
+				else
+				{
+					$('#pagination-links').show();
+				}
 			}
 		$(next_page).click(function(e)
 		{
@@ -513,6 +514,14 @@ timerSlider = {
 
 $(document).ready(function() {
 
+	loadTaskActivities({ type: 'date' });
+
+	// check for previous punch out
+	if (document.getElementById('previous-punch-in')) {
+		$('#previous-punch-in').modal({
+			keyboard: false
+		});
+	}
 	//check for existing running tasks
 	$.ajax({
 		type: 'POST',
@@ -523,18 +532,13 @@ $(document).ready(function() {
 		}
 	});
 
-
 	if (document.getElementById('start-login-time')) {
 		document.getElementById('start-login-time').value = moment().format('HH:mm a');
 		$('#stop-now').modal({
 			keyboard: false
 		});
 	}
-	if (document.getElementById('previous-punch-in')) {
-		$('#previous-punch-in').modal({
-			keyboard: false
-		});
-	}
+	
 	if (document.getElementById('stop-time')) {
 		if (document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-play') {
 			document.getElementById('login-time').innerHTML = 'Punch in at 00:00:00';
@@ -548,7 +552,6 @@ $(document).ready(function() {
 			var user_filtering = document.getElementById('filtering').getElementsByTagName('input');
 			var sortBy = 'date';
 			var filterBy = [];
-
 
 			for (var i = 0; i < user_sorting.length; i++) {
 				if (user_sorting[i].checked == true) {
@@ -572,17 +575,17 @@ $(document).ready(function() {
 					else loadTaskActivities({ "search_string": document.getElementById("search-task").value, type: sortBy, filter: 'today' });
 					$('#clear-filter').show();
 					return false;
-				} else
-					{
-					$('#navbarToggleExternalContent').collapse('toggle');
-
-					if(filterBy.length > 0)
-					loadTaskActivities({ "search_string": document.getElementById("search-task").value, type: sortBy, project_filter: JSON.stringify(filterBy) });
-					else loadTaskActivities({ "search_string": document.getElementById("search-task").value, type: sortBy });
-					$('#clear-filter').show();
-					return false;
-					}
 				}
+				else
+				{
+				$('#navbarToggleExternalContent').collapse('toggle');
+				if(filterBy.length > 0)
+				loadTaskActivities({ "search_string": document.getElementById("search-task").value, type: sortBy, project_filter: JSON.stringify(filterBy) });
+				else loadTaskActivities({ "search_string": document.getElementById("search-task").value, type: sortBy });
+				$('#clear-filter').show();
+				return false;
+				}
+			}
 			else
 			{
 				if (document.getElementById('today-input').checked == true) {
@@ -713,9 +716,6 @@ $(document).ready(function() {
 						var action_play = $('<a href="' + timeTrackerBaseURL + 'user/start_timer?id=' + task_id_no[0] + '" class="card-action" data-id="' + task_id_no[0] + '" data-toggle="tooltip" data-placement="top" title="Play"></a>');
 						action_play.append('<i class="fas action-edit  fa-play"></i>');
 
-						//document.getElementById('footer-right-' + task_id_no[0]).childNodes[0].remove();
-						//$('#footer-right-' + task_id_no[0]).append(action_play);
-
 						$('#play-' + task_id_no).show();
 						$('#stop-' + task_id_no).hide();
 
@@ -734,7 +734,20 @@ $(document).ready(function() {
 				});
 			} else {
 				if (t_id == '' || t_id == ' ') {
+					if (timerSlider.slider.getSlideCount() > 1) {
+						$('#alert-running-task').modal('show');
+						var cnt = timerSlider.slider.getSlideCount()-1;
+						if (cnt == 1) {
+							document.getElementById('task-count').innerHTML = cnt+" task";
+						}
+						else
+						{
+							document.getElementById('task-count').innerHTML = cnt+" tasks";
+						}
+					}else{
 					$('#pause-action').modal('show');
+					}
+
 				} else {
 					localStorage.setItem('task_id', t_id);
 				}
@@ -769,9 +782,10 @@ $(document).ready(function() {
 		}
 	}
 
-	if ($('#attach-card').length > 0) {
-		loadTaskActivities({ type: 'date' });
-	}
+	// if ($('#attach-card').length > 0) {
+	// 	loadTaskActivities({ type: 'date' });
+	// }
+	// loadTaskActivities({ type: 'date' });
 
 	timerSlider.init();
 
@@ -815,11 +829,11 @@ $(document).ready(function() {
 				return false;
 			} else {
 				var input_element = __element.getElementsByClassName('check-for-utc');
-				for (var i = 0; i < input_element.length; i++) {
-					if (input_element[i].value != '' && input_element[i].value != ' ') {
-						var serverDate = moment(document.getElementById('previous-date').value.slice(0, 10) + ' ' + input_element[i].value).tz('utc').format('Y-MM-DD H:mm:ss');
-						input_element[i].value = serverDate;
-						if (input_element[i].value == 'Invalid date') {
+					if (input_element[0].value == '' || input_element[i].value == ' ') {
+						var serverDate = moment(document.getElementById('previous-date').value.slice(0, 10) + ' ' + input_element[0].value).tz('utc').format('Y-MM-DD H:mm:ss');
+						document.getElementById('stop-end-time').value = serverDate;
+
+						if (input_element[0].value == 'Invalid date') {
 							document.getElementById('stop-now-error').innerHTML = 'enter valid end time. ';
 							return false;
 						}
@@ -827,10 +841,13 @@ $(document).ready(function() {
 							document.getElementById('stop-now-error').innerHTML = 'enter valid end time. ';
 							return false;
 						}
+						else
+						{
+							return true
+						}
 					}
-				}
-				return true;
 			}
+			return false;
 		};
 	}
 	if (document.getElementById('update-punch-in')) {
@@ -884,6 +901,10 @@ $(document).ready(function() {
 		var startingTimer = document.getElementById('starting-timer');
 		startingTimer.onsubmit = function() {
 			var startTime = document.getElementById('start-login-time').value;
+			if (startTime == '' || startTime == ' ') {
+				document.getElementById('stop-timer-error').innerHTML = 'Please enter login time';
+				return false;
+			}
 			var t_day = moment().format('YYYY-MM-DD');
 			startTime = moment(t_day + ' ' + startTime).format('HH:mm');
 			document.getElementById('start-login-time').value = startTime;
@@ -891,10 +912,7 @@ $(document).ready(function() {
 				document.getElementById('stop-timer-error').innerHTML = 'Please enter valid time';
 				return false;
 			}
-			if (startTime == '' || startTime == ' ') {
-				document.getElementById('stop-timer-error').innerHTML = 'Please enter login time';
-				return false;
-			} else {
+			else {
 				document.getElementById('stop-timer-error').innerHTML = ' ';
 				var currentTime = new Date().getHours() * 60 + new Date().getMinutes();
 				var enteredTime = parseInt(startTime.toString().slice(0, 2) * 60) + parseInt(startTime.toString().slice(3, 5));
@@ -908,14 +926,20 @@ $(document).ready(function() {
 					$('#icon-for-task').removeClass('fa-play');
 					$('#icon-for-task').addClass('fa-stop');
 					var input_element = startingTimer.getElementsByClassName('check-for-utc');
-					for (var i = 0; i < input_element.length; i++) {
-						if (input_element[i].value != '' && input_element[i].value != ' ') {
-							var server_start_time = moment(new Date().getFullYear() + '-' + (parseInt(new Date().getMonth()) + 1) + '-' + new Date().getDate() + ' ' + input_element[i].value).tz('utc').format('YYYY-MM-DD HH:mm:ss');
-							input_element[i].value = server_start_time;
+					if (input_element[0].value != '' && input_element[0].value != ' ') {
+						var server_start_time = moment(new Date().getFullYear() + '-' + (parseInt(new Date().getMonth()) + 1) + '-' + new Date().getDate() + ' ' + input_element[0].value).tz('utc').format('YYYY-MM-DD HH:mm:ss');
+						input_element[0].value = server_start_time;
+					}
+					var curr_timeStamp = Math.floor(Date.now() / 1000);
+					if (typeof __timeTrackerLoginTime !== 'undefined' && document.getElementById('stop-time').childNodes[1].childNodes[0].classList[2] == 'fa-stop') {
+						login_timer = parseInt(curr_timeStamp) - parseInt(__timeTrackerLoginTime);
+						if (typeof login_timer != 'undefined') {
+							if (login_timer == parseInt(login_timer)) {
+								startTimer(login_timer);
+								return true;
+							}
 						}
 					}
-					startTimer(login_timer);
-					return true;
 				}
 			}
 			return false;
@@ -944,11 +968,14 @@ $(document).ready(function() {
 					type: 'POST',
 					url: timeTrackerBaseURL + 'user/update_end_time',
 					data: { punch_out_time: moment(pounchOutTime).tz('utc').format('Y-MM-DD H:mm:ss') },
+					dataType: 'json',
 					success: function(res) {
+						if (res['status']) {
 						document.getElementById('stop-time').childNodes[1].childNodes[0].classList.remove('fa-stop');
 						document.getElementById('stop-time').childNodes[1].childNodes[0].classList.add('fa-play');
 						window.location.reload();
 						document.getElementById('stop-time').removeEventListener('click', function() {}, true);
+						}
 					}
 				});
 			}

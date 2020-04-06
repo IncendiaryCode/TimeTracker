@@ -7,6 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="main-container-inner mt-3">
             <div class="au-card au-card--no-shadow au-card--no-pad mb-2">
                 <div class="au-card-title pt-5">
+                    <!-- Start of navigation -->
                     <ul class="nav nav-tabs" id="chart-navigation" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active text-center" id="daily-tab" data-toggle="tab" href="#daily-view" role="tab" aria-controls="daily-view" aria-selected="true">Daily</a>
@@ -64,7 +65,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <h5 id="current-date"></h5>
                                                 <h6 class="mt-3 mb-1">Duration</h6>
                                                 <input type="hidden" class="edit-date" id="daily-chart" data-date-format="YYYY-mm-DD ">
-                                                <h4 id="daily-duration">00:00</h4>
+                                                <h4 id="daily-duration">00h:00m</h4>
                                             </div>
                                             <div class="col-3 text-left">
                                                 <a href="#" class="arrow-style" id="next-date"><i class="fas fa-angle-right"></i></a>
@@ -75,18 +76,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <div id="daily">
                                         <div id="print-chart"></div>
                                         <p class="cust_daily_chart" id="cust_daily_chart">
+                                            <!-- labels for daily chart -->
                                             <span id="chart-labels"><span class="">12AM</span>
-                                                <!-- <span class="cust_chart">2AM</span> -->
                                                 <span class="cust_chart">4AM</span>
-                                                <!-- <span class="cust_chart">6AM</span> -->
                                                 <span class="cust_chart">8AM</span>
-                                                <!-- span class="cust_chart">10AM</span> -->
                                                 <span class="cust_chart">12PM</span>
-                                                <!-- <span class="cust_chart">2PM</span> -->
                                                 <span class="cust_chart">4PM</span>
-                                                <!-- <span class="cust_chart">6PM</span> -->
                                                 <span class="cust_chart">8PM</span>
-                                                <!-- <span class="cust_chart">10PM</span> -->
                                                 <span class="cust_chart">12AM</span>
                                             </span>
                                         </p>
@@ -101,7 +97,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <div class="col-6 pl-md-5">
                                                 <h5 id="current-week"></h5><span id="week_y"></span>
                                                 <h6 class="mt-3 mb-1">Duration</h6>
-                                                <h4 id="weekly-duration">00:00</h4>
+                                                <h4 id="weekly-duration">00h:00m</h4>
                                                 <input type="text" class="form-control " id="weekly-chart">
                                             </div>
                                             <div class="col-3 text-left">
@@ -121,13 +117,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <div class="col-6 text-center pl-md-5">
                                                 <h5 id="current-year"></h5>
                                                 <h6 class="mt-3 mb-1">Duration</h6>
-                                                <h4 id="monthly-duration">00:00</h4>
+                                                <h4 id="monthly-duration">00h:00m</h4>
                                                 <input type="hidden" class="form-control" id="monthly-chart">
                                             </div>
                                             <div class="col-3 text-left">
                                                 <a href="javascript:next()" class="arrow-style" id="next-year"><i class="fas fa-angle-right"></i></a>
                                             </div>
                                             <div class="col-md-8 offset-md-2 mt-4">
+                                                <!-- Start of monthly chart view  -->
                                                 <div class="card">
                                                     <table class="table text-center" id="calendar">
                                                         <thead>
@@ -157,7 +154,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="au-task-list js-scrollbar3">
                             <div class="au-task__item au-task__item--danger">
                                 <div class="row au-task__item-inner attach  m-1 pt-4" id="attachPanels">
-                                    <!-- Loading in js-->
+                                    <!-- Loading cards in js-->
                                 </div>
                                 <div class="row" id="no-activities">
                                     <div class="col-12 text-center no-activities">

@@ -35,7 +35,8 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
             </button>
         </div>
     <?php } ?>
-    <form method="post" action="<?= base_url(); ?>index.php/admin/edit_project" enctype="multipart/form-data">
+    <!-- enctype="multipart/form-data" -->
+    <form method="post" id="modify-project" action="<?= base_url(); ?>index.php/admin/edit_project">
         <div class="row">
             <div class="col-3">
                 <img src="<?=base_url().UPLOAD_PATH_PROJECT.$project_data['project']['project_image'];?>" alt="" class="img-fluid">
@@ -50,7 +51,8 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
                     <input type = "hidden" id= "edit_project_id" name = "project_id" value = "<?=$project_data['project']['project_id'] ?>" >
                     <div class="col-5">
                         <div class="pb-4">
-                            Logo: <input type="file" name="project_icon" class="form-control" placeholder="Project logo" >
+                            Logo: <input type="file" name="project_icon" class="form-control item-img" placeholder="Project logo" >
+                            <input type="hidden" name="cropped_icon_points" id="cropped-icon-points">
                         </div>
                     </div> 
                     <div class="col-5">
@@ -62,9 +64,9 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
                             <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </div>
-            </div>
-                            
+            </div>          
         </div>
+        <p class="edit_project_error text-danger" id="edit-project-error"></p>
     </form>
     <hr class="mt-5">
     <div class="row scroll-module">
@@ -185,4 +187,22 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
         </div>
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="maintainAsectRatio" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <div id="upload-demo1" class="center-block"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary col-6" data-dismiss="modal">Close</button>
+                <button type="button" id="cropImageBtn1" class="btn btn-primary col-6 ml-0">Done</button>
+            </div>
+        </div>
+    </div>
 </div>
