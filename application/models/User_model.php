@@ -195,7 +195,7 @@ class User_model extends CI_Model {
                 $month_value = $month_array[0];
                 $year_value = $month_array[1];
                 $first = date($year_value . '-' . $month_value . '-' . '01');
-                $last = date($year_value . '-' . $month_value . '-' . 't');
+                $last = date('Y-m-t',strtotime($first));
                 $this->db->select_sum('d.total_minutes', 't_minutes'); //get total minutes for a particular task
                 $this->db->where(array('d.user_id' => $userid));
                 $this->db->where('d.end_time IS NOT NULL');
@@ -468,11 +468,16 @@ class User_model extends CI_Model {
             } else {
                 $update_time = $data['task_date'] . " " . date('H:i:s');
             }
-            $diff = (strtotime($update_time) - strtotime($data['start_time']));
+            if(date('Y-m-d H:i',strtotime($update_time)) == date('Y-m-d H:i',strtotime($data['start_time']))){
+                $end_time = date('Y-m-d H:i:s',strtotime("+1 minute",strtotime($update_time)));
+            }else{
+                $end_time = $update_time;
+            }
+            $diff = (strtotime($end_time) - strtotime($data['start_time']));
             $t_minutes = (($diff / 60) < 1) ? ceil(abs($diff / 60)) : round(abs($diff / 60),2);
             $hours = round(abs($diff / (60 * 60)));
             $this->db->where(array('id' => $data['id']));
-            $query2 = $this->db->update('time_details', array('task_description' => $req_data['task_desc'], 'end_time' => $update_time, 'total_hours' => $hours, 'total_minutes' => $t_minutes, 'modified_on' => date('Y-m-d H:i:s')));
+            $query2 = $this->db->update('time_details', array('task_description' => $req_data['task_desc'], 'end_time' => $end_time, 'total_hours' => $hours, 'total_minutes' => $t_minutes, 'modified_on' => date('Y-m-d H:i:s')));
             if ($query2) {
                 if ($req_data['flag'] == 1) //if flag is 1, request is to complete the task
                 {
@@ -676,7 +681,7 @@ class User_model extends CI_Model {
             $month_value = $month_array[0];
             $year_value = $month_array[1];
             $first = date($year_value . '-' . $month_value . '-' . '01');
-            $last = date($year_value . '-' . $month_value . '-' . 't');
+            $last = date('Y-m-t',strtotime($first));
             $data = $this->get_monthly_activity($userid,$first,$last,$filter_value);
             if(!empty($data)){
                 foreach ($data as $d) {
@@ -818,7 +823,7 @@ class User_model extends CI_Model {
         $this->db->select('t.task_name');
         $this->db->from('task As t');
         $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
-        $this->db->where(array('t.task_name' => $task_name, 'ta.user_id' => $this->userid, 't.project_id' => $this->input->post('project')));
+        $this->db->where(array('t.task_name' => $task_name, 't.project_id' => $this->input->post('project')));
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             $this->form_validation->set_message('task_exists', 'Task name exists.');
@@ -1566,7 +1571,7 @@ class User_model extends CI_Model {
         }
         if (strrchr($str,":")) {
             $dat_time = explode(' ',$str);
-            if($dat_time[1])
+            if(!empty($dat_time[1]))
             {
                 list($hh, $mm, $ss) = explode(':', $dat_time[1]);
                 if (!is_numeric($hh) || !is_numeric($mm) || !is_numeric($ss)){

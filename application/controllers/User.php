@@ -363,7 +363,7 @@ class User extends CI_Controller
         //form inputs validation
         $std ='';
         $user_id = $this->userid;
-        $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|xss_clean');
+        $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|callback_task_exists|xss_clean');
         if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to edit task page
             $t_id = $this->input->post('task_id', TRUE);
             $std = validation_errors();
@@ -498,10 +498,6 @@ class User extends CI_Controller
     //Edit profile function to edit User name and phone number
     public function edit_profile()
     {
-        $cropped_points = $this->input->post('cropped-points');
-        $c_points = explode(',',$cropped_points);
-        $x_axis = $c_points[0];
-        $y_axis = $c_points[1];
         $user_data['name'] = $this->input->post('profile-name');
         $user_data['phone'] = $this->input->post('profile-ph');
         if (!empty($_FILES['change_img']['name'])) { //if image file present, upload image file
@@ -521,6 +517,10 @@ class User extends CI_Controller
                 $picture    = $uploadData['file_name']; //to update profile in db
                 $user_data['profile_photo'] = $picture;
                 //print_r($uploadData);exit;
+                $cropped_points = $this->input->post('cropped_points');
+                $c_points = explode(',',$cropped_points);
+                $x_axis = $c_points[0];
+                $y_axis = $c_points[1];
 
                 $config['image_library'] = 'gd2';
                 $config['source_image'] = $uploadData['full_path'];

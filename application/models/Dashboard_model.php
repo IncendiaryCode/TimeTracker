@@ -811,9 +811,10 @@ class Dashboard_model extends CI_Model
                 'mailtype' => MAILTYPE,
                 'validation' => TRUE
             ));
-                $this->email->from('admin@printgreener.com');
+                $this->email->from('admin1@printgreener.com');
                 $this->email->to($user_email);
                 $this->email->subject('TimeTracker Notification: New project');
+                $this->email->set_newline("\r\n");
                 $this->email->message('Hi '.$user_name.', you are assigned to the project: '.$project_name);
                 //$this->email->send();
                 if(!$this->email->send()){
@@ -992,7 +993,7 @@ class Dashboard_model extends CI_Model
      */
     public function assign_tasks()
     {
-        $select = $this->input->post('user-name');
+        $select = $this->input->post('user_name');
         if(!empty($this->input->post('module'))){
             $module_id = $this->input->post('module');
         }else{
@@ -1019,7 +1020,7 @@ class Dashboard_model extends CI_Model
         if(sizeof($select) > 0){
             for($i=0;$i<sizeof($select);$i++){
                 $query  = $this->db->get_where('users', array(
-                    'name' => $select[$i]['name']
+                    'name' => $select[$i]
                 ));
                 $user_id[$i] = $query->row_array();
 
@@ -1078,17 +1079,16 @@ class Dashboard_model extends CI_Model
     public function add_projects($project_icon)
     {
         $userid = $this->session->userdata('userid');
-        if($this->input->post('new-module[0][module]')==''){
+        if($this->input->post('new_module')==''){
             $module = '';
         }else{
-            $module = $this->input->post('new-module');
+            $module = $this->input->post('new_module');
         }
-        if($this->input->post('assign-name[0][name]') == 'Select User'){
+        if($this->input->post('assign_name') == 'Select User' || $this->input->post('assign_name') == ''){
             $users = '';
         }else{
-            $users = $this->input->post('assign-name');
+            $users = $this->input->post('assign_name');
         }
-
         //check if the project is assigning to the user
         if($this->input->post('project_name') == ''){
             //add project into project table
@@ -1114,11 +1114,41 @@ class Dashboard_model extends CI_Model
         
         if($users != ''){    //if User name is entered, store the details into project_assignee table
             for($i=0;$i<sizeof($users);$i++){
-                $query  = $this->db->get_where('users', array('name' => $users[$i]['name']));
+                $query  = $this->db->get_where('users', array('name' => $users[$i]));
                 $user_id[$i] = $query->row_array();
                 $array = array('project_id'=>$project_id,'user_id'=>$user_id[$i]['id'],'created_on'=>date('Y-m-d H:i:s'));
                 $this->db->set($array);
                 $assignee_query = $this->db->insert('project_assignee',$array);
+                $user_name = $user_id[$i]['name'];
+                $user_email = $user_id[$i]['email'];
+                $project_name = $this->input->post('project-name');
+                $this->load->library('email');
+                //send mail to the user
+                $to = $user_email;
+                $this->email->initialize(array(
+                  'protocol' => PROTOCOL,
+                  'smtp_host' => SMTP_HOST,
+                  'smtp_user' => SMTP_USER,
+                  'smtp_pass' => SMTP_PASS,
+                  'smtp_port' => SMTP_PORT,
+                  'charset' => CHARSET,
+                  'crlf' => CRLF,
+                  'newline' => NEWLINE,
+                  'mailtype' => MAILTYPE,
+                  'validation' => TRUE
+                ));
+                $message = '<html><body>';
+                $message .= '<p> Dear '.$user_name.', </p>';
+                $message .= '<p><h3>New Project has been assigned to you!!!</h3><br><h2>Project name: <strong>'.$project_name.'</strong></h2></p>';
+                $message .= '</body></html>';
+                $this->email->from('admin1@printgreener.com');
+                $this->email->to($user_email);
+                $this->email->subject('TimeTracker Notification: New project!');
+                $this->email->message($message);
+                //$this->email->send();
+                if(!$this->email->send()){
+                    print_r($this->email->print_debugger());
+                }
             }
         }
         return true;
@@ -1395,11 +1425,15 @@ class Dashboard_model extends CI_Model
                     'mailtype' => MAILTYPE,
                     'validation' => TRUE
                 ));
+                    $message = '<html><body>';
+                    $message .= '<p> Dear Sir/ Madam, </p>';
+                    $message .= '<p>You have requested to access TimeTracker website.<br>Please use this <strong>Verification Code</strong> for <strong>TimeTracker</strong> login:<h3>'.$token.'</h3></p>';
+                    $message .= '</body></html>';
                     $this->email->from('admin1@printgreener.com');
                     $this->email->to($email);
                     $this->email->subject('TimeTracker login!');
                     $this->email->set_newline("\r\n");
-                    $this->email->message('Use this OTP for TimeTracker login:'.$token);
+                    $this->email->message($message);
                     //$this->email->send();
                     if(!$this->email->send()){
                         print_r($this->email->print_debugger());
@@ -1860,7 +1894,7 @@ class Dashboard_model extends CI_Model
                 $details['timeline_data'][] = array('table_id'=>$d['id'],'task_date'=>($d['task_date'])?$d['task_date']:date('Y-m-d'),'start_time'=>isset($d['start_time'])?$this->user_model->convert_date($d['start_time']):'','end_time'=>isset($d['end_time'])?$this->user_model->convert_date($d['end_time']):'','task_description'=>($d['task_description'])?$d['task_description']:null);
             }
         }//if there is no timeline data, send only the task information to edit task page
-        $details['task_data'] = array('task_name'=>$task_data['task_name'],'project_name'=>$task_data['name'],'project_id'=>$task_data['project_id'],'description'=>$task_data['description'],'task_id'=>$task_data['task_id'],'module_name'=>$task_data['module_name'],'module_id'=>$task_data['module_id']);
+        $details['task_data'] = array('task_name'=>$task_data['task_name'],'project_name'=>$task_data['name'],'project_id'=>$task_data['project_id'],'description'=>$task_data['description'],'task_id'=>$task_data['task_id'],'module_name'=>$task_data['module_name'],'module_id'=>$task_data['module_id'],'user_id'=>$task_data['user_id'],'user_name'=>$task_data['user_name']);
 
         //send list of project module to edit task page
         if(isset($details['task_data'])){
