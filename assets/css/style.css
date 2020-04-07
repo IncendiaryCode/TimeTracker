@@ -30,13 +30,6 @@ header {
 	width: 250px;
 }
 
-.number-font {
-	font-size: 45px;
-}
-
-.col-lg-5 {
-	font-size: 70px;
-}
 
 .canvasjs-chart-credit {
 	display: none;
@@ -120,16 +113,6 @@ header {
 .text-underline {
 	color: white;
 	text-decoration: underline;
-}
-
-@media (max-width: 1200px) {
-	.number-font {
-		font-size: 30px;
-	}
-
-	.col-lg-5 {
-		font-size: 40px;
-	}
 }
 
 .m-0 {
@@ -313,6 +296,9 @@ header.main-header h1 {
 	background-image: linear-gradient(150deg, #7277fe, #ca82fb, #f2c2fd);
 }
 
+#new-module0::placeholder {
+  color: #bbb;
+  }
 @media (max-width: 770px) {
 	#new-task {
 		width: 50%;

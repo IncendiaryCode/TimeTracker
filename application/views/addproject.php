@@ -46,6 +46,7 @@ $this->load->helper('url_helper');
                                     </div>
                                 </div>
                             </div>
+                                    <p id="module-err" class="text-danger"></p>
                             <div class="form-group mt-3 row " id="assign-new-user">
                                 <div class="col-12">
                                     <label for="assign-name">Name:</label>

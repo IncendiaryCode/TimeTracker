@@ -828,12 +828,11 @@ $(document).ready(function() {
 				document.getElementById('stop-now-error').innerHTML = 'enter valid end time. ';
 				return false;
 			} else {
-				var input_element = __element.getElementsByClassName('check-for-utc');
-					if (input_element[0].value == '' || input_element[i].value == ' ') {
-						var serverDate = moment(document.getElementById('previous-date').value.slice(0, 10) + ' ' + input_element[0].value).tz('utc').format('Y-MM-DD H:mm:ss');
+				var input_time = document.getElementById('stop-end-time').value;
+					if (input_time != '' || input_time != ' ') {
+						var serverDate = moment(document.getElementById('previous-date').value.slice(0, 10) + ' ' + input_time).tz('utc').format('Y-MM-DD H:mm:ss');
 						document.getElementById('stop-end-time').value = serverDate;
-
-						if (input_element[0].value == 'Invalid date') {
+						if (input_time == 'Invalid date') {
 							document.getElementById('stop-now-error').innerHTML = 'enter valid end time. ';
 							return false;
 						}
@@ -843,7 +842,7 @@ $(document).ready(function() {
 						}
 						else
 						{
-							return true
+							return true;
 						}
 					}
 			}

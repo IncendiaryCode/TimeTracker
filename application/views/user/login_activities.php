@@ -34,7 +34,7 @@ $this->load->helper('url_helper');
                         <div class="col-6 text-left">
                             <h4>List of login activities</h4>
                         </div>
-                        <div col-6 text-right>
+                        <div class="col-6 text-right">
                             <div class="row">
                             <div class="col-4  offset-md-1">
                             <div class="input-group date">

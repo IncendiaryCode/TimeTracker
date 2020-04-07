@@ -22,7 +22,6 @@ var add_module = {
         if (_this.last_row != 0) {
             _this.last_row.removeClass('fas fa-plus');
             _this.last_row.addClass('fas fa-minus icon-plus text-white');
-
         }
         $('#adding-module').removeClass('fas fa-plus');
         $('#adding-module').addClass('fas fa-minus icon-plus text-white');
@@ -47,9 +46,9 @@ var add_module = {
         var id = 'new-module' + (i - 1);
         var module_name = document.getElementById(id).value;
         if ((module_name == "Select User") || (module_name == "") || (module_name == " ")) {
-            document.getElementById('module-error').innerHTML = "Please enter module name..";
+            document.getElementById('module-err').innerHTML = "Please enter module name..";
         } else {
-            document.getElementById('module-error').innerHTML = " ";
+            document.getElementById('module-err').innerHTML = " ";
             for (var k = 0; k < username.length; k++) {
                 if ((username[k] == module_name) && (k != 1)) {
                     sameName = 1;
@@ -62,7 +61,7 @@ var add_module = {
                 username.push(module_name);
             }
             else {
-                document.getElementById('module-error').innerHTML = "Module name is repeated.";
+                document.getElementById('module-err').innerHTML = "Module name is repeated.";
             }
         }
     },
@@ -71,8 +70,6 @@ var add_module = {
         this.addBtn.on('click', function (e) {
             e.preventDefault();
             _this.validate() // validate the timing details
-
-
         });
     },
     init: function (eleID) {

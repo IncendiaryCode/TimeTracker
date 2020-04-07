@@ -96,8 +96,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                             <div class="col-6 pl-md-5">
                                                 <h5 id="current-week"></h5><span id="week_y"></span>
-                                                <h6 class="mt-3 mb-1">Duration</h6>
-                                                <h4 id="weekly-duration">00h:00m</h4>
+                                                <h6 class="">Duration: <span id="weekly-duration">00h:00m</span></h6>
+                                                <h6 class="">Time spent on task: <span id="total-time-task">00h:00m</span></h6>
+                                                <!-- <h4 >00h:00m</h4> -->
                                                 <input type="text" class="form-control " id="weekly-chart">
                                             </div>
                                             <div class="col-3 text-left">

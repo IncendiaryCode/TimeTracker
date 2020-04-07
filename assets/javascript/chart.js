@@ -103,4 +103,6 @@ $(document).ready(function() {
 	dashPrjDtPicker.datepicker().on("changeMonth", function(e) {
 		loadDashProjectChart(moment(e.date).format("Y-MM"));
 	});
+
+	$("#update-prj-dtpicker").keydown(false);
 });

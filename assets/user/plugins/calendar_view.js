@@ -274,6 +274,8 @@ function loadWeeklyChart(filterBy) {
 
 function drawChart(type, res, date) {
 	if (res['status'] == false) {
+
+		document.getElementById('total-time-task').innerHTML = '00h:00m';
 		$('.no-activities').show();
 		$('#attachPanels').hide();
 		if (window.myBar != undefined) {
@@ -283,6 +285,19 @@ function drawChart(type, res, date) {
 		document.getElementById('weekly-duration').innerHTML = '00h:00m';
 		$('#attachPanels').empty();
 	} else {
+
+		var hour = parseInt(res['total_minutes']/60);
+		var minutes = res['total_minutes']%60;
+		if (hour.toString().length == 1) {
+			hour = '0'+hour;
+		}
+		if (minutes.toString().length == 1) {
+			minutes = '0'+minutes;
+		}
+		if (minutes.toString().length == 2) {
+			minutes = minutes.toString().slice(0,2);
+		}
+		document.getElementById('total-time-task').innerHTML = hour+'h:'+minutes+'m';
 		$('.no-activities').hide();
 		$('#attachPanels').show();
 		$('#weekly').css('height', '400px');
@@ -370,8 +385,10 @@ function drawChart(type, res, date) {
 					yAxes: [
 						{
 							ticks: {
-								//stepSize:10,
-								scaleStepWidth: 60
+								stepSize:1,
+								callback: function(value, index, values) {
+			                        return value;
+			                    }
 							},
 							stacked: true,
 							scaleLabel: {
@@ -388,7 +405,6 @@ function drawChart(type, res, date) {
 }
 function retrieveChartData(type, date, filterBy) {
 	$('#print-chart').empty();
-	console.log(date);
 	$.ajax({
 		type: 'POST',
 		url: timeTrackerBaseURL + 'index.php/user/activity_chart',

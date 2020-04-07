@@ -1794,7 +1794,10 @@ a:hover {
     }
 }
 
-
+.datepicker-dropdown
+{
+	z-index:1024 !important;
+}
 .no-data {
 	display: none;
 }
@@ -1979,6 +1982,7 @@ a#activity-action-filter:hover {
 #week_y {
 	display: none;
 }
+
 #print-chart {
 	position: relative;
 	height: 50px;

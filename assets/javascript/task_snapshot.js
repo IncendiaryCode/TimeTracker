@@ -101,8 +101,10 @@ function callTaskTableData(start_date, end_date, project, user) {
 					if (json['status'] == false) {
 						$('#task-lists-datatable').empty();
 						document.getElementById('task-tabel-error').innerHTML = 'No results found';
+						$('#task-lists-datatable_processing').hide();
 					} else {
 						document.getElementById('task-tabel-error').innerHTML = ' ';
+						$('#task-lists-datatable_processing').show();
 					}
 					return json.data;
 				}
@@ -195,6 +197,10 @@ $(document).ready(function() {
 		format: 'yyyy-mm-dd',
 		todayHighlight: true
 	});
+
+	$("#curr-month").keydown(false);
+	$("#dateStart").keydown(false);
+	$("#dateEnd").keydown(false);
 
 	if (document.getElementById('task-chart')) {
 		if (document.getElementById('curr-month').value == '' || document.getElementById('curr-month').value == ' ') {

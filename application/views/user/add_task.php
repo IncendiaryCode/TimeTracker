@@ -57,7 +57,7 @@ if ($this->input->get('t_id')) { ?>
                             <div class="form-group">
                                 <label for="task-name ">Write the task name</label>
                                 <?php if ($this->input->get('t_id')) { ?>
-                                    <input type="text" class="form-control" name="task_name" id="Taskname" value=<?= isset($task_data['task_name'])?$task_data['task_name']:'' ?>>
+                                    <input type="text" class="form-control" name="task_name" id="Taskname" value="<?= isset($task_data['task_name'])?$task_data['task_name']:'' ?>">
                                 <?php } else { ?>
                                     <input type="text" class="form-control" name="task_name" id="Taskname">
                                 <?php } ?>
