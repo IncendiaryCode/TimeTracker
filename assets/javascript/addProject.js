@@ -8,7 +8,7 @@ var add_module = {
         var username = _this.username;
         var i = _this.i;
         var main_row = $('<div class = "row"></div>')
-        var element = $('<div class="col-10 assign-module' + i + '"><input type="text" class="form-control mt-3"  id="new-module' + i + '" name="new-module[' + i + '][module]" placeholder="Enter module name"></div>');
+        var element = $('<div class="col-10 assign-module' + i + '"><input type="text" class="form-control mt-3"  id="new-module' + i + '" name="new_module[]" placeholder="Enter module name"></div>');
 
         main_row.append(element);
         var row1 = $('<div class="col-2 pt-3 assign-module' + i + '"></div>');
@@ -231,8 +231,6 @@ $(document).ready(function () {
                 $('#cropImagePop').modal('hide');
             });
     });
-
-    
 
     if (document.getElementById('old-project-input')) {
         $('#old-project-input').show();

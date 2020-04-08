@@ -1089,6 +1089,7 @@ class Dashboard_model extends CI_Model
         }else{
             $users = $this->input->post('assign_name');
         }
+
         //check if the project is assigning to the user
         if($this->input->post('project_name') == ''){
             //add project into project table
@@ -1104,8 +1105,8 @@ class Dashboard_model extends CI_Model
 
         if($module != ''){   //if module name is entered store 'module' into project_module table
             for($i=0;$i<sizeof($module);$i++) {
-                if(!empty($module[$i]['module'])){
-                   $array = array('project_id'=>$project_id,'name'=>$module[$i]['module'],'created_on'=>date('Y-m-d H:i:s'));
+                if(!empty($module[$i])){
+                   $array = array('project_id'=>$project_id,'name'=>$module[$i],'created_on'=>date('Y-m-d H:i:s'));
                     $this->db->set($array);
                     $query = $this->db->insert('project_module', $array);
                 }
@@ -1139,7 +1140,7 @@ class Dashboard_model extends CI_Model
                 ));
                 $message = '<html><body>';
                 $message .= '<p> Dear '.$user_name.', </p>';
-                $message .= '<p><h3>New Project has been assigned to you!!!</h3><br><h2>Project name: <strong>'.$project_name.'</strong></h2></p>';
+                $message .= '<p>New Project has been assigned to you!!!<br></p><h3>Project name:</h3><h2>'.$project_name.'</h2>';
                 $message .= '</body></html>';
                 $this->email->from('admin1@printgreener.com');
                 $this->email->to($user_email);

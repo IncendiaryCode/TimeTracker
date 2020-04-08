@@ -27,17 +27,16 @@ $this->load->helper('url_helper');
                                 </div>
                             <?php } ?>
                             <h1 class="text-center display-heading">Add Project</h1>
-                        <form action="<?php echo base_url();?>index.php/admin/add_projects" id="add-project" method="post" >
+                        <form action="<?php echo base_url();?>index.php/admin/add_projects" id="add-project" method="post" enctype="multipart/form-data">
                             <div class="form-group mt-3" id="new-project-input">
                                 <label for="task-name ">Project name:<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control " name="project-name" id="project-name" placeholder="">  
                             </div>
                             <div class="form-group mt-3 " id="append-new-module">
-
                                 <label for="new-module0">Module name:</label>
                                 <div class="row">
                                     <div class="col-10 assign-module0">
-                                        <input class="form-control user"  id="new-module0" name="new_module[0][module]" placeholder="General">
+                                        <input class="form-control user"  id="new-module0" name="new_module[]" placeholder="General">
                                     </div>
                                     <div class="col-2 assign-module0">
                                         <a href="#" id="add-new-module" >

@@ -356,6 +356,16 @@ class User extends CI_Controller
             } 
         }
     }
+
+    //checking whether same taskname exists for same project.
+    public function tasks_exist(){
+        if($this->user_model->check_task_name() == TRUE){
+            return true;
+        }else{
+            $this->form_validation->set_message('tasks_exist', 'This task name already exists.');
+            return false;
+        }
+    }
     
     //Function to edit task
     public function edit_task()
@@ -363,7 +373,7 @@ class User extends CI_Controller
         //form inputs validation
         $std ='';
         $user_id = $this->userid;
-        $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|callback_task_exists|xss_clean');
+        $this->form_validation->set_rules('task_name', 'Task Name', 'trim|required|max_length[100]|callback_tasks_exist|xss_clean');
         if ($this->form_validation->run() == FALSE) { //if inputs are not valid, return validation error to edit task page
             $t_id = $this->input->post('task_id', TRUE);
             $std = validation_errors();
@@ -503,7 +513,7 @@ class User extends CI_Controller
         if (!empty($_FILES['change_img']['name'])) { //if image file present, upload image file
             $config['upload_path']   = USER_UPLOAD_PATH;
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
-            $config['overwrite']     = FALSE;
+            $config['overwrite']     = TRUE;
             // $config['encrypt_name']  = TRUE;
             $config['remove_spaces'] = TRUE;
             $config['file_name']     = $_FILES['change_img']['name'];
@@ -524,20 +534,18 @@ class User extends CI_Controller
 
                 $config['image_library'] = 'gd2';
                 $config['source_image'] = $uploadData['full_path'];
-                $config['maintain_ratio'] = TRUE;
+                $config['maintain_ratio'] = FALSE;
                 $config['x_axis'] = $x_axis;
                 $config['y_axis'] = $y_axis;
-                $img_dim = getimagesize($uploadData['full_path']);
-                $config['width'] = $img_dim[0];
-                $config['height'] = $img_dim[1];
-                $croped_image = base64_decode($_FILES['change_img']['name']);
+                //$img_dim = getimagesize($uploadData['full_path']);
+                $config['width'] = $c_points[2]-$c_points[0];
+                $config['height'] = $c_points[3]-$c_points[1];
+                //$croped_image = base64_decode($_FILES['change_img']['name']);
                 $this->load->library('image_lib',$config);
                 $this->image_lib->initialize($config);
-                $this->image_lib->crop();
-
                 if(!($this->image_lib->crop())){
                     $this->session->set_flashdata('failure', $this->image_lib->display_errors());
-                    redirect('user/load_my_profile','refresh');
+                    redirect('user/load_my_profile');
                 }else{
                     $user_data['profile_photo'] = $picture;
                 }
@@ -551,7 +559,7 @@ class User extends CI_Controller
         $result = $this->user_model->edit_profile($user_data);
         if($result == TRUE){
             $this->session->set_flashdata('success', 'Profile data updated.');
-            redirect('user/load_my_profile');
+            redirect('user/load_my_profile','refresh');
         } else {
             $this->session->set_flashdata('failure', 'Unable to update profile data.');
             redirect('user/load_my_profile');

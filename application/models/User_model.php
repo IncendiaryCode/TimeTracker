@@ -1929,5 +1929,20 @@ class User_model extends CI_Model {
         $query = $this->db->get();
         return $query->num_rows();
     }
+
+    //check whether task name exists for same project(edit task)
+    public function check_task_name(){
+        $this->db->select('t.id');
+        $this->db->from('task AS t');
+        $this->db->join('task_assignee AS ta','ta.task_id = t.id','LEFT');
+        $this->db->where('t.id !=',$this->input->post('task_id'));
+        $this->db->where(array('t.project_id'=>$this->input->post('project'),'t.task_name'=>$this->input->post('task_name')));
+        $check_task = $this->db->get();
+        if($check_task->num_rows() > 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
 }
 ?>

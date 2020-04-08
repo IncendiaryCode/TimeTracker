@@ -350,18 +350,38 @@
 	        }
 	        else
 	        {
-	        	if (!empty($_FILES['project_icon']['name'])) { //if project logo is given, the upload it and insert project logo into db.
+	        	if (!empty($_FILES['project-logo']['name'])) { //if project logo is given, the upload it and insert project logo into db.
 		            $config['upload_path']   = UPLOAD_PATH_PROJECT;
 		            $config['allowed_types'] = 'gif|jpg|png|jpeg';
-		            $config['overwrite']     = FALSE;
+		            $config['overwrite']     = TRUE;
 		           // $config['encrypt_name']  = TRUE;
 		            $config['remove_spaces'] = TRUE;
-		            $config['file_name']     = $_FILES['project_icon']['name'];
+		            $config['file_name']     = $_FILES['project-logo']['name'];
 		            $this->load->library('upload', $config);
 		            $this->upload->initialize($config);
-		            if ($this->upload->do_upload('project_icon')) { //upload project logo
+		            if ($this->upload->do_upload('project-logo')) { //upload project logo
 		                $uploadData = $this->upload->data();
 		                $picture    = $uploadData['file_name']; //to insert project logo into db
+		                $cropped_points = $this->input->post('cropped_icon_points');
+		                $c_points = explode(',',$cropped_points);
+		                $x_axis = $c_points[0];
+		                $y_axis = $c_points[1];
+
+		                $config['image_library'] = 'gd2';
+		                $config['source_image'] = $uploadData['full_path'];
+		                $config['maintain_ratio'] = FALSE;
+		                $config['x_axis'] = $x_axis;
+		                $config['y_axis'] = $y_axis;
+		                //$img_dim = getimagesize($uploadData['full_path']);
+		                $config['width'] = $c_points[2]-$c_points[0];
+		                $config['height'] = $c_points[3]-$c_points[1];
+		                //$croped_image = base64_decode($_FILES['project-logo']['name']);
+		                $this->load->library('image_lib',$config);
+		                $this->image_lib->initialize($config);
+		                if(!($this->image_lib->crop())){
+		                    $this->session->set_flashdata('err', $this->image_lib->display_errors());
+		                    redirect('admin/load_add_project','refresh');
+		                }
 		            } else {
 		                //if upload is not successful, print upload errors
 		                $this->session->set_flashdata('err', $this->upload->display_errors());
@@ -372,6 +392,7 @@
 		        //if image file is not present, assign default image to $picture variable
 		            $picture = 'default.png';
 		        }
+
 	            $result=$this->dashboard_model->add_projects($picture); //insert project into db
 	            if($result == FALSE){ //if not added, redirect to add project page with error message
 	                $this->session->set_flashdata('err', "Something went wrong.");
@@ -597,11 +618,11 @@
 					if (!empty($_FILES['project_icon']['name'])) { //if project logo is given, the upload it and insert project logo into db.
 						$config['upload_path']   = UPLOAD_PATH_PROJECT;
 						$config['allowed_types'] = 'gif|jpg|png|jpeg';
-						$config['overwrite']     = FALSE;
+						$config['overwrite']     = TRUE;
 					   // $config['encrypt_name']  = TRUE;
 						$config['remove_spaces'] = TRUE;
 						// $config['file_name']     = $_FILES['project_icon']['name'];
-						$config['file_name']     = str_replace(' ', '', $post_data['project-name']) .'_'. time();
+						//$config['file_name']     = str_replace(' ', '', $post_data['project-name']) .'_'. time();
 						$this->load->library('upload', $config);
 						$this->upload->initialize($config);
 						if ($this->upload->do_upload('project_icon')) { //upload project logo
@@ -609,7 +630,28 @@
 							$picture = $uploadData['file_name']; //to insert project logo into db
 							//---------------------------------
 							//TODO: delete the existing picture
-							//---------------------------------							
+							//---------------------------------
+
+							$cropped_points = $this->input->post('cropped_icon_points');
+			                $c_points = explode(',',$cropped_points);
+			                $x_axis = $c_points[0];
+			                $y_axis = $c_points[1];
+
+			                $config['image_library'] = 'gd2';
+			                $config['source_image'] = $uploadData['full_path'];
+			                $config['maintain_ratio'] = FALSE;
+			                $config['x_axis'] = $x_axis;
+			                $config['y_axis'] = $y_axis;
+			                //$img_dim = getimagesize($uploadData['full_path']);
+			                $config['width'] = $c_points[2]-$c_points[0];
+			                $config['height'] = $c_points[3]-$c_points[1];
+			                //$croped_image = base64_decode($_FILES['project-logo']['name']);
+			                $this->load->library('image_lib',$config);
+			                $this->image_lib->initialize($config);
+			                if(!($this->image_lib->crop())){
+			                    $this->session->set_flashdata('error', $this->image_lib->display_errors());
+			                    redirect('admin/load_edit_project?project_id='.$post_data['project_id']);
+			                }
 						} else {
 							//if upload is not successful, print upload errors
 							$this->session->set_flashdata("error",$this->upload->display_errors());

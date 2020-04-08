@@ -36,7 +36,7 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
         </div>
     <?php } ?>
     <!-- enctype="multipart/form-data" -->
-    <form method="post" id="modify-project" action="<?= base_url(); ?>index.php/admin/edit_project">
+    <form method="post" id="modify-project" action="<?= base_url(); ?>index.php/admin/edit_project" enctype="multipart/form-data">
         <div class="row">
             <div class="col-3">
                 <img src="<?=base_url().UPLOAD_PATH_PROJECT.$project_data['project']['project_image'];?>" alt="" class="img-fluid">
