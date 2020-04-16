@@ -314,6 +314,12 @@ function drawCards(data) {
 							dataType: 'json',
 							success: function(res) {
 								if (res['status'] == true) {
+
+									var a = document.getElementById("snackbar-start");
+							        a.className = "show";
+								    setTimeout(function(){ a.className = a.className.replace("show", ""); }, 3000);
+
+
 									$('.container-fluid-main').css('padding-top', '0px');
 									var res = res['data']['details'];
 									var startDateTime = moment().format('h:mm A');
@@ -385,6 +391,11 @@ function drawCards(data) {
 							success: function(res) {
 								var data = res['flag'];
 								if (res['status'] == true) {
+
+									var a = document.getElementById("snackbar-end");
+							        a.className = "show";
+								    setTimeout(function(){ a.className = a.className.replace("show", ""); }, 3000);
+
 									$('#running-task-' + task_id).hide();
 									$('#play-' + task_id).show();
 									$('#stop-' + task_id).hide();
@@ -713,6 +724,11 @@ $(document).ready(function() {
 					success: function(res) {
 						var data = JSON.parse(res);
 						var task_id_no = t_id.match(/(\d+)/);
+
+						var a = document.getElementById("snackbar-end");
+				        a.className = "show";
+					    setTimeout(function(){ a.className = a.className.replace("show", ""); }, 3000);
+					    
 						var action_play = $('<a href="' + timeTrackerBaseURL + 'user/start_timer?id=' + task_id_no[0] + '" class="card-action" data-id="' + task_id_no[0] + '" data-toggle="tooltip" data-placement="top" title="Play"></a>');
 						action_play.append('<i class="fas action-edit  fa-play"></i>');
 

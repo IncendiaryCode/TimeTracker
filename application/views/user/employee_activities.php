@@ -65,7 +65,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <h5 id="current-date"></h5>
                                                 <h6 class="mt-3 mb-1">Duration</h6>
                                                 <input type="hidden" class="edit-date" id="daily-chart" data-date-format="YYYY-mm-DD ">
-                                                <h4 id="daily-duration">00h:00m</h4>
+                                                <h4 id="daily-duration">00h 00m</h4>
                                             </div>
                                             <div class="col-3 text-left">
                                                 <a href="#" class="arrow-style" id="next-date"><i class="fas fa-angle-right"></i></a>
@@ -95,9 +95,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <a href="#" class="arrow-style" id="previous-week"><i class=" fas fa-angle-left"></i></a>
                                             </div>
                                             <div class="col-6 pl-md-5">
-                                                <h5 id="current-week"></h5><span id="week_y"></span>
-                                                <h6 class="">Duration: <span id="weekly-duration">00h:00m</span></h6>
-                                                <h6 class="">Time spent on task: <span id="total-time-task">00h:00m</span></h6>
+                                                <h4 id="current-week"></h4><span id="week_y"></span>
+                                                <h5 class="text-muted">Duration: <span id="weekly-duration"> 00h 00m</span><span class="total-time-task small"> (Actual time: </span><span id="total-time-task" class="total-time-task small  ">00h 00m</span><span class="total-time-task">)</span></h5>
                                                 <!-- <h4 >00h:00m</h4> -->
                                                 <input type="text" class="form-control " id="weekly-chart">
                                             </div>
@@ -118,7 +117,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <div class="col-6 text-center pl-md-5">
                                                 <h5 id="current-year"></h5>
                                                 <h6 class="mt-3 mb-1">Duration</h6>
-                                                <h4 id="monthly-duration">00h:00m</h4>
+                                                <h4 id="monthly-duration">00h 00m</h4>
                                                 <input type="hidden" class="form-control" id="monthly-chart">
                                             </div>
                                             <div class="col-3 text-left">

@@ -196,10 +196,6 @@ header.main-header h1 {
 		font-size: 24px;
 		margin-bottom: 5%;
 	}
-	.user-name
-	{
-		padding-right: 77%;
-	}
 	#stopTime {
 		position: relative;
 		text-align: center;
@@ -450,10 +446,19 @@ table.dataTable
 	color: #7077ff;
 	border-color: #7077ff;
 }
-.user-append p
+/*.user-append p
+
 {
 	position: absolute;
     top: 90px;
+}
+*/
+#append-list .user-items
+{
+    margin-top: 7px;
+    border: 1px solid #ccc;
+    border-radius: 4px; 
+    padding: 5px;
 }
 .scroll-module
 {

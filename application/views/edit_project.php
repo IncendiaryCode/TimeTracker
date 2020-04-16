@@ -3,17 +3,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 <script type="text/javascript">
 var usr_arr = [];
-var usr_id = {};
+var usr_email_array = [];
+var usr_email = {};
 var usr_profile = {};
 </script>
 <?php foreach($all_users as $users)
-{ 
+{
 ?>
 <script type="text/javascript">
 usr_arr.push("<?=$users['name']; ?>");
-usr_id["<?=$users['name']; ?>"] = "<?=$users['id']; ?>";
+usr_email_array.push("<?=$users['email']; ?>");
+usr_email["<?=$users['email']; ?>"] = "<?=$users['id']; ?>";
 usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
-
 </script>
 <?php } ?>
 
@@ -35,11 +36,11 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
             </button>
         </div>
     <?php } ?>
-    <!-- enctype="multipart/form-data" -->
+    <!-- form of project details -->
     <form method="post" id="modify-project" action="<?= base_url(); ?>index.php/admin/edit_project" enctype="multipart/form-data">
         <div class="row">
             <div class="col-3">
-                <img src="<?=base_url().UPLOAD_PATH_PROJECT.$project_data['project']['project_image'];?>" alt="" class="img-fluid">
+                <img src="<?=base_url().UPLOAD_PATH_PROJECT.$project_data['project']['project_image'];?>" width="150px;" height="150px;" class="img-fluid">
             </div>
             <div class="col-9">
                 <div class="row">
@@ -69,6 +70,7 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
         <p class="edit_project_error text-danger" id="edit-project-error"></p>
     </form>
     <hr class="mt-5">
+    <!-- list of modules -->
     <div class="row scroll-module">
         <div class="col-md-6 module-append">
             <h3 class="text-center">Modules</h3>
@@ -94,6 +96,8 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
                 <?php } ?>
             </ul>
         </div>
+
+        <!-- list of users -->
         <div class="col-md-6 user-append">
             <h3 class="text-center">Users</h3>
                 <div class="input-group">
@@ -109,13 +113,22 @@ usr_profile["<?=$users['name']; ?>"] = "<?=$users['profile']; ?>";
                 <?php foreach(($project_data['users']) as $user) { ?>
                     <li class="list-group-item d-flex-">
                     <?php if(!empty($user['profile_photo'])) { ?>
-                        <img src="<?= base_url() . USER_UPLOAD_PATH . $user['profile_photo']; ?>" width="30px;"> <?php  } ?><span class ="user-name"><?=$user['user_name']; ?></span>
-                        <span>
-                            <a href="#user-delete" data-toggle="modal" data="<?=$user['user_id']; ?>" class = "user-delete float-right"><i class="fas fa-trash pl-3">
-                                <input type = "hidden" value = <?=$user['user_id'] ?> >
-                                </i>
-                            </a>
-                        </span>
+                        <div class="row">
+                            <div class="col-2 col-lg-1 text-left">
+                                <img src="<?= base_url() . USER_UPLOAD_PATH . $user['profile_photo']; ?>" width="30px;"> <?php  } ?>
+                            </div>
+                            <div class="col-4 col-lg-5 text-left">
+                                <?=$user['user_name']; ?>
+                            </div>
+                            <div class="col-6  text-right">
+                                <span>
+                                    <a href="#user-delete" data-toggle="modal" data="<?=$user['user_id']; ?>" class = "user-delete float-right"><i class="fas fa-trash pl-3">
+                                        <input type = "hidden" value = <?=$user['user_id'] ?> >
+                                        </i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
                     </li>
                 <?php } ?>
             <?php } ?>

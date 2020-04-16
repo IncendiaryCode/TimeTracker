@@ -128,7 +128,7 @@ function draw_chart_cards(data, type) {
 			if (min.toString().length == 1) {
 				min = '0' + min;
 			}
-			document.getElementById('daily-duration').innerHTML = hr + 'h:' + min+'m';
+			document.getElementById('daily-duration').innerHTML = hr + 'h ' + min+'m';
 		} else {
 			store_and_calculate_duration(timings, type);
 		}
@@ -226,8 +226,8 @@ function loadTask(type, date, filterBy) {
 				if (min.toString().length == 1) {
 					min = '0' + min;
 				}
-				if (type == 'weekly_chart') document.getElementById('weekly-duration').innerHTML = hr + 'h:' + min+'m';
-				if (type == 'monthly_chart') document.getElementById('monthly-duration').innerHTML = hr + 'h:' + min+'m';
+				if (type == 'weekly_chart') document.getElementById('weekly-duration').innerHTML = hr + 'h ' + min+'m';
+				if (type == 'monthly_chart') document.getElementById('monthly-duration').innerHTML = hr + 'h ' + min+'m';
 			}
 		}
 	});
@@ -275,14 +275,14 @@ function loadWeeklyChart(filterBy) {
 function drawChart(type, res, date) {
 	if (res['status'] == false) {
 
-		document.getElementById('total-time-task').innerHTML = '00h:00m';
+		document.getElementById('total-time-task').innerHTML = '00h 00m';
 		$('.no-activities').show();
 		$('#attachPanels').hide();
 		if (window.myBar != undefined) {
 			window.myBar.destroy();
 		}
 		$('#weekly').css('height', '0px');
-		document.getElementById('weekly-duration').innerHTML = '00h:00m';
+		document.getElementById('weekly-duration').innerHTML = '00h 00m';
 		$('#attachPanels').empty();
 	} else {
 
@@ -297,7 +297,7 @@ function drawChart(type, res, date) {
 		if (minutes.toString().length == 2) {
 			minutes = minutes.toString().slice(0,2);
 		}
-		document.getElementById('total-time-task').innerHTML = hour+'h:'+minutes+'m';
+		document.getElementById('total-time-task').innerHTML = hour+'h '+minutes+'m';
 		$('.no-activities').hide();
 		$('#attachPanels').show();
 		$('#weekly').css('height', '400px');
@@ -310,7 +310,7 @@ function drawChart(type, res, date) {
 			weekly_min = '0' + weekly_min;
 		}
 
-		document.getElementById('weekly-duration').innerHTML = weekly_hr + ':' + weekly_min;
+		document.getElementById('weekly-duration').innerHTML = weekly_hr + ' ' + weekly_min;
 		var const_lable = [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ];
 		var data = {
 			labels: const_lable,
@@ -458,7 +458,7 @@ function draw_customized_chart(res) {
 		daily_min = '0' + daily_min;
 	}
 
-	document.getElementById('daily-duration').innerHTML = daily_hr + 'h:' + daily_min+'m';
+	document.getElementById('daily-duration').innerHTML = daily_hr + 'h ' + daily_min+'m';
 	var p_left = parseInt(window_width) / 6;
 
 	if (res['data'] != 'No activity in this date.') {
@@ -750,7 +750,7 @@ function showCalendar(month, year, filterBy) {
 			if (monthly_min.toString().length == 1) {
 				monthly_min = '0' + monthly_min;
 			}
-			document.getElementById('monthly-duration').innerHTML = monthly_hr + 'h:' + monthly_min+'m';
+			document.getElementById('monthly-duration').innerHTML = monthly_hr + 'h ' + monthly_min+'m';
 			for (var i = 0; i < result['data'].length; i++) {
 				var res_date = result['data'][i][0].split('-')[2];
 				var cal_date = document.getElementsByTagName('td');

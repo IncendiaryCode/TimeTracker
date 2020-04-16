@@ -120,6 +120,12 @@ if (!empty($task_info['login_run'])) { ?>
         </div>
         <div class="container">
             <div class="row mb-3 pt-2">
+                <div class="col-12">
+                    <div id="snackbar-start" class="snackbar">Task has been started..</div>
+                    <div id="snackbar-end" class="snackbar">Task has been stopped..</div>
+                </div>
+
+                
                 <div class="col-md-6 col-3">
                     <h5 class="font-weight-light text-left recent-activites">Recent Activities</h5>
                 </div>
