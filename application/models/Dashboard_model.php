@@ -1377,7 +1377,7 @@ class Dashboard_model extends CI_Model
                 'user_type' => $row->type,
                 'user_tz' => ($this->input->post('time-zone'))?$this->input->post('time-zone'):'Asia/Kolkata'
             );
-            $this->session->sess_expiration = '86400';// expires in 4 hours
+            $this->session->sess_expiration = 86400;// expires in 24 hours
             $this->session->sess_expire_on_close = FALSE;
             $this->session->set_userdata($data);
 

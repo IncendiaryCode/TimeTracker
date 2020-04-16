@@ -351,7 +351,7 @@ class User extends CI_Controller
                 $this->session->set_flashdata('failure', 'Unable to add the Task.');
                 redirect('user/load_add_task');
             } else { //if add method is successful, redirect with success message
-                $this->session->set_flashdata('success', 'A new Task is added.');
+                $this->session->set_flashdata('success', 'Task added successfully.');
                 redirect('user/index');
             } 
         }
@@ -481,12 +481,12 @@ class User extends CI_Controller
             if (!$result) {
                 //if edit is unsuccessful, redirect to edit task page with error message
                 $t_id = $this->input->post('task_id', TRUE);
-                $this->session->set_flashdata('failure', 'Unable to edit.');
+                $this->session->set_flashdata('failure', 'Unable to update.');
                 redirect('user/load_add_task?t_id=' . $t_id);
             } else {
                 //if edit method is successful, redirect with success message
                 $t_id = $this->input->post('task_id', TRUE);
-                $this->session->set_flashdata('success', 'Edit task successful.');
+                $this->session->set_flashdata('success', 'Task updated successfully.');
                 redirect('user/load_add_task?t_id=' . $t_id, 'refresh');
             }
         }
@@ -513,7 +513,7 @@ class User extends CI_Controller
         if (!empty($_FILES['change_img']['name'])) { //if image file present, upload image file
             $config['upload_path']   = USER_UPLOAD_PATH;
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
-            $config['overwrite']     = TRUE;
+            $config['overwrite']     = FALSE;
             // $config['encrypt_name']  = TRUE;
             $config['remove_spaces'] = TRUE;
             $config['file_name']     = $_FILES['change_img']['name'];
@@ -552,14 +552,14 @@ class User extends CI_Controller
             } else {
                 //if image is not uploaded, print error message
                 $this->session->set_flashdata('failure', $this->upload->display_errors());
-                redirect('user/load_my_profile','refresh');
+                redirect('user/load_my_profile');
             }
             
         }
         $result = $this->user_model->edit_profile($user_data);
         if($result == TRUE){
             $this->session->set_flashdata('success', 'Profile data updated.');
-            redirect('user/load_my_profile','refresh');
+            redirect('user/load_my_profile');
         } else {
             $this->session->set_flashdata('failure', 'Unable to update profile data.');
             redirect('user/load_my_profile');

@@ -353,7 +353,7 @@
 	        	if (!empty($_FILES['project-logo']['name'])) { //if project logo is given, the upload it and insert project logo into db.
 		            $config['upload_path']   = UPLOAD_PATH_PROJECT;
 		            $config['allowed_types'] = 'gif|jpg|png|jpeg';
-		            $config['overwrite']     = TRUE;
+		            $config['overwrite']     = FALSE;
 		           // $config['encrypt_name']  = TRUE;
 		            $config['remove_spaces'] = TRUE;
 		            $config['file_name']     = $_FILES['project-logo']['name'];
@@ -380,7 +380,7 @@
 		                $this->image_lib->initialize($config);
 		                if(!($this->image_lib->crop())){
 		                    $this->session->set_flashdata('err', $this->image_lib->display_errors());
-		                    redirect('admin/load_add_project','refresh');
+		                    redirect('admin/load_add_project');
 		                }
 		            } else {
 		                //if upload is not successful, print upload errors
@@ -398,7 +398,7 @@
 	                $this->session->set_flashdata('err', "Something went wrong.");
 	                redirect('admin/load_add_project','refresh');
 	            }else{ //if add method is successful, redirect with success message
-	            	$this->session->set_flashdata('true', 'Successfully Added.');
+	            	$this->session->set_flashdata('true', 'Project added successfully.');
 	            	redirect('admin/load_add_project','refresh');
 	            }
 	        }
@@ -424,7 +424,7 @@
 	                $this->session->set_flashdata('err', "Something went wrong.");
 	                redirect('admin/load_add_user','refresh');
 	            }else{ //if add method is successful, redirect with success message
-					$this->session->set_flashdata('true', 'Successfully Added.');
+					$this->session->set_flashdata('true', 'User added successfully.');
 					redirect('admin/load_add_user','refresh');
 	            }
 	        }
@@ -476,7 +476,7 @@
 					$this->session->set_flashdata('err', "Something went wrong.");
 	                redirect('admin/load_add_task','refresh');
 	            }else{ //if add method is successful, redirect with success message
-					$this->session->set_flashdata('true', 'Successfully Added.');
+					$this->session->set_flashdata('true', 'Task added successfully.');
 					redirect('admin/load_add_task','refresh');
 	            }
 	        }
@@ -519,7 +519,7 @@
 			if(!empty($_FILES['change_img']['name'])){ //if image file present, upload image file
 				$config['upload_path'] = UPLOAD_PATH;
 				$config['allowed_types'] = 'gif|jpg|png|jpeg';
-				$config['overwrite'] = TRUE;
+				$config['overwrite'] = FALSE;
 			    $config['file_name'] = $_FILES['change_img']['name'];
 			    $this->load->library('upload',$config);
 	            $this->upload->initialize($config);
@@ -618,7 +618,7 @@
 					if (!empty($_FILES['project_icon']['name'])) { //if project logo is given, the upload it and insert project logo into db.
 						$config['upload_path']   = UPLOAD_PATH_PROJECT;
 						$config['allowed_types'] = 'gif|jpg|png|jpeg';
-						$config['overwrite']     = TRUE;
+						$config['overwrite']     = FALSE;
 					   // $config['encrypt_name']  = TRUE;
 						$config['remove_spaces'] = TRUE;
 						// $config['file_name']     = $_FILES['project_icon']['name'];

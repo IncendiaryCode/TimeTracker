@@ -29,7 +29,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <?php
                                     if ($data['image_name'] != '') {
                                     ?>
-                                        <img src="<?= base_url() . UPLOAD_PATH . $data['image_name']; ?>" width="40px;">
+                                        <img src="<?= base_url() . UPLOAD_PATH_PROJECT . $data['image_name']; ?>" width="40px;">
                                         <input type="hidden" id="project-id" name="" value="<?= $data['project_id'] ?>">
                                     <?php
                                     } ?>
