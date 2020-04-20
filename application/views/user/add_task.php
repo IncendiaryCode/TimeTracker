@@ -108,7 +108,6 @@ if ($this->input->get('t_id')) { ?>
                                         <?php  }else{ ?>
                                             <option value="<?=$module->id;?>"><?=$module->name;?></option>
                                     <?php } ?>
-                                    <!-- <option value=<?=$task_data['module_name']?>><?=$task_data['module_name']?></option> -->
                                 <?php } ?></select>
                                 <?php } }else { ?>
                                     <select type="text" class="form-control" id="choose-module" name="project_module" value="<?= $task_data['module_name'] ?>">
@@ -116,6 +115,7 @@ if ($this->input->get('t_id')) { ?>
                                     <?php } ?>
                                 </select>
                             </div>
+                                <input type="hidden" name="module_name" id="selected-module">
                             
                             
                             <div id="task-times">

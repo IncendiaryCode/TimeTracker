@@ -70,6 +70,7 @@ function formatAMPM(date) {
 function drawCards(data) {
 	if (data['data'] == null) {
 		$('.no-data').show();
+			$('#pagination-links').hide();
 	} else {
 		offset_cards = data['count'];
 			$('.page-number').empty();
@@ -978,7 +979,13 @@ $(document).ready(function() {
 			var pounchOutTime = moment(moment().format('YYYY-MM-DD') + ' ' + document.getElementById('timerpicker-punchout').value);
 			if (pounchOutTime.format('Y-MM-DD H:mm:ss') == 'Invalid date') {
 				document.getElementById('punch-out-invalid').innerHTML = 'Please enter valid time';
-			} else {
+			}
+			if(moment(pounchOutTime).isAfter(moment()))
+			{
+				document.getElementById('punch-out-invalid').innerHTML = 'Punch out cannot be greater than current time.';
+				$('#timerpicker-punchout').focus();
+			}
+			else {
 				$.ajax({
 					type: 'POST',
 					url: timeTrackerBaseURL + 'user/update_end_time',

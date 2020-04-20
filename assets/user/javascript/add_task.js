@@ -361,6 +361,8 @@ $(document).ready(function() {
 		addTask.onsubmit = function(e) {
 			var taskName = document.getElementById('Taskname').value;
 			var project = document.getElementById('choose-project').value;
+			var sel = document.getElementById("choose-module")
+				document.getElementById('selected-module').value = sel.options[sel.selectedIndex].text;
 			if (taskName == '' || taskName == ' ') {
 				document.getElementById('taskError').innerHTML = 'Please Enter Task Name ';
 				return false;
@@ -424,6 +426,8 @@ $(document).ready(function() {
 				var project = document.getElementById('choose-project').value;
 				var start_time;
 
+				var sel = document.getElementById("choose-module")
+				document.getElementById('selected-module').value = sel.options[sel.selectedIndex].text;
 				var flag = false;
 				flag = addTime.validate(false);
 				if (flag == false) {
