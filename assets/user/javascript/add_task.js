@@ -187,7 +187,7 @@ var addTime = {
 			if (__start_seconds >= __end_seconds) {
 				document.getElementById('taskError').innerHTML = 'Start time cannot be greater or equal to end time.';
 				return false;
-			} else if (!validate_interval) {
+			} else if (!validate_interval && (!edit)) {
 				document.getElementById('taskError').innerHTML = 'Already same task is done in this interval.';
 				return false;
 			} else {

@@ -284,14 +284,14 @@ function drawCards(data) {
 				var serverDate = moment(date).tz('utc').format('Y-MM-DD H:mm:ss');
 				var footerRight = $("<div class='card-actions' id='footer-right-" + data[x][y].id + "'>");
 				//action Edit
-				var actionEdit = $('<a href="#" class=" pl-2  text-white " id="action-edit"><i class="fas fa-pencil-alt action-play" data-toggle="tooltip" data-placement="top" title="edit"></i></a>');
+				var actionEdit = $('<a href="#" class=" pl-2  text-white " id="action-edit"><i class="fas fa-pencil-alt action-play" ></i></a>');
 				actionEdit.attr('href', timeTrackerBaseURL + 'index.php/user/load_add_task?t_id=' + data[x][y].id);
 				footerRight.append(actionEdit);
 
-				var actionPlay = $('<a href="' + timeTrackerBaseURL + 'user/start_timer?id=' + data[x][y].id + '&time=' + serverDate + '" class="card-action" data-id="' + data[x][y].id + '" id=play-' + data[x][y].id + ' data-toggle="tooltip" data-placement="top" title="Play"></a>');
+				var actionPlay = $('<a href="' + timeTrackerBaseURL + 'user/start_timer?id=' + data[x][y].id + '&time=' + serverDate + '" class="card-action" data-id="' + data[x][y].id + '" id=play-' + data[x][y].id + ' ></a>');
 				actionPlay.append('<i class="fas action-edit  fa-play"></i>');
 
-				var actionStop = $('<a href="' + timeTrackerBaseURL + 'user/stop_timer?id=' + data[x][y].id + '&time=' + serverDate + '" class="card-action" data-id="' + data[x][y].id + '" id=stop-' + data[x][y].id + ' data-toggle="tooltip" data-placement="top" title="Stop"></a>');
+				var actionStop = $('<a href="' + timeTrackerBaseURL + 'user/stop_timer?id=' + data[x][y].id + '&time=' + serverDate + '" class="card-action" data-id="' + data[x][y].id + '" id=stop-' + data[x][y].id + ' ></a>');
 
 				actionStop.append('<i class="fas action-edit fa-stop"></i>');
 				footerRight.append(actionPlay);
