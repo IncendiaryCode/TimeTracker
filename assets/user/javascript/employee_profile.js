@@ -208,16 +208,18 @@ $(document).ready(function() {
 			}
 		});
 		$('#dateEnd').change(function() {
+
 			$(".clear-daterange").show();
 			if (document.getElementById('dateStart').value == '') {
 				document.getElementById('start-time-error').innerHTML = 'Please enter Start date';
 			} else {
+				var end_date = document.getElementById('dateEnd').value;
 				var validate_filter_e = validate_login_filters();
 				if (validate_filter_e != true) {
 					document.getElementById('start-time-error').innerHTML = validate_filter_e;
 				} else {
 					document.getElementById('start-time-error').innerHTML = '';
-					callLoginTableData(document.getElementById('dateStart').value, document.getElementById('dateEnd').value);
+					callLoginTableData(document.getElementById('dateStart').value, end_date);
 				}
 			}
 		});
@@ -316,6 +318,8 @@ $(document).ready(function() {
 	{
 		document.getElementById('dateEnd').value = "";
 		document.getElementById('dateStart').value = "";
+		document.getElementById('start-time-error').innerHTML = "";
+
 		$('.clear-daterange').hide();
 		callLoginTableData();
 	});

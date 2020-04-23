@@ -57,8 +57,8 @@ $this->load->helper('url_helper');
                                 </div>
                             </div>
                         </div>
-                        <div class="col-2 pt-1 clear-daterange">
-                                <a href="#"><i class="fas fa-trash-alt text-danger"></i></a>
+                        <div class="col-2 pt-1 clear-daterange text-left">
+                                <a href="#"><i class="far fa-times-circle text-danger"></i></a>
                         </div>
                     </div>
                 </div>

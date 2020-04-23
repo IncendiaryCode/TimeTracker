@@ -278,7 +278,7 @@ if ($this->input->get('t_id')) { ?>
                 </footer>
             </div>
 
-            <div class="modal fade" id="alert_for_delete" tabindex="-1" role="dialog" aria-labelledby="alert_for_deleteLabel" aria-hidden="true">
+            <div class="modal fade" id="alert_for_delete" tabindex="-1" role="dialog" aria-labelledby="alert_for_deleteLabel" aria-hidden="true" data-backdrop="static">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">

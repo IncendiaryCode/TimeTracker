@@ -998,6 +998,10 @@ $(document).ready(function() {
 						window.location.reload();
 						document.getElementById('stop-time').removeEventListener('click', function() {}, true);
 						}
+						else
+						{
+							document.getElementById('punch-out-invalid').innerHTML = res['msg'];
+						}
 					}
 				});
 			}
