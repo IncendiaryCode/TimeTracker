@@ -76,7 +76,6 @@ if (loginForm) {
     loginForm.onsubmit = function (e) {
         var validateForm = new Validation(e.currentTarget);
         var finalValue = validateForm.correctCheck();
-        console.log(finalValue)
         if (finalValue.isValid == true) {
 
 

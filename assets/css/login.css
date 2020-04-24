@@ -34,74 +34,37 @@ html {
 	color: white;
 }
 
-.login-form {
-	padding-left: 50px;
-	padding-right: 50px;
-}
 
-@media( max-width: 770px)
-{
-	.login-form {
-		margin-top: 100px;
-	}
-}
 
 .positioning-logo {
-	position: absolute;
-	top: 0%;
-	margin-top: 10%;
-	width: 100%;
-	right: 0%;
+	padding-top: 20%;
 }
+
 .email-input {
 	padding-top: 25px;
 }
 #form1 {
-	position: absolute;
-	top: -13%;
-	margin-top: 350px;
-	width: 50%;
-	float: right;
-	right: 0%;
+	margin-top: 20px;
 }
 
 #form2 {
-	position: absolute;
-	top: -8%;
-	margin-top: 350px;
-	width: 50%;
-	float: right;
-	right: 0%;
+	margin-top: 20px;
 }
 
-#formPsw {
-	position: absolute;
-	top: -20%;
-	margin-top: 350px;
-	width: 50%;
-	float: right;
-	right: 0%;
-}
-
-@media (max-width: 768px) {
-	#mySlider {
-		display: none;
-	}
-
+@media(max-width: 766px)
+{
 	#form1 {
-		width: 100%;
-		margin-top: 200px;
-	}
+	margin: 0px 25px 0px 25px;
+}
 
-	#form2 {
-		width: 100%;
-    	margin-top: 250px;
-	}
-
-	#formPsw {
-		width: 100%;
-		margin-top: 300px;
-	}
+#form2 {
+	margin: 0px 25px 0px 25px;
+}
+.bg
+{
+	display: none;
+}
+	
 }
 
 .logo-space {

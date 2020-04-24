@@ -2196,17 +2196,6 @@ button#project-filtering:focus {
 	}
 }
 
-@media (max-width: 400px) {
-	.project-filtering {
-		position: fixed;
-	}
-}
-
-@media (max-width: 400px) {
-	.project-filtering {
-		position: fixed;
-	}
-}
 
 .item-img
 {
